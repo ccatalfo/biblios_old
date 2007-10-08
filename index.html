@@ -1,0 +1,195 @@
+<html>
+<head>
+<script type="text/javascript" src="lib/google_gears/gears_init.js"></script>
+<script>
+  if (!window.google || !google.gears) {
+	  location.href = "http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application" +
+                    "&return="+document.URL;
+  }
+</script>
+<script type="text/javascript">
+  // set debug to 0 to disable logging to firebug
+var debug = 0;
+var db_debug = 0;
+</script>
+<!-- Sarissa -->
+<script type="text/javascript" src="lib/sarissa/sarissa.js"></script>
+<!-- Jquery -->
+<script type="text/javascript" src="lib/jquery/jquery-1.1.3.1.pack.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery-plugins.js"></script>
+<script type="text/javascript" src="lib/jquery/ajaxfileupload.js"></script>
+<script type="text/javascript" src="lib/jquery/interface.js"></script>
+<script type="text/javascript" src="lib/jquery/jQuery.frameReady.js"></script>
+<style>
+	.yui-toolbar-subcont {
+		display:none;
+	}
+	.yui-toolbar-titlebar {
+		display:none;
+	}
+</style>
+<!-- YUI -->
+<!-- Skin CSS file -->
+<link rel="stylesheet" type="text/css" href="lib/yui/build/assets/skins/sam/skin.css">
+
+<!-- Utility Dependencies -->
+<script src="lib/yui/build/utilities/utilities.js"></script>
+
+<!-- Needed for Menus, Buttons and Overlays used in the Toolbar -->
+<script src="lib/yui/build/container/container-min.js"></script>
+<script src="lib/yui/build/menu/menu-min.js"></script>
+<script src="lib/yui/build/button/button-beta-min.js"></script>
+
+<!-- Source file for Rich Text Editor-->
+<script src="lib/yui/build/editor/editor-beta-min.js"></script>
+
+<!-- ExtJs -->
+<script type="text/javascript" src="lib/extjs/ext-yui-adapter.js"></script>
+<script type="text/javascript" src="lib/extjs/ext-jquery-adapter.js"></script>
+<script type="text/javascript" src="lib/extjs/ext-all.js"></script>
+<script type="text/javascript" src="lib/extjs/PagingMemoryProxy.js"></script>
+
+<!-- our own javascript app files -->
+<script type="text/javascript" src="ui/js/db.js"></script>
+<script type="text/javascript" src="ui/js/init.js"></script>
+<script type="text/javascript" src="ui/js/prefs.js"></script>
+<script type="text/javascript" src="ui/js/ui.js"></script>
+<script type="text/javascript" src="ui/js/search.js"></script>
+<script type="text/javascript" src="ui/js/save.js"></script>
+<script type="text/javascript" src="ui/js/edit.js"></script>
+<script type="text/javascript" src="ui/js/options.js"></script>
+<script type="text/javascript" src="test/include.js"></script>
+<!-- additions to Extjs library for this project -->
+<script type="text/javascript" src="lib/extjs/PagingToolbarRemoveButton.js"></script>
+
+<link type="text/css" rel="stylesheet" href="lib/extjs/resources/css/ext-all.css" />
+<link type="text/css" rel="stylesheet" href="ui/css/styles.css" />
+
+<style>
+.loading-indicator {
+  font-size:8pt;
+  background-image: url('lib/extjs/resources/images/default/grid/loading.gif');
+  background-repeat: no-repeat;
+  background-position:top left;
+  padding-left:20px;
+	height:18px;
+	text-align:left;
+}
+#loading{
+	position:absolute;
+	left:45%;
+	top:40%;
+	border:1px solid #6593cf;
+	padding:2px;
+	background:#c3daf9;
+	width:150px;
+	text-align:center;
+	z-index:20001;
+}
+#loading .loading-indicator{
+	border:1px solid #a3bad9;
+	background:white url('lib/extjs/resources/images/block-bg.gif') repeat-x;
+	color:#003366;
+	font:bold 13px tahoma,arial,helvetica;
+	padding:10px;
+	margin:0;
+}
+
+</style>
+
+</head>
+
+<body>
+<!-- loading mask area -->
+<div id="loading-mask" style="width:100%;height:100%;background:#c3daf9;p osition:absolute;z-index:20000;left:0;top:0;"> </div>
+<div id="loading">
+<div class="loading-indicator"><img src="../resources/images/default/grid/loading.gif" style="width:16px;height:16px;" align="absmiddle"> Loading...</div>
+</div>
+
+<div id='top-panel'>
+<div id='logo'><img src='ui/images/biblios-logo.gif' alt='Biblios Web Cataloging Application'></img></div>
+  <div id='searchform'></div>
+  <div id='info-panel'>Info panel</div>
+</div>
+<div id="tab-panel">
+    <div id='maintab'>
+    <div id='folder-list'>
+      <div id='status-box'></div>
+    </div>
+        <div id='work-panel'>
+            <div id='upper-panel'>
+					<div id='home-panel'>
+
+					</div>
+					<div id='searchgridpanel'>
+						  <div id='searchgrid-toolbar'></div>
+						  <div id='searchgrid'></div>
+					</div>
+					<div id='savegridpanel'>
+						  <div id='savegrid-toolbar'></div>
+						  <div id='savegrid'></div>
+					</div>
+					 <div id='marceditor'>
+							  <div id='editor-toolbar'></div>
+							  <div id='record-toolbar'>
+									<ul>
+										<li id='record-toolbar-handle'></li>
+										<li id='tb1'></li>
+										<li id='tb2'></li>
+										<li id='tb3'></li>
+									</ul>
+								</div>
+							  <div id='marccontent'>
+								  <div id='ffeditor'></div>
+								  <div id='vareditor'></div>
+							  </div>
+					 </div>
+             </div> <!-- upper-panel -->
+             <div id='left-panel'></div>
+            <div id='lower-panel'>
+                <div id='search-prev'></div>
+                <div id='save-prev'></div>
+            </div>
+            <div id='right-panel'></div>
+        </div> <!-- work-panel -->
+    </div>
+</div>
+<div id='south'></div>
+
+<!-- dialogs -->
+<div id='options-dlg'></div>
+<div id='search-dlg'></div>
+<div id='upload-dlg'></div>
+<div id='newrecord-dlg'></div>
+
+<script>
+Ext.onReady(function(){
+    init_gears();
+    initPrefs();
+    initUI();
+    createMainTab();
+
+// remove loading box
+  var loading = Ext.get('loading');
+  var mask = Ext.get('loading-mask');
+  mask.setOpacity(.8);
+  mask.shift({
+  	xy:loading.getXY(),
+  	width:loading.getWidth(),
+  	height:loading.getHeight(), 
+  	remove:true,
+  	duration:1,
+  	opacity:.3,
+  	easing:'bounceOut',
+  	callback : function(){
+  		loading.fadeOut({duration:.2,remove:true});
+  	}
+  });
+});
+
+
+
+</script>
+</body>
+</html>
+

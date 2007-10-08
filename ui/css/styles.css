@@ -1,0 +1,48 @@
+
+#top-panel {
+  height: 60px;
+}
+
+#info-panel {
+  float: right;
+}
+
+#status-box {
+  bottom: 0;
+}
+#fixedfields_editor {
+  background-color: #eeeeee;
+  border: solid 2px;
+}
+
+#varfields_editor {
+  background-color: #eeeeee,
+  border: solid 2px;
+  margin-top: 10px;
+}
+
+.database-details {
+  font-weight: bold;
+}
+
+.rootFolders {
+  margin-top: 10px;
+}
+
+#record-toolbar {
+  float: right;
+  height: 100px;
+  width: 70px;
+}
+
+#record-toolbar-handle {
+  height: 10px;
+  cursor: hand;
+}
+
+#status {
+  margin-top: 500px;
+  font-size: medium;
+  background-color: #33FF66;
+}
+

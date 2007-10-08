@@ -1,0 +1,702 @@
+<?xml version="1.0"?>
+<fields>
+    <field tag="000" length="24" repeatable="false" mandatory="true" fixedfield="true">
+	<description>Leader</description>
+	<value name="RLen" position="0" length="5" inputtype="textbox">
+		<description>The computer-generated, five-character numeric string that specifies the length of the entire record. The number is right justified and each unused position contains a zero.</description>
+	</value>
+	<value name="Base" position="12" length="5" inputtype="textbox">
+	    <description>The computer-generated, five-character numeric string that indicates the first character position of the first variable control field in a record. The number is right justified and each unused position contains a zero.</description>
+	</value>
+
+	<value name="RStat" position="5" length="1" inputtype="menulist">
+		<option>a</option>
+		<option>c</option>
+		<option>d</option>
+		<option>n</option>
+		<option>p</option>
+		<description>Indicates the relation of the record to a file.</description>
+	</value>
+	<value name="BLvl" position="7" length="1" inputtype="menulist">
+	    <description>Bibliographic Level</description>
+		<option desc="a A monographic bibliographic unit that is physically attached to or contained in another unit">a</option>
+		<option desc="b A serial bibliographic unit that is physically attached to or contained in another serial unit">b</option>
+		<option desc="c A made-up multipart group of items that were not originally published, distributed, or produced together">c</option>
+		<option desc="d A part of a collection, especially an archival unit described collectively elsewhere in the system.">d</option>
+		<option desc="i A bibliographic resource that is added to or changed by means of updates">i</option>
+		<option desc="m An item either complete in one part (monograph) or intended to be completed in a finite number of separate parts (multivolume monograph).">m</option>
+		<option desc="s An item issued in successive parts bearing numerical or chronological designations and intended to be continued indefinitely (e.g., serials, journals, series, newspapers).">s</option>
+	</value>
+	<value name="Desc" position="18" length="1" inputtype="menulist">
+		<option> </option>
+		<option>a</option>
+		<option>i</option>
+		<option>u</option>
+	    <description>Descriptive Cataloging Form: black: non-ISBD, a:AACR2, i:ISBD, u:Unknown</description>
+	</value>
+	<value name="Type" position="6" length="1" inputtype="menulist">
+	    <description>Type of record</description>
+		<option>a</option>
+		<option>c</option>
+		<option>d</option>
+		<option>e</option>
+		<option>f</option>
+		<option>g</option>
+		<option>i</option>
+		<option>j</option>
+		<option>k</option>
+		<option>m</option>
+		<option>o</option>
+		<option>p</option>
+		<option>r</option>
+		<option>t</option>
+	</value>
+	<value name="Indc" position="10" length="1">
+		<option>2</option>
+	</value>
+	<value name="Subc" position="12" length="1">
+		<option>2</option>
+	</value>
+
+	<value name="ELvl" position="17" length="1" inputtype="menulist">
+	    <description>Indicates the fullness of the bibliographic information and/or content designation of the MARC record.</description>
+		<option> </option>
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+	</value>
+	<value name="Enc" position="9" length="1" inputtype="menulist">
+	    	<description>Character coding scheme.  Blank: MARC-8.  a: UCS/Unicode</description>
+		<option desc="MARC-8"> </option>
+		<option desc="UCS/UNICODE">a</option>
+	</value>
+	<value name="Ctrl" position="8" length="1" inputtype="menulist">
+	    <description>Type of Control  Blank: No specific type.  a: Archival</description>
+		<option desc="No specific type"> </option>
+		<option desc="Archival">a</option>
+	</value>
+	<value name="Entry" position="20" length="4">
+		<option>4500</option>
+	</value>
+    </field>
+    <field tag="008" length="40" repeatable="false" mandatory="true" fixedfield="true">
+	<description>008 Fixed Field</description>
+	<value name="DateEntered" position="0" length="6"></value>
+	<value name="Form" position="23" length="1" inputtype="menulist">
+		<option> </option>
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
+		<option>d</option>
+		<option>f</option>
+		<option>r</option>
+		<option>s</option>
+		<option>|</option>
+	</value>
+	<value name="MRec" position="38" length="1" inputtype="menulist">
+		<option> </option>
+		<option>s</option>
+		<option>d</option>
+		<option>x</option>
+		<option>r</option>
+		<option>o</option>
+		<option>|</option>
+	</value>
+	<value name="Lang" position="35" length="3" inputtype="menulist">
+		<option>eng</option>
+		<option>fre</option>
+		<option>ita</option>
+		<option>rus</option>
+	</value>
+	<value name="Ctry" position="15" length="3" inputtype="menulist">
+		<option>nyu</option>
+		<option>cau</option>
+		<option>dcu</option>
+		<option>fre</option>
+		<option>ger</option>
+		<option>mdu</option>
+	</value>
+	<value name="Srce" position="39" length="1" inputtype="menulist">
+		<option> </option>
+		<option>c</option>
+		<option>d</option>
+		<option>u</option>
+		<option>|</option>
+	</value>
+	<value name="DtSt" position="6" length="1" inputtype="menulist">
+		<option>b</option>
+		<option>c</option>
+		<option>d</option>
+		<option>e</option>
+		<option>i</option>
+		<option>k</option>
+		<option>m</option>
+		<option>n</option>
+		<option>p</option>
+		<option>q</option>
+		<option>r</option>
+		<option>s</option>
+		<option>t</option>
+		<option>u</option>
+		<option>|</option>
+	</value>
+	<value name="Date1" position="7" length="4" inputtype="textbox"></value>
+	<value name="Date2" position="11" length="4" inputtype="textbox"></value>
+
+	<!-- fixed fields applicable to books pos 18-34 -->
+	<value name="Indx" position="31" length="1" rectype="BKS" inputtype="menulist">
+		<option>0</option>
+		<option>1</option>
+		<option>|</option>
+	</value>
+	<value name="LitF" position="33" length="1" rectype="BKS" inputtype="menulist">
+		<option>0</option>
+		<option>1</option>
+		<option>c</option>
+		<option>d</option>
+		<option>e</option>
+		<option>f</option>
+		<option>h</option>
+		<option>i</option>
+		<option>j</option>
+		<option>m</option>
+		<option>p</option>
+		<option>s</option>
+		<option>u</option>
+		<option>|</option>
+	</value>
+	<value name="Bio" position="34" length="1" rectype="BKS">
+		<option> </option>
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
+		<option>d</option>
+		<option>|</option>
+	</value>
+	<value name="Ills" position="18" length="4" rectype="BKS" inputtype="textbox">
+		<option> </option>
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
+		<option>d</option>
+		<option>e</option>
+		<option>f</option>
+		<option>g</option>
+		<option>h</option>
+		<option>i</option>
+		<option>j</option>
+		<option>k</option>
+		<option>l</option>
+		<option>m</option>
+		<option>n</option>
+		<option>o</option>
+		<option>p</option>
+		<option>|</option>
+	</value>
+	<value name="Audn" position="22" length="1" rectype="BKS" inputtype="menulist">
+		<option> </option>
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
+		<option>d</option>
+		<option>e</option>
+		<option>f</option>
+		<option>g</option>
+		<option>j</option>
+		<option>|</option>
+	</value>
+	<value name="GovPub" position="28" length="1" rectype="BKS">
+		<option>a</option>
+		<option> </option>
+		<option>c</option>
+		<option>f</option>
+		<option>i</option>
+		<option>l</option>
+		<option>m</option>
+		<option>o</option>
+		<option>s</option>
+		<option>u</option>
+		<option>z</option>
+		<option>|</option>
+	</value>
+	<value name="Fest" position="30" length="1" rectype="BKS" inputtype="menulist">
+		<option>0</option>
+		<option>1</option>
+		<option>|</option>
+	</value>
+	<value name="Conf" position="29" length="1" rectype="BKS" inputtype="menulist">
+		<option>0</option>
+		<option>1</option>
+		<option>|</option>
+	</value>
+	<value name="Link" position="19" length="1" inputtype="menulist">
+		<description>Indicates whether a note containing basic identification information (i.e., main entry and title, main entry and uniform title, main entry under uniform title, title, uniform title, Standard Technical Report Number, or report number) can be generated from a Linking Entry field (76X-78X).</description>
+		<option> </option>
+		<option>r</option>
+	</value>
+	<value name="Contents" position="24" length="4">
+	    <option> </option>
+	    <option>a</option>
+	    <option>b</option>
+	    <option>c</option>
+	    <option>d</option>
+	    <option>e</option>
+	    <option>f</option>
+	    <option>g</option>
+	    <option>h</option>
+	    <option>i</option>
+	    <option>j</option>
+	    <option>k</option>
+	    <option>l</option>
+	    <option>m</option>
+	    <option>n</option>
+	    <option>o</option>
+	    <option>p</option>
+	    <option>q</option>
+	    <option>r</option>
+	    <option>s</option>
+	    <option>t</option>
+	    <option>u</option>
+	    <option>v</option>
+	    <option>w</option>
+	    <option>z</option>
+	    <option>|</option>
+	</value>
+	<!-- fixed fields applicable to computer files -->
+	<value name="File" position="26" length="1" inputtype="menulist">
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
+		<option>d</option>
+		<option>e</option>
+		<option>f</option>
+		<option>g</option>
+		<option>h</option>
+		<option>i</option>
+		<option>j</option>
+		<option>m</option>
+		<option>u</option>
+		<option>z</option>
+		<option>|</option>
+	</value>
+	<!-- fixed fields applicable to maps -->
+	<value name="Relief" position="18" length="4" inputtype="menulist">
+		<option> </option>
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
+		<option>d</option>
+		<option>e</option>
+		<option>f</option>
+		<option>g</option>
+		<option>i</option>
+		<option>j</option>
+		<option>k</option>
+		<option>m</option>
+		<option>z</option>
+		<option>|</option>
+	</value>
+	<value name="Proj" position="22" length="2" inputtype="menulist">
+		<option>##</option>
+
+		<option>aa</option>
+
+		<option>ab</option>
+
+		<option>ac</option>
+
+		<option>ad</option>
+
+		<option>ae</option>
+
+		<option>af</option>
+
+		<option>ag</option>
+
+		<option>am</option>
+
+		<option>an</option>
+
+		<option>ap</option>
+
+		<option>au</option>
+
+		<option>az</option>
+
+		<option>ba</option>
+
+		<option>bb</option>
+
+		<option>bc</option>
+
+		<option>bd</option>
+
+		<option>be</option>
+
+		<option>bf</option>
+
+		<option>bg</option>
+
+		<option>bh</option>
+
+		<option>bi</option>
+
+		<option>bj</option>
+
+		<option>bo</option>
+
+		<option>br</option>
+
+		<option>bs</option>
+
+		<option>bu</option>
+
+		<option>bz</option>
+
+		<option>ca</option>
+
+		<option>cb</option>
+
+		<option>cc</option>
+
+		<option>ce</option>
+
+		<option>cp</option>
+
+		<option>cu</option>
+
+		<option>cz</option>
+
+		<option>da</option>
+
+		<option>db</option>
+
+		<option>dc</option>
+
+		<option>dd</option>
+
+		<option>de</option>
+
+		<option>df</option>
+
+		<option>dg</option>
+
+		<option>dh</option>
+
+		<option>dl</option>
+
+		<option>zz</option>
+
+		<option>| </option>
+	</value>
+	<value name="Cart" position="25" length="1" inputtype="menulist">
+		<option>|</option>
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
+		<option>d</option>
+		<option>e</option>
+		<option>f</option>
+		<option>g</option>
+		<option>u</option>
+		<option>z</option>
+		<option>|</option>
+	</value>
+	<value name="SpChar" position="33" length="2" inputtype="menulist">
+		<option> </option>
+		<option>e</option>
+		<option>j</option>
+		<option>k</option>
+		<option>l</option>
+		<option>n</option>
+		<option>o</option>
+		<option>p</option>
+		<option>r</option>
+		<option>z</option>
+		<option>|</option>
+	</value>
+	<!-- music materials -->
+	<value name="CompForm" position="18" length="2" inputtype="menulist">
+   <option>an</option>
+
+   <option>bd</option>
+
+   <option>bg</option>
+
+   <option>bl</option>
+
+   <option>bt</option>
+
+   <option>ca</option>
+
+   <option>cb</option>
+
+   <option>cc</option>
+
+   <option>cg</option>
+
+   <option>ch</option>
+
+   <option>cl</option>
+
+   <option>cn</option>
+
+   <option>co</option>
+
+   <option>cp</option>
+
+   <option>cr</option>
+
+   <option>cs</option>
+
+   <option>ct</option>
+
+   <option>cy</option>
+
+   <option>cz</option>
+
+   <option>df</option>     
+
+   <option>dv</option>
+
+   <option>fg</option>
+
+   <option>fm</option>
+
+   <option>ft</option>
+
+   <option>gm</option>
+
+   <option>hy</option>
+
+   <option>jz</option>
+
+   <option>mc</option>
+
+   <option>md</option>
+
+   <option>mi</option>
+
+   <option>mo</option>
+
+   <option>mp</option>
+
+   <option>mr</option>
+
+   <option>ms</option>
+
+   <option>mu</option>
+
+   <option>mz</option>
+
+   <option>nc</option>
+
+   <option>nn</option>
+
+   <option>op</option>
+
+   <option>or</option>
+
+   <option>ov</option>
+
+   <option>pg</option>
+
+   <option>pm</option>
+
+   <option>po</option>
+
+   <option>pp</option>
+
+   <option>pr</option>
+
+   <option>ps</option>
+
+   <option>pt</option>
+
+   <option>pv</option>
+
+   <option>rc</option>
+
+   <option>rd</option>
+
+   <option>rg</option>
+
+   <option>ri</option>
+
+   <option>rp</option>
+
+   <option>rq</option>
+
+   <option>sd</option>
+
+   <option>sg</option>
+
+   <option>sn</option>
+
+   <option>sp</option>
+
+   <option>st</option>
+
+   <option>su</option>
+
+   <option>sy</option>
+
+   <option>tc</option>
+
+   <option>ts</option>
+
+   <option>uu</option>
+
+   <option>vr</option>
+
+   <option>wz</option>
+
+   <option>zz</option>
+
+   <option>||</option>
+
+	</value>
+	<value name="Format" position="20" length="1" inputtype="menulist">
+   <option>a</option>
+
+   <option>b</option>
+
+   <option>c</option>
+
+   <option>d</option>
+
+   <option>e</option>
+
+   <option>g</option>
+
+   <option>m</option>
+
+   <option>n</option>
+
+   <option>u</option>
+
+   <option>z</option>
+
+   <option>|</option>
+
+	</value>
+
+	<value name="Parts" position="21" length="1" inputtype="menulist">
+   <option>#</option>
+
+   <option>d</option>
+
+   <option>e</option>
+
+   <option>f</option>
+
+   <option>n</option>
+
+   <option>u</option>
+
+   <option>|</option>
+		
+	</value>
+	<value name="Accomp" position="24" length="6" inputtype="menulist">
+   <option>#</option>
+
+   <option>a</option>
+
+   <option>b</option>
+
+   <option>c</option>
+
+   <option>d</option>
+
+   <option>e</option>
+
+   <option>f</option>
+
+   <option>g</option>
+
+   <option>h</option>
+
+   <option>i</option>
+
+   <option>k</option>
+
+   <option>r</option>
+
+   <option>s</option>
+
+   <option>z</option>
+
+   <option>|</option>
+
+	</value>
+	<value name="LitText" position="30" length="2" inputtype="menulist">
+   <option>#</option>
+
+   <option>a</option>
+
+   <option>b</option>
+
+   <option>c</option>
+
+   <option>d</option>
+
+   <option>e</option>
+
+   <option>f</option>
+
+   <option>g</option>
+
+   <option>h</option>
+
+   <option>i</option>
+
+   <option>j</option>
+
+   <option>k</option>
+
+   <option>l</option>
+
+   <option>m</option>
+
+   <option>n</option>
+
+   <option>o</option>
+
+   <option>p</option>
+
+   <option>r</option>
+
+   <option>s</option>
+
+   <option>t</option>
+
+   <option>z</option>
+
+   <option>|</option>
+
+	</value>
+	<value name="TrArr" position="33" length="1" inputtype="menulist">
+   <option>#</option>
+
+   <option>a</option>
+
+   <option>b</option>
+
+   <option>c</option>
+
+   <option>n</option>
+
+   <option>u</option>
+
+   <option>|</option>
+
+
+	</value>
+
+</field>
+</fields>
+
