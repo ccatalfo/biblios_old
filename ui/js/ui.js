@@ -80,6 +80,10 @@ var emptyTrashButton = new Ext.Toolbar.Button({
     }
 });
 
+function createHomeTab() {
+    hometab = tabs.addTab('hometab', 'Home');
+    hometab.activate();
+}
 
 /*
    Function: createMainTab
@@ -95,11 +99,11 @@ var emptyTrashButton = new Ext.Toolbar.Button({
    None.
 
 */
-function createMainTab()  {
-    maintab = tabs.addTab('maintab', 'Bibliographic');
-    maintab.activate();
-    layout = new Ext.BorderLayout('maintab', {
+function createBiblioTab()  {
+    bibliotab = tabs.addTab('bibliotab', 'Bibliographic');
+    layout = new Ext.BorderLayout('bibliotab', {
         west: {
+		  titlebar: true,	
           split: true,
           initialSize: 200,
           collapsible: true,
@@ -120,22 +124,22 @@ function createMainTab()  {
 		  preservePanels: true
           //autoScroll: true
         },
-        east: {
-          hidden: true,
-          collapsible: true,
-          split: true,
-          initialSize: 100,
-		  titleBar: true
-        },
-        west: {
-          hidden: true,
-          hideWhenEmpty: true
-        },
         south: {
+			split:true,
+			initialSize: 200,
+			minSize: 100,
+			maxSize: 400,
+			autoScroll:true,
+			collapsible:true,
+			titlebar: true
+        },
+        east: {
           split: true,
           collapsible: true,
           initialSize: 250,
           autoScroll: true,
+		  titlebar: true,
+		  collapsed: true
         }
         });
 		// create the search and save grids
@@ -149,12 +153,10 @@ function createMainTab()  {
 		innerLayout.add('center', savegridpanel);
 		innerLayout.add('center', marceditorpanel);
 		innerLayout.add('center', homepanel);
-        lower_panel = new Ext.ContentPanel('lower-panel');
+        lower_panel = new Ext.ContentPanel('lower-panel', "Preview");
         innerLayout.add('south', lower_panel);
         right_panel =new Ext.ContentPanel('right-panel');
         innerLayout.add('east', right_panel);
-        left_panel =new Ext.ContentPanel('left-panel');
-        innerLayout.add('west', left_panel);
         searchSaveNestedLayout = new Ext.NestedLayoutPanel(innerLayout);
         // add to main layout
         layout.add('center', searchSaveNestedLayout);

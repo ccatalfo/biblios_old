@@ -10,7 +10,7 @@
       <subfield code="a">   </subfield>
     </datafield>
     <datafield tag="020" ind1=" " ind2=" ">
-      <subfield code="a">:</subfield>
+      <subfield code="a"></subfield>
       <subfield code="c"></subfield>
     </datafield>
     <datafield tag="040" ind1=" " ind2=" ">
@@ -34,8 +34,8 @@
       <subfield code="d"></subfield>
     </datafield>
     <datafield tag="245" ind1="1" ind2="0">
-        <subfield code="a">/</subfield>
-      <subfield code="c">.</subfield>
+        <subfield code="a"></subfield>
+      <subfield code="c"></subfield>
     </datafield>
     <datafield tag="250" ind1=" " ind2=" ">
       <subfield code="a"></subfield>
@@ -46,9 +46,9 @@
       <subfield code="c"></subfield>
     </datafield>
     <datafield tag="300" ind1=" " ind2=" ">
-      <subfield code="a"> :</subfield>
-      <subfield code="b"> ;</subfield>
-      <subfield code="c">.</subfield>
+      <subfield code="a"></subfield>
+      <subfield code="b"></subfield>
+      <subfield code="c"></subfield>
     </datafield>
     <datafield tag="500" ind1=" " ind2=" ">
       <subfield code="a"></subfield>

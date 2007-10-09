@@ -54,7 +54,8 @@ var newRecordNum = 0; // number of individual records found and saved to db
 var resultsDoc;
 // tabs
 var tabs;
-var maintab;
+var bibliotab;
+var hometab;
 var optionstab;
 // toolbars, menus
 var RecentSearchesMenu;

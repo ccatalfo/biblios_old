@@ -112,7 +112,10 @@ var db_debug = 0;
   <div id='info-panel'>Info panel</div>
 </div>
 <div id="tab-panel">
-    <div id='maintab'>
+	<div id='hometab'>
+
+	</div>
+    <div id='bibliotab'>
     <div id='folder-list'>
       <div id='status-box'></div>
     </div>
@@ -167,7 +170,8 @@ Ext.onReady(function(){
     init_gears();
     initPrefs();
     initUI();
-    createMainTab();
+    createHomeTab();
+	createBiblioTab();
 
 // remove loading box
   var loading = Ext.get('loading');
