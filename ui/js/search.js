@@ -96,3 +96,97 @@ function handleSearch(options, isSuccess, resp) {
     createSearchResultsGrid(data);
 }
 
+var pazpar2Session = {};
+
+function pazpar2Init() {
+	$.ajax({
+		type: 'GET',
+		url: pazpar2url,
+		data: {command: 'init'},
+		dataType: 'text/xml',
+		success: function(data) {
+			console.info(data);
+			if( $("status", data).text() == 'OK') {
+				pazpar2Session.sessionid = $("session", data).text();
+				var pingintervalid = setInterval(pazpar2Ping, 30000);
+				pazpar2Session.pingintervalid = pingintervalid;
+			}
+			else {
+				console.error('PazPar2 error', $("error", data).text() );
+			}
+		},
+		error: function(data) {
+			console.error(data);
+		}
+		});
+}
+
+function pazpar2Ping() {
+	$.ajax({
+		type: 'GET',
+		dataType: 'text/xml',
+		url: pazpar2url,
+		data:{command: 'ping', session: pazpar2Session.sessionid},
+		success: function(data) {
+			console.info(data);
+		},
+		error: function(data) {
+			console.error(data);
+		}
+	});
+}
+
+function pazpar2Search(ccl) {
+	$.ajax({
+		url: pazpar2url,
+		dataType: 'text/xml',
+		data: { command: 'search', session: pazpar2Session.sessionid, query: ccl},
+		success: function(data) {
+			pazpar2Session.searchresp = data;
+		},
+		error: function(data) {
+			console.error(data);
+		}
+	});
+}
+
+function pazpar2ShowSearchResults() {
+	$.ajax({
+		url: pazpar2url,
+		dataType: 'text/xml',
+		data: { command: 'show', session: pazpar2Session.sessionid},
+		success: function(data) {
+			pazpar2Session.showresp = data;
+		},
+		error: function(data) {
+			console.error(data);
+		}
+	});
+}
+
+function pazpar2ShowRecordMetadata(recid) {
+	$.ajax({
+		url: pazpar2url,
+		dataType: 'text/xml',
+		data: { command: 'record', session: pazpar2Session.sessionid, id: recid},
+		success: function(data) {
+			pazpar2Session.record = data;
+		},
+		error: function(data) {
+			console.error(data);
+		}
+	});
+}
+function pazpar2ShowRecordMarcXML(recid, offset) {
+	$.ajax({
+		url: pazpar2url,
+		dataType: 'text/xml',
+		data: { command: 'record', session: pazpar2Session.sessionid, id: recid, offset: offset},
+		success: function(data) {
+			pazpar2Session.recordxml = data;
+		},
+		error: function(data) {
+			console.error(data);
+		}
+	});
+}
