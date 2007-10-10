@@ -720,6 +720,47 @@ function createSearchResultsGrid(data) {
     searchsaveds.load({params:{start:0, limit:20}});
 }
 
+function createSearchPazParGrid(url) {
+	var recordDef = Ext.data.Record.create([
+		{name: 'md-title'},
+		{name: 'md-title-remainder'},
+		{name:'md-author'},
+		{name: 'md-date'},
+		{name:'md-medium'},
+		{name:'location'}
+	]);
+	var reader = new Ext.data.XmlReader({
+		totalRecords: 'total',
+		record: 'hit',
+		id: 'recid'
+	}, recordDef);
+    ds = new Ext.data.Store({
+        // load using HTTP
+        proxy: new Ext.data.HttpProxy({url: url}),
+
+        // the return will be XML, so lets set up a reader
+        reader: reader    });
+
+    cm = new Ext.grid.ColumnModel([
+		{header: "Title", width: 180, dataIndex: 'md-title'},
+	    {header: "Author", width: 120, dataIndex: 'md-author'},
+		{header: "Date", width: 180, dataIndex: 'md-date'},
+		{header: "Medium", width: 100, dataIndex: 'md-medium'},
+		{header: "Location", width: 100, dataIndex: 'location'}
+	]);
+    cm.defaultSortable = true;
+
+    // create the grid
+    grid = new Ext.grid.Grid('searchgrid', {
+        ds: ds,
+        cm: cm
+    });
+    grid.render();
+
+    ds.load();
+
+}
+
 /*
    Function: createSaveFileGrid
 
