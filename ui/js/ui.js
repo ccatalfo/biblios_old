@@ -724,12 +724,12 @@ function createSearchPazParGrid(url) {
 	// clear the searchgrid of old results
 	$("#searchgrid").empty();
 	var recordDef = Ext.data.Record.create([
-		{name: 'md-title'},
-		{name: 'md-title-remainder'},
-		{name:'md-author'},
-		{name: 'md-date'},
-		{name:'md-medium'},
-		{name:'location @name'}
+		{name: 'title', mapping: 'md-title'},
+		{name: 'title-remainder', mapping: 'md-title-remainder'},
+		{name: 'author', mapping:'md-author'},
+		{name: 'date', mapping: 'md-date'},
+		{name: 'medium', mapping:'md-medium'},
+		{name: 'location', mapping:'location @name'}
 	]);
 	var reader = new Ext.data.XmlReader({
 		totalRecords: 'total',
@@ -742,23 +742,60 @@ function createSearchPazParGrid(url) {
 
         // the return will be XML, so lets set up a reader
         reader: reader,  
-		remoteSort: true
+		remoteSort: false
 		});
 
     cm = new Ext.grid.ColumnModel([
-		{header: "Title", width: 180, dataIndex: 'md-title'},
-	    {header: "Author", width: 120, dataIndex: 'md-author'},
-		{header: "Date", width: 180, dataIndex: 'md-date'},
-		{header: "Medium", width: 100, dataIndex: 'md-medium'},
-		{header: "Location", width: 100, dataIndex: 'location @name'}
+		{header: "Title", width: 180, dataIndex: 'title'},
+	    {header: "Author", width: 120, dataIndex: 'author'},
+		{header: "Date", width: 50, dataIndex: 'date'},
+		{header: "Medium", width: 50, dataIndex: 'medium'},
+		{header: "Location", width: 100, dataIndex: 'location'}
 	]);
     cm.defaultSortable = true;
 
     // create the grid
     grid = new Ext.grid.Grid('searchgrid', {
         ds: ds,
-        cm: cm
+        cm: cm,
+		autoHeight: true,
+		autoExpandColumn: 0
     });
+	grid.on('headerclick', function(grid, columnIndex, event) {
+		//ds.reload({params:{sort:1}});
+	});
+	grid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
+		var id = grid.dataSource.data.items[rowIndex].id;
+		// get the marcxml for this record and send to preview()
+		var marcxml = '';
+		searches[0].getRecordMarc( {recid:id} );
+		setTimeout( function() { marcxml = searches[0].record 
+			previewRecord( marcxml , 'search-prev');
+		}, 4000);
+	});
+	// FIXME
+	grid.on('celldblclick', function(searchsavegrid, rowIndex, colIndex,  e) {
+		showStatusMsg('Opening record...');
+		var id = grid.dataSource.data.items[rowIndex].id;
+		// get the marcxml for this record and send to preview()
+		var marcxml = '';
+		searches[0].getRecordMarc( {recid:id} );
+		setTimeout( function() { 
+		  marcxml = searches[0].record;
+          openRecord( id );
+		  clearStatusMsg();
+		}, 4000);
+        });
+		// FIXME
+        grid.on('keypress', function( e ) {
+          if( e.getKey() == Ext.EventObject.ENTER ) {
+            var sel = grid.getSelectionModel().getSelected();
+            var id = sel.data.Id;
+		    showStatusMsg('Opening record...');
+            openRecord( id );
+			clearStatusMsg();
+          }
+        });
     grid.render();
       // add a paging toolbar to the grid's header
       searchgridpaging = new Ext.PagingToolbar('searchgrid-toolbar', ds, {
@@ -1018,22 +1055,8 @@ function loadSaveFile(id) {
    None.
 
 */
-function previewRecord(id) {
-    //console.info('openRecord: opening record with id: ' + id);
-    var resultSet;
-    try {
-        resultSet = db.execute('select xml from Records where id=?', [id]);
-    } catch(ex) {
-        Ext.Msg.alert('Error', 'db error: ' + ex.message);
-    }
-    var xml;
-    while( resultSet.isValidRow() ) {
-        xml = resultSet.field(0);
-        //console.log('opening record with xml: ' + xml);
-        resultSet.next();
-    }
-    resultSet.close();
-    //console.info("record " + id + " has xml: " + xml);
+function previewRecord(xml) {
+    console.info('previewRecord: opening record with xml: ' + xml);
     var recDom = (new DOMParser()).parseFromString(xml, "text/xml");
     var rec001 = $("//controlfield[@tag=001]", recDom).text();
     var recAsHTML = ShowMarcProcessor.transformToDocument(recDom);  
