@@ -727,7 +727,7 @@ function createSearchPazParGrid(url) {
 		{name:'md-author'},
 		{name: 'md-date'},
 		{name:'md-medium'},
-		{name:'location'}
+		{name:'location @name'}
 	]);
 	var reader = new Ext.data.XmlReader({
 		totalRecords: 'total',
@@ -746,7 +746,7 @@ function createSearchPazParGrid(url) {
 	    {header: "Author", width: 120, dataIndex: 'md-author'},
 		{header: "Date", width: 180, dataIndex: 'md-date'},
 		{header: "Medium", width: 100, dataIndex: 'md-medium'},
-		{header: "Location", width: 100, dataIndex: 'location'}
+		{header: "Location", width: 100, dataIndex: 'location @name'}
 	]);
     cm.defaultSortable = true;
 
