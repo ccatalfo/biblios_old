@@ -721,6 +721,8 @@ function createSearchResultsGrid(data) {
 }
 
 function createSearchPazParGrid(url) {
+	// clear the searchgrid of old results
+	$("#searchgrid").empty();
 	var recordDef = Ext.data.Record.create([
 		{name: 'md-title'},
 		{name: 'md-title-remainder'},

@@ -53,6 +53,7 @@ var srchResNum = 0; // number of search queries
 var recordNum = 0; // number of individual records found and saved to db
 var newRecordNum = 0; // number of individual records found and saved to db
 var resultsDoc;
+var searches = new Array(); // Array of pazpar2 searches
 // tabs
 var tabs;
 var bibliotab;
@@ -154,11 +155,11 @@ function initUI() {
     var store = new Ext.data.SimpleStore({
         fields: ['type', 'desc'],
         data: [
-            ['kw:', 'Keyword'],
-            ['ti:', 'Title'],
-            ['au:', 'Author'],
-            ['su:', 'Subject'],
-            ['is:', 'ISBN']
+            ['', 'Keyword'],
+            ['ti', 'Title'],
+            ['au', 'Author'],
+            ['su', 'Subject'],
+            ['is', 'ISBN']
         ]		    
         });
       searchform.column(
@@ -186,8 +187,19 @@ function initUI() {
         );
         var map = new Ext.KeyMap("searchform", {
           key: 13, // or Ext.EventObject.ENTER
-          fn: function() {
-              doSearchZ3950();
+         fn: function() {
+				var searchtype = Ext.ComponentMgr.get('searchtype').getValue(); 
+				var query =  Ext.ComponentMgr.get('query').getValue();
+				var searchstring = '';
+				if( searchtype != '' ) {
+					searchstring = searchtype + '=' + query;
+				}
+				else {
+					searchstring = query;
+				}
+				if(debug) { console.info('searchstring is: ' + searchstring ); }
+              var pazparSearch = doPazPar2Search(searchstring);
+			  searches.push(pazparSearch);
           },
           scope: searchform
       });
