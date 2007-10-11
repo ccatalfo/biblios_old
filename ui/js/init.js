@@ -188,6 +188,10 @@ function initUI() {
         var map = new Ext.KeyMap("searchform", {
           key: 13, // or Ext.EventObject.ENTER
          fn: function() {
+		 		// kill any previous pazpar2 search instances
+				if( searches.length > 0 ) {
+					searches[0].clearPing();
+				}
 				var searchtype = Ext.ComponentMgr.get('searchtype').getValue(); 
 				var query =  Ext.ComponentMgr.get('query').getValue();
 				var searchstring = '';

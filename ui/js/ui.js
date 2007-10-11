@@ -760,7 +760,9 @@ function createSearchPazParGrid(url) {
     grid.render();
 
     ds.load();
-
+	if( ds.getCount() < 20 ) {
+		ds.reload();
+	}
 }
 
 /*
