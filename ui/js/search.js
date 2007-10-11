@@ -104,7 +104,7 @@ function doPazPar2Search(searchstring) {
 		if(debug) { console.info('pazpar2 inited with sessionid: ' + pz2.sessionid);}
 		pz2.pingAtInterval(50000); 
 		pz2.search( searchstring );
-		createSearchPazParGrid( pz2.getShowUrl() );
+		createSearchPazParGrid( pz2.getShowUrl({block: 20}) );
 		displaySearchView();
 	}, 2000);
 	return pz2;

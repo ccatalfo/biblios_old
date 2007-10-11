@@ -144,7 +144,7 @@ function createBiblioTab()  {
         });
 		// create the search and save grids
 		createSaveFileGrid();
-		createSearchResultsGrid();
+		//createSearchResultsGrid();
 		var searchgridpanel = new Ext.ContentPanel('searchgridpanel', {toolbar: searchgridpaging, resizeEl: 'searchgrid', fitToFrame: true, autoScroll: true});
 		var savegridpanel = new Ext.ContentPanel('savegridpanel', {toolbar: savegridpaging, resizeEl: 'savegrid', fitToFrame: true, autoScroll: true});
 		var marceditorpanel = new Ext.ContentPanel('marceditor', {toolbar: editor_toolbar, resizeEl: 'marccontent', fitToFrame: true, autoScroll: true});
@@ -741,7 +741,9 @@ function createSearchPazParGrid(url) {
         proxy: new Ext.data.HttpProxy({url: url}),
 
         // the return will be XML, so lets set up a reader
-        reader: reader    });
+        reader: reader,  
+		remoteSort: true
+		});
 
     cm = new Ext.grid.ColumnModel([
 		{header: "Title", width: 180, dataIndex: 'md-title'},
@@ -758,10 +760,22 @@ function createSearchPazParGrid(url) {
         cm: cm
     });
     grid.render();
+      // add a paging toolbar to the grid's header
+      searchgridpaging = new Ext.PagingToolbar('searchgrid-toolbar', ds, {
+          displayInfo: true,
+		  pageSize: 20,
+          emptyMsg: "No records to display"
+      });
+    searchgridpaging.insertButton(0, newButton);
+    searchgridpaging.insertButton(1, editButton);
+    searchgridpaging.insertButton(2, moveButton);
+    searchgridpaging.insertButton(3, refreshButton);
+    searchgridpaging.insertButton(4, printButton);
+    searchgridpaging.insertButton(5, exportButton);
+    ds.load({params:{start:0, num:20}});
 
-    ds.load();
 	if( ds.getCount() < 20 ) {
-		ds.reload();
+		ds.reload({params: {start:0, num:20}});
 	}
 }
 
