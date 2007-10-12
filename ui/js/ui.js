@@ -13,7 +13,7 @@ var refreshButton = new Ext.Toolbar.Button({
         handler: function() {
             // see which grid is visible at the moment and get reload data in it 
             if( Ext.get('searchgrid').isVisible() ) {
-                searchsavegrid.getDataSource().load();
+                searchgrid.getDataSource().load();
             }
             else if( Ext.get('savegrid').isVisible() ) {
                 savefilegrid.getDataSource().load();
@@ -45,10 +45,18 @@ var editButton = new Ext.Toolbar.Button({
 			showStatusMsg('Opening record...');
             // see which grid is visible at the moment and get selected record from it
             if( Ext.get('searchgrid').isVisible() ) {
-                openRecord( searchsavegrid.getSelections()[0].data.Id );
+				var sel = searchgrid.getSelectionModel().getSelected();
+				var id = sel.data.Id;
+				searches[0].getRecordMarc({
+					recid:id, 
+					success: function(data){openRecord(data);}
+				});
+				showStatusMsg('Opening record...');
+				clearStatusMsg();
             }
             else if( Ext.get('savegrid').isVisible() ) {
-                openRecord( savefilegrid.getSelections()[0].data.Id );
+				var xml = getLocalXml(savefilegrid.getSelections()[0].data.Id);
+                openRecord(  xml );
             }
 			clearStatusMsg();
 		}
@@ -755,51 +763,48 @@ function createSearchPazParGrid(url) {
     cm.defaultSortable = true;
 
     // create the grid
-    grid = new Ext.grid.Grid('searchgrid', {
+    searchgrid = new Ext.grid.Grid('searchgrid', {
         ds: ds,
         cm: cm,
 		//autoHeight: true,
 		autoExpandColumn: 0
     });
-	grid.on('headerclick', function(grid, columnIndex, event) {
+	searchgrid.on('headerclick', function(searchgrid, columnIndex, event) {
 		//ds.reload({params:{sort:1}});
 	});
-	grid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
-		var id = grid.dataSource.data.items[rowIndex].id;
+	searchgrid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
+		var id = searchgrid.dataSource.data.items[rowIndex].id;
 		// get the marcxml for this record and send to preview()
 		var marcxml = '';
 		searches[0].getRecordMarc( 
 		{
 			recid:id,
 			success: function(data) {
-				previewRecord(data);
+				previewRecord( data );
 			}
 		});
 	});
-	// FIXME
-	grid.on('celldblclick', function(searchsavegrid, rowIndex, colIndex,  e) {
+	searchgrid.on('celldblclick', function(searchgrid, rowIndex, colIndex,  e) {
 		showStatusMsg('Opening record...');
-		var id = grid.dataSource.data.items[rowIndex].id;
-		// get the marcxml for this record and send to preview()
-		var marcxml = '';
-		searches[0].getRecordMarc( {recid:id} );
-		setTimeout( function() { 
-		  marcxml = searches[0].record;
-          openRecord( id );
-		  clearStatusMsg();
-		}, 4000);
-        });
-		// FIXME
-        grid.on('keypress', function( e ) {
-          if( e.getKey() == Ext.EventObject.ENTER ) {
-            var sel = grid.getSelectionModel().getSelected();
+		var id = searchgrid.dataSource.data.items[rowIndex].id;
+		searches[0].getRecordMarc({
+			recid:id, 
+			success: function(data){openRecord(data);}
+		});
+	});
+	searchgrid.on('keypress', function( e ) {
+	  if( e.getKey() == Ext.EventObject.ENTER ) {
+            var sel = searchgrid.getSelectionModel().getSelected();
             var id = sel.data.Id;
+			searches[0].getRecordMarc({
+				recid:id, 
+				success: function(data){openRecord(data);}
+			});
 		    showStatusMsg('Opening record...');
-            openRecord( id );
 			clearStatusMsg();
-          }
-        });
-    grid.render();
+          } // if ENTER
+	}); // on keypress
+    searchgrid.render();
       // add a paging toolbar to the grid's header
       searchgridpaging = new Ext.PagingToolbar('searchgrid-toolbar', ds, {
           displayInfo: true,
@@ -891,15 +896,18 @@ function createSaveFileGrid(data) {
           savefileds = savefilegrid.getDataSource();
           var id = savefileds.data.items[rowIndex].data.Id;
 		  showStatusMsg('Opening record...');
-          openRecord( id );
+		  var xml = getLocalXml(id);
+          openRecord( xml );
 		  clearStatusMsg();
         });
         savefilegrid.on('keypress', function( e ) {
           if( e.getKey() == Ext.EventObject.ENTER ) {
             var sel = savefilegrid.getSelectionModel().getSelected();
             var id = sel.data.Id;
+			  var xml = getLocalXml(id);
+			  openRecord( xml );
 		  	showStatusMsg('Opening record...');
-            openRecord( id );
+            openRecord( xml );
 			clearStatusMsg();
           }
         });
@@ -909,7 +917,8 @@ function createSaveFileGrid(data) {
         //});
         savefilegrid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
           var id = savefileds.data.items[rowIndex].data.Id;
-          previewRecord( id , 'save-prev');
+		  var xml = getLocalXml(id);
+          previewRecord( xml );
         });
 		savefilegrid.render();
 
@@ -1033,7 +1042,6 @@ function loadSaveFile(id) {
             data[i] = recArray;
             i++;
                 rs.next();
-            srchResNum++;
             }
         } catch(ex) {
             Ext.Msg.alert('Error', 'db error: ' + ex.message);
@@ -1059,23 +1067,9 @@ function loadSaveFile(id) {
 
 */
 function previewRecord(xml) {
-    console.info('previewRecord: opening record with xml: ' + xml);
-    var recDom = (new DOMParser()).parseFromString(xml, "text/xml");
-    var rec001 = $("//controlfield[@tag=001]", recDom).text();
-    var recAsHTML = ShowMarcProcessor.transformToDocument(recDom);  
-    if(Sarissa.getParseErrorText(recAsHTML) == Sarissa.PARSED_OK){
-    } 
-    else {
-        //console.info(Sarissa.getParseErrorText(recAsHTML));
-    }   
-    var recEditor = (new XMLSerializer().serializeToString(recAsHTML));
-    if(Sarissa.getParseErrorText(recAsHTML) == Sarissa.PARSED_OK){
-    } 
-    else {
-        //console.info(Sarissa.getParseErrorText(recAsHTML));
-    }
     $("#lower-panel").empty();
-    $('#lower-panel').append( recEditor );
+    console.info('previewRecord: previewing record with xml: ' + xml);
+    $('#lower-panel').getTransform(showMarcXslPath, xml );
 }
 
 /*
@@ -1176,44 +1170,46 @@ function displaySaveView() {
    None.
 
 */
-function openRecord(id) {
-    //console.info('openRecord: opening record with id: ' + id);
-    try {
-        var resultSet = db.execute('select xml, savefile from Records where id=?', [id]);
-    } catch(ex) {
-        //console.error('db error: ' + ex.message);
-    }
-    var xml;
-    while( resultSet.isValidRow() ) {
-        xml = resultSet.fieldByName('xml');
-		savefileid = resultSet.fieldByName('savefile');
-        //console.log('opening record with xml: ' + xml);
-        resultSet.next();
-    }
-    if(debug==1) {console.info("record " + id + " has xml: " + xml);}
-    var recDom = (new DOMParser()).parseFromString(xml, "text/xml");
-    var rec001 = $("//controlfield[@tag=001]", recDom).text();
-    var title = $('[@tag="245"]/subfield[@code="a"]', recDom).text();
-    var fixedfieldseditor = MarcFixedFieldsProcessor.transformToDocument(recDom);  
-    var varfieldseditor = MarcVarFieldsProcessor.transformToDocument(recDom);  
-    if(Sarissa.getParseErrorText(recDom) == Sarissa.PARSED_OK){
-    } 
-    else {
-        Ext.MessageBox.alert(Sarissa.getParseErrorText(recDom));
-    }   
-    var ffed =(new XMLSerializer().serializeToString( fixedfieldseditor ));
-    var vared =(new XMLSerializer().serializeToString(varfieldseditor));
-    if(Sarissa.getParseErrorText(fixedfieldseditor) == Sarissa.PARSED_OK){
-    } 
-    else {
-        Ext.MessageBox.alert(Sarissa.getParseErrorText(fixedfieldseditor));
-    }
-    if(Sarissa.getParseErrorText(varfieldseditor) == Sarissa.PARSED_OK){
-    } 
-    else {
-        Ext.MessageBox.alert(Sarissa.getParseErrorText(varfieldseditor));
-    }
-    createEditor(ffed, vared, id, savefileid);
+function openRecord(xml) {
+    $("#ffeditor").getTransform( fixedFieldXslPath, xml);
+    $("#vareditor").getTransform( varFieldsXslPath, xml);
+	var vared = $("#vareditor").html();
+	$("#vareditor").empty();
+    $("#vareditor").append("<textarea name='rte_placeholder' id='rte_placeholder'>"+vared+"</textarea>");
+	rte_editor = new YAHOO.widget.Editor('rte_placeholder', {
+		height: '700px',
+		width: '722px',
+		dompath: false, //Turns on the bar at the bottom
+		animate: false, //Animates the opening, closing and moving of Editor windows
+		css: editor_css
+	});
+	rte_editor.render();
+	rte_editor.on('editorContentLoaded', function() {
+		// move the cursor to 001 tag so we can use it even though leader will be invisible
+		var editorSelection = rte_editor._getSelection();
+		var tag001 = $("#001", rte_editor._getDoc()).get(0);
+		editorSelection.extend(tag001, 0);
+		editorSelection.collapseToEnd();
+		editorSetFocus( $(editorSelection.focusNode).children('.tagnumber') );
+		rte_editor._focusWindow();
+		$("#000", rte_editor._getDoc()).hide();
+		$("#008", rte_editor._getDoc()).hide();
+		// add metadata div with associated savefile id and record id
+		$("#marceditor").prepend("<div id='metadata' style='display: none;'><span id='id'>"+id+"</span><span id='savefileid'>"+savefileid+"</span></div>");
+	});
+	rte_editor.on('editorKeyPress', editorKeyPress );
+	rte_editor.on('editorKeyPress', editorCheckHighlighting );
+	rte_editor.on('editorKeyUp', function(o) {
+	});
+	rte_editor.on('editorMouseUp', function(o) {
+		YAHOO.util.Event.stopEvent(o.ev);
+		editorSelection = rte_editor._getSelection();
+		var selectedElement = editorGetSelectedElement();
+		editorSetFocus( selectedElement );
+		if(debug) { console.info( "mouseUP: selected node text: " + $(selectedElement).text() );}
+		if(debug) { console.info( "mouseUp: " + selectedElement);}
+		if(debug) { console.info( "mouseUp: " + editorSelection);}
+	});
 	// show fixed field editor, hide ldr and 008 divs
 	$("#ffeditor").show();
 	// hide leader and 008
@@ -1221,23 +1217,23 @@ function openRecord(id) {
 	$("#008", rte_editor._getDoc()).hide();
 
 
-    $("#help-panel").append("This is the Help panel");
-     // Draggable is causing the cursor not to be able to move out of the $a subfield <span>.  Not sure why yet.
-     // add jquery draggable and droppable to subfields
-    //$('.subfield').Draggable();
-    //$('.subfields').Droppable(
-    //    {accept: 'subfield',
-    //      ondrop: function(dropped) {
-    //            $(this).append( "<div class='subfield' style='display:inline;' onclick='initEditor(this)'>"+$(dropped).html() + "</div>").Draggable();
-    //            $(dropped).remove();
-    //            $('.subfield').Draggable();
-    //       },
-    //      hoverclass: 'droppable'
-    //    });
+	$("#help-panel").append("This is the Help panel");
+	 // Draggable is causing the cursor not to be able to move out of the $a subfield <span>.  Not sure why yet.
+	 // add jquery draggable and droppable to subfields
+	//$('.subfield').Draggable();
+	//$('.subfields').Droppable(
+	//    {accept: 'subfield',
+	//      ondrop: function(dropped) {
+	//            $(this).append( "<div class='subfield' style='display:inline;' onclick='initEditor(this)'>"+$(dropped).html() + "</div>").Draggable();
+	//            $(dropped).remove();
+	//            $('.subfield').Draggable();
+	//       },
+	//      hoverclass: 'droppable'
+	//    });
 
-    // keep track of currently open record
-    currOpenRecord = id;
-    displayRecordView();
+	// keep track of currently open record
+	currOpenRecord = id;
+	displayRecordView();
 }
 
 /* 
@@ -1263,7 +1259,7 @@ function clear_editor() {
     }
    // clear the marceditor divs
    $("#ffeditor").empty();
-   $("#vareditor").empty();
+   $("#rte_placeholder").empty();
 }
 
 /*
@@ -1563,7 +1559,8 @@ function doCreateNewRecord() {
 				}
 				var lastId = getLastRecId();
 				showStatusMsg('Opening record...');
-				openRecord(lastId);
+				var xml = getLocalXml(lastId);
+				openRecord(xml);
 				clearStatusMsg();
 				currOpenRecord = lastId;
         }
@@ -1803,3 +1800,20 @@ function filterSearchResultsByServer() {
   });
 }
 
+function getLocalXml(id) {
+    //console.info('openRecord: opening record with id: ' + id);
+    try {
+        var resultSet = db.execute('select xml, savefile from Records where id=?', [id]);
+    } catch(ex) {
+        //console.error('db error: ' + ex.message);
+    }
+    var xml;
+    while( resultSet.isValidRow() ) {
+        xml = resultSet.fieldByName('xml');
+		savefileid = resultSet.fieldByName('savefile');
+        //console.log('opening record with xml: ' + xml);
+        resultSet.next();
+    }
+    if(debug==1) {console.info("record " + id + " has xml: " + xml);}
+	return xml;
+}

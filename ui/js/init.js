@@ -28,28 +28,11 @@ Ext.Ajax.request({
       $("//templates/template/file", configDoc).each( function() { templates += ' ' + $(this).text(); } );
     }	
 });
-var srchResultsProcessor = new XSLTProcessor();
-var xslDoc = Sarissa.getDomDocument();
-xslDoc.load("ui/xsl/search_results.xsl");
-srchResultsProcessor.importStylesheet(xslDoc);
 
-var ShowMarcProcessor = new XSLTProcessor();
-var fullRecordXSLDoc = Sarissa.getDomDocument();
-fullRecordXSLDoc.load("ui/xsl/MARC21slim2HTML.xsl");
-ShowMarcProcessor.importStylesheet(fullRecordXSLDoc);
+var showMarcXslPath = "ui/xsl/MARC21slim2HTML.xsl";
+var fixedFieldXslPath = "ui/xsl/fixedfields_editor.xsl";
+var varFieldsXslPath = "ui/xsl/varfields_editor.xsl";
 
-var MarcFixedFieldsProcessor = new XSLTProcessor();
-var MarcFixedFieldsProcessor_XSL = Sarissa.getDomDocument();
-MarcFixedFieldsProcessor_XSL.load("ui/xsl/fixedfields_editor.xsl");
-MarcFixedFieldsProcessor.importStylesheet(MarcFixedFieldsProcessor_XSL);
-
-var MarcVarFieldsProcessor = new XSLTProcessor();
-var MarcVarFieldsProcessor_XSL = Sarissa.getDomDocument();
-MarcVarFieldsProcessor_XSL.load("ui/xsl/varfields_editor.xsl");
-MarcVarFieldsProcessor.importStylesheet(MarcVarFieldsProcessor_XSL);
-
-var srchResults = Sarissa.getDomDocument("", "collection");
-var srchResNum = 0; // number of search queries
 var recordNum = 0; // number of individual records found and saved to db
 var newRecordNum = 0; // number of individual records found and saved to db
 var resultsDoc;
@@ -191,6 +174,7 @@ function initUI() {
 		 		// kill any previous pazpar2 search instances
 				if( searches.length > 0 ) {
 					searches[0].clearPing();
+					searches[0] = '';
 				}
 				var searchtype = Ext.ComponentMgr.get('searchtype').getValue(); 
 				var query =  Ext.ComponentMgr.get('query').getValue();
@@ -203,7 +187,7 @@ function initUI() {
 				}
 				if(debug) { console.info('searchstring is: ' + searchstring ); }
               var pazparSearch = doPazPar2Search(searchstring);
-			  searches.push(pazparSearch);
+				  searches[0] = pazparSearch;
           },
           scope: searchform
       });

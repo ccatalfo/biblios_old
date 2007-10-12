@@ -46,3 +46,6 @@
   background-color: #33FF66;
 }
 
+.yui-toolbar-subcont{
+  display: none; 
+}

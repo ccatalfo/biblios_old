@@ -134,20 +134,9 @@ function updateFFEditor(ff_ed) {
     newff += "</controlfield>";
     newff += "</record>";
     newff += "</collection>";
-    var oDomDoc = (new DOMParser()).parseFromString(newff, "text/xml");
-    if(Sarissa.getParseErrorText(oDomDoc) == Sarissa.PARSED_OK){
-      // The document was parsed/loaded just fine, go on
-    } 
-    else{
-      // The document was not loaded correctly! Inform the user:
-      Ext.MessageBox.alert('XML parsing error', Sarissa.getParseErrorText(oDomDoc));
-      if(debug) { console.info(Sarissa.getParseErrorText(oDomDoc)); }
-    }
-    var fixedfieldseditor = MarcFixedFieldsProcessor.transformToDocument(oDomDoc);  
-    var newff_ed =(new XMLSerializer().serializeToString( fixedfieldseditor ));
-    // replace old fixed field editor with new one
+	//FIXME make this an jquery.xslTransform call
     $("#ffeditor").empty();
-    $("#ffeditor").append(newff_ed);
+    $("#ffeditor").getTransform( fixedFieldXslPath, newff);
 }
     
 /*
@@ -265,45 +254,6 @@ function Edit2XmlMarc21(ff_ed, var_ed) {
 	var marcxmlAsString = (new XMLSerializer().serializeToString(marcxml));
 	//console.info("serialized marc editor into marcxml: " + marcxmlAsString);
 	return marcxmlAsString;	
-}
-
-function createEditor(ffed, vared, id, savefileid) {
-    $("#ffeditor").append(ffed);
-    $("#vareditor").append("<textarea name='rte_placeholder' id='rte_placeholder'>"+vared+"</textarea>");
-    rte_editor = new YAHOO.widget.Editor('rte_placeholder', {
-        height: '700px',
-        width: '722px',
-        dompath: false, //Turns on the bar at the bottom
-        animate: false, //Animates the opening, closing and moving of Editor windows
-        css: editor_css
-    });
-    rte_editor.render();
-    rte_editor.on('editorContentLoaded', function() {
-        // move the cursor to 001 tag so we can use it even though leader will be invisible
-        var editorSelection = rte_editor._getSelection();
-        var tag001 = $("#001", rte_editor._getDoc()).get(0);
-        editorSelection.extend(tag001, 0);
-        editorSelection.collapseToEnd();
-        editorSetFocus( $(editorSelection.focusNode).children('.tagnumber') );
-        rte_editor._focusWindow();
-        $("#000", rte_editor._getDoc()).hide();
-        $("#008", rte_editor._getDoc()).hide();
-		// add metadata div with associated savefile id and record id
-		$("#marceditor").prepend("<div id='metadata' style='display: none;'><span id='id'>"+id+"</span><span id='savefileid'>"+savefileid+"</span></div>");
-    });
-    rte_editor.on('editorKeyPress', editorKeyPress );
-    rte_editor.on('editorKeyPress', editorCheckHighlighting );
-    rte_editor.on('editorKeyUp', function(o) {
-    });
-    rte_editor.on('editorMouseUp', function(o) {
-        YAHOO.util.Event.stopEvent(o.ev);
-        editorSelection = rte_editor._getSelection();
-		var selectedElement = editorGetSelectedElement();
-        editorSetFocus( selectedElement );
-        if(debug) { console.info( "mouseUP: selected node text: " + $(selectedElement).text() );}
-        if(debug) { console.info( "mouseUp: " + selectedElement);}
-        if(debug) { console.info( "mouseUp: " + editorSelection);}
-    });
 }
 
 function editorGetSelectedElement() {
