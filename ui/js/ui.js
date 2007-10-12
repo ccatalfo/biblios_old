@@ -758,7 +758,7 @@ function createSearchPazParGrid(url) {
     grid = new Ext.grid.Grid('searchgrid', {
         ds: ds,
         cm: cm,
-		autoHeight: true,
+		//autoHeight: true,
 		autoExpandColumn: 0
     });
 	grid.on('headerclick', function(grid, columnIndex, event) {
@@ -768,10 +768,13 @@ function createSearchPazParGrid(url) {
 		var id = grid.dataSource.data.items[rowIndex].id;
 		// get the marcxml for this record and send to preview()
 		var marcxml = '';
-		searches[0].getRecordMarc( {recid:id} );
-		setTimeout( function() { marcxml = searches[0].record 
-			previewRecord( marcxml , 'search-prev');
-		}, 4000);
+		searches[0].getRecordMarc( 
+		{
+			recid:id,
+			success: function(data) {
+				previewRecord(data);
+			}
+		});
 	});
 	// FIXME
 	grid.on('celldblclick', function(searchsavegrid, rowIndex, colIndex,  e) {
