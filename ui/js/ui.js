@@ -1,4 +1,4 @@
-
+var UI = {};
 var newButton = new Ext.Toolbar.Button ({
         id: 'newrecordbutton',
         icon: 'ui/images/document-new.png',
@@ -45,13 +45,11 @@ var editButton = new Ext.Toolbar.Button({
 			showStatusMsg('Opening record...');
             // see which grid is visible at the moment and get selected record from it
             if( Ext.get('searchgrid').isVisible() ) {
+				showStatusMsg('Opening record...');
 				var sel = searchgrid.getSelectionModel().getSelected();
 				var id = sel.data.Id;
-				searches[0].getRecordMarc({
-					recid:id, 
-					success: function(data){openRecord(data);}
-				});
-				showStatusMsg('Opening record...');
+				UI.preview = false;
+				paz.record(id, 0, {syntax: 'marcxml'});
 				clearStatusMsg();
             }
             else if( Ext.get('savegrid').isVisible() ) {
@@ -776,23 +774,22 @@ function createSearchPazParGrid(url) {
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
 		// get the marcxml for this record and send to preview()
 		var marcxml = '';
-	    paz["onrecord"] = function(data) { previewRecord(data) };
-	    paz.record(id);
+		UI.preview = true;
+	    paz.record(id, 0, {syntax: 'marcxml'});
 	});
 	searchgrid.on('celldblclick', function(searchgrid, rowIndex, colIndex,  e) {
 		showStatusMsg('Opening record...');
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
-	    paz.record(id);
+		UI.preview = false;
+	    paz.record(id, 0, {syntax: 'marcxml'});
 	});
 	searchgrid.on('keypress', function( e ) {
 	  if( e.getKey() == Ext.EventObject.ENTER ) {
+		    showStatusMsg('Opening record...');
             var sel = searchgrid.getSelectionModel().getSelected();
             var id = sel.data.Id;
-			searches[0].getRecordMarc({
-				recid:id, 
-				success: function(data){openRecord(data);}
-			});
-		    showStatusMsg('Opening record...');
+			UI.preview = false;
+			paz.record(id, 0, {syntax: 'marcxml'});
 			clearStatusMsg();
           } // if ENTER
 	}); // on keypress

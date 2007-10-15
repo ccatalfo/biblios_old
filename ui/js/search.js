@@ -96,12 +96,21 @@ function handleSearch(options, isSuccess, resp) {
     createSearchResultsGrid(data);
 }
 
+function handleOnRecord(data) {
+	if( UI.preview == true) {
+		previewRecord(data.xmlDoc);
+	}
+	else if (UI.preview == false ) {
+		openRecord(data.xmlDoc);
+	}
+}
+
 function initializePazPar2(pazpar2url) {
     paz = new pz2({
 	"onshow": function(data) { searchds.load(); },
 	"showtime": 1000,
 	"pazpar2path": pazpar2url,
-	"onrecord": function(data) { if(debug) { console.info(data)} },
+	"onrecord": function(data) { handleOnRecord(data); },
 	});
 	return paz;
 }
