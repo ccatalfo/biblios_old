@@ -96,17 +96,18 @@ function handleSearch(options, isSuccess, resp) {
     createSearchResultsGrid(data);
 }
 
+function initializePazPar2(pazpar2url) {
+    paz = new pz2({
+	"onshow": function(data) { searchds.load(); },
+	"showtime": 1000,
+	"pazpar2path": pazpar2url,
+	"onrecord": function(data) { if(debug) { console.info(data)} },
+	});
+	return paz;
+}
+
 function doPazPar2Search(searchstring) {
-	var pz2 = new Pazpar2();
-	pz2.init( pazpar2url );
-	// wait 2 seconds for successful init FIXME: this may need to be adjusted.  Perhaps waiting with a synchronous transfer?
-	setTimeout( function() {
-		if(debug) { console.info('pazpar2 inited with sessionid: ' + pz2.sessionid);}
-		pz2.pingAtInterval(50000); 
-		pz2.search( searchstring );
-		createSearchPazParGrid( pz2.getShowUrl({block: 20}) );
-		displaySearchView();
-	}, 2000);
-	return pz2;
+    paz.search( searchstring );
+    displaySearchView();
 }
 

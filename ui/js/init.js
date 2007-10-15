@@ -36,7 +36,7 @@ var varFieldsXslPath = "ui/xsl/varfields_editor.xsl";
 var recordNum = 0; // number of individual records found and saved to db
 var newRecordNum = 0; // number of individual records found and saved to db
 var resultsDoc;
-var searches = new Array(); // Array of pazpar2 searches
+
 // tabs
 var tabs;
 var bibliotab;
@@ -58,8 +58,8 @@ var editorlayout;
 // google gears db handle
 var db;
 // grid and data store for searches
-var searchsavegrid;
-var searchsaveds;
+var searchgrid;
+var searchds;
 var searchmodel;
 // grid and data store for save file
 var savefilegrid;
@@ -81,6 +81,8 @@ var editor_css;
 $.get('ui/css/editor-styles.css', function(data) {
     editor_css = data;
 });
+var searches = new Array(); // Array of pazpar2 searches
+var paz = initializePazPar2(pazpar2url);
 
 
 /*
@@ -171,11 +173,6 @@ function initUI() {
         var map = new Ext.KeyMap("searchform", {
           key: 13, // or Ext.EventObject.ENTER
          fn: function() {
-		 		// kill any previous pazpar2 search instances
-				if( searches.length > 0 ) {
-					searches[0].clearPing();
-					searches[0] = '';
-				}
 				var searchtype = Ext.ComponentMgr.get('searchtype').getValue(); 
 				var query =  Ext.ComponentMgr.get('query').getValue();
 				var searchstring = '';
@@ -186,8 +183,7 @@ function initUI() {
 					searchstring = query;
 				}
 				if(debug) { console.info('searchstring is: ' + searchstring ); }
-              var pazparSearch = doPazPar2Search(searchstring);
-				  searches[0] = pazparSearch;
+              	doPazPar2Search(searchstring);
           },
           scope: searchform
       });

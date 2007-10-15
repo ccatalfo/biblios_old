@@ -152,7 +152,7 @@ function createBiblioTab()  {
         });
 		// create the search and save grids
 		createSaveFileGrid();
-		//createSearchResultsGrid();
+		createSearchPazParGrid(paz.pz2String+"?command=show&session="+paz.sessionID);
 		var searchgridpanel = new Ext.ContentPanel('searchgridpanel', {toolbar: searchgridpaging, resizeEl: 'searchgrid', fitToFrame: true, autoScroll: true});
 		var savegridpanel = new Ext.ContentPanel('savegridpanel', {toolbar: savegridpaging, resizeEl: 'savegrid', fitToFrame: true, autoScroll: true});
 		var marceditorpanel = new Ext.ContentPanel('marceditor', {toolbar: editor_toolbar, resizeEl: 'marccontent', fitToFrame: true, autoScroll: true});
@@ -744,7 +744,7 @@ function createSearchPazParGrid(url) {
 		record: 'hit',
 		id: 'recid'
 	}, recordDef);
-    ds = new Ext.data.Store({
+    searchds = new Ext.data.Store({
         // load using HTTP
         proxy: new Ext.data.HttpProxy({url: url}),
 
@@ -764,7 +764,7 @@ function createSearchPazParGrid(url) {
 
     // create the grid
     searchgrid = new Ext.grid.Grid('searchgrid', {
-        ds: ds,
+        ds: searchds,
         cm: cm,
 		//autoHeight: true,
 		autoExpandColumn: 0
@@ -776,21 +776,13 @@ function createSearchPazParGrid(url) {
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
 		// get the marcxml for this record and send to preview()
 		var marcxml = '';
-		searches[0].getRecordMarc( 
-		{
-			recid:id,
-			success: function(data) {
-				previewRecord( data );
-			}
-		});
+	    paz["onrecord"] = function(data) { previewRecord(data) };
+	    paz.record(id);
 	});
 	searchgrid.on('celldblclick', function(searchgrid, rowIndex, colIndex,  e) {
 		showStatusMsg('Opening record...');
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
-		searches[0].getRecordMarc({
-			recid:id, 
-			success: function(data){openRecord(data);}
-		});
+	    paz.record(id);
 	});
 	searchgrid.on('keypress', function( e ) {
 	  if( e.getKey() == Ext.EventObject.ENTER ) {
@@ -806,7 +798,7 @@ function createSearchPazParGrid(url) {
 	}); // on keypress
     searchgrid.render();
       // add a paging toolbar to the grid's header
-      searchgridpaging = new Ext.PagingToolbar('searchgrid-toolbar', ds, {
+      searchgridpaging = new Ext.PagingToolbar('searchgrid-toolbar', searchds, {
           displayInfo: true,
 		  pageSize: 20,
           emptyMsg: "No records to display"
@@ -817,11 +809,7 @@ function createSearchPazParGrid(url) {
     searchgridpaging.insertButton(3, refreshButton);
     searchgridpaging.insertButton(4, printButton);
     searchgridpaging.insertButton(5, exportButton);
-    ds.load({params:{start:0, num:20}});
-
-	if( ds.getCount() < 20 ) {
-		ds.reload({params: {start:0, num:20}});
-	}
+    //ds.load({params:{start:0, num:20}});
 }
 
 /*
