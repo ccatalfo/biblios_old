@@ -48,8 +48,8 @@ var editButton = new Ext.Toolbar.Button({
 				showStatusMsg('Opening record...');
 				var sel = searchgrid.getSelectionModel().getSelected();
 				var id = sel.data.Id;
-				UI.preview = false;
-				paz.record(id, 0, {syntax: 'marcxml'});
+				paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
+				getPazRecord(id);
 				clearStatusMsg();
             }
             else if( Ext.get('savegrid').isVisible() ) {
@@ -727,6 +727,8 @@ function createSearchResultsGrid(data) {
 }
 
 function createSearchPazParGrid(url) {
+	// set init callback for paz
+	paz.init = function(data) { searchds.proxy.conn.url = pazpar2url + '?command=show&session=' + paz.sessionID;},
 	// clear the searchgrid of old results
 	$("#searchgrid").empty();
 	var recordDef = Ext.data.Record.create([
@@ -764,6 +766,8 @@ function createSearchPazParGrid(url) {
     searchgrid = new Ext.grid.Grid('searchgrid', {
         ds: searchds,
         cm: cm,
+		enableDragDrop: true,
+		ddGroup: 'RecordDrop',
 		//autoHeight: true,
 		autoExpandColumn: 0
     });
@@ -774,22 +778,27 @@ function createSearchPazParGrid(url) {
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
 		// get the marcxml for this record and send to preview()
 		var marcxml = '';
-		UI.preview = true;
-	    paz.record(id, 0, {syntax: 'marcxml'});
+		paz.recordCallback = function(data) { var xml = xslTransform.serialize(data.xmlDoc); recordCache[id] = xml; previewRecord(xml)  }
+		try {
+			getPazRecord(id);
+		}
+		catch(ex) {
+			Ext.MessageBox.alert('Record retrieval error', ex);
+		}
 	});
 	searchgrid.on('celldblclick', function(searchgrid, rowIndex, colIndex,  e) {
 		showStatusMsg('Opening record...');
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
-		UI.preview = false;
-	    paz.record(id, 0, {syntax: 'marcxml'});
+		paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
+		getPazRecord(id);
 	});
 	searchgrid.on('keypress', function( e ) {
 	  if( e.getKey() == Ext.EventObject.ENTER ) {
 		    showStatusMsg('Opening record...');
             var sel = searchgrid.getSelectionModel().getSelected();
             var id = sel.data.Id;
-			UI.preview = false;
-			paz.record(id, 0, {syntax: 'marcxml'});
+			paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
+			getPazRecord(id);
 			clearStatusMsg();
           } // if ENTER
 	}); // on keypress

@@ -96,23 +96,37 @@ function handleSearch(options, isSuccess, resp) {
     createSearchResultsGrid(data);
 }
 
-function handleOnRecord(data) {
-	if( UI.preview == true) {
-		previewRecord(data.xmlDoc);
-	}
-	else if (UI.preview == false ) {
-		openRecord(data.xmlDoc);
-	}
-}
 
 function initializePazPar2(pazpar2url) {
-    paz = new pz2({
-	"onshow": function(data) { searchds.load(); },
-	"showtime": 1000,
-	"pazpar2path": pazpar2url,
-	"onrecord": function(data) { handleOnRecord(data); },
-	});
+paz = new pz2({ 
+					"onshow": function(data){ searchds.reload() },
+                    "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
+                    "pazpar2path": pazpar2url,
+                    "onstat": function(data){ console.info(data)},
+                    "onterm": function(data){ console.info(data)},
+                    "termlist": "subject,author",
+                    "onbytarget": function(data) { console.info(data)},
+					"usesessions" : true,
+                    "onrecord": function(data) {console.info(data) } 
+				});
 	return paz;
+}
+
+function resetPazPar2(paz) {
+	paz.stop();
+	paz.reset();
+	paz = new pz2({ 
+					"oninit": function(data) { searchds.proxy.conn.url = pazpar2url + '?command=show&session=' + paz.sessionID;},
+					"onshow": function(data){ searchds.reload() },
+                    "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
+                    "pazpar2path": pazpar2url,
+                    "onstat": function(data){ console.info(data)},
+                    "onterm": function(data){ console.info(data)},
+                    "termlist": "subject,author",
+                    "onbytarget": function(data) { console.info(data)},
+					"usesessions" : true,
+                    "onrecord": function(data) {console.info(data) } 
+				});
 }
 
 function doPazPar2Search(searchstring) {
@@ -120,3 +134,13 @@ function doPazPar2Search(searchstring) {
     displaySearchView();
 }
 
+function getPazRecord(recId) {
+	if( recordCache.recId ) {
+		if(debug) { console.info('retreiving record from cache')}
+		return recordCache.recId;
+	}
+	else {
+		if(debug) { console.info('retreiving record from pazpar2')}
+		paz.record(recId, {syntax: 'marcxml'});
+	}
+}

@@ -67,7 +67,7 @@ var savefileds;
 var savefilemodel;
 var searchgridpaging;
 var savegridpaging;
-// record cache for save files
+// record cache for search results
 var recordCache = {};
 // panels
 var status_panel, folderlist_panel, toolbar_panel, work_panel, upper_panel, lower_panel, right_panel, left_panel;

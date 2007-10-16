@@ -129,29 +129,45 @@ function doSaveLocal(savefileid, savefilename, sel, dd) {
         var grid = Ext.ComponentMgr.get( 'save-file-grid' );
         var ds = grid.getDataSource();
         var sel = grid.getSelectionModel().getSelections();
-    }
+		// update the record(s) based on current selection
+		for( var i = 0; i < sel.length; i++) {
+			var id = sel[i].data.Id;
+			try {
+				rs = db.execute('update Records set status=? where id=?', ['edited', id]);	
+				rs = db.execute('update Records set date_modified=datetime("now", "localtime") where id=?', [id]);	
+				rs = db.execute('update Records set savefile=? where id=?', [savefileid, id]);	
+				rs.close();
+				if(debug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
+			}
+			catch(ex) {
+				Ext.MessageBox.alert("Database error", ex.message);
+			}
+		}
+	}
     else if( Ext.get('searchgrid').isVisible() ) {
-        var grid = Ext.ComponentMgr.get( 'search-grid' );
-        var ds = grid.getDataSource();
-        var sel = grid.getSelectionModel().getSelections();
+		for( var i = 0; i < sel.length; i++) {
+			var id = sel[i].id;
+			paz.recordCallback = function(data) { addRecord( data ) }
+			paz.record(id, 0);
+		}
     }
-    // update the record(s) based on current selection
-    for( var i = 0; i < sel.length; i++) {
-	var id = sel[i].data.Id;
-	try {
-	    rs = db.execute('update Records set status=? where id=?', ['edited', id]);	
-	    rs = db.execute('update Records set date_modified=datetime("now", "localtime") where id=?', [id]);	
-	    rs = db.execute('update Records set savefile=? where id=?', [savefileid, id]);	
-	    rs.close();
-	    if(debug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
-	}
-	catch(ex) {
-	    Ext.MessageBox.alert("Database error", ex.message);
-	}
-}
-    $("#south").empty();
-    $("#south").append("Record(s) saved to "+savefilename);
+    showStatusMsg("Record(s) saved to "+savefilename);
     return true;
 }
+
+// FIXME need to get server from selection
+function addRecord(data) {
+	var savefileid = 2;
+	var xml = xslTransform.serialize( data.xmlDoc );
+	try {
+		db.execute('insert into Records (id, xml, status, date_added, date_modified, server, savefile) values (null, ?, ?, date("now", "localtime"), date("now", "localtime"), ?, ?)', [xml, 'new', server, savefileid]);
+		if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + title);}
+	} catch(ex) {
+		Ext.Msg.alert('Error', 'db error: ' + ex.message);
+	}
+	var lastId = getLastRecId();	
+	return lastId;
+}
+
 
 
