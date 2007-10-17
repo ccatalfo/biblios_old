@@ -53,7 +53,9 @@ var editButton = new Ext.Toolbar.Button({
 				clearStatusMsg();
             }
             else if( Ext.get('savegrid').isVisible() ) {
-				var xml = getLocalXml(savefilegrid.getSelections()[0].data.Id);
+                var id = savefilegrid.getSelections()[0].data.Id;
+				var xml = getLocalXml(id);
+                currOpenRecord = id;
                 openRecord(  xml );
             }
 			clearStatusMsg();
@@ -620,110 +622,6 @@ function createFolderList() {
         displaySaveFile(currentId, currentNode.text); 
         return true;
     });
-}
-
-/*
-   Function: createSearchResultsGrid
-
-   Creates the ext.Grid for displaying search results.  Destroys any old existing search grids.
-
-   Parameters:
-
-   data: Array holding the data to load into the newly created grid.
-
-   Returns:
-
-   searchgrid: the grid created
-
-   See Also:
-
-      <createSaveFileGrid>
-*/
-function createSearchResultsGrid(data) {
-
-	// destroy old search results grid
-	if( Ext.ComponentMgr.get('search-grid') ) {
-		searchsavegrid.destroy(false);
-	}
-    // create new Search Results Grid
-    // empty data at first
-	if( ! data) {
-		data = [];
-	}
-    searchsaveds = new Ext.data.Store({
-                proxy: new Ext.data.PagingMemoryProxy(data),
-                reader: new Ext.data.ArrayReader({}, [
-                       {name: 'Id'},
-                       {name: 'Title'},
-                       {name: 'Author'},
-                       {name: 'Publisher'},
-                       {name: 'DateOfPub'},
-                       {name: 'Server'},
-                  ])
-        });
-
-    var colModel = new Ext.grid.ColumnModel([
-            {header: "Title", width: 370, dataIndex: 'Title', sortable: true},
-            {header: "Author", width: 190, dataIndex: 'Author', sortable: true},
-            {header: "Publisher", width: 210, dataIndex: 'Publisher', sortable: true},
-            {header: "DateOfPub", width: 80, dataIndex: 'DateOfPub', sortable: true},
-            {header: "Server", width: 200, dataIndex: 'Server', sortable: true},
-    ]);
-
-	// make sure the div holding the search grid has height and width so it will render correclty
-	$("#searchgrid").css('width', '10px');
-	$("#searchgrid").css('height', '10px');
-
-        // create the Grid
-        searchsavegrid = new Ext.grid.Grid('searchgrid', {
-            id: 'search-grid',
-            ds: searchsaveds,
-            cm: colModel,
-            enableDragDrop: true,
-            ddGroup: 'RecordDrop',
-            autoExpandColumn: 1,
-			autoWidth: true,
-            autoHeight: true
-        });
-        Ext.ComponentMgr.register(searchsavegrid);
-        searchsavegrid.on('celldblclick', function(searchsavegrid, rowIndex, colIndex,  e) {
-          var id = searchsaveds.data.items[rowIndex].data.Id;
-		  showStatusMsg('Opening record...');
-          openRecord( id );
-		  clearStatusMsg();
-        });
-        searchsavegrid.on('keypress', function( e ) {
-          if( e.getKey() == Ext.EventObject.ENTER ) {
-            var sel = searchsavegrid.getSelectionModel().getSelected();
-            var id = sel.data.Id;
-		    showStatusMsg('Opening record...');
-            openRecord( id );
-			clearStatusMsg();
-          }
-        });
-        //searchsavegrid.on('rowclick', function(searchsavegrid, rowIndex, colIndex, e) {
-        //  var id = searchsaveds.data.items[rowIndex].data.Id;
-        //  previewRecord( id , 'search-prev');
-        //});
-        searchsavegrid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
-          var id = searchsaveds.data.items[rowIndex].data.Id;
-          previewRecord( id , 'search-prev');
-        });
-      searchsavegrid.render();
-        searchsavegrid.getSelectionModel().selectFirstRow();
-
-      // add a paging toolbar to the grid's header
-      searchgridpaging = new Ext.PagingToolbar('searchgrid-toolbar', searchsaveds, {
-          displayInfo: true,
-          emptyMsg: "No records to display"
-      });
-    searchgridpaging.insertButton(0, newButton);
-    searchgridpaging.insertButton(1, editButton);
-    searchgridpaging.insertButton(2, moveButton);
-    searchgridpaging.insertButton(3, refreshButton);
-    searchgridpaging.insertButton(4, printButton);
-    searchgridpaging.insertButton(5, exportButton);
-    searchsaveds.load({params:{start:0, limit:20}});
 }
 
 function createSearchPazParGrid(url) {
