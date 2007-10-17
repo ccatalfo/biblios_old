@@ -102,12 +102,8 @@ paz = new pz2({
 					"onshow": function(data){ searchds.reload() },
                     "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
                     "pazpar2path": pazpar2url,
-                    "onstat": function(data){ console.info(data)},
-                    "onterm": function(data){ console.info(data)},
                     "termlist": "subject,author",
-                    "onbytarget": function(data) { console.info(data)},
 					"usesessions" : true,
-                    "onrecord": function(data) {console.info(data) } 
 				});
 	return paz;
 }
@@ -135,12 +131,17 @@ function doPazPar2Search(searchstring) {
 }
 
 function getPazRecord(recId) {
-	if( recordCache.recId ) {
+	if( recordCache[recId] ) {
 		if(debug) { console.info('retreiving record from cache')}
-		return recordCache.recId;
+		return recordCache[recId];
 	}
 	else {
 		if(debug) { console.info('retreiving record from pazpar2')}
-		paz.record(recId, {syntax: 'marcxml'});
+        if( paz.currRecOffset) {
+          paz.record(recId, paz.currRecOffset);
+        }
+        else {
+          paz.record(recId, 0);
+        }
 	}
 }

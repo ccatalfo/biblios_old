@@ -147,8 +147,19 @@ function doSaveLocal(savefileid, savefilename, sel, dd) {
     else if( Ext.get('searchgrid').isVisible() ) {
 		for( var i = 0; i < sel.length; i++) {
 			var id = sel[i].id;
-			paz.recordCallback = function(data) { addRecord( data ) }
-			paz.record(id, 0);
+            var server = sel[i].data.location;
+            var title = sel[i].data.title;
+            try {
+                db.execute('insert into Records (id, status, date_added, date_modified, server, savefile) values (null, ?, date("now", "localtime"), date("now", "localtime"), ?, ?)', ['new', server, savefileid]);
+                if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + title);}
+            } catch(ex) {
+                Ext.Msg.alert('Error', 'db error: ' + ex.message);
+            }
+			paz.recordCallback = function(data) { addRecord( xslTransform.serialize(data.xmlDoc) ) }
+            var xml = getPazRecord(id);
+            if(xml) {
+              addRecord(xml);
+            }
 		}
     }
     showStatusMsg("Record(s) saved to "+savefilename);
@@ -156,17 +167,15 @@ function doSaveLocal(savefileid, savefilename, sel, dd) {
 }
 
 // FIXME need to get server from selection
-function addRecord(data) {
-	var savefileid = 2;
-	var xml = xslTransform.serialize( data.xmlDoc );
+function addRecord(xml) {
+    if(debug){ console.info('addRecord called with data: ' + xml.substr(0, 10)) }
+    var id = getLastRecId();
 	try {
-		db.execute('insert into Records (id, xml, status, date_added, date_modified, server, savefile) values (null, ?, ?, date("now", "localtime"), date("now", "localtime"), ?, ?)', [xml, 'new', server, savefileid]);
-		if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + title);}
+		db.execute('update Records set xml = ? where id = ?', [xml, id]);
+		if(debug == 1 ) {console.info('addRecord: updating xml of record with id: ' + id);}
 	} catch(ex) {
 		Ext.Msg.alert('Error', 'db error: ' + ex.message);
 	}
-	var lastId = getLastRecId();	
-	return lastId;
 }
 
 

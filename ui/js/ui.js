@@ -781,6 +781,10 @@ function createSearchPazParGrid(url) {
 		paz.recordCallback = function(data) { var xml = xslTransform.serialize(data.xmlDoc); recordCache[id] = xml; previewRecord(xml)  }
 		try {
 			getPazRecord(id);
+          var xml = getPazRecord(id);
+          if( xml ) {
+            previewRecord(xml);
+          }
 		}
 		catch(ex) {
 			Ext.MessageBox.alert('Record retrieval error', ex);
@@ -790,7 +794,10 @@ function createSearchPazParGrid(url) {
 		showStatusMsg('Opening record...');
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
 		paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
-		getPazRecord(id);
+		var xml = getPazRecord(id);
+        if( xml ) {
+          openRecord(xml);
+        }
 	});
 	searchgrid.on('keypress', function( e ) {
 	  if( e.getKey() == Ext.EventObject.ENTER ) {
@@ -798,7 +805,10 @@ function createSearchPazParGrid(url) {
             var sel = searchgrid.getSelectionModel().getSelected();
             var id = sel.data.Id;
 			paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
-			getPazRecord(id);
+            var xml = getPazRecord(id);
+            if( xml ) {
+              openRecord(xml);
+            }
 			clearStatusMsg();
           } // if ENTER
 	}); // on keypress
@@ -1062,7 +1072,7 @@ function loadSaveFile(id) {
 */
 function previewRecord(xml) {
     $("#lower-panel").empty();
-    console.info('previewRecord: previewing record with xml: ' + xml);
+    //console.info('previewRecord: previewing record with xml: ' + xml);
     $('#lower-panel').getTransform(showMarcXslPath, xml );
 }
 
