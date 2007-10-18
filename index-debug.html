@@ -61,14 +61,13 @@ var db_debug = 0;
 
 <!-- our own javascript app files -->
 <script type="text/javascript" src="ui/js/db.js"></script>
-<script type="text/javascript" src="ui/js/search.js"></script>
-<script type="text/javascript" src="ui/js/init.js"></script>
 <script type="text/javascript" src="ui/js/prefs.js"></script>
+<script type="text/javascript" src="ui/js/search.js"></script>
 <script type="text/javascript" src="ui/js/ui.js"></script>
 <script type="text/javascript" src="ui/js/save.js"></script>
 <script type="text/javascript" src="ui/js/edit.js"></script>
 <script type="text/javascript" src="ui/js/options.js"></script>
-<script type="text/javascript" src="test/include.js"></script>
+<script type="text/javascript" src="ui/js/init.js"></script>
 <!-- additions to Extjs library for this project -->
 <script type="text/javascript" src="lib/extjs/PagingToolbarRemoveButton.js"></script>
 
@@ -176,7 +175,6 @@ var db_debug = 0;
 <div id='newrecord-dlg'></div>
 <script>
 Ext.onReady(function(){
-    init_gears();
     initPrefs();
     initUI();
 	createHomeTab();

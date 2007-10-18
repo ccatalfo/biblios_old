@@ -9,7 +9,8 @@ var z3950serversSave = '';
 var cclfile = '';
 var plugins = '';
 var templates = '';
-var pazpar2url = 'http://10.0.2.2/pazpar2/search.pz2';
+var pazpar2url = 'http://eowyn.metavore.com/pazpar2/search.pz2';
+init_gears();
 
 Ext.Ajax.request({
     url: 'conf/webcatdb.conf',

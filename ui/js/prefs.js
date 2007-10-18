@@ -1,6 +1,6 @@
 
 function initPrefs() {
-  z3950serversSearch = getTargetAuthStrings();
+	setPazPar2Targets(paz);
 }
 
 function getTargetAuthStrings() {
@@ -97,6 +97,4 @@ function setEnableTargets() {
       Ext.MessageBox.alert('db error', ex.message);
     }
   }
-  // reset the authstring for enabled servers
-  z3950serversSearch = getTargetAuthStrings();
 }

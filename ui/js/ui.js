@@ -1707,7 +1707,7 @@ function filterSearchResultsByServer() {
       checkednodes.push( targetnodes[i].attributes.servername );
     }
   }
-  searchsaveds.filterBy( function(record, id) {
+  searchds.filterBy( function(record, id) {
     // if this records Server name matches one of the checkednodes, return true for this record
     for( var i = 0; i < checkednodes.length; i++) {
       if( record.data.Server == checkednodes[i] ) {
