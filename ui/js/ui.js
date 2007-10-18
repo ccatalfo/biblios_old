@@ -1,4 +1,15 @@
 var UI = {};
+UI.searchpreview = {};
+UI.searchpreview.id = '';
+UI.searchpreview.xml = '';
+UI.savepreview = {};
+UI.savepreview.id = '';
+UI.savepreview.xml = '';
+UI.editor = {};
+UI.editor.id = '';
+UI.editor.savefileid = '';
+UI.editor.xml = '';
+
 var newButton = new Ext.Toolbar.Button ({
         id: 'newrecordbutton',
         icon: 'ui/images/document-new.png',
@@ -48,14 +59,20 @@ var editButton = new Ext.Toolbar.Button({
 				showStatusMsg('Opening record...');
 				var sel = searchgrid.getSelectionModel().getSelected();
 				var id = sel.data.Id;
-				paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
-				getPazRecord(id);
+                var title = sel.data.title;
+                var server = sel.data.location;
+                UI.editor.id = '';
+                paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
+                var xml = getPazRecord(id);
+                if( xml ) {
+                  openRecord(xml);
+                }
 				clearStatusMsg();
             }
             else if( Ext.get('savegrid').isVisible() ) {
                 var id = savefilegrid.getSelections()[0].data.Id;
 				var xml = getLocalXml(id);
-                currOpenRecord = id;
+                UI.editor.id = id;
                 openRecord(  xml );
             }
 			clearStatusMsg();
@@ -677,20 +694,15 @@ function createSearchPazParGrid(url) {
 		// get the marcxml for this record and send to preview()
 		var marcxml = '';
 		paz.recordCallback = function(data) { var xml = xslTransform.serialize(data.xmlDoc); recordCache[id] = xml; previewRecord(xml)  }
-		try {
-			getPazRecord(id);
-          var xml = getPazRecord(id);
-          if( xml ) {
-            previewRecord(xml);
-          }
-		}
-		catch(ex) {
-			Ext.MessageBox.alert('Record retrieval error', ex);
-		}
+        var xml = getPazRecord(id);
+        if( xml ) {
+          previewRecord(xml);
+        }
 	});
 	searchgrid.on('celldblclick', function(searchgrid, rowIndex, colIndex,  e) {
 		showStatusMsg('Opening record...');
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
+        UI.editor.id = '';
 		paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
 		var xml = getPazRecord(id);
         if( xml ) {
@@ -702,6 +714,7 @@ function createSearchPazParGrid(url) {
 		    showStatusMsg('Opening record...');
             var sel = searchgrid.getSelectionModel().getSelected();
             var id = sel.data.Id;
+            UI.editor.id = '';
 			paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
             var xml = getPazRecord(id);
             if( xml ) {
@@ -1155,6 +1168,8 @@ function openRecord(xml) {
    <openRecord>
 */
 function clear_editor() {
+    // reset current open record to none
+    UI.editor.id = '';
     // if we're coming from marceditor, destroy old rte instance
     if( innerLayout.getRegion('center').activePanel.getId() == 'marceditor' && rte_editor && rte_editor._getDoc()  ) {
         rte_editor.destroy();

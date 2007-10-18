@@ -112,17 +112,24 @@ function resetPazPar2(paz) {
 	paz.stop();
 	paz.reset();
 	paz = new pz2({ 
-					"oninit": function(data) { searchds.proxy.conn.url = pazpar2url + '?command=show&session=' + paz.sessionID;},
 					"onshow": function(data){ searchds.reload() },
                     "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
                     "pazpar2path": pazpar2url,
-                    "onstat": function(data){ console.info(data)},
-                    "onterm": function(data){ console.info(data)},
                     "termlist": "subject,author",
-                    "onbytarget": function(data) { console.info(data)},
+                    "errorHandler": handlePazPar2Error,
 					"usesessions" : true,
-                    "onrecord": function(data) {console.info(data) } 
 				});
+}
+
+function handlePazPar2Error(data) {
+  // get error code
+  if(debug){ console.info('pazpar2 error: ' + data)}
+  var errorcode = $("error[@code]", data).text();
+  // if session does not exist 
+  if( errorcode == '1' ) {
+    if(debug) { console.info("pazpar2 error: session does not exist") }
+  
+  }
 }
 
 function doPazPar2Search(searchstring) {
@@ -137,11 +144,11 @@ function getPazRecord(recId) {
 	}
 	else {
 		if(debug) { console.info('retreiving record from pazpar2')}
-        if( paz.currRecOffset) {
-          paz.record(recId, paz.currRecOffset);
-        }
-        else {
+        try {
           paz.record(recId, 0);
+        }
+        catch(ex) {
+          ext.MessageBox.alert('Pazpar2 error', ex.message);
         }
 	}
 }

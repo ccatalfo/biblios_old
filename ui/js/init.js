@@ -198,6 +198,10 @@ function initUI() {
         handler: function() {
 			// get the savefile info for this record
 			var savefileid = $("#metadata").children("#savefileid").text();
+            if( savefileid == '' ) {
+              savefileid = 2; // Drafts
+              if(debug) { console.info('Save Button: setting savefileid to Drafts')}
+            }
 			doSaveLocal(savefileid);
 			clearStatusMsg();
 		}

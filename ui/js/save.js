@@ -68,6 +68,10 @@ function doSaveZ3950() {
 
 */
 function doSaveLocal(savefileid, savefilename, sel, dd) {
+    if( !savefileid ) {
+      if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
+      savefileid = 2; // Drafts
+    }
 	if( !savefilename ) {
 		// get savefilename for this savefileid
 		var rs;
@@ -95,7 +99,16 @@ function doSaveLocal(savefileid, savefilename, sel, dd) {
         else if( marcFlavor == 'unimarc' ) {
             Ext.MessageBox.alert("Unimarc support not yet implemented");
         }
-        var recid = currOpenRecord;
+        var recid = UI.editor.id;
+        // if we don't have a record id, add this record to the db first
+        if( recid == '' ) {
+            if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
+            var sel = searchgrid.getSelections()[0];
+			var id = sel.id;
+            var server = sel.data.location;
+            var title = sel.data.title;
+            recid = addRecordFromSearch(id, server, title, savefileid);
+        }
         if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
         try {
             rs = db.execute('update Records set xml=? where id=?', [xml, recid]);	
@@ -149,24 +162,29 @@ function doSaveLocal(savefileid, savefilename, sel, dd) {
 			var id = sel[i].id;
             var server = sel[i].data.location;
             var title = sel[i].data.title;
-            try {
-                db.execute('insert into Records (id, status, date_added, date_modified, server, savefile) values (null, ?, date("now", "localtime"), date("now", "localtime"), ?, ?)', ['new', server, savefileid]);
-                if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + title);}
-            } catch(ex) {
-                Ext.Msg.alert('Error', 'db error: ' + ex.message);
-            }
-			paz.recordCallback = function(data) { addRecord( xslTransform.serialize(data.xmlDoc) ) }
-            var xml = getPazRecord(id);
-            if(xml) {
-              addRecord(xml);
-            }
+            addRecordFromSearch(id, server, title, savefileid);
 		}
     }
     showStatusMsg("Record(s) saved to "+savefilename);
     return true;
 }
 
-// FIXME need to get server from selection
+function addRecordFromSearch(id, server, title, savefileid) {
+    try {
+        db.execute('insert into Records (id, status, date_added, date_modified, server, savefile) values (null, ?, date("now", "localtime"), date("now", "localtime"), ?, ?)', ['new', server, savefileid]);
+        if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + title);}
+    } catch(ex) {
+        Ext.Msg.alert('Error', 'db error: ' + ex.message);
+    }
+    paz.recordCallback = function(data) { addRecord( xslTransform.serialize(data.xmlDoc) ) }
+    var xml = getPazRecord(id);
+    if(xml) {
+      addRecord(xml);
+    }
+    var id = getLastRecId();
+    return id;
+}
+
 function addRecord(xml) {
     if(debug){ console.info('addRecord called with data: ' + xml.substr(0, 10)) }
     var id = getLastRecId();
