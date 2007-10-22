@@ -111,10 +111,15 @@ paz = new pz2({
 function setPazPar2Targets(paz) {
 	var targets = getTargets();
 	$.each( targets, function(i, n){
-		var db = n.hostname+":"+n.port+"/"+n.dbname;
-		$.get( paz.pz2String + "?command=settings&session="+paz.sessionID+"&pz:name["+db+"]="+n.name+"&pz:requestsyntax["+db+"]=marc21&pz:elements["+db+"]=F&pz:nativesyntax["+db+"]=iso2709&pz:xslt["+db+"]=marc21.xsl");		
+		if( targets[i].enabled == 1 ) {
+			var db = n.hostname+":"+n.port+"/"+n.dbname;
+			$.get( paz.pz2String + "?command=settings&session="+paz.sessionID+"&pz:name["+db+"]="+n.name+"&pz:requestsyntax["+db+"]=marc21&pz:elements["+db+"]=F&pz:nativesyntax["+db+"]=iso2709&pz:xslt["+db+"]=marc21.xsl");		
+		}
 	});
+}
 
+function changePazPar2TargetStatus(o) {
+		$.get( paz.pz2String + "?command=settings&session="+paz.sessionID+"&pz:allow["+o.db+"]="+o.allow );
 }
 
 function resetPazPar2(paz) {

@@ -350,6 +350,9 @@ function createFolderList() {
             text: data.name, 
             servername: data.name,
             id: data.id, 
+			hostname: data.hostname,
+			port: data.port,
+			dbname: data.dbname,
             checked: data.enabled?true:false,
             qtip: data.description, 
             leaf: false, 
@@ -1705,16 +1708,22 @@ function filterSearchResultsByServer() {
   for( var i = 0; i < targetnodes.length; i++ ) {
     if( targetnodes[i].attributes.checked == true ) {
       checkednodes.push( targetnodes[i].attributes.servername );
+	  changePazPar2TargetStatus( {db: targetnodes[i].attributes.hostname + ":" + targetnodes[i].attributes.port + "/" + targetnodes[i].attributes.dbname, allow: '1'} );
     }
+	else {
+	  changePazPar2TargetStatus( {db: targetnodes[i].attributes.hostname + ":" + targetnodes[i].attributes.port + "/" + targetnodes[i].attributes.dbname, allow: '0' });
+	}
   }
   searchds.filterBy( function(record, id) {
     // if this records Server name matches one of the checkednodes, return true for this record
     for( var i = 0; i < checkednodes.length; i++) {
-      if( record.data.Server == checkednodes[i] ) {
+      if( record.data.location == checkednodes[i] ) {
         return true;
       }
     }
   });
+	// rerun search using updated targets
+	paz.search( paz.currQuery );
 }
 
 function getLocalXml(id) {
