@@ -100,6 +100,8 @@ function handleSearch(options, isSuccess, resp) {
 function initializePazPar2(pazpar2url) {
 paz = new pz2({ 
 					"onshow": function(data){ searchds.reload() },
+					"termlist": "subject,author",
+					"onterm": function(data) { displaySearchFacets(data); },
                     "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
                     "pazpar2path": pazpar2url,
                     "termlist": "subject,author",
@@ -126,14 +128,11 @@ function changePazPar2TargetStatus(o) {
 function resetPazPar2(paz) {
 	paz.stop();
 	paz.reset();
-	paz = new pz2({ 
-					"onshow": function(data){ searchds.reload() },
-                    "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
-                    "pazpar2path": pazpar2url,
-                    "termlist": "subject,author",
-                    "errorHandler": handlePazPar2Error,
-					"usesessions" : true,
-				});
+	paz = initializePazPar2();
+	// reset search grid's url for new session id
+	setTimeout(function() {
+		searchds.proxy.conn.url = paz.pz2String + "?command=show&session=" + paz.sessionID;
+	}, 2000);
 }
 
 function handlePazPar2Error(data) {
@@ -175,4 +174,45 @@ function getPazRecord(recId) {
           ext.MessageBox.alert('Pazpar2 error', ex.message);
         }
 	}
+}
+
+function displaySearchFacets(data) {
+	facetsRoot.enable();
+	facetsRoot.expand();
+	var subjectHTML = '<br/>';
+	for( var i = 0; i < data.subject.length; i++) {
+		subjectHTML += '<span class=limit onclick="limitSearch(\'su\', \''+data.subject[i].name +'\')">'
+					+ data.subject[i].name
+					+ '</span><span> ('
+					+ data.subject[i].freq
+					+ ')</span><br/>';
+	}
+	var subjectNode = facetsRoot.findChild('name', 'subjectRoot').findChild('name', 'subjectFacets');
+	subjectNode.setText(subjectHTML);
+	var authorHTML = '<br/>';
+	for( var i = 0; i < data.author.length; i++) {
+		authorHTML += '<span class=limit onclick="limitSearch(\'au\', \''+data.author[i].name +'\')">'
+					+ data.author[i].name
+					+ '</span><span> ('
+					+ data.author[i].freq
+					+ ')</span><br/>';
+	}
+	var authorNode = facetsRoot.findChild('name', 'authorRoot').findChild('name', 'authorFacets');
+	authorNode.setText(authorHTML);
+	//facetsRoot.expandChildNodes(true);
+}
+
+function limitSearch(field, value) {
+	var query = $("#query").val();
+	var searchtype  = $("#searchtype").val();
+	var searchquery = '';
+	if( searchtype == '') {
+		searchquery = query;
+	}
+	else {
+		searchquery = searchtype + '=' + query + '';
+	}
+    paz.search( searchquery+' and ' + field + '=' + value );
+    displaySearchView();
+	
 }

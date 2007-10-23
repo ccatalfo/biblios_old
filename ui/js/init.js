@@ -74,7 +74,7 @@ var recordCache = {};
 var status_panel, folderlist_panel, toolbar_panel, work_panel, upper_panel, lower_panel, right_panel, left_panel;
 // trees
 var searchTree, saveTree, saveFilesTree, treeEditor;
-var folderRoot, searchRoot, saveRoot, saveFilesRoot;
+var folderRoot, searchRoot, saveRoot, saveFilesRoot, facetsRoot;
 // YUI rich text editor
 var rte_editor;
 // get css styles for marc editor
@@ -108,6 +108,7 @@ function initUI() {
       north: {
           split: false,
           titlebar: false,
+		  minSize: 100
       },
       center: {
           split: false,

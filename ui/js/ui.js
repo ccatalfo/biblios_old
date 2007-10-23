@@ -417,8 +417,35 @@ function createFolderList() {
     createSaveFileFolders('null'); 
 
 
-
-    folderRoot.appendChild([searchRoot, saveFilesRoot]);
+	facetsRoot = new Ext.tree.TreeNode({
+		text: 'Facets',
+		leaf: false,
+		disabled: true
+	});
+    folderRoot.appendChild([searchRoot, facetsRoot, saveFilesRoot]);
+	var subjectRoot =  new Ext.tree.TreeNode({
+		name: 'subjectRoot',
+		text: "<b>Subjects</b>",
+		leaf: false
+	});
+	subjectRoot.appendChild( new Ext.tree.TreeNode({
+		name: 'subjectFacets',
+		leaf: true,
+		icon: '',
+		text: '<br/>',
+	}));
+	var authorRoot =  new Ext.tree.TreeNode({
+		name: 'authorRoot',
+		text: "<b>Authors</b>",
+		leaf: false
+	});
+	authorRoot.appendChild( new Ext.tree.TreeNode({
+		name: 'authorFacets',
+		icon: '',
+		leaf: true,
+		text: '<br/>',
+	}));
+	facetsRoot.appendChild(subjectRoot, authorRoot);
     folderTree.setRootNode(folderRoot);
     folderTree.render();
     saveFilesRoot.expand();
