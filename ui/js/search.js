@@ -104,6 +104,7 @@ paz = new pz2({
                     "pazpar2path": pazpar2url,
                     "termlist": "subject,author",
 					"usesessions" : true,
+					"clear": 1
 				});
 	return paz;
 }
@@ -146,8 +147,17 @@ function handlePazPar2Error(data) {
   }
 }
 
-function doPazPar2Search(searchstring) {
-    paz.search( searchstring );
+function doPazPar2Search() {
+	var query = $("#query").val();
+	var searchtype  = $("#searchtype").val();
+	var searchquery = '';
+	if( searchtype == '') {
+		searchquery = query;
+	}
+	else {
+		searchquery = searchtype + '=' + query + '';
+	}
+    paz.search( searchquery );
     displaySearchView();
 }
 

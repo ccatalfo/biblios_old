@@ -133,62 +133,6 @@ function initUI() {
     new Ext.ContentPanel('tab-panel', {fittoframe: true})
   );
   layout.endUpdate();
-      searchform = new Ext.form.Form({
-        labelAlign: 'left',
-        method: 'GET',
-        url: searchScript
-      });
-    var store = new Ext.data.SimpleStore({
-        fields: ['type', 'desc'],
-        data: [
-            ['', 'Keyword'],
-            ['ti', 'Title'],
-            ['au', 'Author'],
-            ['su', 'Subject'],
-            ['is', 'ISBN']
-        ]		    
-        });
-      searchform.column(
-        {width:300, style: 'margin-left:200px'},
-        new Ext.form.TextField({
-          fieldLabel: 'Search',
-          name: 'query',
-          id: 'query',
-          width: 300 
-        })
-        );
-        searchform.column(
-        {width: 400, style: 'margin-left:0px'},
-          new Ext.form.ComboBox({
-            id: 'searchtype',
-            store: store,
-            displayField:'desc',
-            valueField: 'type',
-            typeAhead: true,
-            mode: 'local',
-            triggerAction: 'all',
-            emptyText:'Select a search type...',
-            selectOnFocus:true	
-          })
-        );
-        var map = new Ext.KeyMap("searchform", {
-          key: 13, // or Ext.EventObject.ENTER
-         fn: function() {
-				var searchtype = Ext.ComponentMgr.get('searchtype').getValue(); 
-				var query =  Ext.ComponentMgr.get('query').getValue();
-				var searchstring = '';
-				if( searchtype != '' ) {
-					searchstring = searchtype + '=' + query;
-				}
-				else {
-					searchstring = query;
-				}
-				if(debug) { console.info('searchstring is: ' + searchstring ); }
-              	doPazPar2Search(searchstring);
-          },
-          scope: searchform
-      });
-        searchform.render('searchform');
 
     editor_toolbar = new Ext.Toolbar('editor-toolbar',
     [
