@@ -713,7 +713,7 @@ function createSearchPazParGrid(url) {
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
 		// get the marcxml for this record and send to preview()
 		var marcxml = '';
-		paz.recordCallback = function(data) { var xml = xslTransform.serialize(data.xmlDoc); recordCache[id] = xml; previewRecord(xml)  }
+		paz.recordCallback = function(data) { if( $("error[@code=1]", data) ) { resetPazPar2() } var xml = xslTransform.serialize(data.xmlDoc); recordCache[id] = xml; previewRecord(xml)  }
         var xml = getPazRecord(id);
         if( xml ) {
           previewRecord(xml);

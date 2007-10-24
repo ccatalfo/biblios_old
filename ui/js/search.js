@@ -126,12 +126,11 @@ function changePazPar2TargetStatus(o) {
 }
 
 function resetPazPar2(paz) {
-	paz.stop();
-	paz.reset();
 	paz = initializePazPar2();
 	// reset search grid's url for new session id
 	setTimeout(function() {
 		searchds.proxy.conn.url = paz.pz2String + "?command=show&session=" + paz.sessionID;
+		setPazPar2Targets();
 	}, 2000);
 }
 
