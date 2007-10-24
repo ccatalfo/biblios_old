@@ -156,6 +156,7 @@ function doPazPar2Search() {
 	else {
 		searchquery = searchtype + '=' + query + '';
 	}
+	UI.search.currQuery = searchquery;
     paz.search( searchquery );
     displaySearchView();
 }
@@ -179,40 +180,56 @@ function getPazRecord(recId) {
 function displaySearchFacets(data) {
 	facetsRoot.enable();
 	facetsRoot.expand();
-	var subjectHTML = '<br/>';
+	var subjectRoot = facetsRoot.findChild('name', 'subjectRoot');
 	for( var i = 0; i < data.subject.length; i++) {
-		subjectHTML += '<span class=limit onclick="limitSearch(\'su\', \''+data.subject[i].name +'\')">'
+		subjectHTML = '<span class=limit onclick="limitSearch(\'su\', \''+data.subject[i].name +'\')">'
 					+ data.subject[i].name
 					+ '</span><span> ('
 					+ data.subject[i].freq
-					+ ')</span><br/>';
+					+ ')</span>';
+		subjectRoot.appendChild( new Ext.tree.TreeNode({
+			leaf: true,
+			subject: data.subject[i].name,
+			text: subjectHTML,
+			checked: false
+		})).on('checkchange', limitSearch);
 	}
-	var subjectNode = facetsRoot.findChild('name', 'subjectRoot').findChild('name', 'subjectFacets');
-	subjectNode.setText(subjectHTML);
-	var authorHTML = '<br/>';
+	var authorRoot = facetsRoot.findChild('name', 'authorRoot');
 	for( var i = 0; i < data.author.length; i++) {
-		authorHTML += '<span class=limit onclick="limitSearch(\'au\', \''+data.author[i].name +'\')">'
+		authorHTML = '<span class=limit onclick="limitSearch(\'au\', \''+data.author[i].name +'\')">'
 					+ data.author[i].name
 					+ '</span><span> ('
 					+ data.author[i].freq
 					+ ')</span><br/>';
+		authorRoot.appendChild( new Ext.tree.TreeNode({
+			leaf: true,
+			author: data.author[i].name,
+			text: authorHTML,
+			checked: false
+		})).on('checkchange', limitSearch); 	
 	}
-	var authorNode = facetsRoot.findChild('name', 'authorRoot').findChild('name', 'authorFacets');
-	authorNode.setText(authorHTML);
 	//facetsRoot.expandChildNodes(true);
 }
 
 function limitSearch(field, value) {
-	var query = $("#query").val();
-	var searchtype  = $("#searchtype").val();
-	var searchquery = '';
-	if( searchtype == '') {
-		searchquery = query;
+	// start w/ original query and build from there
+	var query = UI.search.currQuery;
+	// find all checked subject nodes
+	var subjectRoot = facetsRoot.findChild('name', 'subjectRoot');
+	var subjects = subjectRoot.childNodes;
+	for( var j = 0; j < subjects.length; j++ ) {
+		if( subjects[j].attributes.checked == true ) {	
+			query += ' and su=' + subjects[j].attributes.subject;	
+		}
 	}
-	else {
-		searchquery = searchtype + '=' + query + '';
+	// find all checked author nodes
+	var authorRoot = facetsRoot.findChild('name', 'authorRoot');
+	var authors = authorRoot.childNodes;
+	for( var j = 0; j < authors.length; j++ ) {
+		if( authors[j].attributes.checked == true ) {	
+			query += ' and au=' + authors[j].attributes.author;	
+		}
 	}
-    paz.search( searchquery+' and ' + field + '=' + value );
+	paz.search(query);
     displaySearchView();
-	
 }
