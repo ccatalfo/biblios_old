@@ -135,7 +135,8 @@ function createBiblioTab()  {
           split: true,
           initialSize: 200,
           collapsible: true,
-          hidden: true
+          hidden: true,
+			 autoScroll: true
         },
         center: {
           split: true,
