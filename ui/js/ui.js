@@ -745,6 +745,28 @@ function createSearchPazParGrid(url) {
 			clearStatusMsg();
           } // if ENTER
 	}); // on keypress
+	searchgrid.on('headerclick', function(grid, colIndex, e) {
+		// dataStore.getSortState() returns void if not set so check and set defaults
+		var sortState = searchds.getSortState() || {direction: 'ASC'};
+		if( !sortState.field ) {
+			var col = searchgrid.getColumnModel().getColumnById(colIndex);
+			sortState.field = col.dataIndex;
+		}
+		var sortDir;
+		// pazpar2: ascending = 1, descending = 0
+		if( sortState.direction == 'ASC' ) {
+			sortDir = 1;
+		}
+		else if( sortState.direction == 'DESC' ) {
+			sortDir = 0;
+		}
+		var sortString = sortState.field + ':' + sortDir; 
+		var currNum = paz.currNum ? paz.currNum : 20;
+		// set searchds proxy url to sort
+		searchds.proxy.conn.url = paz.pz2String + '?command=show&session=' + paz.sessionID + '&sort=' + sortString;
+		// run the show query
+		paz.show(sortString);
+	});
     searchgrid.render();
       // add a paging toolbar to the grid's header
       searchgridpaging = new Ext.PagingToolbar('searchgrid-toolbar', searchds, {
@@ -1110,8 +1132,8 @@ function displaySaveView() {
 function openRecord(xml) {
     $("#ffeditor").getTransform( fixedFieldXslPath, xml);
     $("#vareditor").getTransform( varFieldsXslPath, xml);
-	 //create_jquery_editor();
-	create_yui_rte_editor();
+	 create_jquery_editor();
+	//create_yui_rte_editor();
 	// show fixed field editor, hide ldr and 008 divs
 	$("#ffeditor").show();
 	// hide leader and 008
