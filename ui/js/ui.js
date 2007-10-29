@@ -7,6 +7,7 @@ UI.savepreview.id = '';
 UI.savepreview.xml = '';
 UI.editor = {};
 UI.editor.id = '';
+UI.editor.doc = null;
 UI.editor.savefileid = '';
 UI.editor.xml = '';
 UI.search = {};
@@ -713,7 +714,7 @@ function createSearchPazParGrid(url) {
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
 		// get the marcxml for this record and send to preview()
 		var marcxml = '';
-		paz.recordCallback = function(data) { if( $("error[@code=1]", data) ) { resetPazPar2() } var xml = xslTransform.serialize(data.xmlDoc); recordCache[id] = xml; previewRecord(xml)  }
+		paz.recordCallback = function(data) { if( $("error[@code=1]", data) ) {  } var xml = xslTransform.serialize(data.xmlDoc); recordCache[id] = xml; previewRecord(xml)  }
         var xml = getPazRecord(id);
         if( xml ) {
           previewRecord(xml);
@@ -1108,48 +1109,13 @@ function displaySaveView() {
 function openRecord(xml) {
     $("#ffeditor").getTransform( fixedFieldXslPath, xml);
     $("#vareditor").getTransform( varFieldsXslPath, xml);
-	var vared = $("#vareditor").html();
-	$("#vareditor").empty();
-    $("#vareditor").append("<textarea name='rte_placeholder' id='rte_placeholder'>"+vared+"</textarea>");
-	rte_editor = new YAHOO.widget.Editor('rte_placeholder', {
-		height: '700px',
-		width: '722px',
-		dompath: false, //Turns on the bar at the bottom
-		animate: false, //Animates the opening, closing and moving of Editor windows
-		css: editor_css
-	});
-	rte_editor.render();
-	rte_editor.on('editorContentLoaded', function() {
-		// move the cursor to 001 tag so we can use it even though leader will be invisible
-		var editorSelection = rte_editor._getSelection();
-		var tag001 = $("#001", rte_editor._getDoc()).get(0);
-		editorSelection.extend(tag001, 0);
-		editorSelection.collapseToEnd();
-		editorSetFocus( $(editorSelection.focusNode).children('.tagnumber') );
-		rte_editor._focusWindow();
-		$("#000", rte_editor._getDoc()).hide();
-		$("#008", rte_editor._getDoc()).hide();
-		// add metadata div with associated savefile id and record id
-		$("#marceditor").prepend("<div id='metadata' style='display: none;'><span id='id'>"+id+"</span><span id='savefileid'>"+savefileid+"</span></div>");
-	});
-	rte_editor.on('editorKeyPress', editorKeyPress );
-	rte_editor.on('editorKeyPress', editorCheckHighlighting );
-	rte_editor.on('editorKeyUp', function(o) {
-	});
-	rte_editor.on('editorMouseUp', function(o) {
-		YAHOO.util.Event.stopEvent(o.ev);
-		editorSelection = rte_editor._getSelection();
-		var selectedElement = editorGetSelectedElement();
-		editorSetFocus( selectedElement );
-		if(debug) { console.info( "mouseUP: selected node text: " + $(selectedElement).text() );}
-		if(debug) { console.info( "mouseUp: " + selectedElement);}
-		if(debug) { console.info( "mouseUp: " + editorSelection);}
-	});
+	 //create_jquery_editor();
+	create_yui_rte_editor();
 	// show fixed field editor, hide ldr and 008 divs
 	$("#ffeditor").show();
 	// hide leader and 008
-	$("#000", rte_editor._getDoc()).hide();
-	$("#008", rte_editor._getDoc()).hide();
+	//$("#000", rte_editor._getDoc()).hide();
+	//$("#008", rte_editor._getDoc()).hide();
 
 
 	$("#help-panel").append("This is the Help panel");
@@ -1171,33 +1137,6 @@ function openRecord(xml) {
 	displayRecordView();
 }
 
-/* 
-   Function: clearEditor
-
-   Clear the editor divs and rich text editor of currently open record.
-
-   Parameters:
-  
-   None.
-
-   Returns:
-
-   None.
- 
-   See Also:
-   <openRecord>
-*/
-function clear_editor() {
-    // reset current open record to none
-    UI.editor.id = '';
-    // if we're coming from marceditor, destroy old rte instance
-    if( innerLayout.getRegion('center').activePanel.getId() == 'marceditor' && rte_editor && rte_editor._getDoc()  ) {
-        rte_editor.destroy();
-    }
-   // clear the marceditor divs
-   $("#ffeditor").empty();
-   $("#rte_placeholder").empty();
-}
 
 /*
    Function: doDownloadRecords

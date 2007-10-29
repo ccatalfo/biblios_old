@@ -12,6 +12,10 @@
 var debug = 0;
 var db_debug = 0;
 </script>
+<!-- fckeditor 
+<script type="text/javascript" src="lib/fckeditor/fckeditor.js"></script>
+-->
+
 <!-- Sarissa -->
 <script type="text/javascript" src="lib/sarissa/sarissa.js"></script>
 <script src="lib/sarissa/sarissa_ieemu_xpath.js"		type="text/javascript"></script>
@@ -23,7 +27,22 @@ var db_debug = 0;
 <script type="text/javascript" src="lib/jquery/ajaxfileupload.js"></script>
 <script type="text/javascript" src="lib/jquery/jquery.dimensions.pack.js"></script>
 <script type="text/javascript" src="lib/jquery/interface.js"></script>
-<style>
+<script type="text/javascript" src="lib/jquery/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="lib/jquery/jQuery.frameReady.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery.replaceWith.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery.hotkeys.js"></script>
+<link rel="stylesheet" type="text/css" href="lib/jquery/jquery.autocomplete.css">
+
+
+<!-- tinyMCE integration -->
+<!--<script type="text/javascript" src="lib/tiny_mce.js"></script>
+<script type="text/javascript">
+tinyMCE.init({
+	mode: 'textareas',
+	theme: 'simple'
+});
+</script>-->
+<!-- YUI rich text editor -->
 <style>
 	.yui-toolbar-subcont {
 		display:none;
@@ -32,7 +51,6 @@ var db_debug = 0;
 		display:none;
 	}
 </style>
-<!-- YUI -->
 <!-- Skin CSS file -->
 <link rel="stylesheet" type="text/css" href="lib/yui/build/assets/skins/sam/skin.css">
 
@@ -43,9 +61,16 @@ var db_debug = 0;
 <script src="lib/yui/build/container/container-min.js"></script>
 <script src="lib/yui/build/menu/menu-min.js"></script>
 <script src="lib/yui/build/button/button-beta-min.js"></script>
+<!-- for yui autocomplete 
+<script src="lib/yui/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="lib/yui/build/connection/connection-min.js"></script>
+<script src="lib/yui/build/autocomplete/autocomplete-min.js"></script>
+<!-- css for yui autocomplete -->
+<link rel="stylesheet" type="text/css" href="lib/yui/build/assets/skins/sam/autocomplete.css">
+-->
 
 <!-- Source file for Rich Text Editor-->
-<script src="lib/yui/build/editor/editor-beta-min.js"></script>
+<script src="lib/yui/build/editor/editor-beta-debug.js"></script>
 
 <!-- ExtJs -->
 <script type="text/javascript" src="lib/extjs/ext-yui-adapter.js"></script>
@@ -70,6 +95,7 @@ var db_debug = 0;
 
 <link type="text/css" rel="stylesheet" href="lib/extjs/resources/css/ext-all.css" />
 <link type="text/css" rel="stylesheet" href="ui/css/styles.css" />
+<link type="text/css" rel="stylesheet" href="ui/css/editor-styles.css" />
 
 <style>
 .loading-indicator {
@@ -165,7 +191,16 @@ var db_debug = 0;
 								</div>
 							  <div id='marccontent'>
 								  <div id='ffeditor'></div>
-								  <div id='vareditor'></div>
+								  <div id='vareditor'>
+									<!--
+								  <script type="text/javascript">
+									  var oFCKeditor = new FCKeditor('FCKeditor1');
+									  oFCKeditor.BasePath = "lib/fckeditor/";
+									  oFCKeditor.Create();
+								  </script>
+									-->
+								  
+								  </div>
 							  </div>
 					 </div>
              </div> <!-- upper-panel -->

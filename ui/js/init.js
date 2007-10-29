@@ -82,6 +82,12 @@ var editor_css;
 $.get('ui/css/editor-styles.css', function(data) {
     editor_css = data;
 });
+// get css style for jquery autocomplete plugin used in marceditor
+var autocomplete_css;
+$.get('lib/jquery/jquery.autocomplete.css', function(data) {
+	autocomplete_css = data;
+});
+	
 var searches = new Array(); // Array of pazpar2 searches
 var paz = initializePazPar2(pazpar2url);
 
@@ -103,6 +109,15 @@ var paz = initializePazPar2(pazpar2url);
 function initUI() {
   // initialize the ui
   Ext.QuickTips.init();
+	// handle ENTER for query search form
+	var querymap = new Ext.KeyMap('query', {
+		key: Ext.EventObject.ENTER,
+		fn: function() {
+			doPazPar2Search();
+			return false;
+		},
+		scope: searchform
+	});
 
   layout = new Ext.BorderLayout(document.body, {
       north: {
@@ -249,5 +264,4 @@ function initUI() {
 	}));
 	 $('#record-toolbar').Draggable();
 }
-
 

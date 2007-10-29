@@ -283,11 +283,17 @@ function editorKeyPress(o) {
           console.info('focusOffset: ' + editorSelection.focusOffset);
           console.info('selectedElement: ' + $(selectedElement).text());
         }
+		// if we're in an autocomplete input text box, don't bother with all of this checking
 
         // disallow up (keyCode == 38) and down arrows (keyCode == 40)
         if( (o.ev.keyCode == 38) || (o.ev.keyCode == 40) ) {
-          YAHOO.util.Event.stopEvent(o.ev);
-          return false;
+			if( $(selectedElement).is('.ac_input') ) {
+				return true;
+			}
+			else {
+				YAHOO.util.Event.stopEvent(o.ev);
+				return false;
+			}
         }
         // disallow left arrow if we're at beginning of element ev.keyCode == 37, unless we're moving into a subfield delimiter, which is ok
         else if( o.ev.keyCode == 37 ) {
@@ -334,8 +340,13 @@ function editorKeyPress(o) {
         }
         // check for moving to next tag ( ENTER )
         else if( (o.ev.keyCode == 13) ) {
-          YAHOO.util.Event.stopEvent(o.ev);
-          editorNextTag(o, editorSelection, selectedElement);
+						if( $(selectedElement).is('.ac_input') ) {
+							return true;
+						}
+						else {
+								YAHOO.util.Event.stopEvent(o.ev);
+								editorNextTag(o, editorSelection, selectedElement);
+						}
         }
 		  // check for length limits for the selectedElement if we have a non special char
 		  else {
@@ -1074,4 +1085,86 @@ function doRemoveTag() {
 	$(selectedElement).parents('.tag').remove();
 }
 
+
+function create_jquery_editor() {
+	$('.subfield-text').click( function() {
+		$('.auto').replaceWith("<span class='subfield-text'>");
+		$('span').removeClass('focused-subfield-text');
+		$(this).replaceWith("<input class='auto' type='text'>").focus();
+		$('.auto').css('background-color', 'yellow');
+	});
+
+}
+
+function create_yui_rte_editor() {
+	var vared = $("#vareditor").html();
+	$("#vareditor").empty();
+  $("#vareditor").append("<textarea id='rte_placeholder' name='rte_placeholder' id='rte_placeholder'>"+vared+"</textarea>");
+	rte_editor = new YAHOO.widget.Editor('rte_placeholder', {
+		height: '700px',
+		width: '722px',
+		dompath: false, //Turns on the bar at the bottom
+		animate: false, //Animates the opening, closing and moving of Editor windows
+		css: editor_css + autocomplete_css
+	});
+	UI.editor.editorDoc = rte_editor._getDoc();
+	rte_editor.render();
+	rte_editor.on('editorContentLoaded', function() {
+		// move the cursor to 001 tag so we can use it even though leader will be invisible
+		var editorSelection = rte_editor._getSelection();
+		var tag001 = $("#001", rte_editor._getDoc()).get(0);
+		editorSelection.extend(tag001, 0);
+		editorSelection.collapseToEnd();
+		editorSetFocus( $(editorSelection.focusNode).children('.tagnumber') );
+		rte_editor._focusWindow();
+		$("#000", rte_editor._getDoc()).hide();
+		$("#008", rte_editor._getDoc()).hide();
+		// add metadata div with associated savefile id and record id
+		$("#marceditor").prepend("<div id='metadata' style='display: none;'><span id='id'>"+id+"</span><span id='savefileid'>"+savefileid+"</span></div>");
+	});
+	rte_editor.on('editorKeyPress', editorKeyPress );
+	rte_editor.on('editorKeyPress', editorCheckHighlighting );
+	rte_editor.on('editorKeyUp', function(o) {
+	});
+	rte_editor.on('editorMouseUp', editorMouseUp );
+	
+}
+
+function editorMouseUp(o) {
+  YAHOO.util.Event.stopEvent(o.ev);
+  editorSelection = rte_editor._getSelection();
+  var selectedElement = editorGetSelectedElement();
+  editorSetFocus( selectedElement );
+  if(debug) { console.info( "mouseUP: selected node text: " + $(selectedElement).text() );}
+  if(debug) { console.info( "mouseUp: " + selectedElement);}
+  if(debug) { console.info( "mouseUp: " + editorSelection);}
+}
+
+/* 
+   Function: clearEditor
+
+   Clear the editor divs and rich text editor of currently open record.
+
+   Parameters:
+  
+   None.
+
+   Returns:
+
+   None.
+ 
+   See Also:
+   <openRecord>
+*/
+function clear_editor() {
+    // reset current open record to none
+    UI.editor.id = '';
+    // if we're coming from marceditor, destroy old rte instance
+    if( innerLayout.getRegion('center').activePanel.getId() == 'marceditor' && rte_editor && rte_editor._getDoc()  ) {
+        rte_editor.destroy();
+    }
+   // clear the marceditor divs
+   $("#ffeditor").empty();
+   $("#rte_placeholder").empty();
+}
 

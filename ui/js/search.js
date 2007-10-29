@@ -97,8 +97,12 @@ function handleSearch(options, isSuccess, resp) {
 }
 
 
-function initializePazPar2(pazpar2url) {
+function initializePazPar2(pazpar2url, options) {
+if(!options) { options = {} }
 paz = new pz2({ 
+					"errorhandler": pazPar2Error,
+					"oninit": options.initCallback || function() {},
+					"onping": options.pingCallback || function(){},
 					"onshow": function(data){ searchds.reload() },
 					"termlist": "subject,author",
 					"onterm": function(data) { displaySearchFacets(data); },
@@ -126,23 +130,32 @@ function changePazPar2TargetStatus(o) {
 }
 
 function resetPazPar2(paz) {
-	paz = initializePazPar2();
-	// reset search grid's url for new session id
-	setTimeout(function() {
-		searchds.proxy.conn.url = paz.pz2String + "?command=show&session=" + paz.sessionID;
-		setPazPar2Targets();
-	}, 2000);
+	if(debug){ console.info('resetting pazpar2') }
+	paz = initializePazPar2(pazpar2url, {
+			initCallback: function(statusOK) {
+				if(debug) { console.info('pazpar2 initCallback: resetting sessionID for searching and setting Z targets') }
+				if(statusOK == true) {
+					// reset search grid's url for new session id
+					searchds.proxy.conn.url = paz.pz2String + "?command=show&session=" + paz.sessionID;
+					setPazPar2Targets(paz);
+				}
+			}
+	});
 }
 
-function handlePazPar2Error(data) {
-  // get error code
-  if(debug){ console.info('pazpar2 error: ' + data)}
-  var errorcode = $("error[@code]", data).text();
-  // if session does not exist 
-  if( errorcode == '1' ) {
-    if(debug) { console.info("pazpar2 error: session does not exist") }
-  
-  }
+function pazPar2Error(data) {
+		if(debug){ console.info('pazpar2 error: ' + data.code)}
+		// if session does not exist 
+		if( data.code == '1' ) {
+			if(debug) { console.info("pazpar2 error: session does not exist") }
+			var currQuery = paz.currQuery;
+			resetPazPar2();
+			if(debug) { console.info("re-running search with pazpar2") }
+			paz.search( currQuery );
+		}
+		if( data.code == '7' ) {
+			if(debug) { console.info("pazpar2 error: record missing")}
+		}
 }
 
 function doPazPar2Search() {
@@ -150,10 +163,10 @@ function doPazPar2Search() {
 	var searchtype  = $("#searchtype").val();
 	var searchquery = '';
 	if( searchtype == '') {
-		searchquery = query;
+		searchquery = '"' + query + '"';
 	}
 	else {
-		searchquery = searchtype + '=' + query + '';
+		searchquery = searchtype + '="' + query + '"';
 	}
 	UI.search.currQuery = searchquery;
     paz.search( searchquery );
@@ -218,7 +231,7 @@ function limitSearch(field, value) {
 	var subjects = subjectRoot.childNodes;
 	for( var j = 0; j < subjects.length; j++ ) {
 		if( subjects[j].attributes.checked == true ) {	
-			query += ' and su=' + subjects[j].attributes.subject;	
+			query += ' and su="' + subjects[j].attributes.subject + '"';	
 		}
 	}
 	// find all checked author nodes
@@ -226,9 +239,9 @@ function limitSearch(field, value) {
 	var authors = authorRoot.childNodes;
 	for( var j = 0; j < authors.length; j++ ) {
 		if( authors[j].attributes.checked == true ) {	
-			query += ' and au=' + authors[j].attributes.author;	
+			query += ' and au="' + authors[j].attributes.author + '"';	
 		}
 	}
 	paz.search(query);
-    displaySearchView();
+	displaySearchView();
 }
