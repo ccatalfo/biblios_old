@@ -104,14 +104,21 @@ paz = new pz2({
 					"oninit": options.initCallback || function() {},
 					"onping": options.pingCallback || function(){},
 					"onshow": function(data){ searchds.reload() },
-					"termlist": "subject,author",
-					"onterm": function(data) { displaySearchFacets(data); },
+					"termlist": "subject,author,date,publication-name",
+					"onterm": function(data) { 
+						displaySearchFacets(data, 'subject', 'su'); 
+						displaySearchFacets(data, 'author', 'au'); 
+						displaySearchFacets(data, 'date', 'date'); 
+						displaySearchFacets(data, 'publication-name', 'pub'); 
+					},
                     "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
                     "pazpar2path": pazpar2url,
                     "termlist": "subject,author",
 					"usesessions" : true,
 					"clear": 1
 				});
+	// HACK: set paz.termKeys manually or else pz2.js doesn't seem to accept date in termlist
+	paz.termKeys = 'subject,author,date,publication-name';
 	return paz;
 }
 
@@ -129,7 +136,7 @@ function changePazPar2TargetStatus(o) {
 		$.get( paz.pz2String + "?command=settings&session="+paz.sessionID+"&pz:allow["+o.db+"]="+o.allow );
 }
 
-function resetPazPar2(paz) {
+function resetPazPar2(options) {
 	if(debug){ console.info('resetting pazpar2') }
 	paz = initializePazPar2(pazpar2url, {
 			initCallback: function(statusOK) {
@@ -138,6 +145,12 @@ function resetPazPar2(paz) {
 					// reset search grid's url for new session id
 					searchds.proxy.conn.url = paz.pz2String + "?command=show&session=" + paz.sessionID;
 					setPazPar2Targets(paz);
+					if(options) {
+						if(debug) { console.info("re-running search with pazpar2") }
+						paz.search( options.currQuery );
+						paz.show(options.currStart, options.currNum);
+						getPazRecord(options.currRecId);
+					}
 				}
 			}
 	});
@@ -145,20 +158,22 @@ function resetPazPar2(paz) {
 
 function pazPar2Error(data) {
 		if(debug){ console.info('pazpar2 error: ' + data.code)}
-		// if session does not exist 
-		if( data.code == '1' ) {
-			if(debug) { console.info("pazpar2 error: session does not exist") }
+		// if session does not exist  or record is missing
+		if( data.code == '1' || data.code == '7') {
+			if(debug) { console.info("pazpar2 error: session does not exist or record is missing") }
 			var currQuery = paz.currQuery;
-			resetPazPar2();
-			if(debug) { console.info("re-running search with pazpar2") }
-			paz.search( currQuery );
-		}
-		if( data.code == '7' ) {
-			if(debug) { console.info("pazpar2 error: record missing")}
+			var currStart = paz.currentStart;
+			var currNum = paz.currNum;
+			var currRecId = paz.currRecId;
+			resetPazPar2({currQuery: currQuery, currStart: currStart, currNum: currNum, currRecId: currRecId});
 		}
 }
 
 function doPazPar2Search() {
+	//get rid of old facets from previous searches
+	if( UI.search.currQuery != '') {
+		removeOldFacets();
+	}
 	var query = $("#query").val();
 	var searchtype  = $("#searchtype").val();
 	var searchquery = '';
@@ -168,7 +183,10 @@ function doPazPar2Search() {
 	else {
 		searchquery = searchtype + '="' + query + '"';
 	}
+	// save this query
 	UI.search.currQuery = searchquery;
+	// reset search ds's proxy url to get rid of old sort params
+	searchds.proxy.conn.url = paz.pz2String + '?command=show&session=' + paz.sessionID;
     paz.search( searchquery );
     displaySearchView();
 }
@@ -189,59 +207,86 @@ function getPazRecord(recId) {
 	}
 }
 
-function displaySearchFacets(data) {
+function displaySearchFacets(data, type, searchtype) {
+	var root = facetsRoot.findChild('name', type+'Root');
+	for( var i = 0; i < data[type].length; i++) {
+		var html = '<span class="limit"">'
+					+ data[type][i].name
+					+ '</span><span> ('
+					+ data[type][i].freq
+					+ ')</span>'
+					+ '<br/>';
+		var oldchild = root.findChild('name', data[type][i].name);
+		if( oldchild ) {
+			oldchild.attributes.freq = data[type][i].freq;	
+			oldchild.setText(html);
+		}
+		else {
+			root.appendChild( new Ext.tree.TreeNode({
+				leaf: true,
+				name: data[type][i].name,
+				freq: data[type][i].freq,
+				searchtype: searchtype,
+				checked: false,
+				text: html,
+			})).on('checkchange', function(node, checked) {
+				if( checked ) {
+					UI.search.limitby.push(node);
+				}
+				else {
+					UI.search.limitby.remove(node);
+				}
+				limitSearch();	
+			});
+		}
+	}
 	facetsRoot.enable();
 	facetsRoot.expand();
-	var subjectRoot = facetsRoot.findChild('name', 'subjectRoot');
-	for( var i = 0; i < data.subject.length; i++) {
-		subjectHTML = '<span class=limit onclick="limitSearch(\'su\', \''+data.subject[i].name +'\')">'
-					+ data.subject[i].name
-					+ '</span><span> ('
-					+ data.subject[i].freq
-					+ ')</span>';
-		subjectRoot.appendChild( new Ext.tree.TreeNode({
-			leaf: true,
-			subject: data.subject[i].name,
-			text: subjectHTML,
-			checked: false
-		})).on('checkchange', limitSearch);
-	}
-	var authorRoot = facetsRoot.findChild('name', 'authorRoot');
-	for( var i = 0; i < data.author.length; i++) {
-		authorHTML = '<span class=limit onclick="limitSearch(\'au\', \''+data.author[i].name +'\')">'
-					+ data.author[i].name
-					+ '</span><span> ('
-					+ data.author[i].freq
-					+ ')</span><br/>';
-		authorRoot.appendChild( new Ext.tree.TreeNode({
-			leaf: true,
-			author: data.author[i].name,
-			text: authorHTML,
-			checked: false
-		})).on('checkchange', limitSearch); 	
-	}
 	//facetsRoot.expandChildNodes(true);
 }
 
-function limitSearch(field, value) {
+function removeOldFacets() {
+	var subjectRoot = facetsRoot.findChild('name', 'subjectRoot');
+	var authorRoot = facetsRoot.findChild('name', 'authorRoot');
+	var dateRoot = facetsRoot.findChild('name', 'dateRoot');
+	var pubRoot = facetsRoot.findChild('name', 'publisher-nameRoot');
+	facetsRoot.removeChild(subjectRoot);
+	facetsRoot.removeChild(authorRoot);
+	facetsRoot.removeChild(dateRoot);
+	facetsRoot.removeChild(pubRoot);
+	// re-add them
+	var subjectRoot =  new Ext.tree.TreeNode({
+		name: 'subjectRoot',
+		text: "<b>Subjects</b>",
+		leaf: false
+	});
+	var authorRoot =  new Ext.tree.TreeNode({
+		name: 'authorRoot',
+		text: "<b>Authors</b>",
+		leaf: false
+	});
+	var dateRoot =  new Ext.tree.TreeNode({
+		name: 'dateRoot',
+		text: "<b>Dates</b>",
+		leaf: false
+	});
+	var pubRoot =  new Ext.tree.TreeNode({
+		name: 'publication-nameRoot',
+		text: "<b>Publisher</b>",
+		leaf: false
+	});
+	facetsRoot.appendChild(subjectRoot, authorRoot, dateRoot, pubRoot);
+
+
+}
+
+function limitSearch() {
 	// start w/ original query and build from there
 	var query = UI.search.currQuery;
-	// find all checked subject nodes
-	var subjectRoot = facetsRoot.findChild('name', 'subjectRoot');
-	var subjects = subjectRoot.childNodes;
-	for( var j = 0; j < subjects.length; j++ ) {
-		if( subjects[j].attributes.checked == true ) {	
-			query += ' and su="' + subjects[j].attributes.subject + '"';	
-		}
-	}
-	// find all checked author nodes
-	var authorRoot = facetsRoot.findChild('name', 'authorRoot');
-	var authors = authorRoot.childNodes;
-	for( var j = 0; j < authors.length; j++ ) {
-		if( authors[j].attributes.checked == true ) {	
-			query += ' and au="' + authors[j].attributes.author + '"';	
-		}
-	}
+	$.each(UI.search.limitby, function(i, n) {
+		query += ' and ' + n.attributes.searchtype + '="' + n.attributes.name + '"';
+	});
 	paz.search(query);
+	paz.show();
 	displaySearchView();
 }

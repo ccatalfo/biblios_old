@@ -77,3 +77,7 @@
 .yui-toolbar-subcont{
   display: none; 
 }
+
+.limit:hover {
+	color: red;	
+}

@@ -12,6 +12,7 @@ UI.editor.savefileid = '';
 UI.editor.xml = '';
 UI.search = {};
 UI.search.currQuery = '';
+UI.search.limitby = new Array();
 
 var newButton = new Ext.Toolbar.Button ({
         id: 'newrecordbutton',
@@ -426,7 +427,6 @@ function createFolderList() {
 		leaf: false,
 		disabled: true
 	});
-    folderRoot.appendChild([searchRoot, facetsRoot, saveFilesRoot]);
 	var subjectRoot =  new Ext.tree.TreeNode({
 		name: 'subjectRoot',
 		text: "<b>Subjects</b>",
@@ -437,8 +437,19 @@ function createFolderList() {
 		text: "<b>Authors</b>",
 		leaf: false
 	});
-	facetsRoot.appendChild(subjectRoot, authorRoot);
-    folderTree.setRootNode(folderRoot);
+	var dateRoot =  new Ext.tree.TreeNode({
+		name: 'dateRoot',
+		text: "<b>Dates</b>",
+		leaf: false
+	});
+	var pubRoot =  new Ext.tree.TreeNode({
+		name: 'publication-nameRoot',
+		text: "<b>Publisher</b>",
+		leaf: false
+	});
+	facetsRoot.appendChild(subjectRoot, authorRoot, dateRoot, pubRoot);
+	 folderRoot.appendChild([searchRoot, facetsRoot, saveFilesRoot]);
+	 folderTree.setRootNode(folderRoot);
     folderTree.render();
     saveFilesRoot.expand();
     searchRoot.expand();
@@ -708,9 +719,6 @@ function createSearchPazParGrid(url) {
 		//autoHeight: true,
 		autoExpandColumn: 0
     });
-	searchgrid.on('headerclick', function(searchgrid, columnIndex, event) {
-		//ds.reload({params:{sort:1}});
-	});
 	searchgrid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
 		// get the marcxml for this record and send to preview()
@@ -1702,6 +1710,7 @@ function filterSearchResultsByServer() {
     }
   });
 	// rerun search using updated targets
+	removeOldFacets();
 	paz.search( paz.currQuery );
 }
 
