@@ -106,10 +106,12 @@ paz = new pz2({
 					"onshow": function(data){ searchds.reload() },
 					"termlist": "subject,author,date,publication-name",
 					"onterm": function(data) { 
+						removeFacets();
 						displaySearchFacets(data, 'subject', 'su'); 
 						displaySearchFacets(data, 'author', 'au'); 
 						displaySearchFacets(data, 'date', 'date'); 
 						displaySearchFacets(data, 'publication-name', 'pub'); 
+						//hideDisabledFacets();
 					},
                     "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
                     "pazpar2path": pazpar2url,
@@ -172,7 +174,7 @@ function pazPar2Error(data) {
 function doPazPar2Search() {
 	//get rid of old facets from previous searches
 	if( UI.search.currQuery != '') {
-		removeOldFacets();
+		removeFacets();
 	}
 	var query = $("#query").val();
 	var searchtype  = $("#searchtype").val();
@@ -209,6 +211,7 @@ function getPazRecord(recId) {
 
 function displaySearchFacets(data, type, searchtype) {
 	var root = facetsRoot.findChild('name', type+'Root');
+	var newnode;
 	for( var i = 0; i < data[type].length; i++) {
 		var html = '<span class="limit"">'
 					+ data[type][i].name
@@ -216,33 +219,50 @@ function displaySearchFacets(data, type, searchtype) {
 					+ data[type][i].freq
 					+ ')</span>'
 					+ '<br/>';
-		var oldchild = root.findChild('name', data[type][i].name);
-		if( oldchild ) {
-			oldchild.attributes.freq = data[type][i].freq;	
-			oldchild.setText(html);
-		}
-		else {
-			root.appendChild( new Ext.tree.TreeNode({
+		if( UI.search.limitby[data[type][i].name] ) {
+			newnode = new Ext.tree.TreeNode({
 				leaf: true,
 				name: data[type][i].name,
 				freq: data[type][i].freq,
 				searchtype: searchtype,
-				checked: false,
 				text: html,
-			})).on('checkchange', function(node, checked) {
-				if( checked ) {
-					UI.search.limitby.push(node);
-				}
-				else {
-					UI.search.limitby.remove(node);
-				}
-				limitSearch();	
+				checked: true
 			});
 		}
+		else {
+			newnode = new Ext.tree.TreeNode({
+				leaf: true,
+				name: data[type][i].name,
+				freq: data[type][i].freq,
+				searchtype: searchtype,
+				text: html,
+				checked: false
+			});
+		}
+		root.appendChild(newnode);
+		newnode.on('checkchange', function(node, checked) {
+			if( checked ) {
+				UI.search.limitby[node.attributes.name] = node.attributes.searchtype;
+			}
+			else {
+				delete UI.search.limitby[node.attributes.name];
+			}
+			limitSearch();	
+		}); // checkchange handler
+		//var oldchild = root.findChild('name', data[type][i].name);
+		//if( oldchild ) {
+	//		oldchild.enable();
+	//		oldchild.attributes.freq = data[type][i].freq;	
+	//		oldchild.setText(html);
+	//	}
 	}
-	facetsRoot.enable();
-	facetsRoot.expand();
-	//facetsRoot.expandChildNodes(true);
+	if(data.activeclients == 0 ) {
+		facetsRoot.setText("Facets");
+		facetsRoot.enable();
+		facetsRoot.expand();
+		//root.expand();
+		//facetsRoot.expandChildNodes(true);
+	}
 }
 
 function removeOldFacets() {
@@ -276,16 +296,50 @@ function removeOldFacets() {
 		leaf: false
 	});
 	facetsRoot.appendChild(subjectRoot, authorRoot, dateRoot, pubRoot);
+}
 
+function disableFacets() {
+	var facets = new Array('subject', 'author', 'date', 'publication-name');
+	$.each(facets, function(i,n) {	
+		var root = facetsRoot.findChild('name', n+'Root');
+		var facets = root.childNodes;
+		for(var i=0; i<facets.length; i++) {
+			facets[i].disable();
+		}
+	});
+}
+function hideDisabledFacets() {
+	var facets = new Array('subject', 'author', 'date', 'publication-name');
+	$.each(facets, function(i,n) {	
+		var root = facetsRoot.findChild('name', n+'Root');
+		var facets = root.childNodes;
+		for(var i=0; i<facets.length; i++) {
+			if( facets[i].disabled == true && facets[i].rendered == true) {
+				$(facets[i].getUI().elNode).hide();
+			}
+		}
+	});
+}
 
+function removeFacets() {
+	var facets = new Array('subject', 'author', 'date', 'publication-name');
+	$.each(facets, function(i,n) {	
+		var root = facetsRoot.findChild('name', n+'Root');
+		var facets = root.childNodes;
+		while( facets.length > 0 ) {
+			root.removeChild(facets[0]);
+		}
+	});
+	facetsRoot.collapseChildNodes(true);
+	facetsRoot.setText("Facets <img src='ui/images/ajax-loader.gif'>");
 }
 
 function limitSearch() {
 	// start w/ original query and build from there
 	var query = UI.search.currQuery;
-	$.each(UI.search.limitby, function(i, n) {
-		query += ' and ' + n.attributes.searchtype + '="' + n.attributes.name + '"';
-	});
+	for( name in UI.search.limitby ) {
+		query += ' and ' + UI.search.limitby[name] + '="' + name + '"';
+	}
 	paz.search(query);
 	paz.show();
 	displaySearchView();

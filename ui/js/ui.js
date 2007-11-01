@@ -12,7 +12,7 @@ UI.editor.savefileid = '';
 UI.editor.xml = '';
 UI.search = {};
 UI.search.currQuery = '';
-UI.search.limitby = new Array();
+UI.search.limitby = {};
 
 var newButton = new Ext.Toolbar.Button ({
         id: 'newrecordbutton',
@@ -448,6 +448,9 @@ function createFolderList() {
 		leaf: false
 	});
 	facetsRoot.appendChild(subjectRoot, authorRoot, dateRoot, pubRoot);
+	facetsRoot.eachChild(function(n) {
+		n.on('afterchildrenrendered', hideDisabledFacets);
+	});
 	 folderRoot.appendChild([searchRoot, facetsRoot, saveFilesRoot]);
 	 folderTree.setRootNode(folderRoot);
     folderTree.render();
@@ -1710,7 +1713,7 @@ function filterSearchResultsByServer() {
     }
   });
 	// rerun search using updated targets
-	removeOldFacets();
+	disableFacets();
 	paz.search( paz.currQuery );
 }
 
