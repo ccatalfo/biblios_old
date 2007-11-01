@@ -1143,8 +1143,8 @@ function displaySaveView() {
 function openRecord(xml) {
     $("#ffeditor").getTransform( fixedFieldXslPath, xml);
     $("#vareditor").getTransform( varFieldsXslPath, xml);
-	 create_jquery_editor();
-	//create_yui_rte_editor();
+	 //create_jquery_editor();
+	create_yui_rte_editor();
 	// show fixed field editor, hide ldr and 008 divs
 	$("#ffeditor").show();
 	// hide leader and 008

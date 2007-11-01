@@ -260,8 +260,8 @@ function displaySearchFacets(data, type, searchtype) {
 		facetsRoot.setText("Facets");
 		facetsRoot.enable();
 		facetsRoot.expand();
-		//root.expand();
-		//facetsRoot.expandChildNodes(true);
+		root.expand();
+		facetsRoot.expandChildNodes(true);
 	}
 }
 

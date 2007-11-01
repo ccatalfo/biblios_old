@@ -1089,7 +1089,7 @@ function doRemoveTag() {
 function create_jquery_editor() {
 	UI.editor.editorDoc = '';
 	$('.subfield-text').click( function() {
-		$('input').filter('.subfield-text').replaceWith("<span>");
+		$('input').filter('.subfield-text').replaceWith("<span class='subfield-text'>");
 		$('span').removeClass('focused-subfield-text');
 		$(this).replaceWith("<input type='text'>").addClass('focused').focus();
 	});
