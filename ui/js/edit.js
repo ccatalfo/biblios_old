@@ -122,8 +122,8 @@ function get008FromEditor(ff_ed) {
 function updateFFEditor(ff_ed) {
 	if(debug) { console.info("updating fixed field editor from leader and 008 tags"); }
     var oDomDoc = Sarissa.getDomDocument();
-    var leaderval = $("#000", rte_editor._getDoc()).children('.controlfield').text();
-    var tag008val = $("#008", rte_editor._getDoc()).children('.controlfield').text();
+    var leaderval = $("#000", UI.editor.doc).children('.controlfield').text();
+    var tag008val = $("#008", UI.editor.doc).children('.controlfield').text();
     var newff = '<collection xmlns="http://www.loc.gov/MARC21/slim">';
     //"<?xml version='1.0' encoding='UTF-8'?>";
     newff += "<record><leader>";
@@ -200,7 +200,7 @@ function Edit2XmlMarc21(ff_ed, var_ed) {
 			if( tag != '008' && tag != '000') { // skip 000 and 008 since we generate from dropdowns
 				var cf = marcxml.createElement('controlfield'); 
 				cf.setAttribute('tag', tag);
-				var text = marcxml.createTextNode( $(this).text());
+				var text = marcxml.createTextNode( $(this).children().val());
                 if(debug) {
                     console.info("Saving controlfield text: " + $(this).text());
                 }
@@ -218,9 +218,9 @@ function Edit2XmlMarc21(ff_ed, var_ed) {
 			df.setAttributeNode(tagAttr);
 			// set indicator attributes
 			var indid1 = 'dind1' + tag_with_suffix;	
-			var ind1val = $("[@id="+indid1+"]", var_ed).text();
+			var ind1val = $("[@id="+indid1+"]", var_ed).val();
 			var indid2 = 'dind2' + tag_with_suffix;	
-			var ind2val = $("[@id="+indid2+"]", var_ed).text();
+			var ind2val = $("[@id="+indid2+"]", var_ed).val();
             // set indicators from displayed # to proper " "
             if( ind1val == "#") {
                 ind1val = " ";
@@ -231,7 +231,10 @@ function Edit2XmlMarc21(ff_ed, var_ed) {
 			df.setAttribute('ind1', ind1val);
 			df.setAttribute('ind2', ind2val);
 			// create <subfield> elems for this datafield
-			var subfields = $(this).text();
+			var subfields = '';
+			$('input', $(this)).each( function() {
+				subfields += $(this).val();
+			});
             if(debug) {
                 console.info("Saving subfields: " + subfields);
             }
@@ -377,35 +380,12 @@ function doMerge() {
    None.
 
 */
-function addSubfield(o, selectedElement, editorSelection) {
-	// make sure the cursor is in the editor so we can perform the operation
-	rte_editor._focusWindow();
-    if(debug) { console.info("Adding subfield");}
-    // get the currently selected node
-    var n = editorSelection.anchorNode;
-    // get where in the node the cursor is
-    var offset = editorSelection.anchorOffset;
-    // get the text *after* the cursor to stick into a new subfield
-    var newtext = n.textContent.substr(offset);
-    if(debug) { console.info("new subfield will have text: "+ newtext);}
-    // remove this text from the previous subfield
-    n.textContent = n.textContent.substr(0, offset);
-    // append it 
-    // get a random number to assign as a suffix to our new subfield's id so we can find it
-    var newid="newsubfield-" + Math.floor(Math.random()*100);    
-	 // if we're in a subfield-delimiter or subfield-text, add the new subfield after its parent
-	 if( $(selectedElement).is('.subfield-delimiter,.subfield-text') ) {
-	 	selectedElement = $(selectedElement).parent();
-	 }
-    $(selectedElement, rte_editor._getDoc() ).after("<span id='"+newid+"' class='subfield'><span class='subfield-delimiter'>&Dagger;</span><span class='subfield-text'>"+newtext+"</span></span>")
-    // put the cursor after the subfield delimiter in the new element' subfield-delimiter <span>
-    editorSelection.extend(  $(selectedElement).next().children().get(0), 1);
-    editorSelection.collapseToEnd();
-	 var next = $(selectedElement).next();
-	 editorSetFocus(next);
-    // delete moz_dirty <br/> which messes up editor spacing by inserting that <br/>
-    //<br _moz_dirty=""/>
-    $("br", rte_editor._getDoc()).remove();
+function addSubfield() {
+		 // get a new random id for the new elements
+		 var el = $( UI.editor.lastFocusedEl );
+		 var newid="newsubfield-" + Math.floor(Math.random()*100);    
+		$(el).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' value='&Dagger;'><input id='subfield-text-'"+newid+"' class='subfield-text'></span>");
+		$('delimiter'+newid).get(0).focus();
 }
 
 /*
@@ -422,12 +402,12 @@ function addSubfield(o, selectedElement, editorSelection) {
    None.
 
 */
-function doAddField() {
+function addField() {
   Ext.MessageBox.prompt('Add tag', 'Choose a tag number', function(btn, tagnumber) {
         if(debug) { console.info("Adding tag with tagnumber: " + tagnumber);  }; 
 
         // insert the new field in numerical order among the existing tags
-        var tags = $(".tag", rte_editor._getDoc() );
+        var tags = $(".tag", UI.editor.doc );
         var tagToInsertAfter; // the tag just before where we'll insert the new tag
         var highestSuffix = 1; // highest number appended to tag id's with this tag number.  Add 1 to it to get suffix for new tag
         var newSuffix = 1;
@@ -446,11 +426,18 @@ function doAddField() {
         }
         newSuffix = highestSuffix + 1;
         var newId = tagnumber + "-" + newSuffix;
-        var newtag = "<div class='tag' id='"+newId+"'><span id='d"+tagnumber+"'>"+tagnumber+"</span><span class='indicator' id='dind1"+newId+"'>#</span><span class='indicator' id='dind2"+newId+"'>#</span><span class='subfields' id='dsubfields"+newId+"'><span class='subfield'><span class='subfield-delimiter'>&Dagger;</span><span class='subfield-text> </span></span></span></div>"
+		  var newtag = '<div class="tag" id="'+newId+'">';
+		  newtag += '<input class="tagnumber" id="d'+tagnumber+'" value="'+tagnumber+'" />';
+		  newtag += '<input size="2" class="indicator" value="#" id="dind1'+newId+'"/>';
+		  newtag += '<input size="2" class="indicator" value="#" id="dind2'+newId+'"/>';
+		  newtag += '<span class="subfields" id="dsubfields'+newId+'">';
+		  newtag += '<span class="subfield" id="'+tagnumber+newId+'">';
+		  newtag += '<input class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;">';
+		  newtag += '<input class="subfield-text" size="40" value="">';
         // insert out new tag after the tag we just found
-        $(tagToInsertAfter, rte_editor._getDoc()).after(newtag);
+        $(tagToInsertAfter, UI.editor.doc).after(newtag);
 		// set the focus to this new tag
-		editorSetFocus( $(newId) );
+  		$( newId ).get(0).focus();
   });
 }
 
@@ -1020,11 +1007,11 @@ function editorCheckHighlighting(o) {
 */
 function transferFF_EdToTags(ff_ed) {
     var leaderval = getLeaderFromEditor(ff_ed);
-    $("#000", rte_editor._getDoc()).children('.controlfield').empty()
-    $("#000", rte_editor._getDoc()).children('.controlfield').append(leaderval);
+    $("#000", UI.editor.doc).children('.controlfield').empty()
+    $("#000", UI.editor.doc).children('.controlfield').append(leaderval);
     var tag008val = get008FromEditor(ff_ed);
-    $("#008", rte_editor._getDoc()).children('.controlfield').empty()
-    $("#008", rte_editor._getDoc()).children('.controlfield').append(tag008val);
+    $("#008", UI.editor.doc).children('.controlfield').empty()
+    $("#008", UI.editor.doc).children('.controlfield').append(tag008val);
     if(debug) {
         console.info('Transferring leader value from fixed field editor into leader tag: ' + leaderval);
         console.info('Transferring 008 value from fixed field editor into 008 tag: ' + tag008val);
@@ -1040,60 +1027,414 @@ function toggleFixedFieldDisplay(btn, toggled) {
         var ff_ed = $("#ffeditor");
         transferFF_EdToTags(ff_ed);
 		// show leader and 008
-		$("#000", rte_editor._getDoc()).show();
-		$("#008", rte_editor._getDoc()).show();
+		$("#000", UI.editor.doc).show();
+		$("#008", UI.editor.doc).show();
 	}
 	else {
         var ff_ed = $("#ffeditor");
         updateFFEditor(ff_ed);
 		$("#ffeditor").show();
 		// hide leader and 008
-		$("#000", rte_editor._getDoc()).hide();
-		$("#008", rte_editor._getDoc()).hide();
+		$("#000", UI.editor.doc).hide();
+		$("#008", UI.editor.doc).hide();
 
 	}
 
 }
 
-function doRemoveSubfield() {
-	var selectedElement = editorGetSelectedElement();
-	editorSelection = rte_editor._getSelection();
-	if( $(selectedElement).is('.subfield-text') || $(selectedElement).is('.subfield-delimiter') ) {
-		// don't let user delete first subfield
-		if( $(selectedElement).parents('.subfield').prev().length == 0 ) {
-			Ext.MessageBox.alert('Error', "You can't delete the first subfield.  Please change the subfield code instead");
-		}
-		else {
-			if( $(selectedElement).parents('.subfield').next().length == 0 ) {
-				editorPrevSubfield(null, editorSelection, selectedElement);
-			}
-			else {
-				editorNextSubfield(null, editorSelection, selectedElement);
-			}
-			$(selectedElement).parents('.subfield').remove();
-		}
+function removeSubfield() {
+	if(debug) { console.info('removing subfield with text: ' + $(UI.editor.lastFocusedEl).val());}
+	var next = $(UI.editor.lastFocusedEl).parents('.subfield').next().children('.subfield-delimiter');
+	var prev = $(UI.editor.lastFocusedEl).parents('.subfield').prev().children('.subfield-delimiter');
+	var ind2 = $(UI.editor.lastFocusedEl).parents('.tag').children('.indicator').eq(1);
+	// remove current subfield
+	$(UI.editor.lastFocusedEl).parents('.subfield').remove();
+	// focus next subfield 
+	if( $(UI.editor.lastFocusedEl.parents('.subfield').next().length ) ) {
+		$(next).focus();
+	}
+	else if( $(UI.editor.lastFocusedEl.parents('.subfield').prev().length ) ) {
+		$(prev).focus();
+	}
+	// or indicator
+	else {
+		$(ind2).focus();
+	}
+}
+
+
+function removeTag() {
+	if(debug) { console.info('removing tag: ' + $(UI.editor.lastFocusedEl).parents('.tag').get(0).id)}
+	// focus previous or next tag
+	var prev = $(UI.editor.lastFocusedEl).parents('.tag').prev().children('.tagnumber');
+	var next = $(UI.editor.lastFocusedEl).parents('.tag').next().children('.tagnumber');
+	$(UI.editor.lastFocusedEl).parents('.tag').remove();
+	if( $(next).length ) {
+		$(next).focus();
 	}
 	else {
-		Ext.MessageBox.alert('Error', 'You must be in a subfield to delete it');
+		$(prev).focus();
 	}
 }
 
-function doRemoveTag() {
-	var selectedElement = editorGetSelectedElement();
-	editorSelection = rte_editor._getSelection();
-	editorNextTag(null, editorSelection, selectedElement) ;
-	$(selectedElement).parents('.tag').remove();
+
+function create_static_editor() {
+	UI.editor.editorDoc = $('#vareditor');
+	// add focus behavior
+	$('#marceditor input')
+		.livequery('focus', function(e) {
+			// remove old focused element
+			$('#marceditor input').removeClass('focused');
+			// add focus css to newly focused element
+			$(this).addClass('focused');
+			// keep track of currently focused element so we can use toolbar even though 
+			// focus has moved
+			UI.editor.lastFocusedEl = $(this);
+		});
+	// remove focus css on blur
+	$('#marceditor input')
+		.livequery('blur', function(e) {
+			$(this).removeClass('focused');
+		});
+	// add focus for hover
+	// FIXME? Changing focus class on hovering didn't look so great- didn't always update smoothly.
+/*	$('#marceditor input')
+		.livequery(function(){
+			$(this)
+				.hover(function() {
+					$(this).addClass('focused');
+				}, function() {
+					$(this).removeClass('focused');
+				});
+		}, function() {
+			// unbind mouseover and mouseout events
+			$(this)
+				.unbind('mouseover')
+				.unbind('mouseout');
+		});
+*/
+	// add editor hotkeys
+	setupEditorHotkeys();
+
+	// apply ExtJS comboboxes for live searching of authority data
+	setupMarc21AuthorityLiveSearches();
 }
 
+function setupEditorHotkeys() {
+	// focus next tagnumber of return
+	$.hotkeys.add('Alt+space', {propagate: true}, function(e) {
+		$('.focused').parents('.tag').next().children('.tagnumber').get(0).focus();
+		$(e.target).blur();
+	});
+	// focus prev tagnumber on shift-return
+	$.hotkeys.add('Shift+return', function(e) {
+		$('.focused').parents('.tag').prev().children('.tagnumber').get(0).focus();
+		$(e.target).blur();
+	});
+
+	// add a new subfield
+	$.hotkeys.add('Ctrl+m', function(e) {	
+		addSubfield();
+	});
+	
+	// add a new field
+	$.hotkeys.add('Ctrl+n', function(e) {
+		addField();
+	});
+
+	// remove a subfield
+	$.hotkeys.add('Ctrl+d', function(e) {
+		removeSubfield();
+	});
+	// remove a field
+	$.hotkeys.add('Ctrl+k', function(e) {
+		removeTag();	
+	});
+
+	// save record
+	$.hotkeys.add('Ctrl+s', function(e) {
+		doSaveLocal();
+	});
+}
+
+function setupMarc21AuthorityLiveSearches() {
+	// 100 personal names
+	var tag100 = $('div').filter('.tag[@id^=100]').children('.subfields').children('[@id*=a]');
+	$(tag100).
+		each(function(i) {
+		var subfield_text = $(this).children('.subfield-text');
+		console.info('applying combobox to '+ $(subfield_text).val() );
+		var store = new Ext.data.SimpleStore({
+			fields: ['author', 'auth'],
+			data: [['A', 'A'],
+					['B', 'B']
+					]
+		});
+		var cb = new Ext.form.ComboBox({
+			store: store,
+			typeAhead: true,
+			editable: true,
+			forceSelection: false,
+			triggerAction: 'all',
+			mode: 'local',
+			selectOnFocus: true,
+			hideTrigger: true,
+			displayField: 'author',
+		});
+		cb.applyTo($(subfield_text).get(0));
+	});
+	// 700 personal names
+	var tag700 = $('div').filter('.tag[@id^=700]').children('.subfields').children('[@id*=a]');
+	$(tag700).
+		each(function(i) {
+		var subfield_text = $(this).children('.subfield-text');
+		console.info('applying combobox to '+ $(subfield_text).val() );
+		var store = new Ext.data.SimpleStore({
+			fields: ['author', 'auth'],
+			data: [['A', 'A'],
+					['B', 'B']
+					]
+		});
+		var cb = new Ext.form.ComboBox({
+			store: store,
+			typeAhead: true,
+			editable: true,
+			forceSelection: false,
+			triggerAction: 'all',
+			mode: 'local',
+			selectOnFocus: true,
+			hideTrigger: true,
+			displayField: 'author',
+		});
+		cb.applyTo($(subfield_text).get(0));
+	});
+	// 650 subject
+	var tag650 = $('div').filter('.tag[@id^=650]').children('.subfields').children('[@id*=a]');
+	$(tag650).
+		each(function(i) {
+		var subfield_text = $(this).children('.subfield-text');
+		console.info('applying combobox to '+ $(subfield_text).val() );
+		var store = new Ext.data.SimpleStore({
+			fields: ['author', 'auth'],
+			data: [['A', 'A'],
+					['B', 'B']
+					]
+		});
+		var cb = new Ext.form.ComboBox({
+			store: store,
+			typeAhead: true,
+			editable: true,
+			forceSelection: false,
+			triggerAction: 'all',
+			mode: 'local',
+			selectOnFocus: true,
+			hideTrigger: true,
+			displayField: 'author',
+		});
+		cb.applyTo($(subfield_text).get(0));
+	});
+	// 600 subject
+	var tag600 = $('div').filter('.tag[@id^=600]').children('.subfields').children('[@id*=a]');
+	$(tag600).
+		each(function(i) {
+		var subfield_text = $(this).children('.subfield-text');
+		console.info('applying combobox to '+ $(subfield_text).val() );
+		var store = new Ext.data.SimpleStore({
+			fields: ['author', 'auth'],
+			data: [['A', 'A'],
+					['B', 'B']
+					]
+		});
+		var cb = new Ext.form.ComboBox({
+			store: store,
+			typeAhead: true,
+			editable: true,
+			forceSelection: false,
+			triggerAction: 'all',
+			mode: 'local',
+			selectOnFocus: true,
+			hideTrigger: true,
+			displayField: 'author',
+		});
+		cb.applyTo($(subfield_text).get(0));
+	});
+	// 440 series
+	var tag440 = $('div').filter('.tag[@id^=440]').children('.subfields').children('[@id*=a]');
+	$(tag440).
+		each(function(i) {
+		var subfield_text = $(this).children('.subfield-text');
+		console.info('applying combobox to '+ $(subfield_text).val() );
+		var store = new Ext.data.SimpleStore({
+			fields: ['author', 'auth'],
+			data: [['A', 'A'],
+					['B', 'B']
+					]
+		});
+		var cb = new Ext.form.ComboBox({
+			store: store,
+			typeAhead: true,
+			editable: true,
+			forceSelection: false,
+			triggerAction: 'all',
+			mode: 'local',
+			selectOnFocus: true,
+			hideTrigger: true,
+			displayField: 'author',
+		});
+		cb.applyTo($(subfield_text).get(0));
+	});
+	// 710 corp name
+	var tag710 = $('div').filter('.tag[@id^=710]').children('.subfields').children('[@id*=a]');
+	$(tag710).
+		each(function(i) {
+		var subfield_text = $(this).children('.subfield-text');
+		console.info('applying combobox to '+ $(subfield_text).val() );
+		var store = new Ext.data.SimpleStore({
+			fields: ['author', 'auth'],
+			data: [['A', 'A'],
+					['B', 'B']
+					]
+		});
+		var cb = new Ext.form.ComboBox({
+			store: store,
+			typeAhead: true,
+			editable: true,
+			forceSelection: false,
+			triggerAction: 'all',
+			mode: 'local',
+			selectOnFocus: true,
+			hideTrigger: true,
+			displayField: 'author',
+		});
+		cb.applyTo($(subfield_text).get(0));
+	});
+
+}
+
+function create_ext_editor_static() {
+	UI.editor.editorDoc = $('#vareditor');
+	$('.subfield-text').each( function() {
+		var value = $(this).text();
+		$(this).text('');
+		var ite = new Ext.form.TextField(
+		{	
+			value: value,
+			grow: true, 
+			focusClass: 'focused-subfield-text',
+			cls: 'subfield-text',
+			fieldClass: 'subfield-text'
+		});
+		ite.render($(this).get(0));
+	});
+	$('.subfield-delimiter').each( function() {
+		var value = $(this).text();
+		$(this).text('');
+		var ite = new Ext.form.TextField(
+		{
+			value: value,
+			grow: true, 
+			maxLength: 2,
+			focusClass: 'focused-subfield-delimiter',
+			cls: 'subfield-delimiter',
+			fieldClass: 'subfield-delimiter'
+		});
+		ite.render($(this).get(0));
+	});
+	$('.tagnumber').each( function() {
+		var value = $(this).text();
+		var id = $(this).id;
+		$(this).text('');
+		var ite = new Ext.form.TextField(
+		{
+			id: id,
+			value: value,
+			grow: true, 
+			maxLength: 3,
+			cls: 'tagnumber',
+			fieldClass: 'tagnumber',
+			focusClass: 'focused-tagnumber'
+		});
+		ite.render($(this).get(0));
+	});
+	$('.indicator').each( function() {
+		var value = $(this).text();
+		$(this).text('');
+		var ite = new Ext.form.TextField(
+		{
+			value: value,
+			grow: true, 
+			maxLength: 1,
+			focusClass: 'focused-indicator',
+			cls: 'indicator',
+			fieldClass: 'indicator'
+		});
+		ite.render($(this).get(0));
+	});
+	$('.controlfield').each( function() {
+		var value = $(this).text();
+		$(this).text('');
+		var ite = new Ext.form.TextField(
+		{
+			value: value,
+			grow: false,
+			focusClass: 'focused-controlfield',
+			cls: 'subfield-text',
+			fieldClass: 'subfield-text'
+		});
+		ite.render($(this).get(0));
+	});
+	$("#000").hide();
+	$("#008").hide();
+	// focus first input element
+	$('input', '#vareditor').get(0).focus();
+}
 
 function create_jquery_editor() {
 	UI.editor.editorDoc = '';
-	$('.subfield-text').click( function() {
-		$('input').filter('.subfield-text').replaceWith("<span class='subfield-text'>");
-		$('span').removeClass('focused-subfield-text');
-		$(this).replaceWith("<input type='text'>").addClass('focused').focus();
+	//$('.subfield-text').click( function() {
+//		$('input').filter('.subfield-text').replaceWith("<span>");
+//		$('span').removeClass('focused-subfield-text');
+//		$(this).replaceWith("<input type='text'>").addClass('focused').focus();
+//	});
+	// jeditable
+	$('.subfield-text').editable(
+		function(value, settings) {
+			console.log(this);
+			console.log(value);
+			console.log(settings);
+			return(value);
+		},
+		{
+			//type: 'textarea',
+			//event: "mouseover",
+			style: 'display: inline; background-color: yellow;',
+			onblur: 'submit'
 	});
-
+	$('.subfield-delimiter').editable(
+		function(value, settings) {
+			console.log(this);
+			console.log(value);
+			console.log(settings);
+			return(value);
+		},
+		{
+			//event: "mouseover",
+			style: 'inherit',
+			onblur: 'submit'
+	});
+	$('.tagnumber').editable(
+		function(value, settings) {
+			console.log(this);
+			console.log(value);
+			console.log(settings);
+			return(value);
+		},
+		{
+			//event: "mouseover",
+			style: "inherit",
+			onblur: 'submit'
+>>>>>>> neweditor:ui/js/edit.js
+	});
 }
 
 function create_yui_rte_editor() {
@@ -1107,7 +1448,6 @@ function create_yui_rte_editor() {
 		animate: false, //Animates the opening, closing and moving of Editor windows
 		css: editor_css + autocomplete_css
 	});
-	UI.editor.editorDoc = rte_editor._getDoc();
 	rte_editor.render();
 	rte_editor.on('editorContentLoaded', function() {
 		// move the cursor to 001 tag so we can use it even though leader will be invisible
@@ -1127,7 +1467,7 @@ function create_yui_rte_editor() {
 	rte_editor.on('editorKeyUp', function(o) {
 	});
 	rte_editor.on('editorMouseUp', editorMouseUp );
-	
+	UI.editor.editorDoc = rte_editor._getDoc();
 }
 
 function editorMouseUp(o) {

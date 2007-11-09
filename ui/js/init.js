@@ -32,7 +32,7 @@ Ext.Ajax.request({
 
 var showMarcXslPath = "ui/xsl/MARC21slim2HTML.xsl";
 var fixedFieldXslPath = "ui/xsl/fixedfields_editor.xsl";
-var varFieldsXslPath = "ui/xsl/varfields_editor.xsl";
+var varFieldsXslPath = "ui/xsl/varfields_inputboxes.xsl";
 
 var recordNum = 0; // number of individual records found and saved to db
 var newRecordNum = 0; // number of individual records found and saved to db
@@ -113,6 +113,7 @@ function initUI() {
 	var querymap = new Ext.KeyMap('query', {
 		key: Ext.EventObject.ENTER,
 		fn: function() {
+			showStatusMsg('Searching...');
 			doPazPar2Search();
 			return false;
 		},
@@ -149,7 +150,6 @@ function initUI() {
     new Ext.ContentPanel('tab-panel', {fittoframe: true})
   );
   layout.endUpdate();
-
     editor_toolbar = new Ext.Toolbar('editor-toolbar',
     [
     {
@@ -178,8 +178,15 @@ function initUI() {
         icon: 'ui/images/process-stop.png',
         text: 'Cancel',
         handler: function() {
+			showStatusMsg('Cancelling record...');
             clear_editor();
-            displaySaveView();
+			if( UI.lastWindowOpen == 'savegrid' ) {
+				displaySaveView();
+			}
+			else if( UI.lastWindowOpen == 'searchgrid' ) {
+				displaySearchView();
+			}
+			clearStatusMsg();
         }
     },
     {
@@ -223,18 +230,13 @@ function initUI() {
 					{
 						text: 'Add subfield',				
 						handler: function() {
-							rte_editor._focusWindow();
-							editorSelection = rte_editor._getSelection();
-							var selectedElement = editorGetSelectedElement();
-							addSubfield(null, selectedElement, editorSelection);
-							rte_editor._focusWindow();
+							addSubfield();
 						}
 					},
 					{
 						text: 'Add field',
 						handler: function() {
-							doAddField();
-							rte_editor._focusWindow();
+							addField();
 						}
 					}
 			]})
@@ -249,19 +251,18 @@ function initUI() {
 					{
 						text: 'Remove subfield',
 						handler: function() {
-							doRemoveSubfield();
-							rte_editor._focusWindow();
+							removeSubfield();
 						}
 					},
 					{
 						text: 'Remove tag',
 						handler: function() {
-							doRemoveTag();
-							rte_editor._focusWindow();
+							removeTag();
 						}
 					}
 			]})
 	}));
 	 $('#record-toolbar').Draggable();
+
 }
 

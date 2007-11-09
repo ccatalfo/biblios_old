@@ -69,9 +69,11 @@
 }
 
 #status {
-  margin-top: 500px;
+	position: static;	
+  margin-top: 200px;
   font-size: medium;
   background-color: #33FF66;
+  display: block;
 }
 
 .yui-toolbar-subcont{
@@ -81,3 +83,4 @@
 .limit:hover {
 	color: red;	
 }
+

@@ -2,54 +2,60 @@
   font-size: small;
 } 
 
+input.controlfield, input.subfield-text, input.subfield-delimiter, input.indicator, input.tagnumber {
+	border: 1px solid #fff;
+}
+.focused.tagnumber {
+    border: solid 1px; 
+    background-color: #eeeeee;
+} 
+
+.focused.indicator {
+    border: solid 1px; 
+    background-color: #ccffff;
+} 
+
+.focused.subfield-text {
+    border: solid 1px; 
+    background-color: #ffff99;
+} 
+
+.focused.subfield-delimiter {
+    border: solid 1px; 
+    background-color: #ffff99; 
+} 
+
+.focused.controlfield {
+    border: solid 1px; 
+    background-color: #ffff66;
+}
+
 .tag {
     margin-top:8px; 
     margin-bottom:8px;
 } 
 
+.tagnumber {
+	width: 30px;
+}
+
 .indicator {
     margin-left: 2px; 
     margin-right: 2px;
+	width: 20px;
 } 
 
 .subfield-delimiter {
     color: blue; 
     margin-right: 3px; 
     margin-left: 3px;
+	width: 20px;
 } 
 
 .subfield-text {
-	min-width: 150px;
+	/*min-width: 150px;*/
 }
 
-.focused-tag {
-    border: solid 1px; 
-    background-color: #eeeeee;
-} 
-
-.focused-tagnumber {
-    background-color: #ccffcc;
-} 
-
-.focused-indicator {
-    background-color: #ccffff;
-} 
-
-.focused-subfield {
-    background-color: #ffff99;
-} 
-
-.focused-subfield-delimiter {
-    background-color: #ffff99; 
-} 
-
-.focused-subfield-text {
-    background-color: #ffff66;
-} 
-
-.focused-controlfield {
-    background-color: #ffff66;
-}
 
 .highlighted {
     padding: 2px; 
@@ -58,11 +64,9 @@
     border: 1px solid;
 }
 
-#000 {
-    display: none;
+.auth-combobox {
+	display: inline;
 }
-
-#008 {
-    display: none;
+#marceditor .x-form-field-wrap {
+	display: inline;
 }
-

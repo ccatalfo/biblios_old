@@ -9,7 +9,7 @@
 </script>
 <script type="text/javascript">
   // set debug to 0 to disable logging to firebug
-var debug = 0;
+var debug = 1;
 var db_debug = 0;
 </script>
 <!-- fckeditor 
@@ -31,6 +31,9 @@ var db_debug = 0;
 <script type="text/javascript" src="lib/jquery/jQuery.frameReady.js"></script>
 <script type="text/javascript" src="lib/jquery/jquery.replaceWith.js"></script>
 <script type="text/javascript" src="lib/jquery/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery.livequery.min.js"></script>
+<script type="text/javascript" src="lib/jquery/JQuery.moreSelectors.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery.jeditable.pack.js"></script>
 <link rel="stylesheet" type="text/css" href="lib/jquery/jquery.autocomplete.css">
 
 
@@ -75,8 +78,7 @@ tinyMCE.init({
 <!-- ExtJs -->
 <script type="text/javascript" src="lib/extjs/ext-yui-adapter.js"></script>
 <script type="text/javascript" src="lib/extjs/ext-jquery-adapter.js"></script>
-<script type="text/javascript" src="lib/extjs/ext-all.js"></script>
-<script type="text/javascript" src="lib/extjs/PagingMemoryProxy.js"></script>
+<script type="text/javascript" src="lib/extjs/ext-all-debug.js"></script>
 
 <!-- pazpar2 library -->
 <script type="text/javascript" src="lib/pz2.js"></script>
@@ -90,10 +92,18 @@ tinyMCE.init({
 <script type="text/javascript" src="ui/js/save.js"></script>
 <script type="text/javascript" src="ui/js/edit.js"></script>
 <script type="text/javascript" src="ui/js/options.js"></script>
+
 <!-- additions to Extjs library for this project -->
 <script type="text/javascript" src="lib/extjs/PagingToolbarRemoveButton.js"></script>
+<script type="text/javascript" src="lib/extjs/PagingMemoryProxy.js"></script>
+<script type="text/javascript" src="lib/extjs/InlineTextField.js"></script>
+<script type="text/javascript" src="lib/extjs/InlineTextArea.js"></script>
+<script type="text/javascript" src="lib/extjs/InlineComboBox.js"></script>
 
 <link type="text/css" rel="stylesheet" href="lib/extjs/resources/css/ext-all.css" />
+<link type="text/css" rel="stylesheet" href="lib/extjs/InlineFormFields.css" />
+
+<!-- our own style sheets -->
 <link type="text/css" rel="stylesheet" href="ui/css/styles.css" />
 <link type="text/css" rel="stylesheet" href="ui/css/editor-styles.css" />
 
@@ -152,6 +162,8 @@ tinyMCE.init({
 				<option value='ti'>Title</option>
 				<option value='au'>Author</option>
 				<option value='su'>Subject</option>
+				<option value='isbn'>ISBN</option>
+				<option value='issn'>ISSN</option>
 			</select>
 			<input type='submit' value='Search'>
 		</form>
@@ -228,6 +240,7 @@ Ext.onReady(function(){
     initUI();
     createHomeTab();	
 	createBiblioTab();
+    createOptionsTab();	
 
 // remove loading box
   var loading = Ext.get('loading');

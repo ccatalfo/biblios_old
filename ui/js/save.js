@@ -91,7 +91,7 @@ function doSaveLocal(savefileid, savefilename, sel, dd) {
     // if we have a record open in the marceditor, get its xml and save to drafts
     if( Ext.get('marceditor').isVisible() ) {
         var ff_ed = $("#fixedfields_editor");
-        var var_ed = rte_editor._getDoc();
+        var var_ed = UI.editor.editorDoc;
         // transform edited record back into marcxml
         if( marcFlavor == 'marc21' ) {
             xml = Edit2XmlMarc21(ff_ed, var_ed);
@@ -104,7 +104,7 @@ function doSaveLocal(savefileid, savefilename, sel, dd) {
         if( recid == '' ) {
             if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
             var sel = searchgrid.getSelections()[0];
-			var id = sel.id;
+				var id = sel.id;
             var server = sel.data.location;
             var title = sel.data.title;
             recid = addRecordFromSearch(id, server, title, savefileid);

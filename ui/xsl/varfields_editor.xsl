@@ -16,7 +16,7 @@
 
 	<xsl:template match="marc:leader">
         <div class="tag" id="000">
-        <span class='tagnumber' id='c000'>ldr</span>
+        <span class='tagnumber' id='c000'>ldr </span>
 
         <span class="indicator">
                 <xsl:attribute name="id">cind1<xsl:value-of select="000"/>-<xsl:number value="position()"/></xsl:attribute>#</span>

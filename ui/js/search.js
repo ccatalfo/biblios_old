@@ -103,7 +103,13 @@ paz = new pz2({
 					"errorhandler": pazPar2Error,
 					"oninit": options.initCallback || function() {},
 					"onping": options.pingCallback || function(){},
-					"onshow": function(data){ searchds.reload() },
+					"onshow": function(data){ 
+						searchds.reload(); 
+						if(data.activeclients == 0 ) {
+							// remove 'Searching' status msg
+							clearStatusMsg();
+						}
+					},
 					"termlist": "subject,author,date,publication-name",
 					"onterm": function(data) { 
 						removeFacets();

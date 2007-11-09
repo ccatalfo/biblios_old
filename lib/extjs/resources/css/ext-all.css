@@ -427,8 +427,8 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 
 .x-form-text, textarea.x-form-field{
     padding: 1px 3px;
-    background:#fff url(../images/default/form/text-bg.gif) repeat-x 0 0;
-    border: 1px solid #B5B8C8;
+    /*background:#fff url(../images/default/form/text-bg.gif) repeat-x 0 0;*/
+    border: 1px solid #fff;
 }
 .x-form-text {
     height:22px;

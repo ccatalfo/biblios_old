@@ -10,9 +10,15 @@ UI.editor.id = '';
 UI.editor.doc = null;
 UI.editor.savefileid = '';
 UI.editor.xml = '';
+UI.editor.lastFocusedEl = '';
 UI.search = {};
 UI.search.currQuery = '';
 UI.search.limitby = {};
+UI.currSaveFile = '';
+UI.currSaveFileName = '';
+UI.lastWindowOpen = '';
+UI.lastSearchPreviewed = '';
+UI.lastSavePreview = '';
 
 var newButton = new Ext.Toolbar.Button ({
         id: 'newrecordbutton',
@@ -57,25 +63,23 @@ var editButton = new Ext.Toolbar.Button({
         text: 'Edit',
         disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
         handler: function() {
-			showStatusMsg('Opening record...');
+				showStatusMsg('Opening record...');
             // see which grid is visible at the moment and get selected record from it
             if( Ext.get('searchgrid').isVisible() ) {
-				showStatusMsg('Opening record...');
-				var sel = searchgrid.getSelectionModel().getSelected();
-				var id = sel.data.Id;
-                var title = sel.data.title;
-                var server = sel.data.location;
-                UI.editor.id = '';
-                paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
-                var xml = getPazRecord(id);
-                if( xml ) {
-                  openRecord(xml);
-                }
-				clearStatusMsg();
+					var sel = searchgrid.getSelectionModel().getSelected();
+					var id = sel.data.Id;
+					var title = sel.data.title;
+					var server = sel.data.location;
+					UI.editor.id = '';
+					paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
+					var xml = getPazRecord(id);
+					if( xml ) {
+					openRecord(xml);
+					}
             }
             else if( Ext.get('savegrid').isVisible() ) {
                 var id = savefilegrid.getSelections()[0].data.Id;
-				var xml = getLocalXml(id);
+					 var xml = getLocalXml(id);
                 UI.editor.id = id;
                 openRecord(  xml );
             }
@@ -97,14 +101,14 @@ var emptyTrashButton = new Ext.Toolbar.Button({
     icon: 'ui/images/network-receive.png',
     handler: function() {
             if( Ext.get('searchgrid').isVisible() ) {
-				showStatusMsg('Emptying trash...');
-                doDeleteFromSaveFile( searchsavegrid.getSelections() );
-				clearStatusMsg();
+					showStatusMsg('Emptying trash...');
+					doDeleteFromSaveFile( searchsavegrid.getSelections() );
+					clearStatusMsg();
             }
             else if( Ext.get('savegrid').isVisible() ) {
-				showStatusMsg('Emptying trash...');
-                doDeleteFromSaveFile( savefilegrid.getSelections() );
-				clearStatusMsg();
+					showStatusMsg('Emptying trash...');
+               doDeleteFromSaveFile( savefilegrid.getSelections() );
+					clearStatusMsg();
             }
     }
 });
@@ -114,8 +118,12 @@ function createHomeTab() {
     hometab.activate();
 }
 
+function createOptionsTab() {
+	optionstab = tabs.addTab('optionstab', 'Options');
+}
+
 /*
-   Function: createMainTab
+   Function: createBiblioTab
 
    Creates the main ext.TabItem for bibliographic records.
 
@@ -281,11 +289,13 @@ function createSaveFileFolders(parentid) {
         }); 
         current_root.appendChild(newnode);
         newnode.on('click', function(n) {
-			showStatusMsg('Displaying ' + n.attributes.id);
+			   showStatusMsg('Displaying ' + n.attributes.id);
+				UI.currSaveFile = n.attributes.id;
+				UI.currSaveFileName = n.text;
             displaySaveView();
             folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
             displaySaveFile(n.attributes.savefileid, n.text); 
-			clearStatusMsg();
+				clearStatusMsg();
         });
 		//FIXME: save records in this save file folder to recordCache
 		//if(debug) { console.info('loading records for save file folder with id ' + rs.fieldByName('id') + ' into recordCache'); }
@@ -299,7 +309,7 @@ function createSaveFileFolders(parentid) {
     } 
     }
     catch(ex) {
-    Ext.Msg.alert("DB error", ex.message);
+		 Ext.Msg.alert("DB error", ex.message);
     }
 }
 
@@ -621,7 +631,7 @@ function createFolderList() {
         rs.close();
         }
         catch(ex) {
-        Ext.Msg.alert("DB error", ex.message);
+			  Ext.Msg.alert("DB error", ex.message);
         }
         var newnode = new Ext.tree.TreeNode(
         {
@@ -660,20 +670,20 @@ function createFolderList() {
 
 
     folderTree.on('beforenodedrop', function(e){
-        if(debug) { console.info("savefilestree dropped on: " + e.target.id); }
-        // grid data source: e.data.selections[0].id
-        // tree node target: e.target.id
-        var sel = e.data.selections;
-        doSaveLocal(e.target.attributes.savefileid, e.target.text, sel);
-        // redisplay current savefile (to show moved record)
-        var currentNode = folderTree.getSelectionModel().getSelectedNode();
-		// reload data into recordCache
-		var currentId = currentNode.attributes.savefileid;
-		// FIXME: use Gears workerpool to do this?
-		//if(debug) { console.info('reloading data into save file after record(s) droppped'); }
-		//recordCache[currentId] = loadSaveFile(currentId);
-        displaySaveFile(currentId, currentNode.text); 
-        return true;
+			 if(debug) { console.info("savefilestree dropped on: " + e.target.id); }
+			 // grid data source: e.data.selections[0].id
+			 // tree node target: e.target.id
+			 var sel = e.data.selections;
+			 doSaveLocal(e.target.attributes.savefileid, e.target.text, sel);
+			 // redisplay current savefile (to show moved record)
+			 var currentId = UI.currSaveFile;
+			 var currentName = UI.currSaveFileName;
+			 // reload data into recordCache
+			 // FIXME: use Gears workerpool to do this?
+			 //if(debug) { console.info('reloading data into save file after record(s) droppped'); }
+			 //recordCache[currentId] = loadSaveFile(currentId);
+			 displaySaveFile(currentId, currentName); 
+			 return true;
     });
 }
 
@@ -691,24 +701,21 @@ function createSearchPazParGrid(url) {
 		{name: 'location', mapping:'location @name'}
 	]);
 	var reader = new Ext.data.XmlReader({
-		totalRecords: 'total',
+		totalRecords: 'merged',
 		record: 'hit',
 		id: 'recid'
 	}, recordDef);
     searchds = new Ext.data.Store({
-        // load using HTTP
         proxy: new Ext.data.HttpProxy({url: url}),
-
-        // the return will be XML, so lets set up a reader
         reader: reader,  
-		remoteSort: false
+		  remoteSort: false
 		});
 
     cm = new Ext.grid.ColumnModel([
+		{header: "Medium", width: 50, dataIndex: 'medium'},
 		{header: "Title", width: 180, dataIndex: 'title'},
 	    {header: "Author", width: 120, dataIndex: 'author'},
 		{header: "Date", width: 50, dataIndex: 'date'},
-		{header: "Medium", width: 50, dataIndex: 'medium'},
 		{header: "Location", width: 100, dataIndex: 'location'}
 	]);
     cm.defaultSortable = true;
@@ -717,10 +724,10 @@ function createSearchPazParGrid(url) {
     searchgrid = new Ext.grid.Grid('searchgrid', {
         ds: searchds,
         cm: cm,
-		enableDragDrop: true,
-		ddGroup: 'RecordDrop',
-		//autoHeight: true,
-		autoExpandColumn: 0
+		  enableDragDrop: true,
+		  ddGroup: 'RecordDrop',
+		  //autoHeight: true,
+		  autoExpandColumn: 1
     });
 	searchgrid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
@@ -730,8 +737,9 @@ function createSearchPazParGrid(url) {
         var xml = getPazRecord(id);
         if( xml ) {
           previewRecord(xml);
+			 UI.lastSearchPreviewed = xml;
         }
-	});
+	}); // rowselect
 	searchgrid.on('celldblclick', function(searchgrid, rowIndex, colIndex,  e) {
 		showStatusMsg('Opening record...');
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
@@ -741,7 +749,7 @@ function createSearchPazParGrid(url) {
         if( xml ) {
           openRecord(xml);
         }
-	});
+	}); // cell dbl click
 	searchgrid.on('keypress', function( e ) {
 	  if( e.getKey() == Ext.EventObject.ENTER ) {
 		    showStatusMsg('Opening record...');
@@ -865,20 +873,22 @@ function createSaveFileGrid(data) {
         savefilegrid.on('celldblclick', function(savefilegrid, rowIndex, colIndex,  e) {
           savefileds = savefilegrid.getDataSource();
           var id = savefileds.data.items[rowIndex].data.Id;
-		  showStatusMsg('Opening record...');
-		  var xml = getLocalXml(id);
+			 UI.editor.id = id;
+			 showStatusMsg('Opening record...');
+			 var xml = getLocalXml(id);
           openRecord( xml );
 		  clearStatusMsg();
         });
         savefilegrid.on('keypress', function( e ) {
           if( e.getKey() == Ext.EventObject.ENTER ) {
             var sel = savefilegrid.getSelectionModel().getSelected();
-            var id = sel.data.Id;
+				var id = sel.data.Id;
+				UI.editor.id = id;
 			  var xml = getLocalXml(id);
 			  openRecord( xml );
-		  	showStatusMsg('Opening record...');
-            openRecord( xml );
-			clearStatusMsg();
+			  showStatusMsg('Opening record...');
+			  openRecord( xml );
+			  clearStatusMsg();
           }
         });
         //savefilegrid.on('rowclick', function(searchsavegrid, rowIndex, colIndex, e) {
@@ -887,8 +897,9 @@ function createSaveFileGrid(data) {
         //});
         savefilegrid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
           var id = savefileds.data.items[rowIndex].data.Id;
-		  var xml = getLocalXml(id);
+			 var xml = getLocalXml(id);
           previewRecord( xml );
+			 UI.lastSavePreview = xml;
         });
 		savefilegrid.render();
 
@@ -1037,9 +1048,17 @@ function loadSaveFile(id) {
 
 */
 function previewRecord(xml) {
+	// to prevent Extjs from sending to rowselect events in succession, thereby causing 
+	// to preview twice in a row
+	if( UI.lastSearchPreviewed == xml || UI.lastSavePreview == xml ) {
+		return;
+	}
+	if(debug) { console.info('previewing record'); }
+	showStatusMsg('Previewing record...');
     $("#lower-panel").empty();
     //console.info('previewRecord: previewing record with xml: ' + xml);
     $('#lower-panel').getTransform(showMarcXslPath, xml );
+	 clearStatusMsg();
 }
 
 /*
@@ -1095,6 +1114,7 @@ function displaySearchView() {
 	innerLayout.getRegion('center').showPanel('searchgridpanel');
     // select search results root
     folderTree.getSelectionModel().select(searchRoot);
+	 UI.lastWindowOpen = 'searchgrid';
 }
 
 /*
@@ -1124,6 +1144,7 @@ function displaySaveView() {
 	innerLayout.getRegion('center').showPanel('savegridpanel');
     // select root node of savefile folders
     //folderTree.getSelectionModel().select(saveFilesRoot);
+	 UI.lastWindowOpen = 'savegrid';
 }
 
 /*
@@ -1143,13 +1164,15 @@ function displaySaveView() {
 function openRecord(xml) {
     $("#ffeditor").getTransform( fixedFieldXslPath, xml);
     $("#vareditor").getTransform( varFieldsXslPath, xml);
+	 create_static_editor();
 	 //create_jquery_editor();
 	create_yui_rte_editor();
+	//create_yui_rte_editor();
 	// show fixed field editor, hide ldr and 008 divs
 	$("#ffeditor").show();
 	// hide leader and 008
-	//$("#000", rte_editor._getDoc()).hide();
-	//$("#008", rte_editor._getDoc()).hide();
+	$("#000").hide();
+	$("#008").hide();
 
 
 	$("#help-panel").append("This is the Help panel");
@@ -1166,8 +1189,6 @@ function openRecord(xml) {
 	//      hoverclass: 'droppable'
 	//    });
 
-	// keep track of currently open record
-	currOpenRecord = id;
 	displayRecordView();
 }
 
@@ -1236,7 +1257,7 @@ function doDownloadRecords() {
         // else if we have an open record in the editor
     else if( Ext.get('marceditor').isVisible() ) {
         var ff_ed = $("#fixedfields_editor");
-        var var_ed = rte_editor._getDoc();
+        var var_ed = UI.editor.doc;
         // transform edited record back into marcxml
         if( marcFlavor == 'marc21' ) {
             xml = Edit2XmlMarc21(ff_ed, var_ed);
@@ -1657,26 +1678,26 @@ function doChangeStatus(recstatus) {
     None.
 */
 function showStatusMsg(msg) {
+	$('#status').css('display', 'block');
+	$('#status').empty();
 	if( $("#status").length == 0 ) {
 		$("#folder-list").append("<div id='status'></div>");
 	}
-	else if( $("#status").text() == msg) {
+	if( $("#status").text() == msg) {
 		// don't show this same status message twice
 		return false;
 	}
 	else {
 		$("#status").append(msg);
-		$("#status").SlideInDown(500);
+		$("#status").SlideInLeft(1000);
+		$("#status").SlideOutLeft(2000);
 	}
 }
 
 function clearStatusMsg() {
-	if( $("#status").length > 0 ) {
-		setTimeout( function() {
-			$("#status").SlideOutDown(1000);
-			$("#status").empty();
-		}, 3000);
-	}
+	/*if( $("#status").length > 0 ) {
+		$("#status").SlideOutDown(2000);
+	}*/
 }
 
 /* Function: filterSearchResultsByServer
@@ -1727,7 +1748,7 @@ function getLocalXml(id) {
     var xml;
     while( resultSet.isValidRow() ) {
         xml = resultSet.fieldByName('xml');
-		savefileid = resultSet.fieldByName('savefile');
+		  savefileid = resultSet.fieldByName('savefile');
         //console.log('opening record with xml: ' + xml);
         resultSet.next();
     }
