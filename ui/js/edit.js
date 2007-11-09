@@ -1433,7 +1433,6 @@ function create_jquery_editor() {
 			//event: "mouseover",
 			style: "inherit",
 			onblur: 'submit'
->>>>>>> neweditor:ui/js/edit.js
 	});
 }
 
