@@ -11,7 +11,14 @@
 	</xsl:template>
 	
 	<xsl:template match="marc:record">
-		    <xsl:apply-templates select="marc:leader|marc:datafield|marc:controlfield"/>
+		    <xsl:apply-templates select="marc:leader">
+			</xsl:apply-templates>
+		    <xsl:apply-templates select="marc:controlfield">
+				<xsl:sort select="marc:datafield[@tag]" data-type="number"/>
+			</xsl:apply-templates>
+		    <xsl:apply-templates select="marc:datafield">
+				<xsl:sort select="marc:datafield[@tag]" data-type="number"/>
+			</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="marc:leader">
