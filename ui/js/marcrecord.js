@@ -5,9 +5,23 @@ function MarcRecord(ffeditor, vareditor) {
 	var vared = vareditor;
 
 	// privileged
-	this._updateEditor = function(tag, subfield, value) {
+	this._setValue = function(tag, subfield, value) {
 		$('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').val(value);
+	}
 
+	this._getValue = function(tag, subfield) {
+		$('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').val();
+	}
+
+	this._addSubfield = function(tag, subfield) {
+		
+		UI.editor.lastFocusedEl = '';
+	}
+
+	this._deleteSubfield = function(tag, subfield) {
+		var sf = $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
+		UI.editor.lastFocusedEl = sf;
+		removeSubfield();
 	}
 
 	this._focusTag = function(tag) {
@@ -20,8 +34,21 @@ function MarcRecord(ffeditor, vareditor) {
 
 }
 
-MarcRecord.prototype.update = function(tag, subfield, value) {
-	this._updateEditor(tag, subfield, value);
+// Public methods 
+MarcRecord.prototype.getValue = function(tag, subfield) {
+	this._getValue(tag, subfield);
+}
+
+MarcRecord.prototype.setValue = function(tag, subfield, value) {
+	this._setValue(tag, subfield, value);
+}
+
+MarcRecord.prototype.deleteSubfield = function(tag, subfield) {
+	this._deleteSubfield(tag, subfield);
+}
+
+MarcRecord.prototype.addSubfield = function(tag, subfield) {
+	this._addSubfield(tag, subfield);
 }
 
 MarcRecord.prototype.focusTag = function(tag) {
