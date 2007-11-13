@@ -1118,7 +1118,15 @@ function create_static_editor() {
 
 	// apply ExtJS comboboxes for live searching of authority data
 	setupMarc21AuthorityLiveSearches();
+
+	// setup marceditor macro functionality
+	UI.editor.record = setupMacros($('#ffeditor'), $('#vareditor'));
 }
+
+function setupMacros(ffeditor, vareditor) {
+	return new MarcRecord(ffeditor, vareditor);
+}
+
 
 function setupEditorHotkeys() {
 	// focus next tagnumber of return

@@ -11,6 +11,7 @@ UI.editor.doc = null;
 UI.editor.savefileid = '';
 UI.editor.xml = '';
 UI.editor.lastFocusedEl = '';
+UI.editor.record = '';
 UI.search = {};
 UI.search.currQuery = '';
 UI.search.limitby = {};
@@ -1164,7 +1165,7 @@ function displaySaveView() {
 function openRecord(xml) {
     $("#ffeditor").getTransform( fixedFieldXslPath, xml);
     $("#vareditor").getTransform( varFieldsXslPath, xml);
-	 create_static_editor();
+	 create_static_editor($('#ffeditor'), $('#vareditor') );
 	 //create_jquery_editor();
 	//create_yui_rte_editor();
 	//create_yui_rte_editor();
