@@ -46,9 +46,9 @@ function Field(tagnumber, indicator1, indicator2, subfields) {
 		// decide if it's controlfield of datafield	
 		if( tagnumber == '000') {
 			var leader = marcxml.createElement('leader');
-			marcxml.appendChild(record);
 			var lv = marcxml.createTextNode( subfields[0].value );
 			leader.appendChild(lv);
+			marcxml.appendChild(leader);
 			return leader;
 		}
 		else if( tagnumber < '010' ) {
@@ -76,10 +76,18 @@ function Field(tagnumber, indicator1, indicator2, subfields) {
 			return df;
 		}
 	}
+
+	this._XMLString = function() {
+		return xslTransform.serialize( this.XML() );
+	}
 }
 
 Field.prototype.XML = function() {
 	return this._XML();
+}
+
+Field.prototype.XMLString = function() {
+	return this._XMLString();
 }
 
 Field.prototype.subfields = function() {
