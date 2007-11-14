@@ -40,6 +40,46 @@ function Field(tagnumber, indicator1, indicator2, subfields) {
 		}
 		return sf;
 	}
+
+	this._XML = function() {
+		var marcxml = Sarissa.getDomDocument('', '');
+		// decide if it's controlfield of datafield	
+		if( tagnumber == '000') {
+			var leader = marcxml.createElement('leader');
+			marcxml.appendChild(record);
+			var lv = marcxml.createTextNode( subfields[0].value );
+			leader.appendChild(lv);
+			return leader;
+		}
+		else if( tagnumber < '010' ) {
+			var cf = marcxml.createElement('controlfield'); 
+			cf.setAttribute('tag', tagnumber);
+			var text = marcxml.createTextNode( subfields[0].value );
+			cf.appendChild(text);
+			return cf;
+		}
+		// datafield
+		else {
+			var df = marcxml.createElement('datafield');
+			var tagAttr = marcxml.createAttribute('tag');		
+			tagAttr.nodeValue = tagnumber;
+			df.setAttributeNode(tagAttr);
+			df.setAttribute('ind1', indicators[0]);
+			df.setAttribute('ind2', indicators[1]);
+			for( var i = 0; i< subfields.length; i++) {
+				var sf = marcxml.createElement('subfield');
+				sf.setAttribute('code', subfields[i].code);
+				var text = marcxml.createTextNode( subfields[i].value );
+				sf.appendChild(text);
+				df.appendChild(sf);	
+			}
+			return df;
+		}
+	}
+}
+
+Field.prototype.XML = function() {
+	return this._XML();
 }
 
 Field.prototype.subfields = function() {
