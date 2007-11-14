@@ -140,9 +140,11 @@ function MarcEditor(ffeditor, vareditor) {
 	var ffed = ffeditor;
 	var vared = vareditor;
 	var fieldlist = new Array();
+	var fields = new Array();
 
 	// inititalize
 	createFieldList();
+	createFields();
 
 	// private methods
 	function createFieldList() {
@@ -151,9 +153,40 @@ function MarcEditor(ffeditor, vareditor) {
 		});
 	}
 
+	function createFields() {
+		var editorfields = $('.tag');
+		for( var i = 0; i < editorfields.length; i++) {
+			var tagnumber = editorfields.eq(i).children('.tagnumber').eq(0).val();
+			var id = editorfields[i].id;
+			var ind1 = editorfields.eq(i).children('.indicator').eq(0).val();
+			var ind2 = editorfields.eq(i).children('.indicator').eq(1).val();
+			if( tagnumber < '010' ) {
+				var value = editorfields.eq(i).children('.controlfield').val();	
+				var newfield = new Field(tagnumber, ind1, ind2, [{code: '', value: value}]);
+				fields.push(newfield);
+			}
+			else {
+				var editorsubfields = $('[@id='+id+']').children('.subfields').children('.subfield');
+				var subfields = new Array();
+				for(var j = 0; j < editorsubfields.length; j++) {
+					var code = editorsubfields.eq(j).children('.subfield-delimiter').val().substring(1);
+					var value = editorsubfields.eq(j).children('.subfield-text').val();
+					var newsf = new Subfield(code, value);
+					subfields.push(newsf);
+				}
+				var newfield = new Field(tagnumber, ind1, ind2, subfields);
+				fields.push(newfield);
+			}
+		}
+	}
+
 	// privileged methods
 	this._getFieldList = function() {
 		return fieldlist;
+	}
+
+	this._getFields = function() {
+		return fields;
 	}
 
 	// privileged
@@ -299,4 +332,7 @@ MarcEditor.prototype.rawFields = function() {
 	return this._rawFields();
 }
 
+MarcEditor.prototype.getFields = function() {
+	return this._getFields();
+}
 
