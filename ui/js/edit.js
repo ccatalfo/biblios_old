@@ -380,12 +380,11 @@ function doMerge() {
    None.
 
 */
-function addSubfield() {
+function addSubfield(afterEl) {
 		 // get a new random id for the new elements
-		 var el = $( UI.editor.lastFocusedEl );
 		 var newid="newsubfield-" + Math.floor(Math.random()*100);    
-		$(el).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' value='&Dagger;'><input id='subfield-text-'"+newid+"' class='subfield-text'></span>");
-		$('delimiter'+newid).get(0).focus();
+		$(afterEl).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' value='&Dagger;'><input id='subfield-text-'"+newid+"' class='subfield-text'></span>");
+		//$('delimiter'+newid).get(0).focus();
 }
 
 /*
@@ -402,43 +401,58 @@ function addSubfield() {
    None.
 
 */
-function addField() {
-  Ext.MessageBox.prompt('Add tag', 'Choose a tag number', function(btn, tagnumber) {
-        if(debug) { console.info("Adding tag with tagnumber: " + tagnumber);  }; 
+function addField(tagnumber, ind1, ind2, subfields) {
+	if( tagnumber ) {
+		_addField(tagnumber, ind1, ind2, subfields);
+	}
+	else {
+		Ext.MessageBox.prompt('Add tag', 'Choose a tag number', function(btn, tagnumber) {
+			_addField(tagnumber);
+		});
+	}
 
-        // insert the new field in numerical order among the existing tags
-        var tags = $(".tag", UI.editor.doc );
-        var tagToInsertAfter; // the tag just before where we'll insert the new tag
-        var highestSuffix = 1; // highest number appended to tag id's with this tag number.  Add 1 to it to get suffix for new tag
-        var newSuffix = 1;
-        for( var i = 0; i<tags.length; i++) {
-            var id = $(tags[i]).attr('id').substr(0,3);
-            if( id < tagnumber) {
-                tagToInsertAfter = tags[i];
-            }
-            // get a new suffix number for our new tags id
-            else if( id == tagnumber ) {
-                var currSuffix = $(tags[i]).attr('id').substr(3);
-                if( currSuffix > highestSuffix ) {
-                    highestSuffix = currSuffix;
-                } 
-            }
-        }
-        newSuffix = highestSuffix + 1;
-        var newId = tagnumber + "-" + newSuffix;
+	function _addField(tagnumber, ind1, ind2, subfields) {
+		var firstind = ind1 || '#';
+		var secondind = ind2 || '#';
+		var sf = subfields || [ {'delimiter': 'a', 'text': ''} ];
+		if(debug) { console.info("Adding tag with tagnumber: " + tagnumber);  }; 
+
+		// insert the new field in numerical order among the existing tags
+		var tags = $(".tag", UI.editor.doc );
+		var tagToInsertAfter; // the tag just before where we'll insert the new tag
+		var highestSuffix = 1; // highest number appended to tag id's with this tag number.  Add 1 to it to get suffix for new tag
+		var newSuffix = 1;
+		for( var i = 0; i<tags.length; i++) {
+			var id = $(tags[i]).attr('id').substr(0,3);
+			if( id < tagnumber) {
+				tagToInsertAfter = tags[i];
+			}
+			// get a new suffix number for our new tags id
+			else if( id == tagnumber ) {
+				var currSuffix = $(tags[i]).attr('id').substr(3);
+				if( currSuffix > highestSuffix ) {
+					highestSuffix = currSuffix;
+				} 
+			}
+		}
+		newSuffix = highestSuffix + 1;
+		var newId = tagnumber + "-" + newSuffix;
 		  var newtag = '<div class="tag" id="'+newId+'">';
 		  newtag += '<input class="tagnumber" id="d'+tagnumber+'" value="'+tagnumber+'" />';
-		  newtag += '<input size="2" class="indicator" value="#" id="dind1'+newId+'"/>';
-		  newtag += '<input size="2" class="indicator" value="#" id="dind2'+newId+'"/>';
+		  newtag += '<input size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+'"/>';
+		  newtag += '<input size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+'"/>';
 		  newtag += '<span class="subfields" id="dsubfields'+newId+'">';
-		  newtag += '<span class="subfield" id="'+tagnumber+newId+'">';
-		  newtag += '<input class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;">';
-		  newtag += '<input class="subfield-text" size="40" value="">';
-        // insert out new tag after the tag we just found
-        $(tagToInsertAfter, UI.editor.doc).after(newtag);
+		  for( var i = 0; i< sf.length; i++) {
+			  newtag += '<span class="subfield" id="'+tagnumber+newId+'">';
+			  newtag += '<input class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;'+sf[i]['delimiter']+'">';
+			  var textlength = sf[i]['text'].length;
+			  newtag += '<input id="'+tagnumber+newId+i+'text"class="subfield-text" size="'+textlength+'" value="'+sf[i]['text']+'">';
+			}
+		// insert out new tag after the tag we just found
+		$(tagToInsertAfter, UI.editor.doc).after(newtag);
 		// set the focus to this new tag
-  		$( newId ).get(0).focus();
-  });
+		$( newId ).get(0).focus();
+  }
 }
 
 /*
@@ -1063,17 +1077,22 @@ function removeSubfield() {
 }
 
 
-function removeTag() {
+function removeTag(tagnumber) {
 	if(debug) { console.info('removing tag: ' + $(UI.editor.lastFocusedEl).parents('.tag').get(0).id)}
-	// focus previous or next tag
-	var prev = $(UI.editor.lastFocusedEl).parents('.tag').prev().children('.tagnumber');
-	var next = $(UI.editor.lastFocusedEl).parents('.tag').next().children('.tagnumber');
-	$(UI.editor.lastFocusedEl).parents('.tag').remove();
-	if( $(next).length ) {
-		$(next).focus();
+	if( tagnumber ) {
+		$('.tag').filter('[@id*='+tagnumber+']').remove();
 	}
 	else {
-		$(prev).focus();
+		// focus previous or next tag
+		var prev = $(UI.editor.lastFocusedEl).parents('.tag').prev().children('.tagnumber');
+		var next = $(UI.editor.lastFocusedEl).parents('.tag').next().children('.tagnumber');
+		$(UI.editor.lastFocusedEl).parents('.tag').remove();
+		if( $(next).length ) {
+			$(next).focus();
+		}
+		else {
+			$(prev).focus();
+		}
 	}
 }
 
@@ -1142,7 +1161,7 @@ function setupEditorHotkeys() {
 
 	// add a new subfield
 	$.hotkeys.add('Ctrl+m', function(e) {	
-		addSubfield();
+		addSubfield(UI.editor.lastFocusedEl);
 	});
 	
 	// add a new field

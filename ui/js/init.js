@@ -230,7 +230,7 @@ function initUI() {
 					{
 						text: 'Add subfield',				
 						handler: function() {
-							addSubfield();
+							addSubfield(UI.editor.lastFocusedEl);
 						}
 					},
 					{
