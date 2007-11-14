@@ -1,15 +1,66 @@
 function Field(tagnumber, indicator1, indicator2, subfields) {
 	var that = this;
 	var tagnumber = tagnumber;
-	var ind1 = indicator1;
-	var ind2 = indicator2;
+	var indicators = new Array(indicator1, indicator2);
 	var subfields = subfields;
 
+	this._indicator = function(num, val) {
+		if( !Ext.isEmpty(val) ) {
+			indicators[num] = val;
+		}
+		return indicators[num];
+	}
+
+	this._indicators = function() {
+		return indicators;
+	}
+
+	this._hasSubfield = function(code) {
+		for(var i = 0; i<subfields.length; i++) {
+			if( subfields[i].code == code ) {	
+				return true;
+			}
+		}
+		return false;
+	}
+		
+	this._subfields = function() {
+		return subfields;
+	}
+
+	this._subfield = function(code, val) {
+		var sf = '';
+		for(var i = 0; i<subfields.length; i++) {
+			if( subfields[i].code == code ) {
+				sf = subfields[i];
+			}
+		}
+		if( !Ext.isEmpty(val) ) {
+			sf.value = val;
+		}
+		return sf;
+	}
 }
 
+Field.prototype.subfields = function() {
+	return this._subfields();	
+}
+
+Field.prototype.subfield = function(code, val) {
+	return this._subfield(code, val);
+}
+
+Field.prototype.hasSubfield = function(code) {
+	return this._hasSubfield(code);
+}
 Field.prototype.indicator = function(num, val) {
-
+	return this._indicator(num, val);
 }
+
+Field.prototype.indicators = function() {
+	return this._indicators();
+}
+
 
 function Subfield(code, value) {
 	var that = this;
