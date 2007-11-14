@@ -133,13 +133,13 @@ Subfield.prototype.getValue = function(value) {
 }
 
 
-
-function MarcRecord(ffeditor, vareditor) {
+// Object -> marc editor wrapper
+function MarcEditor(ffeditor, vareditor) {
 	// private
 	var that = this;
 	var ffed = ffeditor;
 	var vared = vareditor;
-	var fields = new Array();
+	var fieldlist = new Array();
 
 	// inititalize
 	createFieldList();
@@ -147,18 +147,18 @@ function MarcRecord(ffeditor, vareditor) {
 	// private methods
 	function createFieldList() {
 		$('.tag').each( function(i) {
-			fields.push($(this).get(0).id.substring(0,3));
+			fieldlist.push($(this).get(0).id.substring(0,3));
 		});
 	}
 
 	// privileged methods
-	this._getFields = function() {
-		return fields;
+	this._getFieldList = function() {
+		return fieldlist;
 	}
 
 	// privileged
 	this._hasField = function(tagnumber) {
-		if( fields.indexOf(tagnumber) >= 0 ) {
+		if( fieldlist.indexOf(tagnumber) >= 0 ) {
 			return true;
 		}
 		else {
@@ -167,7 +167,7 @@ function MarcRecord(ffeditor, vareditor) {
 	}
 
 	this._fieldIndex = function(tagnumber) {
-		return fields.indexOf(tagnumber);
+		return fieldlist.indexOf(tagnumber);
 	}
 
 	this._setValue = function(tag, subfield, value) {
@@ -176,6 +176,28 @@ function MarcRecord(ffeditor, vareditor) {
 
 	this._getValue = function(tag, subfield) {
 		return $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').val();
+	}
+
+	this._rawFields = function() {
+		return $('.tag');
+	}
+
+	this._rawField = function(tagnumber, i) {
+		if( !Ext.isEmpty(i) ) {
+			return $('.tag').filter('[@id*='+tagnumber+']').eq(i);
+		}
+		else {
+			return $('.tag').filter('[@id*='+tagnumber+']');
+		}
+	}
+
+	this._rawSubfields = function(tagnumber, i) {
+		if( !Ext.isEmpty(i) ) {
+			return $('.tag').filter('[@id*='+tagnumber+']').eq(i).children('.subfields').children('.subfield');
+		}
+		else {
+			return $('.tag').filter('[@id*='+tagnumber+']').children('.subfields').children('.subfield');
+		}
 	}
 
 	this._addField = function(tag, ind1, ind2, subfields) {
@@ -220,47 +242,61 @@ function MarcRecord(ffeditor, vareditor) {
 }
 
 // Public methods 
-MarcRecord.prototype.getValue = function(tag, subfield) {
+MarcEditor.prototype.getValue = function(tag, subfield) {
 	return this._getValue(tag, subfield);
 }
 
-MarcRecord.prototype.setValue = function(tag, subfield, value) {
+MarcEditor.prototype.setValue = function(tag, subfield, value) {
 	this._setValue(tag, subfield, value);
 }
 
-MarcRecord.prototype.deleteSubfield = function(tag, subfield) {
+MarcEditor.prototype.deleteSubfield = function(tag, subfield) {
 	this._deleteSubfield(tag, subfield);
 }
 
-MarcRecord.prototype.addSubfield = function(tag, subfield, value) {
+MarcEditor.prototype.addSubfield = function(tag, subfield, value) {
 	this._addSubfield(tag, subfield, value);
 }
 
-MarcRecord.prototype.focusTag = function(tag) {
+MarcEditor.prototype.focusTag = function(tag) {
 	this._focusTag(tag);
 }
 
-MarcRecord.prototype.focusSubfield = function(tag, subfield) {
+MarcEditor.prototype.focusSubfield = function(tag, subfield) {
 	this._focusSubfield(tag, subfield);
 }
 
-MarcRecord.prototype.addField = function(tag, ind1, ind2, subfields) {
+MarcEditor.prototype.addField = function(tag, ind1, ind2, subfields) {
 	this._addField(tag, ind1, ind2, subfields);
 }
 
-MarcRecord.prototype.deleteField = function(tagnumber, i) {
+MarcEditor.prototype.deleteField = function(tagnumber, i) {
 	this._deleteField(tagnumber, i);
 }
 
-MarcRecord.prototype.getFields = function() {
-	return this._getFields();
+MarcEditor.prototype.getFieldList = function() {
+	return this._getFieldList();
 }
 
 
-MarcRecord.prototype.hasField = function(tagnumber) {
+MarcEditor.prototype.hasField = function(tagnumber) {
 	return this._hasField(tagnumber);
 }
 
-MarcRecord.prototype.fieldIndex = function(tagnumber) {
-	return this._fieldIndex(tagnumber);
+MarcEditor.prototype.fieldIndex = function(tagnumber, i) {
+	return this._fieldIndex(tagnumber, i);
 }
+
+MarcEditor.prototype.rawSubfields = function(tagnumber, i) {
+	return this._rawSubfields(tagnumber, i);
+}
+
+MarcEditor.prototype.rawField = function(tagnumber, i) {
+	return this._rawField(tagnumber, i);
+}
+
+MarcEditor.prototype.rawFields = function() {
+	return this._rawFields();
+}
+
+

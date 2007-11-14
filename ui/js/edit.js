@@ -1150,7 +1150,7 @@ function create_static_editor() {
 }
 
 function setupMacros(ffeditor, vareditor) {
-	return new MarcRecord(ffeditor, vareditor);
+	return new MarcEditor(ffeditor, vareditor);
 }
 
 
