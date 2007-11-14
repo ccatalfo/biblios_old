@@ -54,8 +54,8 @@ function MarcRecord(ffeditor, vareditor) {
 		addField(tag, ind1, ind2, subfields);
 	}
 
-	this._deleteField = function(tagnumber) {
-		removeTag(tagnumber);
+	this._deleteField = function(tagnumber, i) {
+		removeTag(tagnumber, i);
 	}
 
 	this._addSubfield = function(tag, subfield, value) {
@@ -120,7 +120,7 @@ MarcRecord.prototype.addField = function(tag, ind1, ind2, subfields) {
 	this._addField(tag, ind1, ind2, subfields);
 }
 
-MarcRecord.prototype.deleteField = function(tagnumber) {
-	this._deleteField(tagnumber);
+MarcRecord.prototype.deleteField = function(tagnumber, i) {
+	this._deleteField(tagnumber, i);
 }
 

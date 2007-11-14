@@ -1077,10 +1077,17 @@ function removeSubfield() {
 }
 
 
-function removeTag(tagnumber) {
-	if(debug) { console.info('removing tag: ' + $(UI.editor.lastFocusedEl).parents('.tag').get(0).id)}
+function removeTag(tagnumber, i) {
+	//if(debug) { console.info('removing tag: ' + $(UI.editor.lastFocusedEl).parents('.tag').get(0).id)}
 	if( tagnumber ) {
-		$('.tag').filter('[@id*='+tagnumber+']').remove();
+		// remove  the ith tagnumber if we were passed an i
+		if( !Ext.isEmpty(i) ) {
+			$('.tag').filter('[@id*='+tagnumber+']').eq(i).remove();
+		}
+		// else remove all!
+		else {
+			$('.tag').filter('[@id*='+tagnumber+']').remove();
+		}
 	}
 	else {
 		// focus previous or next tag
