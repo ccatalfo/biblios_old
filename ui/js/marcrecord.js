@@ -40,8 +40,37 @@ function MarcRecord(ffeditor, vareditor) {
 	var that = this;
 	var ffed = ffeditor;
 	var vared = vareditor;
+	var fields = new Array();
+
+	// inititalize
+	createFieldList();
+
+	// private methods
+	function createFieldList() {
+		$('.tag').each( function(i) {
+			fields.push($(this).get(0).id.substring(0,3));
+		});
+	}
+
+	// privileged methods
+	this._getFields = function() {
+		return fields;
+	}
 
 	// privileged
+	this._hasField = function(tagnumber) {
+		if( fields.indexOf(tagnumber) >= 0 ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	this._fieldIndex = function(tagnumber) {
+		return fields.indexOf(tagnumber);
+	}
+
 	this._setValue = function(tag, subfield, value) {
 		$('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').val(value);
 	}
@@ -124,3 +153,15 @@ MarcRecord.prototype.deleteField = function(tagnumber, i) {
 	this._deleteField(tagnumber, i);
 }
 
+MarcRecord.prototype.getFields = function() {
+	return this._getFields();
+}
+
+
+MarcRecord.prototype.hasField = function(tagnumber) {
+	return this._hasField(tagnumber);
+}
+
+MarcRecord.prototype.fieldIndex = function(tagnumber) {
+	return this._fieldIndex(tagnumber);
+}
