@@ -68,7 +68,7 @@ var editButton = new Ext.Toolbar.Button({
             // see which grid is visible at the moment and get selected record from it
             if( Ext.get('searchgrid').isVisible() ) {
 					var sel = searchgrid.getSelectionModel().getSelected();
-					var id = sel.data.Id;
+					var id = sel.id;
 					var title = sel.data.title;
 					var server = sel.data.location;
 					UI.editor.id = '';
