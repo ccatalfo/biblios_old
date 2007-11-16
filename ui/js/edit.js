@@ -1198,22 +1198,60 @@ function setupMarc21AuthorityLiveSearches() {
 		each(function(i) {
 		var subfield_text = $(this).children('.subfield-text');
 		console.info('applying combobox to '+ $(subfield_text).val() );
-		var store = new Ext.data.SimpleStore({
-			fields: ['author', 'auth'],
-			data: [['A', 'A'],
-					['B', 'B']
-					]
+		var marcxmlReader = new Ext.data.XmlReader({
+				record: 'record',
+				id: 'controlfield[@tag=001]',
+				},
+				[
+					// field mapping
+					{name: 'pname', mapping: 'datafield[@code=100] > subfield[@code=a]'},
+					{name: 'dates', mapping: 'datafield[@code=100] > subfield[@code=d]'}
+				]
+		);
+		var scanClauseReader = new Ext.data.XmlReader({
+				record: 'term',
+				},
+				[
+					// field mapping
+					{name: 'pname', mapping: 'value'}
+				]
+		);
+
+		var ds = new Ext.data.Store({
+			proxy: new Ext.data.HttpProxy(
+				{
+					url: kohaauthurl,
+					method: 'GET'
+				
+				}),
+			baseParams: {
+									version: '1.1',
+									operation: 'scan',
+									recordSchema: 'marcxml',
+									maximumRecords: '5'
+			},
+			reader: scanClauseReader
+			
 		});
+
 		var cb = new Ext.form.ComboBox({
-			store: store,
+			store: ds,
 			typeAhead: true,
+			typeAheadDelay: 500,
+			allQuery: 'scanClause',
+			queryParam: 'scanClause',
 			editable: true,
 			forceSelection: false,
 			triggerAction: 'all',
-			mode: 'local',
+			mode: 'remote',
 			selectOnFocus: true,
 			hideTrigger: true,
-			displayField: 'author',
+			displayField: 'pname',
+			loadingText: 'Searching...'
+		});
+		cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
+			var name = combo.query;
+			combo.query = 'pname='+name;
 		});
 		cb.applyTo($(subfield_text).get(0));
 	});
