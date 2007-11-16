@@ -1194,18 +1194,19 @@ function setupEditorHotkeys() {
 function setupMarc21AuthorityLiveSearches() {
 	// 100 personal names
 	var tag100 = $('div').filter('.tag[@id^=100]').children('.subfields').children('[@id*=a]');
-	$(tag100).
+	var tag700 = $('div').filter('.tag[@id^=700]').children('.subfields').children('[@id*=a]');
+	$(tag100).add(tag700).
 		each(function(i) {
 		var subfield_text = $(this).children('.subfield-text');
 		console.info('applying combobox to '+ $(subfield_text).val() );
 		var marcxmlReader = new Ext.data.XmlReader({
 				record: 'record',
-				id: 'controlfield[@tag=001]',
+				id: 'controlfield[tag=001]',
 				},
 				[
 					// field mapping
-					{name: 'pname', mapping: 'datafield[@code=100] > subfield[@code=a]'},
-					{name: 'dates', mapping: 'datafield[@code=100] > subfield[@code=d]'}
+					{name: 'pname', mapping: 'datafield[tag=100] > subfield[code=a]'},
+					{name: 'dates', mapping: 'datafield[tag=100] > subfield[code=d]'}
 				]
 		);
 		var scanClauseReader = new Ext.data.XmlReader({
@@ -1253,30 +1254,8 @@ function setupMarc21AuthorityLiveSearches() {
 			var name = combo.query;
 			combo.query = 'pname='+name;
 		});
-		cb.applyTo($(subfield_text).get(0));
-	});
-	// 700 personal names
-	var tag700 = $('div').filter('.tag[@id^=700]').children('.subfields').children('[@id*=a]');
-	$(tag700).
-		each(function(i) {
-		var subfield_text = $(this).children('.subfield-text');
-		console.info('applying combobox to '+ $(subfield_text).val() );
-		var store = new Ext.data.SimpleStore({
-			fields: ['author', 'auth'],
-			data: [['A', 'A'],
-					['B', 'B']
-					]
-		});
-		var cb = new Ext.form.ComboBox({
-			store: store,
-			typeAhead: true,
-			editable: true,
-			forceSelection: false,
-			triggerAction: 'all',
-			mode: 'local',
-			selectOnFocus: true,
-			hideTrigger: true,
-			displayField: 'author',
+		cb.on('select', function(combo, record, index) {
+
 		});
 		cb.applyTo($(subfield_text).get(0));
 	});
