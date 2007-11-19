@@ -104,7 +104,10 @@ function getRemoteRecord(callback) {
 		showStatusMsg('Opening record...');
 		var id = searchgrid.getSelections()[0].id;
 		var loc = searchgrid.getSelections()[0].data.location;
-		getRecordFromLocation(loc);
+		// if this location is in our Prefs.remoteILS hash, retrieve it specially
+		if( Prefs.remoteILS[loc] ) {
+			getRecordFromLocation(loc);
+		}
         UI.editor.id = '';
 		paz.recordCallback = callback;
 		var xml = getPazRecord(id);
@@ -114,10 +117,12 @@ function getRemoteRecord(callback) {
 }
 
 function getRecordFromLocation(loc) {
-	// if this location is in our Prefs.remoteILS hash, use the stored proc to get it
-	if( Prefs.remoteILS[loc] == 1 ) {
-
-	}
+	// get retrieval func name for this loc
+	var targetId = Prefs.remoteILS[loc].targetId;
+	var rs = db.execute('select func from targetPlugins where targetid=? and command="remoteRetrieve"', [targetId]);
+	var func = rs.fieldByName('func');
+	// eval it!
+	eval(func);
 }
 
 function getPazRecord(recId) {

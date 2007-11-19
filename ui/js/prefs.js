@@ -23,20 +23,23 @@ function setILSTargets() {
 	}
 	// get remote ILS location names so we know when to ask remote ILS for record
 	try {
-		rs = db.execute('select type from Prefs where name="remoteILS"');
+		rs = db.execute('select type, value from Prefs where name="remoteILS"');
 		while( rs.isValidRow() ) {
-			var ils = rs.fieldByName('type');
+			var ils = rs.fieldByName('value');
+			var type = rs.fieldByName('type');
 			// add to hash of remoteILS locations
 			Prefs.remoteILS[ ils ] = {};
 			// get params for this ils
-			var rs2 = db.execute('select value from Prefs where name="remoteILS" and type="'+ils+'"');
+			var rs2 = db.execute('select value from Prefs where name="remoteILS" and type=?', [type]);
 			Prefs.remoteILS[ils].location = rs2.fieldByName('value');
-			var rs2 = db.execute('select value from Prefs where name="remoteUser" and type="'+ils+'"');
+			var rs2 = db.execute('select value from Prefs where name="remoteUser" and type=?', [type]);
 			Prefs.remoteILS[ils].user = rs2.fieldByName('value');
-			var rs2 = db.execute('select value from Prefs where name="remotePassword" and type="'+ils+'"');
+			var rs2 = db.execute('select value from Prefs where name="remotePassword" and type=?',[type]);
 			Prefs.remoteILS[ils].pw = rs2.fieldByName('value');
-			var rs2 = db.execute('select value from Prefs where name="remoteUrl" and type="'+ils+'"');
+			var rs2 = db.execute('select value from Prefs where name="remoteUrl" and type=?',[type]);
 			Prefs.remoteILS[ils].url = rs2.fieldByName('value');
+			var rs2 = db.execute('select value from Prefs where name="remoteTargetId" and type=?',[type]);
+			Prefs.remoteILS[ils].targetId = rs2.fieldByName('value');
 			rs.next();
 		}
 	}
