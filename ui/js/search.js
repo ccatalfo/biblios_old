@@ -114,7 +114,10 @@ function getRemoteRecord(callback) {
 }
 
 function getRecordFromLocation(loc) {
+	// if this location is in our Prefs.remoteILS hash, use the stored proc to get it
+	if( Prefs.remoteILS[loc] == 1 ) {
 
+	}
 }
 
 function getPazRecord(recId) {
