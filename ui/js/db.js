@@ -31,6 +31,7 @@ function init_gears() {
 			createTables();
 			setupSaveFiles();
 			setupTargets();
+			setupKohaPrefs();
 			// remove old search results from Records (records with status = '')
 			rs = db.execute('delete from Records where status = ""');
 			// clear out old search results
@@ -176,3 +177,21 @@ function setupTargets() {
     Ext.MessageBox.alert('db error', ex.message);
   }
 }
+
+// test prefs for koha integration
+function setupKohaPrefs() {
+	try {
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'enabled', 'remoteILS', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'http://staff-gmc.dev.kohalibrary.com/', 'remoteUrl', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'api', 'remoteUser', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'api', 'remotePassword', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'plugins/koha.js', 'ilspluginlocation', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'kohaRetrieve()', 'remoteRetrieve', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'kohaInit()', 'remoteInit', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'kohaSave()', 'remoteSave', '')");
+	}
+	catch(ex) {
+		Ext.MessageBox.alert('db error on setting test prefs', ex.message);
+	}
+}
+
