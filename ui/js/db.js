@@ -31,7 +31,7 @@ function init_gears() {
 			createTables();
 			setupSaveFiles();
 			setupTargets();
-			setupKohaPrefs();
+			setupKohaPlugin();
 			// remove old search results from Records (records with status = '')
 			rs = db.execute('delete from Records where status = ""');
 			// clear out old search results
@@ -92,6 +92,7 @@ function createTables() {
 	rs = db.execute('create table if not exists Searches (id integer primary key autoincrement, xml text, query text, servers text, date_added date, searchname text)');
 	rs = db.execute('create table if not exists Savefiles (id integer primary key autoincrement, name text, description text, parentid integer, allowDelete boolean, allowAdd boolean, allowRename boolean, allowDrag boolean, allowDrop boolean, ddGroup text, icon text, date_added date, date_modified date)');
 	rs = db.execute('create table if not exists Targets (id integer primary key autoincrement, hostname varchar(255) default null, port integer default null, dbname varchar(255) default null, userid varchar(255) default null, password varchar(255) default null, name text, enabled boolean default 0, rank integer default null, description text, syntax varchar(80) default null, icon text, position text default "primary", type not null default "zed")');
+	rs = db.execute('create table if not exists targetPlugins (id integer primary key autoincrement, targetid integer, command varchar(255) default null, func varchar(255) default null)');
 	rs = db.execute('create table if not exists Prefs (id integer primary key autoincrement, name text, value text, type text, option text)');
     }
     catch(ex) {
@@ -171,6 +172,7 @@ function setupTargets() {
     rs = db.execute('insert or ignore into Targets (id, hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type) values (2, "zconn.lib.monash.edu.au", 7090, "Voyager", "", "", "Berwick Library", 1, 1, "Berwick Library, Monash University", null, null, "primary", "zed");');
     rs = db.execute('insert or ignore into Targets (id, hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type) values (3, "z3950.lib.byu.edu", 2200, "unicorn", "", "", "Brigham Young University", 1, 1, "Brigham Young University", null, null, "primary", "zed");');
     rs = db.execute('insert or ignore into Targets (id, hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type) values (4, "z3950.loc.gov", 7090, "voyager", "", "", "Library of Congress", 1, 1, "Library of Congress", null, null, "primary", "zed");');
+    rs = db.execute('insert or ignore into Targets (id, hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type) values (5, "arwen.metavore.com", 9819, "biblios", "", "", "Koha-gmc", 1, 1, "Koha-gmc", null, null, "primary", "zed");');
 
   }
   catch(ex) {
@@ -179,16 +181,16 @@ function setupTargets() {
 }
 
 // test prefs for koha integration
-function setupKohaPrefs() {
+function setupKohaPlugin() {
 	try {
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'enabled', 'remoteILS', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'http://staff-gmc.dev.kohalibrary.com/', 'remoteUrl', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'api', 'remoteUser', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'api', 'remotePassword', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'plugins/koha.js', 'ilspluginlocation', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'kohaRetrieve()', 'remoteRetrieve', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'kohaInit()', 'remoteInit', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'kohaSave()', 'remoteSave', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (1, 'remoteILS', 'Koha-gmc', 'koha', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (2, 'remoteUrl', 'http://staff-gmc.dev.kohalibrary.com/', 'koha', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (3, 'remoteUser', 'api', 'koha', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (4, 'remotePassword', 'api', 'koha', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (5, 'ilspluginlocation', 'plugins/koha.js', 'koha', '')");
+		rs = db.execute("insert or ignore into targetPlugins (id, targetid, command, func) values (null, 5, 'remoteRetrieve', 'kohaRetrieve()')");
+		rs = db.execute("insert or ignore into targetPlugins (id, targetid, command, func) values (null, 5, 'remoteInit', 'kohaInit()')");
+		rs = db.execute("insert or ignore into targetPlugins (id, targetid, command, func) values (null, 5, 'remoteSave', 'kohaSave()')");
 	}
 	catch(ex) {
 		Ext.MessageBox.alert('db error on setting test prefs', ex.message);

@@ -1,3 +1,6 @@
+// keep prefs in memory
+var Prefs = {};
+Prefs.remoteILS = {};
 
 function initPrefs() {
 	setPazPar2Targets(paz);
@@ -8,9 +11,32 @@ function setILSTargets() {
 	var rs;
 	// get all of the pluginlocations from Prefs
 	try {
-		rs = db.execute('select value from Prefs where type="ilspluginlocation"');
+		rs = db.execute('select value from Prefs where name="ilspluginlocation"');
 		while(rs.isValidRow() ){
+			// retrieve and execute plugin script
 			$.getScript( rs.fieldByName('value') );
+			rs.next();
+		}
+	}
+	catch(ex) {
+		alert(ex.message);
+	}
+	// get remote ILS location names so we know when to ask remote ILS for record
+	try {
+		rs = db.execute('select type from Prefs where name="remoteILS"');
+		while( rs.isValidRow() ) {
+			var ils = rs.fieldByName('type');
+			// add to hash of remoteILS locations
+			Prefs.remoteILS[ ils ] = {};
+			// get params for this ils
+			var rs2 = db.execute('select value from Prefs where name="remoteILS" and type="'+ils+'"');
+			Prefs.remoteILS[ils].location = rs2.fieldByName('value');
+			var rs2 = db.execute('select value from Prefs where name="remoteUser" and type="'+ils+'"');
+			Prefs.remoteILS[ils].user = rs2.fieldByName('value');
+			var rs2 = db.execute('select value from Prefs where name="remotePassword" and type="'+ils+'"');
+			Prefs.remoteILS[ils].pw = rs2.fieldByName('value');
+			var rs2 = db.execute('select value from Prefs where name="remoteUrl" and type="'+ils+'"');
+			Prefs.remoteILS[ils].url = rs2.fieldByName('value');
 			rs.next();
 		}
 	}

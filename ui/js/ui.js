@@ -1,4 +1,6 @@
 var UI = {};
+UI.search = {};
+UI.search.remoteILS = {};
 UI.searchpreview = {};
 UI.searchpreview.id = '';
 UI.searchpreview.xml = '';
