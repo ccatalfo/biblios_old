@@ -1,3 +1,6 @@
+// keep prefs in memory
+var Prefs = {};
+Prefs.remoteILS = {};
 
 function initPrefs() {
 	setPazPar2Targets(paz);
@@ -10,8 +13,21 @@ function setILSTargets() {
 	try {
 		rs = db.execute('select value from Prefs where type="ilspluginlocation"');
 		while(rs.isValidRow() ){
+			// retrieve and execute plugin script
 			$.getScript( rs.fieldByName('value') );
 			rs.next();
+		}
+	}
+	catch(ex) {
+		alert(ex.message);
+	}
+	// get remote ILS location names so we know when to ask remote ILS for record
+	try {
+		rs = db.execute('select value from Prefs where type="remoteILS"');
+		while( rs.isValidRow() ) {
+		// add to hash of remoteILS locations
+		Prefs.remoteILS[ rs.fieldByName('value') ] = 1;
+		rs.next();
 		}
 	}
 	catch(ex) {

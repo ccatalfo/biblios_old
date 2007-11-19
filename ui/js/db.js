@@ -181,7 +181,7 @@ function setupTargets() {
 // test prefs for koha integration
 function setupKohaPrefs() {
 	try {
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'enabled', 'remoteILS', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'Koha-gmc', 'remoteILS', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'http://staff-gmc.dev.kohalibrary.com/', 'remoteUrl', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'api', 'remoteUser', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (null, 'koha', 'api', 'remotePassword', '')");
