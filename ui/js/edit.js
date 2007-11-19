@@ -1227,20 +1227,19 @@ function setupMarc21AuthorityLiveSearches() {
 				}),
 			baseParams: {
 									version: '1.1',
-									operation: 'scan',
+									operation: 'searchRetrieve',
 									recordSchema: 'marcxml',
 									maximumRecords: '5'
 			},
-			reader: scanClauseReader
-			
+			reader: marcxmlReader 
 		});
 
 		var cb = new Ext.form.ComboBox({
 			store: ds,
 			typeAhead: true,
 			typeAheadDelay: 500,
-			allQuery: 'scanClause',
-			queryParam: 'scanClause',
+			allQuery: 'query',
+			queryParam: 'query',
 			editable: true,
 			forceSelection: false,
 			triggerAction: 'all',
@@ -1251,10 +1250,12 @@ function setupMarc21AuthorityLiveSearches() {
 			loadingText: 'Searching...'
 		});
 		cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
-			var name = combo.query;
-			combo.query = 'pname='+name;
+			// for scan searching need to add pname= to query
+			//var name = combo.query;
+			//combo.query = 'pname='+name;
 		});
 		cb.on('select', function(combo, record, index) {
+			var thissf = $(combo).parents().filter('.tag[@id^=100]').children('.subfields').children('[@id*=a]');
 
 		});
 		cb.applyTo($(subfield_text).get(0));
