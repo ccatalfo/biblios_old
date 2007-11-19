@@ -103,13 +103,18 @@ function doPazPar2Search() {
 function getRemoteRecord(callback) {
 		showStatusMsg('Opening record...');
 		var id = searchgrid.getSelections()[0].id;
-		var location = searchgrid.getSelections()[0].data.location;
+		var loc = searchgrid.getSelections()[0].data.location;
+		getRecordFromLocation(loc);
         UI.editor.id = '';
 		paz.recordCallback = callback;
 		var xml = getPazRecord(id);
         if( xml ) {
           openRecord(xml);
         }
+}
+
+function getRecordFromLocation(loc) {
+
 }
 
 function getPazRecord(recId) {

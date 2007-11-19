@@ -1,7 +1,24 @@
 
 function initPrefs() {
 	setPazPar2Targets(paz);
+	setILSTargets();
 }
+
+function setILSTargets() {
+	var rs;
+	// get all of the pluginlocations from Prefs
+	try {
+		rs = db.execute('select value from Prefs where type="ilspluginlocation"');
+		while(rs.isValidRow() ){
+			$.getScript( rs.fieldByName('value') );
+			rs.next();
+		}
+	}
+	catch(ex) {
+		alert(ex.message);
+	}
+}
+
 
 function getTargetAuthStrings() {
   // z39.50 search servers authorization strings 
