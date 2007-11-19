@@ -100,6 +100,18 @@ function doPazPar2Search() {
     displaySearchView();
 }
 
+function getRemoteRecord(callback) {
+		showStatusMsg('Opening record...');
+		var id = searchgrid.getSelections()[0].id;
+		var location = searchgrid.getSelections()[0].data.location;
+        UI.editor.id = '';
+		paz.recordCallback = callback;
+		var xml = getPazRecord(id);
+        if( xml ) {
+          openRecord(xml);
+        }
+}
+
 function getPazRecord(recId) {
 	if( recordCache[recId] ) {
 		if(debug) { console.info('retreiving record from cache')}

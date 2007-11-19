@@ -67,16 +67,7 @@ var editButton = new Ext.Toolbar.Button({
 				showStatusMsg('Opening record...');
             // see which grid is visible at the moment and get selected record from it
             if( Ext.get('searchgrid').isVisible() ) {
-					var sel = searchgrid.getSelectionModel().getSelected();
-					var id = sel.id;
-					var title = sel.data.title;
-					var server = sel.data.location;
-					UI.editor.id = '';
-					paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
-					var xml = getPazRecord(id);
-					if( xml ) {
-					openRecord(xml);
-					}
+				getRemoteRecord(function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) });
             }
             else if( Ext.get('savegrid').isVisible() ) {
                 var id = savefilegrid.getSelections()[0].data.Id;
@@ -742,29 +733,14 @@ function createSearchPazParGrid(url) {
         }
 	}); // rowselect
 	searchgrid.on('celldblclick', function(searchgrid, rowIndex, colIndex,  e) {
-		showStatusMsg('Opening record...');
-		var id = searchgrid.dataSource.data.items[rowIndex].id;
-        UI.editor.id = '';
-		paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
-		var xml = getPazRecord(id);
-        if( xml ) {
-          openRecord(xml);
-        }
+		getRemoteRecord(function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
+);
 	}); // cell dbl click
 	searchgrid.on('keypress', function( e ) {
 	  if( e.getKey() == Ext.EventObject.ENTER ) {
-		    showStatusMsg('Opening record...');
-            var sel = searchgrid.getSelectionModel().getSelected();
-            var id = sel.data.Id;
-            UI.editor.id = '';
-			paz.recordCallback = function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
-            var xml = getPazRecord(id);
-            if( xml ) {
-              openRecord(xml);
-            }
-			clearStatusMsg();
-          } // if ENTER
-	}); // on keypress
+		  getRemoteRecord(function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) });
+		}
+	}); // on ENTER keypress
 	searchgrid.on('headerclick', function(grid, colIndex, e) {
 		// dataStore.getSortState() returns void if not set so check and set defaults
 		var sortState = searchds.getSortState() || {direction: 'ASC'};
@@ -899,7 +875,7 @@ function createSaveFileGrid(data) {
         savefilegrid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
           var id = savefileds.data.items[rowIndex].data.Id;
 			 var xml = getLocalXml(id);
-          previewRecord( xml );
+			  previewRecord( xml );
 			 UI.lastSavePreview = xml;
         });
 		savefilegrid.render();
