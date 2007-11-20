@@ -45,7 +45,6 @@ function setILSTargets() {
 			// initialize and authorize for this ils instance
 			Prefs.remoteILS[ils].instance = eval( initcall );
 			Prefs.remoteILS[ils].instance.init(Prefs.remoteILS[ils].url, Prefs.remoteILS[ils].user, Prefs.remoteILS[ils].pw);
-			Prefs.remoteILS[ils].instance.auth();
 			rs.next();
 		}
 	}

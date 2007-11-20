@@ -7,6 +7,8 @@ var koha = function() {
 	this.sessionStatus = 'uninitialized';
 	this.recidXpath = 'datafield[@tag=999] subfield[@code=c]';
 	this.recordCache = {};
+	this.saveStatus = '';
+	this.savedBiblionumber = '';
 };
 
 koha.prototype = {	
@@ -14,6 +16,8 @@ koha.prototype = {
 			this.url = url;
 			this.user = user;
 			this.password = password;
+			this.auth();
+			this.bibprofile();
 		}, // end init
 
 		auth: function() {
@@ -45,11 +49,12 @@ koha.prototype = {
 			});
 		},
 
-		retrieve: function koharetrieve(xml) {
+		retrieve: function(xmldoc) {
 			//alert('retrieving record from koha!');	
-			var recid = $(this.recidXpath, xml).text();
+			var recid = $(this.recidXpath, xmldoc).text();
 			Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
 				options.scope.recordCache[ options.id ] = resp.responseXML;
+				Ext.Ajax.purgeListeners();
 			});
 			Ext.Ajax.request({
 				url: this.url + 'cgi-bin/koha/biblios/bib/' + recid,
@@ -59,8 +64,39 @@ koha.prototype = {
 			});
 		},
 
-		save: function save() {
-
+		save: function(xmldoc) {
+			// if we have a bib number, replace. Otherwise, new bib
+			var recid = $(this.recidXpath, xmldoc).text();
+			var savepath = '';
+			if(recid != '') {
+				savepath = 'bib/'+recid;
+			}
+			else {
+				savepath = 'new_bib';
+			}
+			Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
+				// check response is ok
+				var status = $('status', resp.responseXML).text();
+				if( status == 'failed' ) {
+					options.scope.saveStatus = 'failed';
+				}
+				else if( status == 'ok' ) {
+					options.scope.saveStatus = 'ok';
+					var biblionumber = $('biblionumber', resp.responseXML).text();
+					options.scope.savedBiblionumber = 'failed';
+					// replace marcxml in recordcache	
+					var marcxml = $('record', resp.responseXML);
+					options.scope.recordCache[ options.id ] = marcxml;
+				}
+				Ext.Ajax.purgeListeners();
+			});
+			Ext.Ajax.request({
+				url: this.url + 'cgi-bin/koha/biblios/' + savepath,
+				method: 'post',
+				id: recid,
+				xmlData: xmldoc,
+				scope: this
+			});
 		}
 }; // end public properties
 
