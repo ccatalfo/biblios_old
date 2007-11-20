@@ -5,6 +5,8 @@ var koha = function() {
 	this.password = '';
 	this.bibprofilexml = '';
 	this.sessionStatus = 'uninitialized';
+	this.recidXpath = 'datafield[@tag=999] subfield[@code=c]';
+	this.recordCache = {};
 };
 
 koha.prototype = {	
@@ -44,11 +46,17 @@ koha.prototype = {
 		},
 
 		retrieve: function koharetrieve(xml) {
-			alert('retrieving record from koha!');	
-			// var recid = $('datafield[@tag=999] subfield[@code=a]', marcxml).text();
-			// $.get(  + '/cgi-bin/koha/biblios/bib/' + recid , function(data) {
-			// 	openRecord(data);
-			// });
+			//alert('retrieving record from koha!');	
+			var recid = $(this.recidXpath, xml).text();
+			Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
+				options.scope.recordCache[ options.id ] = resp.responseXML;
+			});
+			Ext.Ajax.request({
+				url: this.url + 'cgi-bin/koha/biblios/bib/' + recid,
+				method: 'get',
+				scope: this,
+				id: recid
+			});
 		},
 
 		save: function save() {
