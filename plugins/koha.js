@@ -17,6 +17,7 @@ koha.prototype = {
 		auth: function() {
 			Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
 				options.scope.sessionStatus = $('status', resp.responseXML).text();
+				Ext.Ajax.purgeListeners();
 			});
 
 			Ext.Ajax.request({
@@ -32,11 +33,13 @@ koha.prototype = {
 
 		bibprofile: function() {
 			Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
-				optios.scope.bibprofilexml = resp.responseXML;
+				options.scope.bibprofilexml = resp.responseXML;
+				Ext.Ajax.purgeListeners();
 			});
 			Ext.Ajax.request({
 				url: this.url + 'cgi-bin/koha/biblios/bib_profile',
 				method: 'get',
+				scope: this
 			});
 		},
 
