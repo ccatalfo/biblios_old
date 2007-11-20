@@ -106,23 +106,24 @@ function getRemoteRecord(callback) {
 		var loc = searchgrid.getSelections()[0].data.location;
 		// if this location is in our Prefs.remoteILS hash, retrieve it specially
 		if( Prefs.remoteILS[loc] ) {
-			getRecordFromLocation(loc);
+			getRecordFromLocation(id, loc);
 		}
-        UI.editor.id = '';
-		paz.recordCallback = callback;
-		var xml = getPazRecord(id);
-        if( xml ) {
-          openRecord(xml);
-        }
+		else {
+			UI.editor.id = '';
+			paz.recordCallback = callback;
+			var xml = getPazRecord(id);
+			if( xml ) {
+			  openRecord(xml);
+			}
+		}
 }
 
-function getRecordFromLocation(loc) {
-	// get retrieval func name for this loc
-	var targetId = Prefs.remoteILS[loc].targetId;
-	var rs = db.execute('select func from targetPlugins where targetid=? and command="remoteRetrieve"', [targetId]);
-	var func = rs.fieldByName('func');
-	// eval it!
-	eval(func);
+function getRecordFromLocation(id, loc) {
+	// get xml for the record we wantt to retrieve
+	xml = recordCache[id];
+	marcxml = xslTransform.loadString(xml);
+
+	Prefs.remoteILS[loc].instance.retrieve(marcxml);
 }
 
 function getPazRecord(recId) {

@@ -14,7 +14,7 @@ function setILSTargets() {
 		rs = db.execute('select value from Prefs where name="ilspluginlocation"');
 		while(rs.isValidRow() ){
 			// retrieve and execute plugin script
-			$.getScript( rs.fieldByName('value') );
+			//$.getScript( rs.fieldByName('value') );
 			rs.next();
 		}
 	}
@@ -40,6 +40,12 @@ function setILSTargets() {
 			Prefs.remoteILS[ils].url = rs2.fieldByName('value');
 			var rs2 = db.execute('select value from Prefs where name="remoteTargetId" and type=?',[type]);
 			Prefs.remoteILS[ils].targetId = rs2.fieldByName('value');
+			var rs2 = db.execute('select value from Prefs where name="ilsinitcall" and type=?',[type]);
+			var initcall = rs2.fieldByName('value');	
+			// initialize and authorize for this ils instance
+			Prefs.remoteILS[ils].instance = eval( initcall );
+			Prefs.remoteILS[ils].instance.init(Prefs.remoteILS[ils].url, Prefs.remoteILS[ils].user, Prefs.remoteILS[ils].pw);
+			Prefs.remoteILS[ils].instance.auth();
 			rs.next();
 		}
 	}
