@@ -1,11 +1,18 @@
 var koha = function() {
 	var that = this;
+	// auth stuff
 	this.url = '';
 	this.user = '';
 	this.password = '';
+	// bib profile
+	this.bibprofileHandler = '';
 	this.bibprofilexml = '';
+	this.mandatory_subfields = new Array();
+	this.mandatory_tags = new Array();
+	this.reserved_tags = new Array();
 	this.sessionStatus = 'uninitialized';
 	this.recidXpath = '';
+	// record save and retrieval
 	this.recordCache = {};
 	this.saveStatus = '';
 	this.savedBiblionumber = '';
@@ -46,6 +53,11 @@ koha.prototype = {
 				var tag = $('bib_number/tag', xml).text();
 				var subfield = $('bib_number/subfield', xml).text();
 				options.scope.recidXpath = 'datafield[@tag='+tag+'] subfield[@code='+subfield+']';
+				options.scope.mandatory_tags = $('mandatory_tags', xml).children();
+				options.scope.mandatory_subfields = $('mandatory_subfields', xml).children();
+				options.scope.reserved_tags = $('reserved_tags', xml).children();
+				options.scope.special_entries = $('special_entry', xml);
+				options.scope.bibprofileHandler( xml );
 				Ext.Ajax.purgeListeners();
 			});
 			Ext.Ajax.request({
