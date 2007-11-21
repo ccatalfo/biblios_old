@@ -1,8 +1,90 @@
+function MarcRecord(fieldlist) {
+	var fields = new Array();
+	if(fields) {
+		fields = fieldlist;
+	}
+	var numfields = fields.length;	
+
+	this.fields = function() {
+		return fields;
+	}
+
+	this._field = function(fieldno) {
+		for(var i=0; i<fields.length; i++){
+			if( fields[i].tagnumber() == fieldno ) {
+				return fields[i];
+			}
+		}
+		return false;
+	}
+
+	this._addField = function(field) {
+		fields.push(field);
+	}
+
+	this._removeField = function(fieldno) {
+		for(var i=0; i<fields.length; i++){
+			if( fields[i].tagnumber() == fieldno ) {
+				fields.splice(i, 1);
+			}
+		}
+	}
+
+	this._XML = function() {
+		// fixme this isn't working correctly: it's failing on trying to add xml fragment 
+		// returned from fields[i].XML()
+		//var xml = Sarissa.getDomDocument("", "record");
+		//for(var i=0; i<fields.length; i++){
+		//	xml.appendChild( fields[i].XML() );
+		//}
+		//return xml;
+		return xslTransform.loadString( this._XMLString() );
+	}
+
+	this._XMLString = function() {
+		var xml = '<record>';
+		for(var i=0; i<fields.length; i++){
+			xml += fields[i].XMLString();
+		}
+		xml += '</record>';
+		return xml;
+	}
+
+}
+
+MarcRecord.prototype.field = function(fieldno) {
+	return this._field(fieldno);
+}
+ 
+MarcRecord.prototype.fields = function() {
+	return this.fields();
+}
+
+MarcRecord.prototype.addField = function(field) {
+	this._addField(field);
+}
+
+MarcRecord.prototype.removeField = function(fieldno) {
+	this._removeField(fieldno);
+}
+
+MarcRecord.prototype.XML = function() {
+	return this._XML();
+}
+
+MarcRecord.prototype.XMLString = function() {
+	return this._XMLString();
+}
+
 function Field(tagnumber, indicator1, indicator2, subfields) {
 	var that = this;
 	var tagnumber = tagnumber;
 	var indicators = new Array(indicator1, indicator2);
 	var subfields = subfields;
+
+	this._tagnumber = function() {
+		return tagnumber;
+	}
 
 	this._indicator = function(num, val) {
 		if( !Ext.isEmpty(val) ) {
@@ -101,6 +183,11 @@ Field.prototype.subfield = function(code, val) {
 Field.prototype.hasSubfield = function(code) {
 	return this._hasSubfield(code);
 }
+
+Field.prototype.tagnumber = function() {
+	return this._tagnumber();
+}
+
 Field.prototype.indicator = function(num, val) {
 	return this._indicator(num, val);
 }
