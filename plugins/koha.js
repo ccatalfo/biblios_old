@@ -5,7 +5,7 @@ var koha = function() {
 	this.password = '';
 	this.bibprofilexml = '';
 	this.sessionStatus = 'uninitialized';
-	this.recidXpath = 'datafield[@tag=999] subfield[@code=c]';
+	this.recidXpath = '';
 	this.recordCache = {};
 	this.saveStatus = '';
 	this.savedBiblionumber = '';
@@ -19,7 +19,6 @@ koha.prototype = {
 			this.user = user;
 			this.password = password;
 			this.auth();
-			this.bibprofile();
 		}, // end init
 
 		auth: function() {
@@ -41,7 +40,12 @@ koha.prototype = {
 
 		bibprofile: function() {
 			Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
-				options.scope.bibprofilexml = resp.responseXML;
+				xml = resp.responseXML;
+				options.scope.bibprofilexml = xml;
+				// construct record id xpath expression from bib profile
+				var tag = $('bib_number/tag', xml).text();
+				var subfield = $('bib_number/subfield', xml).text();
+				options.scope.recidXpath = 'datafield[@tag='+tag+'] subfield[@code='+subfield+']';
 				Ext.Ajax.purgeListeners();
 			});
 			Ext.Ajax.request({
