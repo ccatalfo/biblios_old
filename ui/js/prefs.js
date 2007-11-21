@@ -1,10 +1,19 @@
 // keep prefs in memory
 var Prefs = {};
 Prefs.remoteILS = {};
+Prefs.remoteILS.list = new Array();
 
 function initPrefs() {
 	setPazPar2Targets(paz);
 	setILSTargets();
+	getRemoteBibProfiles();
+}
+
+function getRemoteBibProfiles() {
+	// get bib profiles for each remoteILS now (so xhr requests aren't overlapping)
+	for( var i = 0; i<Prefs.remoteILS.list.length; i++) {
+		Prefs.remoteILS[ Prefs.remoteILS.list[i] ].instance.bibprofile();
+	}
 }
 
 function setILSTargets() {
@@ -29,6 +38,8 @@ function setILSTargets() {
 			var type = rs.fieldByName('type');
 			// add to hash of remoteILS locations
 			Prefs.remoteILS[ ils ] = {};
+			// add to list of remoteILS locations
+			Prefs.remoteILS.list.push(ils);
 			// get params for this ils
 
 			var rs2 = db.execute('select value from Prefs where name="remoteILS" and type=?', [type]);
