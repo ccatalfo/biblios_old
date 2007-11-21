@@ -6,7 +6,7 @@ Prefs.remoteILS.list = new Array();
 function initPrefs() {
 	setPazPar2Targets(paz);
 	setILSTargets();
-	getRemoteBibProfiles();
+	//getRemoteBibProfiles();
 }
 
 function getRemoteBibProfiles() {

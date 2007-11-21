@@ -5,7 +5,7 @@ var koha = function() {
 	this.user = '';
 	this.password = '';
 	// bib profile
-	this.bibprofileHandler = '';
+	this.bibprofileHandler = function(){};
 	this.bibprofilexml = '';
 	this.mandatory_subfields = new Array();
 	this.mandatory_tags = new Array();
@@ -16,8 +16,8 @@ var koha = function() {
 	this.recordCache = {};
 	this.saveStatus = '';
 	this.savedBiblionumber = '';
-	this.retrieveHandler = '';
-	this.saveHandler = '';
+	this.retrieveHandler = function() {};
+	this.saveHandler = function() {};
 };
 
 koha.prototype = {	
@@ -26,60 +26,56 @@ koha.prototype = {
 			this.user = user;
 			this.password = password;
 			this.auth();
+			this.bibprofile();
 		}, // end init
 
 		auth: function() {
-			Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
-				options.scope.sessionStatus = $('status', resp.responseXML).text();
-				Ext.Ajax.purgeListeners();
-			});
-
-			Ext.Ajax.request({
+			$.ajax({
 					url: this.url + 'cgi-bin/koha/biblios/authentication',
 					method: 'post',
-					params: {	
+					data: {	
 							userid: this.user,
 							password: this.password
 					},
-					scope: this
-				});
+					that: this,
+					success: function(xml, status) {
+						this.that.sessionStatus = $('status', xml).text();
+					}
+			});
 		},
 
 		bibprofile: function() {
-			Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
-				xml = resp.responseXML;
-				options.scope.bibprofilexml = xml;
-				// construct record id xpath expression from bib profile
-				var tag = $('bib_number/tag', xml).text();
-				var subfield = $('bib_number/subfield', xml).text();
-				options.scope.recidXpath = 'datafield[@tag='+tag+'] subfield[@code='+subfield+']';
-				options.scope.mandatory_tags = $('mandatory_tags', xml).children();
-				options.scope.mandatory_subfields = $('mandatory_subfields', xml).children();
-				options.scope.reserved_tags = $('reserved_tags', xml).children();
-				options.scope.special_entries = $('special_entry', xml);
-				options.scope.bibprofileHandler( xml );
-				Ext.Ajax.purgeListeners();
-			});
-			Ext.Ajax.request({
+			$.ajax({
 				url: this.url + 'cgi-bin/koha/biblios/bib_profile',
 				method: 'get',
-				scope: this
+				that: this,
+				success: function(xml, status) {
+					this.that.bibprofilexml = xml;
+					// construct record id xpath expression from bib profile
+					var tag = $('bib_number/tag', xml).text();
+					var subfield = $('bib_number/subfield', xml).text();
+					this.that.recidXpath = 'datafield[@tag='+tag+'] subfield[@code='+subfield+']';
+					this.that.mandatory_tags = $('mandatory_tags', xml).children();
+					this.that.mandatory_subfields = $('mandatory_subfields', xml).children();
+					this.that.reserved_tags = $('reserved_tags', xml).children();
+					this.that.special_entries = $('special_entry', xml);
+					this.that.bibprofileHandler( xml );
+				}
 			});
 		},
 
 		retrieve: function(xmldoc, callback) {
 			//alert('retrieving record from koha!');	
 			var recid = $(this.recidXpath, xmldoc).text();
-			Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
-				options.scope.recordCache[ options.id ] = resp.responseXML;
-				options.scope.retrieveHandler(resp.responseXML);
-				Ext.Ajax.purgeListeners();
-			});
-			Ext.Ajax.request({
+			$.ajax({
 				url: this.url + 'cgi-bin/koha/biblios/bib/' + recid,
 				method: 'get',
-				scope: this,
-				id: recid
+				that: this,
+				id: recid,
+				success: function(xml, status) {
+					this.that.recordCache[ this.id ] = xml;
+					this.that.retrieveHandler(xml);
+				}
 			});
 		},
 
