@@ -10,6 +10,7 @@ var koha = function() {
 	this.saveStatus = '';
 	this.savedBiblionumber = '';
 	this.retrieveHandler = '';
+	this.saveHandler = '';
 };
 
 koha.prototype = {	
@@ -85,11 +86,12 @@ koha.prototype = {
 				else if( status == 'ok' ) {
 					options.scope.saveStatus = 'ok';
 					var biblionumber = $('biblionumber', resp.responseXML).text();
-					options.scope.savedBiblionumber = 'failed';
+					options.scope.savedBiblionumber = biblionumber;
 					// replace marcxml in recordcache	
 					var marcxml = $('record', resp.responseXML);
 					options.scope.recordCache[ options.id ] = marcxml;
 				}
+				options.scope.saveHandler( marcxml );
 				Ext.Ajax.purgeListeners();
 			});
 			Ext.Ajax.request({
@@ -97,7 +99,8 @@ koha.prototype = {
 				method: 'post',
 				id: recid,
 				xmlData: xmldoc,
-				scope: this
+				scope: this,
+				params: {}
 			});
 		}
 }; // end public properties
