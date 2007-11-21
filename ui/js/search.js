@@ -123,6 +123,7 @@ function getRecordFromLocation(id, loc) {
 	xml = recordCache[id];
 	marcxml = xslTransform.loadString(xml);
 
+	Prefs.remoteILS[loc].instance.retrieveHandler = openRecord;
 	Prefs.remoteILS[loc].instance.retrieve(marcxml);
 }
 

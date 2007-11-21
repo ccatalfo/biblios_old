@@ -9,6 +9,7 @@ var koha = function() {
 	this.recordCache = {};
 	this.saveStatus = '';
 	this.savedBiblionumber = '';
+	this.retrieveHandler = '';
 };
 
 koha.prototype = {	
@@ -49,11 +50,12 @@ koha.prototype = {
 			});
 		},
 
-		retrieve: function(xmldoc) {
+		retrieve: function(xmldoc, callback) {
 			//alert('retrieving record from koha!');	
 			var recid = $(this.recidXpath, xmldoc).text();
 			Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
 				options.scope.recordCache[ options.id ] = resp.responseXML;
+				options.scope.retrieveHandler(resp.responseXML);
 				Ext.Ajax.purgeListeners();
 			});
 			Ext.Ajax.request({
