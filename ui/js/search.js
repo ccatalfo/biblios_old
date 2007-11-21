@@ -104,20 +104,26 @@ function getRemoteRecord(callback) {
 		showStatusMsg('Opening record...');
 		var id = searchgrid.getSelections()[0].id;
 		var loc = searchgrid.getSelections()[0].data.location;
-		getRecordFromLocation(loc);
-        UI.editor.id = '';
-		paz.recordCallback = callback;
-		var xml = getPazRecord(id);
-        if( xml ) {
-          openRecord(xml);
-        }
+		// if this location is in our Prefs.remoteILS hash, retrieve it specially
+		if( Prefs.remoteILS[loc] ) {
+			getRecordFromLocation(id, loc);
+		}
+		else {
+			UI.editor.id = '';
+			paz.recordCallback = callback;
+			var xml = getPazRecord(id);
+			if( xml ) {
+			  openRecord(xml);
+			}
+		}
 }
 
-function getRecordFromLocation(loc) {
-	// if this location is in our Prefs.remoteILS hash, use the stored proc to get it
-	if( Prefs.remoteILS[loc] == 1 ) {
+function getRecordFromLocation(id, loc) {
+	// get xml for the record we wantt to retrieve
+	xml = recordCache[id];
+	marcxml = xslTransform.loadString(xml);
 
-	}
+	Prefs.remoteILS[loc].instance.retrieve(marcxml);
 }
 
 function getPazRecord(recId) {

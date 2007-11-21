@@ -184,13 +184,10 @@ function setupTargets() {
 function setupKohaPlugin() {
 	try {
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (1, 'remoteILS', 'Koha-gmc', 'koha', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (2, 'remoteUrl', 'http://staff-gmc.dev.kohalibrary.com/', 'koha', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (3, 'remoteUser', 'api', 'koha', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (4, 'remotePassword', 'api', 'koha', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (5, 'ilspluginlocation', 'plugins/koha.js', 'koha', '')");
-		rs = db.execute("insert or ignore into targetPlugins (id, targetid, command, func) values (null, 5, 'remoteRetrieve', 'kohaRetrieve()')");
-		rs = db.execute("insert or ignore into targetPlugins (id, targetid, command, func) values (null, 5, 'remoteInit', 'kohaInit()')");
-		rs = db.execute("insert or ignore into targetPlugins (id, targetid, command, func) values (null, 5, 'remoteSave', 'kohaSave()')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (6, 'ilsinitcall', 'new koha();', 'koha', '')");
 	}
 	catch(ex) {
 		Ext.MessageBox.alert('db error on setting test prefs', ex.message);

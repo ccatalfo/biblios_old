@@ -741,7 +741,7 @@ function createSearchPazParGrid(url) {
 	searchgrid.on('keypress', function( e ) {
 	  if( e.getKey() == Ext.EventObject.ENTER ) {
 		  getRemoteRecord(function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) });
-		}
+		}	
 	}); // on ENTER keypress
 	searchgrid.on('headerclick', function(grid, colIndex, e) {
 		// dataStore.getSortState() returns void if not set so check and set defaults
