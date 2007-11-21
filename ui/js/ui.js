@@ -1991,8 +1991,8 @@ function showStatusMsg(msg) {
 	}
 	else {
 		$("#status").append(msg);
-		$("#status").SlideInLeft(1000);
-		$("#status").SlideOutLeft(2000);
+		//$("#status").SlideInLeft(1000);
+		//$("#status").SlideOutLeft(2000);
 	}
 }
 

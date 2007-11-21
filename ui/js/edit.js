@@ -1196,7 +1196,7 @@ function setupReservedTags(loc, editor) {
 }
 
 function setupMacros(ffeditor, vareditor) {
-	return new MarcEditor(ffeditor, vareditor);
+	//return new MarcEditor(ffeditor, vareditor);
 }
 
 
