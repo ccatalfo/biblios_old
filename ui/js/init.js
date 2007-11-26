@@ -9,8 +9,8 @@ var z3950serversSave = '';
 var cclfile = '';
 var plugins = '';
 var templates = '';
-var pazpar2url = 'http://eowyn.metavore.com/pazpar2/search.pz2';
-var kohaauthurl = 'http://eowyn.metavore.com/kohaauth/authorities';
+var pazpar2url = 'http://'+ location.hostname + '/pazpar2/search.pz2';
+var kohaauthurl = 'http://'+ location.hostname+ '/kohaauth/authorities';
 init_gears();
 
 Ext.Ajax.request({
