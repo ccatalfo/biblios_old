@@ -31,7 +31,7 @@ koha.prototype = {
 
 		auth: function() {
 			$.ajax({
-					url: this.url + 'cgi-bin/koha/biblios/authentication',
+					url: this.url + 'cgi-bin/koha/svc/authentication',
 					method: 'post',
 					data: {	
 							userid: this.user,
@@ -46,7 +46,7 @@ koha.prototype = {
 
 		bibprofile: function() {
 			$.ajax({
-				url: this.url + 'cgi-bin/koha/biblios/bib_profile',
+				url: this.url + 'cgi-bin/koha/svc/bib_profile',
 				method: 'get',
 				that: this,
 				success: function(xml, status) {
@@ -68,7 +68,7 @@ koha.prototype = {
 			//alert('retrieving record from koha!');	
 			var recid = $(this.recidXpath, xmldoc).text();
 			$.ajax({
-				url: this.url + 'cgi-bin/koha/biblios/bib/' + recid,
+				url: this.url + 'cgi-bin/koha/svc/bib/' + recid,
 				method: 'get',
 				that: this,
 				id: recid,
@@ -107,7 +107,7 @@ koha.prototype = {
 				Ext.Ajax.purgeListeners();
 			});
 			Ext.Ajax.request({
-				url: this.url + 'cgi-bin/koha/biblios/' + savepath,
+				url: this.url + 'cgi-bin/koha/svc/' + savepath,
 				method: 'post',
 				id: recid,
 				xmlData: xmldoc,
