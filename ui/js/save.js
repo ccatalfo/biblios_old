@@ -144,8 +144,10 @@ function doSaveLocal(savefileid) {
     return true;
 }
 
-function doSaveRemote(remoteid, xml, loc) {
-
+function doSaveRemote(loc, xmldoc) {
+	if(debug) { console.info('Saving open record to ' + loc); }
+	Prefs.remoteILS[loc].instance.saveHandler = openRecord;
+	Prefs.remoteILS[loc].instance.save(xmldoc);
 }
 
 
@@ -199,6 +201,22 @@ function updateSaveMenu() {
 	for( sf in savefiles ) {
 		Ext.ComponentMgr.get('saveMenu').add( savefiles[sf] );
 	}
+}
+
+function getSendFileMenuItems() {
+	var list = new Array();
+	for( ils in Prefs.remoteILS ) {
+		var o = {
+			text: ils,
+			id: ils,
+			handler: function(btn) {
+				var xmldoc = xslTransform.loadString( Edit2XmlMarc21( $('#fixedfields_editor'), UI.editor.doc) );
+				doSaveRemote(btn.id, xmldoc);
+			}
+		}
+		list.push(o);
+	}
+	return list;
 }
 
 function getSaveFileMenuItems() {
