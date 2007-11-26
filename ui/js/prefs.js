@@ -170,8 +170,9 @@ function getSaveFileNames() {
 		while( rs.isValidRow() ) {
 			var id = rs.fieldByName('id');
 			var name = rs.fieldByName('name');
+			var o = {id: id, name: name};
 			UI.save.savefile[ id ] = name;
-			savefilenames.push( rs.fieldByName('name') );
+			savefilenames.push( o );
 			rs.next();
 		}
 	}

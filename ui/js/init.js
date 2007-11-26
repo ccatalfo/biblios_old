@@ -159,19 +159,7 @@ function initUI() {
         text: 'Save',
 		menu: new Ext.menu.Menu({
 			id: 'saveMenu',
-			items: [
-				{ 
-					text: 'Drafts',
-					id: '2',
-					handler: function(btn) {
-						var savefileid = btn.id;
-						doSaveLocal(savefileid);
-					}
-				},
-				{
-					text: 'Complete'
-				}
-			]
+			items: getSaveFileMenuItems()
 		})
     },
 	{

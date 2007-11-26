@@ -104,12 +104,6 @@ function doSaveLocal(savefileid) {
             savefileid = rs.fieldByName('savefile');
             rs = db.execute('select name from SaveFiles where id=?', [savefileid]);
             savefilename = rs.fieldByName('name');
-            // if null, we haven't saved this record anywhere yet so set to Drafts
-            if(savefilename == null) {
-                savefileid = 2;
-                savefilename = 'Drafts';
-                rs = db.execute('update Records set savefile=? where id=?', [savefileid, recid]);	
-            } 
             rs = db.execute('update Records set status=? where id=?', ['edited', recid]);	
             rs = db.execute('update Records set date_modified=datetime("now", "localtime") where id=?', [recid]);	
             if(debug) { console.info("saved record with id: " + recid + " to savefile: " + savefilename); }
@@ -201,3 +195,21 @@ function getSaveFileNameFromId(savefileid) {
 	}
 	return savefilename;
 }
+
+function getSaveFileMenuItems() {
+	var list = new Array();
+	getSaveFileNames();
+	for ( sf in UI.save.savefile ) {
+		var o = {
+			text: UI.save.savefile[sf],
+			id: sf,
+			handler: function(btn) {
+				var savefileid = btn.id;
+				doSaveLocal(savefileid);
+			}
+		};
+		list.push(o);
+	}
+	return list;
+}
+
