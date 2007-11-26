@@ -115,6 +115,8 @@ function initUI() {
 		key: Ext.EventObject.ENTER,
 		fn: function() {
 			showStatusMsg('Searching...');
+			// activate biblio tab
+			tabs.get(1).activate();
 			doPazPar2Search();
 			return false;
 		},
