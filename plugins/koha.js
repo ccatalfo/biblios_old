@@ -100,7 +100,7 @@ koha.prototype = {
 					var biblionumber = $('biblionumber', resp.responseXML).text();
 					options.scope.savedBiblionumber = biblionumber;
 					// replace marcxml in recordcache	
-					var marcxml = $('record', resp.responseXML);
+					var marcxml = $('record', resp.responseXML).get(0);
 					options.scope.recordCache[ options.id ] = marcxml;
 				}
 				options.scope.saveHandler( marcxml );

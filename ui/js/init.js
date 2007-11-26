@@ -152,8 +152,12 @@ function initUI() {
   );
   layout.endUpdate();
 	var saveMenu = new Ext.menu.Menu({
-			id: 'saveMenu',
-			items: getSaveFileMenuItems()
+		id: 'saveMenu',
+		items: getSaveFileMenuItems()
+	});
+	var sendMenu = new Ext.menu.Menu({
+		id: 'sendMenu',
+		items: getSendFileMenuItems()
 	});
 	Ext.ComponentMgr.register(saveMenu);
     editor_toolbar = new Ext.Toolbar('editor-toolbar',
@@ -168,16 +172,9 @@ function initUI() {
         cls: 'x-btn-text-icon bmenu', // icon and text class
         icon: 'ui/images/document-save.png',
         text: 'Send',
-		menu: new Ext.menu.Menu({
-			id: 'sendMenu',
-			items: [
-				{ 
-					text: 'Koha-gmc',
-					handler: doSaveRemote
-				}
-			]
-		})
+		menu: sendMenu
 	},
+
     {   
         cls: 'x-btn-text-icon', // icon and text class
         icon: 'ui/images/network-receive.png',
