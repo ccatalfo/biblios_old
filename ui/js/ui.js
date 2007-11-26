@@ -10,6 +10,7 @@ UI.savepreview.xml = '';
 UI.editor = {};
 UI.editor.id = '';
 UI.editor.doc = null;
+UI.editor.location = '';
 UI.editor.savefileid = '';
 UI.editor.xml = '';
 UI.editor.lastFocusedEl = '';
@@ -17,6 +18,8 @@ UI.editor.record = '';
 UI.search = {};
 UI.search.currQuery = '';
 UI.search.limitby = {};
+UI.save = {};
+UI.save.savefile = {};
 UI.currSaveFile = '';
 UI.currSaveFileName = '';
 UI.lastWindowOpen = '';
@@ -69,7 +72,9 @@ var editButton = new Ext.Toolbar.Button({
 				showStatusMsg('Opening record...');
             // see which grid is visible at the moment and get selected record from it
             if( Ext.get('searchgrid').isVisible() ) {
-				getRemoteRecord(function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) });
+				var id = searchgrid.getSelections()[0].id;
+				var loc = searchgrid.getSelections()[0].data.location;
+				getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) });
             }
             else if( Ext.get('savegrid').isVisible() ) {
                 var id = savefilegrid.getSelections()[0].data.Id;
@@ -542,6 +547,8 @@ function createFolderList() {
                 rs = db.execute('delete from Savefiles where id=?', [id]);
                 rs.close();
                 return true;
+				// update our hash of savefile id/names
+				getSaveFileNames();
             }
             catch(ex) {
                 Ext.Msg.alert("DB error", ex.message);
@@ -579,6 +586,8 @@ function createFolderList() {
         if((n.attributes.allowRename == true)){
         treeEditor.editNode = n;
         treeEditor.startEdit(n.ui.textNode);
+		// update our hash of savefile id/names
+		getSaveFileNames();
     }
     else {
         return false;
@@ -615,6 +624,8 @@ function createFolderList() {
         try {
         rs = db.execute('insert into Savefiles (id, name, description, parentid, allowDelete, allowAdd, allowRename, allowDrag, allowDrop, ddGroup, icon, date_added, date_modified) values (null, ?, "", ?, 1, 1, 1, 1, 1, "RecordDrop", "ui/images/drive-harddisk.png", datetime("now", "localtime"), datetime("now", "localtime"))', [newname, parentid]);
         rs.close();
+		// update our hash of savefile id/names
+		getSaveFileNames();
         }
         catch(ex) {
         Ext.Msg.alert("DB error", ex.message);
@@ -656,8 +667,13 @@ function createFolderList() {
         });
         folderTree.getSelectionModel().select(newnode);
         setTimeout(function() {
+			treeEditor.on('complete', function(editor, value, startValue) {
+				// update our hash of savefile id/names
+				getSaveFileNames();
+			});
 			treeEditor.editNode = newnode;
 			treeEditor.startEdit(newnode.ui.textNode);
+				
         }, 1000);
         }
     }
@@ -668,7 +684,7 @@ function createFolderList() {
 			 // grid data source: e.data.selections[0].id
 			 // tree node target: e.target.id
 			 var sel = e.data.selections;
-			 doSaveLocal(e.target.attributes.savefileid, e.target.text, sel);
+			 doSaveLocal(e.target.attributes.savefileid);
 			 // redisplay current savefile (to show moved record)
 			 var currentId = UI.currSaveFile;
 			 var currentName = UI.currSaveFileName;
@@ -717,12 +733,14 @@ function createSearchPazParGrid(url) {
     // create the grid
     searchgrid = new Ext.grid.Grid('searchgrid', {
         ds: searchds,
+		id: 'searchgrid',
         cm: cm,
 		  enableDragDrop: true,
 		  ddGroup: 'RecordDrop',
 		  //autoHeight: true,
 		  autoExpandColumn: 1
     });
+	Ext.ComponentMgr.register(searchgrid);
 	searchgrid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
 		// get the marcxml for this record and send to preview()
@@ -735,12 +753,16 @@ function createSearchPazParGrid(url) {
         }
 	}); // rowselect
 	searchgrid.on('celldblclick', function(searchgrid, rowIndex, colIndex,  e) {
-		getRemoteRecord(function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
+		var id = searchgrid.getSelections()[0].id;
+		var loc = searchgrid.getSelections()[0].data.location;
+		getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
 );
 	}); // cell dbl click
 	searchgrid.on('keypress', function( e ) {
 	  if( e.getKey() == Ext.EventObject.ENTER ) {
-		  getRemoteRecord(function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) });
+		var id = searchgrid.getSelections()[0].id;
+		var loc = searchgrid.getSelections()[0].data.location;
+		  getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) });
 		}	
 	}); // on ENTER keypress
 	searchgrid.on('headerclick', function(grid, colIndex, e) {

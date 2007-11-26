@@ -6,6 +6,7 @@ Prefs.remoteILS.list = new Array();
 function initPrefs() {
 	setPazPar2Targets(paz);
 	setILSTargets();
+	getSaveFileNames();
 	//getRemoteBibProfiles();
 }
 
@@ -161,3 +162,22 @@ function setEnableTargets() {
     }
   }
 }
+
+function getSaveFileNames() {
+	var savefilenames = new Array();
+	try {
+		var rs = db.execute('select name, id from Savefiles where name != "Trash"');
+		while( rs.isValidRow() ) {
+			var id = rs.fieldByName('id');
+			var name = rs.fieldByName('name');
+			UI.save.savefile[ id ] = name;
+			savefilenames.push( rs.fieldByName('name') );
+			rs.next();
+		}
+	}
+	catch(ex) {
+		Ext.MessageBox.alert('db error', ex);
+	}
+	return savefilenames;
+}
+

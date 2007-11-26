@@ -67,25 +67,12 @@ function doSaveZ3950() {
    None.
 
 */
-function doSaveLocal(savefileid, savefilename, sel, dd) {
+function doSaveLocal(savefileid) {
     if( !savefileid ) {
-      if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
-      savefileid = 2; // Drafts
+	if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
+		savefileid = 2; // Drafts
     }
-	if( !savefilename ) {
-		// get savefilename for this savefileid
-		var rs;
-		try {
-			rs = db.execute('select name from Savefiles where id=?', [savefileid]);
-		}
-		catch(ex) {
-			Ext.MessageBox.alert('DB Error', ex.message);
-		}
-		while(rs.isValidRow() ) {
-			savefilename = rs.fieldByName('name');
-			rs.next();
-		}
-	}
+	var savefilename = UI.save.savefile[savefileid];
 	showStatusMsg('Saving to '+ savefilename);
     var rs;
     // if we have a record open in the marceditor, get its xml and save to drafts
@@ -132,11 +119,6 @@ function doSaveLocal(savefileid, savefilename, sel, dd) {
             }
         return true;
     }
-    // if a savefile has been dropped on by a record from a search or save grid
-    else if(dd) {
-	// grid data source: e.data.selections[0].id
-	// we've got the sel passed into this func
-    }
     // if we're picking from the savefile grid 
     else if( (Ext.get('savegrid').isVisible() ) ) {
         var grid = Ext.ComponentMgr.get( 'save-file-grid' );
@@ -158,6 +140,9 @@ function doSaveLocal(savefileid, savefilename, sel, dd) {
 		}
 	}
     else if( Ext.get('searchgrid').isVisible() ) {
+        var grid = Ext.ComponentMgr.get( 'searchgrid' );
+        var ds = searchgrid.getDataSource();
+        var sel = searchgrid.getSelectionModel().getSelections();
 		for( var i = 0; i < sel.length; i++) {
 			var id = sel[i].id;
             var server = sel[i].data.location;
@@ -168,6 +153,11 @@ function doSaveLocal(savefileid, savefilename, sel, dd) {
     showStatusMsg("Record(s) saved to "+savefilename);
     return true;
 }
+
+function doSaveRemote(remoteid, xml, loc) {
+
+}
+
 
 function addRecordFromSearch(id, server, title, savefileid) {
     try {
@@ -196,5 +186,18 @@ function addRecord(xml) {
 	}
 }
 
-
-
+function getSaveFileNameFromId(savefileid) {
+	// get savefilename for this savefileid
+	var rs;
+	try {
+		rs = db.execute('select name from Savefiles where id=?', [savefileid]);
+	}
+	catch(ex) {
+		Ext.MessageBox.alert('DB Error', ex.message);
+	}
+	while(rs.isValidRow() ) {
+		savefilename = rs.fieldByName('name');
+		rs.next();
+	}
+	return savefilename;
+}

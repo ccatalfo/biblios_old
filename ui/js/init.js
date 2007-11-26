@@ -154,20 +154,40 @@ function initUI() {
     editor_toolbar = new Ext.Toolbar('editor-toolbar',
     [
     {
-        cls: 'x-btn-text-icon', // icon and text class
+        cls: 'x-btn-text-icon bmenu', // icon and text class
         icon: 'ui/images/document-save.png',
         text: 'Save',
-        handler: function() {
-			// get the savefile info for this record
-			var savefileid = $("#metadata").children("#savefileid").text();
-            if( savefileid == '' ) {
-              savefileid = 2; // Drafts
-              if(debug) { console.info('Save Button: setting savefileid to Drafts')}
-            }
-			doSaveLocal(savefileid);
-			clearStatusMsg();
-		}
+		menu: new Ext.menu.Menu({
+			id: 'saveMenu',
+			items: [
+				{ 
+					text: 'Drafts',
+					id: '2',
+					handler: function(btn) {
+						var savefileid = btn.id;
+						doSaveLocal(savefileid);
+					}
+				},
+				{
+					text: 'Complete'
+				}
+			]
+		})
     },
+	{
+        cls: 'x-btn-text-icon bmenu', // icon and text class
+        icon: 'ui/images/document-save.png',
+        text: 'Send',
+		menu: new Ext.menu.Menu({
+			id: 'sendMenu',
+			items: [
+				{ 
+					text: 'Koha-gmc',
+					handler: doSaveRemote
+				}
+			]
+		})
+	},
     {   
         cls: 'x-btn-text-icon', // icon and text class
         icon: 'ui/images/network-receive.png',

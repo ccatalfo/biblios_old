@@ -100,16 +100,15 @@ function doPazPar2Search() {
     displaySearchView();
 }
 
-function getRemoteRecord(callback) {
+function getRemoteRecord(id, loc, callback) {
 		showStatusMsg('Opening record...');
-		var id = searchgrid.getSelections()[0].id;
-		var loc = searchgrid.getSelections()[0].data.location;
+		UI.editor.id = '';
+		UI.editor.location = loc;
 		// if this location is in our Prefs.remoteILS hash, retrieve it specially
 		if( Prefs.remoteILS[loc] ) {
 			getRecordFromLocation(id, loc);
 		}
 		else {
-			UI.editor.id = '';
 			paz.recordCallback = callback;
 			var xml = getPazRecord(id);
 			if( xml ) {
