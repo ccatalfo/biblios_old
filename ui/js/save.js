@@ -69,8 +69,8 @@ function doSaveZ3950() {
 */
 function doSaveLocal(savefileid) {
     if( !savefileid ) {
-	if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
-		savefileid = 2; // Drafts
+		if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
+			savefileid = 2; // Drafts
     }
 	var savefilename = UI.save.savefile[savefileid];
 	showStatusMsg('Saving to '+ savefilename);
@@ -91,7 +91,7 @@ function doSaveLocal(savefileid) {
         if( recid == '' ) {
             if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
             var sel = searchgrid.getSelections()[0];
-				var id = sel.id;
+			var id = sel.id;
             var server = sel.data.location;
             var title = sel.data.title;
             recid = addRecordFromSearch(id, server, title, savefileid);
@@ -99,11 +99,7 @@ function doSaveLocal(savefileid) {
         if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
         try {
             rs = db.execute('update Records set xml=? where id=?', [xml, recid]);	
-            rs = db.execute('select savefile from Records where id=?', [recid]);	
-            // get the savefile this record is in
-            savefileid = rs.fieldByName('savefile');
-            rs = db.execute('select name from SaveFiles where id=?', [savefileid]);
-            savefilename = rs.fieldByName('name');
+            rs = db.execute('update Records set savefile=? where id=?', [savefileid, recid]);	
             rs = db.execute('update Records set status=? where id=?', ['edited', recid]);	
             rs = db.execute('update Records set date_modified=datetime("now", "localtime") where id=?', [recid]);	
             if(debug) { console.info("saved record with id: " + recid + " to savefile: " + savefilename); }
