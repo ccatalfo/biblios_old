@@ -549,6 +549,7 @@ function createFolderList() {
                 return true;
 				// update our hash of savefile id/names
 				getSaveFileNames();
+				updateSaveMenu();
             }
             catch(ex) {
                 Ext.Msg.alert("DB error", ex.message);
@@ -588,6 +589,7 @@ function createFolderList() {
         treeEditor.startEdit(n.ui.textNode);
 		// update our hash of savefile id/names
 		getSaveFileNames();
+		updateSaveMenu();
     }
     else {
         return false;
@@ -626,6 +628,8 @@ function createFolderList() {
         rs.close();
 		// update our hash of savefile id/names
 		getSaveFileNames();
+		// update Save menu
+		updateSaveMenu();
         }
         catch(ex) {
         Ext.Msg.alert("DB error", ex.message);
@@ -670,6 +674,7 @@ function createFolderList() {
 			treeEditor.on('complete', function(editor, value, startValue) {
 				// update our hash of savefile id/names
 				getSaveFileNames();
+				updateSaveMenu();
 			});
 			treeEditor.editNode = newnode;
 			treeEditor.startEdit(newnode.ui.textNode);

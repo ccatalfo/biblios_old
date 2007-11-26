@@ -119,6 +119,7 @@ function resetDatabase() {
 	dropTables();	
 	createTables();
 	setupSaveFiles();
+	setupKohaPlugin();
     }
     catch(ex) {
 	Ext.message.alert(ex.message);
@@ -184,6 +185,7 @@ function setupTargets() {
 function setupKohaPlugin() {
 	try {
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (1, 'remoteILS', 'Koha-gmc', 'koha', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (2, 'remoteILSUrl', 'http://eowyn.metavore.com/kohaapi', 'koha', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (3, 'remoteUser', 'api', 'koha', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (4, 'remotePassword', 'api', 'koha', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (5, 'ilspluginlocation', 'plugins/koha.js', 'koha', '')");

@@ -49,10 +49,8 @@ function setILSTargets() {
 			Prefs.remoteILS[ils].user = rs2.fieldByName('value');
 			var rs2 = db.execute('select value from Prefs where name="remotePassword" and type=?',[type]);
 			Prefs.remoteILS[ils].pw = rs2.fieldByName('value');
-			var rs2 = db.execute('select value from Prefs where name="remoteUrl" and type=?',[type]);
+			var rs2 = db.execute('select value from Prefs where name="remoteILSUrl" and type=?',[type]);
 			Prefs.remoteILS[ils].url = rs2.fieldByName('value');
-			var rs2 = db.execute('select value from Prefs where name="remoteTargetId" and type=?',[type]);
-			Prefs.remoteILS[ils].targetId = rs2.fieldByName('value');
 			var rs2 = db.execute('select value from Prefs where name="ilsinitcall" and type=?',[type]);
 			var initcall = rs2.fieldByName('value');	
 			// initialize and authorize for this ils instance
@@ -166,7 +164,7 @@ function setEnableTargets() {
 function getSaveFileNames() {
 	var savefilenames = new Array();
 	try {
-		var rs = db.execute('select name, id from Savefiles where name != "Trash"');
+		var rs = db.execute('select name, id from Savefiles');
 		while( rs.isValidRow() ) {
 			var id = rs.fieldByName('id');
 			var name = rs.fieldByName('name');

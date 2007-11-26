@@ -151,17 +151,19 @@ function initUI() {
     new Ext.ContentPanel('tab-panel', {fittoframe: true})
   );
   layout.endUpdate();
+	var saveMenu = new Ext.menu.Menu({
+			id: 'saveMenu',
+			items: getSaveFileMenuItems()
+	});
+	Ext.ComponentMgr.register(saveMenu);
     editor_toolbar = new Ext.Toolbar('editor-toolbar',
     [
     {
         cls: 'x-btn-text-icon bmenu', // icon and text class
         icon: 'ui/images/document-save.png',
         text: 'Save',
-		menu: new Ext.menu.Menu({
-			id: 'saveMenu',
-			items: getSaveFileMenuItems()
-		})
-    },
+		menu: saveMenu
+	},
 	{
         cls: 'x-btn-text-icon bmenu', // icon and text class
         icon: 'ui/images/document-save.png',

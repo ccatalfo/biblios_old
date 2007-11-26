@@ -196,6 +196,15 @@ function getSaveFileNameFromId(savefileid) {
 	return savefilename;
 }
 
+function updateSaveMenu() {
+	// remove old Save menu items
+	Ext.ComponentMgr.get('saveMenu').removeAll();
+	var savefiles = getSaveFileMenuItems();
+	for( sf in savefiles ) {
+		Ext.ComponentMgr.get('saveMenu').add( savefiles[sf] );
+	}
+}
+
 function getSaveFileMenuItems() {
 	var list = new Array();
 	getSaveFileNames();
