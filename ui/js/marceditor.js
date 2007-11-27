@@ -6,10 +6,7 @@ function MarcEditor(ffeditor, vareditor) {
 	var vared = vareditor;
 	var fieldlist = new Array();
 	var fields = new Array();
-<<<<<<< HEAD:ui/js/marceditor.js
 	var marcrecord = null;
-=======
->>>>>>> Moved MarcEditor js object to its own file, out of marcrecord.js.:ui/js/marceditor.js
 
 	// inititalize
 	createFieldList();
@@ -75,6 +72,10 @@ function MarcEditor(ffeditor, vareditor) {
 		else {
 			return false;
 		}
+	}
+	
+	this._hasFieldAndSubfield = function(tagnumber, subfieldcode) {
+		return this._getField(tagnumber).hasSubfield(subfieldcode);
 	}
 
 	this._hasFieldAndSubfield = function(tagnumber, subfieldcode) {
