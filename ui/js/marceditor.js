@@ -6,7 +6,7 @@ function MarcEditor(ffeditor, vareditor) {
 	var vared = vareditor;
 	var fieldlist = new Array();
 	var fields = new Array();
-	this.marcrecord = null;
+	var marcrecord = null;
 
 	// inititalize
 	createFieldList();
@@ -44,7 +44,7 @@ function MarcEditor(ffeditor, vareditor) {
 				fields.push(newfield);
 			}
 		}
-		this.marcrecord = new MarcRecord(fields);
+		marcrecord = new MarcRecord(fields);
 	}
 
 	// privileged methods
@@ -150,7 +150,14 @@ function MarcEditor(ffeditor, vareditor) {
 	this._focusSubfield = function(tag, subfield) {
 		$('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').focus();
 	}
+	
+	this._XML = function() {
+		return marcrecord.XML();
+	}
 
+	this._XMLString = function() {
+		return marcrecord.XMLString();
+	}
 }
 
 // Public methods 
@@ -223,3 +230,10 @@ MarcEditor.prototype.getField = function(tagnumber) {
 	return this._getField(tagnumber);
 }
 
+MarcEditor.prototype.XML = function() {
+	return this._XML();
+}
+
+MarcEditor.prototype.XMLString = function() {
+	return this._XMLString();
+}

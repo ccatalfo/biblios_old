@@ -23,16 +23,23 @@
 
 	<xsl:template match="marc:leader">
         <div class="tag" id="000">
-			  <span class='tagnumber' id='c000'>ldr</span>
+			  <input size='3' class='tagnumber' id='000'>
+					<xsl:attribute name='value'>000</xsl:attribute>
+			  </input>
 
-			  <span class="indicator">
-						 <xsl:attribute name="id">cind1<xsl:value-of select="000"/>-<xsl:number value="position()"/></xsl:attribute>#
-				</span>
-			  <span class="indicator">
-						 <xsl:attribute name="id">cind2<xsl:value-of select="000"/>-<xsl:number value="position()"/></xsl:attribute>#
-				</span>
-				<span class='controlfield' id='csubfields000'><xsl:value-of select="."/>
-				</span>
+			  <input size='2' class="indicator">
+						 <xsl:attribute name="id">cind1<xsl:value-of select="@tag"/>-<xsl:number value="position()"/></xsl:attribute>
+					<xsl:attribute name='value'>#</xsl:attribute>
+				</input>
+			  <input size='2' class="indicator">
+						 <xsl:attribute name="id">cind2<xsl:value-of select="@tag"/>-<xsl:number value="position()"/></xsl:attribute>
+					<xsl:attribute name='value'>#</xsl:attribute>
+				</input>
+				<input class='controlfield' id='csubfields{@tag}'>
+					<xsl:attribute name='value'>
+						<xsl:value-of select="."/>
+					</xsl:attribute>
+				</input>
         </div>
 		
 	</xsl:template>
