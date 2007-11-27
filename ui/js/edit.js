@@ -1106,6 +1106,8 @@ function removeTag(tagnumber, i) {
 
 function create_static_editor() {
 	UI.editor.editorDoc = $('#vareditor');
+	// setup marceditor macro functionality
+	UI.editor.record = setupMacros($('#ffeditor'), $('#vareditor'));
 	// add focus behavior
 	$('#marceditor input')
 		.livequery('focus', function(e) {
@@ -1117,10 +1119,11 @@ function create_static_editor() {
 			// focus has moved
 			UI.editor.lastFocusedEl = $(this);
 		});
-	// remove focus css on blur
+	// remove focus css on blur and update MarcEditor instance
 	$('#marceditor input')
 		.livequery('blur', function(e) {
 			$(this).removeClass('focused');
+			UI.editor.record.update( $(this ) ) ;
 		});
 	// add focus for hover
 	// FIXME? Changing focus class on hovering didn't look so great- didn't always update smoothly.
@@ -1145,8 +1148,6 @@ function create_static_editor() {
 	// apply ExtJS comboboxes for live searching of authority data
 	setupMarc21AuthorityLiveSearches();
 
-	// setup marceditor macro functionality
-	UI.editor.record = setupMacros($('#ffeditor'), $('#vareditor'));
 }
 
 function setupMacros(ffeditor, vareditor) {
