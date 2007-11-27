@@ -75,11 +75,12 @@ function MarcEditor(ffeditor, vareditor) {
 	}
 	
 	this._hasFieldAndSubfield = function(tagnumber, subfieldcode) {
-		return this._getField(tagnumber).hasSubfield(subfieldcode);
-	}
-
-	this._hasFieldAndSubfield = function(tagnumber, subfieldcode) {
-		return this._getField(tagnumber).hasSubfield(subfieldcode);
+		if( this._hasField(tagnumber) {
+			return this._getField(tagnumber).hasSubfield(subfieldcode);
+		}
+		else {
+			return false;
+		}
 	}
 
 	this._fieldIndex = function(tagnumber) {
