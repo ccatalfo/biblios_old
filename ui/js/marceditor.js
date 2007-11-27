@@ -22,29 +22,34 @@ function MarcEditor(ffeditor, vareditor) {
 	function createFields() {
 		var editorfields = $('.tag');
 		for( var i = 0; i < editorfields.length; i++) {
-			var tagnumber = editorfields.eq(i).children('.tagnumber').eq(0).val();
-			var id = editorfields[i].id;
-			var ind1 = editorfields.eq(i).children('.indicator').eq(0).val();
-			var ind2 = editorfields.eq(i).children('.indicator').eq(1).val();
-			if( tagnumber < '010' ) {
-				var value = editorfields.eq(i).children('.controlfield').val();	
-				var newfield = new Field(tagnumber, ind1, ind2, [{code: '', value: value}]);
+				var newfield = createField( editorfields.eq(i) );
 				fields.push(newfield);
-			}
-			else {
-				var editorsubfields = $('[@id='+id+']').children('.subfields').children('.subfield');
-				var subfields = new Array();
-				for(var j = 0; j < editorsubfields.length; j++) {
-					var code = editorsubfields.eq(j).children('.subfield-delimiter').val().substring(1);
-					var value = editorsubfields.eq(j).children('.subfield-text').val();
-					var newsf = new Subfield(code, value);
-					subfields.push(newsf);
-				}
-				var newfield = new Field(tagnumber, ind1, ind2, subfields);
-				fields.push(newfield);
-			}
 		}
 		marcrecord = new MarcRecord(fields);
+	}
+	
+	function createField(elem) {
+		var newfield;
+		var tagnumber = $(elem).children('.tagnumber').eq(0).val();
+		var id = $(elem).get(0).id;
+		var ind1 = $(elem).children('.indicator').eq(0).val();
+		var ind2 = $(elem).children('.indicator').eq(1).val();
+		if( tagnumber < '010' ) {
+			var value = $(elem).children('.controlfield').val();	
+			newfield = new Field(tagnumber, ind1, ind2, [{code: '', value: value}]);
+		}
+		else {
+			var editorsubfields = $('[@id='+id+']').children('.subfields').children('.subfield');
+			var subfields = new Array();
+			for(var j = 0; j < editorsubfields.length; j++) {
+				var code = editorsubfields.eq(j).children('.subfield-delimiter').val().substring(1);
+				var value = editorsubfields.eq(j).children('.subfield-text').val();
+				var newsf = new Subfield(code, value);
+				subfields.push(newsf);
+				newfield = new Field(tagnumber, ind1, ind2, subfields);
+			}
+		}
+		return newfield;
 	}
 
 	// privileged methods
@@ -92,7 +97,12 @@ function MarcEditor(ffeditor, vareditor) {
 	}
 
 	this._getValue = function(tag, subfield) {
-		return $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').val();
+		if( subfield != null ) {
+			return $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').val();
+		}
+		else {
+			return $('[@id^='+tag+']').children('.controlfield').val();
+		}
 	}
 
 	this._rawFields = function() {
@@ -163,8 +173,19 @@ function MarcEditor(ffeditor, vareditor) {
 	this._XMLString = function() {
 		return marcrecord.XMLString();
 	}
-}
 
+	this._update = function(elem) {
+		// get the tagnumber to update
+		var tagnumber = $(elem).parents('.tag').children('.tagnumber').val();
+		// loop through fields in this marceditor instance, replacing the one whose tagnumber
+		// we're modifying
+		for( var i = 0; i < fields.length; i++) {
+			if( fields[i].tagnumber() == tagnumber ) {
+				
+			}
+		}
+	}
+}
 // Public methods 
 MarcEditor.prototype.getValue = function(tag, subfield) {
 	return this._getValue(tag, subfield);
@@ -241,4 +262,8 @@ MarcEditor.prototype.XML = function() {
 
 MarcEditor.prototype.XMLString = function() {
 	return this._XMLString();
+}
+
+MarcEditor.prototype.update = function(elem) {
+	return this._update(elem);
 }
