@@ -187,11 +187,11 @@ function Edit2XmlMarc21(ff_ed, var_ed) {
 
 	// for each input w/ id containing the text "subfields"...
 	$("[@id*=subfields]", var_ed).each( function() { 
-		var id = this.id;
+		var id = $(this).get(0).id;
 		// what kind of field is this, c=controlfield or d=datafield?
 		var type = id.substring(0, 1);
 		// what's the tag number?
-		var tag = id.substr(10, 3);
+		var tag = $(this).parents('.tag').get(0).id;
         if(debug) {
             console.info("Saving tag: " + tag);
         }
@@ -200,9 +200,9 @@ function Edit2XmlMarc21(ff_ed, var_ed) {
 			if( tag != '008' && tag != '000') { // skip 000 and 008 since we generate from dropdowns
 				var cf = marcxml.createElement('controlfield'); 
 				cf.setAttribute('tag', tag);
-				var text = marcxml.createTextNode( $(this).children().val());
+				var text = marcxml.createTextNode( $(this).val());
                 if(debug) {
-                    console.info("Saving controlfield text: " + $(this).text());
+                    console.info("Saving controlfield text: " + $(this).val());
                 }
 				cf.appendChild(text);
 				record.appendChild(cf);
