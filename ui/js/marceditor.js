@@ -177,11 +177,13 @@ function MarcEditor(ffeditor, vareditor) {
 	this._update = function(elem) {
 		// get the tagnumber to update
 		var tagnumber = $(elem).parents('.tag').children('.tagnumber').val();
+		// replace with this tag
+		var tag = $(elem).parents('.tag');
 		// loop through fields in this marceditor instance, replacing the one whose tagnumber
 		// we're modifying
 		for( var i = 0; i < fields.length; i++) {
 			if( fields[i].tagnumber() == tagnumber ) {
-				
+				fields[i] = createField(tag); 		
 			}
 		}
 	}
