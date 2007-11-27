@@ -11,6 +11,7 @@ UI.editor = {};
 UI.editor.id = '';
 UI.editor.doc = null;
 UI.editor.location = '';
+UI.editor.savedRemote = {};
 UI.editor.savefileid = '';
 UI.editor.xml = '';
 UI.editor.lastFocusedEl = '';

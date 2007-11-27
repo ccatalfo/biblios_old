@@ -148,6 +148,7 @@ function doSaveRemote(loc, xmldoc) {
 	if(debug) { console.info('Saving open record to ' + loc); }
 	Prefs.remoteILS[loc].instance.saveHandler = openRecord;
 	Prefs.remoteILS[loc].instance.save(xmldoc);
+	UI.editor.savedRemote[loc] = true;
 }
 
 
@@ -210,9 +211,17 @@ function getSendFileMenuItems() {
 			text: ils,
 			id: ils,
 			handler: function(btn) {
-				if( validateRemote(btn.id) ) {
-					var xmldoc = xslTransform.loadString( Edit2XmlMarc21( $('#fixedfields_editor'), UI.editor.doc) );
-					doSaveRemote(btn.id, xmldoc);
+				// if this record has already been saved to this location
+				if( UI.editor.savedRemote[btn.id] == true ) {
+					if( validateRemote(btn.id) ) {
+						var xmldoc = xslTransform.loadString( Edit2XmlMarc21( $('#fixedfields_editor'), UI.editor.doc) );
+						doSaveRemote(btn.id, xmldoc);
+					}
+				}
+				// if the record has not already been saved remotely
+				else {
+						var xmldoc = xslTransform.loadString( Edit2XmlMarc21( $('#fixedfields_editor'), UI.editor.doc) );
+						doSaveRemote(btn.id, xmldoc);
 				}
 			}
 		}
