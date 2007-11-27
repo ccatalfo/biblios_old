@@ -210,8 +210,10 @@ function getSendFileMenuItems() {
 			text: ils,
 			id: ils,
 			handler: function(btn) {
-				var xmldoc = xslTransform.loadString( Edit2XmlMarc21( $('#fixedfields_editor'), UI.editor.doc) );
-				doSaveRemote(btn.id, xmldoc);
+				if( validateRemote(btn.id) ) {
+					var xmldoc = xslTransform.loadString( Edit2XmlMarc21( $('#fixedfields_editor'), UI.editor.doc) );
+					doSaveRemote(btn.id, xmldoc);
+				}
 			}
 		}
 		list.push(o);
@@ -234,5 +236,33 @@ function getSaveFileMenuItems() {
 		list.push(o);
 	}
 	return list;
+}
+
+function validateRemote(loc) {
+	var errormsg = '';
+	// check for mandatory subfields
+	var subfields = Prefs.remoteILS[loc].instance.mandatory_subfields;
+	var subfieldsvalid = true;
+	for( var i = 0; i < subfields.length; i++) {
+		var tag = $(subfields).eq(i).children('tag').text();
+		var subfield = $(subfields).eq(i).children('subfield_label').text();
+		if( !UI.editor.record.hasFieldAndSubfield(tag, subfield)) {
+			subfieldsvalid = false;
+			errormsg += 'Record is missing tag ' + tag + ' with subfield ' + subfield;
+		}
+	}
+	var tags = Prefs.remoteILS[loc].instance.mandatory_tags;
+	var tagsvalid = true;
+	for( var i = 0; i< tags.length; i++) {
+		var tag = $(tags).eq(i).text();
+		if( !UI.editor.record.hasField(tag)) {
+			tagsvalid = false;
+			errormsg += 'Record is missing tag ' + tag;
+		}
+	}
+	if( errormsg != '' ) {
+		Ext.MessageBox.alert('Remote validation from ' + loc, errormsg);
+	}
+	return subfieldsvalid && tagsvalid;
 }
 
