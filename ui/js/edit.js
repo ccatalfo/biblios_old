@@ -191,7 +191,7 @@ function Edit2XmlMarc21(ff_ed, var_ed) {
 		// what kind of field is this, c=controlfield or d=datafield?
 		var type = id.substring(0, 1);
 		// what's the tag number?
-		var tag = $(this).parents('.tag').get(0).id;
+		var tag = $(this).parents('.tag').children('.tagnumber').val();
         if(debug) {
             console.info("Saving tag: " + tag);
         }
