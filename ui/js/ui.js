@@ -1064,7 +1064,7 @@ function previewRecord(xml) {
 	showStatusMsg('Previewing record...');
     $("#lower-panel").empty();
     //console.info('previewRecord: previewing record with xml: ' + xml);
-    $('#lower-panel').getTransform(showMarcXslPath, xml );
+    $('#lower-panel').getTransform(marcxsl, xml );
 	 clearStatusMsg();
 }
 
@@ -1169,8 +1169,8 @@ function displaySaveView() {
 
 */
 function openRecord(xml) {
-    $("#ffeditor").getTransform( fixedFieldXslPath, xml);
-    $("#vareditor").getTransform( varFieldsXslPath, xml);
+    $("#ffeditor").getTransform( ffxsl, xml);
+    $("#vareditor").getTransform( varfxsl, xml);
 	 create_static_editor($('#ffeditor'), $('#vareditor') );
 	 //create_jquery_editor();
 	//create_yui_rte_editor();
