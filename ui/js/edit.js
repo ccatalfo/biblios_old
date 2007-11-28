@@ -1107,7 +1107,11 @@ function removeTag(tagnumber, i) {
 function create_static_editor() {
 	UI.editor.editorDoc = $('#vareditor');
 	// setup marceditor macro functionality
-	UI.editor.record = setupMacros($('#ffeditor'), $('#vareditor'));
+	UI.editor.record = setupMacros($('#fixedfields_editor'), UI.editor.editorDoc);
+	// setup reserved (locked) tags based on remote ils bib profile
+	if( Prefs.remoteILS[ UI.editor.location ] ) {
+		setupReservedTags( Prefs.remoteILS[ UI.editor.location ], UI.editor.editorDoc);
+	}
 	// add focus behavior
 	$('#marceditor input')
 		.livequery('focus', function(e) {
@@ -1148,6 +1152,17 @@ function create_static_editor() {
 	// apply ExtJS comboboxes for live searching of authority data
 	setupMarc21AuthorityLiveSearches();
 
+}
+
+function setupReservedTags(loc, editor) {
+	var reservedtags = loc.instance.reserved_tags;
+	for( var i = 0; i< reservedtags.length; i++) {
+		var tagnumber = $(reservedtags).eq(i).text();
+		// set readonly for tagnumber and indicators
+		$('.tag[@id^='+tagnumber+']').children('input').attr('readonly', 'readonly').addClass('reserved_tag');
+		// set readonly for subfields
+		$('.tag[@id^='+tagnumber+']').children('.subfields').children('.subfield').children('input').attr('readonly', 'readonly').addClass('reserved_tag');;
+	}	
 }
 
 function setupMacros(ffeditor, vareditor) {

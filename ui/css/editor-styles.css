@@ -70,3 +70,7 @@ input.controlfield, input.subfield-text, input.subfield-delimiter, input.indicat
 #marceditor .x-form-field-wrap {
 	display: inline;
 }
+
+.reserved_tag {
+	background-color: gray;
+}
