@@ -65,8 +65,6 @@ var innerLayout;
 var searchSaveNestedLayout;
 var folder_and_status_layout;
 var editorlayout;
-// google gears db handle
-var db;
 // grid and data store for searches
 var searchgrid;
 var searchds;

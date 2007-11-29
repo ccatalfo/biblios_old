@@ -1,3 +1,12 @@
+/* global vars for GearsORM Tables */
+var DB = {};
+DB.Info_Schema = {};
+DB.Records = {};
+DB.Targets = {};
+DB.ILS = {};
+DB.Prefs = {};
+DB.Searches = {};
+var db = {};
 
 /*
    Function: init_gears
@@ -13,30 +22,97 @@
    None.
 
 */
+GearsORMShift.rules = [
+	{
+		version: 0,
+		comment: 'Default rule 0',
+		up: function() {
+			return true;
+		},
+		down: function() {
+			return true;
+		}
+	},
+	{
+		version: 1,
+		comment: 'Create Records table',
+		up: function() {
+			DB.Records.createTable();
+			return true;
+		},
+		down: function() {
+			DB.Records.dropTable();
+			return true;
+		}
+	},
+	{
+		version: 2,
+		comment: 'Create Targets table',
+		up: function() {
+			DB.Targets.createTable();
+			return true;
+		},
+		down: function() {
+			DB.Targets.dropTable();
+			return true;
+		}
+	}
+];
+
 function init_gears() {
 	
-    var rs;
-	try {
-		rs = db = google.gears.factory.create('beta.database', '1.0');
-	} catch (ex) {
-		setError('Could not create database: ' + ex.message);
-	}
-	if(db) {
-		try {
-			rs = db.open('catalogingProject');
-			createTables();
-			setupSaveFiles();
-			// remove old search results from Records (records with status = '')
-			rs = db.execute('delete from Records where status = ""');
-			// clear out old search results
-			rs = db.execute('delete from Searches where searchname=""');
-		    } catch (ex) {
-			    Ext.Msg.alert('Error', 'Trouble with db: ' + ex.message);
-		    } finally {
-			rs.close();
-		    }
-	}
+			GearsORM.dbName = "catalogingProject";
+			db = GearsORM.getDB();
+			DB.Info_Schema = new GearsORM.Model({
+				name:"Info_Schema",
+				fields:
+				{
+					version: new GearsORM.Fields.Integer()
+				}
+			});
+			DB.Info_Schema.createTable();
+			DB.Records = new GearsORM.Model({
+				name: 'Records',
+				fields: 
+				{
+					id: new GearsORM.Fields.Integer(),
+					xml: new GearsORM.Fields.String(),
+					stat: new GearsORM.Fields.String({maxLength: 256}),
+					date_added: new GearsORM.Fields.TimeStamp(),
+					date_modified: new GearsORM.Fields.TimeStamp(),
+					server: new GearsORM.Fields.ManyToOne({related: "Target"}),
+					savefile: new GearsORM.Fields.ManyToOne({related: "Savefile"}),
+					xmlformat: new GearsORM.Fields.String({defaultValue: 'null'}),
+					marcflavour: new GearsORM.Fields.String({defaultValue: 'null'}),
+					template: new GearsORM.Fields.String({defaultValue: 'null'}),
+					marcformat: new GearsORM.Fields.String({defaultValue: 'null'})
+				}
+			});
+			DB.Targets = new GearsORM.Model({
+				name: 'Targets',
+				fields: 
+				{
+					id: new GearsORM.Fields.Integer(),
+					hostname: new GearsORM.Fields.String(),
+					port: new GearsORM.Fields.Integer(),
+					dbname: new GearsORM.Fields.String(),
+					userid: new GearsORM.Fields.String(),
+					password: new GearsORM.Fields.String(),
+					name: new GearsORM.Fields.String(),
+					enabled: new GearsORM.Fields.Integer(),
+					rank: new GearsORM.Fields.Integer(),
+					description: new GearsORM.Fields.String(),
+					syntax: new GearsORM.Fields.String(),
+					icon: new GearsORM.Fields.String(),
+					position: new GearsORM.Fields.String(),
+					type: new GearsORM.Fields.String()
+				}
+			});
+			GearsORMShift.init( DB.Info_Schema, true );
+
+>>>>>>> Initial attempt at using GearsORM migration rules.  Believe it's working when migrating up or down.:ui/js/db.js
 }
+
 
 /*
    Function: dropTables
