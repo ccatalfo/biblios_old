@@ -86,7 +86,6 @@ GearsORMShift.rules = [
 		comment: 'Create default Savefiles',
 		up: function() {
 			var Trash = new DB.Savefiles({
-				id: null,
 				name: 'Trash',
 				description: 'Record to delete',
 				parent: null,
@@ -102,7 +101,6 @@ GearsORMShift.rules = [
 				date_mofified: 'datetime("now", "localtime"'
 			}).save();
 			var Completed = new DB.Savefiles({
-				id: null,
 				name: 'Completed',
 				description: 'Completed records',
 				parent: null,
@@ -118,7 +116,6 @@ GearsORMShift.rules = [
 				date_mofified: 'datetime("now", "localtime"'
 			}).save();
 			var Drafts = new DB.Savefiles({
-				id: null,
 				name: 'Drafts',
 				description: 'In-progress records',
 				parent: null,
@@ -136,9 +133,9 @@ GearsORMShift.rules = [
 			return true;
 		},
 		down: function() {
-			DB.Savefiles().select('name="Trash"').remove();
-			DB.Savefiles().select('name="Completed"').remove();
-			DB.Savefiles().select('name="Drafts"').remove();
+			DB.Savefiles.remove('name="Trash"');
+			DB.Savefiles.remove('name="Completed"');
+			DB.Savefiles.remove('name="Drafts"');
 			return true;
 		}
 	},
@@ -147,7 +144,6 @@ GearsORMShift.rules = [
 		comment: 'Create Test Z39.50 Targets',
 		up: function() {
 			var NelsonVille = new DB.Targets({
-				id: null,
 				hostname: '66.213.78.76',
 				port: '9999',
 				dbname: 'NPLKoha',
@@ -163,7 +159,6 @@ GearsORMShift.rules = [
 				type: 'zed'
 			}).save();
 			var Berwick = new DB.Targets({
-				id: null,
 				hostname: 'zconn.lib.monash.edu.au',
 				port: '7090',
 				dbname: 'Voyager',
@@ -179,7 +174,6 @@ GearsORMShift.rules = [
 				type: 'zed'
 			}).save();
 			var LOC = new DB.Targets({
-				id: null,
 				hostname: 'z3950.loc.gov',
 				port: '7090',
 				dbname: 'Voyager',
@@ -195,7 +189,6 @@ GearsORMShift.rules = [
 				type: 'zed'
 			}).save();
 			var Koha_cfc = new DB.Targets({
-				id: null,
 				hostname: 'arwen.metavore.com',
 				port: '9820',
 				dbname: 'biblios',
@@ -213,10 +206,10 @@ GearsORMShift.rules = [
 			return true;
 		},
 		down: function() {
-			DB.Targets.select('name="Nelsonville Public Library"').remove();
-			DB.Targets.select('name="Berwick Library"').remove();
-			DB.Targets.select('name="Library of Congress"').remove();
-			DB.Targets.select('name="CFC Koha"').remove();
+			DB.Targets.remove('name="Nelsonville Public Library"');
+			DB.Targets.remove('name="Berwick Library"');
+			DB.Targets.remove('name="Library of Congress"');
+			DB.Targets.remove('name="CFC Koha"');
 			return true;
 		}
 	}
@@ -235,11 +228,14 @@ function init_gears() {
 					version: new GearsORM.Fields.Integer({defaultValue: 0})
 				}
 			});
+			if( ! GearsORM.Introspection.doesTableExist('Info_Schema') ) {
+				DB.Info_Schema.createTable();
+				is = new DB.Info_Schema({version:0}).save();
+			}
 			DB.Records = new GearsORM.Model({
 				name: 'Records',
 				fields: 
 				{
-					id: new GearsORM.Fields.Integer(),
 					xml: new GearsORM.Fields.String(),
 					stat: new GearsORM.Fields.String({maxLength: 256}),
 					date_added: new GearsORM.Fields.TimeStamp(),
@@ -256,7 +252,6 @@ function init_gears() {
 				name: 'Targets',
 				fields: 
 				{
-					id: new GearsORM.Fields.Integer(),
 					hostname: new GearsORM.Fields.String(),
 					port: new GearsORM.Fields.Integer(),
 					dbname: new GearsORM.Fields.String(),
@@ -276,7 +271,6 @@ function init_gears() {
 				name: 'Prefs',
 				fields:
 				{
-					id: new GearsORM.Fields.Integer({primary_key: true, autoincrement: true}),
 					name: new GearsORM.Fields.String(),
 					value: new GearsORM.Fields.String(),
 					type: new GearsORM.Fields.String(),
@@ -287,11 +281,9 @@ function init_gears() {
 				name: 'Savefiles',
 				fields:
 				{
-					id: new GearsORM.Fields.Integer({primary_key: true, autoincrement: true}),
 					name: new GearsORM.Fields.String(),
 					description: new GearsORM.Fields.String(),
-					parent: new GearsORM.Fields.OneToMany({related:'Savefiles', allowNull:true}),
-					children: new GearsORM.Fields.ManyToOne({related:'Savefiles'}),
+					parentid: new GearsORM.Fields.Integer({allowNull:true}),
 					allowDelete: new GearsORM.Fields.Integer(),
 					allowAdd: new GearsORM.Fields.Integer(),
 					allowRename: new GearsORM.Fields.Integer(),
