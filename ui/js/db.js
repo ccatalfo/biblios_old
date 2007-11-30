@@ -56,7 +56,172 @@ GearsORMShift.rules = [
 			DB.Targets.dropTable();
 			return true;
 		}
+	},
+	{
+		version: 3,
+		comment: 'Create Prefs table',
+		up: function() {
+			DB.Prefs.createTable();
+			return true;
+		},
+		down: function() {
+			DB.Prefs.dropTable();
+			return true;
+		}
+	},
+	{
+		version: 4,
+		comment: 'Create Savefiles table',
+		up: function() {
+			DB.Savefiles.createTable();
+			return true;
+		},
+		down: function() {
+			DB.Savefiles.dropTable();
+			return true;
+		}
+	},
+	{
+		version: 5,
+		comment: 'Create default Savefiles',
+		up: function() {
+			var Trash = new DB.Savefiles({
+				id: null,
+				name: 'Trash',
+				description: 'Record to delete',
+				parent: null,
+				children: null,
+				allowDelete: 0,
+				allowAdd: 0,
+				allowRename: 0,
+				allowDrag: 0,
+				allowDrop: 0,
+				ddGroup: null,
+				icon: 'ui/images/user-trash.png',
+				date_added: 'datetime("now", "localtime"',
+				date_mofified: 'datetime("now", "localtime"'
+			}).save();
+			var Completed = new DB.Savefiles({
+				id: null,
+				name: 'Completed',
+				description: 'Completed records',
+				parent: null,
+				children: null,
+				allowDelete: 0,
+				allowAdd: 1,
+				allowRename: 0,
+				allowDrag: 0,
+				allowDrop: 1,
+				ddGroup: 'RecordDrop',
+				icon: 'ui/images/drive-harddisk.png',
+				date_added: 'datetime("now", "localtime"',
+				date_mofified: 'datetime("now", "localtime"'
+			}).save();
+			var Drafts = new DB.Savefiles({
+				id: null,
+				name: 'Drafts',
+				description: 'In-progress records',
+				parent: null,
+				children: null,
+				allowDelete: 0,
+				allowAdd: 1,
+				allowRename: 0,
+				allowDrag: 0,
+				allowDrop: 1,
+				ddGroup: 'RecordDrop',
+				icon: 'ui/images/drive-harddisk.png',
+				date_added: 'datetime("now", "localtime"',
+				date_mofified: 'datetime("now", "localtime"'
+			}).save();
+			return true;
+		},
+		down: function() {
+			DB.Savefiles().select('name="Trash"').remove();
+			DB.Savefiles().select('name="Completed"').remove();
+			DB.Savefiles().select('name="Drafts"').remove();
+			return true;
+		}
+	},
+	{
+		version: 6,
+		comment: 'Create Test Z39.50 Targets',
+		up: function() {
+			var NelsonVille = new DB.Targets({
+				id: null,
+				hostname: '66.213.78.76',
+				port: '9999',
+				dbname: 'NPLKoha',
+				userid: '',
+				password: '',
+				name: 'Nelsonville Public Library',
+				enabled: 1,
+				rank: 1,
+				description: 'Nelsonville Public Library',
+				syntax: null,
+				icon: null,
+				position: 'primary',
+				type: 'zed'
+			}).save();
+			var Berwick = new DB.Targets({
+				id: null,
+				hostname: 'zconn.lib.monash.edu.au',
+				port: '7090',
+				dbname: 'Voyager',
+				userid: '',
+				password: '',
+				name: 'Berwick Library',
+				enabled: 1,
+				rank: 1,
+				description: 'Berwick Library',
+				syntax: null,
+				icon: null,
+				position: 'primary',
+				type: 'zed'
+			}).save();
+			var LOC = new DB.Targets({
+				id: null,
+				hostname: 'z3950.loc.gov',
+				port: '7090',
+				dbname: 'Voyager',
+				userid: '',
+				password: '',
+				name: 'Library of Congress',
+				enabled: 1,
+				rank: 1,
+				description: 'Library of Congress',
+				syntax: null,
+				icon: null,
+				position: 'primary',
+				type: 'zed'
+			}).save();
+			var Koha_cfc = new DB.Targets({
+				id: null,
+				hostname: 'arwen.metavore.com',
+				port: '9820',
+				dbname: 'biblios',
+				userid: '',
+				password: '',
+				name: "CFC Koha",
+				enabled: 1,
+				rank: 1,
+				description: "CFC Koha",
+				syntax: null,
+				icon: null,
+				position: 'primary',
+				type: 'zed'
+			}).save();
+			return true;
+		},
+		down: function() {
+			DB.Targets.select('name="Nelsonville Public Library"').remove();
+			DB.Targets.select('name="Berwick Library"').remove();
+			DB.Targets.select('name="Library of Congress"').remove();
+			DB.Targets.select('name="CFC Koha"').remove();
+			return true;
+		}
 	}
+			
+
 ];
 
 function init_gears() {
@@ -67,10 +232,9 @@ function init_gears() {
 				name:"Info_Schema",
 				fields:
 				{
-					version: new GearsORM.Fields.Integer()
+					version: new GearsORM.Fields.Integer({defaultValue: 0})
 				}
 			});
-			DB.Info_Schema.createTable();
 			DB.Records = new GearsORM.Model({
 				name: 'Records',
 				fields: 
@@ -106,6 +270,37 @@ function init_gears() {
 					icon: new GearsORM.Fields.String(),
 					position: new GearsORM.Fields.String(),
 					type: new GearsORM.Fields.String()
+				}
+			});
+			DB.Prefs = new GearsORM.Model({
+				name: 'Prefs',
+				fields:
+				{
+					id: new GearsORM.Fields.Integer({primary_key: true, autoincrement: true}),
+					name: new GearsORM.Fields.String(),
+					value: new GearsORM.Fields.String(),
+					type: new GearsORM.Fields.String(),
+					option: new GearsORM.Fields.String()
+				}
+			});
+			DB.Savefiles = new GearsORM.Model({
+				name: 'Savefiles',
+				fields:
+				{
+					id: new GearsORM.Fields.Integer({primary_key: true, autoincrement: true}),
+					name: new GearsORM.Fields.String(),
+					description: new GearsORM.Fields.String(),
+					parent: new GearsORM.Fields.OneToMany({related:'Savefiles', allowNull:true}),
+					children: new GearsORM.Fields.ManyToOne({related:'Savefiles'}),
+					allowDelete: new GearsORM.Fields.Integer(),
+					allowAdd: new GearsORM.Fields.Integer(),
+					allowRename: new GearsORM.Fields.Integer(),
+					allowDrag: new GearsORM.Fields.Integer(),
+					allowDrop: new GearsORM.Fields.Integer(),
+					ddGroup: new GearsORM.Fields.String(),
+					icon: new GearsORM.Fields.String(),
+					date_added: new GearsORM.Fields.TimeStamp(),
+					date_modified: new GearsORM.Fields.TimeStamp()
 				}
 			});
 			GearsORMShift.init( DB.Info_Schema, true );
