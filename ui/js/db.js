@@ -295,7 +295,7 @@ function init_gears() {
 					date_modified: new GearsORM.Fields.TimeStamp()
 				}
 			});
-			GearsORMShift.init( DB.Info_Schema, true );
+			GearsORMShift.init( DB.Info_Schema, false );
 
 >>>>>>> Initial attempt at using GearsORM migration rules.  Believe it's working when migrating up or down.:ui/js/db.js
 }
