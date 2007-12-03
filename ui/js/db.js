@@ -173,7 +173,7 @@ function setupTargets() {
     rs = db.execute('insert or ignore into Targets (id, hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type) values (2, "zconn.lib.monash.edu.au", 7090, "Voyager", "", "", "Berwick Library", 1, 1, "Berwick Library, Monash University", null, null, "primary", "zed");');
     rs = db.execute('insert or ignore into Targets (id, hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type) values (3, "z3950.lib.byu.edu", 2200, "unicorn", "", "", "Brigham Young University", 1, 1, "Brigham Young University", null, null, "primary", "zed");');
     rs = db.execute('insert or ignore into Targets (id, hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type) values (4, "z3950.loc.gov", 7090, "voyager", "", "", "Library of Congress", 1, 1, "Library of Congress", null, null, "primary", "zed");');
-    rs = db.execute('insert or ignore into Targets (id, hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type) values (5, "arwen.metavore.com", 9819, "biblios", "", "", "Koha-gmc", 1, 1, "Koha-gmc", null, null, "primary", "zed");');
+    rs = db.execute('insert or ignore into Targets (id, hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type) values (5, "arwen.metavore.com", 9820, "biblios", "", "", "Koha-cfc", 1, 1, "Koha-cfc", null, null, "primary", "zed");');
 
   }
   catch(ex) {
@@ -184,10 +184,10 @@ function setupTargets() {
 // test prefs for koha integration
 function setupKohaPlugin() {
 	try {
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (1, 'remoteILS', 'Koha-gmc', 'koha', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (1, 'remoteILS', 'Koha-cfc', 'koha', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (2, 'remoteILSUrl', 'http://eowyn.metavore.com/kohaapi/', 'koha', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (3, 'remoteUser', 'api', 'koha', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (4, 'remotePassword', 'api', 'koha', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (3, 'remoteUser', 'marian', 'koha', '')");
+		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (4, 'remotePassword', 'marian', 'koha', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (5, 'ilspluginlocation', 'plugins/koha.js', 'koha', '')");
 		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (6, 'ilsinitcall', 'new koha();', 'koha', '')");
 	}
