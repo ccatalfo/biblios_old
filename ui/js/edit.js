@@ -1313,7 +1313,7 @@ function setupMarc21AuthorityLiveSearches() {
 			triggerAction: 'all',
 			mode: 'remote',
 			selectOnFocus: true,
-			hideTrigger: true,
+			hideTrigger: false,
 			displayField: 'pname',
 			loadingText: 'Searching...'
 		});
@@ -1348,7 +1348,7 @@ function setupMarc21AuthorityLiveSearches() {
 			triggerAction: 'all',
 			mode: 'local',
 			selectOnFocus: true,
-			hideTrigger: true,
+			hideTrigger: false,
 			displayField: 'author',
 		});
 		cb.applyTo($(subfield_text).get(0));
@@ -1373,7 +1373,7 @@ function setupMarc21AuthorityLiveSearches() {
 			triggerAction: 'all',
 			mode: 'local',
 			selectOnFocus: true,
-			hideTrigger: true,
+			hideTrigger: false,
 			displayField: 'author',
 		});
 		cb.applyTo($(subfield_text).get(0));
@@ -1398,7 +1398,7 @@ function setupMarc21AuthorityLiveSearches() {
 			triggerAction: 'all',
 			mode: 'local',
 			selectOnFocus: true,
-			hideTrigger: true,
+			hideTrigger: false,
 			displayField: 'author',
 		});
 		cb.applyTo($(subfield_text).get(0));
@@ -1423,7 +1423,7 @@ function setupMarc21AuthorityLiveSearches() {
 			triggerAction: 'all',
 			mode: 'local',
 			selectOnFocus: true,
-			hideTrigger: true,
+			hideTrigger: false,
 			displayField: 'author',
 		});
 		cb.applyTo($(subfield_text).get(0));
