@@ -232,7 +232,7 @@ function Edit2XmlMarc21(ff_ed, var_ed) {
 			df.setAttribute('ind2', ind2val);
 			// create <subfield> elems for this datafield
 			var subfields = '';
-			$('input', $(this)).each( function() {
+			$('input,select', $(this)).each( function() {
 				subfields += $(this).val();
 			});
             if(debug) {
@@ -1167,18 +1167,27 @@ function setupSpecialEntries(loc, editor) {
 		// get parent .subfield to render combo to
 		var subfield = $(elemToReplace).parents('.subfield');
 		// remove current text of elemToReplace
-		$(elemToReplace).remove();
-		
+		//$(elemToReplace).remove();
+		var select = '<select>';
 		var valid_values = $('valid_values/value', entry);
-		var storevalues = new Array();
+		//var storevalues = new Array();
 		for( j = 0; j < valid_values.length; j++) {
 			var value = valid_values.eq(j);
 			var code = $('code', value).text();
 			var desc = $('description', value).text();
+			select += '<option value="'+code+'"';
+			if( currentValue == code ) {
+				select += ' selected ';
+			}
+			select += '>'+desc+'</option>';
 			// store valid values in store
-			storevalues.push([code, desc]);
+			//storevalues.push([code, desc]);
 		}
-		var store = new Ext.data.SimpleStore({
+		select += '</select>';
+		$(elemToReplace).before(select);
+		$(elemToReplace).remove();
+		if(debug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry')}
+		/*var store = new Ext.data.SimpleStore({
 			fields: ['code', 'desc'],
 			data: storevalues
 		});
@@ -1193,6 +1202,7 @@ function setupSpecialEntries(loc, editor) {
 		});
 		if(debug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry')}
 		combo.render( $(subfield).get(0) );
+		*/
 	}
 }
 
