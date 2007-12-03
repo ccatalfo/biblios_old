@@ -1111,6 +1111,7 @@ function create_static_editor() {
 	// setup reserved (locked) tags based on remote ils bib profile
 	if( Prefs.remoteILS[ UI.editor.location ] ) {
 		setupReservedTags( Prefs.remoteILS[ UI.editor.location ], UI.editor.editorDoc);
+		setupSpecialEntries( Prefs.remoteILS[ UI.editor.location ], UI.editor.editorDoc);
 	}
 	// add focus behavior
 	$('#marceditor input')
@@ -1152,6 +1153,47 @@ function create_static_editor() {
 	// apply ExtJS comboboxes for live searching of authority data
 	setupMarc21AuthorityLiveSearches();
 
+}
+
+function setupSpecialEntries(loc, editor) {
+	var specialentries = loc.instance.special_entries;
+	for( var i = 0; i < specialentries.length; i++) {
+		var entry = specialentries.eq(i);
+		var tagnumber = $('field/tag', entry).text();	
+		var subfield = $('field/subfield', entry).text();	
+		// get the element to replace w/ combobox
+		var elemToReplace = $('[@id^='+tagnumber+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
+		var currentValue = $(elemToReplace).val();
+		// get parent .subfield to render combo to
+		var subfield = $(elemToReplace).parents('.subfield');
+		// remove current text of elemToReplace
+		$(elemToReplace).remove();
+		
+		var valid_values = $('valid_values/value', entry);
+		var storevalues = new Array();
+		for( j = 0; j < valid_values.length; j++) {
+			var value = valid_values.eq(j);
+			var code = $('code', value).text();
+			var desc = $('description', value).text();
+			// store valid values in store
+			storevalues.push([code, desc]);
+		}
+		var store = new Ext.data.SimpleStore({
+			fields: ['code', 'desc'],
+			data: storevalues
+		});
+		var combo = new Ext.form.ComboBox({
+			store: store,
+			displayField: 'desc',
+			valueField: 'code',
+			mode: 'local',
+			selectOnFocus: true,
+			value: currentValue,
+			triggerAction: 'all',
+		});
+		if(debug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry')}
+		combo.render( $(subfield).get(0) );
+	}
 }
 
 function setupReservedTags(loc, editor) {
