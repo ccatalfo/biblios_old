@@ -1,3 +1,6 @@
+// reference local blank image
+Ext.BLANK_IMAGE_URL = 'lib/extjs/resources/images/default/s.gif';
+
 // config options
 var configDoc = '';
 var marcFlavor = '';

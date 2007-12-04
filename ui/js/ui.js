@@ -120,6 +120,27 @@ function createHomeTab() {
 
 function createOptionsTab() {
 	optionstab = tabs.addTab('optionstab', 'Options');
+	var optionsLayout = new Ext.BorderLayout('optionstab', {
+		id: 'optionsLayout',
+		center: {
+			titleBar: true,
+			alwaysShowTabs: true,
+			tabPosition: 'top'
+		}
+	});
+	Ext.ComponentMgr.register(optionsLayout);
+	optionsLayout.add('center', new Ext.ContentPanel('database_options', 'Database'));
+	optionsLayout.add('center', new Ext.ContentPanel('macro_options', 'Macros'));
+	optionsLayout.add('center', new Ext.ContentPanel('target_options', 'Targets'));
+	optionsLayout.add('center', new Ext.ContentPanel('keyboard_options', 'Keyboard Shortcuts'));
+	optionsLayout.getRegion('center').showPanel('database_options');
+	// create database options 
+	var dbform = new Ext.form.Form();
+	dbform.addButton('Update Database', function(btn) {
+		resetDatabase();
+		Ext.MessageBox.alert('Preferences', 'Database updated');
+	});
+	dbform.render('dbform');
 }
 
 /*
