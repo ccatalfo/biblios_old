@@ -136,9 +136,31 @@ function createOptionsTab() {
 	optionsLayout.getRegion('center').showPanel('database_options');
 	// create database options 
 	var dbform = new Ext.form.Form();
-	dbform.addButton('Update Database', function(btn) {
+	dbform.addButton('Reset Database', function(btn) {
 		resetDatabase();
-		Ext.MessageBox.alert('Preferences', 'Database updated');
+		setPazPar2Targets(paz);
+		createTargetFolders();
+		Ext.MessageBox.alert('Preferences', 'Database reset');
+	});
+	dbform.addButton('Add Test Targets', function(btn) {
+		setupTestTargets();
+		setPazPar2Targets(paz);
+		createTargetFolders();
+		Ext.MessageBox.alert('Preferences', 'Test targets set');
+	});
+	dbform.addButton('Remove Test Targets', function(btn) {
+		setPazPar2Targets(paz);
+		removeTargetFolder(1);
+		removeTargetFolder(2);
+		removeTargetFolder(3);
+		removeTargetFolder(4);
+		removeTargetFolder(5);
+		Ext.MessageBox.alert('Preferences', 'Test targets set');
+	});
+	dbform.addButton('Add Test Koha Plugin', function(btn) {
+		setupKohaPlugin();
+		setILSTargets();
+		Ext.MessageBox.alert('Preferences', 'Test Koha plugin set');
 	});
 	dbform.render('dbform');
 }
@@ -271,6 +293,26 @@ function getNodeBySaveFileId(savefileid) {
 
 */
 function createSaveFileFolders(parentid) {
+	if( ! Ext.ComponentMgr.get('saveFileRoot') ) {
+		saveFilesRoot = new Ext.tree.TreeNode({
+			allowDrag:false,
+			allowDrop:false,
+			allowDelete: false,
+			allowAdd: true,
+			allowRename: false,
+			id:'saveFileRoot',
+			parentid: 'null',
+			savefileid: 'null',
+			leaf:false,
+			text: 'Folders',
+			icon: 'ui/images/folder.png',
+			cls: 'rootFolders'
+		});
+		Ext.ComponentMgr.register(saveFilesRoot);
+		saveFilesRoot.on('click', function() {
+			displaySaveView();
+		});
+	}
     // get all savefiles at the root level, then for each append its children
     var rs, current_root;
     try {
@@ -332,6 +374,7 @@ function createSaveFileFolders(parentid) {
     catch(ex) {
 		 Ext.Msg.alert("DB error", ex.message);
     }
+	return saveFilesRoot;
 }
 
 /*
@@ -369,121 +412,14 @@ function createFolderList() {
         allowDrop:false,
         id:'folderRoot',
     });
-    searchRoot = new Ext.tree.TreeNode({
-        allowDrag:false,
-        allowDrop:false,
-        id:'searchRoot',
-        leaf: false,
-        text: 'Resources',
-        icon: 'ui/images/folder-remote.png'
-    });
-    var searchTreeChildren = new Array();
-    var targets = getTargets();
-    for( var i = 0; i < targets.length; i++) {
-        var data = targets[i];
-        var targetnode = new Ext.tree.TreeNode(
-          {
-            text: data.name, 
-            servername: data.name,
-            id: data.id, 
-			hostname: data.hostname,
-			port: data.port,
-			dbname: data.dbname,
-            checked: data.enabled?true:false,
-            qtip: data.description, 
-            leaf: false, 
-            allowDelete:false, 
-            allowAdd: false,
-            allowDrag: false, 
-            allowDrop:true, 
-            ddGroup:'RecordDrop', 
-            icon: 'ui/images/network-server.png'
-          });
-        var serverleaf = new Ext.tree.TreeNode(
-          {
-            text: '<span class="database-details">Server:</span> ' + data.hostname,
-            leaf: true
-          });
-        var portleaf = new Ext.tree.TreeNode( 
-          {
-            text: '<span class="database-details">Port:</span> ' + data.port,
-            leaf: true
-          });
-        var dbnameleaf = new Ext.tree.TreeNode(
-          { 
-            text: '<span class="database-details">Database:</span> ' + data.dbname,
-            leaf: true
-          });
-        var userleaf = new Ext.tree.TreeNode (
-          {
-            text: '<span class="database-details">User:</span> ' + data.userid,
-            leaf: true
-          });
-        targetnode.on('checkchange', function(node, checked) {
-          filterSearchResultsByServer();
-          setEnableTargets();
-        });
-        targetnode.appendChild([serverleaf, portleaf, dbnameleaf, userleaf]);
-        searchTreeChildren.push(targetnode);
-    }
-    searchRoot.appendChild(searchTreeChildren);
-	searchRoot.on('click', function(n) {
-		displaySearchView();
-        folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
-	});
+	Ext.ComponentMgr.register(folderRoot);
 
-    saveFilesRoot = new Ext.tree.TreeNode({
-        allowDrag:false,
-        allowDrop:false,
-        allowDelete: false,
-        allowAdd: true,
-        allowRename: false,
-        id:'saveFileRoot',
-        parentid: 'null',
-        savefileid: 'null',
-        leaf:false,
-        text: 'Folders',
-        icon: 'ui/images/folder.png',
-		cls: 'rootFolders'
-    });
-    saveFilesRoot.on('click', function() {
-        displaySaveView();
-    });
+    var savefilesRoot = createSaveFileFolders('null'); 
+	var searchRoot = createTargetFolders();
+	var facetsRoot = createFacetFolder();
 
-    createSaveFileFolders('null'); 
-
-
-	facetsRoot = new Ext.tree.TreeNode({
-		text: 'Facets',
-		leaf: false,
-		disabled: true
-	});
-	var subjectRoot =  new Ext.tree.TreeNode({
-		name: 'subjectRoot',
-		text: "<b>Subjects</b>",
-		leaf: false
-	});
-	var authorRoot =  new Ext.tree.TreeNode({
-		name: 'authorRoot',
-		text: "<b>Authors</b>",
-		leaf: false
-	});
-	var dateRoot =  new Ext.tree.TreeNode({
-		name: 'dateRoot',
-		text: "<b>Dates</b>",
-		leaf: false
-	});
-	var pubRoot =  new Ext.tree.TreeNode({
-		name: 'publication-nameRoot',
-		text: "<b>Publisher</b>",
-		leaf: false
-	});
-	facetsRoot.appendChild(subjectRoot, authorRoot, dateRoot, pubRoot);
-	facetsRoot.eachChild(function(n) {
-		n.on('afterchildrenrendered', hideDisabledFacets);
-	});
-	 folderRoot.appendChild([searchRoot, facetsRoot, saveFilesRoot]);
-	 folderTree.setRootNode(folderRoot);
+	folderRoot.appendChild([searchRoot, facetsRoot, saveFilesRoot]);
+	folderTree.setRootNode(folderRoot);
     folderTree.render();
     saveFilesRoot.expand();
     searchRoot.expand();
@@ -722,6 +658,121 @@ function createFolderList() {
 			 displaySaveFile(currentId, currentName); 
 			 return true;
     });
+}
+
+function createFacetFolder() {
+	facetsRoot = new Ext.tree.TreeNode({
+		text: 'Facets',
+		leaf: false,
+		disabled: true,
+		id: 'facetsRoot'
+	});
+	Ext.ComponentMgr.register(facetsRoot);
+	var subjectRoot =  new Ext.tree.TreeNode({
+		name: 'subjectRoot',
+		text: "<b>Subjects</b>",
+		leaf: false
+	});
+	var authorRoot =  new Ext.tree.TreeNode({
+		name: 'authorRoot',
+		text: "<b>Authors</b>",
+		leaf: false
+	});
+	var dateRoot =  new Ext.tree.TreeNode({
+		name: 'dateRoot',
+		text: "<b>Dates</b>",
+		leaf: false
+	});
+	var pubRoot =  new Ext.tree.TreeNode({
+		name: 'publication-nameRoot',
+		text: "<b>Publisher</b>",
+		leaf: false
+	});
+	facetsRoot.appendChild(subjectRoot, authorRoot, dateRoot, pubRoot);
+	facetsRoot.eachChild(function(n) {
+		n.on('afterchildrenrendered', hideDisabledFacets);
+	});
+	return facetsRoot;
+}
+
+function createTargetFolders() {
+	// remove old searchRoot if it exists to clear out any old entries
+	var folderRoot = Ext.ComponentMgr.get('folderRoot');
+	//folderRoot.removeChild( folderRoot.findChild('id', 'searchRoot') );
+	if( ! Ext.ComponentMgr.get('searchRoot') ) {
+		searchRoot = new Ext.tree.TreeNode({
+			allowDrag:false,
+			allowDrop:false,
+			id:'searchRoot',
+			leaf: false,
+			text: 'Resources',
+			icon: 'ui/images/folder-remote.png'
+		});
+		Ext.ComponentMgr.register(searchRoot);
+	}
+
+    var searchTreeChildren = new Array();
+    var targets = getTargets();
+    for( var i = 0; i < targets.length; i++) {
+        var data = targets[i];
+        var targetnode = new Ext.tree.TreeNode(
+          {
+            text: data.name, 
+            servername: data.name,
+            id: data.id, 
+			hostname: data.hostname,
+			port: data.port,
+			dbname: data.dbname,
+            checked: data.enabled?true:false,
+            qtip: data.description, 
+            leaf: false, 
+            allowDelete:false, 
+            allowAdd: false,
+            allowDrag: false, 
+            allowDrop:true, 
+            ddGroup:'RecordDrop', 
+            icon: 'ui/images/network-server.png'
+          });
+        var serverleaf = new Ext.tree.TreeNode(
+          {
+            text: '<span class="database-details">Server:</span> ' + data.hostname,
+            leaf: true
+          });
+        var portleaf = new Ext.tree.TreeNode( 
+          {
+            text: '<span class="database-details">Port:</span> ' + data.port,
+            leaf: true
+          });
+        var dbnameleaf = new Ext.tree.TreeNode(
+          { 
+            text: '<span class="database-details">Database:</span> ' + data.dbname,
+            leaf: true
+          });
+        var userleaf = new Ext.tree.TreeNode (
+          {
+            text: '<span class="database-details">User:</span> ' + data.userid,
+            leaf: true
+          });
+        targetnode.on('checkchange', function(node, checked) {
+          filterSearchResultsByServer();
+          //setEnableTargets();
+        });
+        targetnode.appendChild([serverleaf, portleaf, dbnameleaf, userleaf]);
+        searchTreeChildren.push(targetnode);
+    }
+	if( searchTreeChildren.length > 0 ) {
+		searchRoot.appendChild(searchTreeChildren);
+	}
+	searchRoot.on('click', function(n) {
+		displaySearchView();
+        folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
+	});
+	return searchRoot;
+}
+
+function removeTargetFolder(id) {
+	var searchRoot = Ext.ComponentMgr.get('searchRoot');
+	searchRoot.removeChild( searchRoot.findChild('id', id) );
 }
 
 function createSearchPazParGrid(url) {

@@ -24,14 +24,9 @@ function init_gears() {
 	if(db) {
 		try {
 			rs = db.open('catalogingProject');
-			if( db_debug == 1 ) {
-			    // delete table Records
-			    dropTables();
-			}
+			dropTables();
 			createTables();
 			setupSaveFiles();
-			setupTargets();
-			setupKohaPlugin();
 			// remove old search results from Records (records with status = '')
 			rs = db.execute('delete from Records where status = ""');
 			// clear out old search results
@@ -118,8 +113,6 @@ function resetDatabase() {
     try {
 	dropTables();	
 	createTables();
-	setupSaveFiles();
-	setupKohaPlugin();
     }
     catch(ex) {
 	Ext.message.alert(ex.message);
@@ -167,7 +160,7 @@ function setupSaveFiles() {
    None.
 
 */
-function setupTargets() {
+function setupTestTargets() {
   try {
     rs = db.execute('insert or ignore into Targets (id, hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type) values (1, "66.213.78.76", 9999, "NPLKoha", "", "", "Nelsonville Public Library", 1, 1, "Nelsonville Public Library", null, null, "primary", "zed");');
     rs = db.execute('insert or ignore into Targets (id, hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type) values (2, "zconn.lib.monash.edu.au", 7090, "Voyager", "", "", "Berwick Library", 1, 1, "Berwick Library, Monash University", null, null, "primary", "zed");');
