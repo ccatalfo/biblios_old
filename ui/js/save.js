@@ -257,7 +257,7 @@ function validateRemote(loc) {
 		var subfield = $(subfields).eq(i).children('subfield_label').text();
 		if( !UI.editor.record.hasFieldAndSubfield(tag, subfield)) {
 			subfieldsvalid = false;
-			errormsg += 'Record is missing tag ' + tag + ' with subfield ' + subfield;
+			errormsg += 'Record is missing tag ' + tag + ' with subfield ' + subfield + '<br/>';
 		}
 	}
 	var tags = Prefs.remoteILS[loc].instance.mandatory_tags;
@@ -266,7 +266,7 @@ function validateRemote(loc) {
 		var tag = $(tags).eq(i).text();
 		if( !UI.editor.record.hasField(tag)) {
 			tagsvalid = false;
-			errormsg += 'Record is missing tag ' + tag;
+			errormsg += 'Record is missing tag ' + tag + '<br/>';
 		}
 	}
 	if( errormsg != '' ) {
