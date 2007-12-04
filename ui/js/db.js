@@ -24,7 +24,6 @@ function init_gears() {
 	if(db) {
 		try {
 			rs = db.open('catalogingProject');
-			dropTables();
 			createTables();
 			setupSaveFiles();
 			// remove old search results from Records (records with status = '')
