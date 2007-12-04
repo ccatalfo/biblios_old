@@ -297,7 +297,6 @@ function init_gears() {
 			});
 			GearsORMShift.init( DB.Info_Schema, false );
 
->>>>>>> Initial attempt at using GearsORM migration rules.  Believe it's working when migrating up or down.:ui/js/db.js
 }
 
 
