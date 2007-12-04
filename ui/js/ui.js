@@ -160,6 +160,7 @@ function createOptionsTab() {
 	dbform.addButton('Add Test Koha Plugin', function(btn) {
 		setupKohaPlugin();
 		setILSTargets();
+		updateSendMenu();
 		Ext.MessageBox.alert('Preferences', 'Test Koha plugin loaded');
 	});
 	dbform.render('dbform');
