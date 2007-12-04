@@ -146,7 +146,7 @@ function createOptionsTab() {
 		setupTestTargets();
 		setPazPar2Targets(paz);
 		createTargetFolders();
-		Ext.MessageBox.alert('Preferences', 'Test targets set');
+		Ext.MessageBox.alert('Preferences', 'Test targets added');
 	});
 	dbform.addButton('Remove Test Targets', function(btn) {
 		setPazPar2Targets(paz);
@@ -155,12 +155,12 @@ function createOptionsTab() {
 		removeTargetFolder(3);
 		removeTargetFolder(4);
 		removeTargetFolder(5);
-		Ext.MessageBox.alert('Preferences', 'Test targets set');
+		Ext.MessageBox.alert('Preferences', 'Test targets removed');
 	});
 	dbform.addButton('Add Test Koha Plugin', function(btn) {
 		setupKohaPlugin();
 		setILSTargets();
-		Ext.MessageBox.alert('Preferences', 'Test Koha plugin set');
+		Ext.MessageBox.alert('Preferences', 'Test Koha plugin loaded');
 	});
 	dbform.render('dbform');
 }

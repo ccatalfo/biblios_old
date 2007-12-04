@@ -169,7 +169,6 @@ function initUI() {
 		id: 'sendMenu',
 		items: getSendFileMenuItems()
 	});
-	Ext.ComponentMgr.register(saveMenu);
     editor_toolbar = new Ext.Toolbar('editor-toolbar',
     [
     {

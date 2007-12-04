@@ -197,10 +197,19 @@ function getSaveFileNameFromId(savefileid) {
 
 function updateSaveMenu() {
 	// remove old Save menu items
-	Ext.ComponentMgr.get('saveMenu').removeAll();
+	Ext.menu.MenuMgr.get('saveMenu').removeAll();
 	var savefiles = getSaveFileMenuItems();
 	for( sf in savefiles ) {
-		Ext.ComponentMgr.get('saveMenu').add( savefiles[sf] );
+		Ext.menu.MenuMgr.get('saveMenu').add( savefiles[sf] );
+	}
+}
+
+function updateSendMenu() {
+	// remove old send menu items
+	Ext.menu.MenuMgr.get('sendMenu').removeAll();
+	var sendfiles = getSendFileMenuItems();
+	for( sf in sendfiles ) {
+		Ext.menu.MenuMgr.get('sendMenu').add( sendfiles[sf] );
 	}
 }
 
