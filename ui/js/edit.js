@@ -1186,14 +1186,12 @@ function setupSpecialEntries(loc, editor) {
 		}
 		if(debug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry')}
 		var store = new Ext.data.SimpleStore({
-			fields: ['code', 'desc'],
+			fields: ['value', 'text'],
 			data: storevalues
 		});
 		var combo = new Ext.form.ComboBox({
 			id: id,
 			store: store,
-			displayField: 'desc',
-			valueField: 'code',
 			typeAhead: true,
 			grow: true,
 			mode: 'local',
