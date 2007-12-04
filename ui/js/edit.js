@@ -1169,6 +1169,9 @@ function setupSpecialEntries(loc, editor) {
 		var subfield = $('field/subfield', entry).text();	
 		// get the element to replace w/ combobox
 		var elemToReplace = $('[@id^='+tagnumber+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
+		if(elemToReplace.length == 0) {
+			return false;
+		}
 		var currentValue = $(elemToReplace).val();
 		var id = $(elemToReplace).get(0).id;
 		// get parent .subfield to render combo to

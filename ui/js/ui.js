@@ -131,6 +131,7 @@ function createOptionsTab() {
 	Ext.ComponentMgr.register(optionsLayout);
 	optionsLayout.add('center', new Ext.ContentPanel('database_options', 'Database'));
 	optionsLayout.add('center', new Ext.ContentPanel('macro_options', 'Macros'));
+	optionsLayout.add('center', new Ext.ContentPanel('plugin_options', 'Plugins'));
 	optionsLayout.add('center', new Ext.ContentPanel('target_options', 'Targets'));
 	optionsLayout.add('center', new Ext.ContentPanel('keyboard_options', 'Keyboard Shortcuts'));
 	optionsLayout.getRegion('center').showPanel('database_options');
