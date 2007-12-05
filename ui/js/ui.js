@@ -912,7 +912,7 @@ function updateSearchTargetFolders() {
           {
             text: data.name, 
             servername: data.name,
-            id: data.id, 
+            id: data.rowid, 
 			hostname: data.hostname,
 			port: data.port,
 			dbname: data.dbname,
