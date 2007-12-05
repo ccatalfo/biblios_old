@@ -544,13 +544,13 @@ function createSaveFileFolders(parentid) {
             displaySaveView();
             folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
             displaySaveFile(n.attributes.savefileid, n.text); 
-				clearStatusMsg();
+			clearStatusMsg();
         });
         // setup dropnode for Trash
         if( name == 'Trash' ) {
 
         }
-        createSaveFileFolders(savefile.id);
+        createSaveFileFolders(savefile.rowid);
     }); 
 	return saveFilesRoot;
 }
@@ -642,15 +642,16 @@ function createFolderList() {
 
     // save new name for save file to db on completion
     treeEditor.on('complete', function(editor, value, startvalue) {
-        try {
-        rs = db.execute('update Savefiles set name=? where id=?', [value, editor.editNode.attributes.savefileid]);
-        rs.close();
-        return true;
+		try {
+			var savefile = DB.Savefiles.select('rowid=?', [editor.editNode.attributes.savefileid]).getOne();
+			savefile.name = value;
+			savefile.save();
+			return true;
         }
         catch(ex) {
-        Ext.Msg.alert("DB error", ex.message);
-        return false;
-        }
+			Ext.MessageBox.alert("Database error", ex.message);
+			return false;
+		}
     });
 /*
    Function: removeNode
@@ -672,32 +673,31 @@ function createFolderList() {
     function removeNode(){
         var n = folderTree.getSelectionModel().getSelectedNode();
         if(n && n.attributes.allowDelete){
-        // do we really want to do this???
-        Ext.MessageBox.confirm("Delete", "Really delete this folder and all records in it?", function(btn, text) {
-            if( btn == 'yes' ) {
-            var id = n.attributes.savefileid;
-            folderTree.getSelectionModel().selectPrevious();
-            n.parentNode.removeChild(n);
-            // update db
-            try {
-                rs = db.execute('delete from Savefiles where id=?', [id]);
-                rs.close();
-                return true;
-				// update our hash of savefile id/names
-				getSaveFileNames();
-				updateSaveMenu();
-            }
-            catch(ex) {
-                Ext.Msg.alert("DB error", ex.message);
-                return false;
-            }
-            return true;
-            }
-            else {
-            return false;   
-            }
-        });
-         
+			// do we really want to do this???
+			Ext.MessageBox.confirm("Delete", "Really delete this folder and all records in it?", 
+				function(btn, text) {
+				if( btn == 'yes' ) {
+					var id = n.attributes.savefileid;
+					folderTree.getSelectionModel().selectPrevious();
+					n.parentNode.removeChild(n);
+					// update db
+					try {
+						DB.Savefiles.select('rowid = ?', [id]).getOne().remove();
+						return true;
+						// update our hash of savefile id/names
+						getSaveFileNames();
+						updateSaveMenu();
+					}
+					catch(ex) {
+						Ext.MessageBox.alert("Database error", ex.message);
+						return false;
+					}
+					return true;
+				}
+				else {
+					return false;   
+				}
+			});
         }
     }
 
@@ -721,15 +721,15 @@ function createFolderList() {
     function renameNode() {
         var n = folderTree.getSelectionModel().getSelectedNode();
         if((n.attributes.allowRename == true)){
-        treeEditor.editNode = n;
-        treeEditor.startEdit(n.ui.textNode);
-		// update our hash of savefile id/names
-		getSaveFileNames();
-		updateSaveMenu();
-    }
-    else {
-        return false;
-    }
+			treeEditor.editNode = n;
+			treeEditor.startEdit(n.ui.textNode);
+			// update our hash of savefile id/names
+			getSaveFileNames();
+			updateSaveMenu();
+		}
+		else {
+			return false;
+		}
     }
 
 /*
@@ -751,90 +751,91 @@ function createFolderList() {
 */
     function addNode(){
         var n = folderTree.getSelectionModel().getSelectedNode();
-        if((n.attributes.allowAdd == true)){
-        var newname = 'New Folder';
-        // update db with new save file and get its id so we can pass it to TreeNode config
-        var rs, id, parentid;
-        parentid = n.attributes.savefileid;
-        if( parentid == 'null') {
-        parentid = null;
-        }
-        try {
-        rs = db.execute('insert into Savefiles (id, name, description, parentid, allowDelete, allowAdd, allowRename, allowDrag, allowDrop, ddGroup, icon, date_added, date_modified) values (null, ?, "", ?, 1, 1, 1, 1, 1, "RecordDrop", "ui/images/drive-harddisk.png", datetime("now", "localtime"), datetime("now", "localtime"))', [newname, parentid]);
-        rs.close();
-		// update our hash of savefile id/names
-		getSaveFileNames();
-		// update Save menu
-		updateSaveMenu();
-        }
-        catch(ex) {
-        Ext.Msg.alert("DB error", ex.message);
-        }
-        try {
-        rs = db.execute('select max(id) from Savefiles');
-        id = rs.field(0);
-        rs.close();
-        }
-        catch(ex) {
-			  Ext.Msg.alert("DB error", ex.message);
-        }
-        var newnode = new Ext.tree.TreeNode(
-        {
-           text: 'New Folder', 
-            savefileid: id, 
-            qtip:'', 
-            icon: 'ui/images/drive-harddisk.png',
-            leaf: false, 
-            allowDelete:true, 
-            allowAdd: true,
-            allowRename: true,
-            allowEdit: true,
-            allowDrag:true, 
-            allowDrop:true, 
-            ddGroup:'SaveFileNodeDrop'
-        }                   
-        );
-            n.appendChild(
-        newnode
-        );
-        n.expand();
-        newnode.on('click', function(n) {
-			displaySaveView();
-			folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
-			showStatusMsg('Displaying ' + n.attributes.id);
-			displaySaveFile(n.attributes.savefileid, n.text); 
-			clearStatusMsg();
-        });
-        folderTree.getSelectionModel().select(newnode);
-        setTimeout(function() {
-			treeEditor.on('complete', function(editor, value, startValue) {
+        if((n.attributes.allowAdd == true)) {
+			// update db with new save file and get its id so we can pass it to TreeNode config
+			var parentid;
+			parentid = n.attributes.savefileid;
+			if( parentid == 'null') {
+				parentid = null;
+			}
+			try {
+				var savefile = new DB.Savefiles({
+					name: "New Folder",
+					description: '',
+					parentid: parentid,
+					allowDelete: 1,
+					allowAdd: 1,
+					allowRename: 1,
+					allowDrag: 1,
+					allowDrop: 1,
+					ddGroup: 'RecordDrop',
+					icon: 'ui/images/drive-harddisk.png',
+					date_added: '',
+					date_modified: ''
+				}).save();
 				// update our hash of savefile id/names
 				getSaveFileNames();
+				// update Save menu
 				updateSaveMenu();
+			}
+			catch(ex) {
+				Ext.MessageBox.alert("Database error", ex.message);
+			}
+			try {
+				var id = DB.Savefiles.count();
+			}
+			catch(ex) {
+				  Ext.MessageBox.alert("Database error", ex.message);
+			}
+			var newnode = new Ext.tree.TreeNode(
+			{
+				text: 'New Folder', 
+				savefileid: id, 
+				qtip:'', 
+				icon: 'ui/images/drive-harddisk.png',
+				leaf: false, 
+				allowDelete:true, 
+				allowAdd: true,
+				allowRename: true,
+				allowEdit: true,
+				allowDrag:true, 
+				allowDrop:true, 
+				ddGroup:'SaveFileNodeDrop'
 			});
-			treeEditor.editNode = newnode;
-			treeEditor.startEdit(newnode.ui.textNode);
-				
-        }, 1000);
+			n.appendChild(newnode);
+			n.expand();
+			newnode.on('click', function(n) {
+				displaySaveView();
+				folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
+				showStatusMsg('Displaying ' + n.attributes.id);
+				displaySaveFile(n.attributes.savefileid, n.text); 
+				clearStatusMsg();
+			});
+			folderTree.getSelectionModel().select(newnode);
+			setTimeout(function() {
+				treeEditor.on('complete', function(editor, value, startValue) {
+					// update our hash of savefile id/names
+					getSaveFileNames();
+					updateSaveMenu();
+				});
+				treeEditor.editNode = newnode;
+				treeEditor.startEdit(newnode.ui.textNode);
+			}, 1000);
         }
     }
 
 
     folderTree.on('beforenodedrop', function(e){
-			 if(debug) { console.info("savefilestree dropped on: " + e.target.id); }
-			 // grid data source: e.data.selections[0].id
-			 // tree node target: e.target.id
-			 var sel = e.data.selections;
-			 doSaveLocal(e.target.attributes.savefileid);
-			 // redisplay current savefile (to show moved record)
-			 var currentId = UI.currSaveFile;
-			 var currentName = UI.currSaveFileName;
-			 // reload data into recordCache
-			 // FIXME: use Gears workerpool to do this?
-			 //if(debug) { console.info('reloading data into save file after record(s) droppped'); }
-			 //recordCache[currentId] = loadSaveFile(currentId);
-			 displaySaveFile(currentId, currentName); 
-			 return true;
+		 if(debug) { console.info("savefilestree dropped on: " + e.target.id); }
+		 // grid data source: e.data.selections[0].id
+		 // tree node target: e.target.id
+		 var sel = e.data.selections;
+		 doSaveLocal(e.target.attributes.savefileid);
+		 // redisplay current savefile (to show moved record)
+		 var currentId = UI.currSaveFile;
+		 var currentName = UI.currSaveFileName;
+		 displaySaveFile(currentId, currentName); 
+		 return true;
     });
 }
 
