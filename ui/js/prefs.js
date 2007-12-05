@@ -25,87 +25,16 @@ function setILSTargets() {
 			Prefs.remoteILS[ils.name].user = ils.user;
 			Prefs.remoteILS[ils.name].pw = ils.password;
 			Prefs.remoteILS[ils.name].url = ils.url;
-			var initcall = rs2.plugininit;
+			var initcall = ils.plugininit;
 			// initialize and authorize for this ils instance
 			Prefs.remoteILS[ils.name].instance = eval( initcall );
-			Prefs.remoteILS[ils.name].instance.init(Prefs.remoteILS[ils].url, Prefs.remoteILS[ils].user, Prefs.remoteILS[ils].pw);
+			Prefs.remoteILS[ils.name].instance.init(ils.url, ils.user, ils.password);
 	});
 }
 
-
-function getTargetAuthStrings() {
-  // z39.50 search servers authorization strings 
-  var rs;
-  var authstrings = '';
-  try {
-    rs = db.execute('select hostname, port, dbname, userid, password from Targets where enabled = 1;');
-    while( rs.isValidRow() ) {
-      var hostname = rs.fieldByName('hostname');
-      var port = rs.fieldByName('port');
-      var dbname = rs.fieldByName('dbname');
-      var userid = rs.fieldByName('userid');
-      var password = rs.fieldByName('password');
-      var authstring = hostname + ":" + port + "/" + dbname + "-login-" + userid + "-pass-" + password + "-";
-      authstrings += authstring + " ";
-      rs.next();
-    }
-  }
-  catch(ex) {
-    Ext.MessageBox.alert('db error', ex.message);
-  }
-  return authstrings;
-}
-
-function getTargetNameByAuthString(teststring) {
-  try {
-    rs = db.execute('select hostname, name, port, dbname, userid, password from Targets;');
-    while( rs.isValidRow() ) {
-      var hostname = rs.fieldByName('hostname');
-      var name = rs.fieldByName('name');
-      var port = rs.fieldByName('port');
-      var dbname = rs.fieldByName('dbname');
-      var userid = rs.fieldByName('userid');
-      var password = rs.fieldByName('password');
-      var authstring = hostname + ":" + port + "/" + dbname;
-      if( teststring == authstring ) {
-        return name;
-      }
-      rs.next();
-    }
-  }
-  catch(ex) {
-    Ext.MessageBox.alert('db error', ex.message);
-  }
-}
-
 function getTargets() {
-  var targets = new Array();
-  try {
-    rs = db.execute('select * from Targets;');
-    while( rs.isValidRow() ) {
-      var data = {};
-      data.id = rs.fieldByName('id');
-      data.hostname = rs.fieldByName('hostname');
-      data.port = rs.fieldByName('port');
-      data.dbname = rs.fieldByName('dbname');
-      data.userid = rs.fieldByName('userid');
-      data.password = rs.fieldByName('password');
-      data.name = rs.fieldByName('name');
-      data.enabled = rs.fieldByName('enabled');
-      data.rank = rs.fieldByName('rank');
-      data.description = rs.fieldByName('description');
-      data.syntax = rs.fieldByName('syntax');
-      data.icon = rs.fieldByName('icon');
-      data.position = rs.fieldByName('position');
-      data.type = rs.fieldByName('type');
-      targets.push(data);
-      rs.next();
-    }
-  }
-  catch(ex) {
-    Ext.MessageBox.alert('db error', ex.message);
-  }
-  return targets;
+	var targets = DB.Targets.select().toArray();
+	return targets;
 }
 
 function setEnableTargets() {
