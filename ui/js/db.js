@@ -252,7 +252,7 @@ function init_gears() {
 				fields: 
 				{
 					xml: new GearsORM.Fields.String(),
-					stat: new GearsORM.Fields.String({maxLength: 256}),
+					status: new GearsORM.Fields.String({maxLength: 256}),
 					date_added: new GearsORM.Fields.TimeStamp(),
 					date_modified: new GearsORM.Fields.TimeStamp(),
 					server: new GearsORM.Fields.OneToMany({related: "Targets"}),

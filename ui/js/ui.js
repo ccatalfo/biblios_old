@@ -81,7 +81,7 @@ var editButton = new Ext.Toolbar.Button({
             }
             else if( Ext.get('savegrid').isVisible() ) {
                 var id = savefilegrid.getSelections()[0].data.Id;
-					 var xml = getLocalXml(id);
+				var xml = getLocalXml(id);
                 UI.editor.id = id;
                 openRecord(  xml );
             }
@@ -1253,30 +1253,27 @@ function displaySearchResults(data) {
 */
 function loadSaveFile(id) {
     var data = new Array();
-    var i = 0;
-    try {
-        var rs = db.execute('select * from Records where savefile=?',[id]);
-        while( rs.isValidRow() ) {
-            var id = rs.fieldByName('id');
-            var xml = rs.fieldByName('xml');
-            var currRecord = Sarissa.getDomDocument();
-            currRecord = (new DOMParser()).parseFromString(xml, 'text/xml');
+	var i = 0;
+	var savefile = DB.Savefiles.select('rowid=?',[id]).getOne();
+	if( savefile.records.select().toArray().length > 0 ){
+		savefile.records.select().each( function(record) {
+			var id = record.rowid;
+			var xml = record.xml;
+			var currRecord = Sarissa.getDomDocument();
+			currRecord = (new DOMParser()).parseFromString(xml, 'text/xml');
 			// FIXME: change these xpath expressions to parameters based on xml record type
-            var title = $('[@tag="245"]/subfield[@code="a"]', currRecord).text();
-            var author = $('[@tag="245"]/subfield[@code="c"]', currRecord).text();
-            var publisher = $('[@tag="260"]/subfield[@code="b"]', currRecord).text();
-            var dateofpub = $('[@tag="260"]/subfield[@code="c"]', currRecord).text();
-            var recstatus = rs.fieldByName('status');
-            var date_added = rs.fieldByName('date_added');
-            var date_modified = rs.fieldByName('date_modified');
-            var recArray = new Array(id, title, author, publisher, dateofpub, recstatus, date_added, date_modified);
-            data[i] = recArray;
-            i++;
-                rs.next();
-            }
-        } catch(ex) {
-            Ext.Msg.alert('Error', 'db error: ' + ex.message);
-        }
+			var title = $('[@tag="245"]/subfield[@code="a"]', currRecord).text();
+			var author = $('[@tag="245"]/subfield[@code="c"]', currRecord).text();
+			var publisher = $('[@tag="260"]/subfield[@code="b"]', currRecord).text();
+			var dateofpub = $('[@tag="260"]/subfield[@code="c"]', currRecord).text();
+			var recstatus = record.status;
+			var date_added = record.date_added;
+			var date_modified = record.date_modified;
+			var recArray = new Array(id, title, author, publisher, dateofpub, recstatus, date_added, date_modified);
+			data[i] = recArray;
+			i++;
+		});
+	}
     return data;
 }
 
@@ -1985,19 +1982,6 @@ function filterSearchResultsByServer() {
 }
 
 function getLocalXml(id) {
-    //console.info('openRecord: opening record with id: ' + id);
-    try {
-        var resultSet = db.execute('select xml, savefile from Records where id=?', [id]);
-    } catch(ex) {
-        //console.error('db error: ' + ex.message);
-    }
-    var xml;
-    while( resultSet.isValidRow() ) {
-        xml = resultSet.fieldByName('xml');
-		  savefileid = resultSet.fieldByName('savefile');
-        //console.log('opening record with xml: ' + xml);
-        resultSet.next();
-    }
-    if(debug==1) {console.info("record " + id + " has xml: " + xml);}
+	var xml = DB.Records.select(id).getOne().xml;
 	return xml;
 }
