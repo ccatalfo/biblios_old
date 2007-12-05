@@ -6,6 +6,7 @@ DB.Targets = {};
 DB.ILS = {};
 DB.Prefs = {};
 DB.Searches = {};
+DB.RemoteILS = {};
 var db = {};
 
 /*
@@ -136,6 +137,18 @@ GearsORMShift.rules = [
 			DB.Savefiles.remove('name="Trash"');
 			DB.Savefiles.remove('name="Completed"');
 			DB.Savefiles.remove('name="Drafts"');
+			return true;
+		}
+	},
+	{
+		version: 6,
+		comment: 'Create RemoteILS table',
+		up: function() {
+			DB.RemoteILS.createTable();
+			return true;
+		},
+		down: function() {
+			DB.RemoteILS.dropTable();
 			return true;
 		}
 	}
@@ -289,6 +302,18 @@ function init_gears() {
 					date_modified: new GearsORM.Fields.TimeStamp()
 				}
 			});
+			DB.RemoteILS = new GearsORM.Model({
+				name: 'RemoteILS',
+				fields: 
+				{
+					name: new GearsORM.Fields.String(),
+					url: new GearsORM.Fields.String(),
+					user: new GearsORM.Fields.String(),
+					password: new GearsORM.Fields.String(),
+					pluginlocation: new GearsORM.Fields.String(),
+					plugininit: new GearsORM.Fields.String()
+				}
+			});
 			GearsORMShift.init( DB.Info_Schema, false );
 
 }
@@ -298,41 +323,13 @@ function init_gears() {
 
 // test prefs for koha integration
 function setupKohaPlugin() {
-	var pref = new DB.Prefs({
-		name: 'remoteILS',
-		value: 'Koha-cfc',
-		type: 'koha',
-		option: null,
-	}).save();
-	var pref = new DB.Prefs({
-		name: 'remoteILSUrl',
-		value: 'Khttp://eowyn.metavore.com/kohaapi/',
-		type: 'koha',
-		option: null,
-	}).save();
-	var pref = new DB.Prefs({
-		name: 'remoteUser',
-		value: 'marian',
-		type: 'koha',
-		option: null,
-	}).save();
-	var pref = new DB.Prefs({
-		name: 'remotePassword',
-		value: 'marian',
-		type: 'koha',
-		option: null,
-	}).save();
-	var pref = new DB.Prefs({
-		name: 'ilspluginlocation',
-		value: 'plugins/koha/js',
-		type: 'koha',
-		option: null,
-	}).save();
-	var pref = new DB.Prefs({
-		name: 'ilsinitcall',
-		value: 'new koha()',
-		type: 'koha',
-		option: null,
+	var koha = new DB.RemoteILS({
+		name: 'Koha-cfc',
+		url: 'http://eowyn.metavore.com/kohaapi/',
+		user: 'marian',
+		password: 'marian',
+		pluginlocation: 'plugins/koha.js',
+		plugininit: 'new koha()'
 	}).save();
 }
 
