@@ -328,18 +328,20 @@ function createTargetGrid() {
 function createDatabaseOptions() {
 	var dbform = new Ext.form.Form();
 	dbform.addButton('Reset Database', function(btn) {
-		resetDatabase();
+		GearsORMShift.migrateTo(0);
+		GearsORMShift.migrateTo( GearsORMShift.latestVersion() );
 		setPazPar2Targets(paz);
 		updateSearchTargetFolders();
 		Ext.MessageBox.alert('Preferences', 'Database reset');
 	});
 	dbform.addButton('Add Test Targets', function(btn) {
-		setupTestTargets();
+		createTestTargets();
 		setPazPar2Targets(paz);
 		updateSearchTargetFolders();
 		Ext.MessageBox.alert('Preferences', 'Test targets added');
 	});
 	dbform.addButton('Remove Test Targets', function(btn) {
+		removeTestTargets();
 		setPazPar2Targets(paz);
 		removeTargetFolder(1);
 		removeTargetFolder(2);
