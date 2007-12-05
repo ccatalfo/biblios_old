@@ -1261,6 +1261,7 @@ function loadSaveFile(id) {
             var xml = rs.fieldByName('xml');
             var currRecord = Sarissa.getDomDocument();
             currRecord = (new DOMParser()).parseFromString(xml, 'text/xml');
+			// FIXME: change these xpath expressions to parameters based on xml record type
             var title = $('[@tag="245"]/subfield[@code="a"]', currRecord).text();
             var author = $('[@tag="245"]/subfield[@code="c"]', currRecord).text();
             var publisher = $('[@tag="260"]/subfield[@code="b"]', currRecord).text();
@@ -1276,7 +1277,6 @@ function loadSaveFile(id) {
         } catch(ex) {
             Ext.Msg.alert('Error', 'db error: ' + ex.message);
         }
-    rs.close();
     return data;
 }
 

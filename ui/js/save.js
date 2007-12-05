@@ -126,12 +126,14 @@ function doSaveRemote(loc, xmldoc) {
 
 function addRecordFromSearch(id, server, title, savefileid) {
     try {
+		var target = DB.Targets.select('name=?', [server]).getOne();
+		var savefile = DB.Savefiles.select('rowid=?', [savefileid]).getOne();
 		var record = new DB.Records({
 			status: 'new',
-			date_added: '',
-			date_modified: '',
-			server: server,
-			savefile: savefileid,
+			date_added: new Date().toString(),
+			date_modified: new Date().toString(),
+			server: target,
+			savefile: savefile,
 		}).save();
         if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + title);}
     } catch(ex) {
