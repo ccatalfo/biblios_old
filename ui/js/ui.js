@@ -1237,32 +1237,6 @@ function displaySearchResults(data) {
     searchsavegrid.getSelectionModel().selectFirstRow();
 }
 
-
-/*
-   Function: loadSearch
-
-   Loads a search with the passed in id into the search results grid.
-
-   Parameters:
-
-   id: id of the search (Searches table) to load.
-
-   Returns:
-
-   None.
-
-*/
-function loadSearch(id) {
-    var rs;
-    try {
-    rs = db.execute('select * from Searches where id = ?', [id]);   
-    }
-    catch(ex) {
-    Ext.Message.alert(ex.message);
-    }
-}
-
-
 /*
    Function: loadSaveFile
 
@@ -1802,20 +1776,7 @@ function doCreateNewRecord() {
       <getLastSrchId>
 */
 function getLastRecId() {
-    // get the last id from sqlite to set open javascript function id
-    var rs;
-    var lastId;
-    try {
-        rs = db.execute('select max(id) from Records');
-        lastId = rs.field(0);
-        //console.info('ProcsessSearchResults: last id inserted: ' + lastId);
-    } catch(ex) {
-        //console.error('db error: ' + ex.message);
-    }
-    if( lastId == null) {
-    //console.info('changing lastId from null to 0');
-    lastId = 0;
-    }
+	var lastId = DB.Records.count();
     return lastId;
 }
 

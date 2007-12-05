@@ -5,7 +5,6 @@ DB.Records = {};
 DB.Targets = {};
 DB.ILS = {};
 DB.Prefs = {};
-DB.Searches = {};
 DB.RemoteILS = {};
 var db = {};
 

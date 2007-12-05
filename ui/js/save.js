@@ -51,12 +51,15 @@ function doSaveLocal(savefileid) {
         }
         if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
         try {
-            rs = db.execute('update Records set xml=? where id=?', [xml, recid]);	
-            rs = db.execute('update Records set savefile=? where id=?', [savefileid, recid]);	
-            rs = db.execute('update Records set status=? where id=?', ['edited', recid]);	
-            rs = db.execute('update Records set date_modified=datetime("now", "localtime") where id=?', [recid]);	
-            if(debug) { console.info("saved record with id: " + recid + " to savefile: " + savefilename); }
-                rs.close();
+			var record = DB.Records.select('rowid = ?', [recid]);
+			record.xml = xml;
+			record.savefile = savefileid;
+			record.status = 'edited';
+			record.date_modified = new Date();
+			record.save();
+            if(debug) { 
+				console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
+			}
 			progress.updateProgress(1, 'Saving record to local database');
             } catch(ex) {
                 Ext.MessageBox.alert('Database error',ex.message);
@@ -123,10 +126,16 @@ function doSaveRemote(loc, xmldoc) {
 
 function addRecordFromSearch(id, server, title, savefileid) {
     try {
-        db.execute('insert into Records (id, status, date_added, date_modified, server, savefile) values (null, ?, date("now", "localtime"), date("now", "localtime"), ?, ?)', ['new', server, savefileid]);
+		var record = new DB.Records({
+			status: 'new',
+			date_added: '',
+			date_modified: '',
+			server: server,
+			savefile: savefileid,
+		}).save();
         if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + title);}
     } catch(ex) {
-        Ext.Msg.alert('Error', 'db error: ' + ex.message);
+        Ext.MessageBox.alert('Database Error', ex.message);
     }
     paz.recordCallback = function(data) { addRecord( xslTransform.serialize(data.xmlDoc) ) }
     var xml = getPazRecord(id);
@@ -141,10 +150,12 @@ function addRecord(xml) {
     if(debug){ console.info('addRecord called with data: ' + xml.substr(0, 10)) }
     var id = getLastRecId();
 	try {
-		db.execute('update Records set xml = ? where id = ?', [xml, id]);
+		var record = DB.Records.select('rowid = ?', [id]).getOne();
+		record.xml = xml;
+		record.save();
 		if(debug == 1 ) {console.info('addRecord: updating xml of record with id: ' + id);}
 	} catch(ex) {
-		Ext.Msg.alert('Error', 'db error: ' + ex.message);
+		Ext.MessageBox.alert('Error', 'db error: ' + ex.message);
 	}
 }
 
