@@ -152,7 +152,7 @@ function addRecord(xml) {
     if(debug){ console.info('addRecord called with data: ' + xml.substr(0, 10)) }
     var id = getLastRecId();
 	try {
-		var record = DB.Records.select('rowid = ?', [id]).getOne();
+		var record = DB.Records.select(id).getOne();
 		record.xml = xml;
 		record.save();
 		if(debug == 1 ) {console.info('addRecord: updating xml of record with id: ' + id);}

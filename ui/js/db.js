@@ -35,54 +35,26 @@ GearsORMShift.rules = [
 	},
 	{
 		version: 1,
-		comment: 'Create Records table',
+		comment: 'Create tables',
 		up: function() {
+			DB.Targets.createTable();
+			DB.Savefiles.createTable();
 			DB.Records.createTable();
+			DB.Prefs.createTable();
+			DB.RemoteILS.createTable();
 			return true;
 		},
 		down: function() {
+			DB.Targets.dropTable();
+			DB.Savefiles.dropTable();
 			DB.Records.dropTable();
+			DB.Prefs.dropTable();
+			DB.RemoteILS.dropTable();
 			return true;
 		}
 	},
 	{
 		version: 2,
-		comment: 'Create Targets table',
-		up: function() {
-			DB.Targets.createTable();
-			return true;
-		},
-		down: function() {
-			DB.Targets.dropTable();
-			return true;
-		}
-	},
-	{
-		version: 3,
-		comment: 'Create Prefs table',
-		up: function() {
-			DB.Prefs.createTable();
-			return true;
-		},
-		down: function() {
-			DB.Prefs.dropTable();
-			return true;
-		}
-	},
-	{
-		version: 4,
-		comment: 'Create Savefiles table',
-		up: function() {
-			DB.Savefiles.createTable();
-			return true;
-		},
-		down: function() {
-			DB.Savefiles.dropTable();
-			return true;
-		}
-	},
-	{
-		version: 5,
 		comment: 'Create default Savefiles',
 		up: function() {
 			var Trash = new DB.Savefiles({
@@ -139,18 +111,6 @@ GearsORMShift.rules = [
 			return true;
 		}
 	},
-	{
-		version: 6,
-		comment: 'Create RemoteILS table',
-		up: function() {
-			DB.RemoteILS.createTable();
-			return true;
-		},
-		down: function() {
-			DB.RemoteILS.dropTable();
-			return true;
-		}
-	}
 ];
 
 function createTestTargets() {
@@ -238,26 +198,11 @@ function init_gears() {
 				DB.Info_Schema.createTable();
 				is = new DB.Info_Schema({version:0}).save();
 			}
-			DB.Records = new GearsORM.Model({
-				name: 'Records',
-				fields: 
-				{
-					xml: new GearsORM.Fields.String(),
-					stat: new GearsORM.Fields.String({maxLength: 256}),
-					date_added: new GearsORM.Fields.TimeStamp(),
-					date_modified: new GearsORM.Fields.TimeStamp(),
-					server: new GearsORM.Fields.ManyToOne({related: "Target"}),
-					savefile: new GearsORM.Fields.ManyToOne({related: "Savefile"}),
-					xmlformat: new GearsORM.Fields.String({defaultValue: 'null'}),
-					marcflavour: new GearsORM.Fields.String({defaultValue: 'null'}),
-					template: new GearsORM.Fields.String({defaultValue: 'null'}),
-					marcformat: new GearsORM.Fields.String({defaultValue: 'null'})
-				}
-			});
 			DB.Targets = new GearsORM.Model({
 				name: 'Targets',
 				fields: 
 				{
+					records: new GearsORM.Fields.ManyToOne({related: 'Records'}),
 					hostname: new GearsORM.Fields.String(),
 					port: new GearsORM.Fields.Integer(),
 					dbname: new GearsORM.Fields.String(),
@@ -287,6 +232,7 @@ function init_gears() {
 				name: 'Savefiles',
 				fields:
 				{
+					records: new GearsORM.Fields.ManyToOne({related: 'Records'}),
 					name: new GearsORM.Fields.String(),
 					description: new GearsORM.Fields.String(),
 					parentid: new GearsORM.Fields.Integer({allowNull:true}),
@@ -299,6 +245,22 @@ function init_gears() {
 					icon: new GearsORM.Fields.String(),
 					date_added: new GearsORM.Fields.TimeStamp(),
 					date_modified: new GearsORM.Fields.TimeStamp()
+				}
+			});
+			DB.Records = new GearsORM.Model({
+				name: 'Records',
+				fields: 
+				{
+					xml: new GearsORM.Fields.String(),
+					stat: new GearsORM.Fields.String({maxLength: 256}),
+					date_added: new GearsORM.Fields.TimeStamp(),
+					date_modified: new GearsORM.Fields.TimeStamp(),
+					server: new GearsORM.Fields.OneToMany({related: "Targets"}),
+					savefile: new GearsORM.Fields.OneToMany({related: "Savefiles"}),
+					xmlformat: new GearsORM.Fields.String({defaultValue: 'null'}),
+					marcflavour: new GearsORM.Fields.String({defaultValue: 'null'}),
+					template: new GearsORM.Fields.String({defaultValue: 'null'}),
+					marcformat: new GearsORM.Fields.String({defaultValue: 'null'})
 				}
 			});
 			DB.RemoteILS = new GearsORM.Model({
