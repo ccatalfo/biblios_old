@@ -307,6 +307,7 @@ function init_gears() {
 				fields: 
 				{
 					name: new GearsORM.Fields.String(),
+					location: new GearsORM.Fields.String(),
 					url: new GearsORM.Fields.String(),
 					user: new GearsORM.Fields.String(),
 					password: new GearsORM.Fields.String(),
@@ -314,8 +315,7 @@ function init_gears() {
 					plugininit: new GearsORM.Fields.String()
 				}
 			});
-			GearsORMShift.init( DB.Info_Schema, false );
-
+			GearsORMShift.init( DB.Info_Schema, true );
 }
 
 
@@ -325,6 +325,7 @@ function init_gears() {
 function setupKohaPlugin() {
 	var koha = new DB.RemoteILS({
 		name: 'Koha-cfc',
+		location: 'Koha-cfc',
 		url: 'http://eowyn.metavore.com/kohaapi/',
 		user: 'marian',
 		password: 'marian',

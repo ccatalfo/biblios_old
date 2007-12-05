@@ -17,48 +17,19 @@ function getRemoteBibProfiles() {
 }
 
 function setILSTargets() {
-	var rs;
-	// get all of the pluginlocations from Prefs
-	try {
-		rs = db.execute('select value from Prefs where name="ilspluginlocation"');
-		while(rs.isValidRow() ){
-			// retrieve and execute plugin script
-			//$.getScript( rs.fieldByName('value') );
-			rs.next();
-		}
-	}
-	catch(ex) {
-		alert(ex.message);
-	}
 	// get remote ILS location names so we know when to ask remote ILS for record
-	try {
-		rs = db.execute('select type, value from Prefs where name="remoteILS"');
-		while( rs.isValidRow() ) {
-			var ils = rs.fieldByName('value');
-			var type = rs.fieldByName('type');
-			// add to hash of remoteILS locations
-			Prefs.remoteILS[ ils ] = {};
+	DB.RemoteILS.select().each( function(ils) {
+			Prefs.remoteILS[ ils.name ] = {};
 			// get params for this ils
-
-			var rs2 = db.execute('select value from Prefs where name="remoteILS" and type=?', [type]);
-			Prefs.remoteILS[ils].location = rs2.fieldByName('value');
-			var rs2 = db.execute('select value from Prefs where name="remoteUser" and type=?', [type]);
-			Prefs.remoteILS[ils].user = rs2.fieldByName('value');
-			var rs2 = db.execute('select value from Prefs where name="remotePassword" and type=?',[type]);
-			Prefs.remoteILS[ils].pw = rs2.fieldByName('value');
-			var rs2 = db.execute('select value from Prefs where name="remoteILSUrl" and type=?',[type]);
-			Prefs.remoteILS[ils].url = rs2.fieldByName('value');
-			var rs2 = db.execute('select value from Prefs where name="ilsinitcall" and type=?',[type]);
-			var initcall = rs2.fieldByName('value');	
+			Prefs.remoteILS[ils.name].location = ils.location;
+			Prefs.remoteILS[ils.name].user = ils.user;
+			Prefs.remoteILS[ils.name].pw = ils.password;
+			Prefs.remoteILS[ils.name].url = ils.url;
+			var initcall = rs2.plugininit;
 			// initialize and authorize for this ils instance
-			Prefs.remoteILS[ils].instance = eval( initcall );
-			Prefs.remoteILS[ils].instance.init(Prefs.remoteILS[ils].url, Prefs.remoteILS[ils].user, Prefs.remoteILS[ils].pw);
-			rs.next();
-		}
-	}
-	catch(ex) {
-		alert(ex.message);
-	}
+			Prefs.remoteILS[ils.name].instance = eval( initcall );
+			Prefs.remoteILS[ils.name].instance.init(Prefs.remoteILS[ils].url, Prefs.remoteILS[ils].user, Prefs.remoteILS[ils].pw);
+	});
 }
 
 
