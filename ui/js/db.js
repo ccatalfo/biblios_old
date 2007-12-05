@@ -298,16 +298,41 @@ function init_gears() {
 
 // test prefs for koha integration
 function setupKohaPlugin() {
-	try {
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (1, 'remoteILS', 'Koha-cfc', 'koha', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (2, 'remoteILSUrl', 'http://eowyn.metavore.com/kohaapi/', 'koha', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (3, 'remoteUser', 'marian', 'koha', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (4, 'remotePassword', 'marian', 'koha', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (5, 'ilspluginlocation', 'plugins/koha.js', 'koha', '')");
-		rs = db.execute("insert or ignore into Prefs (id, name, value, type, option) values (6, 'ilsinitcall', 'new koha();', 'koha', '')");
-	}
-	catch(ex) {
-		Ext.MessageBox.alert('db error on setting test prefs', ex.message);
-	}
+	var pref = new DB.Prefs({
+		name: 'remoteILS',
+		value: 'Koha-cfc',
+		type: 'koha',
+		option: null,
+	}).save();
+	var pref = new DB.Prefs({
+		name: 'remoteILSUrl',
+		value: 'Khttp://eowyn.metavore.com/kohaapi/',
+		type: 'koha',
+		option: null,
+	}).save();
+	var pref = new DB.Prefs({
+		name: 'remoteUser',
+		value: 'marian',
+		type: 'koha',
+		option: null,
+	}).save();
+	var pref = new DB.Prefs({
+		name: 'remotePassword',
+		value: 'marian',
+		type: 'koha',
+		option: null,
+	}).save();
+	var pref = new DB.Prefs({
+		name: 'ilspluginlocation',
+		value: 'plugins/koha/js',
+		type: 'koha',
+		option: null,
+	}).save();
+	var pref = new DB.Prefs({
+		name: 'ilsinitcall',
+		value: 'new koha()',
+		type: 'koha',
+		option: null,
+	}).save();
 }
 
