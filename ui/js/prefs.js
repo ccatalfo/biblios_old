@@ -46,34 +46,19 @@ function setEnableTargets() {
     if( targetnodes[i].attributes.checked == true ) {
         enabled = 1;
     }
-    var rs;
-    try {
-       if(debug) { console.info('setting enabled to ' + enabled + ' for target ' + id); }
-       rs = db.execute('update Targets set enabled = ? where id = ?', [enabled, id]); 
-       rs.close();
-    }
-    catch(ex) {
-      Ext.MessageBox.alert('db error', ex.message);
-    }
+	t = DB.Targets.select('rowid=?', [id]).getOne();
+	t.enabled = enabled;
+	t.save();
   }
 }
 
 function getSaveFileNames() {
 	var savefilenames = new Array();
-	try {
-		var rs = db.execute('select name, id from Savefiles');
-		while( rs.isValidRow() ) {
-			var id = rs.fieldByName('id');
-			var name = rs.fieldByName('name');
-			var o = {id: id, name: name};
-			UI.save.savefile[ id ] = name;
-			savefilenames.push( o );
-			rs.next();
-		}
-	}
-	catch(ex) {
-		Ext.MessageBox.alert('db error', ex);
-	}
+	DB.Savefiles.select().each( function(savefile) {
+		var o = {id: savefile.rowid, name: savefile.name};
+		savefilenames.push( o );
+		UI.save.savefile[ savefile.rowid ] = savefile.name;
+	});
 	return savefilenames;
 }
 
