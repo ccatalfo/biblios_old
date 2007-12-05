@@ -510,66 +510,48 @@ function createSaveFileFolders(parentid) {
 		});
 	}
     // get all savefiles at the root level, then for each append its children
-    var rs, current_root;
-    try {
+    var current_root;
+	var savefiles = new Array();
     if( parentid == 'null' ) {
-        rs = db.execute('select id, name, description, allowDelete, allowAdd, allowRename, allowDrag, allowDrop, ddGroup, icon from Savefiles where parentid is null');
+		savefiles = DB.Savefiles.select('parentid is null');
         current_root = saveFilesRoot;
     }
     else {
-        rs = db.execute('select id, name, description, allowDelete, allowAdd, allowRename, allowDrag, allowDrop, ddGroup, icon from Savefiles where parentid = ?',[parentid]);
+		savefiles = DB.Savefiles.select('parentid = ?', [parentid]);
         current_root = getNodeBySaveFileId(parentid);
     }
-    while( rs.isValidRow() ) {
-        var id = rs.fieldByName('id');  
-        var name = rs.fieldByName('name');  
-        var desc = rs.fieldByName('description');
-        var allowDelete = rs.fieldByName('allowDelete');
-        var allowAdd = rs.fieldByName('allowAdd');
-        var allowRename = rs.fieldByName('allowRename');
-        var allowDrag = rs.fieldByName('allowDrag');
-        var allowDrop = rs.fieldByName('allowDrop');
-        var ddGroup = rs.fieldByName('ddGroup');
-        var icon = rs.fieldByName('icon');
+	savefiles.each( function(savefile) {
         // create a treenode for this save file
         var newnode = new Ext.tree.TreeNode({
-            id: name,
-            text: name, 
-            savefileid: id, 
-            parentid: parentid,
-            qtip: desc, 
-            icon: icon,
+            id: savefile.name,
+            text: savefile.name, 
+            savefileid: savefile.rowid, 
+            parentid: savefile.parentid,
+            qtip: savefile.description, 
+            icon: savefile.icon,
             leaf: false, 
-            allowDelete: allowDelete, 
-            allowAdd: allowAdd,
-            allowDrag: allowDrag, 
-            allowDrop: allowDrop, 
-            ddGroup: ddGroup
+            allowDelete: savefile.allowDelete, 
+            allowAdd: savefile.allowAdd,
+            allowDrag: savefile.allowDrag, 
+            allowDrop: savefile.allowDrop, 
+            ddGroup: savefile.ddGroup
         }); 
         current_root.appendChild(newnode);
         newnode.on('click', function(n) {
-			   showStatusMsg('Displaying ' + n.attributes.id);
-				UI.currSaveFile = n.attributes.id;
-				UI.currSaveFileName = n.text;
+			showStatusMsg('Displaying ' + n.attributes.id);
+			UI.currSaveFile = n.attributes.id;
+			UI.currSaveFileName = n.text;
             displaySaveView();
             folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
             displaySaveFile(n.attributes.savefileid, n.text); 
 				clearStatusMsg();
         });
-		//FIXME: save records in this save file folder to recordCache
-		//if(debug) { console.info('loading records for save file folder with id ' + rs.fieldByName('id') + ' into recordCache'); }
-		//recordCache[id] = loadSaveFile(rs.fieldByName('id'));
         // setup dropnode for Trash
         if( name == 'Trash' ) {
 
         }
-        createSaveFileFolders(id);
-        rs.next();
-    } 
-    }
-    catch(ex) {
-		 Ext.Msg.alert("DB error", ex.message);
-    }
+        createSaveFileFolders(savefile.id);
+    }); 
 	return saveFilesRoot;
 }
 
