@@ -89,7 +89,7 @@ GearsORMShift.rules = [
 			var Trash = new DB.Savefiles({
 				name: 'Trash',
 				description: 'Record to delete',
-				parent: null,
+				parentid: null,
 				children: null,
 				allowDelete: 0,
 				allowAdd: 0,
@@ -104,7 +104,7 @@ GearsORMShift.rules = [
 			var Completed = new DB.Savefiles({
 				name: 'Completed',
 				description: 'Completed records',
-				parent: null,
+				parentid: null,
 				children: null,
 				allowDelete: 0,
 				allowAdd: 1,
@@ -119,7 +119,7 @@ GearsORMShift.rules = [
 			var Drafts = new DB.Savefiles({
 				name: 'Drafts',
 				description: 'In-progress records',
-				parent: null,
+				parentid: null,
 				children: null,
 				allowDelete: 0,
 				allowAdd: 1,
