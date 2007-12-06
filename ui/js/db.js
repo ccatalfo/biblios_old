@@ -251,6 +251,12 @@ function init_gears() {
 				name: 'Records',
 				fields: 
 				{
+					title: new GearsORM.Fields.String(),
+					author: new GearsORM.Fields.String(),
+					date: new GearsORM.Fields.String(),
+					location: new GearsORM.Fields.String(),
+					publisher: new GearsORM.Fields.String(),
+					medium: new GearsORM.Fields.String(),
 					xml: new GearsORM.Fields.String(),
 					status: new GearsORM.Fields.String({maxLength: 256}),
 					date_added: new GearsORM.Fields.TimeStamp(),

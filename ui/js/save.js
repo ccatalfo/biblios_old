@@ -42,7 +42,7 @@ function doSaveLocal(savefileid) {
         // if we don't have a record id, add this record to the db first
         if( recid == '' ) {
             if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
-            var sel = searchgrid.getSelections()[0];
+            var data = searchgrid.getSelections()[0].data;
 			var id = sel.id;
             var server = sel.data.location;
             var title = sel.data.title;
@@ -51,7 +51,7 @@ function doSaveLocal(savefileid) {
         }
         if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
         try {
-			var record = DB.Records.select('rowid = ?', [recid]);
+			var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
 			record.xml = xml;
 			record.savefile = savefileid;
 			record.status = 'edited';
@@ -78,10 +78,11 @@ function doSaveLocal(savefileid) {
 		for( var i = 0; i < sel.length; i++) {
 			var id = sel[i].data.Id;
 			try {
-				rs = db.execute('update Records set status=? where id=?', ['edited', id]);	
-				rs = db.execute('update Records set date_modified=datetime("now", "localtime") where id=?', [id]);	
-				rs = db.execute('update Records set savefile=? where id=?', [savefileid, id]);	
-				rs.close();
+				var record = DB.Records.select('Records.rowid=?',[id]).getOne();
+				record.status = 'edited';
+				record.date_modified = new Date().toString();
+				record.savefile = savefileid;
+				record.save();
 				if(debug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
 			}
 			catch(ex) {
@@ -95,9 +96,8 @@ function doSaveLocal(savefileid) {
         var sel = searchgrid.getSelectionModel().getSelections();
 		for( var i = 0; i < sel.length; i++) {
 			var id = sel[i].id;
-            var server = sel[i].data.location;
-            var title = sel[i].data.title;
-            addRecordFromSearch(id, server, title, savefileid);
+			var data = sel[i].data;
+            addRecordFromSearch(id, data, savefileid);
 		}
     }
     showStatusMsg("Record(s) saved to "+savefilename);
@@ -124,41 +124,32 @@ function doSaveRemote(loc, xmldoc) {
 }
 
 
-function addRecordFromSearch(id, server, title, savefileid) {
+function addRecordFromSearch(id, data, savefileid) {
+	var xml = getPazRecord(id);
     try {
-		var target = DB.Targets.select('name=?', [server]).getOne();
-		var savefile = DB.Savefiles.select('rowid=?', [savefileid]).getOne();
+		var target = DB.Targets.select('name=?', [data.location]).getOne();
+		var savefile = DB.Savefiles.select('Savefiles.rowid=?', [savefileid]).getOne();
 		var record = new DB.Records({
+			title: data.title,
+			author: data.author,
+			location: data.location,
+			publisher: data.publisher,
+			medium: data.medium,
 			status: 'new',
+			xml: xml,
 			date_added: new Date().toString(),
 			date_modified: new Date().toString(),
-			server: target,
+			server: target.rowid,
 			savefile: savefile,
+			xmlformat: 'marcxml',
+			marcflavour: 'marc21',
+			template: null,
+			marcformat: null
 		}).save();
         if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + title);}
     } catch(ex) {
         Ext.MessageBox.alert('Database Error', ex.message);
     }
-    paz.recordCallback = function(data) { addRecord( xslTransform.serialize(data.xmlDoc) ) }
-    var xml = getPazRecord(id);
-    if(xml) {
-      addRecord(xml);
-    }
-    var id = getLastRecId();
-    return id;
-}
-
-function addRecord(xml) {
-    if(debug){ console.info('addRecord called with data: ' + xml.substr(0, 10)) }
-    var id = getLastRecId();
-	try {
-		var record = DB.Records.select(id).getOne();
-		record.xml = xml;
-		record.save();
-		if(debug == 1 ) {console.info('addRecord: updating xml of record with id: ' + id);}
-	} catch(ex) {
-		Ext.MessageBox.alert('Error', 'db error: ' + ex.message);
-	}
 }
 
 function getSaveFileNameFromId(savefileid) {

@@ -980,6 +980,8 @@ function createSearchPazParGrid(url) {
 		{name: 'title', mapping: 'md-title'},
 		{name: 'title-remainder', mapping: 'md-title-remainder'},
 		{name: 'author', mapping:'md-author'},
+		{name: 'title-responsibility', mapping:'md-title-responsibility'},
+		{name: 'publication', mapping:'md-publication-name'},
 		{name: 'date', mapping: 'md-date'},
 		{name: 'medium', mapping:'md-medium'},
 		{name: 'location', mapping:'location @name'}
@@ -998,7 +1000,8 @@ function createSearchPazParGrid(url) {
     cm = new Ext.grid.ColumnModel([
 		{header: "Medium", width: 50, dataIndex: 'medium'},
 		{header: "Title", width: 180, dataIndex: 'title'},
-	    {header: "Author", width: 120, dataIndex: 'author'},
+	    {header: "Author", width: 120, dataIndex: 'title-responsibility'},
+	    {header: "Publisher", width: 120, dataIndex: 'publication'},
 		{header: "Date", width: 50, dataIndex: 'date'},
 		{header: "Location", width: 100, dataIndex: 'location'}
 	]);
@@ -1252,27 +1255,20 @@ function displaySearchResults(data) {
 
 */
 function loadSaveFile(id) {
-    var data = new Array();
-	var i = 0;
-	var savefile = DB.Savefiles.select('rowid=?',[id]).getOne();
-	if( savefile.records.select().toArray().length > 0 ){
-		savefile.records.select().each( function(record) {
-			var id = record.rowid;
-			var xml = record.xml;
-			var currRecord = Sarissa.getDomDocument();
-			currRecord = (new DOMParser()).parseFromString(xml, 'text/xml');
-			// FIXME: change these xpath expressions to parameters based on xml record type
-			var title = $('[@tag="245"]/subfield[@code="a"]', currRecord).text();
-			var author = $('[@tag="245"]/subfield[@code="c"]', currRecord).text();
-			var publisher = $('[@tag="260"]/subfield[@code="b"]', currRecord).text();
-			var dateofpub = $('[@tag="260"]/subfield[@code="c"]', currRecord).text();
-			var recstatus = record.status;
-			var date_added = record.date_added;
-			var date_modified = record.date_modified;
-			var recArray = new Array(id, title, author, publisher, dateofpub, recstatus, date_added, date_modified);
-			data[i] = recArray;
-			i++;
-		});
+	var data = new Array();
+	var records = DB.Records.select('Savefiles_id=?',[id]).toArray();
+	for( var i = 0; i < records.length; i++) {
+		var id = records[i].rowid;
+		var xml = records[i].xml;
+		var title = records[i].title || '';
+		var author = records[i].author || '';
+		var publisher = records[i].publication || '';
+		var dateofpub = records[i].date || '';
+		var recstatus = records[i].status || '';
+		var date_added = records[i].date_added || '';
+		var date_modified = records[i].date_modified || '';
+		var recArray = new Array(id, title, author, publisher, dateofpub, recstatus, date_added, date_modified);
+		data[i] = recArray;
 	}
     return data;
 }
