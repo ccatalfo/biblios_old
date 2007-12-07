@@ -244,6 +244,7 @@ function createTargetGrid() {
 		{
 			header: 'Enabled', 
 			dataIndex: 'enabled', 
+			renderer: formatBoolean,
 			editor: new Ext.grid.GridEditor(new Ext.form.Checkbox())
 		}
 	]);
@@ -262,10 +263,10 @@ function createTargetGrid() {
 		var field = e.field;
 		var value = e.value;
 		if( typeof(value) == 'boolean' ) {
-			if( value == 'true' ) {
+			if( value == true ) {
 				value = 1;
 			}
-			else if( value == 'false' ) {
+			else if( value == false ) {
 				value = 0;
 			}
 		}
