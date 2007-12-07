@@ -143,22 +143,43 @@ function createOptionsTab() {
 }
 
 function createTargetGrid() {
+	// retrieve Target data
 	var data = new Array();
+	var rs;
+	try {
+		rs = db.execute('select * from Targets');
+		while( rs.isValidRow() ) {
+			data.push( [rs.fieldByName('name'), rs.fieldByName('hostname'), rs.fieldByName('port'), rs.fieldByName('dbname'), rs.fieldByName('description'), rs.fieldByName('userid'), rs.fieldByName('userid'), rs.fieldByName('password'), rs.fieldByName('enabled')] );
+			rs.next();
+		}
+		rs.close();
+	}
+	catch(ex) {
+		Ext.MessageBox.alert('Error', ex.message);
+	}
+
+	var Target = Ext.data.Record.create([
+		{name: 'name', type: 'string'},
+		{name: 'hostname', type: 'string'},
+		{name: 'port', type: 'string'},
+		{name: 'dbname', type: 'string'},
+		{name: 'description', type: 'string'},
+		{name: 'userid', type: 'string'},
+		{name: 'password', type: 'string',},
+		{name: 'enabled', type: 'boolean'}
+	]);
 
 	var ds = new Ext.data.Store({
 		proxy: new Ext.data.PagingMemoryProxy(data),
-		reader: new Ext.data.ArrayReader({}, [
-			{name: 'name'},
-			{name: 'hostname'},
-			{name: 'port'},
-			{name: 'dbname'},
-			{name: 'description'},
-			{name: 'userid'},
-			{name: 'password'},
-			{name: 'enabled'}
-		])
+		reader: new Ext.data.ArrayReader({
+			record: 'name'
+		}, Target),
+		remoteSort: false,
+		sortInfo: {
+			field: 'name',
+			direction: 'ASC'
+		}
 	});
-	ds.load();
 
 	var cm = new Ext.grid.ColumnModel([
 		{header: 'Name', dataIndex: 'name', sortable: true},
@@ -170,17 +191,18 @@ function createTargetGrid() {
 		{header: 'Password', dataIndex: 'password', sortable: true},
 		{header: 'Enabled', dataIndex: 'enabled', sortable: true}
 	]);
+	cm.defaultSortable = true;
 
 	var targetgrid = new Ext.grid.Grid('targetgrid', {
 		id: 'targetgrid',
 		ds: ds,
 		cm: cm,
-		autoExpandColumn: 1,
 		autoHeight: true,
-		autoWidth: true
+		autoWidth: true,
 	});
 	Ext.ComponentMgr.register(targetgrid);
 	targetgrid.render();
+	ds.load();
 }
 
 function createDatabaseOptions() {
