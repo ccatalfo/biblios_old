@@ -1439,6 +1439,8 @@ function displaySaveView() {
 
 */
 function openRecord(xml) {
+	$("#vareditor").empty();
+	$("ffeditor").empty();
     $("#ffeditor").getTransform( ffxsl, xml);
     $("#vareditor").getTransform( varfxsl, xml);
 	 create_static_editor($('#ffeditor'), $('#vareditor') );

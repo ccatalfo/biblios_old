@@ -146,6 +146,8 @@ function doSaveLocal(savefileid) {
 
 function doSaveRemote(loc, xmldoc) {
 	if(debug) { console.info('Saving open record to ' + loc); }
+	// set UI.editor.location to point to this record so we get special entries etc.
+	UI.editor.location = Prefs.remoteILS[loc].location;
 	Prefs.remoteILS[loc].instance.saveHandler = openRecord;
 	Prefs.remoteILS[loc].instance.save(xmldoc);
 	UI.editor.savedRemote[loc] = true;
