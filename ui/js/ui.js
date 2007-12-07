@@ -136,6 +136,10 @@ function createOptionsTab() {
 	optionsLayout.add('center', new Ext.ContentPanel('keyboard_options', 'Keyboard Shortcuts'));
 	optionsLayout.getRegion('center').showPanel('database_options');
 	// create database options 
+	createDatabaseOptions();
+}
+
+function createDatabaseOptions() {
 	var dbform = new Ext.form.Form();
 	dbform.addButton('Reset Database', function(btn) {
 		resetDatabase();
