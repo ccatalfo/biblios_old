@@ -26,6 +26,8 @@ UI.currSaveFileName = '';
 UI.lastWindowOpen = '';
 UI.lastSearchPreviewed = '';
 UI.lastSavePreview = '';
+// layouts
+UI.optionsLayout = {};
 
 var newButton = new Ext.Toolbar.Button ({
         id: 'newrecordbutton',
@@ -120,6 +122,9 @@ function createHomeTab() {
 
 function createOptionsTab() {
 	optionstab = tabs.addTab('optionstab', 'Options');
+	optionstab.on('activate', function(tabpanel, item) {
+		createTargetGrid();
+	});
 	var optionsLayout = new Ext.BorderLayout('optionstab', {
 		id: 'optionsLayout',
 		center: {
@@ -128,18 +133,19 @@ function createOptionsTab() {
 			tabPosition: 'top'
 		}
 	});
-	Ext.ComponentMgr.register(optionsLayout);
+	UI.optionsLayout = optionsLayout;
 	optionsLayout.add('center', new Ext.ContentPanel('database_options', 'Database'));
 	optionsLayout.add('center', new Ext.ContentPanel('macro_options', 'Macros'));
 	optionsLayout.add('center', new Ext.ContentPanel('plugin_options', 'Plugins'));
 	optionsLayout.add('center', new Ext.ContentPanel('target_options', 'Targets'));
 	optionsLayout.add('center', new Ext.ContentPanel('keyboard_options', 'Keyboard Shortcuts'));
 	optionsLayout.getRegion('center').showPanel('database_options');
+	optionsLayout.getRegion('center').getPanel('target_options').on('activate',
+		function(cp) {
+			createTargetGrid();
+	});
 	// create database options 
 	createDatabaseOptions();
-
-	// target options
-	createTargetGrid();
 }
 
 function createTargetGrid() {
@@ -149,7 +155,7 @@ function createTargetGrid() {
 	try {
 		rs = db.execute('select * from Targets');
 		while( rs.isValidRow() ) {
-			data.push( [rs.fieldByName('name'), rs.fieldByName('hostname'), rs.fieldByName('port'), rs.fieldByName('dbname'), rs.fieldByName('description'), rs.fieldByName('userid'), rs.fieldByName('userid'), rs.fieldByName('password'), rs.fieldByName('enabled')] );
+			data.push( [rs.fieldByName('id'), rs.fieldByName('name'), rs.fieldByName('hostname'), rs.fieldByName('port'), rs.fieldByName('dbname'), rs.fieldByName('description'), rs.fieldByName('userid'), rs.fieldByName('userid'), rs.fieldByName('password'), rs.fieldByName('enabled')] );
 			rs.next();
 		}
 		rs.close();
@@ -159,6 +165,7 @@ function createTargetGrid() {
 	}
 
 	var Target = Ext.data.Record.create([
+		{name: 'id'},
 		{name: 'name', type: 'string'},
 		{name: 'hostname', type: 'string'},
 		{name: 'port', type: 'string'},
@@ -166,7 +173,7 @@ function createTargetGrid() {
 		{name: 'description', type: 'string'},
 		{name: 'userid', type: 'string'},
 		{name: 'password', type: 'string',},
-		{name: 'enabled', type: 'boolean'}
+		{name: 'enabled', type: 'bool'}
 	]);
 
 	var ds = new Ext.data.Store({
@@ -181,24 +188,83 @@ function createTargetGrid() {
 		}
 	});
 
+	function formatBoolean(value) {
+		return value ? 'Yes' : 'No';
+	}
+
 	var cm = new Ext.grid.ColumnModel([
-		{header: 'Name', dataIndex: 'name', sortable: true},
-		{header: 'Host', dataIndex: 'hostname', sortable: true},
-		{header: 'Port', dataIndex: 'port', sortable: true},
-		{header: 'Database', dataIndex: 'dbname', sortable: true},
-		{header: 'Description', dataIndex: 'description', sortable: true},
-		{header: 'User', dataIndex: 'userid', sortable: true},
-		{header: 'Password', dataIndex: 'password', sortable: true},
-		{header: 'Enabled', dataIndex: 'enabled', sortable: true}
+		{
+			header: 'Name', 
+			dataIndex: 'name', 
+			sortable: true,
+			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+		},
+		{	
+			header: 'Host', 
+			dataIndex: 'hostname', 
+			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+		},
+		{
+			header: 'Port', 
+			dataIndex: 'port', 
+			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+		},
+		{
+			header: 'Database', 
+			dataIndex: 'dbname', 
+			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+		},
+		{
+			header: 'Description', 
+			dataIndex: 'description', 
+			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+		},
+		{
+			header: 'User', 
+			dataIndex: 'userid', 
+			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+		},
+		{
+			header: 'Password', 
+			dataIndex: 'password', 
+			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+		},
+		{
+			header: 'Enabled', 
+			dataIndex: 'enabled', 
+			editor: new Ext.grid.GridEditor(new Ext.form.Checkbox())
+		}
 	]);
 	cm.defaultSortable = true;
 
-	var targetgrid = new Ext.grid.Grid('targetgrid', {
+	var targetgrid = new Ext.grid.EditorGrid('targetgrid', {
 		id: 'targetgrid',
 		ds: ds,
 		cm: cm,
 		autoHeight: true,
 		autoWidth: true,
+		autoExpandColumn: 1
+	});
+	targetgrid.on('afteredit', function(e) {
+		var id = e.record.data.id;
+		var field = e.field;
+		var value = e.value;
+		if( typeof(value) == 'boolean' ) {
+			if( value == 'true' ) {
+				value = 1;
+			}
+			else if( value == 'false' ) {
+				value = 0;
+			}
+		}
+		var rs;
+		try {
+			rs = db.execute('update Targets set '+field+' = ? where id = ?', [value, id]);
+			rs.close();
+		}
+		catch(ex) {
+			Ext.MessageBox.alert('Error', ex.message);
+		}
 	});
 	Ext.ComponentMgr.register(targetgrid);
 	targetgrid.render();
