@@ -137,6 +137,50 @@ function createOptionsTab() {
 	optionsLayout.getRegion('center').showPanel('database_options');
 	// create database options 
 	createDatabaseOptions();
+
+	// target options
+	createTargetGrid();
+}
+
+function createTargetGrid() {
+	var data = new Array();
+
+	var ds = new Ext.data.Store({
+		proxy: new Ext.data.PagingMemoryProxy(data),
+		reader: new Ext.data.ArrayReader({}, [
+			{name: 'name'},
+			{name: 'hostname'},
+			{name: 'port'},
+			{name: 'dbname'},
+			{name: 'description'},
+			{name: 'userid'},
+			{name: 'password'},
+			{name: 'enabled'}
+		])
+	});
+	ds.load();
+
+	var cm = new Ext.grid.ColumnModel([
+		{header: 'Name', dataIndex: 'name', sortable: true},
+		{header: 'Host', dataIndex: 'hostname', sortable: true},
+		{header: 'Port', dataIndex: 'port', sortable: true},
+		{header: 'Database', dataIndex: 'dbname', sortable: true},
+		{header: 'Description', dataIndex: 'description', sortable: true},
+		{header: 'User', dataIndex: 'userid', sortable: true},
+		{header: 'Password', dataIndex: 'password', sortable: true},
+		{header: 'Enabled', dataIndex: 'enabled', sortable: true}
+	]);
+
+	var targetgrid = new Ext.grid.Grid('targetgrid', {
+		id: 'targetgrid',
+		ds: ds,
+		cm: cm,
+		autoExpandColumn: 1,
+		autoHeight: true,
+		autoWidth: true
+	});
+	Ext.ComponentMgr.register(targetgrid);
+	targetgrid.render();
 }
 
 function createDatabaseOptions() {
