@@ -319,6 +319,13 @@ function createTargetGrid() {
 			text: 'Remote Target',
 			handler: function() {
 				var record = Ext.ComponentMgr.get('targetgrid').getSelectionModel().selection.record;
+				try {
+					var rs = db.execute('delete from Targets where id = ?', [record.data.id]);
+					rs.close();
+				}
+				catch(ex) {
+					Ext.MessageBox.alert('Error', ex.message);
+				}
 			}
 		}
 	]);
