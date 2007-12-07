@@ -177,7 +177,7 @@ function createTargetGrid() {
 	]);
 
 	var ds = new Ext.data.Store({
-		proxy: new Ext.data.PagingMemoryProxy(data),
+		proxy: new Ext.data.GoogleGearsProxy(db, 'select id, name, hostname, port, dbname, description, userid, password, enabled from Targets'),
 		reader: new Ext.data.ArrayReader({
 			record: 'name'
 		}, Target),
