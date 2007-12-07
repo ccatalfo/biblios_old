@@ -187,6 +187,18 @@ function createTargetGrid() {
 			direction: 'ASC'
 		}
 	});
+	ds.on('update', function(store, record, operation) {
+		record.enabled = record.enabled ? 1 : 0;
+		if( operation == Ext.data.Record.COMMIT ) {
+			try {
+				var rs = db.execute('update Target set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where id = ?', [record.name, record.hostname, record.port, record.dbname, record.description, record.userid, record.password, record.enabled, record.id]);
+				rs.close()
+			}
+			catch(ex) {
+				Ext.MessageBox.alert('Error', ex.message);
+			}
+		}
+	});
 
 	function formatBoolean(value) {
 		return value ? 'Yes' : 'No';
@@ -269,6 +281,46 @@ function createTargetGrid() {
 	Ext.ComponentMgr.register(targetgrid);
 	targetgrid.render();
 	ds.load();
+
+	var gridHeader = targetgrid.getView().getHeaderPanel(true);
+	var tb = new Ext.Toolbar(gridHeader, [
+		{
+			text: 'Add Target',
+			handler: function() {
+				// insert new target into db so we get it's id
+				var rs;
+				try {
+					rs = db.execute('insert into Targets (id) values (null)');
+					rs.close();
+				}
+				catch(ex) {
+					Ext.MessageBox.alert('Error', ex.message);
+				}
+				var t = new Target({
+					id: db.lastInsertRowId,
+					name: '',
+					hostname: '',
+					port: '',
+					dbname: '',
+					description: '',
+					userid: '',
+					password: '',
+					enabled: 0
+				});
+				var targetgrid = Ext.ComponentMgr.get('targetgrid');
+				var ds = targetgrid.dataSource;
+				targetgrid.stopEditing();
+				ds.insert(0, t);
+				targetgrid.startEditing(0, 0);
+			}
+		},
+		{
+			text: 'Remote Target',
+			handler: function() {
+				var record = Ext.ComponentMgr.get('targetgrid').getSelectionModel().selection.record;
+			}
+		}
+	]);
 }
 
 function createDatabaseOptions() {
