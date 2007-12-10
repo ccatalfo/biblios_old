@@ -1174,10 +1174,10 @@ function createSaveFileGrid(data) {
         //  previewRecord( id , 'save-prev');
         //});
         savefilegrid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
-          var id = savefileds.data.items[rowIndex].data.Id;
-			 var xml = getLocalXml(id);
-			  previewRecord( xml );
-			 UI.lastSavePreview = xml;
+			var id = savefileds.data.items[rowIndex].data.Id;
+			var xml = getLocalXml(id);
+			previewRecord( xml );
+			UI.lastSavePreview = xml;
         });
 		savefilegrid.render();
 
@@ -1293,7 +1293,7 @@ function previewRecord(xml) {
 	// to prevent Extjs from sending to rowselect events in succession, thereby causing 
 	// to preview twice in a row
 	if( UI.lastSearchPreviewed == xml || UI.lastSavePreview == xml ) {
-		return;
+		//return;
 	}
 	if( Ext.get('searchgrid').isVisible() ) {
 		var panelid = 'search-preview-panel';
