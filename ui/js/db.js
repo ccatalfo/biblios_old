@@ -37,19 +37,19 @@ GearsORMShift.rules = [
 		version: 1,
 		comment: 'Create tables',
 		up: function() {
-			DB.Targets.createTable();
+			DB.SearchTargets.createTable();
 			DB.Savefiles.createTable();
 			DB.Records.createTable();
 			DB.Prefs.createTable();
-			DB.RemoteILS.createTable();
+			DB.SendTargets.createTable();
 			return true;
 		},
 		down: function() {
-			DB.Targets.dropTable();
+			DB.SearchTargets.dropTable();
 			DB.Savefiles.dropTable();
 			DB.Records.dropTable();
 			DB.Prefs.dropTable();
-			DB.RemoteILS.dropTable();
+			DB.SendTargets.dropTable();
 			return true;
 		}
 	},
@@ -114,7 +114,7 @@ GearsORMShift.rules = [
 ];
 
 function createTestTargets() {
-	var NelsonVille = new DB.Targets({
+	var NelsonVille = new DB.SearchTargets({
 		hostname: '66.213.78.76',
 		port: '9999',
 		dbname: 'NPLKoha',
@@ -129,7 +129,7 @@ function createTestTargets() {
 		position: 'primary',
 		type: 'zed'
 	}).save();
-	var Berwick = new DB.Targets({
+	var Berwick = new DB.SearchTargets({
 		hostname: 'zconn.lib.monash.edu.au',
 		port: '7090',
 		dbname: 'Voyager',
@@ -144,7 +144,7 @@ function createTestTargets() {
 		position: 'primary',
 		type: 'zed'
 	}).save();
-	var LOC = new DB.Targets({
+	var LOC = new DB.SearchTargets({
 		hostname: 'z3950.loc.gov',
 		port: '7090',
 		dbname: 'Voyager',
@@ -159,7 +159,7 @@ function createTestTargets() {
 		position: 'primary',
 		type: 'zed'
 	}).save();
-	var Koha_cfc = new DB.Targets({
+	var Koha_cfc = new DB.SearchTargets({
 		hostname: 'arwen.metavore.com',
 		port: '9820',
 		dbname: 'biblios',
@@ -177,10 +177,10 @@ function createTestTargets() {
 }
 
 function removeTestTargets() {
-	DB.Targets.remove('name="Nelsonville Public Library"');
-	DB.Targets.remove('name="Berwick Library"');
-	DB.Targets.remove('name="Library of Congress"');
-	DB.Targets.remove('name="CFC Koha"');
+	DB.SearchTargets.remove('name="Nelsonville Public Library"');
+	DB.SearchTargets.remove('name="Berwick Library"');
+	DB.SearchTargets.remove('name="Library of Congress"');
+	DB.SearchTargets.remove('name="CFC Koha"');
 }
 
 function init_gears() {
@@ -198,11 +198,10 @@ function init_gears() {
 				DB.Info_Schema.createTable();
 				is = new DB.Info_Schema({version:0}).save();
 			}
-			DB.Targets = new GearsORM.Model({
-				name: 'Targets',
+			DB.SearchTargets = new GearsORM.Model({
+				name: 'SearchTargets',
 				fields: 
 				{
-					records: new GearsORM.Fields.ManyToOne({related: 'Records'}),
 					hostname: new GearsORM.Fields.String(),
 					port: new GearsORM.Fields.Integer(),
 					dbname: new GearsORM.Fields.String(),
@@ -215,7 +214,8 @@ function init_gears() {
 					syntax: new GearsORM.Fields.String(),
 					icon: new GearsORM.Fields.String(),
 					position: new GearsORM.Fields.String(),
-					type: new GearsORM.Fields.String()
+					type: new GearsORM.Fields.String(),
+					pluginlocation: new GearsORM.Fields.String()
 				}
 			});
 			DB.Prefs = new GearsORM.Model({
@@ -232,7 +232,6 @@ function init_gears() {
 				name: 'Savefiles',
 				fields:
 				{
-					records: new GearsORM.Fields.ManyToOne({related: 'Records'}),
 					name: new GearsORM.Fields.String(),
 					description: new GearsORM.Fields.String(),
 					parentid: new GearsORM.Fields.Integer({allowNull:true}),
@@ -261,16 +260,16 @@ function init_gears() {
 					status: new GearsORM.Fields.String({maxLength: 256}),
 					date_added: new GearsORM.Fields.TimeStamp(),
 					date_modified: new GearsORM.Fields.TimeStamp(),
-					server: new GearsORM.Fields.OneToMany({related: "Targets"}),
-					savefile: new GearsORM.Fields.OneToMany({related: "Savefiles"}),
 					xmlformat: new GearsORM.Fields.String({defaultValue: 'null'}),
 					marcflavour: new GearsORM.Fields.String({defaultValue: 'null'}),
 					template: new GearsORM.Fields.String({defaultValue: 'null'}),
-					marcformat: new GearsORM.Fields.String({defaultValue: 'null'})
+					marcformat: new GearsORM.Fields.String({defaultValue: 'null'}),
+					Savefiles_id: new GearsORM.Fields.Integer(),
+					SearchTargets_id: new GearsORM.Fields.Integer(),
 				}
 			});
-			DB.RemoteILS = new GearsORM.Model({
-				name: 'RemoteILS',
+			DB.SendTargets = new GearsORM.Model({
+				name: 'SendTargets',
 				fields: 
 				{
 					name: new GearsORM.Fields.String(),
