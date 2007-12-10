@@ -32,8 +32,8 @@ function doSaveLocal(savefileid) {
         var var_ed = UI.editor.editorDoc;
         // transform edited record back into marcxml
         if( marcFlavor == 'marc21' ) {
+			progress.updateProgress(.5, 'Extracting marcxml');
             xml = Edit2XmlMarc21(ff_ed, var_ed);
-			progress.updateProgress(.5, 'Extracing marcxml');
         } 
         else if( marcFlavor == 'unimarc' ) {
             Ext.MessageBox.alert("Unimarc support not yet implemented");
@@ -53,7 +53,7 @@ function doSaveLocal(savefileid) {
         try {
 			var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
 			record.xml = xml;
-			record.savefile = savefileid;
+			record.Savefiles_id = savefileid;
 			record.status = 'edited';
 			record.date_modified = new Date();
 			record.save();
@@ -127,7 +127,7 @@ function doSaveRemote(loc, xmldoc) {
 function addRecordFromSearch(id, data, savefileid) {
 	var xml = getPazRecord(id);
     try {
-		var target = DB.Targets.select('name=?', [data.location]).getOne();
+		var target = DB.SearchTargets.select('name=?', [data.location]).getOne();
 		var savefile = DB.Savefiles.select('Savefiles.rowid=?', [savefileid]).getOne();
 		var record = new DB.Records({
 			title: data.title,
@@ -139,8 +139,8 @@ function addRecordFromSearch(id, data, savefileid) {
 			xml: xml,
 			date_added: new Date().toString(),
 			date_modified: new Date().toString(),
-			server: target.rowid,
-			savefile: savefile,
+			SearchTargets_id: target.rowid,
+			Savefiles_id: savefile.rowid,
 			xmlformat: 'marcxml',
 			marcflavour: 'marc21',
 			template: null,

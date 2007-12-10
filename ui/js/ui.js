@@ -150,7 +150,7 @@ function createOptionsTab() {
 
 function createTargetGrid() {
 	var Target = Ext.data.Record.create([
-		{name: 'id'},
+		{name: 'rowid'},
 		{name: 'name', type: 'string'},
 		{name: 'hostname', type: 'string'},
 		{name: 'port', type: 'string'},
@@ -177,7 +177,7 @@ function createTargetGrid() {
 		record.enabled = record.enabled ? 1 : 0;
 		if( operation == Ext.data.Record.COMMIT ) {
 			try {
-				var rs = db.execute('update Target set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where id = ?', [record.name, record.hostname, record.port, record.dbname, record.description, record.userid, record.password, record.enabled, record.id]);
+				var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where rowid = ?', [record.name, record.hostname, record.port, record.dbname, record.description, record.userid, record.password, record.enabled, record.rowid]);
 				rs.close()
 			}
 			catch(ex) {
@@ -263,7 +263,7 @@ function createTargetGrid() {
 		}
 		var rs;
 		try {
-			rs = db.execute('update Targets set '+field+' = ? where id = ?', [value, id]);
+			rs = db.execute('update SearchTargets set '+field+' = ? where rowid = ?', [value, id]);
 			rs.close();
 		}
 		catch(ex) {
@@ -273,7 +273,7 @@ function createTargetGrid() {
 	});
 	Ext.ComponentMgr.register(targetgrid);
 	targetgrid.render();
-	ds.load({db: db, selectSql: 'select id, name, hostname, port, dbname, description, userid, password, syntax, enabled from Targets'});
+	ds.load({db: db, selectSql: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets'});
 
 	var gridHeader = targetgrid.getView().getHeaderPanel(true);
 	var tb = new Ext.Toolbar(gridHeader, [
@@ -283,7 +283,7 @@ function createTargetGrid() {
 				// insert new target into db so we get it's id
 				var rs;
 				try {
-					rs = db.execute('insert into Targets (id) values (null)');
+					rs = db.execute('insert into SearchTargets (name) values ("")');
 					rs.close();
 				}
 				catch(ex) {
@@ -312,7 +312,7 @@ function createTargetGrid() {
 			handler: function() {
 				var record = Ext.ComponentMgr.get('targetgrid').getSelectionModel().selection.record;
 				try {
-					var rs = db.execute('delete from Targets where id = ?', [record.data.id]);
+					var rs = db.execute('delete from SearchTargets where SearchTargets.rowid = ?', [record.data.rowid]);
 					rs.close();
 				}
 				catch(ex) {
