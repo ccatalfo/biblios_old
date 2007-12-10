@@ -307,7 +307,7 @@ function createTargetGrid() {
 			}
 		},
 		{
-			text: 'Remote Target',
+			text: 'Remove Target',
 			handler: function() {
 				var record = Ext.ComponentMgr.get('targetgrid').getSelectionModel().selection.record;
 				try {
