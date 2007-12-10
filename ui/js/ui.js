@@ -834,7 +834,7 @@ function createFolderList() {
 		 // redisplay current savefile (to show moved record)
 		 var currentId = UI.currSaveFile;
 		 var currentName = UI.currSaveFileName;
-		 //displaySaveFile(currentId, currentName); 
+		 displaySaveFile(currentId, currentName); 
 		 return true;
     });
 }
