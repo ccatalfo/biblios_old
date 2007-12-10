@@ -77,11 +77,15 @@ function doSaveLocal(savefileid) {
     var rs;
     // if we have a record open in the marceditor, get its xml and save to drafts
     if( Ext.get('marceditor').isVisible() ) {
+		Ext.get('fixedfields_editor').mask();
+		Ext.get('varfields_editor').mask();
+		var progress = Ext.MessageBox.progress('Saving record');
         var ff_ed = $("#fixedfields_editor");
         var var_ed = UI.editor.editorDoc;
         // transform edited record back into marcxml
         if( marcFlavor == 'marc21' ) {
             xml = Edit2XmlMarc21(ff_ed, var_ed);
+			progress.updateProgress(.5, 'Extracing marcxml');
         } 
         else if( marcFlavor == 'unimarc' ) {
             Ext.MessageBox.alert("Unimarc support not yet implemented");
@@ -95,6 +99,7 @@ function doSaveLocal(savefileid) {
             var server = sel.data.location;
             var title = sel.data.title;
             recid = addRecordFromSearch(id, server, title, savefileid);
+			progress.updateProgress(.6, 'Retrieving record from server');
         }
         if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
         try {
@@ -104,9 +109,13 @@ function doSaveLocal(savefileid) {
             rs = db.execute('update Records set date_modified=datetime("now", "localtime") where id=?', [recid]);	
             if(debug) { console.info("saved record with id: " + recid + " to savefile: " + savefilename); }
                 rs.close();
+			progress.updateProgress(1, 'Saving record to local database');
             } catch(ex) {
                 Ext.MessageBox.alert('Database error',ex.message);
             }
+		progress.hide();
+		Ext.get('fixedfields_editor').unmask();
+		Ext.get('varfields_editor').unmask();
         return true;
     }
     // if we're picking from the savefile grid 
