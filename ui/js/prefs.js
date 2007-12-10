@@ -18,7 +18,7 @@ function getRemoteBibProfiles() {
 
 function setILSTargets() {
 	// get remote ILS location names so we know when to ask remote ILS for record
-	DB.RemoteILS.select().each( function(ils) {
+	DB.SendTargets.select().each( function(ils) {
 			Prefs.remoteILS[ ils.name ] = {};
 			// get params for this ils
 			Prefs.remoteILS[ils.name].location = ils.location;
@@ -33,7 +33,7 @@ function setILSTargets() {
 }
 
 function getTargets() {
-	var targets = DB.Targets.select().toArray();
+	var targets = DB.SearchTargets.select().toArray();
 	return targets;
 }
 
@@ -46,7 +46,7 @@ function setEnableTargets() {
     if( targetnodes[i].attributes.checked == true ) {
         enabled = 1;
     }
-	t = DB.Targets.select('rowid=?', [id]).getOne();
+	t = DB.SearchTargets.select('rowid=?', [id]).getOne();
 	t.enabled = enabled;
 	t.save();
   }
