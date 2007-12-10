@@ -269,6 +269,7 @@ function createTargetGrid() {
 		catch(ex) {
 			Ext.MessageBox.alert('Error', ex.message);
 		}
+		updateSearchTargetFolders();
 	});
 	Ext.ComponentMgr.register(targetgrid);
 	targetgrid.render();
@@ -317,6 +318,8 @@ function createTargetGrid() {
 				catch(ex) {
 					Ext.MessageBox.alert('Error', ex.message);
 				}
+				updateSearchTargetFolders();
+				Ext.ComponentMgr.get('targetgrid').dataSource.reload();
 			}
 		}
 	]);
@@ -327,13 +330,13 @@ function createDatabaseOptions() {
 	dbform.addButton('Reset Database', function(btn) {
 		resetDatabase();
 		setPazPar2Targets(paz);
-		createTargetFolders();
+		updateSearchTargetFolders();
 		Ext.MessageBox.alert('Preferences', 'Database reset');
 	});
 	dbform.addButton('Add Test Targets', function(btn) {
 		setupTestTargets();
 		setPazPar2Targets(paz);
-		createTargetFolders();
+		updateSearchTargetFolders();
 		Ext.MessageBox.alert('Preferences', 'Test targets added');
 	});
 	dbform.addButton('Remove Test Targets', function(btn) {
@@ -884,22 +887,14 @@ function createFacetFolder() {
 	return facetsRoot;
 }
 
-function createTargetFolders() {
-	// remove old searchRoot if it exists to clear out any old entries
-	var folderRoot = Ext.ComponentMgr.get('folderRoot');
-	//folderRoot.removeChild( folderRoot.findChild('id', 'searchRoot') );
-	if( ! Ext.ComponentMgr.get('searchRoot') ) {
-		searchRoot = new Ext.tree.TreeNode({
-			allowDrag:false,
-			allowDrop:false,
-			id:'searchRoot',
-			leaf: false,
-			text: 'Resources',
-			icon: 'ui/images/folder-remote.png'
-		});
-		Ext.ComponentMgr.register(searchRoot);
-	}
+function updateSearchTargetFolders() {
+	var searchRoot = Ext.ComponentMgr.get('searchRoot');
 
+	// remove old nodes
+	for( var i = searchRoot.childNodes.length-1; i >= 0; i--) {
+		searchRoot.removeChild( searchRoot.childNodes[i] );
+	}
+	// re-create targets and add them
     var searchTreeChildren = new Array();
     var targets = getTargets();
     for( var i = 0; i < targets.length; i++) {
@@ -956,6 +951,22 @@ function createTargetFolders() {
 		displaySearchView();
         folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
 	});
+}
+
+function createTargetFolders() {
+	// remove old searchRoot if it exists to clear out any old entries
+	var folderRoot = Ext.ComponentMgr.get('folderRoot');
+	var searchRoot = new Ext.tree.TreeNode({
+		allowDrag:false,
+		allowDrop:false,
+		id:'searchRoot',
+		leaf: false,
+		text: 'Resources',
+		icon: 'ui/images/folder-remote.png'
+	});
+	Ext.ComponentMgr.register(searchRoot);
+
+	updateSearchTargetFolders();
 	return searchRoot;
 }
 
