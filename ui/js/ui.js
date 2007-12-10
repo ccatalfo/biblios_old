@@ -426,8 +426,10 @@ function createBiblioTab()  {
 		innerLayout.add('center', savegridpanel);
 		innerLayout.add('center', marceditorpanel);
 		innerLayout.add('center', homepanel);
-        lower_panel = new Ext.ContentPanel('lower-panel', "Preview");
-        innerLayout.add('south', lower_panel);
+        search_preview_panel = new Ext.ContentPanel('search-preview-panel', {id: 'search-preview-panel', title: "Record Preview"});
+        save_preview_panel = new Ext.ContentPanel('save-preview-panel', {id: 'save-preview-panel', title: "Record Preview"});
+        innerLayout.add('south', search_preview_panel);
+        innerLayout.add('south', save_preview_panel);
         right_panel =new Ext.ContentPanel('right-panel');
         innerLayout.add('east', right_panel);
         searchSaveNestedLayout = new Ext.NestedLayoutPanel(innerLayout);
@@ -1341,14 +1343,22 @@ function previewRecord(xml) {
 	if( UI.lastSearchPreviewed == xml || UI.lastSavePreview == xml ) {
 		return;
 	}
-	Ext.get('lower-panel').mask();
+	if( Ext.get('searchgrid').isVisible() ) {
+		var panelid = 'search-preview-panel';
+	}
+	else if (Ext.get('savegrid').isVisible() ) {
+		var panelid = 'save-preview-panel';
+	}
+	var previewPanel = innerLayout.getRegion('south').getPanel(panelid);
+		
+	previewPanel.el.mask();
 	if(debug) { console.info('previewing record'); }
 	showStatusMsg('Previewing record...');
-    $("#lower-panel").empty();
+	previewPanel.el.update('');
     //console.info('previewRecord: previewing record with xml: ' + xml);
-    $('#lower-panel').getTransform(marcxsl, xml );
+    $('#'+panelid).getTransform(marcxsl, xml );
 	 clearStatusMsg();
-	Ext.get('lower-panel').unmask();
+	previewPanel.el.unmask();
 }
 
 /*
@@ -1395,16 +1405,14 @@ function displayRecordView() {
 */
 function displaySearchView() {
     // show panels for search/save/preview
-    innerLayout.getRegion('south').show()
+    innerLayout.getRegion('south').showPanel('search-preview-panel');
     //hide help panel
     innerLayout.getRegion('east').collapse();
 	innerLayout.getRegion('center').hidePanel('marceditor');
     clear_editor();
 	innerLayout.getRegion('center').hidePanel('savegridpanel');
 	innerLayout.getRegion('center').showPanel('searchgridpanel');
-    // select search results root
-    folderTree.getSelectionModel().select(searchRoot);
-	 UI.lastWindowOpen = 'searchgrid';
+	UI.lastWindowOpen = 'searchgrid';
 }
 
 /*
@@ -1423,7 +1431,7 @@ function displaySearchView() {
 */
 function displaySaveView() {
     // show panels for search/save/preview
-    innerLayout.getRegion('south').show()
+    innerLayout.getRegion('south').showPanel('save-preview-panel');
     //hide help panel
     innerLayout.getRegion('east').collapse();
     if( rte_editor && rte_editor._getDoc()) {
@@ -1432,9 +1440,7 @@ function displaySaveView() {
 	innerLayout.getRegion('center').hidePanel('marceditor');
 	innerLayout.getRegion('center').hidePanel('searchgridpanel');
 	innerLayout.getRegion('center').showPanel('savegridpanel');
-    // select root node of savefile folders
-    //folderTree.getSelectionModel().select(saveFilesRoot);
-	 UI.lastWindowOpen = 'savegrid';
+	UI.lastWindowOpen = 'savegrid';
 }
 
 /*
