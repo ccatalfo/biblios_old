@@ -43,32 +43,32 @@ function doSaveLocal(savefileid) {
         if( recid == '' ) {
             if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
             var data = searchgrid.getSelections()[0].data;
-			var id = sel.id;
-            var server = sel.data.location;
-            var title = sel.data.title;
-            recid = addRecordFromSearch(id, server, title, savefileid);
+			var id = searchgrid.getSelections()[0].id;
 			progress.updateProgress(.6, 'Retrieving record from server');
+            recid = addRecordFromSearch(id, data, savefileid);
+			if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
         }
-        if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
-        try {
-			var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
-			record.xml = xml;
-			record.Savefiles_id = savefileid;
-			record.status = 'edited';
-			record.date_modified = new Date();
-			record.save();
-            if(debug) { 
-				console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
+		else { // recid isn't empty so we've already saved this record, just update it
+			try {
+				var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
+				record.xml = xml;
+				record.Savefiles_id = savefileid;
+				record.status = 'edited';
+				record.date_modified = new Date();
+				record.save();
+				if(debug) { 
+					console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
 			}
-			progress.updateProgress(1, 'Saving record to local database');
-            } catch(ex) {
-                Ext.MessageBox.alert('Database error',ex.message);
-            }
+				progress.updateProgress(1, 'Saving record to local database');
+			} catch(ex) {
+					Ext.MessageBox.alert('Database error',ex.message);
+			}
+		}
 		progress.hide();
 		Ext.get('fixedfields_editor').unmask();
 		Ext.get('varfields_editor').unmask();
         return true;
-    }
+    } // save record from marc editor
     // if we're picking from the savefile grid 
     else if( (Ext.get('savegrid').isVisible() ) ) {
         var grid = Ext.ComponentMgr.get( 'save-file-grid' );
@@ -126,6 +126,7 @@ function doSaveRemote(loc, xmldoc) {
 
 function addRecordFromSearch(id, data, savefileid) {
 	var xml = getPazRecord(id);
+	if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + data.title);}
     try {
 		var target = DB.SearchTargets.select('name=?', [data.location]).getOne();
 		var savefile = DB.Savefiles.select('Savefiles.rowid=?', [savefileid]).getOne();
@@ -135,6 +136,7 @@ function addRecordFromSearch(id, data, savefileid) {
 			location: data.location,
 			publisher: data.publisher,
 			medium: data.medium,
+			date: data.date,
 			status: 'new',
 			xml: xml,
 			date_added: new Date().toString(),
@@ -146,10 +148,10 @@ function addRecordFromSearch(id, data, savefileid) {
 			template: null,
 			marcformat: null
 		}).save();
-        if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + title);}
     } catch(ex) {
         Ext.MessageBox.alert('Database Error', ex.message);
     }
+	return db.lastInsertRowId;
 }
 
 function getSaveFileNameFromId(savefileid) {
