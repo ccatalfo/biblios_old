@@ -1341,12 +1341,14 @@ function previewRecord(xml) {
 	if( UI.lastSearchPreviewed == xml || UI.lastSavePreview == xml ) {
 		return;
 	}
+	Ext.get('lower-panel').mask();
 	if(debug) { console.info('previewing record'); }
 	showStatusMsg('Previewing record...');
     $("#lower-panel").empty();
     //console.info('previewRecord: previewing record with xml: ' + xml);
     $('#lower-panel').getTransform(marcxsl, xml );
 	 clearStatusMsg();
+	Ext.get('lower-panel').unmask();
 }
 
 /*
