@@ -1351,14 +1351,16 @@ function previewRecord(xml) {
 	}
 	var previewPanel = innerLayout.getRegion('south').getPanel(panelid);
 		
-	previewPanel.el.mask();
-	if(debug) { console.info('previewing record'); }
-	showStatusMsg('Previewing record...');
-	previewPanel.el.update('');
-    //console.info('previewRecord: previewing record with xml: ' + xml);
-    $('#'+panelid).getTransform(marcxsl, xml );
-	 clearStatusMsg();
-	previewPanel.el.unmask();
+	if( previewPanel ) {
+		previewPanel.el.mask();
+		if(debug) { console.info('previewing record'); }
+		showStatusMsg('Previewing record...');
+		previewPanel.el.update('');
+		//console.info('previewRecord: previewing record with xml: ' + xml);
+		$('#'+panelid).getTransform(marcxsl, xml );
+		 clearStatusMsg();
+		previewPanel.el.unmask();
+	}
 }
 
 /*
