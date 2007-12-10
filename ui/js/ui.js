@@ -269,7 +269,7 @@ function createTargetGrid() {
 		catch(ex) {
 			Ext.MessageBox.alert('Error', ex.message);
 		}
-		updateSearchTargetFolders();
+		updateSearchTargets();
 	});
 	Ext.ComponentMgr.register(targetgrid);
 	targetgrid.render();
@@ -318,7 +318,7 @@ function createTargetGrid() {
 				catch(ex) {
 					Ext.MessageBox.alert('Error', ex.message);
 				}
-				updateSearchTargetFolders();
+				updateSearchTargets();
 				Ext.ComponentMgr.get('targetgrid').dataSource.reload();
 			}
 		}
@@ -887,6 +887,11 @@ function createFacetFolder() {
 	return facetsRoot;
 }
 
+function updateSearchTargets() {
+	updateSearchTargetFolders();
+	setPazPar2Targets();
+}
+
 function updateSearchTargetFolders() {
 	var searchRoot = Ext.ComponentMgr.get('searchRoot');
 
@@ -951,6 +956,10 @@ function updateSearchTargetFolders() {
 		displaySearchView();
         folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
 	});
+	// expand searchRoot if it's been rendered
+	if( searchRoot.rendered == true ) {
+		searchRoot.expand();
+	}
 }
 
 function createTargetFolders() {
