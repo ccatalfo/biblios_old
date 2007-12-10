@@ -149,21 +149,6 @@ function createOptionsTab() {
 }
 
 function createTargetGrid() {
-	// retrieve Target data
-	var data = new Array();
-	var rs;
-	try {
-		rs = db.execute('select * from Targets');
-		while( rs.isValidRow() ) {
-			data.push( [rs.fieldByName('id'), rs.fieldByName('name'), rs.fieldByName('hostname'), rs.fieldByName('port'), rs.fieldByName('dbname'), rs.fieldByName('description'), rs.fieldByName('userid'), rs.fieldByName('userid'), rs.fieldByName('password'), rs.fieldByName('enabled')] );
-			rs.next();
-		}
-		rs.close();
-	}
-	catch(ex) {
-		Ext.MessageBox.alert('Error', ex.message);
-	}
-
 	var Target = Ext.data.Record.create([
 		{name: 'id'},
 		{name: 'name', type: 'string'},
@@ -173,11 +158,12 @@ function createTargetGrid() {
 		{name: 'description', type: 'string'},
 		{name: 'userid', type: 'string'},
 		{name: 'password', type: 'string',},
+		{name: 'syntax', type: 'string',},
 		{name: 'enabled', type: 'bool'}
 	]);
 
 	var ds = new Ext.data.Store({
-		proxy: new Ext.data.GoogleGearsProxy(db, 'select id, name, hostname, port, dbname, description, userid, password, enabled from Targets'),
+		proxy: new Ext.data.GoogleGearsProxy(new Array()),
 		reader: new Ext.data.ArrayReader({
 			record: 'name'
 		}, Target),
@@ -242,6 +228,11 @@ function createTargetGrid() {
 			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
 		},
 		{
+			header: 'Syntax',
+			dataIndex: 'syntax',
+			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+		},
+		{
 			header: 'Enabled', 
 			dataIndex: 'enabled', 
 			renderer: formatBoolean,
@@ -281,7 +272,7 @@ function createTargetGrid() {
 	});
 	Ext.ComponentMgr.register(targetgrid);
 	targetgrid.render();
-	ds.load();
+	ds.load({db: db, selectSql: 'select id, name, hostname, port, dbname, description, userid, password, syntax, enabled from Targets'});
 
 	var gridHeader = targetgrid.getView().getHeaderPanel(true);
 	var tb = new Ext.Toolbar(gridHeader, [
