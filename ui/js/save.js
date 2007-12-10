@@ -81,7 +81,7 @@ function doSaveLocal(savefileid) {
 				var record = DB.Records.select('Records.rowid=?',[id]).getOne();
 				record.status = 'edited';
 				record.date_modified = new Date().toString();
-				record.savefile = savefileid;
+				record.Savefiles_id = savefileid;
 				record.save();
 				if(debug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
 			}
