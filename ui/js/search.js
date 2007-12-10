@@ -31,7 +31,7 @@ paz = new pz2({
 	return paz;
 }
 
-function setPazPar2Targets(paz) {
+function setPazPar2Targets() {
 	var targets = getTargets();
 	$.each( targets, function(i, n){
 		if( targets[i].enabled == 1 ) {
