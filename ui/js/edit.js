@@ -1623,12 +1623,8 @@ function editorMouseUp(o) {
 function clear_editor() {
     // reset current open record to none
     UI.editor.id = '';
-    // if we're coming from marceditor, destroy old rte instance
-    if( innerLayout.getRegion('center').activePanel.getId() == 'marceditor' && rte_editor && rte_editor._getDoc()  ) {
-        rte_editor.destroy();
-    }
    // clear the marceditor divs
-   $("#ffeditor").empty();
-   $("#rte_placeholder").empty();
+   $("#fixedfields_editor").empty();
+   $("#varfields_editor").empty();
 }
 
