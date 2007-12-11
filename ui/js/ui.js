@@ -1383,6 +1383,10 @@ function displaySaveView() {
 	innerLayout.getRegion('center').hidePanel('searchgridpanel');
 	innerLayout.getRegion('center').showPanel('savegridpanel');
 	UI.lastWindowOpen = 'savegrid';
+	// if we have a current save file, reload it so the grid reflects any changes made
+	if( UI.currSaveFile != '') {
+		loadSaveFile( UI.currSaveFile );
+	}
 }
 
 /*
