@@ -105,17 +105,17 @@ function doSaveLocal(savefileid) {
 }
 
 function doSaveRemote(loc, xmldoc) {
-	Ext.get('fixedfields_editor').mask();
-	Ext.get('varfields_editor').mask();
+	Ext.get('ffeditor').mask();
+	Ext.get('vareditor').mask();
 	UI.editor.progress = Ext.MessageBox.progress('Saving record to remote server', '');
 	if(debug) { console.info('Saving open record to ' + loc); }
 	// set UI.editor.location to point to this record so we get special entries etc.
 	UI.editor.location = Prefs.remoteILS[loc].location;
-	Prefs.remoteILS[loc].instance.saveHandler = function() {
+	Prefs.remoteILS[loc].instance.saveHandler = function(xml) {
 		UI.editor.progress.updateProgress(1, 'Retrieved remote record');
-		openRecord;
-		Ext.get('fixedfields_editor').unmask();
-		Ext.get('varfields_editor').unmask();
+		openRecord(xml);
+		Ext.get('ffeditor').unmask();
+		Ext.get('vareditor').unmask();
 		UI.editor.progress.hide();
 	}
 	Prefs.remoteILS[loc].instance.save(xmldoc);
