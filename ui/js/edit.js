@@ -1113,52 +1113,25 @@ function removeTag(tagnumber, i) {
 function create_static_editor() {
 	UI.editor.editorDoc = $('#vareditor');
 	// setup marceditor macro functionality
-	UI.editor.record = setupMacros($('#fixedfields_editor'), UI.editor.editorDoc);
+	//UI.editor.record = setupMacros($('#fixedfields_editor'), UI.editor.editorDoc);
 	// setup reserved (locked) tags based on remote ils bib profile
 	if( Prefs.remoteILS[ UI.editor.location ] ) {
 		setupReservedTags( Prefs.remoteILS[ UI.editor.location ], UI.editor.editorDoc);
 		setupSpecialEntries( Prefs.remoteILS[ UI.editor.location ], UI.editor.editorDoc);
 	}
-	// add focus behavior
-	$('#marceditor input')
-		.livequery('focus', function(e) {
-			// remove old focused element
-			$('#marceditor input').removeClass('focused');
-			// add focus css to newly focused element
-			$(this).addClass('focused');
-			// keep track of currently focused element so we can use toolbar even though 
-			// focus has moved
-			UI.editor.lastFocusedEl = $(this);
-		});
-	// remove focus css on blur and update MarcEditor instance
-	$('#marceditor input')
-		.livequery('blur', function(e) {
-			$(this).removeClass('focused');
-			UI.editor.record.update( $(this ) ) ;
-		});
-	// add focus for hover
-	// FIXME? Changing focus class on hovering didn't look so great- didn't always update smoothly.
-/*	$('#marceditor input')
-		.livequery(function(){
-			$(this)
-				.hover(function() {
-					$(this).addClass('focused');
-				}, function() {
-					$(this).removeClass('focused');
-				});
-		}, function() {
-			// unbind mouseover and mouseout events
-			$(this)
-				.unbind('mouseover')
-				.unbind('mouseout');
-		});
-*/
 	// add editor hotkeys
 	setupEditorHotkeys();
 
 	// apply ExtJS comboboxes for live searching of authority data
-	setupMarc21AuthorityLiveSearches();
+	//setupMarc21AuthorityLiveSearches();
+}
 
+function onFocus(elem) {
+	$(elem).addClass('focused');
+}
+
+function onBlur(elem) {
+	$(elem).removeClass('focused');
 }
 
 function setupSpecialEntries(loc, editor) {
@@ -1228,15 +1201,17 @@ function setupMacros(ffeditor, vareditor) {
 
 
 function setupEditorHotkeys() {
-	// focus next tagnumber of return
-	$.hotkeys.add('Alt+space', {propagate: true}, function(e) {
-		$('.focused').parents('.tag').next().children('.tagnumber').get(0).focus();
-		$(e.target).blur();
-	});
 	// focus prev tagnumber on shift-return
-	$.hotkeys.add('Shift+return', function(e) {
-		$('.focused').parents('.tag').prev().children('.tagnumber').get(0).focus();
-		$(e.target).blur();
+	Ext.select('input', false, 'marceditor').addKeyMap({
+		key: Ext.EventObject.ENTER,
+		fn: function(key, e) {
+			if(e.shiftKey ) {
+				$('.focused').parents('.tag').prev().children('.tagnumber').eq(0).focus();
+			}
+			else {
+				$('.focused').parents('.tag').next().children('.tagnumber').eq(0).focus();
+			}
+		}
 	});
 
 	// add a new subfield

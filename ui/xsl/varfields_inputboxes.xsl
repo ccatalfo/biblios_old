@@ -55,15 +55,21 @@
 			  <input size='2' class="indicator">
 						 <xsl:attribute name="id">cind1<xsl:value-of select="@tag"/>-<xsl:number value="position()"/></xsl:attribute>
 					<xsl:attribute name='value'>#</xsl:attribute>
+					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
+					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 				</input>
 			  <input size='2' class="indicator">
 						 <xsl:attribute name="id">cind2<xsl:value-of select="@tag"/>-<xsl:number value="position()"/></xsl:attribute>
 					<xsl:attribute name='value'>#</xsl:attribute>
+					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
+					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 				</input>
 				<input class='controlfield' id='csubfields{@tag}'>
 					<xsl:attribute name='value'>
 						<xsl:value-of select="."/>
 					</xsl:attribute>
+					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
+					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 				</input>
         </div>
     
@@ -83,12 +89,16 @@
 					<xsl:attribute name='value'>
 						<xsl:value-of select="@tag"/>
 					</xsl:attribute>
+					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
+					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 				</input>
 
 			  <input maxlength='1' size='1' class="indicator">
 						 <!-- provide an id based on tag number, but append a number to duplicate tags don't have duplicate id's -->
 						 <xsl:attribute name="id">dind1<xsl:value-of select="@tag"/>-<xsl:number value="position()"/>
 						</xsl:attribute>
+						<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
+						<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 						<xsl:choose>
 							<xsl:when test="@ind1 = ' '">
 								<xsl:attribute name='value'>#</xsl:attribute>
@@ -105,6 +115,8 @@
 						 <!-- provide an id based on tag number, but append a number to duplicate tags don't have duplicate id's -->
 						 <xsl:attribute name="id">dind2<xsl:value-of select="@tag"/>-<xsl:number value="position()"/>
 						</xsl:attribute>
+						<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
+						<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 						<xsl:choose>
 							<xsl:when test="@ind2 = ' '">
 								<xsl:attribute name='value'>#</xsl:attribute>
@@ -135,6 +147,8 @@
 					<xsl:attribute name='value'>
 					&#8225;<xsl:value-of select="@code"/>
 					</xsl:attribute>
+					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
+					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 				</input>
 
 				<input class="subfield-text">
@@ -145,6 +159,8 @@
 						<xsl:value-of select="."/>
 					</xsl:attribute>
 
+					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
+					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 					<xsl:attribute name="id">
 						<xsl:value-of select="../@tag"/>-<xsl:number value="position()"/><xsl:value-of select="@code"/>text
 					</xsl:attribute>
