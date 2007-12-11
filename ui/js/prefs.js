@@ -18,7 +18,7 @@ function getRemoteBibProfiles() {
 
 function setILSTargets() {
 	// get remote ILS location names so we know when to ask remote ILS for record
-	DB.SendTargets.select().each( function(ils) {
+	DB.SendTargets.select('SendTargets.enabled = 1').each( function(ils) {
 			Prefs.remoteILS[ ils.name ] = {};
 			// get params for this ils
 			Prefs.remoteILS[ils.name].location = ils.location;

@@ -278,7 +278,8 @@ function init_gears() {
 					user: new GearsORM.Fields.String(),
 					password: new GearsORM.Fields.String(),
 					pluginlocation: new GearsORM.Fields.String(),
-					plugininit: new GearsORM.Fields.String()
+					plugininit: new GearsORM.Fields.String(),
+					enabled: new GearsORM.Fields.Integer({defaultValue: 0})
 				}
 			});
 			GearsORMShift.init( DB.Info_Schema, true );
@@ -296,7 +297,8 @@ function setupKohaPlugin() {
 		user: 'marian',
 		password: 'marian',
 		pluginlocation: 'plugins/koha.js',
-		plugininit: 'new koha()'
+		plugininit: 'new koha()',
+		enabled: 1
 	}).save();
 }
 
