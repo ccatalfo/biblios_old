@@ -289,7 +289,7 @@ function init_gears() {
 
 // test prefs for koha integration
 function setupKohaPlugin() {
-	var koha = new DB.RemoteILS({
+	var koha = new DB.SendTargets({
 		name: 'Koha-cfc',
 		location: 'Koha-cfc',
 		url: 'http://eowyn.metavore.com/kohaapi/',
