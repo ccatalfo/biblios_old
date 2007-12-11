@@ -21,6 +21,7 @@ UI.search.currQuery = '';
 UI.search.limitby = {};
 UI.save = {};
 UI.save.savefile = {};
+UI.savefilesql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
 UI.currSaveFile = '';
 UI.currSaveFileName = '';
 UI.lastWindowOpen = '';
@@ -1109,22 +1110,31 @@ function createSaveFileGrid(data) {
 	}
  
     savefileds = new Ext.data.Store({
-                proxy: new Ext.data.PagingMemoryProxy(data),
+                proxy: new Ext.data.GoogleGearsProxy(),
                 reader: new Ext.data.ArrayReader({}, [
                        {name: 'Id'},
                        {name: 'Title'},
                        {name: 'Author'},
-                       {name: 'Publisher'},
                        {name: 'DateOfPub'},
+					   {name: 'Location'},
+                       {name: 'Publisher'},
+					   {name: 'Medium'},
+					   {name: 'xml'},
                        {name: 'Status'},
                        {name: 'Date Added'},
                        {name: 'Last Modified'},
+					   {name: 'xmlformat'},
+					   {name: 'marcflavour'},
+					   {name: 'template'},
+					   {name: 'marcformat'},
+					   {name: 'Savefiles_id'},
+					   {name: 'SearchTargets_id'}
                   ])
         });
-        savefileds.load();
 
     var SavecolModel = new Ext.grid.ColumnModel([
-            {header: "Title", width: 300, dataIndex: 'Title', sortable: true},
+			{header: "Medium", dataIndex: 'Medkum', sortable: true},
+            {header: "Title", width: 200, dataIndex: 'Title', sortable: true},
             {header: "Author", width: 160, dataIndex: 'Author', sortable: true},
             {header: "Publisher", width: 130, dataIndex: 'Publisher', sortable: true},
             {header: "DateOfPub", width: 80, dataIndex: 'DateOfPub', sortable: true},
@@ -1192,7 +1202,7 @@ function createSaveFileGrid(data) {
     savegridpaging.insertButton(3, refreshButton);
     savegridpaging.insertButton(4, printButton);
     savegridpaging.insertButton(5, exportButton);
-    savefileds.load({params:{start:0, limit:20}});
+    savefileds.load({db: db, selectSql: UI.savefilesql});
     savefilegrid.getSelectionModel().selectFirstRow();
 }
 
@@ -1212,8 +1222,7 @@ function createSaveFileGrid(data) {
 
 */
 function displaySaveFile(id, savefilename) {
-    var data = loadSaveFile(id);
-	createSaveFileGrid(data);
+    loadSaveFile(id);
 	// FIXME: use Gears workerpool to load records?
 	//createSaveFileGrid(recordCache[id]);
 }
@@ -1255,22 +1264,7 @@ function displaySearchResults(data) {
 
 */
 function loadSaveFile(id) {
-	var data = new Array();
-	var records = DB.Records.select('Savefiles_id=?',[id]).toArray();
-	for( var i = 0; i < records.length; i++) {
-		var id = records[i].rowid;
-		var xml = records[i].xml;
-		var title = records[i].title || '';
-		var author = records[i].author || '';
-		var publisher = records[i].publication || '';
-		var dateofpub = records[i].date || '';
-		var recstatus = records[i].status || '';
-		var date_added = records[i].date_added || '';
-		var date_modified = records[i].date_modified || '';
-		var recArray = new Array(id, title, author, publisher, dateofpub, recstatus, date_added, date_modified);
-		data[i] = recArray;
-	}
-    return data;
+	Ext.ComponentMgr.get('save-file-grid').dataSource.reload({db: db, selectSql: UI.savefilesql + ' WHERE Savefiles_id = ' + id});
 }
 
 
