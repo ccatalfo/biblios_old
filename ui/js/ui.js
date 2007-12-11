@@ -540,7 +540,7 @@ function createSaveFileFolders(parentid) {
         current_root.appendChild(newnode);
         newnode.on('click', function(n) {
 			showStatusMsg('Displaying ' + n.attributes.id);
-			UI.currSaveFile = n.attributes.id;
+			UI.currSaveFile = n.attributes.savefileid;
 			UI.currSaveFileName = n.text;
             displaySaveView();
             folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
@@ -831,11 +831,15 @@ function createFolderList() {
 		 // grid data source: e.data.selections[0].id
 		 // tree node target: e.target.id
 		 var sel = e.data.selections;
-		 doSaveLocal(e.target.attributes.savefileid);
+		 var droppedsavefileid = e.target.attributes.savefileid;
+		 doSaveLocal(droppedsavefileid);
 		 // redisplay current savefile (to show moved record)
 		 var currentId = UI.currSaveFile;
 		 var currentName = UI.currSaveFileName;
-		 displaySaveFile(currentId, currentName); 
+		 ds = Ext.ComponentMgr.get('save-file-grid').dataSource;
+		 if( currentId != '') {
+			 ds.reload({db: db, selectSql: UI.savefilesql + ' WHERE Savefiles_id='+currentId});
+		}
 		 return true;
     });
 }
@@ -1099,16 +1103,6 @@ function createSearchPazParGrid(url) {
       <createSearchResultsGrid>
 */
 function createSaveFileGrid(data) {
-	// destroy old search results grid
-	if( Ext.ComponentMgr.get('save-file-grid') ) {
-		savefilegrid.destroy(false);
-	}
-    // create new Search Results Grid
-    // empty data at first
-	if( ! data) {
-		data = [];
-	}
- 
     savefileds = new Ext.data.Store({
                 proxy: new Ext.data.GoogleGearsProxy(),
                 reader: new Ext.data.ArrayReader({}, [
