@@ -36,7 +36,38 @@ function setPazPar2Targets() {
 	$.each( targets, function(i, n){
 		if( targets[i].enabled == 1 ) {
 			var db = n.hostname+":"+n.port+"/"+n.dbname;
-			$.get( paz.pz2String + "?command=settings&session="+paz.sessionID+"&pz:name["+db+"]="+n.name+"&pz:requestsyntax["+db+"]=marc21&pz:elements["+db+"]=F&pz:nativesyntax["+db+"]=iso2709&pz:xslt["+db+"]=marc21.xsl");		
+			$.get(  paz.pz2String +
+					'?' +
+					'command=settings'+
+					'&' +
+					'session='+paz.sessionID +
+					'&' +
+					'pz:name['+db+']='+ n.name +
+					'&' +
+					'pz:requestsyntax['+db+']='+'marc21'+
+					'&' +
+					'pz:elements['+db+']='+'F'+
+					'&' +
+					'pz:nativesyntax['+db+']='+'iso2709'+
+					'&' +
+					'pz:xslt['+db+']='+'marc21.xsl'+
+					'&' +
+					'pz:cclmap:term=['+db+']='+'u=1016 t=1,r s=al'+
+					'&' +
+					'pz:cclmap:au['+db+']='+'u=1004 s=al'+
+					'&' +
+					'pz:cclmap:ti['+db+']='+'u=4 s=al'+
+					'&' +
+					'pz:cclmap:su['+db+']='+'u=21 s=al'+
+					'&' +	
+					'pz:cclmap:isbn['+db+']='+'u=7'+
+					'&' +
+					'pz:cclmap:issn['+db+']='+'u=8'+
+					'&' +
+					'pz:cclmap:date['+db+']='+'u=31 r=r'+
+					'&' +
+					'pz:cclmap:pub['+db+']='+'u=1018 s=al'
+			);
 		}
 	});
 }
@@ -67,6 +98,9 @@ function resetPazPar2(options) {
 
 function pazPar2Error(data) {
 		if(debug){ console.info('pazpar2 error: ' + data.code)}
+		if( data.code == 'HTTP' ) {
+			Ext.MessageBox.alert('Initialization error', 'Pazpar2 search server is unavailble. Please check your configuration and try again');
+		}
 		// if session does not exist  or record is missing
 		if( data.code == '1' || data.code == '7') {
 			if(debug) { console.info("pazpar2 error: session does not exist or record is missing") }
