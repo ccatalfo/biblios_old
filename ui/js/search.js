@@ -64,7 +64,7 @@ function setPazPar2Targets() {
 					'&' +
 					'pz:cclmap:issn['+db+']='+'u=8'+
 					'&' +
-					'pz:cclmap:date['+db+']='+'u=31 r=r'+
+					'pz:cclmap:date['+db+']='+'u=30 r=r'+
 					'&' +
 					'pz:cclmap:pub['+db+']='+'u=1018 s=al'
 			);
