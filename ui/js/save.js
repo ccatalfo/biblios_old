@@ -131,12 +131,12 @@ function addRecordFromSearch(id, data, savefileid) {
 		var target = DB.SearchTargets.select('name=?', [data.location]).getOne();
 		var savefile = DB.Savefiles.select('Savefiles.rowid=?', [savefileid]).getOne();
 		var record = new DB.Records({
-			title: data.title,
-			author: data.author,
-			location: data.location,
-			publisher: data.publisher,
-			medium: data.medium,
-			date: data.date,
+			title: data.title || '',
+			author: data.author || '',
+			location: data.location || '',
+			publisher: data.publisher || '',
+			medium: data.medium || '',
+			date: data.date || '',
 			status: 'new',
 			xml: xml,
 			date_added: new Date().toString(),
