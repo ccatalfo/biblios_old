@@ -93,12 +93,12 @@ function MarcEditor(ffeditor, vareditor) {
 	}
 
 	this._setValue = function(tag, subfield, value) {
-		$('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').val(value);
+		$('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').find('.subfield-text').val(value);
 	}
 
 	this._getValue = function(tag, subfield) {
 		if( subfield != null ) {
-			return $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').val();
+			return $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').find('.subfield-text').val();
 		}
 		else {
 			return $('[@id^='+tag+']').children('.controlfield').val();
