@@ -93,7 +93,9 @@ function MarcEditor(ffeditor, vareditor) {
 	}
 
 	this._setValue = function(tag, subfield, value) {
-		$('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').val(value);
+		var sf = $('.tag[@id^='+tag+'] .subfield-text[@id*='+subfield+']');
+		sf.val(value);
+		this._update(sf);
 	}
 
 	this._getValue = function(tag, subfield) {
@@ -186,6 +188,8 @@ function MarcEditor(ffeditor, vareditor) {
 				fields[i] = createField(tag); 		
 			}
 		}
+		//update marcrecord instance
+		marcrecord = new MarcRecord(fields);
 	}
 }
 // Public methods 

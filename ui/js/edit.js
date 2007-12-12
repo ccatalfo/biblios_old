@@ -1113,7 +1113,7 @@ function removeTag(tagnumber, i) {
 function create_static_editor() {
 	UI.editor.editorDoc = $('#vareditor');
 	// setup marceditor macro functionality
-	//UI.editor.record = setupMacros($('#fixedfields_editor'), UI.editor.editorDoc);
+	UI.editor.record = setupMacros($('#fixedfields_editor'), UI.editor.editorDoc);
 	// setup reserved (locked) tags based on remote ils bib profile
 	if( Prefs.remoteILS[ UI.editor.location ] ) {
 		setupReservedTags( Prefs.remoteILS[ UI.editor.location ], UI.editor.editorDoc);
@@ -1132,6 +1132,7 @@ function onFocus(elem) {
 
 function onBlur(elem) {
 	$(elem).removeClass('focused');
+	UI.editor.record.update(elem);
 }
 
 function setupSpecialEntries(loc, editor) {
@@ -1196,7 +1197,7 @@ function setupReservedTags(loc, editor) {
 }
 
 function setupMacros(ffeditor, vareditor) {
-	//return new MarcEditor(ffeditor, vareditor);
+	return new MarcEditor(ffeditor, vareditor);
 }
 
 
