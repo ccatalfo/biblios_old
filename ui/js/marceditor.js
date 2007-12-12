@@ -93,14 +93,12 @@ function MarcEditor(ffeditor, vareditor) {
 	}
 
 	this._setValue = function(tag, subfield, value) {
-		var sf = $('.tag[@id^='+tag+'] .subfield-text[@id*='+subfield+']');
-		sf.val(value);
-		this._update(sf);
+		$('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').find('.subfield-text').val(value);
 	}
 
 	this._getValue = function(tag, subfield) {
 		if( subfield != null ) {
-			return $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').val();
+			return $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').find('.subfield-text').val();
 		}
 		else {
 			return $('[@id^='+tag+']').children('.controlfield').val();
@@ -139,8 +137,8 @@ function MarcEditor(ffeditor, vareditor) {
 
 	this._addSubfield = function(tag, subfield, value) {
 		// get last subfield in this tag
-		var numsf = $('[@id^='+tag+']').children('.subfields').children('.subfield').length;
-		var lastsf = $('[@id^='+tag+']').children('.subfields').children('.subfield').eq(numsf-1).children('.subfield-text');
+		var numsf = $('[@id^='+tag+']').find('.subfield-text').length;
+		var lastsf = $('[@id^='+tag+']').find('.subfield-text').eq(numsf-1);
 		// add a subfield after it
 		addSubfield(lastsf);
 		// now set its delimiter to the passed in subfield code
@@ -158,6 +156,10 @@ function MarcEditor(ffeditor, vareditor) {
 		var sf = $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
 		UI.editor.lastFocusedEl = sf;
 		removeSubfield();
+	}
+
+	this._deleteSubfields = function(tag) {
+		$('[@id^='+tag+']').children('.subfields').find('.subfield').remove();
 	}
 
 	this._focusTag = function(tag) {
@@ -203,6 +205,10 @@ MarcEditor.prototype.setValue = function(tag, subfield, value) {
 
 MarcEditor.prototype.deleteSubfield = function(tag, subfield) {
 	this._deleteSubfield(tag, subfield);
+}
+
+MarcEditor.prototype.deleteSubfields = function(tag) {
+	this._deleteSubfields(tag);
 }
 
 MarcEditor.prototype.addSubfield = function(tag, subfield, value) {

@@ -1272,8 +1272,8 @@ function setupMarc21AuthorityLiveSearches() {
 					},
 					[
 						// field mapping
-						{name: 'pname', mapping: 'datafield[tag=100] > subfield[code=a]'},
-						{name: 'dates', mapping: 'datafield[tag=100] > subfield[code=d]'}
+						{name: 'pname', id: 'a', mapping: 'datafield[tag=100] > subfield[code=a]'},
+						{name: 'dates', id: 'd', mapping: 'datafield[tag=100] > subfield[code=d]'}
 					]
 			);
 			var scanClauseReader = new Ext.data.XmlReader({
@@ -1322,7 +1322,19 @@ function setupMarc21AuthorityLiveSearches() {
 				//combo.query = 'pname='+name;
 			});
 			cb.on('select', function(combo, record, index) {
-				var thissf = $(combo).parents().filter('.tag[@id^=100]').children('.subfields').children('[@id*=a]');
+				var tagnumber = $(combo.el.dom).parents('.tag').children('.tagnumber').val();
+				// create/update subfields
+				// for each subfield in this record
+				for( var i = 0; i < record.fields.length; i++) {
+					var data = record.fields.itemAt(i);
+					var subfieldcode = data.id;
+					var fieldname = data.name;
+					var value = record.data[fieldname];
+					// delete old subfield
+					UI.editor.record.deleteSubfield(tagnumber, subfieldcode);
+					// add new one
+					UI.editor.record.addSubfield(tagnumber, subfieldcode, value);
+				}
 				UI.editor.cbOpen = false;
 
 			});
