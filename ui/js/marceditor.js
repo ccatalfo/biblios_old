@@ -158,6 +158,10 @@ function MarcEditor(ffeditor, vareditor) {
 		removeSubfield();
 	}
 
+	this._deleteSubfields = function(tag) {
+		$('[@id^='+tag+']').children('.subfields').find('.subfield').remove();
+	}
+
 	this._focusTag = function(tag) {
 		$('[@id^='+tag+']').children('.tagnumber').focus();
 	}
@@ -199,6 +203,10 @@ MarcEditor.prototype.setValue = function(tag, subfield, value) {
 
 MarcEditor.prototype.deleteSubfield = function(tag, subfield) {
 	this._deleteSubfield(tag, subfield);
+}
+
+MarcEditor.prototype.deleteSubfields = function(tag) {
+	this._deleteSubfields(tag);
 }
 
 MarcEditor.prototype.addSubfield = function(tag, subfield, value) {
