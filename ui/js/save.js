@@ -74,7 +74,7 @@ function doSaveLocal(savefileid) {
     }
 	var savefilename = UI.save.savefile[savefileid];
 	showStatusMsg('Saving to '+ savefilename);
-    var rs;
+    var rs, xml;
     // if we have a record open in the marceditor, get its xml and save to drafts
     if( Ext.get('marceditor').isVisible() ) {
 		Ext.get('fixedfields_editor').mask();
@@ -83,13 +83,8 @@ function doSaveLocal(savefileid) {
         var ff_ed = $("#fixedfields_editor");
         var var_ed = UI.editor.editorDoc;
         // transform edited record back into marcxml
-        if( marcFlavor == 'marc21' ) {
-            xml = Edit2XmlMarc21(ff_ed, var_ed);
-			progress.updateProgress(.5, 'Extracing marcxml');
-        } 
-        else if( marcFlavor == 'unimarc' ) {
-            Ext.MessageBox.alert("Unimarc support not yet implemented");
-        }
+		xml = UI.editor.record.XMLString();
+		progress.updateProgress(.5, 'Extracing marcxml');
         var recid = UI.editor.id;
         // if we don't have a record id, add this record to the db first
         if( recid == '' ) {

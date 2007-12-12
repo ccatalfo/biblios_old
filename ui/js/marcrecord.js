@@ -42,7 +42,7 @@ function MarcRecord(fieldlist) {
 	}
 
 	this._XMLString = function() {
-		var xml = '<record>';
+		var xml = '<record xmlns="http://www.loc.gov/MARC21/slim">';
 		for(var i=0; i<fields.length; i++){
 			xml += fields[i].XMLString();
 		}
