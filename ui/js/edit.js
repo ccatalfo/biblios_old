@@ -1123,7 +1123,7 @@ function create_static_editor() {
 	setupEditorHotkeys();
 
 	// apply ExtJS comboboxes for live searching of authority data
-	//setupMarc21AuthorityLiveSearches();
+	setupMarc21AuthorityLiveSearches();
 }
 
 function onFocus(elem) {
@@ -1202,16 +1202,22 @@ function setupMacros(ffeditor, vareditor) {
 
 function setupEditorHotkeys() {
 	// focus prev tagnumber on shift-return
-	Ext.select('input', false, 'marceditor').addKeyMap({
+	var inputs = Ext.select('input', false, 'marceditor');
+	inputs.addKeyMap({
 		key: Ext.EventObject.ENTER,
 		fn: function(key, e) {
+			// if there's a combobox open in the marceditor, don't process so it can handle enter
+			if( UI.editor.cbOpen == true ) {
+				return;			
+			}
 			if(e.shiftKey ) {
 				$('.focused').parents('.tag').prev().children('.tagnumber').eq(0).focus();
 			}
 			else {
 				$('.focused').parents('.tag').next().children('.tagnumber').eq(0).focus();
 			}
-		}
+		},
+		stopEvent: false
 	});
 
 	// add a new subfield
@@ -1245,68 +1251,81 @@ function setupMarc21AuthorityLiveSearches() {
 	var tag700 = $('div').filter('.tag[@id^=700]').children('.subfields').children('[@id*=a]');
 	$(tag100).add(tag700).
 		each(function(i) {
-		var subfield_text = $(this).children('.subfield-text');
-		console.info('applying combobox to '+ $(subfield_text).val() );
-		var marcxmlReader = new Ext.data.XmlReader({
-				record: 'record',
-				id: 'controlfield[tag=001]',
+			var subfield_text = $(this).children('.subfield-text');
+			if( ! subfield_text ) {
+				return;
+			}
+			console.info('applying combobox to '+ $(subfield_text).val() );
+			var marcxmlReader = new Ext.data.XmlReader({
+					record: 'record',
+					id: 'controlfield[tag=001]',
+					},
+					[
+						// field mapping
+						{name: 'pname', mapping: 'datafield[tag=100] > subfield[code=a]'},
+						{name: 'dates', mapping: 'datafield[tag=100] > subfield[code=d]'}
+					]
+			);
+			var scanClauseReader = new Ext.data.XmlReader({
+					record: 'term',
+					},
+					[
+						// field mapping
+						{name: 'pname', mapping: 'value'}
+					]
+			);
+
+			var ds = new Ext.data.Store({
+				proxy: new Ext.data.HttpProxy(
+					{
+						url: kohaauthurl,
+						method: 'GET'
+					
+					}),
+				baseParams: {
+										version: '1.1',
+										operation: 'searchRetrieve',
+										recordSchema: 'marcxml',
+										maximumRecords: '5'
 				},
-				[
-					// field mapping
-					{name: 'pname', mapping: 'datafield[tag=100] > subfield[code=a]'},
-					{name: 'dates', mapping: 'datafield[tag=100] > subfield[code=d]'}
-				]
-		);
-		var scanClauseReader = new Ext.data.XmlReader({
-				record: 'term',
-				},
-				[
-					// field mapping
-					{name: 'pname', mapping: 'value'}
-				]
-		);
+				reader: marcxmlReader 
+			});
 
-		var ds = new Ext.data.Store({
-			proxy: new Ext.data.HttpProxy(
-				{
-					url: kohaauthurl,
-					method: 'GET'
-				
-				}),
-			baseParams: {
-									version: '1.1',
-									operation: 'searchRetrieve',
-									recordSchema: 'marcxml',
-									maximumRecords: '5'
-			},
-			reader: marcxmlReader 
-		});
+			var cb = new Ext.form.ComboBox({
+				store: ds,
+				typeAhead: true,
+				typeAheadDelay: 500,
+				allQuery: 'query',
+				queryParam: 'query',
+				editable: true,
+				forceSelection: false,
+				triggerAction: 'all',
+				mode: 'remote',
+				selectOnFocus: true,
+				hideTrigger: true,
+				displayField: 'pname',
+				loadingText: 'Searching...'
+			});
+			cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
+				// for scan searching need to add pname= to query
+				//var name = combo.query;
+				//combo.query = 'pname='+name;
+			});
+			cb.on('select', function(combo, record, index) {
+				var thissf = $(combo).parents().filter('.tag[@id^=100]').children('.subfields').children('[@id*=a]');
+				UI.editor.cbOpen = false;
 
-		var cb = new Ext.form.ComboBox({
-			store: ds,
-			typeAhead: true,
-			typeAheadDelay: 500,
-			allQuery: 'query',
-			queryParam: 'query',
-			editable: true,
-			forceSelection: false,
-			triggerAction: 'all',
-			mode: 'remote',
-			selectOnFocus: true,
-			hideTrigger: true,
-			displayField: 'pname',
-			loadingText: 'Searching...'
-		});
-		cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
-			// for scan searching need to add pname= to query
-			//var name = combo.query;
-			//combo.query = 'pname='+name;
-		});
-		cb.on('select', function(combo, record, index) {
-			var thissf = $(combo).parents().filter('.tag[@id^=100]').children('.subfields').children('[@id*=a]');
-
-		});
-		cb.applyTo($(subfield_text).get(0));
+			});
+			cb.on('specialkey', function(cb, e) {
+				e.stopEvent();
+			});
+			cb.on('expand', function(cb, e) {
+				UI.editor.cbOpen = true;
+			});
+			cb.on('hide', function(cb, e) {
+			});
+			UI.editor.comboboxes.push(cb);
+			cb.applyTo($(subfield_text).get(0));
 	});
 	// 650 subject
 	var tag650 = $('div').filter('.tag[@id^=650]').children('.subfields').children('[@id*=a]');
@@ -1598,6 +1617,7 @@ function editorMouseUp(o) {
 function clear_editor() {
     // reset current open record to none
     UI.editor.id = '';
+	UI.editor.comboboxes = new Array();
    // clear the marceditor divs
    $("#fixedfields_editor").empty();
    $("#varfields_editor").empty();

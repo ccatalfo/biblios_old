@@ -16,6 +16,7 @@ UI.editor.savefileid = '';
 UI.editor.xml = '';
 UI.editor.lastFocusedEl = '';
 UI.editor.record = '';
+UI.editor.comboboxes = new Array();
 UI.search = {};
 UI.search.currQuery = '';
 UI.search.limitby = {};
@@ -26,6 +27,7 @@ UI.currSaveFileName = '';
 UI.lastWindowOpen = '';
 UI.lastSearchPreviewed = '';
 UI.lastSavePreview = '';
+UI.keymaps = {};
 // layouts
 UI.optionsLayout = {};
 
