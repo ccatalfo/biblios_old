@@ -1136,6 +1136,14 @@ function onBlur(elem) {
 	UI.editor.record.update(elem);
 }
 
+function onFixedFieldEditorBlur(elem) {
+	// transfer the fixed field editor values to fixed field tags
+	var ff_ed = $("#ffeditor");
+	transferFF_EdToTags(ff_ed);
+	UI.editor.record.update($('#000').find('.controlfield'));
+	UI.editor.record.update($('#008').find('.controlfield'));
+}
+
 function setupSpecialEntries(loc, editor) {
 	var specialentries = loc.instance.special_entries;
 	for( var i = 0; i < specialentries.length; i++) {

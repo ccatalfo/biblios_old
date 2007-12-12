@@ -373,6 +373,7 @@
 		<p>Leader value is <xsl:value-of select="$value"/></p>-->
 		<xsl:value-of select="$name"/><select>
 			<xsl:attribute name="name"><xsl:value-of select="$name"/></xsl:attribute>
+			<xsl:attribute name='onblur'>onFixedFieldEditorBlur(this)</xsl:attribute>
 			<xsl:attribute name="id"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:for-each select="$marc21defs//value[@name=$name]/option">
 					<xsl:element name="option">
@@ -398,6 +399,7 @@
 			<xsl:attribute name="id"><xsl:value-of select="$name"/></xsl:attribute>
 			<xsl:attribute name="size"><xsl:value-of select="$length"/></xsl:attribute>
 			<xsl:attribute name="maxlength"><xsl:value-of select="$length"/></xsl:attribute>
+			<xsl:attribute name='onblur'>onFixedFieldEditorBlur(this)</xsl:attribute>
 			<xsl:attribute name="value">
 				<xsl:value-of select="substring($tag, $position+1, $length)"/>
 			</xsl:attribute>
