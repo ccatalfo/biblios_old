@@ -35,7 +35,7 @@
 						 <xsl:attribute name="id">cind2<xsl:value-of select="@tag"/>-<xsl:number value="position()"/></xsl:attribute>
 					<xsl:attribute name='value'>#</xsl:attribute>
 				</input>
-				<input class='controlfield' id='csubfields{@tag}'>
+				<input size='24' class='controlfield' id='csubfields{@tag}'>
 					<xsl:attribute name='value'>
 						<xsl:value-of select="."/>
 					</xsl:attribute>
@@ -65,6 +65,9 @@
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 				</input>
 				<input class='controlfield' id='csubfields{@tag}'>
+					<xsl:attribute name='size'>
+						<xsl:value-of select="string-length(.)"/>
+					</xsl:attribute>
 					<xsl:attribute name='value'>
 						<xsl:value-of select="."/>
 					</xsl:attribute>

@@ -122,8 +122,12 @@ function get008FromEditor(ff_ed) {
 function updateFFEditor(ff_ed) {
 	if(debug) { console.info("updating fixed field editor from leader and 008 tags"); }
     var oDomDoc = Sarissa.getDomDocument();
-    var leaderval = $("#000", UI.editor.doc).children('.controlfield').text();
-    var tag008val = $("#008", UI.editor.doc).children('.controlfield').text();
+    var leaderval = $("#000", UI.editor.doc).children('.controlfield').val();
+    var tag008val = $("#008", UI.editor.doc).children('.controlfield').val();
+    if(debug) {
+        console.info('Transferring leader value to fixed field editor from leader tag: ' + leaderval);
+        console.info('Transferring 008 value to fixed field editor from 008 tag: ' + tag008val);
+    }
     var newff = '<collection xmlns="http://www.loc.gov/MARC21/slim">';
     //"<?xml version='1.0' encoding='UTF-8'?>";
     newff += "<record><leader>";
@@ -1027,11 +1031,9 @@ function editorCheckHighlighting(o) {
 */
 function transferFF_EdToTags(ff_ed) {
     var leaderval = getLeaderFromEditor(ff_ed);
-    $("#000", UI.editor.doc).children('.controlfield').empty()
-    $("#000", UI.editor.doc).children('.controlfield').append(leaderval);
+    $("#000", UI.editor.doc).children('.controlfield').val(leaderval);
     var tag008val = get008FromEditor(ff_ed);
-    $("#008", UI.editor.doc).children('.controlfield').empty()
-    $("#008", UI.editor.doc).children('.controlfield').append(tag008val);
+    $("#008", UI.editor.doc).children('.controlfield').val(tag008val);
     if(debug) {
         console.info('Transferring leader value from fixed field editor into leader tag: ' + leaderval);
         console.info('Transferring 008 value from fixed field editor into 008 tag: ' + tag008val);
@@ -1057,7 +1059,6 @@ function toggleFixedFieldDisplay(btn, toggled) {
 		// hide leader and 008
 		$("#000", UI.editor.doc).hide();
 		$("#008", UI.editor.doc).hide();
-
 	}
 
 }
@@ -1358,6 +1359,9 @@ function setupMarc21AuthorityLiveSearches() {
 	$(tag600).
 		each(function(i) {
 		var subfield_text = $(this).children('.subfield-text');
+		if( ! subfield_text ) {
+			return;
+		}
 		console.info('applying combobox to '+ $(subfield_text).val() );
 		var store = new Ext.data.SimpleStore({
 			fields: ['author', 'auth'],

@@ -229,14 +229,16 @@ function initUI() {
 	 	new Ext.Toolbar.Separator()
 	 );
 	 var rectb1 = new Ext.Toolbar('tb1');
-	 rectb1.add(
-		new Ext.Toolbar.Button({
-			//icon: 'ui/images/fixed-field-show-icon.png',
-			text: 'FF Editor',
-			enableToggle: true,
-            pressed: true,
-			handler: toggleFixedFieldDisplay
-	}));
+	var ffbutton = new Ext.Toolbar.Button({
+		//icon: 'ui/images/fixed-field-show-icon.png',
+		text: 'FF Editor',
+		enableToggle: true,
+		pressed: true,
+	});
+	ffbutton.on('toggle', function(btn, pressed) {
+		toggleFixedFieldDisplay(btn, pressed)
+	});
+	rectb1.add(ffbutton);
 	var rectb2 = new Ext.Toolbar('tb2');
 	rectb2.add(
 		new Ext.Toolbar.Button({

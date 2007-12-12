@@ -1473,8 +1473,7 @@ function openRecord(xml) {
 	// show fixed field editor, hide ldr and 008 divs
 	$("#ffeditor").show();
 	// hide leader and 008
-	$("#000").hide();
-	$("#008").hide();
+	$("#000, #008").css('display', 'none');
 
 
 	$("#help-panel").append("This is the Help panel");
