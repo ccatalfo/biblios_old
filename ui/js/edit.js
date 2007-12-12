@@ -1323,17 +1323,24 @@ function setupMarc21AuthorityLiveSearches() {
 			});
 			cb.on('select', function(combo, record, index) {
 				var tagnumber = $(combo.el.dom).parents('.tag').children('.tagnumber').val();
+				var tag = $(combo.el.dom).parents('.tag');
 				// create/update subfields
+				// delete any subfields following the first (subfield $a)
+				$(tag).find('.subfield').slice(1).remove();
 				// for each subfield in this record
 				for( var i = 0; i < record.fields.length; i++) {
 					var data = record.fields.itemAt(i);
 					var subfieldcode = data.id;
 					var fieldname = data.name;
 					var value = record.data[fieldname];
-					// delete old subfield
-					UI.editor.record.deleteSubfield(tagnumber, subfieldcode);
-					// add new one
-					UI.editor.record.addSubfield(tagnumber, subfieldcode, value);
+					// if we're updating subfield $a, delete the old one first
+					if( subfieldcode == 'a') {
+						combo.setValue(value);	
+					}
+					// add new one if we have a value for it
+					else if( value != '' || null ) {
+						UI.editor.record.addSubfield(tagnumber, subfieldcode, value);
+					}
 				}
 				UI.editor.cbOpen = false;
 
