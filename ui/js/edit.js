@@ -1262,7 +1262,7 @@ function setupMarc21AuthorityLiveSearches() {
 	$(tag100).add(tag700).
 		each(function(i) {
 			var subfield_text = $(this).children('.subfield-text');
-			if( ! subfield_text ) {
+			if( subfield_text.length == 0 ) {
 				return;
 			}
 			console.info('applying combobox to '+ $(subfield_text).val() );
