@@ -108,6 +108,7 @@ function doSaveRemote(loc, xmldoc) {
 	UI.editor.location = Prefs.remoteILS[loc].location;
 	Prefs.remoteILS[loc].instance.saveHandler = function(xml) {
 		UI.editor.progress.updateProgress(.7, 'Retrieved remote record');
+		openRecord(xml);
 		Ext.get('fixedfields_editor').unmask();
 		Ext.get('varfields_editor').unmask();
 		UI.editor.progress.hide();
