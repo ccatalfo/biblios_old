@@ -31,18 +31,8 @@ function doSaveLocal(savefileid) {
         var ff_ed = $("#fixedfields_editor");
         var var_ed = UI.editor.editorDoc;
         // transform edited record back into marcxml
-<<<<<<< HEAD:ui/js/save.js
 		xml = UI.editor.record.XMLString();
 		progress.updateProgress(.5, 'Extracing marcxml');
-=======
-        if( marcFlavor == 'marc21' ) {
-			progress.updateProgress(.5, 'Extracting marcxml');
-            xml = Edit2XmlMarc21(ff_ed, var_ed);
-        } 
-        else if( marcFlavor == 'unimarc' ) {
-            Ext.MessageBox.alert("Unimarc support not yet implemented");
-        }
->>>>>>> db_gearshift:ui/js/save.js
         var recid = UI.editor.id;
         // if we don't have a record id, add this record to the db first
         if( recid == '' ) {
