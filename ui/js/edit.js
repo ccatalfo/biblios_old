@@ -1649,6 +1649,7 @@ function editorMouseUp(o) {
 function clear_editor() {
     // reset current open record to none
     UI.editor.id = '';
+	UI.editor.location = '';
 	UI.editor.comboboxes = new Array();
    // clear the marceditor divs
    $("#fixedfields_editor").empty();
