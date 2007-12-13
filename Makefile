@@ -11,5 +11,11 @@ all: $(SRCS)
 tags: $(SRCS)
 	$(CTAGS) ui/js/*.js
 
+debug: 
+	sed 's|debug = 0|debug = 1|' < index.html > index-debug.html
+	set 's|biblios_packed.js|biblios_all.js|' < index.html > index-debug.html
+	sed 's|ext-all.js|ext-all-debug.js|' < index.html > index-debug.html
+	sed 's|jquery-1.1.3.1.pack.js|jquery-1.1.3.1.js|' < index.html > index-debug.html
+
 
 	
