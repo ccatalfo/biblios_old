@@ -22,6 +22,7 @@ UI.search.currQuery = '';
 UI.search.limitby = {};
 UI.save = {};
 UI.save.savefile = {};
+UI.savefilesql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
 UI.currSaveFile = '';
 UI.currSaveFileName = '';
 UI.lastWindowOpen = '';
@@ -83,7 +84,7 @@ var editButton = new Ext.Toolbar.Button({
             }
             else if( Ext.get('savegrid').isVisible() ) {
                 var id = savefilegrid.getSelections()[0].data.Id;
-					 var xml = getLocalXml(id);
+				var xml = getLocalXml(id);
                 UI.editor.id = id;
                 openRecord(  xml );
             }
@@ -152,7 +153,7 @@ function createOptionsTab() {
 
 function createTargetGrid() {
 	var Target = Ext.data.Record.create([
-		{name: 'id'},
+		{name: 'rowid'},
 		{name: 'name', type: 'string'},
 		{name: 'hostname', type: 'string'},
 		{name: 'port', type: 'string'},
@@ -179,7 +180,7 @@ function createTargetGrid() {
 		record.enabled = record.enabled ? 1 : 0;
 		if( operation == Ext.data.Record.COMMIT ) {
 			try {
-				var rs = db.execute('update Target set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where id = ?', [record.name, record.hostname, record.port, record.dbname, record.description, record.userid, record.password, record.enabled, record.id]);
+				var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where rowid = ?', [record.name, record.hostname, record.port, record.dbname, record.description, record.userid, record.password, record.enabled, record.rowid]);
 				rs.close()
 			}
 			catch(ex) {
@@ -265,7 +266,7 @@ function createTargetGrid() {
 		}
 		var rs;
 		try {
-			rs = db.execute('update Targets set '+field+' = ? where id = ?', [value, id]);
+			rs = db.execute('update SearchTargets set '+field+' = ? where rowid = ?', [value, id]);
 			rs.close();
 		}
 		catch(ex) {
@@ -275,7 +276,7 @@ function createTargetGrid() {
 	});
 	Ext.ComponentMgr.register(targetgrid);
 	targetgrid.render();
-	ds.load({db: db, selectSql: 'select id, name, hostname, port, dbname, description, userid, password, syntax, enabled from Targets'});
+	ds.load({db: db, selectSql: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets'});
 
 	var gridHeader = targetgrid.getView().getHeaderPanel(true);
 	var tb = new Ext.Toolbar(gridHeader, [
@@ -285,7 +286,7 @@ function createTargetGrid() {
 				// insert new target into db so we get it's id
 				var rs;
 				try {
-					rs = db.execute('insert into Targets (id) values (null)');
+					rs = db.execute('insert into SearchTargets (name) values ("")');
 					rs.close();
 				}
 				catch(ex) {
@@ -314,7 +315,7 @@ function createTargetGrid() {
 			handler: function() {
 				var record = Ext.ComponentMgr.get('targetgrid').getSelectionModel().selection.record;
 				try {
-					var rs = db.execute('delete from Targets where id = ?', [record.data.id]);
+					var rs = db.execute('delete from SearchTargets where SearchTargets.rowid = ?', [record.data.rowid]);
 					rs.close();
 				}
 				catch(ex) {
@@ -330,18 +331,20 @@ function createTargetGrid() {
 function createDatabaseOptions() {
 	var dbform = new Ext.form.Form();
 	dbform.addButton('Reset Database', function(btn) {
-		resetDatabase();
+		GearsORMShift.migrateTo(0);
+		GearsORMShift.migrateTo( GearsORMShift.latestVersion() );
 		setPazPar2Targets(paz);
 		updateSearchTargetFolders();
 		Ext.MessageBox.alert('Preferences', 'Database reset');
 	});
 	dbform.addButton('Add Test Targets', function(btn) {
-		setupTestTargets();
+		createTestTargets();
 		setPazPar2Targets(paz);
 		updateSearchTargetFolders();
 		Ext.MessageBox.alert('Preferences', 'Test targets added');
 	});
 	dbform.addButton('Remove Test Targets', function(btn) {
+		removeTestTargets();
 		setPazPar2Targets(paz);
 		removeTargetFolder(1);
 		removeTargetFolder(2);
@@ -510,66 +513,48 @@ function createSaveFileFolders(parentid) {
 		});
 	}
     // get all savefiles at the root level, then for each append its children
-    var rs, current_root;
-    try {
+    var current_root;
+	var savefiles = new Array();
     if( parentid == 'null' ) {
-        rs = db.execute('select id, name, description, allowDelete, allowAdd, allowRename, allowDrag, allowDrop, ddGroup, icon from Savefiles where parentid is null');
+		savefiles = DB.Savefiles.select('parentid is null');
         current_root = saveFilesRoot;
     }
     else {
-        rs = db.execute('select id, name, description, allowDelete, allowAdd, allowRename, allowDrag, allowDrop, ddGroup, icon from Savefiles where parentid = ?',[parentid]);
+		savefiles = DB.Savefiles.select('parentid = ?', [parentid]);
         current_root = getNodeBySaveFileId(parentid);
     }
-    while( rs.isValidRow() ) {
-        var id = rs.fieldByName('id');  
-        var name = rs.fieldByName('name');  
-        var desc = rs.fieldByName('description');
-        var allowDelete = rs.fieldByName('allowDelete');
-        var allowAdd = rs.fieldByName('allowAdd');
-        var allowRename = rs.fieldByName('allowRename');
-        var allowDrag = rs.fieldByName('allowDrag');
-        var allowDrop = rs.fieldByName('allowDrop');
-        var ddGroup = rs.fieldByName('ddGroup');
-        var icon = rs.fieldByName('icon');
+	savefiles.each( function(savefile) {
         // create a treenode for this save file
         var newnode = new Ext.tree.TreeNode({
-            id: name,
-            text: name, 
-            savefileid: id, 
-            parentid: parentid,
-            qtip: desc, 
-            icon: icon,
+            id: savefile.name,
+            text: savefile.name, 
+            savefileid: savefile.rowid, 
+            parentid: savefile.parentid,
+            qtip: savefile.description, 
+            icon: savefile.icon,
             leaf: false, 
-            allowDelete: allowDelete, 
-            allowAdd: allowAdd,
-            allowDrag: allowDrag, 
-            allowDrop: allowDrop, 
-            ddGroup: ddGroup
+            allowDelete: savefile.allowDelete, 
+            allowAdd: savefile.allowAdd,
+            allowDrag: savefile.allowDrag, 
+            allowDrop: savefile.allowDrop, 
+            ddGroup: savefile.ddGroup
         }); 
         current_root.appendChild(newnode);
         newnode.on('click', function(n) {
-			   showStatusMsg('Displaying ' + n.attributes.id);
-				UI.currSaveFile = n.attributes.id;
-				UI.currSaveFileName = n.text;
+			showStatusMsg('Displaying ' + n.attributes.id);
+			UI.currSaveFile = n.attributes.savefileid;
+			UI.currSaveFileName = n.text;
             displaySaveView();
             folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
             displaySaveFile(n.attributes.savefileid, n.text); 
-				clearStatusMsg();
+			clearStatusMsg();
         });
-		//FIXME: save records in this save file folder to recordCache
-		//if(debug) { console.info('loading records for save file folder with id ' + rs.fieldByName('id') + ' into recordCache'); }
-		//recordCache[id] = loadSaveFile(rs.fieldByName('id'));
         // setup dropnode for Trash
         if( name == 'Trash' ) {
 
         }
-        createSaveFileFolders(id);
-        rs.next();
-    } 
-    }
-    catch(ex) {
-		 Ext.Msg.alert("DB error", ex.message);
-    }
+        createSaveFileFolders(savefile.rowid);
+    }); 
 	return saveFilesRoot;
 }
 
@@ -660,15 +645,16 @@ function createFolderList() {
 
     // save new name for save file to db on completion
     treeEditor.on('complete', function(editor, value, startvalue) {
-        try {
-        rs = db.execute('update Savefiles set name=? where id=?', [value, editor.editNode.attributes.savefileid]);
-        rs.close();
-        return true;
+		try {
+			var savefile = DB.Savefiles.select('rowid=?', [editor.editNode.attributes.savefileid]).getOne();
+			savefile.name = value;
+			savefile.save();
+			return true;
         }
         catch(ex) {
-        Ext.Msg.alert("DB error", ex.message);
-        return false;
-        }
+			Ext.MessageBox.alert("Database error", ex.message);
+			return false;
+		}
     });
 /*
    Function: removeNode
@@ -690,32 +676,31 @@ function createFolderList() {
     function removeNode(){
         var n = folderTree.getSelectionModel().getSelectedNode();
         if(n && n.attributes.allowDelete){
-        // do we really want to do this???
-        Ext.MessageBox.confirm("Delete", "Really delete this folder and all records in it?", function(btn, text) {
-            if( btn == 'yes' ) {
-            var id = n.attributes.savefileid;
-            folderTree.getSelectionModel().selectPrevious();
-            n.parentNode.removeChild(n);
-            // update db
-            try {
-                rs = db.execute('delete from Savefiles where id=?', [id]);
-                rs.close();
-                return true;
-				// update our hash of savefile id/names
-				getSaveFileNames();
-				updateSaveMenu();
-            }
-            catch(ex) {
-                Ext.Msg.alert("DB error", ex.message);
-                return false;
-            }
-            return true;
-            }
-            else {
-            return false;   
-            }
-        });
-         
+			// do we really want to do this???
+			Ext.MessageBox.confirm("Delete", "Really delete this folder and all records in it?", 
+				function(btn, text) {
+				if( btn == 'yes' ) {
+					var id = n.attributes.savefileid;
+					folderTree.getSelectionModel().selectPrevious();
+					n.parentNode.removeChild(n);
+					// update db
+					try {
+						DB.Savefiles.select('rowid = ?', [id]).getOne().remove();
+						return true;
+						// update our hash of savefile id/names
+						getSaveFileNames();
+						updateSaveMenu();
+					}
+					catch(ex) {
+						Ext.MessageBox.alert("Database error", ex.message);
+						return false;
+					}
+					return true;
+				}
+				else {
+					return false;   
+				}
+			});
         }
     }
 
@@ -739,15 +724,15 @@ function createFolderList() {
     function renameNode() {
         var n = folderTree.getSelectionModel().getSelectedNode();
         if((n.attributes.allowRename == true)){
-        treeEditor.editNode = n;
-        treeEditor.startEdit(n.ui.textNode);
-		// update our hash of savefile id/names
-		getSaveFileNames();
-		updateSaveMenu();
-    }
-    else {
-        return false;
-    }
+			treeEditor.editNode = n;
+			treeEditor.startEdit(n.ui.textNode);
+			// update our hash of savefile id/names
+			getSaveFileNames();
+			updateSaveMenu();
+		}
+		else {
+			return false;
+		}
     }
 
 /*
@@ -769,90 +754,95 @@ function createFolderList() {
 */
     function addNode(){
         var n = folderTree.getSelectionModel().getSelectedNode();
-        if((n.attributes.allowAdd == true)){
-        var newname = 'New Folder';
-        // update db with new save file and get its id so we can pass it to TreeNode config
-        var rs, id, parentid;
-        parentid = n.attributes.savefileid;
-        if( parentid == 'null') {
-        parentid = null;
-        }
-        try {
-        rs = db.execute('insert into Savefiles (id, name, description, parentid, allowDelete, allowAdd, allowRename, allowDrag, allowDrop, ddGroup, icon, date_added, date_modified) values (null, ?, "", ?, 1, 1, 1, 1, 1, "RecordDrop", "ui/images/drive-harddisk.png", datetime("now", "localtime"), datetime("now", "localtime"))', [newname, parentid]);
-        rs.close();
-		// update our hash of savefile id/names
-		getSaveFileNames();
-		// update Save menu
-		updateSaveMenu();
-        }
-        catch(ex) {
-        Ext.Msg.alert("DB error", ex.message);
-        }
-        try {
-        rs = db.execute('select max(id) from Savefiles');
-        id = rs.field(0);
-        rs.close();
-        }
-        catch(ex) {
-			  Ext.Msg.alert("DB error", ex.message);
-        }
-        var newnode = new Ext.tree.TreeNode(
-        {
-           text: 'New Folder', 
-            savefileid: id, 
-            qtip:'', 
-            icon: 'ui/images/drive-harddisk.png',
-            leaf: false, 
-            allowDelete:true, 
-            allowAdd: true,
-            allowRename: true,
-            allowEdit: true,
-            allowDrag:true, 
-            allowDrop:true, 
-            ddGroup:'SaveFileNodeDrop'
-        }                   
-        );
-            n.appendChild(
-        newnode
-        );
-        n.expand();
-        newnode.on('click', function(n) {
-			displaySaveView();
-			folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
-			showStatusMsg('Displaying ' + n.attributes.id);
-			displaySaveFile(n.attributes.savefileid, n.text); 
-			clearStatusMsg();
-        });
-        folderTree.getSelectionModel().select(newnode);
-        setTimeout(function() {
-			treeEditor.on('complete', function(editor, value, startValue) {
+        if((n.attributes.allowAdd == true)) {
+			// update db with new save file and get its id so we can pass it to TreeNode config
+			var parentid;
+			parentid = n.attributes.savefileid;
+			if( parentid == 'null') {
+				parentid = null;
+			}
+			try {
+				var savefile = new DB.Savefiles({
+					name: "New Folder",
+					description: '',
+					parentid: parentid,
+					allowDelete: 1,
+					allowAdd: 1,
+					allowRename: 1,
+					allowDrag: 1,
+					allowDrop: 1,
+					ddGroup: 'RecordDrop',
+					icon: 'ui/images/drive-harddisk.png',
+					date_added: '',
+					date_modified: ''
+				}).save();
 				// update our hash of savefile id/names
 				getSaveFileNames();
+				// update Save menu
 				updateSaveMenu();
+			}
+			catch(ex) {
+				Ext.MessageBox.alert("Database error", ex.message);
+			}
+			try {
+				var id = DB.Savefiles.count();
+			}
+			catch(ex) {
+				  Ext.MessageBox.alert("Database error", ex.message);
+			}
+			var newnode = new Ext.tree.TreeNode(
+			{
+				text: 'New Folder', 
+				savefileid: id, 
+				qtip:'', 
+				icon: 'ui/images/drive-harddisk.png',
+				leaf: false, 
+				allowDelete:true, 
+				allowAdd: true,
+				allowRename: true,
+				allowEdit: true,
+				allowDrag:true, 
+				allowDrop:true, 
+				ddGroup:'SaveFileNodeDrop'
 			});
-			treeEditor.editNode = newnode;
-			treeEditor.startEdit(newnode.ui.textNode);
-				
-        }, 1000);
+			n.appendChild(newnode);
+			n.expand();
+			newnode.on('click', function(n) {
+				displaySaveView();
+				folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
+				showStatusMsg('Displaying ' + n.attributes.id);
+				displaySaveFile(n.attributes.savefileid, n.text); 
+				clearStatusMsg();
+			});
+			folderTree.getSelectionModel().select(newnode);
+			setTimeout(function() {
+				treeEditor.on('complete', function(editor, value, startValue) {
+					// update our hash of savefile id/names
+					getSaveFileNames();
+					updateSaveMenu();
+				});
+				treeEditor.editNode = newnode;
+				treeEditor.startEdit(newnode.ui.textNode);
+			}, 1000);
         }
     }
 
 
     folderTree.on('beforenodedrop', function(e){
-			 if(debug) { console.info("savefilestree dropped on: " + e.target.id); }
-			 // grid data source: e.data.selections[0].id
-			 // tree node target: e.target.id
-			 var sel = e.data.selections;
-			 doSaveLocal(e.target.attributes.savefileid);
-			 // redisplay current savefile (to show moved record)
-			 var currentId = UI.currSaveFile;
-			 var currentName = UI.currSaveFileName;
-			 // reload data into recordCache
-			 // FIXME: use Gears workerpool to do this?
-			 //if(debug) { console.info('reloading data into save file after record(s) droppped'); }
-			 //recordCache[currentId] = loadSaveFile(currentId);
-			 displaySaveFile(currentId, currentName); 
-			 return true;
+		 if(debug) { console.info("savefilestree dropped on: " + e.target.id); }
+		 // grid data source: e.data.selections[0].id
+		 // tree node target: e.target.id
+		 var sel = e.data.selections;
+		 var droppedsavefileid = e.target.attributes.savefileid;
+		 doSaveLocal(droppedsavefileid);
+		 // redisplay current savefile (to show moved record)
+		 var currentId = UI.currSaveFile;
+		 var currentName = UI.currSaveFileName;
+		 ds = Ext.ComponentMgr.get('save-file-grid').dataSource;
+		 if( currentId != '') {
+			 ds.reload({db: db, selectSql: UI.savefilesql + ' WHERE Savefiles_id='+currentId});
+		}
+		 return true;
     });
 }
 
@@ -912,7 +902,7 @@ function updateSearchTargetFolders() {
           {
             text: data.name, 
             servername: data.name,
-            id: data.id, 
+            id: data.rowid, 
 			hostname: data.hostname,
 			port: data.port,
 			dbname: data.dbname,
@@ -997,6 +987,8 @@ function createSearchPazParGrid(url) {
 		{name: 'title', mapping: 'md-title'},
 		{name: 'title-remainder', mapping: 'md-title-remainder'},
 		{name: 'author', mapping:'md-author'},
+		{name: 'title-responsibility', mapping:'md-title-responsibility'},
+		{name: 'publication', mapping:'md-publication-name'},
 		{name: 'date', mapping: 'md-date'},
 		{name: 'medium', mapping:'md-medium'},
 		{name: 'location', mapping:'location @name'}
@@ -1015,7 +1007,8 @@ function createSearchPazParGrid(url) {
     cm = new Ext.grid.ColumnModel([
 		{header: "Medium", width: 50, dataIndex: 'medium'},
 		{header: "Title", width: 180, dataIndex: 'title'},
-	    {header: "Author", width: 120, dataIndex: 'author'},
+	    {header: "Author", width: 120, dataIndex: 'title-responsibility'},
+	    {header: "Publisher", width: 120, dataIndex: 'publication'},
 		{header: "Date", width: 50, dataIndex: 'date'},
 		{header: "Location", width: 100, dataIndex: 'location'}
 	]);
@@ -1112,33 +1105,32 @@ function createSearchPazParGrid(url) {
       <createSearchResultsGrid>
 */
 function createSaveFileGrid(data) {
-	// destroy old search results grid
-	if( Ext.ComponentMgr.get('save-file-grid') ) {
-		savefilegrid.destroy(false);
-	}
-    // create new Search Results Grid
-    // empty data at first
-	if( ! data) {
-		data = [];
-	}
- 
     savefileds = new Ext.data.Store({
-                proxy: new Ext.data.PagingMemoryProxy(data),
+                proxy: new Ext.data.GoogleGearsProxy(),
                 reader: new Ext.data.ArrayReader({}, [
                        {name: 'Id'},
                        {name: 'Title'},
                        {name: 'Author'},
-                       {name: 'Publisher'},
                        {name: 'DateOfPub'},
+					   {name: 'Location'},
+                       {name: 'Publisher'},
+					   {name: 'Medium'},
+					   {name: 'xml'},
                        {name: 'Status'},
                        {name: 'Date Added'},
                        {name: 'Last Modified'},
+					   {name: 'xmlformat'},
+					   {name: 'marcflavour'},
+					   {name: 'template'},
+					   {name: 'marcformat'},
+					   {name: 'Savefiles_id'},
+					   {name: 'SearchTargets_id'}
                   ])
         });
-        savefileds.load();
 
     var SavecolModel = new Ext.grid.ColumnModel([
-            {header: "Title", width: 300, dataIndex: 'Title', sortable: true},
+			{header: "Medium", dataIndex: 'Medkum', sortable: true},
+            {header: "Title", width: 200, dataIndex: 'Title', sortable: true},
             {header: "Author", width: 160, dataIndex: 'Author', sortable: true},
             {header: "Publisher", width: 130, dataIndex: 'Publisher', sortable: true},
             {header: "DateOfPub", width: 80, dataIndex: 'DateOfPub', sortable: true},
@@ -1188,10 +1180,10 @@ function createSaveFileGrid(data) {
         //  previewRecord( id , 'save-prev');
         //});
         savefilegrid.getSelectionModel().on('rowselect', function(selmodel, rowIndex) {
-          var id = savefileds.data.items[rowIndex].data.Id;
-			 var xml = getLocalXml(id);
-			  previewRecord( xml );
-			 UI.lastSavePreview = xml;
+			var id = savefileds.data.items[rowIndex].data.Id;
+			var xml = getLocalXml(id);
+			previewRecord( xml );
+			UI.lastSavePreview = xml;
         });
 		savefilegrid.render();
 
@@ -1206,7 +1198,7 @@ function createSaveFileGrid(data) {
     savegridpaging.insertButton(3, refreshButton);
     savegridpaging.insertButton(4, printButton);
     savegridpaging.insertButton(5, exportButton);
-    savefileds.load({params:{start:0, limit:20}});
+    savefileds.load({db: db, selectSql: UI.savefilesql});
     savefilegrid.getSelectionModel().selectFirstRow();
 }
 
@@ -1226,8 +1218,7 @@ function createSaveFileGrid(data) {
 
 */
 function displaySaveFile(id, savefilename) {
-    var data = loadSaveFile(id);
-	createSaveFileGrid(data);
+    loadSaveFile(id);
 	// FIXME: use Gears workerpool to load records?
 	//createSaveFileGrid(recordCache[id]);
 }
@@ -1254,32 +1245,6 @@ function displaySearchResults(data) {
     searchsavegrid.getSelectionModel().selectFirstRow();
 }
 
-
-/*
-   Function: loadSearch
-
-   Loads a search with the passed in id into the search results grid.
-
-   Parameters:
-
-   id: id of the search (Searches table) to load.
-
-   Returns:
-
-   None.
-
-*/
-function loadSearch(id) {
-    var rs;
-    try {
-    rs = db.execute('select * from Searches where id = ?', [id]);   
-    }
-    catch(ex) {
-    Ext.Message.alert(ex.message);
-    }
-}
-
-
 /*
    Function: loadSaveFile
 
@@ -1295,32 +1260,7 @@ function loadSearch(id) {
 
 */
 function loadSaveFile(id) {
-    var data = new Array();
-    var i = 0;
-    try {
-        var rs = db.execute('select * from Records where savefile=?',[id]);
-        while( rs.isValidRow() ) {
-            var id = rs.fieldByName('id');
-            var xml = rs.fieldByName('xml');
-            var currRecord = Sarissa.getDomDocument();
-            currRecord = (new DOMParser()).parseFromString(xml, 'text/xml');
-            var title = $('[@tag="245"]/subfield[@code="a"]', currRecord).text();
-            var author = $('[@tag="245"]/subfield[@code="c"]', currRecord).text();
-            var publisher = $('[@tag="260"]/subfield[@code="b"]', currRecord).text();
-            var dateofpub = $('[@tag="260"]/subfield[@code="c"]', currRecord).text();
-            var recstatus = rs.fieldByName('status');
-            var date_added = rs.fieldByName('date_added');
-            var date_modified = rs.fieldByName('date_modified');
-            var recArray = new Array(id, title, author, publisher, dateofpub, recstatus, date_added, date_modified);
-            data[i] = recArray;
-            i++;
-                rs.next();
-            }
-        } catch(ex) {
-            Ext.Msg.alert('Error', 'db error: ' + ex.message);
-        }
-    rs.close();
-    return data;
+	Ext.ComponentMgr.get('save-file-grid').dataSource.reload({db: db, selectSql: UI.savefilesql + ' WHERE Savefiles_id = ' + id});
 }
 
 
@@ -1343,7 +1283,7 @@ function previewRecord(xml) {
 	// to prevent Extjs from sending to rowselect events in succession, thereby causing 
 	// to preview twice in a row
 	if( UI.lastSearchPreviewed == xml || UI.lastSavePreview == xml ) {
-		return;
+		//return;
 	}
 	if( Ext.get('searchgrid').isVisible() ) {
 		var panelid = 'search-preview-panel';
@@ -1445,6 +1385,10 @@ function displaySaveView() {
 	innerLayout.getRegion('center').hidePanel('searchgridpanel');
 	innerLayout.getRegion('center').showPanel('savegridpanel');
 	UI.lastWindowOpen = 'savegrid';
+	// if we have a current save file, reload it so the grid reflects any changes made
+	if( UI.currSaveFile != '') {
+		loadSaveFile( UI.currSaveFile );
+	}
 }
 
 /*
@@ -1818,20 +1762,7 @@ function doCreateNewRecord() {
       <getLastSrchId>
 */
 function getLastRecId() {
-    // get the last id from sqlite to set open javascript function id
-    var rs;
-    var lastId;
-    try {
-        rs = db.execute('select max(id) from Records');
-        lastId = rs.field(0);
-        //console.info('ProcsessSearchResults: last id inserted: ' + lastId);
-    } catch(ex) {
-        //console.error('db error: ' + ex.message);
-    }
-    if( lastId == null) {
-    //console.info('changing lastId from null to 0');
-    lastId = 0;
-    }
+	var lastId = DB.Records.count();
     return lastId;
 }
 
@@ -2040,19 +1971,6 @@ function filterSearchResultsByServer() {
 }
 
 function getLocalXml(id) {
-    //console.info('openRecord: opening record with id: ' + id);
-    try {
-        var resultSet = db.execute('select xml, savefile from Records where id=?', [id]);
-    } catch(ex) {
-        //console.error('db error: ' + ex.message);
-    }
-    var xml;
-    while( resultSet.isValidRow() ) {
-        xml = resultSet.fieldByName('xml');
-		  savefileid = resultSet.fieldByName('savefile');
-        //console.log('opening record with xml: ' + xml);
-        resultSet.next();
-    }
-    if(debug==1) {console.info("record " + id + " has xml: " + xml);}
+	var xml = DB.Records.select(id).getOne().xml;
 	return xml;
 }

@@ -1,55 +1,3 @@
-
-/*
-   Function: doSaveZ3950
-
-   Save record(s) to Z39.50 server.
-
-   Parameters:
-
-   None.
-
-   Returns:
-
-   None.
-
-   Note:
-   *Not yet functional*
-*/
-function doSaveZ3950() {
-	var tab = tabs.getActiveTab();
-	var id = tab.recid;
-	try {
-		var rs = db.execute('select xml from Records where id=?', [id]);
-	} catch(ex) {
-		//console.error('db error: ' + ex.message);
-	}
-	var xml = rs.field(0);	
-	//console.info("saving record id: " + id + " with xml: " + xml);
-
-    Ext.Ajax.on('beforerequest', function() {
-      $("#south").empty();
-      $("#south").append("Saving to " + z3950serversSave);
-    });
-    Ext.Ajax.on('requestexception', function(conn, resp, options) {
-      $("#south").empty();
-      $("#south").append("Error saving " + resp.responseText);
-    });
-	Ext.Ajax.request({
-		method: 'POST',
-		params: {
-			'record': xml,
-			'host': z3950serversSave,
-			'marcflavour': marcFlavor,
-			'encoding': encoding
-			}, 
-		url: saveScript,
-		callback: function(option, success, response) {
-            $("#south").empty();
-		    $("#south").append('Save results: ', response.responseText);
-		}
-	});
-}
-
 /*
    Function: doSaveLocal
 
@@ -83,36 +31,49 @@ function doSaveLocal(savefileid) {
         var ff_ed = $("#fixedfields_editor");
         var var_ed = UI.editor.editorDoc;
         // transform edited record back into marcxml
+<<<<<<< HEAD:ui/js/save.js
 		xml = UI.editor.record.XMLString();
 		progress.updateProgress(.5, 'Extracing marcxml');
+=======
+        if( marcFlavor == 'marc21' ) {
+			progress.updateProgress(.5, 'Extracting marcxml');
+            xml = Edit2XmlMarc21(ff_ed, var_ed);
+        } 
+        else if( marcFlavor == 'unimarc' ) {
+            Ext.MessageBox.alert("Unimarc support not yet implemented");
+        }
+>>>>>>> db_gearshift:ui/js/save.js
         var recid = UI.editor.id;
         // if we don't have a record id, add this record to the db first
         if( recid == '' ) {
             if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
-            var sel = searchgrid.getSelections()[0];
-			var id = sel.id;
-            var server = sel.data.location;
-            var title = sel.data.title;
-            recid = addRecordFromSearch(id, server, title, savefileid);
+            var data = searchgrid.getSelections()[0].data;
+			var id = searchgrid.getSelections()[0].id;
 			progress.updateProgress(.6, 'Retrieving record from server');
+            recid = addRecordFromSearch(id, data, savefileid);
+			if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
         }
-        if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
-        try {
-            rs = db.execute('update Records set xml=? where id=?', [xml, recid]);	
-            rs = db.execute('update Records set savefile=? where id=?', [savefileid, recid]);	
-            rs = db.execute('update Records set status=? where id=?', ['edited', recid]);	
-            rs = db.execute('update Records set date_modified=datetime("now", "localtime") where id=?', [recid]);	
-            if(debug) { console.info("saved record with id: " + recid + " to savefile: " + savefilename); }
-                rs.close();
-			progress.updateProgress(1, 'Saving record to local database');
-            } catch(ex) {
-                Ext.MessageBox.alert('Database error',ex.message);
-            }
+		else { // recid isn't empty so we've already saved this record, just update it
+			try {
+				var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
+				record.xml = xml;
+				record.Savefiles_id = savefileid;
+				record.status = 'edited';
+				record.date_modified = new Date();
+				record.save();
+				if(debug) { 
+					console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
+			}
+				progress.updateProgress(1, 'Saving record to local database');
+			} catch(ex) {
+					Ext.MessageBox.alert('Database error',ex.message);
+			}
+		}
 		progress.hide();
 		Ext.get('fixedfields_editor').unmask();
 		Ext.get('varfields_editor').unmask();
         return true;
-    }
+    } // save record from marc editor
     // if we're picking from the savefile grid 
     else if( (Ext.get('savegrid').isVisible() ) ) {
         var grid = Ext.ComponentMgr.get( 'save-file-grid' );
@@ -122,10 +83,11 @@ function doSaveLocal(savefileid) {
 		for( var i = 0; i < sel.length; i++) {
 			var id = sel[i].data.Id;
 			try {
-				rs = db.execute('update Records set status=? where id=?', ['edited', id]);	
-				rs = db.execute('update Records set date_modified=datetime("now", "localtime") where id=?', [id]);	
-				rs = db.execute('update Records set savefile=? where id=?', [savefileid, id]);	
-				rs.close();
+				var record = DB.Records.select('Records.rowid=?',[id]).getOne();
+				record.status = 'edited';
+				record.date_modified = new Date().toString();
+				record.Savefiles_id = savefileid;
+				record.save();
 				if(debug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
 			}
 			catch(ex) {
@@ -139,9 +101,8 @@ function doSaveLocal(savefileid) {
         var sel = searchgrid.getSelectionModel().getSelections();
 		for( var i = 0; i < sel.length; i++) {
 			var id = sel[i].id;
-            var server = sel[i].data.location;
-            var title = sel[i].data.title;
-            addRecordFromSearch(id, server, title, savefileid);
+			var data = sel[i].data;
+            addRecordFromSearch(id, data, savefileid);
 		}
     }
     showStatusMsg("Record(s) saved to "+savefilename);
@@ -149,16 +110,14 @@ function doSaveLocal(savefileid) {
 }
 
 function doSaveRemote(loc, xmldoc) {
-	Ext.get('fixedfields_editor').mask();
-	Ext.get('varfields_editor').mask();
+	Ext.get('ffeditor').mask();
+	Ext.get('vareditor').mask();
 	UI.editor.progress = Ext.MessageBox.progress('Saving record to remote server', '');
 	if(debug) { console.info('Saving open record to ' + loc); }
 	// set UI.editor.location to point to this record so we get special entries etc.
 	UI.editor.location = Prefs.remoteILS[loc].location;
 	Prefs.remoteILS[loc].instance.saveHandler = function(xml) {
 		UI.editor.progress.updateProgress(.7, 'Retrieved remote record');
-		openRecord(xml);
-		UI.editor.progress.updateProgress(1, 'Displaying remote record');
 		Ext.get('fixedfields_editor').unmask();
 		Ext.get('varfields_editor').unmask();
 		UI.editor.progress.hide();
@@ -169,31 +128,34 @@ function doSaveRemote(loc, xmldoc) {
 }
 
 
-function addRecordFromSearch(id, server, title, savefileid) {
+function addRecordFromSearch(id, data, savefileid) {
+	var xml = getPazRecord(id);
+	if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + data.title);}
     try {
-        db.execute('insert into Records (id, status, date_added, date_modified, server, savefile) values (null, ?, date("now", "localtime"), date("now", "localtime"), ?, ?)', ['new', server, savefileid]);
-        if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + title);}
+		var target = DB.SearchTargets.select('name=?', [data.location]).getOne();
+		var savefile = DB.Savefiles.select('Savefiles.rowid=?', [savefileid]).getOne();
+		var record = new DB.Records({
+			title: data.title || '',
+			author: data.author || '',
+			location: data.location || '',
+			publisher: data.publisher || '',
+			medium: data.medium || '',
+			date: data.date || '',
+			status: 'new',
+			xml: xml,
+			date_added: new Date().toString(),
+			date_modified: new Date().toString(),
+			SearchTargets_id: target.rowid,
+			Savefiles_id: savefile.rowid,
+			xmlformat: 'marcxml',
+			marcflavour: 'marc21',
+			template: null,
+			marcformat: null
+		}).save();
     } catch(ex) {
-        Ext.Msg.alert('Error', 'db error: ' + ex.message);
+        Ext.MessageBox.alert('Database Error', ex.message);
     }
-    paz.recordCallback = function(data) { addRecord( xslTransform.serialize(data.xmlDoc) ) }
-    var xml = getPazRecord(id);
-    if(xml) {
-      addRecord(xml);
-    }
-    var id = getLastRecId();
-    return id;
-}
-
-function addRecord(xml) {
-    if(debug){ console.info('addRecord called with data: ' + xml.substr(0, 10)) }
-    var id = getLastRecId();
-	try {
-		db.execute('update Records set xml = ? where id = ?', [xml, id]);
-		if(debug == 1 ) {console.info('addRecord: updating xml of record with id: ' + id);}
-	} catch(ex) {
-		Ext.Msg.alert('Error', 'db error: ' + ex.message);
-	}
+	return db.lastInsertRowId;
 }
 
 function getSaveFileNameFromId(savefileid) {
