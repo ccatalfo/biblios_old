@@ -1326,7 +1326,10 @@ function setupMarc21AuthorityLiveSearches() {
 				var tag = $(combo.el.dom).parents('.tag');
 				// create/update subfields
 				// delete any subfields following the first (subfield $a)
-				$(tag).find('.subfield').slice(1).remove();
+				var subfields = $(tag).find('.subfield');
+				for( var i = 1; i< subfields.length; i++) {
+					$( subfields[i] ).remove();
+				}
 				// for each subfield in this record
 				for( var i = 0; i < record.fields.length; i++) {
 					var data = record.fields.itemAt(i);
