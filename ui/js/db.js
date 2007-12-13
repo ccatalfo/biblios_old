@@ -25,8 +25,14 @@ var db = {};
 GearsORMShift.rules = [
 	{
 		version: 0,
-		comment: 'Default rule 0',
+		comment: 'Drop old tables from previous biblios version',
 		up: function() {
+			db.execute('drop table if exists Records;');
+			db.execute('drop table if exists Searches;');
+			db.execute('drop table if exists Targets;');
+			db.execute('drop table if exists Savefiles;');
+			db.execute('drop table if exists Prefs;');
+			db.execute('drop table if exists Info_Schema;');
 			return true;
 		},
 		down: function() {
