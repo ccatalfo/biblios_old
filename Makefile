@@ -12,10 +12,6 @@ tags: $(SRCS)
 	$(CTAGS) ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js
 
 debug: 
-	sed 's|debug = 0|debug = 1|' < index.html > index-debug.html
-	set 's|biblios_packed.js|biblios_all.js|' < index.html > index-debug.html
-	sed 's|ext-all.js|ext-all-debug.js|' < index.html > index-debug.html
-	sed 's|jquery-1.1.3.1.pack.js|jquery-1.1.3.1.js|' < index.html > index-debug.html
-
+	sed -f sed_generate_index_debug < index.html > index-debug.html
 
 	
