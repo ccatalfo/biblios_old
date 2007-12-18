@@ -74,3 +74,8 @@ input.controlfield, input.subfield-text, input.subfield-delimiter, input.indicat
 .reserved_tag {
 	background-color: gray;
 }
+
+.authority-field {
+	text-decoration: underline;
+	color: navy;
+}

@@ -1315,7 +1315,9 @@ function setupMarc21AuthorityLiveSearches() {
 				selectOnFocus: true,
 				hideTrigger: true,
 				displayField: 'pname',
-				loadingText: 'Searching...'
+				loadingText: 'Searching...',
+				cls: 'authority-field',
+				lazyRender: true
 			});
 			cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
 				// for scan searching need to add pname= to query
