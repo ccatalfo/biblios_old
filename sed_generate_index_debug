@@ -1,0 +1,6 @@
+# sed script for generating debugging version of biblios index.html
+s|debug = 0|debug = 1|
+s|biblios_packed.js|biblios_all.js|
+s|ext-all.js|ext-all-debug.js|
+s|jquery-1.1.3.1.pack.js|jquery-1.1.3.1.js|
+s|jquery.xslTransform.pack.js|jquery.xslTransform.js|
