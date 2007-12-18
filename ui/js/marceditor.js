@@ -25,9 +25,9 @@ function MarcEditor(ffeditor, vareditor) {
 		fieldlist.length = 0;
 		var editorfields = $('.tag');
 		for( var i = 0; i < editorfields.length; i++) {
-				var newfield = createField( editorfields.eq(i) );
+				var newfield = createField( $(editorfields).eq(i) );
 				fields.push(newfield);
-				fieldlist.push($(this).get(0).id.substring(0,3));
+				fieldlist.push( $(editorfields).get(i).id.substring(0,3));
 		}
 		marcrecord = new MarcRecord(fields);
 	}
