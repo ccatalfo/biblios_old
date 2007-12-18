@@ -1134,6 +1134,7 @@ function onFocus(elem) {
 function onBlur(elem) {
 	$(elem).removeClass('focused');
 	UI.editor.record.update(elem);
+	UI.editor.lastFocusedEl = elem;
 }
 
 function onFixedFieldEditorBlur(elem) {
