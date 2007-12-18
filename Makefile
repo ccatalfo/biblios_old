@@ -9,7 +9,7 @@ all: $(SRCS)
 	$(JSMIN) <ui/js/biblios_all.js >ui/js/biblios_packed.js
 
 tags: $(SRCS)
-	$(CTAGS) ui/js/*.js
+	$(CTAGS) ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js
 
 debug: 
 	sed 's|debug = 0|debug = 1|' < index.html > index-debug.html

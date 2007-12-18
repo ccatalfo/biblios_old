@@ -46,6 +46,12 @@ function doSaveLocal(savefileid) {
 		else { // recid isn't empty so we've already saved this record, just update it
 			try {
 				var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
+				if( record.marcflavour == 'marc21' ) {
+					record.title = UI.editor.record.getValue('245', 'a');
+					record.author = UI.editor.record.getValue('100', 'a');
+					record.publisher = UI.editor.record.getValue('260', 'b');
+					record.dateofpub = UI.editor.record.getValue('260', 'c');
+				}
 				record.xml = xml;
 				record.Savefiles_id = savefileid;
 				record.status = 'edited';
