@@ -1421,18 +1421,6 @@ function openRecord(xml) {
 
 
 	$("#help-panel").append("This is the Help panel");
-	 // Draggable is causing the cursor not to be able to move out of the $a subfield <span>.  Not sure why yet.
-	 // add jquery draggable and droppable to subfields
-	//$('.subfield').Draggable();
-	//$('.subfields').Droppable(
-	//    {accept: 'subfield',
-	//      ondrop: function(dropped) {
-	//            $(this).append( "<div class='subfield' style='display:inline;' onclick='initEditor(this)'>"+$(dropped).html() + "</div>").Draggable();
-	//            $(dropped).remove();
-	//            $('.subfield').Draggable();
-	//       },
-	//      hoverclass: 'droppable'
-	//    });
 
 	displayRecordView();
 }
