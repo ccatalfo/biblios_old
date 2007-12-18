@@ -1971,6 +1971,6 @@ function filterSearchResultsByServer() {
 }
 
 function getLocalXml(id) {
-	var xml = DB.Records.select(id).getOne().xml;
+	var xml = DB.Records.select('Records.rowid=?',[id]).getOne().xml;
 	return xml;
 }
