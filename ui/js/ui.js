@@ -1425,6 +1425,23 @@ function openRecord(xml) {
 	displayRecordView();
 }
 
+function makeSubfieldsDraggable() {
+	 // add jquery draggable and droppable to subfields
+	$('.subfield').Draggable();
+	$('.subfield-text').Droppable(
+	    {accept: 'subfield',
+	      ondrop: function(drag) {
+		  		var tagToAddTo = $(this).parents('.tag').find('.tagnumber').val();
+				var subfieldCodeToAdd = $(drag).find('.subfield-delimiter').val().substr(1);
+				var subfieldValueToAdd = $(drag).find('.subfield-text').val();
+				UI.editor.record.addSubfield(tagToAddTo, subfieldCodeToAdd, subfieldValueToAdd);
+				// make sure new subfield is draggable
+				makeSubfieldsDraggable();
+				$(drag).remove();
+	       },
+	      hoverclass: 'droppable'
+	});
+}
 
 /*
    Function: doDownloadRecords

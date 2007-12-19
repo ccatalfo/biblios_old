@@ -79,3 +79,7 @@ input.controlfield, input.subfield-text, input.subfield-delimiter, input.indicat
 	text-decoration: underline;
 	color: navy;
 }
+
+.droppable {
+	background-color: green;
+}
