@@ -362,6 +362,10 @@ function createDatabaseOptions() {
 	dbform.render('dbform');
 }
 
+function createAcqTab() {
+	acqtab = tabs.addTab('acqtab', 'Acquisitions');
+}
+
 /*
    Function: createBiblioTab
 

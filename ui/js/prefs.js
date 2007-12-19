@@ -9,6 +9,10 @@ function initPrefs() {
 	//getRemoteBibProfiles();
 }
 
+function getVendors() {
+	return 'Amazon';
+}
+
 function getRemoteBibProfiles() {
 	// get bib profiles for each remoteILS now (so xhr requests aren't overlapping)
 	for ( ils in Prefs.remoteILS ) {

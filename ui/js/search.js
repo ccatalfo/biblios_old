@@ -1,3 +1,34 @@
+function doSearch(form) {
+	if( $(searchloc).val() == 'SearchTargets' ) {
+		doPazPar2Search();
+	}
+	else if( $('#searchloc').val() == 'Local Folders') {
+		doLocalFolderSearch();
+	}
+	else if( $('#searchloc').val() == 'Vendors' ) {
+		doVendorSearch();
+	}
+}
+
+function doLocalFolderSearch() {
+
+}
+
+function doVendorSearch() {
+	var vendors = getVendors();
+	var searchtype = $('#searchtype').val();
+	var query = $('#query').val();
+	$.get('/cgi-bin/vendorSearch.pl',{
+			vendors: vendors,
+			searchtype: searchtype,
+			query: query
+		},
+		function(data, textStatus) {
+			alert(data);
+		}
+	);
+}
+
 function initializePazPar2(pazpar2url, options) {
 if(!options) { options = {} }
 paz = new pz2({ 

@@ -100,7 +100,7 @@ var db_debug = 0;
 	<div id='header_search'>
 	  <div id='searchform'>
 	 	<p class='searchtip'>Enter a search term and choose a search type</p>
-		<form onsubmit='doPazPar2Search(this); return false;'>
+		<form onsubmit='doSearch(this); return false;'>
 			<input id='query' class='focus' type='text' size='40' name='query'/>
 			<select id='searchtype'>	
 				<option value=''>Keyword</option>
@@ -109,6 +109,11 @@ var db_debug = 0;
 				<option value='su'>Subject</option>
 				<option value='isbn'>ISBN</option>
 				<option value='issn'>ISSN</option>
+			</select>
+			<select id='searchloc'>
+				<option value='SearchTargets'>SearchTargets</option>
+				<option value='Local Folders'>Local Folders</option>
+				<option value='Vendors'>Vendors</option>
 			</select>
 			<input type='submit' value='Search'>
 		</form>
@@ -130,6 +135,9 @@ var db_debug = 0;
 		  <div id='targetgrid'></div>
 		</div>
 		<div id='keyboard_options'></div>
+
+	</div>
+	<div id='acqtab'>
 
 	</div>
     <div id='bibliotab'>
@@ -197,6 +205,7 @@ Ext.onReady(function(){
     createHomeTab();	
 	createBiblioTab();
     createOptionsTab();	
+	createAcqTab();
 
 // remove loading box
   var loading = Ext.get('loading');
