@@ -11,7 +11,7 @@ function doSearch(form) {
 }
 
 function doLocalFolderSearch() {
-
+	Ext.MessageBox.alert('Error', 'Not yet implemented');
 }
 
 function doVendorSearch() {
