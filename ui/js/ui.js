@@ -365,9 +365,7 @@ function createDatabaseOptions() {
 function createAcqTab() {
 	acqtab = tabs.addTab('acqtab', 'Acquisitions');
 	acqtab.on('activate', function(tabpanel, item) {
-		if( Ext.ComponentMgr.get('acqsearchgrid').rendered == false ) {
-			Ext.ComponentMgr.get('acqsearchgrid').dataSource.reload();
-		}
+		Ext.ComponentMgr.get('acqsearchgrid').render();
 	});
 	createAcqSearchGrid();
 }
