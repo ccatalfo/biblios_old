@@ -122,8 +122,17 @@ function initUI() {
 		fn: function() {
 			showStatusMsg('Searching...');
 			// activate biblio tab
-			tabs.getTab(1).activate();
-			doPazPar2Search();
+			if( $('#searchloc').val() == 'SearchTargets' ) {
+				tabs.getTab(1).activate();
+			}
+			else if( $('#searchloc').val() == 'Vendors') {
+				tabs.getTab(3).activate();
+			}
+			else if( $('#searchloc').val() == 'All') {
+				tabs.getTab(1).activate();
+			}
+				
+			doSearch();
 			return false;
 		},
 		scope: searchform

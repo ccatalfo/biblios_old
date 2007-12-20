@@ -403,10 +403,17 @@ function createAcqSearchGrid() {
 		cm: cm,
 		autoHeight: true,
 		autoWidth: true,
+		loadMask: true
 	});
 	Ext.ComponentMgr.register(vendorSearchGrid);
 	vendorSearchGrid.render();
 	ds.load();
+
+//	var acqpaging = new Ext.PagingToolbar('acqsearchgrid-toolbar', ds, {
+//		displayInfo: true,
+//		pageSize: 20,
+//		emptyMsg: 'No items to display'
+//	});
 }
 
 
