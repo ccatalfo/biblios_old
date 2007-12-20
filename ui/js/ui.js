@@ -393,7 +393,15 @@ function createAcqSearchGrid() {
 	});
 	ds.load();
 	function renderImage(value, p, record) {
-		return "<img src='" + record.data.image+ "' border='0'>";
+		// use our own blank image if this record has none so as to keep grid spacing ok
+		var image_url = '';
+		if( record.data.image == '' ) {
+			image_url = 'ui/images/amazon_blank_medium.jpg';
+		}
+		else {
+			image_url = record.data.image;
+		}
+		return "<img src='" + image_url + "' border='0'>";
 	}
 
 	var cm = new Ext.grid.ColumnModel([
