@@ -380,6 +380,7 @@ function createAcqSearchGrid() {
 		{name: 'image', mapping: 'image_url_medium'},
 		{name: 'description', mapping: 'description'},
 		{name: 'total_offers', mapping: 'total_offers'},
+		{name: 'price', mapping: 'price'},
 		{name: 'asin', mapping: 'asin'}
 	]);
 	var reader = new Ext.data.XmlReader({
@@ -398,6 +399,7 @@ function createAcqSearchGrid() {
 
 	var cm = new Ext.grid.ColumnModel([
 		{header: 'Image', width: 150, renderer: renderImage, dataIndex: 'image_url_medium'},
+		{header: 'Price', dataIndex: 'price'},
 		{header: 'Title', width: 150, dataIndex: 'title'},
 		{header: 'Authors', dataIndex: 'authors'},
 		{header: 'Publisher', dataIndex: 'publisher'},
