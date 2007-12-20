@@ -1,8 +1,13 @@
 function doSearch(form) {
-	if( $(searchloc).val() == 'SearchTargets' ) {
+	if( $('#searchloc').val() == 'All' ) {
+		doPazPar2Search();
+		doLocalFolderSearch();
+		doVendorSearch();
+	}
+	else if( $('#searchloc').val() == 'SearchTargets' ) {
 		doPazPar2Search();
 	}
-	else if( $('#searchloc').val() == 'Local Folders') {
+	else if( $('#searchloc').val() == 'LocalFolders') {
 		doLocalFolderSearch();
 	}
 	else if( $('#searchloc').val() == 'Vendors' ) {
@@ -11,22 +16,20 @@ function doSearch(form) {
 }
 
 function doLocalFolderSearch() {
-	Ext.MessageBox.alert('Error', 'Not yet implemented');
+	//Ext.MessageBox.alert('Error', 'Not yet implemented');
 }
 
 function doVendorSearch() {
 	var vendors = getVendors();
 	var searchtype = $('#searchtype').val();
 	var query = $('#query').val();
-	$.get('/cgi-bin/vendorSearch.pl',{
-			vendors: vendors,
+	Ext.ComponentMgr.get('acqsearchgrid').dataSource.load({
+		params: {
 			searchtype: searchtype,
-			query: query
-		},
-		function(data, textStatus) {
-			alert(data);
+			query: query,
+			vendors: vendors
 		}
-	);
+	});
 }
 
 function initializePazPar2(pazpar2url, options) {

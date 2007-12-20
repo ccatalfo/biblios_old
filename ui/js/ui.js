@@ -364,7 +364,51 @@ function createDatabaseOptions() {
 
 function createAcqTab() {
 	acqtab = tabs.addTab('acqtab', 'Acquisitions');
+	createAcqSearchGrid();
 }
+
+function createAcqSearchGrid() {
+	var recordDef = Ext.data.Record.create([
+		{name: 'title', mapping: 'title'},
+		{name: 'authors', mapping: 'authors'},
+		{name: 'publisher', mapping: 'publisher'},
+		{name: 'image', mapping: 'image_url_medium'},
+		{name: 'description', mapping: 'description'},
+		{name: 'total_offers', mapping: 'total_offers'},
+		{name: 'asin', mapping: 'asin'}
+	]);
+	var reader = new Ext.data.XmlReader({
+		totalRecords: 'count',
+		record: 'item',
+		id: 'asin'
+	}, recordDef);
+	var ds = new Ext.data.Store({
+		proxy: new Ext.data.HttpProxy({url: '/cgi-bin/vendorSearch/'}),
+		reader: reader
+	});
+	function renderImage(value, p, record) {
+		return "<img src='" + record.data.image+ "' border='0'>";
+	}
+
+	var cm = new Ext.grid.ColumnModel([
+		{header: 'Image', renderer: renderImage, dataIndex: 'image_url_medium'},
+		{header: 'Title', width: 150, dataIndex: 'title'},
+		{header: 'Authors', dataIndex: 'authors'},
+		{header: 'Publisher', dataIndex: 'publisher'},
+		{header: 'Description', width: 500, dataIndex: 'description'},
+	]);
+	var vendorSearchGrid = new Ext.grid.Grid('acqsearchgrid', {
+		id: 'acqsearchgrid',
+		ds: ds,
+		cm: cm,
+		autoHeight: true,
+		autoWidth: true,
+	});
+	Ext.ComponentMgr.register(vendorSearchGrid);
+	vendorSearchGrid.render();
+	ds.load();
+}
+
 
 /*
    Function: createBiblioTab

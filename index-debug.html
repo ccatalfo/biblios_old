@@ -111,8 +111,9 @@ var db_debug = 1;
 				<option value='issn'>ISSN</option>
 			</select>
 			<select id='searchloc'>
-				<option value='SearchTargets'>SearchTargets</option>
-				<option value='Local Folders'>Local Folders</option>
+				<option value='All'>All</option>
+				<option value='SearchTargets'>Search Targets</option>
+				<option value='LocalFolders'>Local Folders</option>
 				<option value='Vendors'>Vendors</option>
 			</select>
 			<input type='submit' value='Search'>
@@ -138,6 +139,8 @@ var db_debug = 1;
 
 	</div>
 	<div id='acqtab'>
+		<div id='acqsearchgrid-toolbar'></div>
+		<div id='acqsearchgrid'></div>
 
 	</div>
     <div id='bibliotab'>
