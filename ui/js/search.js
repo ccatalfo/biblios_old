@@ -23,13 +23,7 @@ function doVendorSearch() {
 	var vendors = getVendors();
 	var searchtype = $('#searchtype').val();
 	var query = $('#query').val();
-	Ext.ComponentMgr.get('acqsearchgrid').dataSource.load({
-		params: {
-			searchtype: searchtype,
-			query: query,
-			vendors: vendors
-		}
-	});
+	Ext.ComponentMgr.get('acqsearchgrid').dataSource.load();
 }
 
 function initializePazPar2(pazpar2url, options) {

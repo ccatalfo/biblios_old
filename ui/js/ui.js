@@ -389,7 +389,12 @@ function createAcqSearchGrid() {
 	}, recordDef);
 	var ds = new Ext.data.Store({
 		proxy: new Ext.data.HttpProxy({url: '/cgi-bin/vendorSearch/'}),
-		reader: reader
+		reader: reader,
+		baseParams: {
+			query: $('#query').val(),
+			searchtype: $('#searchtype').val(),
+			vendors: getVendors()
+		}
 	});
 	ds.load();
 	function renderImage(value, p, record) {
@@ -425,11 +430,13 @@ function createAcqSearchGrid() {
 	vendorSearchGrid.render();
 	ds.load();
 
-//	var acqpaging = new Ext.PagingToolbar('acqsearchgrid-toolbar', ds, {
-//		displayInfo: true,
-//		pageSize: 20,
-//		emptyMsg: 'No items to display'
-//	});
+	var acqpaging = new Ext.PagingToolbar('acqsearchgrid-toolbar', ds, {
+		displayInfo: true,
+		displayMsg: 'Displaying items {0} - {1} of {2}',
+		pageSize: 20,
+		emptyMsg: 'No items to display'
+	});
+	ds.load({params: {start:0, limit: 20}});
 }
 
 
