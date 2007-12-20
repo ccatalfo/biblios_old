@@ -9,7 +9,8 @@ use Cache::File;
 
 my $cgi = new CGI();
 my $cache = Cache::File->new(
-	cache_root => '/var/www/biblios-acq/tmp',
+	cache_root => '/tmp',
+	lock_level => Cache::File::LOCK_LOCAL(),
 	default_expires => '30 min',
 ) or die "Couldn't write to cache temp file";
 
@@ -48,7 +49,7 @@ foreach my $vendor (@vendors) {
 		my $ua = Net::Amazon->new(
 			token => '14RFHHPWH7B3BHDSTDR2',
 			max_pages => 2,
-			#cache => $cache
+			cache => $cache
 		);
 		my $resp = $ua->search(power => "$powerquer:$query", mode => 'books');
 		if( $resp->is_success()) {
