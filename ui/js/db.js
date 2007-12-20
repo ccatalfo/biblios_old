@@ -32,7 +32,6 @@ GearsORMShift.rules = [
 			db.execute('drop table if exists Targets;');
 			db.execute('drop table if exists Savefiles;');
 			db.execute('drop table if exists Prefs;');
-			db.execute('drop table if exists Info_Schema;');
 			return true;
 		},
 		down: function() {

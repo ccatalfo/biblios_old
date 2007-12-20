@@ -364,6 +364,11 @@ function createDatabaseOptions() {
 
 function createAcqTab() {
 	acqtab = tabs.addTab('acqtab', 'Acquisitions');
+	acqtab.on('activate', function(tabpanel, item) {
+		if( Ext.ComponentMgr.get('acqsearchgrid').rendered == false ) {
+			Ext.ComponentMgr.get('acqsearchgrid').dataSource.reload();
+		}
+	});
 	createAcqSearchGrid();
 }
 
@@ -386,12 +391,13 @@ function createAcqSearchGrid() {
 		proxy: new Ext.data.HttpProxy({url: '/cgi-bin/vendorSearch/'}),
 		reader: reader
 	});
+	ds.load();
 	function renderImage(value, p, record) {
 		return "<img src='" + record.data.image+ "' border='0'>";
 	}
 
 	var cm = new Ext.grid.ColumnModel([
-		{header: 'Image', renderer: renderImage, dataIndex: 'image_url_medium'},
+		{header: 'Image', width: 150, renderer: renderImage, dataIndex: 'image_url_medium'},
 		{header: 'Title', width: 150, dataIndex: 'title'},
 		{header: 'Authors', dataIndex: 'authors'},
 		{header: 'Publisher', dataIndex: 'publisher'},
