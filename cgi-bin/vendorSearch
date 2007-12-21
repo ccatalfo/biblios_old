@@ -83,6 +83,7 @@ foreach my $vendor (@vendors) {
 					$xmlwriter->dataElement('total_offers', $_->TotalOffers() );
 					$xmlwriter->dataElement('asin', $_->Asin() );
 					$xmlwriter->dataElement('availability', $_->Availability() );
+					$xmlwriter->dataElement('edition', $_->edition() );
 					$xmlwriter->endTag('item');
 				}
 				$recordCount++;
