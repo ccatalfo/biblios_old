@@ -50,14 +50,20 @@ foreach my $vendor (@vendors) {
 			$powerquer = 'isbn';
 		}
 
+		# figure out how many pages to req from amazon based on 20 hits per page
+		# divide start value by 20 and add 1.5 to round up
+		my $max_pages = int(($start/20)+1.5);
+		warn("max_pages to req from amazon: $max_pages");
 		my $ua = Net::Amazon->new(
 			token => '14RFHHPWH7B3BHDSTDR2',
-			cache => $cache
+			cache => $cache,
+			#max_pages => $max_pages
 		);
 		my $resp = $ua->search(power => "$powerquer:$query", mode => 'books');
 		if( $resp->is_success()) {
 			$xmlwriter->startTag('vendor', 'name'=>'Amazon');
 			$xmlwriter->dataElement('count', $resp->total_results() );
+			warn('total records found: ' . $resp->total_results() );
 			my $recordCount = 0;
 			my $stoppingPoint = $start+$limit;
 			warn("record to stop at: $stoppingPoint");
