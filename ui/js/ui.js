@@ -375,6 +375,7 @@ function createAcqSearchGrid() {
 		{name: 'title', mapping: 'title'},
 		{name: 'authors', mapping: 'authors'},
 		{name: 'publisher', mapping: 'publisher'},
+		{name: 'pubdate', mapping: 'pubdate'},
 		{name: 'image', mapping: 'image_url_medium'},
 		{name: 'description', mapping: 'description'},
 		{name: 'total_offers', mapping: 'total_offers'},
@@ -410,12 +411,13 @@ function createAcqSearchGrid() {
 
 	var cm = new Ext.grid.ColumnModel([
 		{header: 'Image', width: 150, renderer: renderImage, dataIndex: 'image_url_medium'},
-		{header: 'Price', dataIndex: 'price'},
-		{header: 'Availability', dataIndex: 'availability'},
-		{header: 'Title', width: 150, dataIndex: 'title'},
-		{header: 'Authors', dataIndex: 'authors'},
-		{header: 'Publisher', dataIndex: 'publisher'},
-		{header: 'Description', width: 500, dataIndex: 'description'},
+		{header: 'Price', sortable: true, dataIndex: 'price'},
+		{header: 'Availability', sortable: true, dataIndex: 'availability'},
+		{header: 'Pub. Date', sortable: true, dataIndex: 'pubdate'},
+		{header: 'Title', sortable: true, width: 150, dataIndex: 'title'},
+		{header: 'Authors', sortable: true, dataIndex: 'authors'},
+		{header: 'Publisher', sortable: true, dataIndex: 'publisher'},
+		{header: 'Description', sortable: true, width: 500, dataIndex: 'description'},
 	]);
 	var vendorSearchGrid = new Ext.grid.Grid('acqsearchgrid', {
 		id: 'acqsearchgrid',
