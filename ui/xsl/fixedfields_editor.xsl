@@ -4,7 +4,7 @@
 	<xsl:variable name='marc21defs' select="document('marc21.xml')"/>
 
 	<xsl:template match="/">
-        <div>
+        <div id='fixedfields_editor'>
 			<xsl:apply-templates/>
         </div>
 	</xsl:template>
