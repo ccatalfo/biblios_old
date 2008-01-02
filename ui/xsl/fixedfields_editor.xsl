@@ -10,9 +10,9 @@
 	</xsl:template>
 	
 	<xsl:template match="marc:record">
-	<xsl:variable name='leader' select="marc:leader"/>
-	<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
-	<xsl:variable name="rectype" select="substring($leader, $marc21defs//value[@name='Type']/@position+1, $marc21defs//value[@name='Type']/@length)"/>
+		<xsl:variable name='leader' select="marc:leader"/>
+		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
+		<xsl:variable name="rectype" select="substring($leader, $marc21defs//value[@name='Type']/@position+1, $marc21defs//value[@name='Type']/@length)"/>
 		<table id="fixed_field_grid" class="fixed_field">
 			<tr>
                       <td style='display:none;'>
@@ -245,7 +245,55 @@
 								</xsl:call-template>
 			</tr>
 			</xsl:if>
+			<xsl:for-each select="marc:controlfield[@tag='006']">
+				<xsl:call-template name="tag006"/>
+			</xsl:for-each>
 		</table>
+	</xsl:template>
+
+	<xsl:template name="tag006">
+			<xsl:variable name="form" select="substring(.,1, 1)"/>
+			<tr>
+			<xsl:if test="$form = 'a'">
+				Language Material
+			</xsl:if>
+			<xsl:if test="$form = 'c'">
+				notated music
+			</xsl:if>
+			<xsl:if test="$form = 'd'">
+				Manuscript notated music
+			</xsl:if>
+			<xsl:if test="$form = 'e'">
+				Cartographic Material
+			</xsl:if>
+			<xsl:if test="$form = 'f'">
+				Manuscript cartographic Material
+			</xsl:if>
+			<xsl:if test="$form = 'g'">
+				Projected Material
+			</xsl:if>
+			<xsl:if test="$form = 'i'">
+				Nonmusical sound Material
+			</xsl:if>
+			<xsl:if test="$form = 'j'">
+				Musical sound Material
+			</xsl:if>
+			<xsl:if test="$form = 'k'">
+				2-d Material
+			</xsl:if>
+			<xsl:if test="$form = 'o'">
+				Kit Material
+			</xsl:if>
+			<xsl:if test="$form = 'r'">
+				3-d Material
+			</xsl:if>
+			<xsl:if test="$form = 't'">
+				Manuscript Material
+			</xsl:if>
+			<xsl:if test="$form = 'm'">
+				Computer file	
+			</xsl:if>
+			</tr>
 	</xsl:template>
 	
 	<xsl:template name="fixed-field-select">
