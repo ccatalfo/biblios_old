@@ -1274,7 +1274,24 @@ function setupMarc21AuthorityLiveSearches() {
 					[
 						// field mapping
 						{name: 'pname', id: 'a', mapping: 'datafield[tag=100] > subfield[code=a]'},
-						{name: 'dates', id: 'd', mapping: 'datafield[tag=100] > subfield[code=d]'}
+						{name: 'numeration', id: 'b', mapping: 'datafield[tag=100] > subfield[code=b]'},
+						{name: 'titles', id: 'c', mapping: 'datafield[tag=100] > subfield[code=c]'},
+						{name: 'dates', id: 'd', mapping: 'datafield[tag=100] > subfield[code=d]'},
+						{name: 'relator', id: 'e', mapping: 'datafield[tag=100] > subfield[code=e]'},
+						{name: 'dateofwork', id: 'f', mapping: 'datafield[tag=100] > subfield[code=f]'},
+						{name: 'miscinfo', id: 'g', mapping: 'datafield[tag=100] > subfield[code=g]'},
+						{name: 'attrqualifier', id: 'j', mapping: 'datafield[tag=100] > subfield[code=j]'},
+						{name: 'formsubheading', id: 'k', mapping: 'datafield[tag=100] > subfield[code=k]'},
+						{name: 'langofwork', id: 'l', mapping: 'datafield[tag=100] > subfield[code=l]'},
+						{name: 'numofpart', id: 'n', mapping: 'datafield[tag=100] > subfield[code=n]'},
+						{name: 'nameofpart', id: 'p', mapping: 'datafield[tag=100] > subfield[code=p]'},
+						{name: 'fullerform', id: 'q', mapping: 'datafield[tag=100] > subfield[code=q]'},
+						{name: 'titleofwork', id: 't', mapping: 'datafield[tag=100] > subfield[code=t]'},
+						{name: 'affiliation', id: 'u', mapping: 'datafield[tag=100] > subfield[code=u]'},
+						{name: 'relatorcode', id: '4', mapping: 'datafield[tag=100] > subfield[code=4]'},
+						{name: 'linkage', id: '6', mapping: 'datafield[tag=100] > subfield[code=6]'},
+						{name: 'fieldlinkseqnum', id: '8', mapping: 'datafield[tag=100] > subfield[code=8]'},
+						{name: 'authcontrolnum', id: '9', mapping: 'datafield[tag=001]'}
 					]
 			);
 			var scanClauseReader = new Ext.data.XmlReader({
@@ -1660,5 +1677,9 @@ function clear_editor() {
    // clear the marceditor divs
    $("#fixedfields_editor").empty();
    $("#varfields_editor").empty();
+}
+
+function getEditorForTag(tagnumber, marcxml) {
+
 }
 
