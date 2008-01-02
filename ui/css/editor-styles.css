@@ -1,6 +1,10 @@
-.body {
-  font-size: small;
-} 
+#fixed_field_grid {
+	background-color: white;
+	border: 1px solid;
+}
+#fixed_field_grid td {
+	padding: 3px;
+}
 
 input.controlfield, input.subfield-text, input.subfield-delimiter, input.indicator, input.tagnumber {
 	border: 1px solid #fff;
