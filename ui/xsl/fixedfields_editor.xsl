@@ -104,8 +104,125 @@
 						</td>
 
 			</tr>
-				<xsl:if test="$rectype = 'a' or $rectype = 't'">
+			<xsl:if test="$rectype = 'a' or $rectype = 't'">
 			<tr>
+					<xsl:call-template name="rectype_a_or_t"/>
+			</tr>
+			</xsl:if>
+
+			<xsl:if test="$rectype = 'm'">
+			<tr>
+				<xsl:call-template name="rectype_m"/>
+			</tr>
+			</xsl:if>
+						
+			<xsl:if test="$rectype = 'e' or $rectype = 'f'">
+			<tr>
+				<xsl:call-template name="rectype_e_or_f"/>
+			</tr>
+			</xsl:if>
+
+			<xsl:if test="$rectype = 'c' or $rectype = 'd' or $rectype = 'j'">
+			<tr>
+					<xsl:call-template name="rectype_c_or_d_or_j"/>
+			</tr>
+			</xsl:if>
+
+			<xsl:for-each select="marc:controlfield[@tag='006']">
+				<xsl:call-template name="tag006"/>
+			</xsl:for-each>
+		</table>
+	</xsl:template>
+
+	<xsl:template name="rectype_c_or_d_or_j">
+		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
+
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'CompForm'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'Format'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'Parts'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'Audn'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-text">
+									<xsl:with-param name="name" select="'Form'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-text">	
+									<xsl:with-param name="name" select="'Accomp'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-text">	
+									<xsl:with-param name="name" select="'LitText'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'TrArr'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+	</xsl:template>
+	<xsl:template name="rectype_m">
+		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
+
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'Audn'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'File'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'GovPub'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template name="rectype_e_or_f">
+		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'Relief'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'Proj'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'Cart'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'GovPub'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-text">
+									<xsl:with-param name="name" select="'Form'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-select">	
+									<xsl:with-param name="name" select="'Indx'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+								<xsl:call-template name="fixed-field-text">	
+									<xsl:with-param name="name" select="'SpChar'" />
+									<xsl:with-param name="tag" select="$tag008" />
+								</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template name="rectype_a_or_t">
+		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
 							<xsl:call-template name="fixed-field-text">
 								<xsl:with-param name="name" select="'Ills'" />
 								<xsl:with-param name="tag" select="$tag008" />
@@ -155,100 +272,6 @@
 								<xsl:with-param name="name" select="'Bio'" />
 								<xsl:with-param name="tag" select="$tag008" />
 							</xsl:call-template>
-
-			</tr>
-			</xsl:if>
-			<xsl:if test="$rectype = 'm'">
-			<tr>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Audn'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'File'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'GovPub'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-				</tr>
-				</xsl:if>
-						
-				<xsl:if test="$rectype = 'e' or $rectype = 'f'">
-				<tr>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Relief'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Proj'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Cart'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'GovPub'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-text">
-									<xsl:with-param name="name" select="'Form'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Indx'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-text">	
-									<xsl:with-param name="name" select="'SpChar'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-				</tr>
-				</xsl:if>
-				<xsl:if test="$rectype = 'c' or $rectype = 'd' or $rectype = 'j'">
-				<tr>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'CompForm'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Format'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Parts'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Audn'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-text">
-									<xsl:with-param name="name" select="'Form'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-text">	
-									<xsl:with-param name="name" select="'Accomp'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-text">	
-									<xsl:with-param name="name" select="'LitText'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'TrArr'" />
-									<xsl:with-param name="tag" select="$tag008" />
-								</xsl:call-template>
-			</tr>
-			</xsl:if>
-			<xsl:for-each select="marc:controlfield[@tag='006']">
-				<xsl:call-template name="tag006"/>
-			</xsl:for-each>
-		</table>
 	</xsl:template>
 
 	<xsl:template name="tag006">
