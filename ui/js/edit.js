@@ -1338,7 +1338,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 	cb.on('hide', function(cb, e) {
 	});
 	UI.editor.comboboxes.push(cb);
-	cb.applyTo($(subfield_text).get(0));
+	cb.applyTo($(subfield_text).get(0).id);
 	return true;
 }
 

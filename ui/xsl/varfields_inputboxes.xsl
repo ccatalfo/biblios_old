@@ -135,15 +135,18 @@
             <span class='subfields'>
                 <!-- provide an id based on tag number, but append a number to duplicate tags don't have duplicate id's -->
                 <xsl:attribute name="id">dsubfields<xsl:value-of select="@tag"/>-<xsl:number value="position()"/></xsl:attribute>
-                <xsl:apply-templates select="marc:subfield"/>
+                <xsl:apply-templates select="marc:subfield">
+					<xsl:with-param name="id">dsubfields<xsl:value-of select="@tag"/>-<xsl:number value="position()"/></xsl:with-param>
+				</xsl:apply-templates>
             </span>
         </div>
     
 	</xsl:template>
 	
     <xsl:template match="marc:subfield">
+		<xsl:param name="id"/>
 			<span class="subfield">
-				<xsl:attribute name="id"><xsl:value-of select="../@tag"/>-<xsl:number value="position()"/><xsl:value-of select="@code"/></xsl:attribute>
+				<xsl:attribute name="id"><xsl:value-of select="$id"/></xsl:attribute>
 				<input class="subfield-delimiter">
 					<xsl:attribute name='size'>2</xsl:attribute>
 					<xsl:attribute name='maxlength'>2</xsl:attribute>
@@ -152,6 +155,9 @@
 					</xsl:attribute>
 					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
+					<xsl:attribute name="id">
+						<xsl:value-of select="$id"/>delimiter
+					</xsl:attribute>
 				</input>
 
 				<input class="subfield-text">
@@ -165,7 +171,7 @@
 					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 					<xsl:attribute name="id">
-						<xsl:value-of select="../@tag"/>-<xsl:number value="position()"/><xsl:value-of select="@code"/>text
+						<xsl:value-of select="$id"/>text
 					</xsl:attribute>
 				</input>
 			</span>
