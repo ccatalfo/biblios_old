@@ -1406,9 +1406,6 @@ function displayRecordView() {
     folderTree.getSelectionModel().unselect( selectedNode );
     // hide panels for search/save/preview
     innerLayout.getRegion('south').hide()
-    //show help panel
-    innerLayout.getRegion('east').show();
-    innerLayout.getRegion('east').expand();
 	innerLayout.getRegion('center').hidePanel('savegridpanel');
 	innerLayout.getRegion('center').hidePanel('searchgridpanel');
 	innerLayout.getRegion('center').showPanel('marceditor');

@@ -288,7 +288,7 @@ function initUI() {
 					}
 			]})
 	}));
-	 //$('#record-toolbar').Draggable();
+	$('#record-toolbar').Draggable();
 
 }
 
