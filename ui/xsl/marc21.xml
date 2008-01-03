@@ -700,3 +700,28 @@
 </field>
 </fields>
 
+<mattypes>
+	<mattype value="Books">
+		<position>Ills</position>
+		<position>LitF</position>
+		<position>Indx</position>
+		<position>Audn</position>
+		<position>Form</position>
+		<position>Contents</position>
+		<position>GovPub</position>
+		<position>Fest</position>
+		<position>Conf</position>
+		<position>Bio</position>
+	</mattype>
+	<mattype value="Music">
+		<position>CompForm</position>
+		<position>Format</position>
+		<position>Parts</position>
+		<position>Audn</position>
+		<position>Form</position>
+		<position>Accomp</position>
+		<position>LitText</position>
+		<position>TrArr</position>
+	</mattype>
+</mattypes>
+
