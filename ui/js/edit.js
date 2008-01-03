@@ -1256,8 +1256,8 @@ function setupEditorHotkeys() {
 	});
 }
 
-function createAuthComboBox(tagelem, xmlReader, displayField, recordSchema) {
-	var subfield_text = $(tagelem).find('.subfield-text');
+function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, recordSchema) {
+	var subfield_text = $(tagelem).find('.subfield-text').eq(0);
 	if( subfield_text.length == 0 ) {
 		return;
 	}
@@ -1284,6 +1284,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, recordSchema) {
 		typeAheadDelay: 500,
 		allQuery: 'query',
 		queryParam: 'query',
+		queryIndex: queryIndex,
 		editable: true,
 		forceSelection: false,
 		triggerAction: 'all',
@@ -1296,6 +1297,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, recordSchema) {
 		lazyRender: true
 	});
 	cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
+		combo.query = combo.combo.queryIndex + "=" + combo.query;
 	});
 	cb.on('select', function(combo, record, index) {
 		var tagnumber = $(combo.el.dom).parents('.tag').children('.tagnumber').val();
@@ -1379,13 +1381,13 @@ function setupMarc21AuthorityLiveSearches() {
 	);
 	// personal names
 	Ext.select('div[id^=100], div[id^=700]').each( function(item) {
-		createAuthComboBox( $(item.dom), pnameXmlReader, 'pname', 'marcxml' );
+		createAuthComboBox( $(item.dom), pnameXmlReader, 'pname', 'bath.personalName', 'marcxml' );
 		return true;
 	});
 	
 	// subject headings
 	Ext.select('div[id^=650]').each( function(item) {
-		createAuthComboBox( $(item.dom), topicalTermXmlReader, 'term', 'marcxml' );
+		createAuthComboBox( $(item.dom), topicalTermXmlReader, 'term', 'bath.topicalSubject', 'marcxml' );
 		return true;
 	});
 }
