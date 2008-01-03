@@ -1256,129 +1256,118 @@ function setupEditorHotkeys() {
 	});
 }
 
-function setupMarc21AuthorityLiveSearches() {
-	// 100 personal names
-	var tag100 = $('div').filter('.tag[@id^=100]').children('.subfields').children('[@id*=a]');
-	var tag700 = $('div').filter('.tag[@id^=700]').children('.subfields').children('[@id*=a]');
-	$(tag100).add(tag700).
-		each(function(i) {
-			var subfield_text = $(this).children('.subfield-text');
-			if( subfield_text.length == 0 ) {
-				return;
+function createAuthComboBox(tagelem, xmlReader, displayField, recordSchema) {
+	var subfield_text = $(tagelem).find('.subfield-text');
+	if( subfield_text.length == 0 ) {
+		return;
+	}
+	console.info('applying combobox to '+ $(subfield_text).val() );
+	var ds = new Ext.data.Store({
+		proxy: new Ext.data.HttpProxy(
+			{
+				url: kohaauthurl,
+				method: 'GET'
+			
+			}),
+		baseParams: {
+								version: '1.1',
+								operation: 'searchRetrieve',
+								recordSchema: recordSchema,
+								maximumRecords: '10'
+		},
+		reader: xmlReader 
+	});
+
+	var cb = new Ext.form.ComboBox({
+		store: ds,
+		typeAhead: true,
+		typeAheadDelay: 500,
+		allQuery: 'query',
+		queryParam: 'query',
+		editable: true,
+		forceSelection: false,
+		triggerAction: 'all',
+		mode: 'remote',
+		selectOnFocus: true,
+		hideTrigger: true,
+		displayField: displayField,
+		loadingText: 'Searching...',
+		cls: 'authority-field',
+		lazyRender: true
+	});
+	cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
+	});
+	cb.on('select', function(combo, record, index) {
+		var tagnumber = $(combo.el.dom).parents('.tag').children('.tagnumber').val();
+		var tag = $(combo.el.dom).parents('.tag');
+		var tagindex = UI.editor.record.getIndexOf( tag );
+		// create/update subfields
+		// delete any subfields following the first (subfield $a)
+		var subfields = $(tag).find('.subfield');
+		for( var i = 1; i< subfields.length; i++) {
+			$( subfields[i] ).remove();
+		}
+		// for each subfield in this record
+		for( var i = 0; i < record.fields.length; i++) {
+			var data = record.fields.itemAt(i);
+			var subfieldcode = data.id;
+			var fieldname = data.name;
+			var value = record.data[fieldname];
+			// update subfield a
+			if( subfieldcode == 'a') {
+				combo.setValue(value);	
 			}
-			console.info('applying combobox to '+ $(subfield_text).val() );
-			var pnameXmlReader = new Ext.data.XmlReader({
-					record: 'record',
-					id: 'controlfield[tag=001]',
-					},
-					[
-						// field mapping
-						{name: 'pname', id: 'a', mapping: 'datafield[tag=100] > subfield[code=a]'},
-						{name: 'numeration', id: 'b', mapping: 'datafield[tag=100] > subfield[code=b]'},
-						{name: 'titles', id: 'c', mapping: 'datafield[tag=100] > subfield[code=c]'},
-						{name: 'dates', id: 'd', mapping: 'datafield[tag=100] > subfield[code=d]'},
-						{name: 'relator', id: 'e', mapping: 'datafield[tag=100] > subfield[code=e]'},
-						{name: 'dateofwork', id: 'f', mapping: 'datafield[tag=100] > subfield[code=f]'},
-						{name: 'miscinfo', id: 'g', mapping: 'datafield[tag=100] > subfield[code=g]'},
-						{name: 'attrqualifier', id: 'j', mapping: 'datafield[tag=100] > subfield[code=j]'},
-						{name: 'formsubheading', id: 'k', mapping: 'datafield[tag=100] > subfield[code=k]'},
-						{name: 'langofwork', id: 'l', mapping: 'datafield[tag=100] > subfield[code=l]'},
-						{name: 'numofpart', id: 'n', mapping: 'datafield[tag=100] > subfield[code=n]'},
-						{name: 'nameofpart', id: 'p', mapping: 'datafield[tag=100] > subfield[code=p]'},
-						{name: 'fullerform', id: 'q', mapping: 'datafield[tag=100] > subfield[code=q]'},
-						{name: 'titleofwork', id: 't', mapping: 'datafield[tag=100] > subfield[code=t]'},
-						{name: 'affiliation', id: 'u', mapping: 'datafield[tag=100] > subfield[code=u]'},
-						{name: 'relatorcode', id: '4', mapping: 'datafield[tag=100] > subfield[code=4]'},
-						{name: 'linkage', id: '6', mapping: 'datafield[tag=100] > subfield[code=6]'},
-						{name: 'fieldlinkseqnum', id: '8', mapping: 'datafield[tag=100] > subfield[code=8]'},
-						{name: 'authcontrolnum', id: '9', mapping: 'datafield[tag=001]'}
-					]
-			);
-			var scanClauseReader = new Ext.data.XmlReader({
-					record: 'term',
-					},
-					[
-						// field mapping
-						{name: 'pname', mapping: 'value'}
-					]
-			);
+			// add new one if we have a value for it
+			else if( value != '' || null ) {
+				UI.editor.record.addSubfield(tagnumber, tagindex, subfieldcode, value);
+			}
+		}
+		UI.editor.cbOpen = false;
 
-			var ds = new Ext.data.Store({
-				proxy: new Ext.data.HttpProxy(
-					{
-						url: kohaauthurl,
-						method: 'GET'
-					
-					}),
-				baseParams: {
-										version: '1.1',
-										operation: 'searchRetrieve',
-										recordSchema: 'marcxml',
-										maximumRecords: '5'
-				},
-				reader: pnameXmlReader 
-			});
+	});
+	cb.on('specialkey', function(cb, e) {
+		e.stopEvent();
+	});
+	cb.on('expand', function(cb, e) {
+		UI.editor.cbOpen = true;
+	});
+	cb.on('hide', function(cb, e) {
+	});
+	UI.editor.comboboxes.push(cb);
+	cb.applyTo($(subfield_text).get(0));
+}
 
-			var cb = new Ext.form.ComboBox({
-				store: ds,
-				typeAhead: true,
-				typeAheadDelay: 500,
-				allQuery: 'query',
-				queryParam: 'query',
-				editable: true,
-				forceSelection: false,
-				triggerAction: 'all',
-				mode: 'remote',
-				selectOnFocus: true,
-				hideTrigger: true,
-				displayField: 'pname',
-				loadingText: 'Searching...',
-				cls: 'authority-field',
-				lazyRender: true
-			});
-			cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
-				// for scan searching need to add pname= to query
-				//var name = combo.query;
-				//combo.query = 'pname='+name;
-			});
-			cb.on('select', function(combo, record, index) {
-				var tagnumber = $(combo.el.dom).parents('.tag').children('.tagnumber').val();
-				var tag = $(combo.el.dom).parents('.tag');
-				var tagindex = UI.editor.record.getIndexOf( tag );
-				// create/update subfields
-				// delete any subfields following the first (subfield $a)
-				var subfields = $(tag).find('.subfield');
-				for( var i = 1; i< subfields.length; i++) {
-					$( subfields[i] ).remove();
-				}
-				// for each subfield in this record
-				for( var i = 0; i < record.fields.length; i++) {
-					var data = record.fields.itemAt(i);
-					var subfieldcode = data.id;
-					var fieldname = data.name;
-					var value = record.data[fieldname];
-					// if we're updating subfield $a, delete the old one first
-					if( subfieldcode == 'a') {
-						combo.setValue(value);	
-					}
-					// add new one if we have a value for it
-					else if( value != '' || null ) {
-						UI.editor.record.addSubfield(tagnumber, tagindex, subfieldcode, value);
-					}
-				}
-				UI.editor.cbOpen = false;
-
-			});
-			cb.on('specialkey', function(cb, e) {
-				e.stopEvent();
-			});
-			cb.on('expand', function(cb, e) {
-				UI.editor.cbOpen = true;
-			});
-			cb.on('hide', function(cb, e) {
-			});
-			UI.editor.comboboxes.push(cb);
-			cb.applyTo($(subfield_text).get(0));
+function setupMarc21AuthorityLiveSearches() {
+	var pnameXmlReader = new Ext.data.XmlReader({
+			record: 'record',
+			id: 'controlfield[tag=001]',
+			},
+			[
+				// field mapping
+				{name: 'pname', id: 'a', mapping: 'datafield[tag=100] > subfield[code=a]'},
+				{name: 'numeration', id: 'b', mapping: 'datafield[tag=100] > subfield[code=b]'},
+				{name: 'titles', id: 'c', mapping: 'datafield[tag=100] > subfield[code=c]'},
+				{name: 'dates', id: 'd', mapping: 'datafield[tag=100] > subfield[code=d]'},
+				{name: 'relator', id: 'e', mapping: 'datafield[tag=100] > subfield[code=e]'},
+				{name: 'dateofwork', id: 'f', mapping: 'datafield[tag=100] > subfield[code=f]'},
+				{name: 'miscinfo', id: 'g', mapping: 'datafield[tag=100] > subfield[code=g]'},
+				{name: 'attrqualifier', id: 'j', mapping: 'datafield[tag=100] > subfield[code=j]'},
+				{name: 'formsubheading', id: 'k', mapping: 'datafield[tag=100] > subfield[code=k]'},
+				{name: 'langofwork', id: 'l', mapping: 'datafield[tag=100] > subfield[code=l]'},
+				{name: 'numofpart', id: 'n', mapping: 'datafield[tag=100] > subfield[code=n]'},
+				{name: 'nameofpart', id: 'p', mapping: 'datafield[tag=100] > subfield[code=p]'},
+				{name: 'fullerform', id: 'q', mapping: 'datafield[tag=100] > subfield[code=q]'},
+				{name: 'titleofwork', id: 't', mapping: 'datafield[tag=100] > subfield[code=t]'},
+				{name: 'affiliation', id: 'u', mapping: 'datafield[tag=100] > subfield[code=u]'},
+				{name: 'relatorcode', id: '4', mapping: 'datafield[tag=100] > subfield[code=4]'},
+				{name: 'linkage', id: '6', mapping: 'datafield[tag=100] > subfield[code=6]'},
+				{name: 'fieldlinkseqnum', id: '8', mapping: 'datafield[tag=100] > subfield[code=8]'},
+				{name: 'authcontrolnum', id: '9', mapping: 'datafield[tag=001]'}
+			]
+	);
+	// 100 personal names
+	Ext.select('div[id^=100]').each( function(item) {
+		createAuthComboBox( $(item.dom), pnameXmlReader, 'pname', 'marcxml' );
 	});
 	// 650 subject
 	var tag650 = $('div').filter('.tag[@id^=650]').children('.subfields').children('[@id*=a]');
