@@ -1335,6 +1335,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, recordSchema) {
 	});
 	UI.editor.comboboxes.push(cb);
 	cb.applyTo($(subfield_text).get(0));
+	return true;
 }
 
 function setupMarc21AuthorityLiveSearches() {
@@ -1365,112 +1366,9 @@ function setupMarc21AuthorityLiveSearches() {
 				{name: 'authcontrolnum', id: '9', mapping: 'datafield[tag=001]'}
 			]
 	);
-	// 100 personal names
-	Ext.select('div[id^=100]').each( function(item) {
+	// personal names
+	Ext.select('div[id^=100], div[id^=700]').each( function(item) {
 		createAuthComboBox( $(item.dom), pnameXmlReader, 'pname', 'marcxml' );
-	});
-	// 650 subject
-	var tag650 = $('div').filter('.tag[@id^=650]').children('.subfields').children('[@id*=a]');
-	$(tag650).
-		each(function(i) {
-		var subfield_text = $(this).children('.subfield-text');
-		console.info('applying combobox to '+ $(subfield_text).val() );
-		var store = new Ext.data.SimpleStore({
-			fields: ['author', 'auth'],
-			data: [['A', 'A'],
-					['B', 'B']
-					]
-		});
-		var cb = new Ext.form.ComboBox({
-			store: store,
-			typeAhead: true,
-			editable: true,
-			forceSelection: false,
-			triggerAction: 'all',
-			mode: 'local',
-			selectOnFocus: true,
-			hideTrigger: true,
-			displayField: 'author',
-		});
-		cb.applyTo($(subfield_text).get(0));
-	});
-	// 600 subject
-	var tag600 = $('div').filter('.tag[@id^=600]').children('.subfields').children('[@id*=a]');
-	$(tag600).
-		each(function(i) {
-		var subfield_text = $(this).children('.subfield-text');
-		if( ! subfield_text ) {
-			return;
-		}
-		console.info('applying combobox to '+ $(subfield_text).val() );
-		var store = new Ext.data.SimpleStore({
-			fields: ['author', 'auth'],
-			data: [['A', 'A'],
-					['B', 'B']
-					]
-		});
-		var cb = new Ext.form.ComboBox({
-			store: store,
-			typeAhead: true,
-			editable: true,
-			forceSelection: false,
-			triggerAction: 'all',
-			mode: 'local',
-			selectOnFocus: true,
-			hideTrigger: true,
-			displayField: 'author',
-		});
-		cb.applyTo($(subfield_text).get(0));
-	});
-	// 440 series
-	var tag440 = $('div').filter('.tag[@id^=440]').children('.subfields').children('[@id*=a]');
-	$(tag440).
-		each(function(i) {
-		var subfield_text = $(this).children('.subfield-text');
-		console.info('applying combobox to '+ $(subfield_text).val() );
-		var store = new Ext.data.SimpleStore({
-			fields: ['author', 'auth'],
-			data: [['A', 'A'],
-					['B', 'B']
-					]
-		});
-		var cb = new Ext.form.ComboBox({
-			store: store,
-			typeAhead: true,
-			editable: true,
-			forceSelection: false,
-			triggerAction: 'all',
-			mode: 'local',
-			selectOnFocus: true,
-			hideTrigger: true,
-			displayField: 'author',
-		});
-		cb.applyTo($(subfield_text).get(0));
-	});
-	// 710 corp name
-	var tag710 = $('div').filter('.tag[@id^=710]').children('.subfields').children('[@id*=a]');
-	$(tag710).
-		each(function(i) {
-		var subfield_text = $(this).children('.subfield-text');
-		console.info('applying combobox to '+ $(subfield_text).val() );
-		var store = new Ext.data.SimpleStore({
-			fields: ['author', 'auth'],
-			data: [['A', 'A'],
-					['B', 'B']
-					]
-		});
-		var cb = new Ext.form.ComboBox({
-			store: store,
-			typeAhead: true,
-			editable: true,
-			forceSelection: false,
-			triggerAction: 'all',
-			mode: 'local',
-			selectOnFocus: true,
-			hideTrigger: true,
-			displayField: 'author',
-		});
-		cb.applyTo($(subfield_text).get(0));
 	});
 
 }
