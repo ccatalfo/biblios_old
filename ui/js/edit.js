@@ -1349,7 +1349,47 @@ function setupMarc21AuthorityLiveSearches() {
 		id: 'controlfield[tag=001]'
 		},
 		[
-			{name: 'term', id: 'a', mapping: 'datafield[tag=150] > subfield[code=a]'}
+			{name: 'topicalterm', id: 'a', mapping: 'datafield[tag=150] > subfield[code=a]'}
+	]);
+	var geoTermXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+		},
+		[
+			{name: 'geoTerm', id: 'a', mapping: 'datafield[tag=151] > subfield[code=a]'}
+	]);
+	var genreTermXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+		},
+		[
+			{name: 'genreTerm', id: 'a', mapping: 'datafield[tag=155] > subfield[code=a]'}
+	]);
+	var corpnameXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+		},
+		[
+			{name: 'corpname', id: 'a', mapping: 'datafield[tag=110] > subfield[code=a]'}
+	]);
+	var confnameXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+		},
+		[
+			{name: 'confname', id: 'a', mapping: 'datafield[tag=111] > subfield[code=a]'}
+	]);
+	var uniformtitleXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+		},
+		[
+			{name: 'title', id: 'a', mapping: 'datafield[tag=130] > subfield[code=a]'}
 	]);
 	var pnameXmlReader = new Ext.data.XmlReader({
 			record: 'record',
@@ -1385,9 +1425,29 @@ function setupMarc21AuthorityLiveSearches() {
 		return true;
 	});
 	
+	Ext.select('div[id^=110], div[id^=710]').each( function(item) {
+		createAuthComboBox( $(item.dom), corpnameXmlReader, 'corpname', 'bath.corporateName', 'marcxml' );
+		return true;
+	});
+	Ext.select('div[id^=111], div[id^=711]').each( function(item) {
+		createAuthComboBox( $(item.dom), confnameXmlReader, 'confname', 'bath.conferenceName', 'marcxml' );
+		return true;
+	});
+	Ext.select('div[id^=240], div[id^=130], div[id^=740]').each( function(item) {
+		createAuthComboBox( $(item.dom), uniformtitleXmlReader, 'title', 'bath.uniformTitle', 'marcxml' );
+		return true;
+	});
 	// subject headings
 	Ext.select('div[id^=650]').each( function(item) {
-		createAuthComboBox( $(item.dom), topicalTermXmlReader, 'term', 'bath.topicalSubject', 'marcxml' );
+		createAuthComboBox( $(item.dom), topicalTermXmlReader, 'topicalterm', 'bath.topicalSubject', 'marcxml' );
+		return true;
+	});
+	Ext.select('div[id^=651]').each( function(item) {
+		createAuthComboBox( $(item.dom), geoTermXmlReader, 'geoterm', 'bath.geographicName', 'marcxml' );
+		return true;
+	});
+	Ext.select('div[id^=655]').each( function(item) {
+		createAuthComboBox( $(item.dom), genreTermXmlReader, 'genreterm', 'bath.genreForm', 'marcxml' );
 		return true;
 	});
 }
