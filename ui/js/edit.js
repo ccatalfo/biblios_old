@@ -1302,10 +1302,12 @@ function createAuthComboBox(tagelem, xmlReader, displayField, recordSchema) {
 		var tag = $(combo.el.dom).parents('.tag');
 		var tagindex = UI.editor.record.getIndexOf( tag );
 		// create/update subfields
-		// delete any subfields following the first (subfield $a)
-		var subfields = $(tag).find('.subfield');
-		for( var i = 1; i< subfields.length; i++) {
-			$( subfields[i] ).remove();
+		if( record.store.reader.deleteSubfields == true ) {
+			// delete any subfields following the first (subfield $a)
+			var subfields = $(tag).find('.subfield');
+			for( var i = 1; i< subfields.length; i++) {
+				$( subfields[i] ).remove();
+			}
 		}
 		// for each subfield in this record
 		for( var i = 0; i < record.fields.length; i++) {
@@ -1339,8 +1341,17 @@ function createAuthComboBox(tagelem, xmlReader, displayField, recordSchema) {
 }
 
 function setupMarc21AuthorityLiveSearches() {
+	var topicalTermXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+		},
+		[
+			{name: 'term', id: 'a', mapping: 'datafield[tag=150] > subfield[code=a]'}
+	]);
 	var pnameXmlReader = new Ext.data.XmlReader({
 			record: 'record',
+			deleteSubfields: true,
 			id: 'controlfield[tag=001]',
 			},
 			[
@@ -1369,8 +1380,14 @@ function setupMarc21AuthorityLiveSearches() {
 	// personal names
 	Ext.select('div[id^=100], div[id^=700]').each( function(item) {
 		createAuthComboBox( $(item.dom), pnameXmlReader, 'pname', 'marcxml' );
+		return true;
 	});
-
+	
+	// subject headings
+	Ext.select('div[id^=650]').each( function(item) {
+		createAuthComboBox( $(item.dom), topicalTermXmlReader, 'term', 'marcxml' );
+		return true;
+	});
 }
 
 function create_ext_editor_static() {
