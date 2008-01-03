@@ -1420,16 +1420,16 @@ function setupMarc21AuthorityLiveSearches() {
 			]
 	);
 	// personal names
-	Ext.select('div[id^=100], div[id^=700]').each( function(item) {
+	Ext.select('div[id^=100], div[id^=700], div[id^=600]').each( function(item) {
 		createAuthComboBox( $(item.dom), pnameXmlReader, 'pname', 'bath.personalName', 'marcxml' );
 		return true;
 	});
 	
-	Ext.select('div[id^=110], div[id^=710]').each( function(item) {
+	Ext.select('div[id^=110], div[id^=710], div[id^=610]').each( function(item) {
 		createAuthComboBox( $(item.dom), corpnameXmlReader, 'corpname', 'bath.corporateName', 'marcxml' );
 		return true;
 	});
-	Ext.select('div[id^=111], div[id^=711]').each( function(item) {
+	Ext.select('div[id^=111], div[id^=711], div[id^=611]').each( function(item) {
 		createAuthComboBox( $(item.dom), confnameXmlReader, 'confname', 'bath.conferenceName', 'marcxml' );
 		return true;
 	});
