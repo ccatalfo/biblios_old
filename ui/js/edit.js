@@ -1267,7 +1267,7 @@ function setupMarc21AuthorityLiveSearches() {
 				return;
 			}
 			console.info('applying combobox to '+ $(subfield_text).val() );
-			var marcxmlReader = new Ext.data.XmlReader({
+			var pnameXmlReader = new Ext.data.XmlReader({
 					record: 'record',
 					id: 'controlfield[tag=001]',
 					},
@@ -1316,7 +1316,7 @@ function setupMarc21AuthorityLiveSearches() {
 										recordSchema: 'marcxml',
 										maximumRecords: '5'
 				},
-				reader: marcxmlReader 
+				reader: pnameXmlReader 
 			});
 
 			var cb = new Ext.form.ComboBox({
@@ -1344,6 +1344,7 @@ function setupMarc21AuthorityLiveSearches() {
 			cb.on('select', function(combo, record, index) {
 				var tagnumber = $(combo.el.dom).parents('.tag').children('.tagnumber').val();
 				var tag = $(combo.el.dom).parents('.tag');
+				var tagindex = UI.editor.record.getIndexOf( tag );
 				// create/update subfields
 				// delete any subfields following the first (subfield $a)
 				var subfields = $(tag).find('.subfield');
@@ -1362,7 +1363,7 @@ function setupMarc21AuthorityLiveSearches() {
 					}
 					// add new one if we have a value for it
 					else if( value != '' || null ) {
-						UI.editor.record.addSubfield(tagnumber, subfieldcode, value);
+						UI.editor.record.addSubfield(tagnumber, tagindex, subfieldcode, value);
 					}
 				}
 				UI.editor.cbOpen = false;

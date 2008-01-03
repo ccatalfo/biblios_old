@@ -235,11 +235,23 @@ function MarcEditor(ffeditor, vareditor) {
 			}
 		}
 	}
+	
+	this._getIndexOf = function(elem) {
+		var id = $(elem).get(0).id;
+		var tagnumber = id.substr(0,3);
+		// find all tags with this tagnumber
+		var tags = $("div[@id^="+tagnumber+"]");
+		for( var i = 0; i < tags.length; i++ ) {
+			if( tags.get(i).id == id ) {
+				return i;
+			}
+		}
+	}
 
-	this._addSubfield = function(tag, subfield, value) {
+	this._addSubfield = function(tag, index, subfield, value) {
 		// get last subfield in this tag
-		var numsf = $('[@id^='+tag+']').find('.subfield-text').length;
-		var lastsf = $('[@id^='+tag+']').find('.subfield-text').eq(numsf-1);
+		var numsf = $('div[@id^='+tag+']').eq(index).find('.subfield-text').length;
+		var lastsf = $('div[@id^='+tag+']').eq(index).find('.subfield-text').eq(numsf-1);
 		// add a subfield after it
 		addSubfield(lastsf);
 		// now set its delimiter to the passed in subfield code
@@ -254,7 +266,7 @@ function MarcEditor(ffeditor, vareditor) {
 		$(lastsf).parents('.subfield').next().children('.subfield-text').focus();
 	}
 
-	this._deleteSubfield = function(tag, subfield) {
+	this._deleteSubfield = function(tag, index, subfield) {
 		var sf = $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
 		UI.editor.lastFocusedEl = sf;
 		removeSubfield();
@@ -295,16 +307,16 @@ MarcEditor.prototype.setValue = function(tag, subfield, value) {
 	this._setValue(tag, subfield, value);
 }
 
-MarcEditor.prototype.deleteSubfield = function(tag, subfield) {
-	this._deleteSubfield(tag, subfield);
+MarcEditor.prototype.deleteSubfield = function(tag, index, subfield) {
+	this._deleteSubfield(tag, index, subfield);
 }
 
 MarcEditor.prototype.deleteSubfields = function(tag) {
 	this._deleteSubfields(tag);
 }
 
-MarcEditor.prototype.addSubfield = function(tag, subfield, value) {
-	this._addSubfield(tag, subfield, value);
+MarcEditor.prototype.addSubfield = function(tag, index, subfield, value) {
+	this._addSubfield(tag, index, subfield, value);
 }
 
 MarcEditor.prototype.focusTag = function(tag) {
@@ -326,7 +338,6 @@ MarcEditor.prototype.deleteField = function(tagnumber, i) {
 MarcEditor.prototype.getFieldList = function() {
 	return this._getFieldList();
 }
-
 
 MarcEditor.prototype.hasField = function(tagnumber) {
 	return this._hasField(tagnumber);
@@ -370,4 +381,8 @@ MarcEditor.prototype.XMLString = function() {
 
 MarcEditor.prototype.update = function(elem) {
 	return this._update(elem);
+}
+
+MarcEditor.prototype.getIndexOf = function(elem) {
+	return this._getIndexOf(elem);
 }
