@@ -147,6 +147,7 @@
 		<xsl:param name="id"/>
 			<span class="subfield">
 				<xsl:attribute name="id"><xsl:value-of select="$id"/></xsl:attribute>
+				<xsl:attribute name="class"><xsl:value-of select="@code"/></xsl:attribute>
 				<input class="subfield-delimiter">
 					<xsl:attribute name='size'>2</xsl:attribute>
 					<xsl:attribute name='maxlength'>2</xsl:attribute>

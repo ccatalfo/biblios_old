@@ -1257,7 +1257,7 @@ function setupEditorHotkeys() {
 }
 
 function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, recordSchema) {
-	var subfield_text = $(tagelem).find('.subfield-text').eq(0);
+	var subfield_text = $(tagelem);
 	if( subfield_text.length == 0 ) {
 		return;
 	}
@@ -1304,7 +1304,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 		var tag = $(combo.el.dom).parents('.tag');
 		var tagindex = UI.editor.record.getIndexOf( tag );
 		// create/update subfields
-		if( record.store.reader.deleteSubfields == true ) {
+		if( record.store.reader.meta.deleteSubfields == true ) {
 			// delete any subfields following the first (subfield $a)
 			var subfields = $(tag).find('.subfield');
 			for( var i = 1; i< subfields.length; i++) {
@@ -1420,33 +1420,33 @@ function setupMarc21AuthorityLiveSearches() {
 			]
 	);
 	// personal names
-	Ext.select('div[id^=100], div[id^=700], div[id^=600], div[id^=800]').each( function(item) {
+	Ext.select('div[id^=100] .a .subfield-text, div[id^=700] .a .subfield-text, div[id^=600] .a .subfield-text, div[id^=800] .a .subfield-text').each( function(item) {
 		createAuthComboBox( $(item.dom), pnameXmlReader, 'pname', 'bath.personalName', 'marcxml' );
 		return true;
 	});
 	
-	Ext.select('div[id^=110], div[id^=710], div[id^=610], div[id^=810]').each( function(item) {
+	Ext.select('div[id^=110] .a .subfield-text, div[id^=710] .a .subfield-text, div[id^=610] .a .subfield-text, div[id^=810] .a .subfield-text').each( function(item) {
 		createAuthComboBox( $(item.dom), corpnameXmlReader, 'corpname', 'bath.corporateName', 'marcxml' );
 		return true;
 	});
-	Ext.select('div[id^=111], div[id^=711], div[id^=611], div[id^=811]').each( function(item) {
+	Ext.select('div[id^=111] .a .subfield-text, div[id^=711] .a .subfield-text, div[id^=611] .a .subfield-text, div[id^=811] .a .subfield-text').each( function(item) {
 		createAuthComboBox( $(item.dom), confnameXmlReader, 'confname', 'bath.conferenceName', 'marcxml' );
 		return true;
 	});
-	Ext.select('div[id^=240], div[id^=130], div[id^=740], div[id^=630]').each( function(item) {
+	Ext.select('div[id^=240] .a .subfield-text, div[id^=130] .a .subfield-text, div[id^=740] .a .subfield-text, div[id^=630] .a .subfield-text').each( function(item) {
 		createAuthComboBox( $(item.dom), uniformtitleXmlReader, 'title', 'bath.uniformTitle', 'marcxml' );
 		return true;
 	});
 	// subject headings
-	Ext.select('div[id^=650]').each( function(item) {
+	Ext.select('div[id^=650] .a .subfield-text').each( function(item) {
 		createAuthComboBox( $(item.dom), topicalTermXmlReader, 'topicalterm', 'bath.topicalSubject', 'marcxml' );
 		return true;
 	});
-	Ext.select('div[id^=651]').each( function(item) {
+	Ext.select('div[id^=651] .a .subfield-text').each( function(item) {
 		createAuthComboBox( $(item.dom), geoTermXmlReader, 'geoterm', 'bath.geographicName', 'marcxml' );
 		return true;
 	});
-	Ext.select('div[id^=655]').each( function(item) {
+	Ext.select('div[id^=655] .a .subfield-text').each( function(item) {
 		createAuthComboBox( $(item.dom), genreTermXmlReader, 'genreterm', 'bath.genreForm', 'marcxml' );
 		return true;
 	});
