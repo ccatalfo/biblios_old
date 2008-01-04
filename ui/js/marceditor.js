@@ -126,7 +126,7 @@ function MarcEditor(ffeditor, vareditor) {
 
 	this._getValue = function(tag, subfield) {
 		if( subfield != null ) {
-			return $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').find('.subfield-text').val();
+			return $('[@id^='+tag+'] .'+subfield+' .subfield-text').val();
 		}
 		else {
 			return $('[@id^='+tag+']').children('.controlfield').val();
