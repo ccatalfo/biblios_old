@@ -1273,7 +1273,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 								version: '1.1',
 								operation: 'searchRetrieve',
 								recordSchema: recordSchema,
-								maximumRecords: '10'
+								maximumRecords: '100'
 		},
 		reader: xmlReader 
 	});
