@@ -1416,24 +1416,24 @@ function setupMarc21AuthorityLiveSearches() {
 				{name: 'relatorcode', id: '4', mapping: 'datafield[tag=100] > subfield[code=4]'},
 				{name: 'linkage', id: '6', mapping: 'datafield[tag=100] > subfield[code=6]'},
 				{name: 'fieldlinkseqnum', id: '8', mapping: 'datafield[tag=100] > subfield[code=8]'},
-				{name: 'authcontrolnum', id: '9', mapping: 'datafield[tag=001]'}
+				{name: 'authcontrolnum', id: '9', mapping: 'datafield[tag=001]'} // KOHA specific
 			]
 	);
 	// personal names
-	Ext.select('div[id^=100], div[id^=700], div[id^=600]').each( function(item) {
+	Ext.select('div[id^=100], div[id^=700], div[id^=600], div[id^=800]').each( function(item) {
 		createAuthComboBox( $(item.dom), pnameXmlReader, 'pname', 'bath.personalName', 'marcxml' );
 		return true;
 	});
 	
-	Ext.select('div[id^=110], div[id^=710], div[id^=610]').each( function(item) {
+	Ext.select('div[id^=110], div[id^=710], div[id^=610], div[id^=810]').each( function(item) {
 		createAuthComboBox( $(item.dom), corpnameXmlReader, 'corpname', 'bath.corporateName', 'marcxml' );
 		return true;
 	});
-	Ext.select('div[id^=111], div[id^=711], div[id^=611]').each( function(item) {
+	Ext.select('div[id^=111], div[id^=711], div[id^=611], div[id^=811]').each( function(item) {
 		createAuthComboBox( $(item.dom), confnameXmlReader, 'confname', 'bath.conferenceName', 'marcxml' );
 		return true;
 	});
-	Ext.select('div[id^=240], div[id^=130], div[id^=740]').each( function(item) {
+	Ext.select('div[id^=240], div[id^=130], div[id^=740], div[id^=630]').each( function(item) {
 		createAuthComboBox( $(item.dom), uniformtitleXmlReader, 'title', 'bath.uniformTitle', 'marcxml' );
 		return true;
 	});
