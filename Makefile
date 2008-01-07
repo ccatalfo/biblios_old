@@ -1,5 +1,5 @@
 CTAGS=ctags
-JSMIN=jsmin 
+JSMIN=tools/jsmin 
 CAT=cat
 SRCS=ui/js/*.js 
 ALLSRC=$(SRCS) index.html
