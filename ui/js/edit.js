@@ -453,11 +453,14 @@ function addField(tagnumber, ind1, ind2, subfields) {
 		  newtag += '<input size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+'"/>';
 		  newtag += '<span class="subfields" id="dsubfields'+newId+'">';
 		  for( var i = 0; i< sf.length; i++) {
-			  newtag += '<span class="subfield" id="'+tagnumber+newId+'">';
-			  newtag += '<input class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;'+sf[i]['delimiter']+'">';
+			  newtag += '<span class="subfield '+sf[i]['delimiter']+'" id="'+tagnumber+newId+'">';
+			  newtag += '<input size="2" maxlength="2" onfocus="onFocus(this)" onblur="onBlur(this)" class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;'+sf[i]['delimiter']+'">';
 			  var textlength = sf[i]['text'].length;
-			  newtag += '<input id="'+tagnumber+newId+i+'text"class="subfield-text" size="'+textlength+'" value="'+sf[i]['text']+'">';
-			}
+			  newtag += '<input onfocus="onFocus(this)" onblur="onBlur(this)" id="'+tagnumber+newId+i+'text"class="subfield-text" size="'+textlength+'" value="'+sf[i]['text']+'">';
+			  newtag += '</span>'; // subfield span
+		}
+		newtag += '</span>'; // subfields span
+		newtag += '</div>'; // tag div
 		// insert out new tag after the tag we just found
 		$(tagToInsertAfter, UI.editor.doc).after(newtag);
 		// set the focus to this new tag
