@@ -35,10 +35,6 @@ Ext.Ajax.request({
 });
 
 // load xsl docs for transforming marcxml
-var showMarcXslPath = "ui/xsl/MARC21slim2HTML.xsl";
-var fixedFieldXslPath = "ui/xsl/fixedfields_editor.xsl";
-var varFieldsXslPath = "ui/xsl/varfields_inputboxes.xsl";
-
 var marcxsl = xslTransform.loadFile(showMarcXslPath);
 var ffxsl = xslTransform.loadFile(fixedFieldXslPath);
 var varfxsl = xslTransform.loadFile(varFieldsXslPath);
