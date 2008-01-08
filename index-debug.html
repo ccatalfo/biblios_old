@@ -2,9 +2,11 @@
 <head>
 <!-- paths for loading xsl stylesheets for manipulating marc records -->
 <script type="text/javascript">
-var showMarcXslPath = "ui/xsl/MARC21slim2HTML.xsl";
-var fixedFieldXslPath = "ui/xsl/fixedfields_editor.xsl";
-var varFieldsXslPath = "ui/xsl/varfields_inputboxes.xsl";
+var libPath = ' ';
+var showMarcXslPath = libPath + "ui/xsl/MARC21slim2HTML.xsl";
+var fixedFieldXslPath = libPath + "ui/xsl/fixedfields_editor.xsl";
+var varFieldsXslPath = libPath + "ui/xsl/varfields_inputboxes.xsl";
+var confPath = libPath + "conf/webcatdb.conf";
 </script>
 
 <script type="text/javascript" src="lib/google_gears/gears_init.js"></script>
@@ -97,7 +99,7 @@ var db_debug = 1;
 <!-- loading mask area -->
 <div id="loading-mask" style="width:100%;height:100%;background:#c3daf9;p osition:absolute;z-index:20000;left:0;top:0;"> </div>
 <div id="loading">
-<div class="loading-indicator"><img src="../resources/images/default/grid/loading.gif" style="width:16px;height:16px;" align="absmiddle"> Loading...</div>
+<div class="loading-indicator"><img src="lib/extjs/resources/images/default/grid/loading.gif" style="width:16px;height:16px;" align="absmiddle"> Loading...</div>
 </div>
 
 <div id='top-panel'>

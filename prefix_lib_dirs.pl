@@ -19,14 +19,9 @@ while(<IN>) {
 		my $newdir = $prefix . $1;
 		$_ =~ s/$1/$newdir/;
 	}
-	if( $_ =~ /"(ui\/xsl\/.*)"/ ) {
-		print 'Updating ' . $_ . 'to ' . $prefix.$1 . "\n";
-		my $newdir = $prefix . $1;
-		$_ =~ s/$1/$newdir/;
-	}
-	if( $_ =~ /var confPath = "(conf\/webcatdb.conf)"/ ) {
-		print 'Updating ' . $_ . 'to ' . $prefix.$1 . "\n";
-		my $newdir = $prefix . $1;
+	if( $_ =~ /var libPath = ('.*');/ ) {
+		print 'Updating ' . $_ . 'to ' . $prefix . "\n";
+		my $newdir = "'" . $prefix . "'";
 		$_ =~ s/$1/$newdir/;
 	}
 	print OUT $_;

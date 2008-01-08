@@ -1,5 +1,5 @@
 // reference local blank image
-Ext.BLANK_IMAGE_URL = 'lib/extjs/resources/images/default/s.gif';
+Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs/resources/images/default/s.gif';
 
 // config options
 var configDoc = '';
