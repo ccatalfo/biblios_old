@@ -17,7 +17,7 @@ var kohaauthurl = 'http://'+ location.hostname+ '/kohaauth/authorities';
 init_gears();
 
 Ext.Ajax.request({
-    url: 'conf/webcatdb.conf',
+    url: confPath,
     method: 'GET',
     callback: function( options, success, response ) {
       configDoc = (new DOMParser()).parseFromString( response.responseText, 'text/xml');
@@ -80,16 +80,6 @@ var searchTree, saveTree, saveFilesTree, treeEditor;
 var folderRoot, searchRoot, saveRoot, saveFilesRoot, facetsRoot;
 // YUI rich text editor
 var rte_editor;
-// get css styles for marc editor
-var editor_css;
-$.get('ui/css/editor-styles.css', function(data) {
-    editor_css = data;
-});
-// get css style for jquery autocomplete plugin used in marceditor
-var autocomplete_css;
-$.get('lib/jquery/jquery.autocomplete.css', function(data) {
-	autocomplete_css = data;
-});
 	
 var searches = new Array(); // Array of pazpar2 searches
 var paz = initializePazPar2(pazpar2url);
