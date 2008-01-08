@@ -73,7 +73,7 @@ GearsORMShift.rules = [
 				allowDrag: 0,
 				allowDrop: 0,
 				ddGroup: null,
-				icon: 'ui/images/user-trash.png',
+				icon: libPath + 'ui/images/user-trash.png',
 				date_added: 'datetime("now", "localtime"',
 				date_mofified: 'datetime("now", "localtime"'
 			}).save();
@@ -88,7 +88,7 @@ GearsORMShift.rules = [
 				allowDrag: 0,
 				allowDrop: 1,
 				ddGroup: 'RecordDrop',
-				icon: 'ui/images/drive-harddisk.png',
+				icon: libPath + 'ui/images/drive-harddisk.png',
 				date_added: 'datetime("now", "localtime"',
 				date_mofified: 'datetime("now", "localtime"'
 			}).save();
@@ -103,7 +103,7 @@ GearsORMShift.rules = [
 				allowDrag: 0,
 				allowDrop: 1,
 				ddGroup: 'RecordDrop',
-				icon: 'ui/images/drive-harddisk.png',
+				icon: libPath + 'ui/images/drive-harddisk.png',
 				date_added: 'datetime("now", "localtime"',
 				date_mofified: 'datetime("now", "localtime"'
 			}).save();
@@ -301,7 +301,7 @@ function setupKohaPlugin() {
 		url: 'http://eowyn.metavore.com/kohaapi/',
 		user: 'marian',
 		password: 'marian',
-		pluginlocation: 'plugins/koha.js',
+		pluginlocation: libPath + 'plugins/koha.js',
 		plugininit: 'new koha()',
 		enabled: 1
 	}).save();

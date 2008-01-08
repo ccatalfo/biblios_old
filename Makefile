@@ -16,4 +16,4 @@ debug:
 
 koha:
 	 perl prefix_lib_dirs.pl index-debug.html index-koha.html "/intranet-tmpl/prog/en/lib/biblios/"
-	 tar -czf biblios-in-koha.tar.gz index-koha.html lib cgi-bin ui templates/
+	 tar -czf biblios-in-koha.tar.gz index-koha.html plugins lib cgi-bin ui templates/
