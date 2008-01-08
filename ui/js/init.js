@@ -166,26 +166,26 @@ function initUI() {
     [
     {
         cls: 'x-btn-text-icon bmenu', // icon and text class
-        icon: 'ui/images/document-save.png',
+        icon: libPath + 'ui/images/document-save.png',
         text: 'Save',
 		menu: saveMenu
 	},
 	{
         cls: 'x-btn-text-icon bmenu', // icon and text class
-        icon: 'ui/images/document-save.png',
+        icon: libPath + 'ui/images/document-save.png',
         text: 'Send',
 		menu: sendMenu
 	},
 
     {   
         cls: 'x-btn-text-icon', // icon and text class
-        icon: 'ui/images/network-receive.png',
+        icon: libPath + 'ui/images/network-receive.png',
         text: 'Export',
         handler: doDownloadRecords
     },
     {
         cls: 'x-btn-text-icon', // icon and text class
-        icon: 'ui/images/process-stop.png',
+        icon: libPath + 'ui/images/process-stop.png',
         text: 'Cancel',
         handler: function() {
 			showStatusMsg('Cancelling record...');
@@ -201,14 +201,14 @@ function initUI() {
     },
     {
         cls: 'x-btn-text-icon', // icon and text class
-        icon: 'ui/images/edit-copy.png',
+        icon: libPath + 'ui/images/edit-copy.png',
         text: 'Merge',
         handler: doMerge,
         disabled: true
     },
     {
         cls: 'x-btn-text-icon', // icon and text class
-        icon: 'ui/images/preferences-system.png',
+        icon: libPath + 'ui/images/preferences-system.png',
         text: 'Options',
         handler: doRecordOptions,
         disabled: true

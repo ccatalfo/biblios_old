@@ -34,7 +34,7 @@ UI.optionsLayout = {};
 
 var newButton = new Ext.Toolbar.Button ({
         id: 'newrecordbutton',
-        icon: 'ui/images/document-new.png',
+        icon: libPath + 'ui/images/document-new.png',
         cls: 'x-btn-text-icon bmenu',
         text: 'New',
         handler: doNewRecord
@@ -42,7 +42,7 @@ var newButton = new Ext.Toolbar.Button ({
 var refreshButton = new Ext.Toolbar.Button({
         cls: 'x-btn-text-icon bmenu',
         text: 'Refresh',
-        icon: 'ui/images/view-refresh.png',
+        icon: libPath + 'ui/images/view-refresh.png',
         handler: function() {
             // see which grid is visible at the moment and get reload data in it 
             if( Ext.get('searchgrid').isVisible() ) {
@@ -56,14 +56,14 @@ var refreshButton = new Ext.Toolbar.Button({
     });
 var moveButton = new Ext.Toolbar.Button({
         cls: 'x-btn-text-icon',
-        icon: 'ui/images/emblem-symbolic-link.png',
+        icon: libPath + 'ui/images/emblem-symbolic-link.png',
         text: 'Move',
         handler: function() {},
         disabled: true
     });
 var printButton = new Ext.Toolbar.Button({
         cls: 'x-btn-text-icon',
-        icon: 'ui/images/document-print.png',
+        icon: libPath + 'ui/images/document-print.png',
         text: 'Print',
         handler: function() {},
         disabled: true
@@ -71,7 +71,7 @@ var printButton = new Ext.Toolbar.Button({
     
 var editButton = new Ext.Toolbar.Button({
         cls: 'x-btn-text-icon',
-        icon: 'ui/images/document-open.png',
+        icon: libPath + 'ui/images/document-open.png',
         text: 'Edit',
         disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
         handler: function() {
@@ -95,7 +95,7 @@ var exportButton = new Ext.Toolbar.Button({
     text: 'Export',
     disabled: false,
     cls: 'x-btn-text-icon',
-    icon: 'ui/images/network-receive.png',
+    icon: libPath + 'ui/images/network-receive.png',
     handler: doDownloadRecords 
     
 });
@@ -103,7 +103,7 @@ var emptyTrashButton = new Ext.Toolbar.Button({
     text: 'Empty Trash',
     disabled: false,
     cls: 'x-btn-text-icon',
-    icon: 'ui/images/network-receive.png',
+    icon: libPath + 'ui/images/network-receive.png',
     handler: function() {
             if( Ext.get('searchgrid').isVisible() ) {
 					showStatusMsg('Emptying trash...');
@@ -585,7 +585,7 @@ function createSaveFileFolders(parentid) {
 			savefileid: 'null',
 			leaf:false,
 			text: 'Folders',
-			icon: 'ui/images/folder.png',
+			icon: libPath + 'ui/images/folder.png',
 			cls: 'rootFolders'
 		});
 		Ext.ComponentMgr.register(saveFilesRoot);
@@ -853,7 +853,7 @@ function createFolderList() {
 					allowDrag: 1,
 					allowDrop: 1,
 					ddGroup: 'RecordDrop',
-					icon: 'ui/images/drive-harddisk.png',
+					icon: libPath + 'ui/images/drive-harddisk.png',
 					date_added: '',
 					date_modified: ''
 				}).save();
@@ -876,7 +876,7 @@ function createFolderList() {
 				text: 'New Folder', 
 				savefileid: id, 
 				qtip:'', 
-				icon: 'ui/images/drive-harddisk.png',
+				icon: libPath + 'ui/images/drive-harddisk.png',
 				leaf: false, 
 				allowDelete:true, 
 				allowAdd: true,
@@ -995,7 +995,7 @@ function updateSearchTargetFolders() {
             allowDrag: false, 
             allowDrop:true, 
             ddGroup:'RecordDrop', 
-            icon: 'ui/images/network-server.png'
+            icon: libPath + 'ui/images/network-server.png'
           });
         var serverleaf = new Ext.tree.TreeNode(
           {
@@ -1046,7 +1046,7 @@ function createTargetFolders() {
 		id:'searchRoot',
 		leaf: false,
 		text: 'Resources',
-		icon: 'ui/images/folder-remote.png'
+		icon: libPath + 'ui/images/folder-remote.png'
 	});
 	Ext.ComponentMgr.register(searchRoot);
 
