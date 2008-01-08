@@ -14,5 +14,10 @@ while(<IN>) {
 		my $newdir = $prefix . $1;
 		$_ =~ s/$1/$newdir/;
 	}
+	if( $_ =~ /"(ui\/xsl\/.*)"/ ) {
+		print 'Updating ' . $_ . 'to ' . $prefix.$1 . "\n";
+		my $newdir = $prefix . $1;
+		$_ =~ s/$1/$newdir/;
+	}
 	print OUT $_;
 }

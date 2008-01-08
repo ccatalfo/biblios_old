@@ -14,4 +14,5 @@ tags: $(SRCS)
 debug: 
 	sed -f sed_generate_index_debug < index.html > index-debug.html
 
-	
+koha:
+	 perl prefix_lib_dirs.pl index.html index-koha.html "koha-tmpl/intranet-tmpl/prog/en/lib/biblios/"
