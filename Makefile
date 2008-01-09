@@ -15,7 +15,7 @@ debug:
 	sed -f sed_generate_index_debug < index.html > index-debug.html
 
 koha:
-	perl integration/koha/prefix_lib_dirs.pl index-debug.html index-koha.html "/intranet-tmpl/prog/en/lib/biblios/" 8001
+	perl integration/updateForEmbedding.pl index-debug.html index-koha.html "/intranet-tmpl/prog/en/lib/biblios/" "/cgi-bin/koha/plugins/biblios/" "8001"
 	cp index-koha.html $(KOHADIR)/koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/biblios.tmpl
 	cp integration/koha/biblios.pl $(KOHADIR)/cataloguing/
 	mkdir -p $(KOHADIR)/plugins/biblios

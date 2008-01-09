@@ -390,7 +390,7 @@ function createAcqSearchGrid() {
 		id: 'asin'
 	}, recordDef);
 	var ds = new Ext.data.Store({
-		proxy: new Ext.data.HttpProxy({url: '/cgi-bin/vendorSearch/'}),
+		proxy: new Ext.data.HttpProxy({url: cgiDir + 'vendorSearch/'}),
 		reader: reader,
 	});
 	ds.on('beforeload', function(ds, options) {
@@ -1663,11 +1663,11 @@ function doDownloadRecords() {
 */
 function handleDownload(format, encoding, xml) {
       $.post(
-        "/cgi-bin/downloadMarc.pl", 
+        cgiDir + "downloadMarc.pl", 
         {format: format, encoding: encoding, xml: xml}, 
           function(data) {
             //if(debug){ alert(data);}
-            $("<iframe id='dl' src='/cgi-bin/download.pl?filename="+data+"'/>").appendTo("body");
+            $("<iframe id='dl' src="+cgiDir+"'download.pl?filename="+data+"'/>").appendTo("body");
             //$("#dl").remove();
           }
         );
@@ -1701,7 +1701,7 @@ function doUploadMarc() {
         uploadDlg.addKeyListener(13, uploadDlg.hide, uploadDlg);
         uploadDlg.addButton('Cancel', uploadDlg.hide, uploadDlg);
         uploadDlg.body.dom.innerHTML = "<div id='uploadFormDiv'/>";
-        $("#uploadFormDiv").append("<form id='uploadForm' target='upload_frame' method='POST' action='/cgi-bin/uploadMarc.pl' enctype='multipart/form-data'>Choose a file to upload:<input type='file' id='fileToUpload' name='fileToUpload'/></form>");
+        $("#uploadFormDiv").append("<form id='uploadForm' target='upload_frame' method='POST' action="+cgiDir+"'uploadMarc.pl' enctype='multipart/form-data'>Choose a file to upload:<input type='file' id='fileToUpload' name='fileToUpload'/></form>");
         // add iframe to set as post target
         $("<iframe id='upload_frame' src='blank.html' style='display: none;' name='upload_frame'/>").appendTo("body");
         // add iframe target to upload form

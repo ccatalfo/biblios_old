@@ -5,6 +5,7 @@ use warnings;
 my $infile = shift(@ARGV);
 my $outfile = shift(@ARGV);
 my $prefix = shift(@ARGV);
+my $cgiDir = shift(@ARGV);
 my $port = shift(@ARGV);
 open(IN, $infile) or die "can't open $infile for reading $!";
 open(OUT, ">$outfile") or die "can't open $outfile for writing $!";
@@ -23,6 +24,11 @@ while(<IN>) {
 	if( $_ =~ /var libPath = ('.*');/ ) {
 		print 'Updating ' . $_ . 'to ' . $prefix . "\n";
 		my $newdir = "'" . $prefix . "'";
+		$_ =~ s/$1/$newdir/;
+	}
+	if( $_ =~ /var cgiDir = ('.*');/ ) {
+		print 'Updating ' . $_ . 'to ' . $cgiDir . "\n";
+		my $newdir = "'" . $cgiDir . "'";
 		$_ =~ s/$1/$newdir/;
 	}
 	if( $_ =~ /var hostPort = ('.*');/ ) {
