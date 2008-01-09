@@ -402,7 +402,7 @@ function createAcqSearchGrid() {
 		// use our own blank image if this record has none so as to keep grid spacing ok
 		var image_url = '';
 		if( record.data.image == '' ) {
-			image_url = 'ui/images/amazon_blank_medium.jpg';
+			image_url = libPath + 'ui/images/amazon_blank_medium.jpg';
 		}
 		else {
 			image_url = record.data.image;
