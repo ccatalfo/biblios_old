@@ -298,7 +298,7 @@ function setupKohaPlugin() {
 	var koha = new DB.SendTargets({
 		name: 'Koha-cfc',
 		location: 'Koha-cfc',
-		url: 'http://eowyn.metavore.com/kohaapi/',
+		url: 'http://eowyn.metavore.com'+hostPort+'/kohaapi/',
 		user: 'marian',
 		password: 'marian',
 		pluginlocation: libPath + 'plugins/koha.js',

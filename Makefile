@@ -15,5 +15,5 @@ debug:
 	sed -f sed_generate_index_debug < index.html > index-debug.html
 
 koha:
-	 perl prefix_lib_dirs.pl index-debug.html index-koha.html "/intranet-tmpl/prog/en/lib/biblios/"
+	 perl prefix_lib_dirs.pl index-debug.html index-koha.html "/intranet-tmpl/prog/en/lib/biblios/" 8001
 	 tar -czf biblios-in-koha.tar.gz index-koha.html plugins lib cgi-bin ui templates/
