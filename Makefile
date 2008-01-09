@@ -15,5 +15,11 @@ debug:
 	sed -f sed_generate_index_debug < index.html > index-debug.html
 
 koha:
-	 perl prefix_lib_dirs.pl index-debug.html index-koha.html "/intranet-tmpl/prog/en/lib/biblios/" 8001
-	 tar -czf biblios-in-koha.tar.gz index-koha.html plugins lib cgi-bin ui templates/
+	perl integration/koha/prefix_lib_dirs.pl index-debug.html index-koha.html "/intranet-tmpl/prog/en/lib/biblios/" 8001
+	cp index-koha.html $(KOHADIR)/koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/biblios.tmpl
+	cp integration/koha/biblios.pl $(KOHADIR)/cataloguing/
+	mkdir -p $(KOHADIR)/plugins/biblios
+	cp cgi-bin/downloadMarc.pl cgi-bin/vendorSearch $(KOHADIR)/plugins/biblios/
+	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl/prog/en/lib/biblios
+	cp -r lib templates ui conf plugins $(KOHADIR)/koha-tmpl/intranet-tmpl/prog/en/lib/biblios/
+	tar -czf biblios-in-koha.tar.gz index-koha.html plugins lib cgi-bin ui templates/
