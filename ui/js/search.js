@@ -332,7 +332,7 @@ function removeFacets() {
 		}
 	});
 	facetsRoot.collapseChildNodes(true);
-	facetsRoot.setText("Facets <img src="+libPath+"'ui/images/ajax-loader.gif'>");
+	facetsRoot.setText("Facets <img src='"+libPath+"ui/images/ajax-loader.gif'>");
 }
 
 function limitSearch() {
