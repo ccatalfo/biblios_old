@@ -15,7 +15,8 @@ debug:
 	sed -f sed_generate_index_debug < index.html > index-debug.html
 
 koha:
-	perl integration/updateForEmbedding.pl index-debug.html index-koha.html "/intranet-tmpl/prog/en/lib/biblios/" "/cgi-bin/koha/plugins/biblios/" "8001"
+	perl integration/updateForEmbedding.pl index-debug.html index-koha.html "/intranet-tmpl/prog/en/lib/biblios/" "/cgi-bin/koha/plugins/biblios/" "8001" "<!-- TMPL_INCLUDE NAME=\"doc-head-open.inc\" --><!-- TMPL_INCLUDE NAME=\"doc-head-close.inc\" -->" "<!-- TMPL_INCLUDE NAME=\"header.inc\" -->"
+
 	tar -czf biblios-in-koha.tar.gz index-koha.html plugins lib cgi-bin ui templates/
 
 koha-install:

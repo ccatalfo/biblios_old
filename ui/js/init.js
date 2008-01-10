@@ -135,7 +135,11 @@ function initUI() {
           titlebar: false,
           minSize: 700,
           collapsable: false
-      }
+      },
+	  south: {
+	  	split: false,
+		titlebar: false,
+	}
   });
 
       tabs = new Ext.TabPanel('tab-panel', 
@@ -153,6 +157,9 @@ function initUI() {
   layout.add('center', 
     new Ext.ContentPanel('tab-panel', {fittoframe: true})
   );
+  layout.add('south',
+  	new Ext.ContentPanel('south')
+);
   layout.endUpdate();
 	var saveMenu = new Ext.menu.Menu({
 		id: 'saveMenu',
