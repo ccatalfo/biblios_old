@@ -48,7 +48,7 @@ while(<IN>) {
 		my $newheader = $1 . $headerhtml;
 		$_ =~ s/$1/$newheader/;
 	}
-	if( $_ =~ /(<div id='login'>)/ ) {
+	if( $_ =~ /(<div id='login'>.*<\/div>)/ ) {
 		print "Deleting <div id='login'>\n";
 		my $newheader = '';
 		$_ =~ s/$1/$newheader/;
