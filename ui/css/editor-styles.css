@@ -87,3 +87,7 @@ input.controlfield, input.subfield-text, input.subfield-delimiter, input.indicat
 .droppable {
 	background-color: green;
 }
+
+li.recordtoolbar {
+	list-style-type: none;
+}
