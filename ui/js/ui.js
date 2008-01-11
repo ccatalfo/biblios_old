@@ -2030,7 +2030,7 @@ function clearStatusMsg() {
 function filterSearchResultsByServer() {
   // loop through search nodes, filtering out targets which aren't checked
   var checkednodes = new Array();
-  var targetnodes = searchRoot.childNodes;
+  var targetnodes = folderRoot.findChild('searchRoot').childNodes;
   for( var i = 0; i < targetnodes.length; i++ ) {
     if( targetnodes[i].attributes.checked == true ) {
       checkednodes.push( targetnodes[i].attributes.servername );

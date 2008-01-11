@@ -134,21 +134,6 @@ function createTestTargets() {
 		position: 'primary',
 		type: 'zed'
 	}).save();
-	var Berwick = new DB.SearchTargets({
-		hostname: 'zconn.lib.monash.edu.au',
-		port: '7090',
-		dbname: 'Voyager',
-		userid: '',
-		password: '',
-		name: 'Berwick Library',
-		enabled: 1,
-		rank: 1,
-		description: 'Berwick Library',
-		syntax: null,
-		icon: null,
-		position: 'primary',
-		type: 'zed'
-	}).save();
 	var LOC = new DB.SearchTargets({
 		hostname: 'z3950.loc.gov',
 		port: '7090',
@@ -164,16 +149,16 @@ function createTestTargets() {
 		position: 'primary',
 		type: 'zed'
 	}).save();
-	var Koha_cfc = new DB.SearchTargets({
+	var Koha= new DB.SearchTargets({
 		hostname: 'arwen.metavore.com',
 		port: '9820',
 		dbname: 'biblios',
 		userid: '',
 		password: '',
-		name: "CFC Koha",
+		name: "Koha",
 		enabled: 1,
 		rank: 1,
-		description: "CFC Koha",
+		description: "Koha",
 		syntax: null,
 		icon: null,
 		position: 'primary',
