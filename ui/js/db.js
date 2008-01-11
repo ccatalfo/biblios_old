@@ -190,7 +190,7 @@ function removeTestTargets() {
 
 function init_gears() {
 	
-			GearsORM.dbName = "catalogingProject";
+			GearsORM.dbName = "biblios";
 			db = GearsORM.getDB();
 			DB.Info_Schema = new GearsORM.Model({
 				name:"Info_Schema",
