@@ -148,6 +148,10 @@ function createOptionsTab() {
 		function(cp) {
 			createTargetGrid();
 	});
+	optionsLayout.getRegion('center').getPanel('sendtarget_options').on('activate',
+		function(cp) {
+			createSendTargetGrid();
+	});
 	// create database options 
 	createDatabaseOptions();
 }
@@ -285,7 +289,7 @@ function createSendTargetGrid() {
 				catch(ex) {
 					Ext.MessageBox.alert('Error', ex.message);
 				}
-				var t = new Target({
+				var t = new SendTarget({
 					id: db.lastInsertRowId,
 					name: '',
 					location: '',
