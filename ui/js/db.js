@@ -299,8 +299,8 @@ function setupKohaPlugin() {
 		name: 'Koha-cfc',
 		location: 'Koha-cfc',
 		url: 'http://eowyn.metavore.com'+hostPort+'/kohaapi/',
-		user: 'marian',
-		password: 'marian',
+		user: 'kohaadmin',
+		password: 'katikoan',
 		pluginlocation: libPath + 'plugins/koha.js',
 		plugininit: 'new koha()',
 		enabled: 1
