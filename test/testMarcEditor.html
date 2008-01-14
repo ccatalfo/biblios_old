@@ -32,17 +32,20 @@
 		alert('You need to include Sarissa!');
 	}
     var setUpPageStatus;
-    var marcxml;
+    var bookDoc;
+	var ffedxsl, varedxsl;
     var xml;
     var ff_ed;
     var var_ed;
     //console.info = inform;
     function setUpPage() {
-        marcxml = xslTransform.load("http://localhost:8890/test/sandburg.xml"); 
-        $('#marcxml').getTransform(marcxml);
-        $('#ff_ed').getTransform('http://localhost:8890/ui/xsl/fixedfields_editor.xsl', 'http://localhost:8890/test/sandburg.xml');
+        ffedxsl = xslTransform.load("../ui/xsl/fixedfields_editor.xsl"); 
+		varedxsl = xslTransform.load('../ui/xsl/varfields_editor.xsl');
+        bookDoc = xslTransform.load("testRecords/sandburg.xml"); 
+        $('#marcxml').getTransform(bookDoc);
+        $('#ff_ed').getTransform(ffedxsl, bookDoc);
         ff_ed = $("#ff_ed");
-        $('#var_ed').getTransform('http://localhost:8890/ui/xsl/varfields_editor.xsl', 'http://localhost:8890/test/sandburg.xml');
+        $('#var_ed').getTransform(varedxsl, bookDoc);
         var_ed = $("#var_ed");
         xml = Edit2XmlMarc21(ff_ed, var_ed);
         inform("Edit2XmlMarc21 produced xml: " + xml);
