@@ -119,11 +119,11 @@ function get008FromEditor(ff_ed) {
 /*
 
 */
-function updateFFEditor(ff_ed) {
+function updateFFEditor(ff_ed, var_ed) {
 	if(debug) { console.info("updating fixed field editor from leader and 008 tags"); }
     var oDomDoc = Sarissa.getDomDocument();
-    var leaderval = $("#000", UI.editor.doc).children('.controlfield').val();
-    var tag008val = $("#008", UI.editor.doc).children('.controlfield').val();
+    var leaderval = $("#000", var_ed).children('.controlfield').val();
+    var tag008val = $("#008", var_ed).children('.controlfield').val();
     if(debug) {
         console.info('Transferring leader value to fixed field editor from leader tag: ' + leaderval);
         console.info('Transferring 008 value to fixed field editor from 008 tag: ' + tag008val);
@@ -164,7 +164,7 @@ function Edit2XmlMarc21(ff_ed, var_ed) {
 	marcxml.appendChild(record);
 	// update fixed field editor if it's not visible so we get most current version of leader, 008
 	if( !Ext.get('ffeditor').isVisible() ) {
-		updateFFEditor(ff_ed);
+		updateFFEditor(ff_ed, var_ed);
 	}
 	// serialize leader and fixed fields
 	var leader = marcxml.createElement('leader');
@@ -1032,11 +1032,11 @@ function editorCheckHighlighting(o) {
     None.
 
 */
-function transferFF_EdToTags(ff_ed) {
+function transferFF_EdToTags(ff_ed, var_ed) {
     var leaderval = getLeaderFromEditor(ff_ed);
-    $("#000", UI.editor.doc).children('.controlfield').val(leaderval);
+    $("#000", var_ed).children('.controlfield').val(leaderval);
     var tag008val = get008FromEditor(ff_ed);
-    $("#008", UI.editor.doc).children('.controlfield').val(tag008val);
+    $("#008", var_ed).children('.controlfield').val(tag008val);
     if(debug) {
         console.info('Transferring leader value from fixed field editor into leader tag: ' + leaderval);
         console.info('Transferring 008 value from fixed field editor into 008 tag: ' + tag008val);
@@ -1045,19 +1045,19 @@ function transferFF_EdToTags(ff_ed) {
 
 
 function toggleFixedFieldDisplay(btn, toggled) {
+	var ff_ed = $("#ffeditor");
+	var var_ed = $("#vareditor");
 	if( btn.pressed == false ) {
 		// hide fixed field editor
 		$("#ffeditor").hide();
         // transfer values from fixed field editor into tags
-        var ff_ed = $("#ffeditor");
-        transferFF_EdToTags(ff_ed);
+        transferFF_EdToTags(ff_ed, var_ed);
 		// show leader and 008
 		$("#000", UI.editor.doc).show();
 		$("#008", UI.editor.doc).show();
 	}
 	else {
-        var ff_ed = $("#ffeditor");
-        updateFFEditor(ff_ed);
+        updateFFEditor(ff_ed, var_ed);
 		$("#ffeditor").show();
 		// hide leader and 008
 		$("#000", UI.editor.doc).hide();
@@ -1143,7 +1143,8 @@ function onBlur(elem) {
 function onFixedFieldEditorBlur(elem) {
 	// transfer the fixed field editor values to fixed field tags
 	var ff_ed = $("#ffeditor");
-	transferFF_EdToTags(ff_ed);
+	var var_ed = $("#vareditor");
+	transferFF_EdToTags(ff_ed, var_ed);
 	UI.editor.record.update($('#000').find('.controlfield'));
 	UI.editor.record.update($('#008').find('.controlfield'));
 }
