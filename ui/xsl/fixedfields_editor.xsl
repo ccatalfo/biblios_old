@@ -209,8 +209,8 @@
 	</xsl:template>
 
 	<xsl:template name="rectype_e_or_f">
-		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
 		<xsl:param name="offset">0</xsl:param>
+		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
 								<xsl:call-template name="fixed-field-select">	
 									<xsl:with-param name="name" select="'Relief'" />
 									<xsl:with-param name="tag" select="$tag008" />
@@ -251,8 +251,8 @@
 	</xsl:template>
 
 	<xsl:template name="rectype_a_or_t">
-		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
 		<xsl:param name="offset">0</xsl:param>
+		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
 			<xsl:for-each select="$marc21defs//mattypes/mattype[@value='Books']/position">
 							<xsl:call-template name="fixed-field-text">
 								<xsl:with-param name="name" select="." />
