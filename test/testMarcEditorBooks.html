@@ -55,31 +55,28 @@
 		alert('You need to include Sarissa!');
 	}
     var setUpPageStatus;
-    var recBook, recMusic, recComp, recMan, rec006;
+    var recBook;
 	var ffedxsl, varedxsl;
     var xml;
+	var marceditor;
     var ff_ed;
     var var_ed;
     //console.info = inform;
     function setUpPage() {
         ffedxsl = xslTransform.load("../ui/xsl/fixedfields_editor.xsl"); 
-		varedxsl = xslTransform.load('../ui/xsl/varfields_editor.xsl');
+		varedxsl = xslTransform.load('../ui/xsl/varfields_inputboxes.xsl');
         recBook = xslTransform.load("testRecords/sandburg.xml"); 
-        rec006 = xslTransform.load("testRecords/006.xml"); 
 		// generate editor for book
         $('#marcxml-book').getTransform(recBook);
-        $('#ff_ed-book').getTransform(ffedxsl, recBook);
-        $('#var_ed-book').getTransform(varedxsl, recBook);
-
-		// generate editor for rec w/ 006
-        $('#marcxml-006').getTransform(rec006);
-        $('#ff_ed-006').getTransform(ffedxsl, rec006);
-        $('#var_ed-006').getTransform(varedxsl, rec006);
+        ff_ed = $('#ffed').getTransform(ffedxsl, recBook);
+        var_ed = $('#vared').getTransform(varedxsl, recBook);
+		marceditor = new MarcEditor($("#fixedfields_editor"), $('#varfields_editor') );
+		xml = marceditor.XML();	
     }
 
     function testLeaderGeneration() {
         // get the values from marcxml record
-        var oldleader = $("leader", marcxml).text();
+        var oldleader = $("leader", recBook).text();
         var rlen = oldleader.substr(0,5);
         var base = oldleader.substr(12,5);
         var rstat = oldleader.substr(5,1);
@@ -123,7 +120,7 @@
     // test the 008 generation
     function test008generaton() {
         // get values from marcxml
-        var old008 = $("controlfield[@tag='008']", marcxml).text();
+        var old008 = $("controlfield[@tag='008']", recBook).text();
         var dateentered_orig = old008.substr(0,6);
         var dtst_orig = old008.substr(6,1);
         var date1_orig = old008.substr(7,4);
@@ -152,7 +149,7 @@
         assertEquals(srce, srce_orig);
 
         // test generation of format-specific 008 fields
-        var oldleader = $("leader", marcxml).text();
+        var oldleader = $("leader", recBook).text();
         var type = oldleader.substr(6,1);
         if( type == 'a') {
             var ill = $("#Ills" ).val();
@@ -198,26 +195,26 @@
     function testEdit2XmlLeader() {
         // compare leaders between edited and original
         var newleader = $("leader", xml).text();
-        var oldleader = $("leader", marcxml).text();
+        var oldleader = $("leader", recBook).text();
         assertEquals("Checking leaders", newleader, oldleader);
     }
 
     function testEdit2Xml008() {
         // compare 008 between edited and original
         var new008 = $("controlfield[@tag='008']", xml).text();
-        var old008 = $("controlfield[@tag='008']", marcxml).text();
+        var old008 = $("controlfield[@tag='008']", recBook).text();
         assertEquals("Checking 008", new008, old008);
     }
 
     function testEdit2XmlControlfields() {
         // compare all controlfields
         var newcf = $("controlfield", xml);
-        var oldcf = $("controlfield", marcxml);
+        var oldcf = $("controlfield", recBook);
         $("controlfield", xml).each( function() {
             var tag = $(this).attr('tag');
             inform("Checking controlfield " + tag);
             var newdata = $.trim($(this).text());
-            var olddata = $.trim($("controlfield[@tag='"+tag+"']", marcxml).text());
+            var olddata = $.trim($("controlfield[@tag='"+tag+"']", recBook).text());
             assertEquals( "Checking controlfield "+tag, newdata, olddata );
         });
     }
@@ -227,7 +224,7 @@
         var newdf = new Array();
         var olddf = new Array();
         var newdflist = $("datafield", xml);
-        var olddflist = $("datafield", marcxml);
+        var olddflist = $("datafield", recBook);
         // add these elements to Array objects so we can run sort() on them
         $.each( newdflist, function(i,n) { newdf.push( newdflist[i] ); });
         $.each( olddflist, function(i,n) { olddf.push( olddflist[i] ); });
@@ -272,15 +269,8 @@
 <div class='area' id='book-area'>
 <p class='title'>Book record</p>
 <div id='marcxml-book'></div>
-<div class='ffed' id='ff_ed-book'></div>
-<div class='vared' id='var_ed-book'></div>
-</div>
-
-<div class='area' id='006-area'>
-<p class='title'>006 record</p>
-<div id='marcxml-006'></div>
-<div class='ffed' id='ff_ed-006'></div>
-<div class='vared' id='var_ed-006'></div>
+<div class='ffed' id='ffed'></div>
+<div class='vared' id='vared'></div>
 </div>
 
 </body>
