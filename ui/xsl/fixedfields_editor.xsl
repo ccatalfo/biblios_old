@@ -143,8 +143,8 @@
 	</xsl:template>
 
 	<xsl:template name="rectype_c_or_d_or_j">
-		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
 		<xsl:param name="offset">0</xsl:param>
+		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
 
 								<xsl:call-template name="fixed-field-select">	
 									<xsl:with-param name="name" select="'CompForm'" />
@@ -188,8 +188,8 @@
 								</xsl:call-template>
 	</xsl:template>
 	<xsl:template name="rectype_m">
-		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
 		<xsl:param name="offset">0</xsl:param>
+		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
 
 								<xsl:call-template name="fixed-field-select">	
 									<xsl:with-param name="name" select="'Audn'" />
