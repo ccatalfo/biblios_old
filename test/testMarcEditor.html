@@ -14,7 +14,30 @@
 
     <script src="../ui/js/save.js" type="text/javascript"></script>
     <script src="../ui/js/edit.js" type="text/javascript"></script>
+    <script src="../ui/js/marceditor.js" type="text/javascript"></script>
+    <script src="../ui/js/marcrecord.js" type="text/javascript"></script>
 
+	<style>
+		.title {
+			color: blue;
+		}
+
+		.area {
+			background-color: #eeffff;
+			border: 1px solid;
+			margin-bottom: 10px;
+		}
+
+		.ffed {
+			border: 1px solid;
+			margin-bottom: 5px;
+		}
+
+		.vared {
+			border: 1px solid;
+			margin-bottom: 5px;
+		}
+	</style>
 
 	<script type="text/javascript">
 	// turn on debugging (see jquery.xslTransform.js)
@@ -32,7 +55,7 @@
 		alert('You need to include Sarissa!');
 	}
     var setUpPageStatus;
-    var bookDoc;
+    var recBook, recMusic, recComp, recMan, rec006;
 	var ffedxsl, varedxsl;
     var xml;
     var ff_ed;
@@ -41,15 +64,17 @@
     function setUpPage() {
         ffedxsl = xslTransform.load("../ui/xsl/fixedfields_editor.xsl"); 
 		varedxsl = xslTransform.load('../ui/xsl/varfields_editor.xsl');
-        bookDoc = xslTransform.load("testRecords/sandburg.xml"); 
-        $('#marcxml').getTransform(bookDoc);
-        $('#ff_ed').getTransform(ffedxsl, bookDoc);
-        ff_ed = $("#ff_ed");
-        $('#var_ed').getTransform(varedxsl, bookDoc);
-        var_ed = $("#var_ed");
-        xml = Edit2XmlMarc21(ff_ed, var_ed);
-        inform("Edit2XmlMarc21 produced xml: " + xml);
-        setUpPageStatus = "complete";
+        recBook = xslTransform.load("testRecords/sandburg.xml"); 
+        rec006 = xslTransform.load("testRecords/006.xml"); 
+		// generate editor for book
+        $('#marcxml-book').getTransform(recBook);
+        $('#ff_ed-book').getTransform(ffedxsl, recBook);
+        $('#var_ed-book').getTransform(varedxsl, recBook);
+
+		// generate editor for rec w/ 006
+        $('#marcxml-006').getTransform(rec006);
+        $('#ff_ed-006').getTransform(ffedxsl, rec006);
+        $('#var_ed-006').getTransform(varedxsl, rec006);
     }
 
     function testLeaderGeneration() {
@@ -244,8 +269,19 @@
 
 <body>
 
-<div id='marcxml'></div>
-<div id='ff_ed'></div>
-<div id='var_ed'></div>
+<div class='area' id='book-area'>
+<p class='title'>Book record</p>
+<div id='marcxml-book'></div>
+<div class='ffed' id='ff_ed-book'></div>
+<div class='vared' id='var_ed-book'></div>
+</div>
+
+<div class='area' id='006-area'>
+<p class='title'>006 record</p>
+<div id='marcxml-006'></div>
+<div class='ffed' id='ff_ed-006'></div>
+<div class='vared' id='var_ed-006'></div>
+</div>
+
 </body>
 </html>
