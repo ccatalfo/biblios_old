@@ -265,8 +265,10 @@
 	<xsl:template name="tag006">
 			<xsl:variable name="form" select="substring(.,1, 1)"/>
 			<tr>
-			<xsl:if test="$form = 'a'">
-				Language Material
+			<xsl:if test="$form = 'a' or $form = 't'">
+				<xsl:call-template name="rectype_a_or_t">
+					<xsl:with-param name="offset">17</xsl:with-param>
+				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$form = 'c'">
 				notated music
@@ -311,9 +313,9 @@
 		<xsl:param name="name"/>
 		<xsl:param name="tag"/>
 		<xsl:param name="offset">0</xsl:param>
-		<xsl:variable name="position" select="$marc21defs//value[@name=$name]/@position + $offset"/>
+		<xsl:variable name="position" select="$marc21defs//value[@name=$name]/@position"/>
 		<xsl:variable name="length" select="$marc21defs//value[@name=$name]/@length"/>
-		<xsl:variable name="value" select="substring($tag, $position+1, $length)"/>
+		<xsl:variable name="value" select="substring($tag, $position+1+$offset, $length)"/>
 		<!--<p>param name is <xsl:value-of select="$name"/></p>
 		<p>Leader value is <xsl:value-of select="$value"/></p>-->
 		<td><xsl:value-of select="$name"/></td>
