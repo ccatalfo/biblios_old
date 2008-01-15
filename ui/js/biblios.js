@@ -67,6 +67,10 @@ biblios.app = function() {
 											{
 												region: 'center',
 												id: 'editor'
+											},
+											{
+												region: 'center',
+												id: 'savefilegrid'
 											}
 										]
 									},
@@ -78,6 +82,17 @@ biblios.app = function() {
 										width: 200,
 										maxSize: 200,
 										title: 'Resources'
+									},
+									{
+										region: 'south',
+										split: true,
+										collapsible: true,
+										collapsed: true,
+										width: 200,
+										maxSize: 200,
+										height: 200,
+										title: 'Previews'
+
 									},
 									{
 										region: 'east',
