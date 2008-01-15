@@ -225,6 +225,11 @@ Ext.onReady(function(){
     createOptionsTab();	
 	createAcqTab();
 
+	// fixes for embedding into koha (eliminate css clashes with koha css)
+	$('td').css('border-left', 'none').css('border-top', 'none').css('border-bottom', 'none').css('background-color', 'transparent');
+	$('table').css('border-collapse', 'separate').css('border-right', 'none').css('border-top', 'none');
+	// make "More" koha dropdown appear correctly
+	$('.outerbox.inner').css('position', '');
 // remove loading box
   var loading = Ext.get('loading');
   var mask = Ext.get('loading-mask');
