@@ -1403,8 +1403,8 @@ function createSaveFileGrid(data) {
             enableDragDrop: true,
             ddGroup: 'RecordDrop',
             autoExpandColumn: 1,
-			autoHeight: false,
-			autoWidth: false
+			autoHeight: true,
+			autoWidth: true
         });
         Ext.ComponentMgr.register(savefilegrid);
         savefilegrid.on('celldblclick', function(savefilegrid, rowIndex, colIndex,  e) {
