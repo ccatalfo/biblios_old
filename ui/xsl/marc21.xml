@@ -108,6 +108,7 @@
 		<option>|</option>
 	</value>
 	<value name="Lang" position="35" length="3" inputtype="menulist">
+		<option>   </option>
 		<option>eng</option>
 		<option>fre</option>
 		<option>ita</option>
