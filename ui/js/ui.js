@@ -126,7 +126,7 @@ function createHomeTab() {
 function createOptionsTab() {
 	optionstab = tabs.addTab('optionstab', 'Options');
 	optionstab.on('activate', function(tabpanel, item) {
-		createTargetGrid();
+		//createTargetGrid();
 	});
 	var optionsLayout = new Ext.BorderLayout('optionstab', {
 		id: 'optionsLayout',
@@ -146,13 +146,14 @@ function createOptionsTab() {
 	optionsLayout.getRegion('center').showPanel('database_options');
 	optionsLayout.getRegion('center').getPanel('target_options').on('activate',
 		function(cp) {
-			createTargetGrid();
+			//createTargetGrid();
 	});
 	optionsLayout.getRegion('center').getPanel('sendtarget_options').on('activate',
 		function(cp) {
-			createSendTargetGrid();
+			//createSendTargetGrid();
 	});
-	// create database options 
+	createTargetGrid();
+	createSendTargetGrid();
 	createDatabaseOptions();
 }
 function createSendTargetGrid() {
