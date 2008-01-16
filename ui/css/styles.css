@@ -80,3 +80,10 @@
 	color: red;	
 }
 
+#search-preview-panel th {
+	background-color: transparent;
+}
+
+#save-preview-panel th {
+	background-color: transparent;
+}
