@@ -139,7 +139,7 @@ function addRecordFromSearch(id, data, savefileid) {
 			medium: data.medium || '',
 			date: data.date || '',
 			status: 'new',
-			xml: xml,
+			xml: xml || '<record></record>',
 			date_added: new Date().toString(),
 			date_modified: new Date().toString(),
 			SearchTargets_id: target.rowid,
