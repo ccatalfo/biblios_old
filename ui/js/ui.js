@@ -1285,11 +1285,13 @@ function createSearchPazParGrid(url) {
 		var marcxml = '';
         var xml = getPazRecord(
 			id,
+			// callback function for when pazpar2 returns record data
 			function(data, o) {  
 				var xml = xslTransform.serialize(data); 
 				recordCache[o.id] = xml; 
 				previewRecord(xml)  
 			},
+			// json literal containing hash of desired params in callback
 			{
 				id: id
 			}

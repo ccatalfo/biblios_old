@@ -126,7 +126,9 @@ function doSaveRemote(loc, xmldoc) {
 
 
 function addRecordFromSearch(id, data, savefileid) {
-	var xml = getPazRecord(id, function(data, o) {
+	var xml = getPazRecord(id, 
+		// this function gets called when pazpar2 returns the xml for record with this id
+		function(data, o) {
 		// data param is this record's xml as returned by pazpar2
 		// o is a json literal containing the record id, grid data and savefileid for this record
 		if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + data.title);}
@@ -155,11 +157,12 @@ function addRecordFromSearch(id, data, savefileid) {
 			Ext.MessageBox.alert('Database Error', ex.message);
 		}
 	},
+	// send these params along with preceding callback function so we can update the correct record in db by id
 	{
 		id: id,
 		savefileid: savefileid,
 		recData: data
-	} // send these params along with preceding callback function so we can update the correct record in db by id
+	} 
 	);
 	return db.lastInsertRowId;
 }
