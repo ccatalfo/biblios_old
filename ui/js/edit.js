@@ -31,6 +31,12 @@ function getLeaderFromEditor(ff_ed) {
 	var link = $("#Link", ff_ed ).val();
 	var entry = '4500'; // entry
    	leaderval = leaderval.concat( rlen, rstat, type, blvl, ctrl, encode, indc, subc, base, elvl, desc, link, entry);	
+	if( leaderval.length != 24 ) {
+		throw {
+			error: "InvalidLeader",
+			msg: "Invalid length of Leader"
+		}
+	}
     return leaderval;
 }
 
@@ -113,6 +119,12 @@ function get008FromEditor(ff_ed) {
 		var trarr = $("#TrArr", ff_ed).val();
 		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, compform, format, parts, audn, form, accomp, littext, undef1, trarr, undef1 );
 	}
+	if( tag008val.length != 40 ) {
+		throw {
+			error: "Invalid008",
+			msg: "Invalid length of 008"
+		}
+	}
     return tag008val;
 }
 
@@ -123,7 +135,19 @@ function updateFFEditor(ff_ed, var_ed) {
 	if(debug) { console.info("updating fixed field editor from leader and 008 tags"); }
     var oDomDoc = Sarissa.getDomDocument();
     var leaderval = $("#000", var_ed).children('.controlfield').val();
+	if( leaderval.length != 24 ) {
+		throw {
+			error: "InvalidLeader",
+			msg: "Invalid length of Leader"
+		}
+	}
     var tag008val = $("#008", var_ed).children('.controlfield').val();
+	if( tag008val.length != 40 ) {
+		throw {
+			error: "Invalid008",
+			msg: "Invalid length of 008"
+		}
+	}
     if(debug) {
         console.info('Transferring leader value to fixed field editor from leader tag: ' + leaderval);
         console.info('Transferring 008 value to fixed field editor from 008 tag: ' + tag008val);

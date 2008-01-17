@@ -341,7 +341,7 @@
 	<xsl:template name="fixed-field-text">
 		<xsl:param name="name"/>
 		<xsl:param name="tag"/>
-		<xsl:param name="offset"/>
+		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="hidden"/>
 		<xsl:variable name="position" select="$marc21defs//value[@name=$name]/@position + $offset"/>
 		<xsl:variable name="length" select="$marc21defs//value[@name=$name]/@length"/>
