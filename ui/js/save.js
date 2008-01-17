@@ -126,32 +126,41 @@ function doSaveRemote(loc, xmldoc) {
 
 
 function addRecordFromSearch(id, data, savefileid) {
-	var xml = getPazRecord(id);
-	if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + data.title);}
-    try {
-		var target = DB.SearchTargets.select('name=?', [data.location]).getOne();
-		var savefile = DB.Savefiles.select('Savefiles.rowid=?', [savefileid]).getOne();
-		var record = new DB.Records({
-			title: data.title || '',
-			author: data.author || '',
-			location: data.location || '',
-			publisher: data.publisher || '',
-			medium: data.medium || '',
-			date: data.date || '',
-			status: 'new',
-			xml: xml || '<record></record>',
-			date_added: new Date().toString(),
-			date_modified: new Date().toString(),
-			SearchTargets_id: target.rowid,
-			Savefiles_id: savefile.rowid,
-			xmlformat: 'marcxml',
-			marcflavour: 'marc21',
-			template: null,
-			marcformat: null
-		}).save();
-    } catch(ex) {
-        Ext.MessageBox.alert('Database Error', ex.message);
-    }
+	var xml = getPazRecord(id, function(data, o) {
+		// data param is this record's xml as returned by pazpar2
+		// o is a json literal containing the record id, grid data and savefileid for this record
+		if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + data.title);}
+		try {
+			var target = DB.SearchTargets.select('name=?', [o.recData.location]).getOne();
+			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [o.savefileid]).getOne();
+			var record = new DB.Records({
+				title: o.recData.title || '',
+				author: o.recData.author || '',
+				location: o.recData.location || '',
+				publisher: o.recData.publisher || '',
+				medium: o.recData.medium || '',
+				date: o.recData.date || '',
+				status: 'new',
+				xml: data || '<record></record>',
+				date_added: new Date().toString(),
+				date_modified: new Date().toString(),
+				SearchTargets_id: target.rowid,
+				Savefiles_id: savefile.rowid,
+				xmlformat: 'marcxml',
+				marcflavour: 'marc21',
+				template: null,
+				marcformat: null
+			}).save();
+		} catch(ex) {
+			Ext.MessageBox.alert('Database Error', ex.message);
+		}
+	},
+	{
+		id: id,
+		savefileid: savefileid,
+		recData: data
+	} // send these params along with preceding callback function so we can update the correct record in db by id
+	);
 	return db.lastInsertRowId;
 }
 

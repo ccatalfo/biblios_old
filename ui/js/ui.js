@@ -80,7 +80,7 @@ var editButton = new Ext.Toolbar.Button({
             if( Ext.get('searchgrid').isVisible() ) {
 				var id = searchgrid.getSelections()[0].id;
 				var loc = searchgrid.getSelections()[0].data.location;
-				getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) });
+				getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data) ) });
             }
             else if( Ext.get('savegrid').isVisible() ) {
                 var id = savefilegrid.getSelections()[0].data.Id;
@@ -1283,24 +1283,30 @@ function createSearchPazParGrid(url) {
 		var id = searchgrid.dataSource.data.items[rowIndex].id;
 		// get the marcxml for this record and send to preview()
 		var marcxml = '';
-		paz.recordCallback = function(data) { if( $("error[@code=1]", data) ) {  } var xml = xslTransform.serialize(data.xmlDoc); recordCache[id] = xml; previewRecord(xml)  }
-        var xml = getPazRecord(id);
-        if( xml ) {
-          previewRecord(xml);
-			 UI.lastSearchPreviewed = xml;
-        }
+        var xml = getPazRecord(
+			id,
+			function(data, o) {  
+				var xml = xslTransform.serialize(data); 
+				recordCache[o.id] = xml; 
+				previewRecord(xml)  
+			},
+			{
+				id: id
+			}
+		);
+		 UI.lastSearchPreviewed = xml;
 	}); // rowselect
 	searchgrid.on('celldblclick', function(searchgrid, rowIndex, colIndex,  e) {
 		var id = searchgrid.getSelections()[0].id;
 		var loc = searchgrid.getSelections()[0].data.location;
-		getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) }
+		getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data) ) }
 );
 	}); // cell dbl click
 	searchgrid.on('keypress', function( e ) {
 	  if( e.getKey() == Ext.EventObject.ENTER ) {
 		var id = searchgrid.getSelections()[0].id;
 		var loc = searchgrid.getSelections()[0].data.location;
-		  getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data.xmlDoc ) ) });
+		  getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data) ) });
 		}	
 	}); // on ENTER keypress
 	searchgrid.on('headerclick', function(grid, colIndex, e) {

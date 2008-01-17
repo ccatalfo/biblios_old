@@ -176,38 +176,55 @@ function getRemoteRecord(id, loc, callback) {
 		UI.editor.location = loc;
 		// if this location is in our Prefs.remoteILS hash, retrieve it specially
 		if( Prefs.remoteILS[loc] ) {
-			getRecordFromLocation(id, loc);
+			getRecordFromLocation(id, loc, callback);
 		}
 		else {
-			paz.recordCallback = callback;
-			var xml = getPazRecord(id);
-			if( xml ) {
-			  openRecord(xml);
-			}
+			var xml = getPazRecord(id, callback);
 		}
 }
 
-function getRecordFromLocation(id, loc) {
+function getRecordFromLocation(id, loc, callback) {
 	// get xml for the record we wantt to retrieve
 	xml = recordCache[id];
 	marcxml = xslTransform.loadString(xml);
 
-	Prefs.remoteILS[loc].instance.retrieveHandler = openRecord;
+	Prefs.remoteILS[loc].instance.retrieveHandler = callback;
 	Prefs.remoteILS[loc].instance.retrieve(marcxml);
 }
 
-function getPazRecord(recId) {
+function getPazRecord(recId, callback, callbackParamObject) {
 	if( recordCache[recId] ) {
 		if(debug) { console.info('retreiving record from cache')}
-		return recordCache[recId];
+		// call the callback with record from record cache
+		callback.call(this, recordCache[recId], callbackParamObject);
 	}
+	// if the record isn't in the cache, ask pazpar2 for it with the supplied callback for record retrieval
 	else {
 		if(debug) { console.info('retreiving record from pazpar2')}
         try {
-          paz.record(recId, 0);
-        }
+		 	$.ajax({
+				url: pazpar2url,
+				data: {
+					session: paz.sessionID,
+					command: 'record',
+					id: recId,
+					offset: '0'
+				},
+				type: 'GET',
+				dataType: 'xml',
+				recId: recId,
+				callback: callback,
+				callbackParamObject: callbackParamObject,
+				success: function(data, textStatus) {
+					var id = this.recId;
+					var callback = this.callback;
+					var callbackParamObject = this.callbackParamObject;
+					callback.call(this, data, callbackParamObject);
+				}
+			});
+		}
         catch(ex) {
-          ext.MessageBox.alert('Pazpar2 error', ex.message);
+         	ext.MessageBox.alert('Pazpar2 error', ex.message);
         }
 	}
 }
