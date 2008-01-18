@@ -1,0 +1,23 @@
+10:07:42-18/01 pazpar2 [fatal] Failed to read conf/pazpar2.conf
+10:08:27-18/01 pazpar2 [log] Pazpar2 1.0.5 started
+10:08:27-18/01 pazpar2 [log] HTTP listener 9004
+10:08:27-18/01 pazpar2 [log] HTTP backend  localhost:80
+10:08:45-18/01 pazpar2 [log] Request: GET /search.pz2?command=init
+10:08:45-18/01 pazpar2 [log] Request: GET /search.pz2?command=settings&session=283847937&pz:name[eowyn.metavore.com:9999/undefined]=koha-eowyn&pz:requestsyntax[eowyn.metavore.com:9999/undefined]=marc21&pz:elements[eowyn.metavore.com:9999/undefined]=F&pz:nativesyntax[eowyn.metavore.com:9999/undefined]=iso2709&pz:xslt[eowyn.metavore.com:9999/undefined]=marc21.xsl&pz:cclmap:term=[eowyn.metavore.com:9999/undefined]=u=1016%20t=1,r%20s=al&pz:cclmap:au[eowyn.metavore.com:9999/undefined]=u=1004%20s=al&pz:cclmap:ti[eowyn.metavore.com:9999/undefined]=u=4%20s=al&pz:cclmap:su[eowyn.metavore.com:9999/undefined]=u=21%20s=al&pz:cclmap:isbn[eowyn.metavore.com:9999/undefined]=u=7&pz:cclmap:issn[eowyn.metavore.com:9999/undefined]=u=8&pz:cclmap:date[eowyn.metavore.com:9999/undefined]=u=30%20r=r&pz:cclmap:pub[eowyn.metavore.com:9999/undefined]=u=1018%20s=al
+10:08:45-18/01 pazpar2 [log] New database: eowyn.metavore.com:9999/undefined
+10:08:45-18/01 pazpar2 [log] resolver start
+10:08:45-18/01 pazpar2 [log] Request: GET /search.pz2?command=settings&session=283847937&pz:name[z3950.loc.gov:7090/Voyager]=Library%20of%20Congress&pz:requestsyntax[z3950.loc.gov:7090/Voyager]=marc21&pz:elements[z3950.loc.gov:7090/Voyager]=F&pz:nativesyntax[z3950.loc.gov:7090/Voyager]=iso2709&pz:xslt[z3950.loc.gov:7090/Voyager]=marc21.xsl&pz:cclmap:term=[z3950.loc.gov:7090/Voyager]=u=1016%20t=1,r%20s=al&pz:cclmap:au[z3950.loc.gov:7090/Voyager]=u=1004%20s=al&pz:cclmap:ti[z3950.loc.gov:7090/Voyager]=u=4%20s=al&pz:cclmap:su[z3950.loc.gov:7090/Voyager]=u=21%20s=al&pz:cclmap:isbn[z3950.loc.gov:7090/Voyager]=u=7&pz:cclmap:issn[z3950.loc.gov:7090/Voyager]=u=8&pz:cclmap:date[z3950.loc.gov:7090/Voyager]=u=30%20r=r&pz:cclmap:pub[z3950.loc.gov:7090/Voyager]=u=1018%20s=al
+10:08:45-18/01 pazpar2 [log] New database: z3950.loc.gov:7090/Voyager
+10:08:45-18/01 pazpar2 [log] Request: GET /search.pz2?command=settings&session=283847937&pz:name[66.213.78.76:9999/NPLKoha]=Nelsonville%20Public%20Library&pz:requestsyntax[66.213.78.76:9999/NPLKoha]=marc21&pz:elements[66.213.78.76:9999/NPLKoha]=F&pz:nativesyntax[66.213.78.76:9999/NPLKoha]=iso2709&pz:xslt[66.213.78.76:9999/NPLKoha]=marc21.xsl&pz:cclmap:term=[66.213.78.76:9999/NPLKoha]=u=1016%20t=1,r%20s=al&pz:cclmap:au[66.213.78.76:9999/NPLKoha]=u=1004%20s=al&pz:cclmap:ti[66.213.78.76:9999/NPLKoha]=u=4%20s=al&pz:cclmap:su[66.213.78.76:9999/NPLKoha]=u=21%20s=al&pz:cclmap:isbn[66.213.78.76:9999/NPLKoha]=u=7&pz:cclmap:issn[66.213.78.76:9999/NPLKoha]=u=8&pz:cclmap:date[66.213.78.76:9999/NPLKoha]=u=30%20r=r&pz:cclmap:pub[66.213.78.76:9999/NPLKoha]=u=1018%20s=al
+10:08:45-18/01 pazpar2 [log] New database: 66.213.78.76:9999/NPLKoha
+10:08:45-18/01 pazpar2 [log] Resolved 66.213.78.76 -> 66.213.78.76:9999
+10:08:45-18/01 pazpar2 [log] Resolved eowyn.metavore.com -> 209.59.197.193:9999
+10:08:45-18/01 pazpar2 [log] Request: GET /search.pz2?command=settings&session=283847937&pz:name[arwen.metavore.com:9820/biblios]=Koha&pz:requestsyntax[arwen.metavore.com:9820/biblios]=marc21&pz:elements[arwen.metavore.com:9820/biblios]=F&pz:nativesyntax[arwen.metavore.com:9820/biblios]=iso2709&pz:xslt[arwen.metavore.com:9820/biblios]=marc21.xsl&pz:cclmap:term=[arwen.metavore.com:9820/biblios]=u=1016%20t=1,r%20s=al&pz:cclmap:au[arwen.metavore.com:9820/biblios]=u=1004%20s=al&pz:cclmap:ti[arwen.metavore.com:9820/biblios]=u=4%20s=al&pz:cclmap:su[arwen.metavore.com:9820/biblios]=u=21%20s=al&pz:cclmap:isbn[arwen.metavore.com:9820/biblios]=u=7&pz:cclmap:issn[arwen.metavore.com:9820/biblios]=u=8&pz:cclmap:date[arwen.metavore.com:9820/biblios]=u=30%20r=r&pz:cclmap:pub[arwen.metavore.com:9820/biblios]=u=1018%20s=al
+10:08:45-18/01 pazpar2 [log] New database: arwen.metavore.com:9820/biblios
+10:08:45-18/01 pazpar2 [log] Resolved arwen.metavore.com -> 72.232.235.42:9820
+10:08:45-18/01 pazpar2 [log] Resolved z3950.loc.gov -> 140.147.249.38:7090
+10:09:08-18/01 pazpar2 [log] Request: GET /search.pz2?command=search&query=%22debussy%20piano%22&session=283847937
+10:09:08-18/01 pazpar2 [fatal] Unable to load stylesheet: marc21.xsl [No such file or directory]
+10:09:08-18/01 pazpar2 [warn] HTTP 417 Target cannot be configured: eowyn.metavore.com:9999/undefined
+10:09:35-18/01 pazpar2 [log] Request: GET /search.pz2?command=ping&session=283847937
+10:10:00-18/01 pazpar2 [log] Received SIGTERM from child 21905
