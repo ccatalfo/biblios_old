@@ -291,7 +291,7 @@ function doMerge() {
 function addSubfield(afterEl) {
 		 // get a new random id for the new elements
 		 var newid="newsubfield-" + Math.floor(Math.random()*100);    
-		$(afterEl).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' value='&Dagger;'><input id='subfield-text-'"+newid+"' class='subfield-text'></span>");
+		$(afterEl).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text'></span>");
 		//$('delimiter'+newid).get(0).focus();
 }
 
