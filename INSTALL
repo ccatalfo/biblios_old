@@ -61,7 +61,7 @@ Run pazpar2 with included config files and search targets with the following com
 pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
 
 10. Install perl dependencies if necessary:
-sudo cpan Net::Amazon\ XML::Writer\ Cache::File\ File::Temp\ File::Basename
+sudo cpan Net::Amazon\ XML::Writer\ Cache::File\ File::Temp\ File::Basename\ Term::Clui
 
 11. Install biblios and cgi scripts into appropriate paths on your web server
 make install WWWROOT=<the directory to install biblios' html, javascript and css files into> CGIROOT=<the path on your webserver where cgi scripts are contained>
