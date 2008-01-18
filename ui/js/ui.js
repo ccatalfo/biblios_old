@@ -1769,7 +1769,7 @@ function doDownloadRecords() {
         var var_ed = UI.editor.doc;
         // transform edited record back into marcxml
         if( marcFlavor == 'marc21' ) {
-            xml = Edit2XmlMarc21(ff_ed, var_ed);
+			xml = UI.editor.record.XMLString();
         }
         else if( marcFlavor == 'unimarc' ) {
             Ext.MessageBox.alert("Unimarc support not yet implemented");
