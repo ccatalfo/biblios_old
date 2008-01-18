@@ -6,12 +6,12 @@ Get a copy of biblios, via git or by downloading a prepackaged .tar.gz or .zip f
 Go to your unpacked biblios tree
 2. cd biblios
 
-3. make all; make debug; make koha
+3. make all; make debug; make koha KOHALANGTHEME=<your koha installations lang and theme path e.g. /prog/en> KOHASTAFFPORT=<the port your koha staff intranet is running on e.g. 8080>
 
 4. For safety's sake, make a new branch to let biblios copy its files into, just in case smth goes wrong.  cd ~/kohaclone; git-checkout -b biblios
 
 This next step will copy biblios' files to the appropriate paths in koha:
-5. make koha-install KOHADIR=<your koha base dir, e.g. /home/you/kohaclone>
+5. make koha-install KOHADIR=<your koha base dir, e.g. /home/you/kohaclone> KOHALANGTHEME=<your koha installations lang and theme path e.g. /prog/en> 
 
 6. Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site ajax reqs.  See conf/biblios-http.conf.
 <IfModule mod_proxy.c>

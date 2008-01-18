@@ -18,13 +18,13 @@ debug:
 	sed -f sed_generate_index_debug < index.html > index-debug.html
 
 koha:
-	perl integration/updateForEmbedding.pl index-debug.html index-koha.html "/intranet-tmpl/prog/en/lib/biblios/" "/cgi-bin/koha/plugins/biblios/" "8001" "<!-- TMPL_INCLUDE NAME=\"doc-head-open.inc\" --><!-- TMPL_INCLUDE NAME=\"doc-head-close-biblios.inc\" -->" "<!-- TMPL_INCLUDE NAME=\"header.inc\" -->"
+	perl integration/updateForEmbedding.pl index-debug.html index-koha.html "/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/" "/cgi-bin/koha/plugins/biblios/" "$(KOHASTAFFPORT)" "<!-- TMPL_INCLUDE NAME=\"doc-head-open.inc\" --><!-- TMPL_INCLUDE NAME=\"doc-head-close-biblios.inc\" -->" "<!-- TMPL_INCLUDE NAME=\"header.inc\" -->"
 
 koha-install:
-	cp index-koha.html $(KOHADIR)/koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/biblios.tmpl
+	cp index-koha.html $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/modules/cataloguing/biblios.tmpl
 	cp integration/koha/biblios.pl $(KOHADIR)/cataloguing/
-	cp integration/koha/doc-head-close-biblios.inc $(KOHADIR)/koha-tmpl/intranet-tmpl/prog/en/includes/
+	cp integration/koha/doc-head-close-biblios.inc $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/includes/ 
 	mkdir -p $(KOHADIR)/plugins/biblios
 	cp cgi-bin/downloadMarc.pl cgi-bin/vendorSearch $(KOHADIR)/plugins/biblios/
-	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl/prog/en/lib/biblios
-	cp -r lib templates ui conf plugins $(KOHADIR)/koha-tmpl/intranet-tmpl/prog/en/lib/biblios/
+	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
+	cp -r lib templates ui conf plugins $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/
