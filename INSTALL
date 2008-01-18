@@ -1,0 +1,67 @@
+These are instructions for installing Biblios as a standalone web application.
+
+Dependencies:
+Apache2 with http_proxy
+Perl (for cgi scripts)
+Pazpar2 (for searching Z39.50 databases)
+
+These instructions cover the installation of http_proxy for Apache2, several required Perl modules, and Pazpar2.
+
+Get a copy of biblios, via git 
+1. 
+git clone <FIXME>
+
+or by downloading a prepackaged .tar.gz or .zip file.
+wget <FIXME> 
+tar xzvf biblios.tar.gz
+OR
+unzip biblios.zip
+
+Go to your unpacked biblios tree
+2. 
+cd biblios
+
+Generate packed version of biblios files
+3. 
+make all 
+make debug 
+
+4. Enable apache2's http_proxy module:
+sudo a2enmod proxy_http
+
+5. Add reverse proxies to your apache configuration file.  Substitute your own server urls where indicated in the configuration section which follows:
+<IfModule mod_proxy.c>
+       ProxyRequests Off
+
+       <Proxy *>
+        AddDefaultCharset off
+        Order deny,allow
+        Allow from all
+       </Proxy>
+
+       ProxyVia Off
+
+       # proxy for pazpar2 daemon
+       ProxyPass /pazpar2/search.pz2 http://localhost:9004/search.pz2
+
+       # proxy for sru authority server
+       ProxyPass /kohaauth/ <your koha sru auth server e.g. http://eowyn.metavore.com:9999/>
+
+       proxy for koha save/retrieve api
+       ProxyPass /kohaapi/ <your koha intranet instance e.g. http://eowyn.metavore.com:8001>
+   
+</IfModule>
+
+Install pazpar2:
+8. 
+sudo apt-get install pazpar2
+
+Run pazpar2 with included config files and search targets with the following command from your biblios directory.
+9. 
+pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
+
+10. Install perl dependencies if necessary:
+sudo cpan Net::Amazon\ XML::Writer\ Cache::File\ File::Temp\ File::Basename
+
+11. Install biblios and cgi scripts into appropriate paths on your web server
+make install WWWROOT=<the directory to install biblios' html, javascript and css files into> CGIROOT=<the path on your webserver where cgi scripts are contained>
