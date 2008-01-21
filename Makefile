@@ -31,7 +31,7 @@ koha:
 koha-install:
 	cp index-koha.html $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/modules/cataloguing/biblios.tmpl
 	cp integration/koha/biblios.pl $(KOHADIR)/cataloguing/
-	cp integration/koha/doc-head-close-biblios.inc $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/includes/ 
+	sed s'|/lib/jquery/jquery.js|/lib/biblios/lib/jquery/jquery-1.1.3.1.js|' < $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/includes/doc-head-close.inc >$(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/includes/doc-head-close-biblios.inc 
 	mkdir -p $(KOHADIR)/plugins/biblios
 	cp cgi-bin/downloadMarc.pl cgi-bin/vendorSearch $(KOHADIR)/plugins/biblios/
 	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
