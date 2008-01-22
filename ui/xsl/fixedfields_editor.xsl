@@ -97,7 +97,7 @@
 			</xsl:if>
 
 			<!-- 008 fixed fields for music materials -->
-			<xsl:if test="$rectype = 'c' or $rectype = 'd' or $rectype = 'j'">
+			<xsl:if test="$rectype = 'c' or $rectype = 'd' or $rectype = 'j' or $rectype = 'i'">
 					<xsl:call-template name="generate_for_rectype">
 						<xsl:with-param name="rectype">Music</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
@@ -158,12 +158,6 @@
 					<xsl:with-param name='tag' select="."/>
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="$form = 'c'">
-				notated music
-			</xsl:if>
-			<xsl:if test="$form = 'd'">
-				Manuscript notated music
-			</xsl:if>
 			<xsl:if test="$form = 'e' or $form = 'f'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">Maps</xsl:with-param>
@@ -171,31 +165,19 @@
 					<xsl:with-param name='tag' select="."/>
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="$form = 'g'">
-				Projected Material
-			</xsl:if>
-			<xsl:if test="$form = 'i'">
-				Nonmusical sound Material
-			</xsl:if>
-			<xsl:if test="$form = 'j'">
-				Musical sound Material
+			<xsl:if test="$rectype = 'c' or $rectype = 'd' or $rectype = 'j' or $rectype = 'i'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">Music</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
 					<xsl:with-param name='tag' select="."/>
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="$form = 'k'">
-				2-d Material
-			</xsl:if>
-			<xsl:if test="$form = 'o'">
-				Kit Material
-			</xsl:if>
-			<xsl:if test="$form = 'r'">
-				3-d Material
-			</xsl:if>
-			<xsl:if test="$form = 't'">
-				Manuscript Material
+			<xsl:if test="$rectype = 'g' or $rectype = 'k' or $rectype = 'o' or $rectype = 'r'">
+					<xsl:call-template name="generate_for_rectype">
+						<xsl:with-param name="rectype">Visual</xsl:with-param>
+						<xsl:with-param name="offset">17</xsl:with-param>
+						<xsl:with-param name='tag' select="."/>
+					</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$form = 'm'">
 				<xsl:call-template name="generate_for_rectype">
