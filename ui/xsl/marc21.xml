@@ -733,6 +733,9 @@
 		<option>z</option>
 		<option>|</option>
 	</value>
+	<!-- mixed materials -->
+
+
 </field>
 </fields>
 
@@ -792,7 +795,9 @@
 		<position>VisType</position>
 		<position>Tech</position>
 	</mattype>
-	
+	<mattype value="Mixed">
+		<position>Form</position>
+	</mattype>
 </mattypes>
 
 </marc21defs>

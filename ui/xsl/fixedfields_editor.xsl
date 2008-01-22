@@ -112,6 +112,14 @@
 						<xsl:with-param name='tag' select="$tag008"/>
 					</xsl:call-template>
 			</xsl:if>
+			<!-- 008 fixed fields for mixed materials -->
+			<xsl:if test="$rectype = 'p'">
+					<xsl:call-template name="generate_for_rectype">
+						<xsl:with-param name="rectype">Mixed</xsl:with-param>
+						<xsl:with-param name="offset">0</xsl:with-param>
+						<xsl:with-param name='tag' select="$tag008"/>
+					</xsl:call-template>
+			</xsl:if>
 			</tr>  <!-- end of material specific row -->
 
 			<!-- rows for any 006's -->
@@ -185,6 +193,13 @@
 					<xsl:with-param name="offset">17</xsl:with-param>
 					<xsl:with-param name='tag' select="."/>
 				</xsl:call-template>
+			</xsl:if>
+			<xsl:if test="$rectype = 'p'">
+					<xsl:call-template name="generate_for_rectype">
+						<xsl:with-param name="rectype">Mixed</xsl:with-param>
+						<xsl:with-param name="offset">17</xsl:with-param>
+						<xsl:with-param name='tag' select="."/>
+					</xsl:call-template>
 			</xsl:if>
 			</tr>
 	</xsl:template>
