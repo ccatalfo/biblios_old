@@ -108,6 +108,7 @@
 			<tr>
 					<xsl:call-template name="rectype_a_or_t">
 						<xsl:with-param name="offset">0</xsl:with-param>
+						<xsl:with-param name='tag' select="marc:controlfield[@tag='008']"/>
 					</xsl:call-template>
 			</tr>
 			</xsl:if>
@@ -252,13 +253,27 @@
 
 	<xsl:template name="rectype_a_or_t">
 		<xsl:param name="offset">0</xsl:param>
-		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
+		<xsl:param name="tag"></xsl:param>
 			<xsl:for-each select="$marc21defs//mattypes/mattype[@value='Books']/position">
+				<xsl:variable name="name" select="string(.)"/>
+				<xsl:variable name="inputtype" select="$marc21defs//value[@name=$name]/@inputtype"/>
+					<xsl:choose>
+						<xsl:when test="$inputtype = 'textbox'">	
 							<xsl:call-template name="fixed-field-text">
 								<xsl:with-param name="name" select="." />
-								<xsl:with-param name="tag" select="$tag008" />
+								<xsl:with-param name="tag"><xsl:value-of select="$tag"/></xsl:with-param>
 								<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
 							</xsl:call-template>
+
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="fixed-field-select">
+								<xsl:with-param name="name" select="." />
+								<xsl:with-param name="tag"><xsl:value-of select="$tag"/></xsl:with-param>
+								<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>	
 			</xsl:for-each>
 	</xsl:template>
 
@@ -266,8 +281,10 @@
 			<xsl:variable name="form" select="substring(.,1, 1)"/>
 			<tr>
 			<xsl:if test="$form = 'a' or $form = 't'">
+				printed material
 				<xsl:call-template name="rectype_a_or_t">
 					<xsl:with-param name="offset">17</xsl:with-param>
+					<xsl:with-param name='tag' select="."/>
 				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$form = 'c'">
@@ -315,7 +332,7 @@
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:variable name="position" select="$marc21defs//value[@name=$name]/@position"/>
 		<xsl:variable name="length" select="$marc21defs//value[@name=$name]/@length"/>
-		<xsl:variable name="value" select="substring($tag, $position+1+$offset, $length)"/>
+		<xsl:variable name="value" select="substring($tag, $position+1-$offset, $length)"/>
 		<!--<p>param name is <xsl:value-of select="$name"/></p>
 		<p>Leader value is <xsl:value-of select="$value"/></p>-->
 		<td><xsl:value-of select="$name"/></td>
@@ -343,7 +360,7 @@
 		<xsl:param name="tag"/>
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="hidden"/>
-		<xsl:variable name="position" select="$marc21defs//value[@name=$name]/@position + $offset"/>
+		<xsl:variable name="position" select="$marc21defs//value[@name=$name]/@position - $offset"/>
 		<xsl:variable name="length" select="$marc21defs//value[@name=$name]/@length"/>
 		<td>
 			<xsl:value-of select="$name"/>

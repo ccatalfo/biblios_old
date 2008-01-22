@@ -86,7 +86,7 @@
     </field>
     <field tag="008" length="40" repeatable="false" mandatory="true" fixedfield="true">
 	<description>008 Fixed Field</description>
-	<value name="DateEntered" position="0" length="6"></value>
+	<value name="DateEntered" position="0" length="6" inputtype="textbox"></value>
 	<value name="Form" position="23" length="1" inputtype="menulist">
 		<option> </option>
 		<option>a</option>
@@ -171,7 +171,7 @@
 		<option>u</option>
 		<option>|</option>
 	</value>
-	<value name="Bio" position="34" length="1" rectype="BKS">
+	<value name="Bio" position="34" length="1" rectype="BKS" inputtype="menulist">
 		<option> </option>
 		<option>a</option>
 		<option>b</option>
@@ -211,7 +211,7 @@
 		<option>j</option>
 		<option>|</option>
 	</value>
-	<value name="GovPub" position="28" length="1" rectype="BKS">
+	<value name="GovPub" position="28" length="1" rectype="BKS" inputtype="menulist">
 		<option>a</option>
 		<option> </option>
 		<option>c</option>
@@ -240,7 +240,7 @@
 		<option> </option>
 		<option>r</option>
 	</value>
-	<value name="Contents" position="24" length="4">
+	<value name="Contents" position="24" length="4" inputtype="textbox">
 	    <option> </option>
 	    <option>a</option>
 	    <option>b</option>
