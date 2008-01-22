@@ -106,7 +106,8 @@
 			</tr>
 			<xsl:if test="$rectype = 'a' or $rectype = 't'">
 			<tr>
-					<xsl:call-template name="rectype_a_or_t">
+					<xsl:call-template name="generate_for_rectype">
+						<xsl:with-param name="rectype">Books</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
 						<xsl:with-param name='tag' select="marc:controlfield[@tag='008']"/>
 					</xsl:call-template>
@@ -251,10 +252,11 @@
 								</xsl:call-template>
 	</xsl:template>
 
-	<xsl:template name="rectype_a_or_t">
+	<xsl:template name="generate_for_rectype">
+		<xsl:param name="rectype">All</xsl:param>
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="tag"></xsl:param>
-			<xsl:for-each select="$marc21defs//mattypes/mattype[@value='Books']/position">
+			<xsl:for-each select="$marc21defs//mattypes/mattype[@value=$rectype]/position">
 				<xsl:variable name="name" select="string(.)"/>
 				<xsl:variable name="inputtype" select="$marc21defs//value[@name=$name]/@inputtype"/>
 					<xsl:choose>
@@ -282,7 +284,8 @@
 			<tr>
 			<xsl:if test="$form = 'a' or $form = 't'">
 				printed material
-				<xsl:call-template name="rectype_a_or_t">
+				<xsl:call-template name="generate_for_rectype">
+					<xsl:with-param name="rectype">Books</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
 					<xsl:with-param name='tag' select="."/>
 				</xsl:call-template>

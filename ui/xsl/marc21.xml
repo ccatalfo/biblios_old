@@ -703,6 +703,17 @@
 </fields>
 
 <mattypes>
+	<mattype value="All">
+		<position>DtSt</position>
+		<position>Date1</position>
+		<position>Date2</position>
+		<position>Ctry</position>
+		<position>Lang</position>
+		<position>Srce</position>
+		<position>MRec</position>
+		<position>Link</position>
+		<position>DateEntered</position>
+	</mattype>
 	<mattype value="Books">
 		<position>Ills</position>
 		<position>LitF</position>
