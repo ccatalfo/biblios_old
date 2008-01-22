@@ -30,5 +30,13 @@ while(<>) {
 	}
 }
 
+if( $writer->in_element('value') ) {
+	$writer->endTag('value');
+}
+if( $writer->in_element('field') ) {
+	$writer->endTag('field');
+}
+
+$writer->endTag('fields');
 $writer->end();
 $output->close();
