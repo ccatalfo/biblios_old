@@ -736,6 +736,17 @@
 		<position>LitText</position>
 		<position>TrArr</position>
 	</mattype>
+	<mattype value="Maps">
+		<position>Relief</position>
+		<position>Proj</position>
+		<position>Cart</position>
+		<position>GovPub</position>
+		<position>Form</position>
+		<position>Indx</position>
+		<position>SpChar</position>
+	</mattype>
+
+	
 </mattypes>
 
 </marc21defs>

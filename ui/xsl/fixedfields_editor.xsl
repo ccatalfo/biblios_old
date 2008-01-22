@@ -124,9 +124,11 @@
 						
 			<xsl:if test="$rectype = 'e' or $rectype = 'f'">
 			<tr>
-				<xsl:call-template name="rectype_e_or_f">
-					<xsl:with-param name="offset">0</xsl:with-param>
-				</xsl:call-template>
+					<xsl:call-template name="generate_for_rectype">
+						<xsl:with-param name="rectype">Maps</xsl:with-param>
+						<xsl:with-param name="offset">0</xsl:with-param>
+						<xsl:with-param name='tag' select="marc:controlfield[@tag='008']"/>
+					</xsl:call-template>
 			</tr>
 			</xsl:if>
 
@@ -212,48 +214,6 @@
 								</xsl:call-template>
 	</xsl:template>
 
-	<xsl:template name="rectype_e_or_f">
-		<xsl:param name="offset">0</xsl:param>
-		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Relief'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Proj'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Cart'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'GovPub'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-text">
-									<xsl:with-param name="name" select="'Form'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Indx'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-text">	
-									<xsl:with-param name="name" select="'SpChar'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-	</xsl:template>
-
 	<xsl:template name="generate_for_rectype">
 		<xsl:param name="rectype">All</xsl:param>
 		<xsl:param name="offset">0</xsl:param>
@@ -285,7 +245,6 @@
 			<xsl:variable name="form" select="substring(.,1, 1)"/>
 			<tr>
 			<xsl:if test="$form = 'a' or $form = 't'">
-				printed material
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">Books</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
@@ -298,11 +257,12 @@
 			<xsl:if test="$form = 'd'">
 				Manuscript notated music
 			</xsl:if>
-			<xsl:if test="$form = 'e'">
-				Cartographic Material
-			</xsl:if>
-			<xsl:if test="$form = 'f'">
-				Manuscript cartographic Material
+			<xsl:if test="$form = 'e' or $form = 'f'">
+				<xsl:call-template name="generate_for_rectype">
+					<xsl:with-param name="rectype">Maps</xsl:with-param>
+					<xsl:with-param name="offset">17</xsl:with-param>
+					<xsl:with-param name='tag' select="."/>
+				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$form = 'g'">
 				Projected Material
@@ -312,6 +272,12 @@
 			</xsl:if>
 			<xsl:if test="$form = 'j'">
 				Musical sound Material
+				<xsl:call-template name="generate_for_rectype">
+					<xsl:with-param name="rectype">Music</xsl:with-param>
+					<xsl:with-param name="offset">17</xsl:with-param>
+					<xsl:with-param name='tag' select="."/>
+				</xsl:call-template>
+			</xsl:if>
 			</xsl:if>
 			<xsl:if test="$form = 'k'">
 				2-d Material
