@@ -132,9 +132,11 @@
 
 			<xsl:if test="$rectype = 'c' or $rectype = 'd' or $rectype = 'j'">
 			<tr>
-				<xsl:call-template name="rectype_c_or_d_or_j">
-					<xsl:with-param name="offset">0</xsl:with-param>
-				</xsl:call-template>
+					<xsl:call-template name="generate_for_rectype">
+						<xsl:with-param name="rectype">Music</xsl:with-param>
+						<xsl:with-param name="offset">0</xsl:with-param>
+						<xsl:with-param name='tag' select="marc:controlfield[@tag='008']"/>
+					</xsl:call-template>
 			</tr>
 			</xsl:if>
 
