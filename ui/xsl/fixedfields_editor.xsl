@@ -127,6 +127,10 @@
 			<xsl:for-each select="marc:controlfield[@tag='006']">
 				<xsl:call-template name="tag006"/>
 			</xsl:for-each>
+			<!-- rows for any 007's -->
+			<xsl:for-each select="marc:controlfield[@tag='007']">
+				<xsl:call-template name="tag007"/>
+			</xsl:for-each>
 		</table> <!-- end fixed fields editor table -->
 	</xsl:template>
 
@@ -201,6 +205,57 @@
 						<xsl:with-param name="offset">17</xsl:with-param>
 						<xsl:with-param name='tag' select="."/>
 					</xsl:call-template>
+			</xsl:if>
+			</tr>
+	</xsl:template>
+	<!-- 007s -->
+	<xsl:template name="tag007">
+			<xsl:variable name="cat" select="substring(.,1, 1)"/>
+			<tr>
+			<!-- map -->
+			<xsl:if test="$cat = 'a'">
+			</xsl:if>
+			<!-- electronic -->
+			<xsl:if test="$cat = 'c'">
+			</xsl:if>
+			<!-- globe-->
+			<xsl:if test="$cat = 'd'">
+			</xsl:if>
+			<!-- tactile-->
+			<xsl:if test="$cat = 'f'">
+			</xsl:if>
+			<!-- projected graphic-->
+			<xsl:if test="$cat = 'g'">
+			</xsl:if>
+			<!-- microform-->
+			<xsl:if test="$cat = 'h'">
+			</xsl:if>
+			<!-- non projected graphic-->
+			<xsl:if test="$cat = 'k'">
+			</xsl:if>
+			<!-- motion picture-->
+			<xsl:if test="$cat = 'm'">
+			</xsl:if>
+			<!-- kit-->
+			<xsl:if test="$cat = 'o'">
+			</xsl:if>
+			<!-- notated music-->
+			<xsl:if test="$cat = 'q'">
+			</xsl:if>
+			<!-- remote sensing image-->
+			<xsl:if test="$cat = 'r'">
+			</xsl:if>
+			<!-- sound recording -->
+			<xsl:if test="$cat = 's'">
+			</xsl:if>
+			<!-- text -->
+			<xsl:if test="$cat = 't'">
+			</xsl:if>
+			<!-- vidoerecording -->
+			<xsl:if test="$cat = 'v'">
+			</xsl:if>
+			<!-- unspecified -->
+			<xsl:if test="$cat = 'z'">
 			</xsl:if>
 			</tr>
 	</xsl:template>
