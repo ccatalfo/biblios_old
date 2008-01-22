@@ -699,6 +699,40 @@
 
 	</value>
 
+	<!-- visual materials -->
+	<value name="RTime" position="18" length="3" inputtype="textbox"></value>
+	<value name="VisType" position="33" length="1" inputtype="menubox">
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
+		<option>d</option>
+		<option>f</option>
+		<option>g</option>
+		<option>i</option>
+		<option>k</option>
+		<option>l</option>
+		<option>m</option>
+		<option>n</option>
+		<option>o</option>
+		<option>p</option>
+		<option>q</option>
+		<option>r</option>
+		<option>s</option>
+		<option>t</option>
+		<option>v</option>
+		<option>w</option>
+		<option>z</option>
+		<option>|</option>
+	</value>
+	<value name="Tech" position="34" length="1" inputtype="menubox">
+		<option>a</option>
+		<option>c</option>
+		<option>l</option>
+		<option>n</option>
+		<option>u</option>
+		<option>z</option>
+		<option>|</option>
+	</value>
 </field>
 </fields>
 
@@ -750,7 +784,14 @@
 		<position>File</position>
 		<position>GovPub</position>
 	</mattype>
-
+	<mattype value="Visual">
+		<position>RTime</position>
+		<position>Audn</position>
+		<position>GovPub</position>
+		<position>Form</position>
+		<position>VisType</position>
+		<position>Tech</position>
+	</mattype>
 	
 </mattypes>
 

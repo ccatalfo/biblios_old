@@ -20,7 +20,6 @@
 								<xsl:with-param name="name" select="'RLen'" />
 								<xsl:with-param name="tag" select="$leader" />
 							</xsl:call-template>
-
 						</td>
 
 						<td style='display:none;'>
@@ -28,7 +27,6 @@
 								<xsl:with-param name="name" select="'Base'" />
 								<xsl:with-param name="tag" select="$leader" />
 							</xsl:call-template>
-
 						</td>
 
 							<xsl:call-template name="fixed-field-select">
@@ -94,7 +92,7 @@
 					<xsl:call-template name="generate_for_rectype">
 						<xsl:with-param name="rectype">Maps</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
-						<xsl:with-param name='tag' select="marc:controlfield[@tag='008']"/>
+						<xsl:with-param name='tag' select="$tag008"/>
 					</xsl:call-template>
 			</xsl:if>
 
@@ -103,7 +101,15 @@
 					<xsl:call-template name="generate_for_rectype">
 						<xsl:with-param name="rectype">Music</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
-						<xsl:with-param name='tag' select="marc:controlfield[@tag='008']"/>
+						<xsl:with-param name='tag' select="$tag008"/>
+					</xsl:call-template>
+			</xsl:if>
+			<!-- 008 fixed fields for visual materials -->
+			<xsl:if test="$rectype = 'g' or $rectype = 'k' or $rectype = 'o' or $rectype = 'r'">
+					<xsl:call-template name="generate_for_rectype">
+						<xsl:with-param name="rectype">Visual</xsl:with-param>
+						<xsl:with-param name="offset">0</xsl:with-param>
+						<xsl:with-param name='tag' select="$tag008"/>
 					</xsl:call-template>
 			</xsl:if>
 			</tr>  <!-- end of material specific row -->
