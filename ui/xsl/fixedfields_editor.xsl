@@ -62,156 +62,57 @@
 								<xsl:with-param name="tag" select="$leader" />
 							</xsl:call-template>
 			</tr>
-			<tr>
-							<xsl:call-template name="fixed-field-select">
-								<xsl:with-param name="name" select="'DtSt'" />
-								<xsl:with-param name="tag" select="$tag008" />
-							</xsl:call-template>
-							<xsl:call-template name="fixed-field-text">
-								<xsl:with-param name="name" select="'Date1'" />
-								<xsl:with-param name="tag" select="$tag008" />
-							</xsl:call-template>
-							<xsl:call-template name="fixed-field-text">
-								<xsl:with-param name="name" select="'Date2'" />
-								<xsl:with-param name="tag" select="$tag008" />
-							</xsl:call-template>
-
-							<xsl:call-template name="fixed-field-select">
-								<xsl:with-param name="name" select="'Ctry'" />
-								<xsl:with-param name="tag" select="$tag008" />
-							</xsl:call-template>
-							<xsl:call-template name="fixed-field-select">
-								<xsl:with-param name="name" select="'Lang'" />
-								<xsl:with-param name="tag" select="$tag008" />
-							</xsl:call-template>
-							<xsl:call-template name="fixed-field-select">
-								<xsl:with-param name="name" select="'Srce'" />
-								<xsl:with-param name="tag" select="$tag008" />
-							</xsl:call-template>
-							<xsl:call-template name="fixed-field-select">
-								<xsl:with-param name="name" select="'MRec'" />
-								<xsl:with-param name="tag" select="$tag008" />
-							</xsl:call-template>
-							<xsl:call-template name="fixed-field-select">
-								<xsl:with-param name="name" select="'Link'" />
-								<xsl:with-param name="tag" select="$leader" />
-							</xsl:call-template>
-						<td style='display:none;'>
-							<xsl:call-template name="fixed-field-text">
-								<xsl:with-param name="name" select="'DateEntered'" />
-								<xsl:with-param name="tag" select="$tag008" />
-							</xsl:call-template>
-						</td>
-
-			</tr>
-			<xsl:if test="$rectype = 'a' or $rectype = 't'">
+			<!-- 008 fixed fields for all material types -->
 			<tr>
 					<xsl:call-template name="generate_for_rectype">
-						<xsl:with-param name="rectype">Books</xsl:with-param>
+						<xsl:with-param name="rectype">All</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
 						<xsl:with-param name='tag' select="marc:controlfield[@tag='008']"/>
 					</xsl:call-template>
 			</tr>
+			<tr> <!-- material-specific row of fixed field input elements -->
+			<!-- 008 fixed fields for Books -->
+			<xsl:if test="$rectype = 'a' or $rectype = 't'">
+					<xsl:call-template name="generate_for_rectype">
+						<xsl:with-param name="rectype">Books</xsl:with-param>
+						<xsl:with-param name="offset">0</xsl:with-param>
+						<xsl:with-param name='tag' select="$tag008"/>
+					</xsl:call-template>
 			</xsl:if>
 
+			<!-- 008 fixed fields for computer files -->
 			<xsl:if test="$rectype = 'm'">
-			<tr>
-				<xsl:call-template name="rectype_m">
+				<xsl:call-template name="generate_for_rectype">
+					<xsl:with-param name="rectype">ComputerFile</xsl:with-param>
 					<xsl:with-param name="offset">0</xsl:with-param>
+					<xsl:with-param name='tag' select="$tag008"/>
 				</xsl:call-template>
-			</tr>
 			</xsl:if>
 						
+			<!-- 008 fixed fields for Cartographic materials -->
 			<xsl:if test="$rectype = 'e' or $rectype = 'f'">
-			<tr>
 					<xsl:call-template name="generate_for_rectype">
 						<xsl:with-param name="rectype">Maps</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
 						<xsl:with-param name='tag' select="marc:controlfield[@tag='008']"/>
 					</xsl:call-template>
-			</tr>
 			</xsl:if>
 
+			<!-- 008 fixed fields for music materials -->
 			<xsl:if test="$rectype = 'c' or $rectype = 'd' or $rectype = 'j'">
-			<tr>
 					<xsl:call-template name="generate_for_rectype">
 						<xsl:with-param name="rectype">Music</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
 						<xsl:with-param name='tag' select="marc:controlfield[@tag='008']"/>
 					</xsl:call-template>
-			</tr>
 			</xsl:if>
+			</tr>  <!-- end of material specific row -->
 
+			<!-- rows for any 006's -->
 			<xsl:for-each select="marc:controlfield[@tag='006']">
 				<xsl:call-template name="tag006"/>
 			</xsl:for-each>
-		</table>
-	</xsl:template>
-
-	<xsl:template name="rectype_c_or_d_or_j">
-		<xsl:param name="offset">0</xsl:param>
-		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
-
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'CompForm'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Format'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Parts'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Audn'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-text">
-									<xsl:with-param name="name" select="'Form'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-text">	
-									<xsl:with-param name="name" select="'Accomp'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-text">	
-									<xsl:with-param name="name" select="'LitText'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'TrArr'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-	</xsl:template>
-	<xsl:template name="rectype_m">
-		<xsl:param name="offset">0</xsl:param>
-		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
-
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'Audn'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'File'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
-								<xsl:call-template name="fixed-field-select">	
-									<xsl:with-param name="name" select="'GovPub'" />
-									<xsl:with-param name="tag" select="$tag008" />
-									<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
-								</xsl:call-template>
+		</table> <!-- end fixed fields editor table -->
 	</xsl:template>
 
 	<xsl:template name="generate_for_rectype">
@@ -278,7 +179,6 @@
 					<xsl:with-param name='tag' select="."/>
 				</xsl:call-template>
 			</xsl:if>
-			</xsl:if>
 			<xsl:if test="$form = 'k'">
 				2-d Material
 			</xsl:if>
@@ -292,7 +192,11 @@
 				Manuscript Material
 			</xsl:if>
 			<xsl:if test="$form = 'm'">
-				Computer file	
+				<xsl:call-template name="generate_for_rectype">
+					<xsl:with-param name="rectype">ComputerFile</xsl:with-param>
+					<xsl:with-param name="offset">17</xsl:with-param>
+					<xsl:with-param name='tag' select="."/>
+				</xsl:call-template>
 			</xsl:if>
 			</tr>
 	</xsl:template>

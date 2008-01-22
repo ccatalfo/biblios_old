@@ -745,6 +745,11 @@
 		<position>Indx</position>
 		<position>SpChar</position>
 	</mattype>
+	<mattype value="ComputerFile">
+		<position>Audn</position>
+		<position>File</position>
+		<position>GovPub</position>
+	</mattype>
 
 	
 </mattypes>
