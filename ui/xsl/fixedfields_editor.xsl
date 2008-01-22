@@ -2,6 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="xml" indent="yes"/>
 	<xsl:variable name='marc21defs' select="document('marc21.xml')"/>
+	<xsl:param name='debug'/>
 
 	<xsl:template match="/">
         <div id='fixedfields_editor'>
@@ -173,14 +174,14 @@
 					<xsl:with-param name='tag' select="."/>
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="$rectype = 'c' or $rectype = 'd' or $rectype = 'j' or $rectype = 'i'">
+			<xsl:if test="$form = 'c' or $form = 'd' or $form = 'j' or $form = 'i'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">Music</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
 					<xsl:with-param name='tag' select="."/>
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="$rectype = 'g' or $rectype = 'k' or $rectype = 'o' or $rectype = 'r'">
+			<xsl:if test="$form = 'g' or $form = 'k' or $form = 'o' or $form = 'r'">
 					<xsl:call-template name="generate_for_rectype">
 						<xsl:with-param name="rectype">Visual</xsl:with-param>
 						<xsl:with-param name="offset">17</xsl:with-param>
@@ -194,7 +195,7 @@
 					<xsl:with-param name='tag' select="."/>
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="$rectype = 'p'">
+			<xsl:if test="$form = 'p'">
 					<xsl:call-template name="generate_for_rectype">
 						<xsl:with-param name="rectype">Mixed</xsl:with-param>
 						<xsl:with-param name="offset">17</xsl:with-param>
@@ -215,6 +216,7 @@
 		<p>Leader value is <xsl:value-of select="$value"/></p>-->
 		<td><xsl:value-of select="$name"/></td>
 		<td>
+			<xsl:if test='$debug=1'><span style='color:red'><xsl:value-of select="$name"/>=<xsl:value-of select="$value"/></span><br/></xsl:if>
 			<select>
 				<xsl:attribute name="name"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:attribute name='onblur'>onFixedFieldEditorBlur(this)</xsl:attribute>
@@ -238,8 +240,9 @@
 		<xsl:param name="tag"/>
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="hidden"/>
-		<xsl:variable name="position" select="$marc21defs//value[@name=$name]/@position - $offset"/>
+		<xsl:variable name="position" select="$marc21defs//value[@name=$name]/@position+1-$offset"/>
 		<xsl:variable name="length" select="$marc21defs//value[@name=$name]/@length"/>
+		<xsl:variable name='value' select="substring($tag, $position, $length)"/>
 		<td>
 			<xsl:value-of select="$name"/>
 		</td>
@@ -250,8 +253,9 @@
 				<xsl:attribute name="maxlength"><xsl:value-of select="$length"/></xsl:attribute>
 				<xsl:attribute name='onblur'>onFixedFieldEditorBlur(this)</xsl:attribute>
 				<xsl:attribute name="value">
-					<xsl:value-of select="substring($tag, $position+1, $length)"/>
+					<xsl:value-of select="$value"/>
 				</xsl:attribute>
+				<xsl:if test='$debug=1'><span style='color:red;'><xsl:value-of select="$name"/>=<xsl:value-of select="$value"/></span><br/></xsl:if>
 				<xsl:if test="$hidden='true'">
 					<xsl:attribute name="hidden">true</xsl:attribute>
 				</xsl:if>
