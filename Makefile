@@ -25,9 +25,15 @@ tags: $(SRCS)
 debug: 
 	sed -f sed_generate_index_debug < index.html > index-debug.html
 
-test:
+testRecords:
 	xalan -in test/testRecords/006.xml -xsl ui/xsl/fixedfields_editor.xsl > test/generatedFiles/ff_006.html
 	 xalan -in test/testRecords/sandburg.xml -xsl ui/xsl/fixedfields_editor.xsl > test/generatedFiles/ff_books.html 		
+	 xalan -in test/testRecords/computer.xml -xsl ui/xsl/fixedfields_editor.xsl > test/generatedFiles/ff_computer.html 		
+	 xalan -in test/testRecords/map.xml -xsl ui/xsl/fixedfields_editor.xsl > test/generatedFiles/ff_map.html 		
+	 xalan -in test/testRecords/music.xml -xsl ui/xsl/fixedfields_editor.xsl > test/generatedFiles/ff_music.html 		
+	rm -f test/generatedFiles/ff_all.html
+	cat test/generatedFiles/*.html >test/generatedFiles/ff_all.html
+
 koha:
 	perl integration/updateForEmbedding.pl index-debug.html index-koha.html "/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/" "/cgi-bin/koha/plugins/biblios/" "$(KOHASTAFFPORT)" "<!-- TMPL_INCLUDE NAME=\"doc-head-open.inc\" --><!-- TMPL_INCLUDE NAME=\"doc-head-close-biblios.inc\" -->" "<!-- TMPL_INCLUDE NAME=\"header.inc\" -->"
 
