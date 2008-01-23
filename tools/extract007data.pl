@@ -36,13 +36,13 @@ while(<>) {
 		}
 		next;	
 	}
-	elsif( /<li>(\d{2})\s-\s(\S+)(.*)/ ) {
+	elsif( /<li>(\d{2}(?:-\d{2})?)\s-\s(\S+)(.*)/ ) {
 		if( $writer->in_element('value') ) {
 			$writer->endTag('value');
 		}
 		$writer->startTag('value', 'name' => trim($hs->parse($2)), position => trim($hs->parse($1)));
 	}
-	elsif ( /^<li>(\S)\s-\s(.*)/ ) {
+	elsif ( /^<li>(\S*)\s-\s(.*)<\/ul>/ ) {
 		$writer->dataElement('option', trim($hs->parse($1)), description=>trim($hs->parse($2)));
 	}
 }
