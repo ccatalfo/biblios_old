@@ -63,7 +63,7 @@ while(<>) {
 		$writer->startTag('value', 'name' => trim($hs->parse($2)), 'position' => $position, 'length' => $length);
 	}
 	# if we have a possible valid value
-	if ( /^<li>(\S*)\s-\s(.*)<\/ul>/ ) {
+	if ( /^<li>(\S*)\s-\s(.*)/ ) {
 		$writer->dataElement('option', trim($hs->parse($1)), description=>trim($hs->parse($2)));
 	}
 }
