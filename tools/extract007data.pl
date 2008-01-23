@@ -27,12 +27,14 @@ while(<>) {
 		if( $writer->in_element('value') ) {
 			$writer->endTag('value');
 		}
-		$writer->startTag('value', 'name' => trim($hs->parse($2)), description => trim($hs->parse($3)), position => trim($hs->parse($1)));
+		my $position = removeLeadingZero(trim($hs->parse($1)));
+		$writer->startTag('value', 'name' => trim($hs->parse($2)), description => trim($hs->parse($3)), position => $position);
 		$writer->dataElement('option', ' ',  description=>'Blank');
 		$writer->dataElement('option', '|',  description=>'Fill Character');
 		$writer->endTag('value');
 		if( /\G(.*)<li>(\d{2})\s-\s(\w+)<br>(.*)/ ) {
-			$writer->startTag('value', 'name' => trim($hs->parse($3)), position => trim($hs->parse($2)));
+			my $position = removeLeadingZero(trim($hs->parse($2)));
+			$writer->startTag('value', 'name' => trim($hs->parse($3)), position => $position);
 		}
 		next;	
 	}
@@ -40,7 +42,8 @@ while(<>) {
 		if( $writer->in_element('value') ) {
 			$writer->endTag('value');
 		}
-		$writer->startTag('value', 'name' => trim($hs->parse($2)), position => trim($hs->parse($1)));
+		my $position = removeLeadingZero(trim($hs->parse($1)));
+		$writer->startTag('value', 'name' => trim($hs->parse($2)), position => $position);
 	}
 	elsif ( /^<li>(\S*)\s-\s(.*)<\/ul>/ ) {
 		$writer->dataElement('option', trim($hs->parse($1)), description=>trim($hs->parse($2)));
@@ -58,3 +61,8 @@ $writer->endTag('fields');
 $writer->end();
 $output->close();
 
+sub removeLeadingZero {
+	my $str = shift(@_);
+	$str =~ s/^0//;
+	return $str;
+}
