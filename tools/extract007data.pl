@@ -13,6 +13,7 @@ my $mattype = '';
 
 $writer->startTag('fields', 'tag' => '007');
 while(<>) {
+	# if we have a material type designation
 	if(/<h2>.*007--(\w+\b)+/) {
 			if( $writer->in_element('value') ) {
 				$writer->endTag('value');
@@ -41,6 +42,7 @@ while(<>) {
 		}
 		next;	
 	}
+	# if we have a normal character position definition
 	elsif( /<li>(\d{2}(?:-\d{2})?)\s-\s(\S+)(.*)/ ) {
 		if( $writer->in_element('value') ) {
 			$writer->endTag('value');
@@ -48,7 +50,7 @@ while(<>) {
 		my $position = trim($hs->parse($1));
 		print "position = $position\n";
 		my $length = '1';
-		# see if we have a position like 06-08
+		# see if we have a position like 06-08; if so compute its length
 		if( $position =~ /(\d{2})-(\d{2})/ ) {
 			my $endpoint = $2;
 			$position = $1;
@@ -59,6 +61,7 @@ while(<>) {
 		$position = removeLeadingZero($position);
 		$writer->startTag('value', 'name' => trim($hs->parse($2)), 'position' => $position, 'length' => $length);
 	}
+	# if we have a possible valid value
 	elsif ( /^<li>(\S*)\s-\s(.*)<\/ul>/ ) {
 		$writer->dataElement('option', trim($hs->parse($1)), description=>trim($hs->parse($2)));
 	}
