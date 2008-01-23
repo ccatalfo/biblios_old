@@ -22,7 +22,19 @@ while( my $token = $p->get_tag("title", "li", "a")) {
 		if( $writer->in_element('value')) {
 			$writer->endTag('value');
 		}
-		$writer->startTag('value', position => $1, description => $2);
+		my $position = $1;
+		my $description = $2;
+		my $length = 1;
+		# see if we have a position like 06-08; if so compute its length
+		if( $position =~ /(\d{2})-(\d{2})/ ) {
+			my $endpoint = $2;
+			$position = $1;
+			$endpoint = removeLeadingZero($endpoint);
+			$length = $endpoint - $position +1;
+			print "computed length = $length\n";
+		}
+		$position = removeLeadingZero($position);
+		$writer->startTag('value', position => $position, description => $description, length => $length);
 	}
 	elsif( $text =~ /(\S+) - (.*)/ ) {
 		$writer->dataElement('option', $1, description => $2);
@@ -34,3 +46,10 @@ $writer->endTag('value');
 $writer->endTag('fields');
 $writer->end();
 $output->close();
+
+
+sub removeLeadingZero {
+	my $str = shift(@_);
+	$str =~ s/^0//;
+	return $str;
+}
