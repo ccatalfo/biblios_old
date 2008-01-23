@@ -28,13 +28,16 @@ while(<>) {
 			$writer->endTag('value');
 		}
 		my $position = removeLeadingZero(trim($hs->parse($1)));
-		$writer->startTag('value', 'name' => trim($hs->parse($2)), description => trim($hs->parse($3)), position => $position);
+		my $length = '1';
+		$writer->startTag('value', 'name' => trim($hs->parse($2)), description => trim($hs->parse($3)), position => $position, 'length' => $length);
 		$writer->dataElement('option', ' ',  description=>'Blank');
 		$writer->dataElement('option', '|',  description=>'Fill Character');
 		$writer->endTag('value');
+		# extract the next value directy following the last Undefined match
 		if( /\G(.*)<li>(\d{2})\s-\s(\w+)<br>(.*)/ ) {
 			my $position = removeLeadingZero(trim($hs->parse($2)));
-			$writer->startTag('value', 'name' => trim($hs->parse($3)), position => $position);
+			my $length = '1';
+			$writer->startTag('value', 'name' => trim($hs->parse($3)), position => $position, 'length' => $length);
 		}
 		next;	
 	}
@@ -42,8 +45,19 @@ while(<>) {
 		if( $writer->in_element('value') ) {
 			$writer->endTag('value');
 		}
-		my $position = removeLeadingZero(trim($hs->parse($1)));
-		$writer->startTag('value', 'name' => trim($hs->parse($2)), position => $position);
+		my $position = trim($hs->parse($1));
+		print "position = $position\n";
+		my $length = '1';
+		# see if we have a position like 06-08
+		if( $position =~ /(\d{2})-(\d{2})/ ) {
+			my $endpoint = $2;
+			$position = $1;
+			$endpoint = removeLeadingZero($endpoint);
+			$length = $endpoint - $position;
+			print "computed length = $length\n";
+		}
+		$position = removeLeadingZero($position);
+		$writer->startTag('value', 'name' => trim($hs->parse($2)), 'position' => $position, 'length' => $length);
 	}
 	elsif ( /^<li>(\S*)\s-\s(.*)<\/ul>/ ) {
 		$writer->dataElement('option', trim($hs->parse($1)), description=>trim($hs->parse($2)));
