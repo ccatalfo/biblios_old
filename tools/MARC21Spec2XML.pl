@@ -11,7 +11,7 @@ my $output = new IO::File(">$outfile");
 my $writer = new XML::Writer(OUTPUT => $output, DATA_MODE => 1, DATA_INDENT => 3);
 
 $writer->startTag('fields');
-while( my $token = $p->get_tag("title", "li", "a")) {
+while( my $token = $p->get_tag("li", "a")) {
 	my $text = $p->get_trimmed_text();
 	print "trimmed text: $text\n\n";
 	print "-----\n";
