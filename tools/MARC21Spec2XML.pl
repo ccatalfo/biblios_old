@@ -15,8 +15,14 @@ while( my $token = $p->get_tag("title", "li", "a")) {
 	my $text = $p->get_trimmed_text();
 	print "trimmed text: $text\n\n";
 	print "-----\n";
-	if( $text =~ /(\d{3})/ ) {
-
+	if( $text =~ /(\d{3})--(.*)/ ) {
+		if( $writer->in_element('value')) {
+			$writer->endTag('value');
+		}
+		if( $writer->in_element('field')) {
+			$writer->endTag('field');
+		}
+		$writer->startTag('field', code => $1, type=>$2);
 	}
 	elsif( $text =~ /(\d{2}(?:-\d{2})?)\s-\s(.*)/ ) {
 		if( $writer->in_element('value')) {
@@ -34,7 +40,8 @@ while( my $token = $p->get_tag("title", "li", "a")) {
 			print "computed length = $length\n";
 		}
 		$position = removeLeadingZero($position);
-		$writer->startTag('value', position => $position, description => $description, length => $length);
+		my $details = $p->get_trimmed_text('ul');
+		$writer->startTag('value', position => $position, description => $description, length => $length, details => $details);
 	}
 	elsif( $text =~ /(\S+) - (.*)/ ) {
 		$writer->dataElement('option', $1, description => $2);
@@ -42,8 +49,15 @@ while( my $token = $p->get_tag("title", "li", "a")) {
 	}
 }
 
-$writer->endTag('value');
-$writer->endTag('fields');
+if( $writer->in_element('value')) {
+	$writer->endTag('value');
+}
+if( $writer->in_element('field')) {
+	$writer->endTag('field');
+}
+if( $writer->in_element('fields')) {
+	$writer->endTag('fields');
+}
 $writer->end();
 $output->close();
 
