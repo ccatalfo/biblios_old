@@ -208,6 +208,13 @@ biblios.app = function() {
 																	])),
 																	remoteSort: false
 														}), // data store search grid
+														sm: new Ext.grid.RowSelectionModel({
+															listeners: {
+																rowselect: function(selmodel, rowindex, record) {
+
+																}
+															} // selection listeners
+														}), // search grid selecion model
 														cm : new Ext.grid.ColumnModel([
 															{header: "Medium", width: 50, dataIndex: 'medium'},
 															{header: "Title", width: 180, dataIndex: 'title'},
@@ -216,6 +223,14 @@ biblios.app = function() {
 															{header: "Date", width: 50, dataIndex: 'date'},
 															{header: "Location", width: 100, dataIndex: 'location'}
 														]), // column model for search grid
+														listeners: {
+															rowclick: function(grid, rowindex, e) {
+
+															},
+															rowdblclick: function(grid, rowindex, e) {
+
+															}
+														} // search grid listeners
 													}), // search results grid panel
 													{
 														region: 'south',
