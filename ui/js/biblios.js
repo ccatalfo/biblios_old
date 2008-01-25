@@ -177,8 +177,17 @@ biblios.app = function() {
 										activeItem: 0,
 										id: 'bibliocenter',
 										items: [
+											{
+												region: 'center',
+												layout: 'border',
+												id: 'searchpanel',
+												height: 500,
+												width: 500,
+												items: [
 													new Ext.grid.GridPanel({
 														region: 'center',
+														height: 300,
+														width: 300,
 														id: 'searchgrid',
 														store : new Ext.data.Store({
 															proxy: new Ext.data.HttpProxy({url: pazpar2url+'?session='+paz.sessionID+'&command=show'}),
@@ -208,6 +217,15 @@ biblios.app = function() {
 															{header: "Location", width: 100, dataIndex: 'location'}
 														]), // column model for search grid
 													}), // search results grid panel
+													{
+														region: 'south',
+														id: 'searchpreview',
+														split: true,
+														html: 'search preview',
+														height: 150
+													} // search preview 
+												] // search results items
+											}, // search results region
 											{
 												region: 'center',
 												id: 'editorpanel',
@@ -215,11 +233,15 @@ biblios.app = function() {
 												items: [
 													{
 														region: 'north',
-														id: 'editorone'
+														id: 'editorone',
+														split: true,
+														html: '<p> marc editor 1</p>'
 													}, // editor north
 													{
 														region: 'center',
-														id: 'editortwo'
+														id: 'editortwo',
+														split: true,
+														html: '<p> marc editor 2</p>'
 													} // editor center
 												] // editor items
 											}, // editor region
@@ -230,11 +252,15 @@ biblios.app = function() {
 												items: [
 													{
 														region: 'north',
-														id: 'savegridpanel'
+														id: 'savegridpanel',
+														split: true,
+														html: '<p> save grid </p>'
 													}, // savepanel north
 													{
 														region: 'center',
-														id: 'savegridpreview'
+														id: 'savegridpreview',
+														split: true,
+														html: '<p>save preview</p>',
 													} // savepanel center
 												] // savepanel items
 											} // savefilegrid region 
