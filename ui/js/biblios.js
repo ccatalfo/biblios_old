@@ -236,6 +236,7 @@ biblios.app = function() {
 														region: 'south',
 														id: 'searchpreview',
 														split: true,
+														collapsible: true,
 														html: 'search preview',
 														height: 150
 													} // search preview 
@@ -250,13 +251,14 @@ biblios.app = function() {
 														region: 'north',
 														id: 'editorone',
 														split: true,
-														html: '<p> marc editor 1</p>'
+														height: 300
 													}, // editor north
 													{
 														region: 'center',
 														id: 'editortwo',
 														split: true,
-														html: '<p> marc editor 2</p>'
+														html: '<p> marc editor 2</p>',
+														height: 150
 													} // editor center
 												] // editor items
 											}, // editor region
@@ -265,18 +267,60 @@ biblios.app = function() {
 												id: 'savefilepanel',
 												layout: 'border',
 												items: [
-													{
-														region: 'north',
-														id: 'savegridpanel',
-														split: true,
-														html: '<p> save grid </p>'
-													}, // savepanel north
-													{
-														region: 'center',
+														new Ext.grid.GridPanel({
+															region: 'center',
+															id: 'savegrid',
+															height: 300,
+															store: new Ext.data.Store({
+																proxy: new Ext.data.GoogleGearsProxy(),
+																reader: new Ext.data.ArrayReader({}, [
+																	   {name: 'Id'},
+																	   {name: 'Title'},
+																	   {name: 'Author'},
+																	   {name: 'DateOfPub'},
+																	   {name: 'Location'},
+																	   {name: 'Publisher'},
+																	   {name: 'Medium'},
+																	   {name: 'xml'},
+																	   {name: 'Status'},
+																	   {name: 'Date Added'},
+																	   {name: 'Last Modified'},
+																	   {name: 'xmlformat'},
+																	   {name: 'marcflavour'},
+																	   {name: 'template'},
+																	   {name: 'marcformat'},
+																	   {name: 'Savefiles_id'},
+																	   {name: 'SearchTargets_id'}
+																  ])
+															}),
+															cm: new Ext.grid.ColumnModel([
+																{header: "Medium", dataIndex: 'Medkum', sortable: true},
+																{header: "Title", width: 200, dataIndex: 'Title', sortable: true},
+																{header: "Author", width: 160, dataIndex: 'Author', sortable: true},
+																{header: "Publisher", width: 130, dataIndex: 'Publisher', sortable: true},
+																{header: "DateOfPub", width: 80, dataIndex: 'DateOfPub', sortable: true},
+																{header: "Status", width: 100, dataIndex: 'Status', sortable: true},
+																{header: "Date Added", width: 120, dataIndex: 'Date Added', sortable: true},
+																{header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true},
+															]),
+															listeners: {
+																rowclick: function(grid, rowindex, e) {
+
+																},
+																rowdblclick: function(grid, rowindex, e) {
+
+																}
+															} // save grid listeners
+
+													}), // savepanel center
+													{ 													
+														region: 'south',
 														id: 'savegridpreview',
 														split: true,
+														collapsible: true,
+														height: 150,
 														html: '<p>save preview</p>',
-													} // savepanel center
+													} // savepanel south
 												] // savepanel items
 											} // savefilegrid region 
 										] // biblio tab center items
