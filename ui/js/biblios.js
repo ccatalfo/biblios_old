@@ -359,19 +359,20 @@ biblios.app = function() {
 										collapsed: true,
 										width: 200,
 										maxSize: 200,
-										title: 'Resources'
+										title: 'Resources',
+										layout: 'accordion',
+										layoutConfig: {
+											animate: true
+										},
+										items: [
+											{
+												title: 'Search Servers'
+											},
+											{
+												title: 'Save folders'
+											}
+										] // resources panel items
 									},// biblio tab west
-									{
-										region: 'south',
-										split: true,
-										collapsible: true,
-										collapsed: true,
-										width: 200,
-										maxSize: 200,
-										height: 200,
-										title: 'Previews'
-
-									}, // biblio tab south
 									{
 										region: 'east',
 										split: true,
