@@ -189,7 +189,7 @@ biblios.app = function() {
 														height: 300,
 														width: 300,
 														id: 'searchgrid',
-														store : new Ext.data.Store({
+														store : (ds = new Ext.data.Store({
 															proxy: new Ext.data.HttpProxy({url: pazpar2url+'?session='+paz.sessionID+'&command=show'}),
 															reader: 
 																new Ext.data.XmlReader({
@@ -207,7 +207,7 @@ biblios.app = function() {
 																	{name: 'location', mapping:'location @name'}
 																	])),
 																	remoteSort: false
-														}), // data store search grid
+														})), // data store search grid aka ds
 														sm: new Ext.grid.RowSelectionModel({
 															listeners: {
 																rowselect: function(selmodel, rowindex, record) {
@@ -230,7 +230,17 @@ biblios.app = function() {
 															rowdblclick: function(grid, rowindex, e) {
 
 															}
-														} // search grid listeners
+														}, // search grid listeners
+														tbar: new Ext.PagingToolbar({
+															pageSize: 15,
+															store: ds,
+															displayInfo: true,
+															displayMsg: 'Displaying records {0} - {1} of {2}',
+															emptyMsg: 'No records to display',
+															items: [
+
+															]
+														}) // search grid paging toolbar
 													}), // search results grid panel
 													{
 														region: 'south',
@@ -271,7 +281,7 @@ biblios.app = function() {
 															region: 'center',
 															id: 'savegrid',
 															height: 300,
-															store: new Ext.data.Store({
+															store: (ds = new Ext.data.Store({
 																proxy: new Ext.data.GoogleGearsProxy(),
 																reader: new Ext.data.ArrayReader({}, [
 																	   {name: 'Id'},
@@ -292,7 +302,7 @@ biblios.app = function() {
 																	   {name: 'Savefiles_id'},
 																	   {name: 'SearchTargets_id'}
 																  ])
-															}),
+															})), // save grid store aka ds
 															cm: new Ext.grid.ColumnModel([
 																{header: "Medium", dataIndex: 'Medkum', sortable: true},
 																{header: "Title", width: 200, dataIndex: 'Title', sortable: true},
@@ -310,7 +320,17 @@ biblios.app = function() {
 																rowdblclick: function(grid, rowindex, e) {
 
 																}
-															} // save grid listeners
+															}, // save grid listeners
+															tbar: new Ext.PagingToolbar({
+																pageSize: 15,
+																store: ds,
+																displayInfo: true,
+																displayMsg: 'Displaying records {0} - {1} of {2}',
+																emptyMsg: 'No records to display',
+																items: [
+
+																]
+															}) // save grid paging toolbar
 
 													}), // savepanel center
 													{ 													
