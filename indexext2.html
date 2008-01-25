@@ -4,12 +4,45 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="lib/extjs2/resources/css/ext-all.css">
+<!-- properties which need to be modified on a global basis -->
+<script type="text/javascript">
+var libPath = '';
+var hostPort = '';
+var cgiDir = '/cgi-bin/';
+var showMarcXslPath = libPath + "ui/xsl/MARC21slim2HTML.xsl";
+var fixedFieldXslPath = libPath + "ui/xsl/fixedfields_editor.xsl";
+var varFieldsXslPath = libPath + "ui/xsl/varfields_inputboxes.xsl";
+var confPath = libPath + "conf/webcatdb.conf";
+</script>
+
     <script type="text/javascript" src="lib/extjs2/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="lib/extjs2/ext-all-debug.js"></script>
+    <script type="text/javascript" src="lib/extjs2/ext-all.js"></script>
+<!-- gears -->
+	<script type="text/javascript" src="lib/google_gears/gears_init.js"></script>
+	<script type="text/javascript" src="lib/google_gears/GearsORM_all.js"></script>
+	<script type="text/javascript" src="lib/google_gears/GearsORMShift.js"></script>
+<!-- pazpar2 -->
+<script type="text/javascript" src="lib/pz2.js"></script>
+<!-- jquery -->
+	<script type="text/javascript" src="lib/jquery/jquery-1.2.2.min.js"></script>
+
+<!-- sarissa  -->
+	<script type="text/javascript" src="lib/sarissa/sarissa.js"></script>
+	<script src="lib/jquery/jquery.debug.js"	type="text/javascript"></script>
+	<script type="text/javascript" src="lib/jquery/jquery.xslTransform.packed.js"></script>
+	<script src="lib/sarissa/sarissa_ieemu_xpath.js"		type="text/javascript"></script>
+<!-- biblios -->
+    <script type="text/javascript" src="ui/js/db.js"></script>
+    <script type="text/javascript" src="ui/js/prefs.js"></script>
     <script type="text/javascript" src="ui/js/biblios.js"></script>
+    <script type="text/javascript" src="ui/js/search.js"></script>
+    <script type="text/javascript" src="ui/js/init.js"></script>
+    <script type="text/javascript" src="ui/js/save.js"></script>
     <!-- A Localization Script File comes here -->
     <script type="text/javascript">
-        Ext.onReady(biblios.app.init, biblios.app);
+        Ext.onReady(function() {
+			biblios.app.init();
+		}, biblios.app);
     </script>
     <title>Application Layout Tutorial</title>
 </head>

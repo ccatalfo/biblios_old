@@ -83,6 +83,7 @@ var rte_editor;
 	
 var searches = new Array(); // Array of pazpar2 searches
 var paz = initializePazPar2(pazpar2url);
+var pazShowUrl = pazpar2url + '?session=' + paz.sessionID + '&command=show';
 
 
 /*
