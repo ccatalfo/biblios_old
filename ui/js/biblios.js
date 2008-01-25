@@ -40,8 +40,8 @@ biblios.app = function() {
 							{
 								region: 'east'
 							}
-						]
-					},
+						] // north region items
+					}, // viewport north region
 					new Ext.TabPanel({
 						region: 'center',
 						items: [
@@ -49,7 +49,7 @@ biblios.app = function() {
 								title: 'Home',
 								closable: false,
 								autoScroll: true
-							},
+							}, // home tab
 							{
 								title: 'Biblio',
 								closable: false,
@@ -63,17 +63,17 @@ biblios.app = function() {
 											{
 												region: 'center',
 												id: 'searchgrid'
-											},
+											}, //search grid region
 											{
 												region: 'center',
 												id: 'editor'
-											},
+											}, // editor region
 											{
 												region: 'center',
 												id: 'savefilegrid'
-											}
-										]
-									},
+											} // savefilegrid region
+										] // biblio tab center items
+									}, // biblio tab center
 									{
 										region: 'west',
 										split: true,
@@ -82,7 +82,7 @@ biblios.app = function() {
 										width: 200,
 										maxSize: 200,
 										title: 'Resources'
-									},
+									},// biblio tab west
 									{
 										region: 'south',
 										split: true,
@@ -93,7 +93,7 @@ biblios.app = function() {
 										height: 200,
 										title: 'Previews'
 
-									},
+									}, // biblio tab south
 									{
 										region: 'east',
 										split: true,
@@ -103,13 +103,13 @@ biblios.app = function() {
 										maxSize: 200,
 										title: 'Help'
 
-									}
-								]
-							}
-						]
-					})
-				]
-			});
+									}  // biblio tab east
+								] // biblio tab items
+							} // biblio tab config
+						] // center items of tabpanel
+					}) // tabpanel constructor
+				] // viewport items
+			}); // viewport constructor
 			
 		alert('Application successfully initialized');
         }
