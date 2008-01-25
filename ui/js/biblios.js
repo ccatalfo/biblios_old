@@ -62,15 +62,48 @@ biblios.app = function() {
 										items: [
 											{
 												region: 'center',
-												id: 'searchgrid'
+												id: 'searchpanel',
+												layout: 'border',
+												items: [
+													{
+														region: 'north',
+														id: 'searchgridpanel'
+													}, // searchpanel north
+													{
+														region: 'center',
+														id: 'searchgridpreview'
+													} // searchpanel center
+												] // searchpanel items
 											}, //search grid region
 											{
 												region: 'center',
-												id: 'editor'
+												id: 'editorpanel',
+												layout: 'border',
+												items: [
+													{
+														region: 'north',
+														id: 'editorone'
+													}, // editor north
+													{
+														region: 'center',
+														id: 'editortwo'
+													} // editor center
+												] // editor items
 											}, // editor region
 											{
 												region: 'center',
-												id: 'savefilegrid'
+												id: 'savefilepanel',
+												layout: 'border',
+												items: [
+													{
+														region: 'north',
+														id: 'savegridpanel'
+													}, // savepanel north
+													{
+														region: 'center',
+														id: 'savegridpreview'
+													} // savepanel center
+												] // savepanel items
 											} // savefilegrid region
 										] // biblio tab center items
 									}, // biblio tab center
