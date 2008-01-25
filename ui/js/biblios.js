@@ -161,17 +161,21 @@ biblios.app = function() {
 							{
 								title: 'Home',
 								closable: false,
-								autoScroll: true
+								autoScroll: true,
+								id: 'hometab'
 							}, // home tab
 							{
 								title: 'Biblio',
 								closable: false,
 								autoScroll: true,
 								layout: 'border',
+								id: 'bibliotab',
 								items: [
 									{
 										region: 'center',
-										layout: 'border',
+										layout: 'card',
+										activeItem: 0,
+										id: 'bibliocenter',
 										items: [
 													new Ext.grid.GridPanel({
 														region: 'center',
