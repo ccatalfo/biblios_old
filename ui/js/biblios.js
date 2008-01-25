@@ -303,6 +303,13 @@ biblios.app = function() {
 																	   {name: 'SearchTargets_id'}
 																  ])
 															})), // save grid store aka ds
+															sm: new Ext.grid.RowSelectionModel({
+																listeners: {
+																	rowselect: function(selmodel, rowindex, record) {
+
+																	}
+																} // selection listeners
+															}), // save grid selecion model
 															cm: new Ext.grid.ColumnModel([
 																{header: "Medium", dataIndex: 'Medkum', sortable: true},
 																{header: "Title", width: 200, dataIndex: 'Title', sortable: true},
