@@ -16,14 +16,115 @@ biblios.app = function() {
     // private variables
 	var viewport; 
 	var currSaveFile, currSaveFileName;
+	var savefiles = {}; // hash mapping save file id -> names
+	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
+
 
     // private functions
+	doSaveLocal = function doSaveLocal(savefileid) {
+		if( !savefileid ) {
+			if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
+				savefileid = 2; // Drafts
+		}
+		var savefilename = savefiles[savefileid];
+		showStatusMsg('Saving to '+ savefilename);
+		var rs, xml;
+		// if we have a record open in the marceditor, get its xml and save to drafts
+		if( Ext.get('editorpanel').isVisible() ) {
+			Ext.get('fixedfields_editor').mask();
+			Ext.get('varfields_editor').mask();
+			var progress = Ext.MessageBox.progress('Saving record');
+			var ff_ed = $("#fixedfields_editor");
+			var var_ed = UI.editor.editorDoc;
+			// transform edited record back into marcxml
+			xml = UI.editor.record.XMLString();
+			progress.updateProgress(.5, 'Extracing marcxml');
+			var recid = UI.editor.id;
+			// if we don't have a record id, add this record to the db first
+			if( recid == '' ) {
+				if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
+				var data = searchgrid.getSelections()[0].data;
+				var id = searchgrid.getSelections()[0].id;
+				progress.updateProgress(.6, 'Retrieving record from server');
+				recid = addRecordFromSearch(id, data, savefileid);
+				if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
+			}
+			else { // recid isn't empty so we've already saved this record, just update it
+				try {
+					var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
+					if( record.marcflavour == 'marc21' ) {
+						record.title = UI.editor.record.getValue('245', 'a');
+						record.author = UI.editor.record.getValue('100', 'a');
+						record.publisher = UI.editor.record.getValue('260', 'b');
+						record.dateofpub = UI.editor.record.getValue('260', 'c');
+					}
+					record.xml = xml;
+					record.Savefiles_id = savefileid;
+					record.status = 'edited';
+					record.date_modified = new Date();
+					record.save();
+					if(debug) { 
+						console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
+				}
+					progress.updateProgress(1, 'Saving record to local database');
+				} catch(ex) {
+						Ext.MessageBox.alert('Database error',ex.message);
+				}
+			}
+			progress.hide();
+			Ext.get('fixedfields_editor').unmask();
+			Ext.get('varfields_editor').unmask();
+			return true;
+		} // save record from marc editor
+		// if we're picking from the savefile grid 
+		else if( (Ext.get('savegrid').isVisible() ) ) {
+			var grid = Ext.ComponentMgr.get( 'savegrid' );
+			var ds = grid.store;
+			var sel = grid.getSelectionModel().getSelections();
+			// update the record(s) based on current selection
+			for( var i = 0; i < sel.length; i++) {
+				var id = sel[i].data.Id;
+				try {
+					var record = DB.Records.select('Records.rowid=?',[id]).getOne();
+					record.status = 'edited';
+					record.date_modified = new Date().toString();
+					record.Savefiles_id = savefileid;
+					record.save();
+					if(debug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
+				}
+				catch(ex) {
+					Ext.MessageBox.alert("Database error", ex.message);
+				}
+			}
+		}
+		else if( Ext.get('searchgrid').isVisible() ) {
+			var grid = Ext.ComponentMgr.get( 'searchgrid' );
+			var ds = grid.store;
+			var sel = grid.getSelectionModel().getSelections();
+			for( var i = 0; i < sel.length; i++) {
+				var id = sel[i].id;
+				var data = sel[i].data;
+				addRecordFromSearch(id, data, savefileid);
+			}
+		}
+		showStatusMsg("Record(s) saved to "+savefilename);
+		return true;
+	}
+	getSaveFileNames : function getSaveFileNames() {
+	var savefilenames = new Array();
+	DB.Savefiles.select().each( function(savefile) {
+		var o = {id: savefile.rowid, name: savefile.name};
+		savefilenames.push( o );
+		savefiles[ savefile.rowid ] = savefile.name;
+	});
+	return savefilenames;
+}
 	displaySearchView : function displaySearchView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(0);
 	}
 
 	displaySaveFile : function displaySaveFile(id) {
-		Ext.getCmp('savegrid').store.load({db: db, selectSql: 'select * from Records where Savefiles_id = '+id});
+		Ext.getCmp('savegrid').store.load({db: db, selectSql: savefileSelectSql + ' where Savefiles_id = '+id});
 	}
 
 	displaySaveView: function displaySaveView() {
@@ -315,6 +416,8 @@ biblios.app = function() {
 												width: 500,
 												items: [
 													new Ext.grid.GridPanel({
+														enableDragDrop: true,
+														ddGroup: 'RecordDrop',
 														region: 'center',
 														height: 300,
 														width: 300,
@@ -411,6 +514,8 @@ biblios.app = function() {
 														new Ext.grid.GridPanel({
 															region: 'center',
 															id: 'savegrid',
+															enableDragDrop: true,
+															ddGroup: 'RecordDrop',
 															height: 300,
 															store: (ds = new Ext.data.Store({
 																proxy: new Ext.data.GoogleGearsProxy(),
@@ -502,7 +607,16 @@ biblios.app = function() {
 													ddGroup: 'RecordDrop',
 													rootVisible: false,
 													lines: false,
-													root: createFolderList() // create root and all children
+													root: createFolderList(), // create root and all children
+													listeners: {
+														beforenodedrop: function(e) {
+															var sel = e.data.selections;
+															var droppedsavefileid = e.target.attributes.savefileid;
+															doSaveLocal(droppedsavefileid);
+
+
+														} // beforenodedrop
+													},
 												}) // resources treepanel with treeeditor applied
 										] // resources panel items
 									},// biblio tab west
@@ -523,6 +637,7 @@ biblios.app = function() {
 				] // viewport items
 			}); // viewport constructor
 			
+		getSaveFileNames(); // set up hash of save file id->names
 		alert('Application successfully initialized');
         }
     };

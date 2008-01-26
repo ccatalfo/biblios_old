@@ -20,7 +20,7 @@ function doSaveLocal(savefileid) {
 		if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
 			savefileid = 2; // Drafts
     }
-	var savefilename = UI.save.savefile[savefileid];
+	var savefilename = savefiles[savefileid];
 	showStatusMsg('Saving to '+ savefilename);
     var rs, xml;
     // if we have a record open in the marceditor, get its xml and save to drafts
