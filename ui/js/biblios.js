@@ -14,6 +14,7 @@ biblios.app = function() {
     // do NOT access DOM from here; elements don't exist yet
  
     // private variables
+	var debug = 1;
 	var viewport; 
 	var currSaveFile, currSaveFileName;
 	var savefiles = {}; // hash mapping save file id -> names
@@ -372,13 +373,17 @@ biblios.app = function() {
 				items: [
 					{
 						region: 'north',
+						height: 60,
 						layout: 'border',
 						items: [
 							{
-								region: 'center'
+								region: 'center',
+								id: 'searchformpanel',
+								contentEl: 'searchform'
 							},
 							{
-								region: 'west'
+								region: 'west',
+								html: '<img src="ui/images/biblios-logo.gif"/>'
 							},
 							{
 								region: 'east',
