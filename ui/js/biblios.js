@@ -15,7 +15,33 @@ biblios.app = function() {
  
     // private variables
 	var viewport; 
+	var currSaveFile, currSaveFileName;
+
     // private functions
+	displaySaveFile : function displaySaveFile(id) {
+		Ext.getCmp('savegrid').store.load({db: db, selectSql: 'select * from Records where Savefiles_id = '+id});
+	}
+
+	displaySaveView: function displaySaveView() {
+		Ext.getCmp('bibliocenter').layout.setActiveItem(2);
+	}
+	
+	showStatusMsg : function showStatusMsg(msg) {
+	$('#status').css('display', 'block');
+	$('#status').empty();
+	if( $("#status").length == 0 ) {
+		$("#folder-list").append("<div id='status'></div>");
+	}
+	if( $("#status").text() == msg) {
+		// don't show this same status message twice
+		return false;
+	}
+	else {
+		$("#status").append(msg);
+		//$("#status").SlideInLeft(1000);
+		//$("#status").SlideOutLeft(2000);
+	}
+}
 	updateSearchTargetFolders: function updateSearchTargetFolders() {
 	var searchRoot = Ext.ComponentMgr.get('searchRoot');
 
@@ -180,12 +206,12 @@ biblios.app = function() {
         current_root.appendChild(newnode);
         newnode.on('click', function(n) {
 			showStatusMsg('Displaying ' + n.attributes.id);
-			UI.currSaveFile = n.attributes.savefileid;
-			UI.currSaveFileName = n.text;
+			currSaveFile = n.attributes.savefileid;
+			currSaveFileName = n.text;
             displaySaveView();
-            folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
-            displaySaveFile(n.attributes.savefileid, n.text); 
-			clearStatusMsg();
+            Ext.getCmp('resourcesTree').getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
+            displaySaveFile(n.attributes.savefileid); 
+			//clearStatusMsg();
         });
         // setup dropnode for Trash
         if( name == 'Trash' ) {
@@ -250,7 +276,8 @@ biblios.app = function() {
 								region: 'west'
 							},
 							{
-								region: 'east'
+								region: 'east',
+								html: '<div id="status"></div>'
 							}
 						] // north region items
 					}, // viewport north region
@@ -462,13 +489,14 @@ biblios.app = function() {
 										layout: 'border',
 										items: [
 												new Ext.tree.TreePanel({
+													id: 'resourcesTree',
 													region: 'center',
 													animate: true,
 													enableDD: true,
 													ddGroup: 'RecordDrop',
 													rootVisible: false,
 													lines: false,
-													root: createFolderList()
+													root: createFolderList() // create root and all children
 												}) // resources treepanel with treeeditor applied
 										] // resources panel items
 									},// biblio tab west
