@@ -18,6 +18,10 @@ biblios.app = function() {
 	var currSaveFile, currSaveFileName;
 
     // private functions
+	displaySearchView : function displaySearchView() {
+		Ext.getCmp('bibliocenter').layout.setActiveItem(0);
+	}
+
 	displaySaveFile : function displaySaveFile(id) {
 		Ext.getCmp('savegrid').store.load({db: db, selectSql: 'select * from Records where Savefiles_id = '+id});
 	}
