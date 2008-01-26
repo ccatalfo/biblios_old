@@ -827,21 +827,6 @@ function createSaveFileFolders(parentid) {
 
 */
 function createFolderList() {
-    $("#folder-list").append("<div id='tree-wrapper'><div id='tree-div'/></div>");
-
-    // tree for servers to search 
-   folderTree = new Ext.tree.TreePanel('tree-div', {
-    animate:true,
-    enableDD:true,
-    ddGroup: 'RecordDrop',
-    containerScroll: true,
-    lines:false,
-    rootVisible:false
-    });
-    var sm = folderTree.getSelectionModel();
-    treeEditor = new Ext.tree.TreeEditor(folderTree, {
-    autosize:true
-    });
     folderRoot = new Ext.tree.TreeNode({
         allowDrag:false,
         allowDrop:false,
@@ -1098,6 +1083,7 @@ function createFolderList() {
 		}
 		 return true;
     });
+	return folderRoot;
 }
 
 function createFacetFolder() {
