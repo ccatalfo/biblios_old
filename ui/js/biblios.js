@@ -375,6 +375,7 @@ biblios.app = function() {
 													{
 														region: 'south',
 														id: 'searchpreview',
+														title: 'Preview',
 														split: true,
 														collapsible: true,
 														html: 'search preview',
@@ -473,6 +474,7 @@ biblios.app = function() {
 													{ 													
 														region: 'south',
 														id: 'savegridpreview',
+														title: 'Preview',
 														split: true,
 														collapsible: true,
 														height: 150,
