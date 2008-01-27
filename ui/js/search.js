@@ -1,18 +1,15 @@
 function doSearch(form) {
 	if( $('#searchloc').val() == 'All' ) {
 		doPazPar2Search();
-		doLocalFolderSearch();
-		doVendorSearch();
+		//doLocalFolderSearch();
 	}
 	else if( $('#searchloc').val() == 'SearchTargets' ) {
 		doPazPar2Search();
 	}
 	else if( $('#searchloc').val() == 'LocalFolders') {
-		doLocalFolderSearch();
+		//doLocalFolderSearch();
 	}
-	else if( $('#searchloc').val() == 'Vendors' ) {
-		doVendorSearch();
-	}
+	return false;
 }
 
 function doLocalFolderSearch() {
@@ -150,7 +147,7 @@ function pazPar2Error(data) {
 
 function doPazPar2Search() {
 	//get rid of old facets from previous searches
-	if( UI.search.currQuery != '') {
+	if( biblios.app.currQuery != '') {
 		removeFacets();
 	}
 	var query = $("#query").val();
@@ -163,11 +160,11 @@ function doPazPar2Search() {
 		searchquery = searchtype + '="' + query + '"';
 	}
 	// save this query
-	UI.search.currQuery = searchquery;
+	biblios.app.currQuery = searchquery;
 	// reset search ds's proxy url to get rid of old sort params
-	searchds.proxy.conn.url = paz.pz2String + '?command=show&session=' + paz.sessionID;
+	Ext.getCmp('searchgrid').store.proxy.conn.url = paz.pz2String + '?command=show&session=' + paz.sessionID;
     paz.search( searchquery );
-    displaySearchView();
+    biblios.app.displaySearchView();
 }
 
 function getRemoteRecord(id, loc, callback) {
@@ -239,7 +236,7 @@ function displaySearchFacets(data, type, searchtype) {
 					+ data[type][i].freq
 					+ ')</span>'
 					+ '<br/>';
-		if( UI.search.limitby[data[type][i].name] ) {
+		if( searchLimits[data[type][i].name] ) {
 			newnode = new Ext.tree.TreeNode({
 				leaf: true,
 				name: data[type][i].name,
@@ -262,10 +259,10 @@ function displaySearchFacets(data, type, searchtype) {
 		root.appendChild(newnode);
 		newnode.on('checkchange', function(node, checked) {
 			if( checked ) {
-				UI.search.limitby[node.attributes.name] = node.attributes.searchtype;
+				searchLimits[node.attributes.name] = node.attributes.searchtype;
 			}
 			else {
-				delete UI.search.limitby[node.attributes.name];
+				delete searchLimits[node.attributes.name];
 			}
 			limitSearch();	
 		}); // checkchange handler
@@ -354,11 +351,11 @@ function removeFacets() {
 
 function limitSearch() {
 	// start w/ original query and build from there
-	var query = UI.search.currQuery;
-	for( name in UI.search.limitby ) {
-		query += ' and ' + UI.search.limitby[name] + '="' + name + '"';
+	var query = biblios.app.currQuery;
+	for( name in searchLimits ) {
+		query += ' and ' + searchLimits[name] + '="' + name + '"';
 	}
 	paz.search(query);
 	paz.show();
-	displaySearchView();
+	biblios.app.displaySearchView();
 }

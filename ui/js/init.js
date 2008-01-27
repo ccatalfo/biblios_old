@@ -91,6 +91,8 @@ var paz = initializePazPar2(pazpar2url, {
 	}
 	});
 var pazShowUrl = pazpar2url + '?session=' + paz.sessionID + '&command=show';
+var searchLimits = {};
+var currQuery;
 
 
 /*

@@ -16,9 +16,11 @@ biblios.app = function() {
     // private variables
 	var debug = 1;
 	var viewport; 
+	// save file vars
 	var currSaveFile, currSaveFileName;
 	var savefiles = {}; // hash mapping save file id -> names
 	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
+	// facets vars
 
 
     // private functions
@@ -210,7 +212,7 @@ biblios.app = function() {
 	}
 	searchRoot.on('click', function(n) {
 		displaySearchView();
-        folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
+        //folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
 	});
 	// expand searchRoot if it's been rendered
 	if( searchRoot.rendered == true ) {
@@ -365,8 +367,16 @@ biblios.app = function() {
     return {
         // public properties, e.g. strings to translate
 		viewport : this.viewport,
+		currQuery : this.currQuery,
 
         // public methods
+		displaySearchView : function() {
+			displaySearchView();
+		},
+		displaySaveView : function() {
+			displaySaveView();
+		},
+
         init: function() {
             this.viewport = new Ext.Viewport({
 				layout: 'border',
@@ -608,6 +618,7 @@ biblios.app = function() {
 													id: 'resourcesTree',
 													region: 'center',
 													animate: true,
+													expanded: true,
 													enableDD: true,
 													ddGroup: 'RecordDrop',
 													rootVisible: false,
@@ -642,6 +653,7 @@ biblios.app = function() {
 				] // viewport items
 			}); // viewport constructor
 			
+		var form = new Ext.form.BasicForm('searchform');
 		getSaveFileNames(); // set up hash of save file id->names
 		alert('Application successfully initialized');
         }
