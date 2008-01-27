@@ -16,6 +16,7 @@ biblios.app = function() {
     // private variables
 	var debug = 1;
 	var viewport; 
+	var viewState = '';
 	// save file vars
 	var currSaveFile, currSaveFileName;
 	var savefiles = {}; // hash mapping save file id -> names
@@ -33,7 +34,7 @@ biblios.app = function() {
 		showStatusMsg('Saving to '+ savefilename);
 		var rs, xml;
 		// if we have a record open in the marceditor, get its xml and save to drafts
-		if( Ext.get('editorpanel').isVisible() ) {
+		if( openState == 'editorPanel' ) {
 			Ext.get('fixedfields_editor').mask();
 			Ext.get('varfields_editor').mask();
 			var progress = Ext.MessageBox.progress('Saving record');
@@ -46,8 +47,8 @@ biblios.app = function() {
 			// if we don't have a record id, add this record to the db first
 			if( recid == '' ) {
 				if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
-				var data = searchgrid.getSelections()[0].data;
-				var id = searchgrid.getSelections()[0].id;
+				var data = Ext.getCmp('searchgrid').getSelections()[0].data;
+				var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 				progress.updateProgress(.6, 'Retrieving record from server');
 				recid = addRecordFromSearch(id, data, savefileid);
 				if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
@@ -80,8 +81,8 @@ biblios.app = function() {
 			return true;
 		} // save record from marc editor
 		// if we're picking from the savefile grid 
-		else if( (Ext.get('savegrid').isVisible() ) ) {
-			var grid = Ext.ComponentMgr.get( 'savegrid' );
+		else if( openState == 'savegrid' ) {
+			var grid = Ext.getCmp( 'savegrid' );
 			var ds = grid.store;
 			var sel = grid.getSelectionModel().getSelections();
 			// update the record(s) based on current selection
@@ -100,8 +101,8 @@ biblios.app = function() {
 				}
 			}
 		}
-		else if( Ext.get('searchgrid').isVisible() ) {
-			var grid = Ext.ComponentMgr.get( 'searchgrid' );
+		else if( openState == 'searchgrid' ) {
+			var grid = Ext.getCmp( 'searchgrid' );
 			var ds = grid.store;
 			var sel = grid.getSelectionModel().getSelections();
 			for( var i = 0; i < sel.length; i++) {
@@ -124,10 +125,12 @@ biblios.app = function() {
 }
 	displaySearchView : function displaySearchView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(0);
+		openState = 'searchgrid';
 	}
 
 	displaySaveFile : function displaySaveFile(id) {
 		Ext.getCmp('savegrid').store.load({db: db, selectSql: savefileSelectSql + ' where Savefiles_id = '+id});
+		openState = 'savegrid';
 	}
 
 	displaySaveView: function displaySaveView() {
@@ -368,6 +371,7 @@ biblios.app = function() {
         // public properties, e.g. strings to translate
 		viewport : this.viewport,
 		currQuery : this.currQuery,
+		savefiles : this.savefiles,
 
         // public methods
 		displaySearchView : function() {
