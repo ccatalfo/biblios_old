@@ -463,8 +463,25 @@ biblios.app = function() {
 														sm: new Ext.grid.RowSelectionModel({
 															listeners: {
 																rowselect: function(selmodel, rowindex, record) {
-
-																}
+																	var id = record.id;
+																	// get the marcxml for this record and send to preview()
+																	var marcxml = '';
+																	var xml = getPazRecord(
+																		id,
+																		// callback function for when pazpar2 returns record data
+																		function(data, o) {  
+																			var xml = xslTransform.serialize(data); 
+																			recordCache[o.id] = xml; 
+																			Ext.getCmp('searchpreview').el.mask();
+																			$('#searchprevrecord').getTransform(marcxsl, xml);
+																			Ext.getCmp('searchpreview').el.unmask();
+																		},
+																		// json literal containing hash of desired params in callback
+																		{
+																			id: id
+																		}
+																	);
+																} // search grid row select handler
 															} // selection listeners
 														}), // search grid selecion model
 														cm : new Ext.grid.ColumnModel([
@@ -500,7 +517,7 @@ biblios.app = function() {
 														title: 'Preview',
 														split: true,
 														collapsible: true,
-														html: 'search preview',
+														html: 'search preview<div id="searchselect"></div><div id="searchprevrecord"></div>',
 														height: 150
 													} // search preview 
 												] // search results items
@@ -602,7 +619,7 @@ biblios.app = function() {
 														split: true,
 														collapsible: true,
 														height: 150,
-														html: '<p>save preview</p>',
+														html: '<p>save preview</p><div id="select"></div><div id="saveprevrecord"></div>',
 													} // savepanel south
 												] // savepanel items
 											} // savefilegrid region 
