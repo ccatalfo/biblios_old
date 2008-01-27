@@ -578,12 +578,16 @@ biblios.app = function() {
 															sm: new Ext.grid.RowSelectionModel({
 																listeners: {
 																	rowselect: function(selmodel, rowindex, record) {
-
+																		var id = record.data.Id;
+																		var xml = getLocalXml(id);
+																		Ext.getCmp('savepreview').el.mask();
+																		$('#saveprevrecord').getTransform(marcxsl, xml);
+																		Ext.getCmp('savepreview').el.unmask();
 																	}
 																} // selection listeners
 															}), // save grid selecion model
 															cm: new Ext.grid.ColumnModel([
-																{header: "Medium", dataIndex: 'Medkum', sortable: true},
+																{header: "Medium", dataIndex: 'Medium', sortable: true},
 																{header: "Title", width: 200, dataIndex: 'Title', sortable: true},
 																{header: "Author", width: 160, dataIndex: 'Author', sortable: true},
 																{header: "Publisher", width: 130, dataIndex: 'Publisher', sortable: true},
@@ -614,7 +618,7 @@ biblios.app = function() {
 													}), // savepanel center
 													{ 													
 														region: 'south',
-														id: 'savegridpreview',
+														id: 'savepreview',
 														title: 'Preview',
 														split: true,
 														collapsible: true,
