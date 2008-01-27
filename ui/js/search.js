@@ -41,7 +41,7 @@ paz = new pz2({
 					"oninit": options.initCallback || function() {},
 					"onping": options.pingCallback || function(){},
 					"onshow": function(data){ 
-						searchds.reload(); 
+						Ext.getCmp('searchgrid').store.reload(); 
 						if(data.activeclients == 0 ) {
 							// remove 'Searching' status msg
 							clearStatusMsg();
