@@ -536,7 +536,7 @@ biblios.app = function() {
 															displayInfo: true,
 															displayMsg: 'Displaying records {0} - {1} of {2}',
 															emptyMsg: 'No records to display',
-															items: ( gridToolbar = [
+															items: [
 																{
 																	id: 'newrecordbutton',
 																	icon: libPath + 'ui/images/document-new.png',
@@ -553,20 +553,11 @@ biblios.app = function() {
 																		text: 'Edit',
 																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
 																		handler: function() {
-																				showStatusMsg('Opening record...');
-																			// see which grid is visible at the moment and get selected record from it
-																			if( openState == 'searchgrid' ) {
-																				var id = Ext.getCmp('searchgrid').getSelections()[0].id;
-																				var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
-																				getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize(data, 'editorone') ) });
-																			}
-																			else if( openState == 'savegrid' ) {
-																				var id = Ext.getCmp('savegrid').getSelections()[0].data.Id;
-																				var xml = getLocalXml(id);
-																				UI.editor.id = id;
-																				openRecord(  xml, 'editorone' );
-																			}
-																		//	clearStatusMsg();
+																			var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+																			var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
+																			getRemoteRecord(id, loc, function(data) { 
+																				openRecord( xslTransform.serialize(data), 'editorone' ) 
+																			});
 																		}
 																	},
 																	{   
@@ -579,7 +570,6 @@ biblios.app = function() {
 																		}
 																	}
 																] // grid toolbar items
-															) // grid toolbar var to use in save grid
 														}) // search grid paging toolbar
 													}), // search results grid panel
 													{
@@ -758,7 +748,40 @@ biblios.app = function() {
 																displayInfo: true,
 																displayMsg: 'Displaying records {0} - {1} of {2}',
 																emptyMsg: 'No records to display',
-																items: gridToolbar
+																items: [
+																{
+																	id: 'newrecordbutton',
+																	icon: libPath + 'ui/images/document-new.png',
+																	cls: 'x-btn-text-icon bmenu',
+																	text: 'New',
+																	menu: {
+																		id: 'newRecordMenu',
+																		items: getNewRecordMenu()
+																	}
+																},
+																{
+																		cls: 'x-btn-text-icon',
+																		icon: libPath + 'ui/images/document-open.png',
+																		text: 'Edit',
+																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
+																		handler: function() {
+																			var id = Ext.getCmp('savegrid').store.data.get(rowIndex).data.Id;
+																			UI.editor.id = id;
+																			showStatusMsg('Opening record...');
+																			var xml = getLocalXml(id);
+																			openRecord( xml, 'editorone');
+																		}
+																	},
+																	{   
+																		cls: 'x-btn-text-icon bmenu', // icon and text class
+																		icon: libPath + 'ui/images/network-receive.png',
+																		text: 'Export',
+																		menu: {
+																			id: 'exportMenu',
+																			items: getExportMenuItems()
+																		}
+																	}
+																]
 															}) // save grid paging toolbar
 													}), // savepanel center
 													{ 													
