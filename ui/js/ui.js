@@ -1655,6 +1655,7 @@ function displaySaveView() {
 */
 function openRecord(xml, editorelem) {
 	// we need to display record view first since editors are lazily rendered
+	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
 	biblios.app.displayRecordView();
 	var ffed =	$('#'+editorelem).find(".ffeditor");

@@ -630,10 +630,10 @@ biblios.app = function() {
 																text: 'Cancel',
 																handler: function() {
 																	showStatusMsg('Cancelling record...');
-																	if( openState  == 'savegrid' ) {
+																	if( UI.lastWindowOpen  == 'savegrid' ) {
 																		biblios.app.displaySaveView();
 																	}
-																	else if( openState  == 'searchgrid' ) {
+																	else if( UI.lastWindowOpen  == 'searchgrid' ) {
 																		biblios.app.displaySearchView();
 																	}
 																	clearStatusMsg();
