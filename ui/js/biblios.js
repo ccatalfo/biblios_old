@@ -868,7 +868,8 @@ biblios.app = function() {
 												title: 'Search Targets',
 											},
 											{
-												title: 'Send Targets'
+												title: 'Send Targets',
+												items: [createSendTargetGrid()]
 											},
 											{
 												title: 'Keyboard Shortcuts'

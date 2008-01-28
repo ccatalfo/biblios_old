@@ -205,82 +205,55 @@ function createSendTargetGrid() {
 			header: 'Name', 
 			dataIndex: 'name', 
 			sortable: true,
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{	
 			header: 'Location Name', 
 			dataIndex: 'location', 
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'Url', 
 			dataIndex: 'url', 
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'User', 
 			dataIndex: 'user', 
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'Password', 
 			dataIndex: 'password', 
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'Plugin Location',
 			dataIndex: 'pluginlocation',
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'Plugin Init',
 			dataIndex: 'plugininit',
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'Enabled', 
 			dataIndex: 'enabled', 
 			renderer: formatBoolean,
-			editor: new Ext.grid.GridEditor(new Ext.form.Checkbox())
+			editor: new Ext.form.Checkbox()
 		}
 	]);
 	cm.defaultSortable = true;
 
-	var sendtargetgrid = new Ext.grid.EditorGrid('sendtargetgrid', {
+	var sendtargetgrid = new Ext.grid.EditorGridPanel({
 		id: 'sendtargetgrid',
 		ds: ds,
 		cm: cm,
 		autoHeight: true,
 		autoWidth: true,
-		autoExpandColumn: 1
-	});
-	sendtargetgrid.on('afteredit', function(e) {
-		var id = e.record.data.id;
-		var field = e.field;
-		var value = e.value;
-		if( typeof(value) == 'boolean' ) {
-			if( value == true ) {
-				value = 1;
-			}
-			else if( value == false ) {
-				value = 0;
-			}
-		}
-		var rs;
-		try {
-			rs = db.execute('update SendTargets set '+field+' = ? where rowid = ?', [value, id]);
-			rs.close();
-		}
-		catch(ex) {
-			Ext.MessageBox.alert('Error', ex.message);
-		}
-	});
-	Ext.ComponentMgr.register(sendtargetgrid);
-	sendtargetgrid.render();
-	ds.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
-
-	var gridHeader = sendtargetgrid.getView().getHeaderPanel(true);
-	var tb = new Ext.Toolbar(gridHeader, [
+		autoExpandColumn: 1,
+		tbar: [
 		{
 			text: 'Add Send Target',
 			handler: function() {
@@ -325,8 +298,33 @@ function createSendTargetGrid() {
 				Ext.ComponentMgr.get('sendtargetgrid').dataSource.reload();
 			}
 		}
-	]);
+	] // send target grid toolbar
+	});
+	sendtargetgrid.on('afteredit', function(e) {
+		var id = e.record.data.id;
+		var field = e.field;
+		var value = e.value;
+		if( typeof(value) == 'boolean' ) {
+			if( value == true ) {
+				value = 1;
+			}
+			else if( value == false ) {
+				value = 0;
+			}
+		}
+		var rs;
+		try {
+			rs = db.execute('update SendTargets set '+field+' = ? where rowid = ?', [value, id]);
+			rs.close();
+		}
+		catch(ex) {
+			Ext.MessageBox.alert('Error', ex.message);
+		}
+	});
+	ds.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
+	return sendtargetgrid;
 }
+
 function createTargetGrid() {
 	var Target = Ext.data.Record.create([
 		{name: 'rowid'},
