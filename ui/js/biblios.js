@@ -841,7 +841,42 @@ biblios.app = function() {
 
 									}  // biblio tab east
 								] // biblio tab items
-							} // biblio tab config
+							}, // biblio tab config
+							{
+								title: 'Options',
+								closable: false,
+								autoScroll: true,
+								layout: 'border',
+								id: 'optionstab',
+								items: [
+									new Ext.TabPanel({
+										region: 'center',
+										items: [
+											{
+												title: 'Setup'
+
+											}, // setup tab
+											{
+												title: 'Macros',
+												html: 'Coming soon'
+											}, // macros
+											{
+												title: 'Plugins',
+												html: 'Coming soon'
+											},
+											{
+												title: 'Search Targets',
+											},
+											{
+												title: 'Send Targets'
+											},
+											{
+												title: 'Keyboard Shortcuts'
+											}
+										] // options inner tab panel
+									})
+								] // options tab items
+							} // options tab config
 						] // center items of tabpanel
 					}) // tabpanel constructor
 				] // viewport items
