@@ -599,6 +599,63 @@ biblios.app = function() {
 														split: true,
 														height: 300,
 														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
+														tbar: (editorToolbar = [
+															{
+																cls: 'x-btn-text-icon bmenu', // icon and text class
+																icon: libPath + 'ui/images/document-save.png',
+																text: 'Save',
+																menu: {
+																	id: 'saveMenu',
+																	items: getSaveFileMenuItems()
+																}
+															},
+															{
+																cls: 'x-btn-text-icon bmenu', // icon and text class
+																icon: libPath + 'ui/images/document-save.png',
+																text: 'Send',
+																menu: {
+																	id: 'sendMenu',
+																	items: getSendFileMenuItems()
+																}
+															},
+
+															{   
+																cls: 'x-btn-text-icon', // icon and text class
+																icon: libPath + 'ui/images/network-receive.png',
+																text: 'Export',
+																handler: doDownloadRecords
+															},
+															{
+																cls: 'x-btn-text-icon', // icon and text class
+																icon: libPath + 'ui/images/process-stop.png',
+																text: 'Cancel',
+																handler: function() {
+																	showStatusMsg('Cancelling record...');
+																	if( openState  == 'savegrid' ) {
+																		biblios.app.displaySaveView();
+																	}
+																	else if( openState  == 'searchgrid' ) {
+																		biblios.app.displaySearchView();
+																	}
+																	clearStatusMsg();
+																}
+															},
+															{
+																cls: 'x-btn-text-icon', // icon and text class
+																icon: libPath + 'ui/images/edit-copy.png',
+																text: 'Merge',
+																handler: doMerge,
+																disabled: true
+															},
+															{
+																cls: 'x-btn-text-icon', // icon and text class
+																icon: libPath + 'ui/images/preferences-system.png',
+																text: 'Options',
+																handler: doRecordOptions,
+																disabled: true
+															}
+
+														]) // editorone toolbar
 													}, // editor north
 													{
 														region: 'center',
@@ -606,7 +663,8 @@ biblios.app = function() {
 														autoScroll: true,
 														split: true,
 														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
-														height: 150
+														height: 50,
+														tbar: editorToolbar
 													} // editor center
 												] // editor items
 											}, // editor region

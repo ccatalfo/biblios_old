@@ -1709,35 +1709,14 @@ function doDownloadRecords() {
         var xml ='';
         var recsep = "<!-- end of record -->";
         showStatusMsg("<p>Downloading records</p>");
-        var currtab = tabs.getActiveTab();
-        if( Ext.get('savegrid').isVisible() ) {
-            var grid = Ext.ComponentMgr.get('save-file-grid');
-            var ds = grid.getDataSource();
+        if( openState == 'savegrid' ) {
+            var grid = Ext.getCmp('savegrid');
+            var ds = grid.store;
             var sel = grid.getSelectionModel().getSelections()
             for( var i = 0; i < sel.length; i++) {
                 var id = sel[i].data.Id;
                 try {
-                  var rs = db.execute('select xml from Records where id =?', [id]);
-                  while( rs.isValidRow() ) {
-                    xml += rs.fieldByName('xml');
-                    xml += recsep;
-                    rs.next();
-                  }
-                }
-                catch(ex) {
-                  console.error('db error: ' + ex.message);
-                }
-            }
-        rs.close();
-        }
-        else if( Ext.get('searchgrid').isVisible() ) {
-            var grid = Ext.ComponentMgr.get('search-grid');
-            var ds = grid.getDataSource();
-            var sel = grid.getSelectionModel().getSelections()
-            for( var i = 0; i < sel.length; i++) {
-                var id = sel[i].data.Id;
-                try {
-                  var rs = db.execute('select xml from Records where id=?', [id]);
+                  var rs = db.execute('select xml from Records where Records.id =?', [id]);
                   while( rs.isValidRow() ) {
                     xml += rs.fieldByName('xml');
                     xml += recsep;
@@ -1751,9 +1730,7 @@ function doDownloadRecords() {
         rs.close();
         }
         // else if we have an open record in the editor
-    else if( Ext.get('marceditor').isVisible() ) {
-        var ff_ed = $("#fixedfields_editor");
-        var var_ed = UI.editor.doc;
+    else if( openState == 'marceditor' ) {
         // transform edited record back into marcxml
         if( marcFlavor == 'marc21' ) {
 			xml = UI.editor.record.XMLString();
@@ -1761,7 +1738,7 @@ function doDownloadRecords() {
         else if( marcFlavor == 'unimarc' ) {
             Ext.MessageBox.alert("Unimarc support not yet implemented");
         }
-        }
+	}
     dlg = new Ext.BasicDialog("newrecord-dlg", {
         height: 200,
         width: 400,
