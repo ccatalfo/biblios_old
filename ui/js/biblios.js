@@ -869,13 +869,134 @@ biblios.app = function() {
 											},
 											{
 												title: 'Send Targets',
-												items: [createSendTargetGrid()]
-											},
+												height: 300,
+												width: 300,
+												items: [
+													new Ext.grid.EditorGridPanel({
+														id: 'sendtargetgrid',
+														ds: new Ext.data.Store({
+															proxy: new Ext.data.GoogleGearsProxy(new Array()),
+															reader: new Ext.data.ArrayReader({
+																record: 'name'
+															}, Ext.data.Record.create([
+																{name: 'rowid'},
+																{name: 'name', type: 'string'},
+																{name: 'location', type: 'string'},
+																{name: 'url', type: 'string'},
+																{name: 'user', type: 'string'},
+																{name: 'password', type: 'string',},
+																{name: 'pluginlocation', type: 'string',},
+																{name: 'pluginit', type: 'string',},
+																{name: 'enabled', type: 'bool'}
+															])
+															),
+															remoteSort: false,
+															sortInfo: {
+																field: 'name',
+																direction: 'ASC'
+															}
+														}), // send target grid data store
+														cm: new Ext.grid.ColumnModel([
+															{
+																header: 'Name', 
+																dataIndex: 'name', 
+																sortable: true,
+																editor: new Ext.form.TextField()
+															},
+															{	
+																header: 'Location Name', 
+																dataIndex: 'location', 
+																editor: new Ext.form.TextField()
+															},
+															{
+																header: 'Url', 
+																dataIndex: 'url', 
+																editor: new Ext.form.TextField()
+															},
+															{
+																header: 'User', 
+																dataIndex: 'user', 
+																editor: new Ext.form.TextField()
+															},
+															{
+																header: 'Password', 
+																dataIndex: 'password', 
+																editor: new Ext.form.TextField()
+															},
+															{
+																header: 'Plugin Location',
+																dataIndex: 'pluginlocation',
+																editor: new Ext.form.TextField()
+															},
+															{
+																header: 'Plugin Init',
+																dataIndex: 'plugininit',
+																editor: new Ext.form.TextField()
+															},
+															{
+																header: 'Enabled', 
+																dataIndex: 'enabled', 
+																renderer: function (value) {
+																	return value ? 'Yes' : 'No';
+																},
+																editor: new Ext.form.Checkbox()
+															}
+														]), // send target column model
+														tbar: [
+															{
+																text: 'Add Send Target',
+																handler: function() {
+																	// insert new target into db so we get it's id
+																	var rs;
+																	try {
+																		rs = db.execute('insert into SendTargets (name) values ("")');
+																		rs.close();
+																	}
+																	catch(ex) {
+																		Ext.MessageBox.alert('Error', ex.message);
+																	}
+																	var t = new SendTarget({
+																		id: db.lastInsertRowId,
+																		name: '',
+																		location: '',
+																		url: '',
+																		user: '',
+																		password: '',
+																		pluginlocation: '',
+																		plugininit: '',
+																		enabled: 0
+																	});
+																	var sendtargetgrid = Ext.ComponentMgr.get('sendtargetgrid');
+																	var ds = sendtargetgrid.dataSource;
+																	sendtargetgrid.stopEditing();
+																	ds.insert(0, t);
+																	sendtargetgrid.startEditing(0, 0);
+																}
+															}, // sendtarget add target tb button
+															{
+																text: 'Remove Target',
+																handler: function() {
+																	var record = Ext.ComponentMgr.get('sendtargetgrid').getSelectionModel().selection.record;
+																	try {
+																		var rs = db.execute('delete from SendTargets where SendTargets.rowid = ?', [record.data.rowid]);
+																		rs.close();
+																	}
+																	catch(ex) {
+																		Ext.MessageBox.alert('Error', ex.message);
+																	}
+																	Ext.ComponentMgr.get('sendtargetgrid').dataSource.reload();
+																}
+															} // send grid remove target tb button
+														] // send target grid toolbar
+													}) // sendtarget editorgridpanel constructor
+
+												] // send targets tab items
+											}, // send targets tab
 											{
 												title: 'Keyboard Shortcuts'
 											}
 										] // options inner tab panel
-									})
+									}) // Options tabpanel constructor
 								] // options tab items
 							} // options tab config
 						] // center items of tabpanel
