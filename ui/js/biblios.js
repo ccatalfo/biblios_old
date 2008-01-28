@@ -537,7 +537,42 @@ biblios.app = function() {
 															displayMsg: 'Displaying records {0} - {1} of {2}',
 															emptyMsg: 'No records to display',
 															items: [
-
+																{
+																	id: 'newrecordbutton',
+																	icon: libPath + 'ui/images/document-new.png',
+																	cls: 'x-btn-text-icon bmenu',
+																	text: 'New',
+																	handler: doNewRecord
+																},
+																{
+																		cls: 'x-btn-text-icon',
+																		icon: libPath + 'ui/images/document-open.png',
+																		text: 'Edit',
+																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
+																		handler: function() {
+																				showStatusMsg('Opening record...');
+																			// see which grid is visible at the moment and get selected record from it
+																			if( openState == 'searchgrid' ) {
+																				var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+																				var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
+																				getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize(data, 'editorone') ) });
+																			}
+																			else if( openState == 'savegrid' ) {
+																				var id = Ext.getCmp('savegrid').getSelections()[0].data.Id;
+																				var xml = getLocalXml(id);
+																				UI.editor.id = id;
+																				openRecord(  xml, 'editorone' );
+																			}
+																		//	clearStatusMsg();
+																		}
+																	},
+																	{
+																		text: 'Export',
+																		disabled: false,
+																		cls: 'x-btn-text-icon',
+																		icon: libPath + 'ui/images/network-receive.png',
+																		handler: doDownloadRecords 
+																	}
 															]
 														}) // search grid paging toolbar
 													}), // search results grid panel
@@ -659,10 +694,44 @@ biblios.app = function() {
 																displayMsg: 'Displaying records {0} - {1} of {2}',
 																emptyMsg: 'No records to display',
 																items: [
-
-																]
+																{
+																	id: 'newrecordbutton',
+																	icon: libPath + 'ui/images/document-new.png',
+																	cls: 'x-btn-text-icon bmenu',
+																	text: 'New',
+																	handler: doNewRecord
+																},
+																{
+																		cls: 'x-btn-text-icon',
+																		icon: libPath + 'ui/images/document-open.png',
+																		text: 'Edit',
+																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
+																		handler: function() {
+																				showStatusMsg('Opening record...');
+																			// see which grid is visible at the moment and get selected record from it
+																			if( openState == 'searchgrid' ) {
+																				var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+																				var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
+																				getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize(data, 'editorone') ) });
+																			}
+																			else if( openState == 'savegrid' ) {
+																				var id = Ext.getCmp('savegrid').getSelections()[0].data.Id;
+																				var xml = getLocalXml(id);
+																				UI.editor.id = id;
+																				openRecord(  xml, 'editorone' );
+																			}
+																		//	clearStatusMsg();
+																		}
+																	},
+																	{
+																		text: 'Export',
+																		disabled: false,
+																		cls: 'x-btn-text-icon',
+																		icon: libPath + 'ui/images/network-receive.png',
+																		handler: doDownloadRecords 
+																	}
+																] // save grid toolbar items
 															}) // save grid paging toolbar
-
 													}), // savepanel center
 													{ 													
 														region: 'south',
