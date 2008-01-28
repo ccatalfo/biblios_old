@@ -1164,7 +1164,8 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 		proxy: new Ext.data.HttpProxy(
 			{
 				url: kohaauthurl,
-				method: 'GET'
+				method: 'GET',
+				disableCaching: false
 			
 			}),
 		baseParams: {
@@ -1193,7 +1194,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 		loadingText: 'Searching...',
 		cls: 'authority-field',
 		lazyRender: false,
-		renderTo: $(subfield_text).get(0).id
+		applyTo: $(subfield_text).get(0).id
 	});
 	cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
 		combo.query = combo.combo.queryIndex + "=" + combo.query;
