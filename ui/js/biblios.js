@@ -588,7 +588,7 @@ biblios.app = function() {
 														title: 'Preview',
 														split: true,
 														collapsible: true,
-														html: 'search preview<div id="searchselect"></div><div id="searchprevrecord"></div>',
+														html: '<div id="searchselect"></div><div id="searchprevrecord"></div>',
 														height: 150
 													} // search preview 
 												] // search results items
@@ -768,7 +768,7 @@ biblios.app = function() {
 														split: true,
 														collapsible: true,
 														height: 150,
-														html: '<p>save preview</p><div id="select"></div><div id="saveprevrecord"></div>',
+														html: '<div id="select"></div><div id="saveprevrecord"></div>',
 													} // savepanel south
 												] // savepanel items
 											} // savefilegrid region 
