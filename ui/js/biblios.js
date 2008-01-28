@@ -516,8 +516,19 @@ biblios.app = function() {
 
 															},
 															rowdblclick: function(grid, rowindex, e) {
+																var id = grid.getSelections()[0].id;
+																var loc = grid.getSelections()[0].data.location;
+																getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize(data), 'editorone' ) }
+														);
 
-															}
+															},
+															keypress: function(e) {
+															  if( e.getKey() == Ext.EventObject.ENTER ) {
+																var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+																var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
+																  getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data), 'editorone' ) });
+																}	
+															} // on ENTER keypress
 														}, // search grid listeners
 														tbar: new Ext.PagingToolbar({
 															pageSize: 15,
