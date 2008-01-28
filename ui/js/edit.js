@@ -1192,7 +1192,8 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 		displayField: displayField,
 		loadingText: 'Searching...',
 		cls: 'authority-field',
-		lazyRender: true
+		lazyRender: false,
+		renderTo: $(subfield_text).get(0).id
 	});
 	cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
 		combo.query = combo.combo.queryIndex + "=" + combo.query;
@@ -1236,7 +1237,6 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 	cb.on('hide', function(cb, e) {
 	});
 	UI.editor.comboboxes.push(cb);
-	cb.applyTo($(subfield_text).get(0).id);
 	return true;
 }
 
