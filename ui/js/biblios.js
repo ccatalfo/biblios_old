@@ -630,12 +630,27 @@ biblios.app = function() {
 																{header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true},
 															]),
 															listeners: {
-																rowclick: function(grid, rowindex, e) {
+																rowclick: function(grid, rowIndex, e) {
 
 																},
-																rowdblclick: function(grid, rowindex, e) {
-
-																}
+																rowdblclick: function(grid, rowIndex, e) {
+																	var id = grid.store.data.get(rowIndex).data.Id;
+																	UI.editor.id = id;
+																	showStatusMsg('Opening record...');
+																	var xml = getLocalXml(id);
+																	openRecord( xml, 'editorone');
+																},// save grid row dbl click handler
+																keypress: function(e) {
+																	if( e.getKey() == Ext.EventObject.ENTER ) {
+																		var sel = Ext.getCmp('savegrid').getSelectionModel().getSelected();
+																		var id = sel.data.Id;
+																		UI.editor.id = id;
+																		var xml = getLocalXml(id);
+																		openRecord( xml, 'editorone' );
+																		showStatusMsg('Opening record...');
+																		//clearStatusMsg();
+																	} // ENTER
+																} // savegrid keypress
 															}, // save grid listeners
 															tbar: new Ext.PagingToolbar({
 																pageSize: 15,
