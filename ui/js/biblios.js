@@ -618,12 +618,14 @@ biblios.app = function() {
 																	items: getSendFileMenuItems()
 																}
 															},
-
 															{   
-																cls: 'x-btn-text-icon', // icon and text class
+																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/network-receive.png',
 																text: 'Export',
-																handler: doDownloadRecords
+																menu: {
+																	id: 'exportMenu',
+																	items: getExportMenuItems()
+																}
 															},
 															{
 																cls: 'x-btn-text-icon', // icon and text class

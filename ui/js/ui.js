@@ -1705,88 +1705,64 @@ function makeSubfieldsDraggable() {
    See Also:
    <handleDownload>
 */
-function doDownloadRecords() {
-        var xml ='';
-        var recsep = "<!-- end of record -->";
-        showStatusMsg("<p>Downloading records</p>");
+function doDownloadRecords(format) {
+	var xml ='';
+	var grid;
+	var recsep = "<!-- end of record -->";
+	showStatusMsg("<p>Downloading records</p>");
+	// if we're exporting a record from the marc editor
+	if( openState == 'marceditor' ) {
+			// transform edited record back into marcxml
+			if( marcFlavor == 'marc21' ) {
+				xml = UI.editor.record.XMLString();
+			}
+			else if( marcFlavor == 'unimarc' ) {
+				Ext.MessageBox.alert("Unimarc support not yet implemented");
+			}
+	}
+	// if we're exporting from a grid
+	else {
         if( openState == 'savegrid' ) {
             var grid = Ext.getCmp('savegrid');
-            var ds = grid.store;
-            var sel = grid.getSelectionModel().getSelections()
-            for( var i = 0; i < sel.length; i++) {
-                var id = sel[i].data.Id;
-                try {
-                  var rs = db.execute('select xml from Records where Records.id =?', [id]);
-                  while( rs.isValidRow() ) {
-                    xml += rs.fieldByName('xml');
-                    xml += recsep;
-                    rs.next();
-                  }
-                }
-                catch(ex) {
-                  console.error('db error: ' + ex.message);
-                }
-            }
-        rs.close();
-        }
-        // else if we have an open record in the editor
-    else if( openState == 'marceditor' ) {
-        // transform edited record back into marcxml
-        if( marcFlavor == 'marc21' ) {
-			xml = UI.editor.record.XMLString();
-        }
-        else if( marcFlavor == 'unimarc' ) {
-            Ext.MessageBox.alert("Unimarc support not yet implemented");
-        }
-	}
-    dlg = new Ext.BasicDialog("newrecord-dlg", {
-        height: 200,
-        width: 400,
-        minHeight: 100,
-        minWidth: 150,
-        modal: false,
-        proxyDrag: true,
-        shadow: true
-    });
-        dlg.body.dom.innerHTML = "<div id='form'></div>";
-
-    var form = new Ext.form.Form({
-    });
-    var store = new Ext.data.SimpleStore({
-    fields: ['name', 'format'],
-    data: [ ['MARC21', 'marc21'],
-            ['MARCXML', 'marcxml']
-          ]
-    });
-   form.add(
-    new Ext.form.ComboBox({
-        id: 'recordformat',
-        store: store,
-        displayField:'name',
-        valueField: 'format',
-        typeAhead: true,
-        mode: 'local',
-        triggerAction: 'all',
-        fieldLabel: 'Choose record type',
-        emptyText:'Select a record type...',
-        selectOnFocus:true  
-    })
-    );
-    form.render('form');
-    encoding='utf-8';
-    if(debug){ console.info("dl rec: xml=" + xml);}
-    dlg.addButton('Select',
-    function() {  
-      format = Ext.ComponentMgr.get('recordformat').getValue();
-        handleDownload(format, encoding, xml);
-        dlg.hide();
-		clearStatusMsg();
-    },
-    dlg);
-    dlg.addButton('Cancel', dlg.hide, dlg);
-    dlg.addKeyListener(27, dlg.hide, dlg); // ESCAPE
-    dlg.show();
+		}
+		else if( openState == 'searchgrid') {
+            var grid = Ext.getCmp('searchgrid');
+		}
+		var ds = grid.store;
+		var sel = grid.getSelectionModel().getSelections();
+		for( var i = 0; i < sel.length; i++) {
+			var id = sel[i].data.Id;
+			try {
+			  var recXml = DB.Records.select('Records.rowid=?', [id]).getOne().xml;
+				xml += recXml;
+				xml += recsep;
+			}
+			catch(ex) {
+			  console.error('db error: ' + ex.message);
+			}
+		}
+    } // if we have a grid open 
+	var encoding = 'utf-8';
+	handleDownload(format, encoding, xml);
 }
+
+function getExportMenuItems() {
+	var list = new Array();
+	var formats = new Array('MARC21', 'MARCXML');
+	for( format in formats ) {
+		var o = {
+			text: formats[format],
+			id: formats[format],
+			handler: function(btn) {
+				doDownloadRecords(btn.text);
+			}
+		}
+	list.push(o);
+	}
+	return list;
+
+}
+
 
 /*
    Function: handleDownload
