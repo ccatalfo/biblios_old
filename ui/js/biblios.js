@@ -49,8 +49,6 @@ biblios.app = function() {
 			Ext.get('fixedfields_editor').mask();
 			Ext.get('varfields_editor').mask();
 			var progress = Ext.MessageBox.progress('Saving record');
-			var ff_ed = $("#fixedfields_editor");
-			var var_ed = UI.editor.editorDoc;
 			// transform edited record back into marcxml
 			xml = UI.editor.record.XMLString();
 			progress.updateProgress(.5, 'Extracing marcxml');
@@ -517,6 +515,7 @@ biblios.app = function() {
 															},
 															rowdblclick: function(grid, rowindex, e) {
 																var id = grid.getSelections()[0].id;
+																UI.editor.id = id;
 																var loc = grid.getSelections()[0].data.location;
 																getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize(data), 'editorone' ) }
 														);
@@ -525,6 +524,7 @@ biblios.app = function() {
 															keypress: function(e) {
 															  if( e.getKey() == Ext.EventObject.ENTER ) {
 																var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+																UI.editor.id = id;
 																var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
 																  getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data), 'editorone' ) });
 																}	
@@ -554,6 +554,7 @@ biblios.app = function() {
 																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
 																		handler: function() {
 																			var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+																			UI.editor.id = id;
 																			var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
 																			getRemoteRecord(id, loc, function(data) { 
 																				openRecord( xslTransform.serialize(data), 'editorone' ) 
@@ -765,7 +766,7 @@ biblios.app = function() {
 																		text: 'Edit',
 																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
 																		handler: function() {
-																			var id = Ext.getCmp('savegrid').store.data.get(rowIndex).data.Id;
+																			var id = Ext.getCmp('savegrid').getSelections()[0].data.Id;
 																			UI.editor.id = id;
 																			showStatusMsg('Opening record...');
 																			var xml = getLocalXml(id);
