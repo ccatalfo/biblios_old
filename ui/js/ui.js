@@ -1854,13 +1854,12 @@ function doUploadMarc() {
 
 */
 function doNewRecord() {
-    var dlg = new Ext.BasicDialog("newrecord-dlg", {
+    var dlg = new Ext.Window({
         height: 200,
         width: 400,
         minHeight: 100,
         minWidth: 150,
         modal: false,
-        proxyDrag: true,
         shadow: true
     });
         dlg.body.dom.innerHTML = "<div id='form'></div>";
@@ -1903,6 +1902,42 @@ function doNewRecord() {
     dlg.show();
 }
 
+function getRecordTemplates() {
+    var list = new Array();
+    $("template", configDoc).each( function() {
+		var template = {name: $("name", $(this)).text(), file: $("file", $(this)).text() };
+		list.push(template);
+    });
+	return list;
+}
+
+function getNewRecordMenu() {
+	var list = new Array();
+	var templates = getRecordTemplates();
+	for( t in templates ) {
+		o = {
+			text: templates[t].name,
+			file: templates[t].file,
+			id: templates[t].name,
+			handler: function(btn) {
+				Ext.Ajax.request({
+							url: btn.file,
+							method: 'GET',
+							callback: function(options, isSuccess, resp) { 
+								var xml = resp.responseText; 
+								srchResults = (new DOMParser()).parseFromString(xml, "text/xml");
+								var record = srchResults.getElementsByTagName('record')[0];
+								var xml = (new XMLSerializer().serializeToString(record));
+								openRecord(xml, 'editorone');
+						} // ajax callback
+				}) // ajax request
+			} // do new record handler
+		} // new record menu item
+		list.push(o);
+	}
+	return list;
+}
+
 /*
    Function: doCreateNewRecord
 
@@ -1918,7 +1953,6 @@ function doNewRecord() {
 
 */
 function doCreateNewRecord() {
-        var filename = Ext.ComponentMgr.get('recordtype').getValue();       
         Ext.Ajax.request({
 			url: filename,
 			method: 'GET',

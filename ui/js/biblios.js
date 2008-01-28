@@ -536,13 +536,16 @@ biblios.app = function() {
 															displayInfo: true,
 															displayMsg: 'Displaying records {0} - {1} of {2}',
 															emptyMsg: 'No records to display',
-															items: [
+															items: ( gridToolbar = [
 																{
 																	id: 'newrecordbutton',
 																	icon: libPath + 'ui/images/document-new.png',
 																	cls: 'x-btn-text-icon bmenu',
 																	text: 'New',
-																	handler: doNewRecord
+																	menu: {
+																		id: 'newRecordMenu',
+																		items: getNewRecordMenu()
+																	}
 																},
 																{
 																		cls: 'x-btn-text-icon',
@@ -575,7 +578,8 @@ biblios.app = function() {
 																			items: getExportMenuItems()
 																		}
 																	}
-															]
+																] // grid toolbar items
+															) // grid toolbar var to use in save grid
 														}) // search grid paging toolbar
 													}), // search results grid panel
 													{
@@ -658,7 +662,6 @@ biblios.app = function() {
 																handler: doRecordOptions,
 																disabled: true
 															}
-
 														]) // editorone toolbar
 													}, // editor north
 													{
@@ -755,46 +758,7 @@ biblios.app = function() {
 																displayInfo: true,
 																displayMsg: 'Displaying records {0} - {1} of {2}',
 																emptyMsg: 'No records to display',
-																items: [
-																{
-																	id: 'newrecordbutton',
-																	icon: libPath + 'ui/images/document-new.png',
-																	cls: 'x-btn-text-icon bmenu',
-																	text: 'New',
-																	handler: doNewRecord
-																},
-																{
-																		cls: 'x-btn-text-icon',
-																		icon: libPath + 'ui/images/document-open.png',
-																		text: 'Edit',
-																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
-																		handler: function() {
-																				showStatusMsg('Opening record...');
-																			// see which grid is visible at the moment and get selected record from it
-																			if( openState == 'searchgrid' ) {
-																				var id = Ext.getCmp('searchgrid').getSelections()[0].id;
-																				var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
-																				getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize(data, 'editorone') ) });
-																			}
-																			else if( openState == 'savegrid' ) {
-																				var id = Ext.getCmp('savegrid').getSelections()[0].data.Id;
-																				var xml = getLocalXml(id);
-																				UI.editor.id = id;
-																				openRecord(  xml, 'editorone' );
-																			}
-																		//	clearStatusMsg();
-																		}
-																	},
-																	{   
-																		cls: 'x-btn-text-icon bmenu', // icon and text class
-																		icon: libPath + 'ui/images/network-receive.png',
-																		text: 'Export',
-																		menu: {
-																			id: 'exportMenu',
-																			items: getExportMenuItems()
-																		}
-																	}
-																] // save grid toolbar items
+																items: gridToolbar
 															}) // save grid paging toolbar
 													}), // savepanel center
 													{ 													
