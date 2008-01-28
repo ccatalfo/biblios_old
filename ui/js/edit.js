@@ -1012,14 +1012,13 @@ function removeTag(tagnumber, i) {
 }
 
 
-function create_static_editor() {
-	UI.editor.editorDoc = $('#vareditor');
+function create_static_editor(ffed, vared) {
 	// setup marceditor macro functionality
-	UI.editor.record = setupMacros($('#fixedfields_editor'), UI.editor.editorDoc);
+	biblios.app.editor.record = setupMacros(ffed, vared);
 	// setup reserved (locked) tags based on remote ils bib profile
 	if( Prefs.remoteILS[ UI.editor.location ] ) {
-		setupReservedTags( Prefs.remoteILS[ UI.editor.location ], UI.editor.editorDoc);
-		setupSpecialEntries( Prefs.remoteILS[ UI.editor.location ], UI.editor.editorDoc);
+		setupReservedTags( Prefs.remoteILS[ UI.editor.location ], vared);
+		setupSpecialEntries( Prefs.remoteILS[ UI.editor.location ], vared);
 	}
 	// add editor hotkeys
 	setupEditorHotkeys();
@@ -1034,8 +1033,8 @@ function onFocus(elem) {
 
 function onBlur(elem) {
 	$(elem).removeClass('focused');
-	UI.editor.record.update(elem);
-	UI.editor.lastFocusedEl = elem;
+	biblios.app.editor.record.update(elem);
+	biblios.app.editor.lastFocusedEl = elem;
 }
 
 function onFixedFieldEditorBlur(elem) {
@@ -1113,9 +1112,9 @@ function setupMacros(ffeditor, vareditor) {
 }
 
 
-function setupEditorHotkeys() {
+function setupEditorHotkeys(editorelem) {
 	// focus prev tagnumber on shift-return
-	var inputs = Ext.select('input', false, 'marceditor');
+	var inputs = Ext.select('input', false, $(editorelem)[0]);
 	inputs.addKeyMap({
 		key: Ext.EventObject.ENTER,
 		fn: function(key, e) {

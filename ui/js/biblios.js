@@ -20,6 +20,10 @@ biblios.app = function() {
 	// save file vars
 	var currSaveFile, currSaveFileName;
 	var savefiles = {}; // hash mapping save file id -> names
+	// editor
+	var editor = {};
+	var editor.record = {};
+	
 	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
 	// facets vars
 
@@ -131,6 +135,11 @@ biblios.app = function() {
 	displaySaveFile : function displaySaveFile(id) {
 		Ext.getCmp('savegrid').store.load({db: db, selectSql: savefileSelectSql + ' where Savefiles_id = '+id});
 		openState = 'savegrid';
+	}
+
+	displayRecordView : function displayRecordView() {
+		Ext.getCmp('bibliocenter').layout.setActiveItem(1);
+
 	}
 
 	displaySaveView: function displaySaveView() {
@@ -372,6 +381,7 @@ biblios.app = function() {
 		viewport : this.viewport,
 		currQuery : this.currQuery,
 		savefiles : this.savefiles,
+		editor : this.editor,
 
         // public methods
 		displaySearchView : function() {
@@ -379,6 +389,9 @@ biblios.app = function() {
 		},
 		displaySaveView : function() {
 			displaySaveView();
+		},
+		displayRecordView : function() {
+			displayRecordView();
 		},
 
         init: function() {
@@ -531,13 +544,14 @@ biblios.app = function() {
 														region: 'north',
 														id: 'editorone',
 														split: true,
-														height: 300
+														height: 300,
+														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
 													}, // editor north
 													{
 														region: 'center',
 														id: 'editortwo',
 														split: true,
-														html: '<p> marc editor 2</p>',
+														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
 														height: 150
 													} // editor center
 												] // editor items

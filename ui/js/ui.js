@@ -1650,24 +1650,23 @@ function displaySaveView() {
    None.
 
 */
-function openRecord(xml) {
-	$("#vareditor").empty();
-	$("ffeditor").empty();
-    $("#ffeditor").getTransform( ffxsl, xml);
-    $("#vareditor").getTransform( varfxsl, xml);
-	 create_static_editor($('#ffeditor'), $('#vareditor') );
+function openRecord(xml, editorelem) {
+	var ffed =	$('#'+editorelem).find(".ffeditor");
+	$(ffed).empty();
+	var vared = $('#'+editorelem).find(".vareditor");
+	$(vared).empty();
+    $(ffed).getTransform( ffxsl, xml);
+    $(vared).getTransform( varfxsl, xml);
+	 create_static_editor(ffed, vared);
 	 //create_jquery_editor();
 	//create_yui_rte_editor();
 	//create_yui_rte_editor();
 	// show fixed field editor, hide ldr and 008 divs
-	$("#ffeditor").show();
+	$(ffed).show();
 	// hide leader and 008
-	$("#000, #008").css('display', 'none');
+	$('#'+editorelem).find("#000, #008").css('display', 'none');
 
-
-	$("#help-panel").append("This is the Help panel");
-
-	displayRecordView();
+	biblios.app.displayRecordView();
 }
 
 function makeSubfieldsDraggable() {
