@@ -37,7 +37,7 @@ function doSaveRemote(loc, xmldoc) {
 }
 
 
-function addRecordFromSearch(id, data, savefileid) {
+function addRecordFromSearch(id, data, savefileid, newxml) {
 	var xml = getPazRecord(id, 
 		// this function gets called when pazpar2 returns the xml for record with this id
 		function(data, o) {
@@ -48,14 +48,14 @@ function addRecordFromSearch(id, data, savefileid) {
 			var target = DB.SearchTargets.select('name=?', [o.recData.location]).getOne();
 			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [o.savefileid]).getOne();
 			var record = new DB.Records({
-				title: o.recData.title || '',
-				author: o.recData.author || '',
+				title: UI.editor.record.getValue('245', 'a') || '',
+				author: UI.editor.record.getValue('100', 'a') || '',
 				location: o.recData.location || '',
-				publisher: o.recData.publisher || '',
+				publisher: UI.editor.record.getValue('260', 'b') || '',
 				medium: o.recData.medium || '',
-				date: o.recData.date || '',
+				date: UI.editor.record.getValue('260', 'c') || '',
 				status: 'new',
-				xml: data || '<record></record>',
+				xml: o.newxml || '<record></record>',
 				date_added: new Date().toString(),
 				date_modified: new Date().toString(),
 				SearchTargets_id: target.rowid,
@@ -73,7 +73,8 @@ function addRecordFromSearch(id, data, savefileid) {
 	{
 		id: id,
 		savefileid: savefileid,
-		recData: data
+		recData: data,
+		newxml: newxml
 	} 
 	);
 	return db.lastInsertRowId;

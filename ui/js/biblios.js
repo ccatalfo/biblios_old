@@ -59,7 +59,7 @@ biblios.app = function() {
 				var data = Ext.getCmp('searchgrid').getSelections()[0].data;
 				var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 				progress.updateProgress(.6, 'Retrieving record from server');
-				recid = addRecordFromSearch(id, data, savefileid);
+				recid = addRecordFromSearch(id, data, savefileid, xml);
 				if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
 			}
 			else { // recid isn't empty so we've already saved this record, just update it
