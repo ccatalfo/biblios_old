@@ -566,12 +566,14 @@ biblios.app = function() {
 																		//	clearStatusMsg();
 																		}
 																	},
-																	{
-																		text: 'Export',
-																		disabled: false,
-																		cls: 'x-btn-text-icon',
+																	{   
+																		cls: 'x-btn-text-icon bmenu', // icon and text class
 																		icon: libPath + 'ui/images/network-receive.png',
-																		handler: doDownloadRecords 
+																		text: 'Export',
+																		menu: {
+																			id: 'exportMenu',
+																			items: getExportMenuItems()
+																		}
 																	}
 															]
 														}) // search grid paging toolbar
@@ -783,12 +785,14 @@ biblios.app = function() {
 																		//	clearStatusMsg();
 																		}
 																	},
-																	{
-																		text: 'Export',
-																		disabled: false,
-																		cls: 'x-btn-text-icon',
+																	{   
+																		cls: 'x-btn-text-icon bmenu', // icon and text class
 																		icon: libPath + 'ui/images/network-receive.png',
-																		handler: doDownloadRecords 
+																		text: 'Export',
+																		menu: {
+																			id: 'exportMenu',
+																			items: getExportMenuItems()
+																		}
 																	}
 																] // save grid toolbar items
 															}) // save grid paging toolbar
