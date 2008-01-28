@@ -1014,7 +1014,7 @@ function removeTag(tagnumber, i) {
 
 function create_static_editor(ffed, vared) {
 	// setup marceditor macro functionality
-	biblios.app.editor.record = setupMacros(ffed, vared);
+	UI.editor.record = setupMacros(ffed, vared);
 	// setup reserved (locked) tags based on remote ils bib profile
 	if( Prefs.remoteILS[ UI.editor.location ] ) {
 		setupReservedTags( Prefs.remoteILS[ UI.editor.location ], vared);
@@ -1033,15 +1033,12 @@ function onFocus(elem) {
 
 function onBlur(elem) {
 	$(elem).removeClass('focused');
-	biblios.app.editor.record.update(elem);
-	biblios.app.editor.lastFocusedEl = elem;
+	UI.editor.record.update(elem);
+	UI.editor.lastFocusedEl = elem;
 }
 
 function onFixedFieldEditorBlur(elem) {
-	// transfer the fixed field editor values to fixed field tags
-	var ff_ed = $("#ffeditor");
-	var var_ed = $("#vareditor");
-	transferFF_EdToTags(ff_ed, var_ed);
+	transferFF_EdToTags(UI.editor.ffed, UI.editor.vared);
 	UI.editor.record.update($('#000').find('.controlfield'));
 	UI.editor.record.update($('#008').find('.controlfield'));
 }

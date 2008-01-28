@@ -5,7 +5,7 @@
   */
  
 // reference local blank image
-Ext.BLANK_IMAGE_URL = '../extjs/resources/images/default/s.gif';
+Ext.BLANK_IMAGE_URL = 'lib/extjs2/resources/images/default/s.gif';
 // create namespace
 Ext.namespace('biblios');
  
@@ -17,12 +17,19 @@ biblios.app = function() {
 	var debug = 1;
 	var viewport; 
 	var viewState = '';
+	var paz = initializePazPar2(pazpar2url, {
+		initCallback: function(data) {
+			paz.sessionID = this.sessionID;
+			// set pazpar2 search results grid url
+			setPazPar2Targets();
+		}
+		});
 	// save file vars
 	var currSaveFile, currSaveFileName;
 	var savefiles = {}; // hash mapping save file id -> names
 	// editor
 	var editor = {};
-	var editor.record = {};
+	editor.record = {};
 	
 	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
 	// facets vars
@@ -381,7 +388,6 @@ biblios.app = function() {
 		viewport : this.viewport,
 		currQuery : this.currQuery,
 		savefiles : this.savefiles,
-		editor : this.editor,
 
         // public methods
 		displaySearchView : function() {
@@ -543,6 +549,7 @@ biblios.app = function() {
 													{
 														region: 'north',
 														id: 'editorone',
+														autoScroll: true,
 														split: true,
 														height: 300,
 														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
@@ -550,6 +557,7 @@ biblios.app = function() {
 													{
 														region: 'center',
 														id: 'editortwo',
+														autoScroll: true,
 														split: true,
 														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
 														height: 150
@@ -694,6 +702,7 @@ biblios.app = function() {
 			
 		var form = new Ext.form.BasicForm('searchform');
 		getSaveFileNames(); // set up hash of save file id->names
+
 		alert('Application successfully initialized');
         }
     };

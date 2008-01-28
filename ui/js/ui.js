@@ -17,6 +17,9 @@ UI.editor.xml = '';
 UI.editor.lastFocusedEl = '';
 UI.editor.record = '';
 UI.editor.comboboxes = new Array();
+// one editor has focus at a time
+UI.editor.ffed = '';
+UI.editor.vared = '';
 UI.search = {};
 UI.search.currQuery = '';
 UI.search.limitby = {};
@@ -1651,22 +1654,21 @@ function displaySaveView() {
 
 */
 function openRecord(xml, editorelem) {
+	// we need to display record view first since editors are lazily rendered
+	biblios.app.displayRecordView();
 	var ffed =	$('#'+editorelem).find(".ffeditor");
 	$(ffed).empty();
 	var vared = $('#'+editorelem).find(".vareditor");
 	$(vared).empty();
     $(ffed).getTransform( ffxsl, xml);
     $(vared).getTransform( varfxsl, xml);
-	 create_static_editor(ffed, vared);
-	 //create_jquery_editor();
-	//create_yui_rte_editor();
-	//create_yui_rte_editor();
+	UI.editor.ffed = ffed;
+	UI.editor.vared = vared;
+	create_static_editor(ffed, vared);
 	// show fixed field editor, hide ldr and 008 divs
 	$(ffed).show();
 	// hide leader and 008
 	$('#'+editorelem).find("#000, #008").css('display', 'none');
-
-	biblios.app.displayRecordView();
 }
 
 function makeSubfieldsDraggable() {

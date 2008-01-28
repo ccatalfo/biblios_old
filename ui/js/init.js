@@ -82,15 +82,6 @@ var folderRoot, searchRoot, saveRoot, saveFilesRoot, facetsRoot;
 var rte_editor;
 	
 var searches = new Array(); // Array of pazpar2 searches
-var paz = initializePazPar2(pazpar2url, {
-	initCallback: function(data) {
-		paz.sessionID = this.sessionID;
-		// set pazpar2 search results grid url
-		Ext.getCmp('searchgrid').store.proxy.conn.url = pazpar2url + '?session=' + this.sessionID + '&command=show';
-		setPazPar2Targets();
-	}
-	});
-var pazShowUrl = pazpar2url + '?session=' + paz.sessionID + '&command=show';
 var searchLimits = {};
 var currQuery;
 
