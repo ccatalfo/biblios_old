@@ -793,7 +793,7 @@ biblios.app = function() {
 										region: 'west',
 										split: true,
 										collapsible: true,
-										collapsed: true,
+										collapsed: false,
 										width: 200,
 										maxSize: 200,
 										title: 'Resources',
@@ -814,8 +814,6 @@ biblios.app = function() {
 															var sel = e.data.selections;
 															var droppedsavefileid = e.target.attributes.savefileid;
 															doSaveLocal(droppedsavefileid);
-
-
 														} // beforenodedrop
 													},
 												}) // resources treepanel with treeeditor applied
