@@ -867,6 +867,12 @@ biblios.app = function() {
 											{
 												title: 'Search Targets',
 												layout: 'border',
+												listeners: {
+													activate: function(tab) {
+														Ext.getCmp('searchtargetsgrid').store.load({db: db, selectSql: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets'});
+													} // activate search targets grid tab
+
+												}, // search targets grid tab listeners
 												items:
 													{
 														region: 'center',
@@ -1006,16 +1012,19 @@ biblios.app = function() {
 											{
 												title: 'Send Targets',
 												layout: 'border',
+												listeners: {
+													activate: function(tab) {
+														Ext.getCmp('searchtargetsgrid').store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
+													} // activate search targets grid tab
+												}, // send targets listeners
 												items: 
 													{
 														region: 'center',
 														height: 300,
-														width: 300,
 														items: [
 															new Ext.grid.EditorGridPanel({
 																id: 'sendtargetsgrid',
 																height: 300,
-																width: 300,
 																ds: new Ext.data.Store({
 																	proxy: new Ext.data.GoogleGearsProxy(new Array()),
 																	reader: new Ext.data.ArrayReader({
