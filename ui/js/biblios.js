@@ -579,6 +579,7 @@ biblios.app = function() {
 														title: 'Preview',
 														split: true,
 														collapsible: true,
+														autoScroll: true,
 														html: '<div id="searchselect"></div><div id="searchprevrecord"></div>',
 														height: 150
 													} // search preview 
@@ -783,6 +784,7 @@ biblios.app = function() {
 														split: true,
 														collapsible: true,
 														height: 150,
+														autoScroll: true,
 														html: '<div id="select"></div><div id="saveprevrecord"></div>',
 													} // savepanel south
 												] // savepanel items
