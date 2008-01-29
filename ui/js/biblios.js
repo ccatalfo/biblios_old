@@ -1016,6 +1016,7 @@ biblios.app = function() {
 																				catch(ex) {
 																					Ext.MessageBox.alert('Error', ex.message);
 																				}
+																			Ext.ComponentMgr.get('searchtargetsgrid').store.reload();
 																			} // process search targets records to remove
 																			//updateSearchTargets();
 																			Ext.getCmp('searchtargetsgrid').store.reload();
@@ -1177,13 +1178,14 @@ biblios.app = function() {
 																	{
 																		text: 'Remove Target',
 																		handler: function() {
-																			var record = Ext.ComponentMgr.get('sendtargetsgrid').getSelectionModel().selection.record;
-																			try {
-																				var rs = db.execute('delete from SendTargets where SendTargets.rowid = ?', [record.data.rowid]);
-																				rs.close();
-																			}
-																			catch(ex) {
-																				Ext.MessageBox.alert('Error', ex.message);
+																			var records = Ext.ComponentMgr.get('sendtargetsgrid').getSelectionModel().getSelections();
+																			for( var i = 0; i < records.length; i++) {
+																				try {
+																					DB.SendTargets.select('SendTargets.rowid=?', [records[i].data.rowid]).getOne().remove();
+																				}
+																				catch(ex) {
+																					Ext.MessageBox.alert('Error', ex.message);
+																				}
 																			}
 																			Ext.ComponentMgr.get('sendtargetsgrid').store.reload();
 																		}
