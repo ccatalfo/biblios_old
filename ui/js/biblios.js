@@ -525,7 +525,16 @@ biblios.app = function() {
 															{header: "Author", width: 120, dataIndex: 'title-responsibility'},
 															{header: "Publisher", width: 120, dataIndex: 'publication'},
 															{header: "Date", width: 50, dataIndex: 'date'},
-															{header: "Location", width: 100, dataIndex: 'location'}
+															{header: "Location", width: 100, dataIndex: 'location',
+																renderer: function(data, meta, record, row, col, store) {
+																			if( record.data.location.length == 1 ) {
+																				return record.data.location[0].name;
+																			}
+																			else {
+																				return 'Found in ' + record.data.location.length + ' targets';
+																			}
+																} // renderer function for Location
+															} // Location column
 														]), // column model for search grid
 														listeners: {
 															rowclick: function(grid, rowindex, e) {
