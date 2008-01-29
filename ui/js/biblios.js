@@ -467,7 +467,7 @@ biblios.app = function() {
 														store : (ds = new Ext.data.Store({
 															proxy: new Ext.data.HttpProxy({url: pazpar2url+'?session='+paz.sessionID+'&command=show'}),
 															reader: 
-																new Ext.data.XmlReader({
+																new Ext.ux.NestedXmlReader({
 																	totalRecords: 'merged',
 																	record: 'hit',
 																	id: 'recid'
@@ -479,8 +479,20 @@ biblios.app = function() {
 																	{name: 'publication', mapping:'md-publication-name'},
 																	{name: 'date', mapping: 'md-date'},
 																	{name: 'medium', mapping:'md-medium'},
-																	{name: 'location', mapping:'location @name'}
-																	])),
+																	{name: 'location', mapping: function(rec) {
+																		var locations = Ext.DomQuery.select('location', rec);
+																		var result = new Array();
+																		for( var i = 0; i < locations.length; i++) {
+																			var name = Ext.DomQuery.select('@name', locations[i])[0].firstChild.nodeValue;
+																			var id = Ext.DomQuery.select('@id', locations[i])[0].firstChild.nodeValue;
+																			result.push({name: name, id: id});
+																		}
+																		return result;
+																		} // location mapping function
+																	}, // end location mapping
+																	{name: 'count', mapping:'count'}
+																	]) // search grid record
+																),//search grid reader
 																	remoteSort: false
 														})), // data store search grid aka ds
 														sm: new Ext.grid.RowSelectionModel({
