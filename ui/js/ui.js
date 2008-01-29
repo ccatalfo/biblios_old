@@ -15,7 +15,7 @@ UI.editor.savedRemote = {};
 UI.editor.savefileid = '';
 UI.editor.xml = '';
 UI.editor.lastFocusedEl = '';
-UI.editor.record = '';
+UI.editor.record = new MarcEditor('', '');
 UI.editor.comboboxes = new Array();
 // one editor has focus at a time
 UI.editor.ffed = '';
