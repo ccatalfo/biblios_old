@@ -1749,10 +1749,10 @@ function doDownloadRecords(format) {
 function getExportMenuItems() {
 	var list = new Array();
 	var formats = new Array('MARC21', 'MARCXML');
-	for( format in formats ) {
+	for( var i = 0; i < formats.length; i++) {
 		var o = {
-			text: formats[format],
-			id: formats[format],
+			text: formats[i],
+			id: formats[i],
 			handler: function(btn) {
 				doDownloadRecords(btn.text);
 			}
@@ -1914,11 +1914,11 @@ function getRecordTemplates() {
 function getNewRecordMenu() {
 	var list = new Array();
 	var templates = getRecordTemplates();
-	for( t in templates ) {
+	for( var i = 0; i < templates.length; i++) {
 		o = {
-			text: templates[t].name,
-			file: templates[t].file,
-			id: templates[t].name,
+			text: templates[i].name,
+			file: templates[i].file,
+			id: templates[i].name,
 			handler: function(btn) {
 				Ext.Ajax.request({
 							url: btn.file,

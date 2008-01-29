@@ -1155,6 +1155,7 @@ biblios.app = function() {
 			
 		var form = new Ext.form.BasicForm('searchform');
 		getSaveFileNames(); // set up hash of save file id->names
+		openState = 'searchgrid';
 
 		alert('Application successfully initialized');
         }
