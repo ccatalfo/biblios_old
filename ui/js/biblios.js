@@ -873,11 +873,12 @@ biblios.app = function() {
 												items:
 													{
 														region: 'center',
-														height: 300,
+														height: 600,
 														id: 'searchtargetsgridpanel',
 														items: [
 															new Ext.grid.EditorGridPanel({
 																id: 'searchtargetsgrid',
+																height: 600,
 																ds: new Ext.data.Store({
 																	proxy: new Ext.data.GoogleGearsProxy(new Array()),
 																	reader: new Ext.data.ArrayReader({
