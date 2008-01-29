@@ -386,7 +386,13 @@ biblios.app = function() {
 		viewport : this.viewport,
 		currQuery : this.currQuery,
 		savefiles : this.savefiles,
+		db : {
+			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets',
+			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets'
 
+			
+		},
+		
         // public methods
 		displaySearchView : function() {
 			displaySearchView();
@@ -860,7 +866,7 @@ biblios.app = function() {
 												layout: 'border',
 												listeners: {
 													activate: function(tab) {
-														Ext.getCmp('searchtargetsgrid').store.load({db: db, selectSql: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets'});
+														Ext.getCmp('searchtargetsgrid').store.load({db: db, selectSql: biblios.app.db.selectSqlSearchTargets});
 													} // activate search targets grid tab
 
 												}, // search targets grid tab listeners
@@ -1034,7 +1040,7 @@ biblios.app = function() {
 												layout: 'border',
 												listeners: {
 													activate: function(tab) {
-														Ext.getCmp('searchtargetsgrid').store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
+														Ext.getCmp('sendtargetsgrid').store.load({db: db, selectSql: biblios.app.db.selectSqlSendTargets});
 													} // activate search targets grid tab
 												}, // send targets listeners
 												items: 
