@@ -590,7 +590,7 @@ biblios.app = function() {
 												layout: 'border',
 												items: [
 													{
-														region: 'north',
+														region: 'center',
 														id: 'editorone',
 														autoScroll: true,
 														split: true,
@@ -655,15 +655,6 @@ biblios.app = function() {
 															}
 														]) // editorone toolbar
 													}, // editor north
-													{
-														region: 'center',
-														id: 'editortwo',
-														autoScroll: true,
-														split: true,
-														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
-														height: 50,
-														tbar: editorToolbar
-													} // editor center
 												] // editor items
 											}, // editor region
 											{
