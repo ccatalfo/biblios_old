@@ -82,6 +82,12 @@ input.controlfield, input.subfield-text, input.subfield-delimiter, input.indicat
 .authority-field {
 	text-decoration: underline;
 	color: navy;
+	display: inline;
+}
+
+
+.x-form-field-wrap {
+	display: inline;
 }
 
 .droppable {

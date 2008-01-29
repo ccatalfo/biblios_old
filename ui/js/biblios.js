@@ -748,7 +748,7 @@ biblios.app = function() {
 																	cls: 'x-btn-text-icon bmenu',
 																	text: 'New',
 																	menu: {
-																		id: 'newRecordMenu',
+																		id: 'newRecordMenuSaveGrid',
 																		items: getNewRecordMenu()
 																	}
 																},
