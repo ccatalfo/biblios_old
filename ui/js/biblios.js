@@ -868,6 +868,7 @@ biblios.app = function() {
 													{
 														region: 'center',
 														height: 300,
+														id: 'searchtargetsgridpanel',
 														items: [
 															new Ext.grid.EditorGridPanel({
 																id: 'searchtargetsgrid',
@@ -884,9 +885,9 @@ biblios.app = function() {
 																	listeners: {
 																		update: function(store, record, operation) {
 																			record.enabled = record.enabled ? 1 : 0;
-																			if( operation == Ext.data.Record.COMMIT ) {
+																			if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT) {
 																				try {
-																					var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where rowid = ?', [record.name, record.hostname, record.port, record.dbname, record.description, record.userid, record.password, record.enabled, record.rowid]);
+																					var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where rowid = ?', [record.data.name, record.data.hostname, record.data.port, record.data.dbname, record.data.description, record.data.userid, record.data.password, record.data.enabled, record.data.rowid]);
 																					rs.close()
 																				}
 																				catch(ex) {
@@ -896,6 +897,30 @@ biblios.app = function() {
 																		} // search targets store update
 																	} // search targets grid store listeners
 																}),
+																listeners: {
+																	afteredit: function(e) {
+																		var id = e.record.data.id;
+																		var field = e.field;
+																		var value = e.value;
+																		if( typeof(value) == 'boolean' ) {
+																			if( value == true ) {
+																				value = 1;
+																			}
+																			else if( value == false ) {
+																				value = 0;
+																			}
+																		}
+																		var rs;
+																		try {
+																			rs = db.execute('update SearchTargets set '+field+' = ? where rowid = ?', [value, id]);
+																			rs.close();
+																		}
+																		catch(ex) {
+																			Ext.MessageBox.alert('Error', ex.message);
+																		}
+
+																	} // after edit event on search target grid
+																}, // search target grid listeners
 																sm: new Ext.grid.RowSelectionModel({
 
 																}),
@@ -1015,6 +1040,7 @@ biblios.app = function() {
 													{
 														region: 'center',
 														height: 300,
+														id: 'sendtargetsgridpanel',
 														items: [
 															new Ext.grid.EditorGridPanel({
 																id: 'sendtargetsgrid',
@@ -1032,9 +1058,9 @@ biblios.app = function() {
 																listeners: {
 																	update: function(store, record, operation) {
 																		record.enabled = record.enabled ? 1 : 0;
-																		if( operation == Ext.data.Record.COMMIT ) {
+																		if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
 																			try {
-																				var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, pluginlocation = ?, plugininit= ?, enabled = ? where rowid = ?', [record.name, record.location, record.user, record.password, record.pluginlocation, record.pluginit, record.enabled, record.rowid]);
+																				var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, pluginlocation = ?, plugininit= ?, enabled = ? where rowid = ?', [record.data.name, record.data.location, record.data.user, record.data.password, record.data.pluginlocation, record.data.pluginit, record.data.enabled, record.data.rowid]);
 																				rs.close()
 																			}
 																			catch(ex) {
@@ -1044,6 +1070,30 @@ biblios.app = function() {
 																	}
 																} // send target grid store listeners
 																}), // send target grid data store
+																listeners: {
+																	afteredit: function(e) {
+																		var id = e.record.data.rowid;
+																		var field = e.field;
+																		var value = e.value;
+																		if( typeof(value) == 'boolean' ) {
+																			if( value == true ) {
+																				value = 1;
+																			}
+																			else if( value == false ) {
+																				value = 0;
+																			}
+																		}
+																		var rs;
+																		try {
+																			rs = db.execute('update SendTargets set '+field+' = ? where rowid = ?', [value, id]);
+																			rs.close();
+																		}
+																		catch(ex) {
+																			Ext.MessageBox.alert('Error', ex.message);
+																		}
+																		e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
+																	} // afteredit handler
+																},
 																sm: new Ext.grid.RowSelectionModel({
 
 																}),
