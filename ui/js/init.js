@@ -81,6 +81,29 @@ var folderRoot, searchRoot, saveRoot, saveFilesRoot, facetsRoot;
 // YUI rich text editor
 var rte_editor;
 	
+var SearchTarget = Ext.data.Record.create([
+	{name: 'rowid'},
+	{name: 'name', type: 'string'},
+	{name: 'hostname', type: 'string'},
+	{name: 'port', type: 'string'},
+	{name: 'dbname', type: 'string'},
+	{name: 'description', type: 'string'},
+	{name: 'userid', type: 'string'},
+	{name: 'password', type: 'string',},
+	{name: 'syntax', type: 'string',},
+	{name: 'enabled', type: 'bool'}
+]);
+var SendTarget = Ext.data.Record.create([
+	{name: 'rowid'},
+	{name: 'name', type: 'string'},
+	{name: 'location', type: 'string'},
+	{name: 'url', type: 'string'},
+	{name: 'user', type: 'string'},
+	{name: 'password', type: 'string',},
+	{name: 'pluginlocation', type: 'string',},
+	{name: 'pluginit', type: 'string',},
+	{name: 'enabled', type: 'bool'}
+]);
 var searches = new Array(); // Array of pazpar2 searches
 var searchLimits = {};
 var currQuery;

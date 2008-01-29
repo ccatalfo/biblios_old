@@ -1128,7 +1128,7 @@ function updateSearchTargets() {
 }
 
 function updateSearchTargetFolders() {
-	var searchRoot = Ext.ComponentMgr.get('searchRoot');
+	var searchRoot = Ext.getCmp('searchRoot');
 
 	// remove old nodes
 	for( var i = searchRoot.childNodes.length-1; i >= 0; i--) {

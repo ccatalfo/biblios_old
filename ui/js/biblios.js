@@ -869,29 +869,32 @@ biblios.app = function() {
 														region: 'center',
 														height: 300,
 														items: [
-															new Ext.grid.GridPanel({
+															new Ext.grid.EditorGridPanel({
 																id: 'searchtargetsgrid',
 																ds: new Ext.data.Store({
 																	proxy: new Ext.data.GoogleGearsProxy(new Array()),
 																	reader: new Ext.data.ArrayReader({
 																		record: 'name'
-																	}, Ext.data.Record.create([
-																		{name: 'rowid'},
-																		{name: 'name', type: 'string'},
-																		{name: 'hostname', type: 'string'},
-																		{name: 'port', type: 'string'},
-																		{name: 'dbname', type: 'string'},
-																		{name: 'description', type: 'string'},
-																		{name: 'userid', type: 'string'},
-																		{name: 'password', type: 'string',},
-																		{name: 'syntax', type: 'string',},
-																		{name: 'enabled', type: 'bool'}
-																	])),
+																	}, SearchTarget),
 																	remoteSort: false,
 																	sortInfo: {
 																		field: 'name',
 																		direction: 'ASC'
-																	}
+																	},
+																	listeners: {
+																		update: function(store, record, operation) {
+																			record.enabled = record.enabled ? 1 : 0;
+																			if( operation == Ext.data.Record.COMMIT ) {
+																				try {
+																					var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where rowid = ?', [record.name, record.hostname, record.port, record.dbname, record.description, record.userid, record.password, record.enabled, record.rowid]);
+																					rs.close()
+																				}
+																				catch(ex) {
+																					Ext.MessageBox.alert('Error', ex.message);
+																				}
+																			}
+																		} // search targets store update
+																	} // search targets grid store listeners
 																}),
 																sm: new Ext.grid.RowSelectionModel({
 
@@ -960,7 +963,7 @@ biblios.app = function() {
 																			catch(ex) {
 																				Ext.MessageBox.alert('Error', ex.message);
 																			}
-																			var t = new Target({
+																			var t = new SearchTarget({
 																				id: db.lastInsertRowId,
 																				name: '',
 																				hostname: '',
@@ -971,26 +974,26 @@ biblios.app = function() {
 																				password: '',
 																				enabled: 0
 																			});
-																			var targetgrid = Ext.ComponentMgr.get('targetgrid');
-																			var ds = targetgrid.dataSource;
-																			targetgrid.stopEditing();
-																			ds.insert(0, t);
-																			targetgrid.startEditing(0, 0);
+																			var grid = Ext.getCmp('searchtargetsgrid');
+																			grid.stopEditing();
+																			grid.store.insert(0, t);
+																			grid.startEditing(0, 0);
 																		}
 																	},
 																	{
 																		text: 'Remove Target',
 																		handler: function() {
-																			var record = Ext.ComponentMgr.get('targetgrid').getSelectionModel().selection.record;
-																			try {
-																				var rs = db.execute('delete from SearchTargets where SearchTargets.rowid = ?', [record.data.rowid]);
-																				rs.close();
-																			}
-																			catch(ex) {
-																				Ext.MessageBox.alert('Error', ex.message);
-																			}
-																			updateSearchTargets();
-																			Ext.ComponentMgr.get('targetgrid').dataSource.reload();
+																			var records = Ext.getCmp('searchtargetsgrid').getSelectionModel().getSelections();
+																			for( var i = 0; i < records.length; i++) {
+																				try {
+																					DB.SearchTargets.select('SearchTargets.rowid=?', [records[i].data.rowid]).getOne().remove();
+																				}
+																				catch(ex) {
+																					Ext.MessageBox.alert('Error', ex.message);
+																				}
+																			} // process search targets records to remove
+																			//updateSearchTargets();
+																			Ext.getCmp('searchtargetsgrid').store.reload();
 																		}
 																	}
 																]
@@ -1020,23 +1023,26 @@ biblios.app = function() {
 																	proxy: new Ext.data.GoogleGearsProxy(new Array()),
 																	reader: new Ext.data.ArrayReader({
 																		record: 'name'
-																	}, Ext.data.Record.create([
-																		{name: 'rowid'},
-																		{name: 'name', type: 'string'},
-																		{name: 'location', type: 'string'},
-																		{name: 'url', type: 'string'},
-																		{name: 'user', type: 'string'},
-																		{name: 'password', type: 'string',},
-																		{name: 'pluginlocation', type: 'string',},
-																		{name: 'pluginit', type: 'string',},
-																		{name: 'enabled', type: 'bool'}
-																	])
-																	),
+																	}, SendTarget),
 																	remoteSort: false,
 																	sortInfo: {
 																		field: 'name',
 																		direction: 'ASC'
+																	},
+																listeners: {
+																	update: function(store, record, operation) {
+																		record.enabled = record.enabled ? 1 : 0;
+																		if( operation == Ext.data.Record.COMMIT ) {
+																			try {
+																				var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, pluginlocation = ?, plugininit= ?, enabled = ? where rowid = ?', [record.name, record.location, record.user, record.password, record.pluginlocation, record.pluginit, record.enabled, record.rowid]);
+																				rs.close()
+																			}
+																			catch(ex) {
+																				Ext.MessageBox.alert('Error', ex.message);
+																			}
+																		}
 																	}
+																} // send target grid store listeners
 																}), // send target grid data store
 																sm: new Ext.grid.RowSelectionModel({
 
@@ -1111,8 +1117,8 @@ biblios.app = function() {
 																				plugininit: '',
 																				enabled: 0
 																			});
-																			var sendtargetgrid = Ext.ComponentMgr.get('sendtargetgrid');
-																			var ds = sendtargetgrid.dataSource;
+																			var sendtargetgrid = Ext.ComponentMgr.get('sendtargetsgrid');
+																			var ds = sendtargetgrid.store;
 																			sendtargetgrid.stopEditing();
 																			ds.insert(0, t);
 																			sendtargetgrid.startEditing(0, 0);
@@ -1121,7 +1127,7 @@ biblios.app = function() {
 																	{
 																		text: 'Remove Target',
 																		handler: function() {
-																			var record = Ext.ComponentMgr.get('sendtargetgrid').getSelectionModel().selection.record;
+																			var record = Ext.ComponentMgr.get('sendtargetsgrid').getSelectionModel().selection.record;
 																			try {
 																				var rs = db.execute('delete from SendTargets where SendTargets.rowid = ?', [record.data.rowid]);
 																				rs.close();
@@ -1129,7 +1135,7 @@ biblios.app = function() {
 																			catch(ex) {
 																				Ext.MessageBox.alert('Error', ex.message);
 																			}
-																			Ext.ComponentMgr.get('sendtargetgrid').dataSource.reload();
+																			Ext.ComponentMgr.get('sendtargetsgrid').store.reload();
 																		}
 																	} // send grid remove target tb button
 																] // send target grid toolbar
