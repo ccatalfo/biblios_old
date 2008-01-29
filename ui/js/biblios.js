@@ -866,7 +866,143 @@ biblios.app = function() {
 											},
 											{
 												title: 'Search Targets',
-											},
+												layout: 'border',
+												items:
+													{
+														region: 'center',
+														height: 300,
+														items: [
+															new Ext.grid.GridPanel({
+																id: 'searchtargetsgrid',
+																ds: new Ext.data.Store({
+																	proxy: new Ext.data.GoogleGearsProxy(new Array()),
+																	reader: new Ext.data.ArrayReader({
+																		record: 'name'
+																	}, Ext.data.Record.create([
+																		{name: 'rowid'},
+																		{name: 'name', type: 'string'},
+																		{name: 'hostname', type: 'string'},
+																		{name: 'port', type: 'string'},
+																		{name: 'dbname', type: 'string'},
+																		{name: 'description', type: 'string'},
+																		{name: 'userid', type: 'string'},
+																		{name: 'password', type: 'string',},
+																		{name: 'syntax', type: 'string',},
+																		{name: 'enabled', type: 'bool'}
+																	])),
+																	remoteSort: false,
+																	sortInfo: {
+																		field: 'name',
+																		direction: 'ASC'
+																	}
+																}),
+																sm: new Ext.grid.RowSelectionModel({
+
+																}),
+																cm: new Ext.grid.ColumnModel([
+																	{
+																		header: 'Name', 
+																		dataIndex: 'name', 
+																		sortable: true,
+																		editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+																	},
+																	{	
+																		header: 'Host', 
+																		dataIndex: 'hostname', 
+																		editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+																	},
+																	{
+																		header: 'Port', 
+																		dataIndex: 'port', 
+																		editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+																	},
+																	{
+																		header: 'Database', 
+																		dataIndex: 'dbname', 
+																		editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+																	},
+																	{
+																		header: 'Description', 
+																		dataIndex: 'description', 
+																		editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+																	},
+																	{
+																		header: 'User', 
+																		dataIndex: 'userid', 
+																		editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+																	},
+																	{
+																		header: 'Password', 
+																		dataIndex: 'password', 
+																		editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+																	},
+																	{
+																		header: 'Syntax',
+																		dataIndex: 'syntax',
+																		editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+																	},
+																	{
+																		header: 'Enabled', 
+																		dataIndex: 'enabled', 
+																		renderer: function formatBoolean(value) {
+																			return value ? 'Yes' : 'No';
+																		},
+																		editor: new Ext.grid.GridEditor(new Ext.form.Checkbox())
+																	}
+																]),
+																tbar: [
+																	{
+																		text: 'Add Target',
+																		handler: function() {
+																			// insert new target into db so we get it's id
+																			var rs;
+																			try {
+																				rs = db.execute('insert into SearchTargets (name) values ("")');
+																				rs.close();
+																			}
+																			catch(ex) {
+																				Ext.MessageBox.alert('Error', ex.message);
+																			}
+																			var t = new Target({
+																				id: db.lastInsertRowId,
+																				name: '',
+																				hostname: '',
+																				port: '',
+																				dbname: '',
+																				description: '',
+																				userid: '',
+																				password: '',
+																				enabled: 0
+																			});
+																			var targetgrid = Ext.ComponentMgr.get('targetgrid');
+																			var ds = targetgrid.dataSource;
+																			targetgrid.stopEditing();
+																			ds.insert(0, t);
+																			targetgrid.startEditing(0, 0);
+																		}
+																	},
+																	{
+																		text: 'Remove Target',
+																		handler: function() {
+																			var record = Ext.ComponentMgr.get('targetgrid').getSelectionModel().selection.record;
+																			try {
+																				var rs = db.execute('delete from SearchTargets where SearchTargets.rowid = ?', [record.data.rowid]);
+																				rs.close();
+																			}
+																			catch(ex) {
+																				Ext.MessageBox.alert('Error', ex.message);
+																			}
+																			updateSearchTargets();
+																			Ext.ComponentMgr.get('targetgrid').dataSource.reload();
+																		}
+																	}
+																]
+															}) // search targets grid
+
+														] // center search target tab region
+
+													} // search targets tab items
+											}, // search targets tab
 											{
 												title: 'Send Targets',
 												layout: 'border',
@@ -877,8 +1013,9 @@ biblios.app = function() {
 														width: 300,
 														items: [
 															new Ext.grid.EditorGridPanel({
-																id: 'sendtargetgrid',
-																height: 500,
+																id: 'sendtargetsgrid',
+																height: 300,
+																width: 300,
 																ds: new Ext.data.Store({
 																	proxy: new Ext.data.GoogleGearsProxy(new Array()),
 																	reader: new Ext.data.ArrayReader({
@@ -901,6 +1038,9 @@ biblios.app = function() {
 																		direction: 'ASC'
 																	}
 																}), // send target grid data store
+																sm: new Ext.grid.RowSelectionModel({
+
+																}),
 																cm: new Ext.grid.ColumnModel([
 																	{
 																		header: 'Name', 
