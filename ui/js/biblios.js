@@ -490,7 +490,21 @@ biblios.app = function() {
 																		return result;
 																		} // location mapping function
 																	}, // end location mapping
-																	{name: 'count', mapping:'count'}
+																	{name: 'count', mapping: 'count'},
+																	// extra data column to hold display of multiple locs
+																	{name: 'locationinfo', mapping: 
+																		function(rec) {
+																			var locations = Ext.DomQuery.select('location', rec);
+																			var html = '<ul class="locationlist"';
+																			for( var i = 0; i < locations.length; i++) {
+																				var name = Ext.DomQuery.select('@name', locations[i])[0].firstChild.nodeValue;
+																				var id = Ext.DomQuery.select('@id', locations[i])[0].firstChild.nodeValue;
+																				html += '<li>'+name+'</li>';
+																			}
+																			html += '</ul>';
+																			return html;
+																		} // locationinfo mapping function
+																	} // locationinfo mapping
 																	]) // search grid record
 																),//search grid reader
 																	remoteSort: false
@@ -520,6 +534,11 @@ biblios.app = function() {
 															} // selection listeners
 														}), // search grid selecion model
 														cm : new Ext.grid.ColumnModel([
+															(expander = new Ext.grid.RowExpander({
+																tpl: new Ext.Template(
+																	'<p class="locationinfo">{locationinfo}</p>'
+																)
+															})),
 															{header: "Medium", width: 50, dataIndex: 'medium'},
 															{header: "Title", width: 180, dataIndex: 'title'},
 															{header: "Author", width: 120, dataIndex: 'title-responsibility'},
@@ -536,10 +555,8 @@ biblios.app = function() {
 																} // renderer function for Location
 															} // Location column
 														]), // column model for search grid
+														plugins: expander, // search grid plugins
 														listeners: {
-															rowclick: function(grid, rowindex, e) {
-
-															},
 															rowdblclick: function(grid, rowindex, e) {
 																var id = grid.getSelections()[0].id;
 																UI.editor.id = id;
@@ -740,9 +757,6 @@ biblios.app = function() {
 																{header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true},
 															]),
 															listeners: {
-																rowclick: function(grid, rowIndex, e) {
-
-																},
 																rowdblclick: function(grid, rowIndex, e) {
 																	var id = grid.store.data.get(rowIndex).data.Id;
 																	UI.editor.id = id;
