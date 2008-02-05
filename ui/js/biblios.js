@@ -499,7 +499,7 @@ biblios.app = function() {
 																			for( var i = 0; i < locations.length; i++) {
 																				var name = Ext.DomQuery.select('@name', locations[i])[0].firstChild.nodeValue;
 																				var id = Ext.DomQuery.select('@id', locations[i])[0].firstChild.nodeValue;
-																				html += '<li>'+name+'</li>';
+																				html += '<li onclick="previewRecordOffset('+i+')">'+name+'</li>';
 																			}
 																			html += '</ul>';
 																			return html;
@@ -513,23 +513,27 @@ biblios.app = function() {
 															listeners: {
 																rowselect: function(selmodel, rowindex, record) {
 																	var id = record.id;
-																	// get the marcxml for this record and send to preview()
-																	var marcxml = '';
-																	var xml = getPazRecord(
-																		id,
-																		// callback function for when pazpar2 returns record data
-																		function(data, o) {  
-																			var xml = xslTransform.serialize(data); 
-																			recordCache[o.id] = xml; 
-																			Ext.getCmp('searchpreview').el.mask();
-																			$('#searchprevrecord').getTransform(marcxsl, xml);
-																			Ext.getCmp('searchpreview').el.unmask();
-																		},
-																		// json literal containing hash of desired params in callback
-																		{
-																			id: id
-																		}
-																	);
+																	if( record.data.count > 1 ) {
+
+																	}
+																	else {
+																		// get the marcxml for this record and send to preview()
+																		getPazRecord(
+																			id,
+																			// callback function for when pazpar2 returns record data
+																			function(data, o) {  
+																				var xml = xslTransform.serialize(data); 
+																				recordCache[o.id] = xml; 
+																				Ext.getCmp('searchpreview').el.mask();
+																				$('#searchprevrecord').getTransform(marcxsl, xml);
+																				Ext.getCmp('searchpreview').el.unmask();
+																			},
+																			// json literal containing hash of desired params in callback
+																			{
+																				id: id
+																			}
+																		);
+																	}
 																} // search grid row select handler
 															} // selection listeners
 														}), // search grid selecion model
@@ -842,24 +846,109 @@ biblios.app = function() {
 										title: 'Resources',
 										layout: 'border',
 										items: [
-												new Ext.tree.TreePanel({
-													id: 'resourcesTree',
-													region: 'center',
-													animate: true,
-													expanded: true,
-													enableDD: true,
-													ddGroup: 'RecordDrop',
-													rootVisible: false,
-													lines: false,
-													root: createFolderList(), // create root and all children
-													listeners: {
-														beforenodedrop: function(e) {
-															var sel = e.data.selections;
-															var droppedsavefileid = e.target.attributes.savefileid;
-															doSaveLocal(droppedsavefileid);
-														} // beforenodedrop
-													},
-												}) // resources treepanel with treeeditor applied
+											{
+												region: 'center',
+												items: 
+												[
+													new Ext.tree.TreePanel({
+														id: 'TargetsTreePanel',
+														animate: true,
+														leaf: false,
+														lines: false,
+														root: new Ext.tree.AsyncTreeNode({
+															text: 'Targets',
+															loader: new Ext.ux.GearsTreeLoader({
+																db: db, 
+																selectSql: 'select SearchTargets.rowid, name, hostname, port, dbname, enabled, description, userid  from SearchTargets', 
+																applyLoader: false,
+																baseAttrs: {
+																	allowDrag: false,
+																	allowDrop: false,
+																	allowAdd: false,
+																	allowDelete: false,
+																	icon: 'ui/images/network-server.png',
+																	loader: new Ext.ux.GearsTreeLoader({
+																		db: db,
+																		selectSql: 'select hostname, port, userid, dbname from SearchTargets ',
+																		whereClause: 'where SearchTargets.rowid=?',
+																		processData: function(data) {
+																			var json = '[';
+																			for( var i = 0; i < data.length; i++) {
+																				json += '{"leaf":true, "text":"Server:'+data[i][0]+'"},';
+																				json += '{"leaf":true, "text":"Port:'+data[i][1]+'"},';
+																				json += '{"leaf":true, "text":"Database:'+data[i][3]+'"},';
+																				json += '{"leaf":true, "text":"User:'+data[i][2]+'"}';
+																			}
+																			json += ']';
+																			return json;
+																		} // processData for server info leaves
+																	}) // loader for server info leaves
+																}, // baseAttrs for server nodes
+																processData: function(data) {  
+																	var json = '[';
+																	for( var i = 0; i< data.length; i++) {
+																		if(i>0) {
+																			json += ',';
+																		}
+																		json += '{';
+																		json += '"leaf": false,';
+																		json += '"servername":"'+data[i][1]+'",';
+																		json += '"text":"'+data[i][1]+'",';
+																		json += '"id":"'+data[i][0]+'",';
+																		json += '"hostname":"'+data[i][2]+'",';
+																		json += '"port":"'+data[i][3]+'",';
+																		json += '"dbname":"'+data[i][4]+'",';
+																		json += '}';
+																	}
+																	json += ']';
+																	return json;
+																}
+															})
+														}),
+													}), // resources treepanel with treeeditor applied
+													new Ext.tree.TreePanel({
+														id: 'facetsTreePanel',
+														animate: true,
+														leaf: false,
+														lines: false,
+														root: new Ext.tree.AsyncTreeNode({
+															text: 'Facets'
+														}),
+													}), // resources treepanel with treeeditor applied
+													new Ext.tree.TreePanel({
+														id: 'FoldersTreePanel',
+														leaf: false,
+														animate: true,
+														expanded: true,
+														enableDD: true,
+														ddGroup: 'RecordDrop',
+														lines: false,
+														root: new Ext.tree.AsyncTreeNode({
+															text: 'Resources'
+														}),
+														listeners: {
+															beforenodedrop: function(e) {
+																var sel = e.data.selections;
+																var droppedsavefileid = e.target.attributes.savefileid;
+																doSaveLocal(droppedsavefileid);
+															} // beforenodedrop
+														},
+													}), // resources treepanel with treeeditor applied
+													new Ext.tree.TreePanel({
+														id: 'editorsTreePanel',
+														leaf: false,
+														animate: true,
+														expanded: true,
+														enabledDD: true,
+														ddGroup: 'RecordDrop',
+														rootVisible: true,
+														lines: false,
+														root: new Ext.tree.AsyncTreeNode({
+															text: 'Editors',
+														})
+													}) // editors treepanel
+												] // tree panel items
+											} // center region of sidebar
 										] // resources panel items
 									},// biblio tab west
 									{
