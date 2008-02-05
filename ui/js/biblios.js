@@ -856,7 +856,8 @@ biblios.app = function() {
 														leaf: false,
 														lines: false,
 														root: new Ext.tree.AsyncTreeNode({
-															text: 'Targets',
+															text: 'Search Targets',
+															id: 'targetsTreeRoot',
 															loader: new Ext.ux.GearsTreeLoader({
 																db: db, 
 																selectSql: 'select SearchTargets.rowid, name, hostname, port, dbname, enabled, description, userid  from SearchTargets', 
@@ -1025,6 +1026,7 @@ biblios.app = function() {
 																					Ext.MessageBox.alert('Error', ex.message);
 																				}
 																			}
+																			Ext.getCmp('TargetsTreePanel').root.reload();
 																		} // search targets store update
 																	} // search targets grid store listeners
 																}),
