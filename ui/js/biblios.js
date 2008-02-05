@@ -925,7 +925,46 @@ biblios.app = function() {
 														ddGroup: 'RecordDrop',
 														lines: false,
 														root: new Ext.tree.AsyncTreeNode({
-															text: 'Resources'
+															text: 'Save Folders',
+															leaf: false,
+															animate: true,
+															loader: new Ext.ux.GearsTreeLoader({
+																db: db,
+																selectSql: 'select Savefiles.rowid, name, parentid, description, icon, allowDelete, allowAdd, allowDrag, allowDrop, ddGroup from Savefiles where parentid is null',
+																applyLoader: false,
+																processData: function(data) {
+																	var json = '[';
+																	for( var i = 0; i < data.length; i++) {
+																		if( i > 0 ) {
+																			json += ',';
+																		}
+																		json += '{';
+																		json += '"id":"'+data[i][0]+'",';
+																		json += '"text":"'+data[i][1]+'",';
+																		json += '"savefileid":"'+data[i][0]+'",';
+																		json += '"parentid":"'+data[i][2]+'",';
+																		json += '"qtip":"'+data[i][3]+'",';
+																		json += '"icon":"'+data[i][4]+'",';
+																		json += '"leaf":false'+',';
+																		json += '"allowDelete":"'+data[i][5]+'",';
+																		json += '"allowAdd":"'+data[i][6]+'",';
+																		json += '"allowDrag":"'+data[i][7]+'",';
+																		json += '"allowDrop":"'+data[i][8]+'",';
+																		json += '"ddGroup":"'+data[i][9]+'"';
+																		json += '}';
+																	}
+																	json += ']';
+																	return json;
+																}, // processData for savefile root nodes
+																baseAttrs: {
+																	loader: new Ext.ux.GearsTreeLoader({
+																		db: db,
+																		selectSql: 'select Savefiles.rowid, name, parentid, description, icon, allowDelete, allowAdd, allowDrag, allowDrop, ddGroup from Savefiles ',
+																		whereClause: ' where parentid = ?',
+																	}) // gears loader for subsequent savefile nodes
+																	
+																} // baseAttrs for savefile children nodes
+															}) // savefiles root gears loader
 														}),
 														listeners: {
 															beforenodedrop: function(e) {
