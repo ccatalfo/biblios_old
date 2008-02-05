@@ -985,6 +985,29 @@ biblios.app = function() {
 														lines: false,
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Editors',
+															leaf: false,
+															loader: new Ext.tree.TreeLoader({}),
+															children: [
+																{
+																	text: 'Editor One',
+																	leaf: true,
+																	listeners: {
+																		click: function(node, e) {
+																			biblios.app.displayRecordView();
+																		} // editor click listener
+
+																	} // editor one listeners
+																},
+																{	
+																	text: 'Editor two',
+																	leaf: true,
+																	listeners: {
+																		click: function(node, e) {
+																			biblios.app.displayRecordView();
+																		} // editor click listener
+																	}
+																}
+															] // editors children
 														})
 													}) // editors treepanel
 												] // tree panel items
