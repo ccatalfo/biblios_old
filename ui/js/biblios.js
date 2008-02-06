@@ -707,7 +707,77 @@ biblios.app = function() {
 																disabled: true
 															}
 														]) // editorone toolbar
-													}, // editor north
+													},
+													// editor two
+													{
+														region: 'south',
+														id: 'editortwo',
+														autoScroll: true,
+														split: true,
+														collapsible: true,
+														collapsed: true,
+														title: 'Editor 2',
+														height: 300,
+														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
+														tbar: [
+															{
+																cls: 'x-btn-text-icon bmenu', // icon and text class
+																icon: libPath + 'ui/images/document-save.png',
+																text: 'Save',
+																menu: {
+																	id: 'saveMenu',
+																	items: getSaveFileMenuItems()
+																}
+															},
+															{
+																cls: 'x-btn-text-icon bmenu', // icon and text class
+																icon: libPath + 'ui/images/document-save.png',
+																text: 'Send',
+																menu: {
+																	id: 'sendMenu',
+																	items: getSendFileMenuItems()
+																}
+															},
+															{   
+																cls: 'x-btn-text-icon bmenu', // icon and text class
+																icon: libPath + 'ui/images/network-receive.png',
+																text: 'Export',
+																menu: {
+																	id: 'exportMenu',
+																	items: getExportMenuItems()
+																}
+															},
+															{
+																cls: 'x-btn-text-icon', // icon and text class
+																icon: libPath + 'ui/images/process-stop.png',
+																text: 'Cancel',
+																handler: function() {
+																	showStatusMsg('Cancelling record...');
+																	if( UI.lastWindowOpen  == 'savegrid' ) {
+																		biblios.app.displaySaveView();
+																	}
+																	else if( UI.lastWindowOpen  == 'searchgrid' ) {
+																		biblios.app.displaySearchView();
+																	}
+																	clearStatusMsg();
+																}
+															},
+															{
+																cls: 'x-btn-text-icon', // icon and text class
+																icon: libPath + 'ui/images/edit-copy.png',
+																text: 'Merge',
+																handler: doMerge,
+																disabled: true
+															},
+															{
+																cls: 'x-btn-text-icon', // icon and text class
+																icon: libPath + 'ui/images/preferences-system.png',
+																text: 'Options',
+																handler: doRecordOptions,
+																disabled: true
+															}
+														] // editortwo toolbar
+													} // editor south
 												] // editor items
 											}, // editor region
 											{
