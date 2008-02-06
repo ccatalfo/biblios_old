@@ -139,7 +139,14 @@ function pazPar2Error(data) {
 		}
 }
 
+function clearSearchLimits() {
+	for( l in UI.searchLimits ) { 
+		delete UI.searchLimits[l]; 
+	}
+}
+
 function doPazPar2Search() {
+	clearSearchLimits();
 	var query = $("#query").val();
 	var searchtype  = $("#searchtype").val();
 	var searchquery = '';
