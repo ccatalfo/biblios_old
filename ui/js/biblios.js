@@ -139,6 +139,7 @@ biblios.app = function() {
 
 	displaySaveFile : function displaySaveFile(id) {
 		Ext.getCmp('savegrid').store.load({db: db, selectSql: savefileSelectSql + ' where Savefiles_id = '+id});
+		biblios.app.displaySaveView();
 		openState = 'savegrid';
 	}
 
@@ -399,6 +400,9 @@ biblios.app = function() {
 		},
 		displaySaveView : function() {
 			displaySaveView();
+		},
+		displaySaveFile: function(id) {
+			displaySaveFile(id);
 		},
 		displayRecordView : function() {
 			displayRecordView();
@@ -855,6 +859,11 @@ biblios.app = function() {
 														animate: true,
 														leaf: false,
 														lines: false,
+														listeners: {
+															click: function(node, e) {
+																biblios.app.displaySearchView();
+															}
+														}, // save folder listeners
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Search Targets',
 															id: 'targetsTreeRoot',
@@ -928,6 +937,11 @@ biblios.app = function() {
 															text: 'Save Folders',
 															leaf: false,
 															animate: true,
+															listeners: {
+																click: function(node, e) {
+																	biblios.app.displaySaveView();
+																}
+															}, // save folder listeners
 															loader: new Ext.ux.GearsTreeLoader({
 																db: db,
 																selectSql: 'select Savefiles.rowid, name, parentid, description, icon, allowDelete, allowAdd, allowDrag, allowDrop, ddGroup from Savefiles where parentid is null',
@@ -957,6 +971,14 @@ biblios.app = function() {
 																	return json;
 																}, // processData for savefile root nodes
 																baseAttrs: {
+																	listeners: {
+																		click: function(node, e) {
+																			UI.currSaveFile = node.attributes.id;
+																			UI.currSaveFileName = node.text;
+																			biblios.app.displaySaveFile( node.attributes.id );
+																			biblios.app.displaySaveView();
+																		}
+																	}, // save folder listeners
 																	loader: new Ext.ux.GearsTreeLoader({
 																		db: db,
 																		selectSql: 'select Savefiles.rowid, name, parentid, description, icon, allowDelete, allowAdd, allowDrag, allowDrop, ddGroup from Savefiles ',
@@ -983,6 +1005,11 @@ biblios.app = function() {
 														ddGroup: 'RecordDrop',
 														rootVisible: true,
 														lines: false,
+														listeners: {
+															click: function(node, e) {
+																biblios.app.displayRecordView();
+															}
+														}, // save folder listeners
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Editors',
 															leaf: false,
