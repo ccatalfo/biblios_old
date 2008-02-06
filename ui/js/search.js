@@ -46,16 +46,10 @@ paz = new pz2({
 					},
 					"termlist": "subject,author,date,publication-name",
 					"onterm": function(data) { 
-						removeFacets();
-						displaySearchFacets(data, 'subject', 'su'); 
-						displaySearchFacets(data, 'author', 'au'); 
-						displaySearchFacets(data, 'date', 'date'); 
-						displaySearchFacets(data, 'publication-name', 'pub'); 
-						//hideDisabledFacets();
+						Ext.getCmp('facetsTreePanel').root.reload();
 					},
                     "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
                     "pazpar2path": pazpar2url,
-                    "termlist": "subject,author",
 					"usesessions" : true,
 					"clear": 1
 				});
@@ -146,10 +140,6 @@ function pazPar2Error(data) {
 }
 
 function doPazPar2Search() {
-	//get rid of old facets from previous searches
-	if( biblios.app.currQuery != '') {
-		removeFacets();
-	}
 	var query = $("#query").val();
 	var searchtype  = $("#searchtype").val();
 	var searchquery = '';
