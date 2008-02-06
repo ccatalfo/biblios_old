@@ -447,6 +447,11 @@ biblios.app = function() {
 								autoScroll: true,
 								layout: 'border',
 								id: 'bibliotab',
+								listeners: {
+									activate: function(p) {
+										biblios.app.viewport.doLayout();
+									}
+								}, //biblio tab listeners
 								items: [
 									{
 										region: 'center',
@@ -1153,6 +1158,7 @@ biblios.app = function() {
 												listeners: {
 													activate: function(tab) {
 														Ext.getCmp('searchtargetsgrid').store.load({db: db, selectSql: biblios.app.db.selectSqlSearchTargets});
+														biblios.app.viewport.doLayout();
 													} // activate search targets grid tab
 
 												}, // search targets grid tab listeners
@@ -1329,6 +1335,7 @@ biblios.app = function() {
 												listeners: {
 													activate: function(tab) {
 														Ext.getCmp('sendtargetsgrid').store.load({db: db, selectSql: biblios.app.db.selectSqlSendTargets});
+														biblios.app.viewport.doLayout();
 													} // activate search targets grid tab
 												}, // send targets listeners
 												items: 
