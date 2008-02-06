@@ -1091,6 +1091,7 @@ biblios.app = function() {
 																	listeners: {
 																		click: function(node, e) {
 																			biblios.app.displayRecordView();
+																			Ext.getCmp('editortwo').collapse();
 																		} // editor click listener
 
 																	} // editor one listeners
@@ -1101,6 +1102,7 @@ biblios.app = function() {
 																	listeners: {
 																		click: function(node, e) {
 																			biblios.app.displayRecordView();
+																			Ext.getCmp('editortwo').expand();
 																		} // editor click listener
 																	}
 																}
