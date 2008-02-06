@@ -4,6 +4,7 @@ UI.search.remoteILS = {};
 UI.searchpreview = {};
 UI.searchpreview.id = '';
 UI.searchpreview.xml = '';
+UI.searchLimits = {};
 UI.savepreview = {};
 UI.savepreview.id = '';
 UI.savepreview.xml = '';

@@ -1000,7 +1000,18 @@ biblios.app = function() {
 														loader: new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+paz.sessionID+'&command=termlist&name=author,subject,date,publication-name'}),
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Facets',
-														})
+														}),
+														listeners: {
+															checkchange: function(node, checked) {
+																if(checked == true) {
+																	UI.searchLimits[node.id] = true;
+																}
+																else if( checked == false ) {
+																	delete UI.searchLimits[node.id];
+																}
+															} // facets panel check change listener
+
+														} // facets tree listeners
 													}), // resources treepanel with treeeditor applied
 													new Ext.tree.TreePanel({
 														id: 'FoldersTreePanel',
