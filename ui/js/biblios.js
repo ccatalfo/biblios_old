@@ -1257,29 +1257,48 @@ biblios.app = function() {
 														animate: true,
 														expanded: true,
 														ddGroup: 'RecordDrop',
+														enableDD: true,
 														rootVisible: true,
 														lines: false,
 														listeners: {
 															click: function(node, e) {
 																biblios.app.displayRecordView();
-															}
+															},
+															beforenodedrop: function(e) {
+																var sel = e.data.selections;
+																var editorid = e.target.attributes.editorid;
+																if( e.data.selections.length > 1 ) {
+																	Ext.MessageBox('Error', 'Please drag only 1 record to an editor');
+																	return false;
+																}
+																var gridid = e.data.grid.id;
+																var id = e.data.grid.store.data.get(e.data.rowIndex).data.Id;
+																if( gridid == 'savegrid') {
+																	showStatusMsg('Opening record...');
+																	var xml = getLocalXml(id);
+																	openRecord( xml, editorid);
+																
+																} // record from save grid
+																else if( gridid == 'searchgrid' ) {
+
+																} // record from search grid
+
+															} // before node drop for editors 
 														}, // save folder listeners
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Editors',
 															leaf: false,
 															ddGroup: 'RecordDrop',
+															enableDD: true,
 															loader: new Ext.tree.TreeLoader({}),
-															listeners: {
-																beforenodedrop: function(e) {
-																	var sel = e.data.selections;
-																	var droppedsavefileid = e.target.attributes.savefileid;
-																} // before node drop for editors 
-															}, // editor listeners
 															children: [
 																{
 																	text: 'Editor One',
+																	id: 'editoroneNode',
+																	editorid: 'editorone',
 																	leaf: false,
 																	allowDrop: true,
+																	enableDD: true,
 																	ddGroup: 'RecordDrop',
 																	listeners: {
 																		click: function(node, e) {
@@ -1291,9 +1310,12 @@ biblios.app = function() {
 																},
 																{	
 																	text: 'Editor two',
+																	id: 'editortwoNode',
+																	editorid: 'editortwo',
 																	leaf: false,
 																	allowDrop: true,
 																	ddGroup: 'RecordDrop',
+																	enableDD: true,
 																	listeners: {
 																		click: function(node, e) {
 																			biblios.app.displayRecordView();
