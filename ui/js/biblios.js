@@ -1183,7 +1183,7 @@ biblios.app = function() {
 																				Ext.MessageBox.alert("Database error", ex.message);
 																			}
 																			try {
-																				var id = DB.Savefiles.count();
+																				id = DB.Savefiles.count();
 																			}
 																			catch(ex) {
 																				  Ext.MessageBox.alert("Database error", ex.message);
@@ -1192,6 +1192,7 @@ biblios.app = function() {
 																			{
 																				text: 'New Folder', 
 																				savefileid: id, 
+																				id: id,
 																				qtip:'', 
 																				icon: libPath + 'ui/images/drive-harddisk.png',
 																				leaf: false, 
@@ -1201,7 +1202,15 @@ biblios.app = function() {
 																				allowEdit: true,
 																				allowDrag:true, 
 																				allowDrop:true, 
-																				ddGroup:'SaveFileNodeDrop'
+																				ddGroup:'SaveFileNodeDrop',
+																				listeners: {
+																					click: function(node, e) {
+																						UI.currSaveFile = node.attributes.id;
+																						UI.currSaveFileName = node.text;
+																						biblios.app.displaySaveFile( node.attributes.id );
+																						biblios.app.displaySaveView();
+																					}
+																				} // save folder listeners
 																			});
 																			n.appendChild(newnode);
 																			n.expand();
@@ -1247,7 +1256,6 @@ biblios.app = function() {
 														leaf: false,
 														animate: true,
 														expanded: true,
-														enabledDD: true,
 														ddGroup: 'RecordDrop',
 														rootVisible: true,
 														lines: false,
@@ -1259,11 +1267,20 @@ biblios.app = function() {
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Editors',
 															leaf: false,
+															ddGroup: 'RecordDrop',
 															loader: new Ext.tree.TreeLoader({}),
+															listeners: {
+																beforenodedrop: function(e) {
+																	var sel = e.data.selections;
+																	var droppedsavefileid = e.target.attributes.savefileid;
+																} // before node drop for editors 
+															}, // editor listeners
 															children: [
 																{
 																	text: 'Editor One',
-																	leaf: true,
+																	leaf: false,
+																	allowDrop: true,
+																	ddGroup: 'RecordDrop',
 																	listeners: {
 																		click: function(node, e) {
 																			biblios.app.displayRecordView();
@@ -1274,7 +1291,9 @@ biblios.app = function() {
 																},
 																{	
 																	text: 'Editor two',
-																	leaf: true,
+																	leaf: false,
+																	allowDrop: true,
+																	ddGroup: 'RecordDrop',
 																	listeners: {
 																		click: function(node, e) {
 																			biblios.app.displayRecordView();
