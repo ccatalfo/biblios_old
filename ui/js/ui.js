@@ -10,6 +10,14 @@ UI.savepreview.id = '';
 UI.savepreview.xml = '';
 UI.editor = {};
 UI.editor.id = '';
+UI.editor.editorone = {};
+UI.editor.editorone.id = '';
+UI.editor.editorone.ffed = '';
+UI.editor.editorone.vared = '';
+UI.editor.editortwo = {};
+UI.editor.editortwo.id = '';
+UI.editor.editortwo.ffed = '';
+UI.editor.editortwo.vared = '';
 UI.editor.doc = null;
 UI.editor.location = '';
 UI.editor.savedRemote = {};
@@ -1663,8 +1671,8 @@ function openRecord(xml, editorelem) {
 	$(vared).empty();
     $(ffed).getTransform( ffxsl, xml);
     $(vared).getTransform( varfxsl, xml);
-	UI.editor.ffed = ffed;
-	UI.editor.vared = vared;
+	UI.editor[editorelem].ffed = ffed;
+	UI.editor[editorelem].vared = vared;
 	create_static_editor(ffed, vared);
 	// show fixed field editor, hide ldr and 008 divs
 	$(ffed).show();

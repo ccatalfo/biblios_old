@@ -1276,8 +1276,8 @@ biblios.app = function() {
 																if( gridid == 'savegrid') {
 																	showStatusMsg('Opening record...');
 																	var xml = getLocalXml(id);
+																	UI.editor[editorid].id = id;
 																	openRecord( xml, editorid);
-																
 																} // record from save grid
 																else if( gridid == 'searchgrid' ) {
 
