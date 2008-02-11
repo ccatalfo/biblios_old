@@ -1070,7 +1070,7 @@ biblios.app = function() {
 																	}, // save folder listeners
 																	loader: new Ext.ux.GearsTreeLoader({
 																		db: db,
-																		selectSql: 'select Savefiles.rowid, name, parentid, description, icon, allowDelete, allowAdd, allowDrag, allowDrop, ddGroup from Savefiles ',
+																		selectSql: 'select Savefiles.rowid, name, parentid, description, icon, allowDelete, allowAdd, allowDrag, allowDrop, allowRename, ddGroup from Savefiles ',
 																		whereClause: ' where parentid = ?',
 																		processData: function(data) {
 																			var json = '[';
@@ -1090,7 +1090,8 @@ biblios.app = function() {
 																				json += '"allowAdd":"'+data[i][6]+'",';
 																				json += '"allowDrag":"'+data[i][7]+'",';
 																				json += '"allowDrop":"'+data[i][8]+'",';
-																				json += '"ddGroup":"'+data[i][9]+'"';
+																				json += '"allowRename":"'+data[i][9]+'",';
+																				json += '"ddGroup":"'+data[i][10]+'"';
 																				json += '}';
 																			}
 																			json += ']';
@@ -1110,6 +1111,11 @@ biblios.app = function() {
 															contextmenu: function(node, e) {
 																var Menu = new Ext.menu.Menu({
 																	id:'menu',
+																	listeners: {
+																		click: function(menu, menuItem, e) {
+																			menu.hide();
+																		}
+																	}, // save folder context menu listeners
 																	items: [{
 																			id:'removeNode',
 																			handler:function() {
@@ -1172,10 +1178,6 @@ biblios.app = function() {
 																					date_added: '',
 																					date_modified: ''
 																				}).save();
-																				// update our hash of savefile id/names
-																				getSaveFileNames();
-																				// update Save menu
-																				updateSaveMenu();
 																			}
 																			catch(ex) {
 																				Ext.MessageBox.alert("Database error", ex.message);
@@ -1211,16 +1213,9 @@ biblios.app = function() {
 																				clearStatusMsg();
 																			});
 																			Ext.getCmp('FoldersTreePanel').getSelectionModel().select(newnode);
-																			setTimeout(function() {
-																				treeEditor.on('complete', function(editor, value, startValue) {
-																					// update our hash of savefile id/names
-																					getSaveFileNames();
-																					updateSaveMenu();
-																				});
-																				treeEditor.editNode = newnode;
-																				treeEditor.startEdit(newnode.ui.textNode);
-																			}, 1000);
-																		} // if this node allows us to add to it
+																			treeEditor.editNode = newnode;
+																			treeEditor.startEdit(newnode.ui.textNode);
+																	} // if this node allows us to add to it
 																	}, // addnode handler
 																	cls: 'add',
 																	text: 'Add folder' 
@@ -1228,13 +1223,10 @@ biblios.app = function() {
 																	{
 																	id: 'renameNode',
 																	handler: function() {
-																		var n = this.getSelectionModel().getSelectedNode();
+																		var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
 																		if((n.attributes.allowRename == true)){
 																			treeEditor.editNode = n;
 																			treeEditor.startEdit(n.ui.textNode);
-																			// update our hash of savefile id/names
-																			getSaveFileNames();
-																			updateSaveMenu();
 																		}
 																		else {
 																			return false;
@@ -1691,10 +1683,18 @@ biblios.app = function() {
 		getSaveFileNames(); // set up hash of save file id->names
 		openState = 'searchgrid';
 		treeEditor = new Ext.tree.TreeEditor( Ext.getCmp('FoldersTreePanel'), {
-			autoSize: true,
 			cancelOnEsc: true,
 			completeOnEnter: true,
-			id: 'saveTreeEditor'
+			id: 'saveTreeEditor',
+			listeners: {
+				beforecomplete: function(editor, value, startValue) {
+					var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelected();
+					var folder = DB.SaveFiles.select('Savefiles.rowid=?', [n.attributes.id]).getOne();
+					folder.name = value;
+					folder.save();
+					//updateSaveMenu();
+				}
+			}
 		});
 		treeEditor.render();
 		alert('Application successfully initialized');
