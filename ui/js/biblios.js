@@ -36,7 +36,7 @@ biblios.app = function() {
 
 
     // private functions
-	doSaveLocal = function doSaveLocal(savefileid) {
+	doSaveLocal = function doSaveLocal(savefileid, editorid) {
 		if( !savefileid ) {
 			if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
 				savefileid = 2; // Drafts
@@ -52,7 +52,7 @@ biblios.app = function() {
 			// transform edited record back into marcxml
 			xml = UI.editor.record.XMLString();
 			progress.updateProgress(.5, 'Extracing marcxml');
-			var recid = UI.editor.id;
+			var recid = UI.editor[editorid].id;
 			// if we don't have a record id, add this record to the db first
 			if( recid == '' ) {
 				if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
@@ -660,8 +660,8 @@ biblios.app = function() {
 																icon: libPath + 'ui/images/document-save.png',
 																text: 'Save',
 																menu: {
-																	id: 'saveMenu',
-																	items: getSaveFileMenuItems()
+																	id: 'editorOneSaveMenu',
+																	items: getSaveFileMenuItems('editorone')
 																}
 															},
 															{
@@ -669,8 +669,8 @@ biblios.app = function() {
 																icon: libPath + 'ui/images/document-save.png',
 																text: 'Send',
 																menu: {
-																	id: 'sendMenu',
-																	items: getSendFileMenuItems()
+																	id: 'editorOneSendMenu',
+																	items: getSendFileMenuItems('editorone')
 																}
 															},
 															{   
@@ -678,13 +678,14 @@ biblios.app = function() {
 																icon: libPath + 'ui/images/network-receive.png',
 																text: 'Export',
 																menu: {
-																	id: 'exportMenu',
-																	items: getExportMenuItems()
+																	id: 'editorOneExportMenu',
+																	items: getExportMenuItems('editorone')
 																}
 															},
 															{
 																cls: 'x-btn-text-icon', // icon and text class
 																icon: libPath + 'ui/images/process-stop.png',
+																id: 'editorOneCancelMenu',
 																text: 'Cancel',
 																handler: function() {
 																	showStatusMsg('Cancelling record...');
@@ -730,8 +731,8 @@ biblios.app = function() {
 																icon: libPath + 'ui/images/document-save.png',
 																text: 'Save',
 																menu: {
-																	id: 'saveMenu',
-																	items: getSaveFileMenuItems()
+																	id: 'editorTwoSaveMenu',
+																	items: getSaveFileMenuItems('editortwo')
 																}
 															},
 															{
@@ -739,8 +740,8 @@ biblios.app = function() {
 																icon: libPath + 'ui/images/document-save.png',
 																text: 'Send',
 																menu: {
-																	id: 'sendMenu',
-																	items: getSendFileMenuItems()
+																	id: 'editorTwoSendMenu',
+																	items: getSendFileMenuItems('editortwo')
 																}
 															},
 															{   
@@ -748,13 +749,14 @@ biblios.app = function() {
 																icon: libPath + 'ui/images/network-receive.png',
 																text: 'Export',
 																menu: {
-																	id: 'exportMenu',
-																	items: getExportMenuItems()
+																	id: 'editorTwoExportMenu',
+																	items: getExportMenuItems('editortwo')
 																}
 															},
 															{
 																cls: 'x-btn-text-icon', // icon and text class
 																icon: libPath + 'ui/images/process-stop.png',
+																id: 'editorTwoCancelMenu',
 																text: 'Cancel',
 																handler: function() {
 																	showStatusMsg('Cancelling record...');
@@ -1280,6 +1282,7 @@ biblios.app = function() {
 																	openRecord( xml, editorid);
 																} // record from save grid
 																else if( gridid == 'searchgrid' ) {
+																	// FIXME
 
 																} // record from search grid
 

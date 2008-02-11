@@ -138,16 +138,18 @@ function getSendFileMenuItems() {
 	return list;
 }
 
-function getSaveFileMenuItems() {
+function getSaveFileMenuItems(editorid) {
 	var list = new Array();
 	getSaveFileNames();
 	for ( sf in UI.save.savefile ) {
 		var o = {
 			text: UI.save.savefile[sf],
 			id: sf,
+			editorid: editorid,
 			handler: function(btn) {
 				var savefileid = btn.id;
-				doSaveLocal(savefileid);
+				var editorid = btn.editorid;
+				doSaveLocal(savefileid, editorid);
 			}
 		};
 		list.push(o);
