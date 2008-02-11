@@ -101,7 +101,7 @@ function updateSaveMenu() {
 	Ext.menu.MenuMgr.get('saveMenu').removeAll();
 	var savefiles = getSaveFileMenuItems();
 	for( sf in savefiles ) {
-		Ext.menu.MenuMgr.get('saveMenu').add( biblios.app.savefiles[sf] );
+		Ext.menu.MenuMgr.get('saveMenu').add( UI.save.savefile[sf] );
 	}
 }
 
