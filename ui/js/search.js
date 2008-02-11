@@ -346,11 +346,27 @@ function removeFacets() {
 	facetsRoot.setText("Facets <img src='"+libPath+"ui/images/ajax-loader.gif'>");
 }
 
+function term2searchterm(term) {
+	switch(term) {
+		case 'title':
+			return 'ti';
+			break;
+		case 'date':
+			return 'date';
+			break;
+		case 'subject':
+			return 'su';
+			break;
+		case 'publication-name':
+			return 'pub';
+			break;
+	}
+}
 function limitSearch() {
 	// start w/ original query and build from there
 	var query = biblios.app.currQuery;
-	for( name in searchLimits ) {
-		query += ' and ' + searchLimits[name] + '="' + name + '"';
+	for( name in UI.searchLimits ) {
+		query += ' and ' + term2searchterm(UI.searchLimits[name]) + '="' + name + '"';
 	}
 	paz.search(query);
 	paz.show();

@@ -1004,11 +1004,12 @@ biblios.app = function() {
 														listeners: {
 															checkchange: function(node, checked) {
 																if(checked == true) {
-																	UI.searchLimits[node.id] = true;
+																	UI.searchLimits[node.id] = node.attributes.searchType;
 																}
 																else if( checked == false ) {
 																	delete UI.searchLimits[node.id];
 																}
+																limitSearch();
 															} // facets panel check change listener
 
 														} // facets tree listeners
