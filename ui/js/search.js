@@ -164,7 +164,7 @@ function doPazPar2Search() {
     biblios.app.displaySearchView();
 }
 
-function getRemoteRecord(id, loc, callback) {
+function getRemoteRecord(id, loc, offset, callback) {
 		showStatusMsg('Opening record...');
 		UI.editor.id = '';
 		UI.editor.location = loc;
@@ -173,7 +173,7 @@ function getRemoteRecord(id, loc, callback) {
 			getRecordFromLocation(id, loc, callback);
 		}
 		else {
-			var xml = getPazRecord(id, callback);
+			var xml = getPazRecord(id, offset, callback);
 		}
 }
 
@@ -186,7 +186,7 @@ function getRecordFromLocation(id, loc, callback) {
 	Prefs.remoteILS[loc].instance.retrieve(marcxml);
 }
 
-function getPazRecord(recId, callback, callbackParamObject) {
+function getPazRecord(recId, offset, callback, callbackParamObject) {
 	if( recordCache[recId] ) {
 		if(debug) { console.info('retreiving record from cache')}
 		// call the callback with record from record cache
@@ -202,7 +202,7 @@ function getPazRecord(recId, callback, callbackParamObject) {
 					session: paz.sessionID,
 					command: 'record',
 					id: recId,
-					offset: '0'
+					offset: offset
 				},
 				type: 'GET',
 				dataType: 'xml',

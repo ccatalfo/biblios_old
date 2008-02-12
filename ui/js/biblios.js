@@ -529,6 +529,7 @@ biblios.app = function() {
 																		// get the marcxml for this record and send to preview()
 																		getPazRecord(
 																			id,
+																			0,
 																			// callback function for when pazpar2 returns record data
 																			function(data, o) {  
 																				var xml = xslTransform.serialize(data); 
@@ -585,7 +586,7 @@ biblios.app = function() {
 																var id = grid.getSelections()[0].id;
 																UI.editor['editorone'].id = id;
 																var loc = grid.getSelections()[0].data.location;
-																getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize(data), 'editorone' ) }
+																getRemoteRecord(id, loc, 0, function(data) { openRecord( xslTransform.serialize(data), 'editorone' ) }
 														);
 
 															},
@@ -594,7 +595,7 @@ biblios.app = function() {
 																var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																UI.editor['editorone'].id = id;
 																var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
-																  getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data), 'editorone' ) });
+																  getRemoteRecord(id, loc, 0, function(data) { openRecord( xslTransform.serialize( data), 'editorone' ) });
 																}	
 															} // on ENTER keypress
 														}, // search grid listeners
@@ -624,7 +625,7 @@ biblios.app = function() {
 																			var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																			UI.editor['editorone'].id = id;
 																			var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
-																			getRemoteRecord(id, loc, function(data) { 
+																			getRemoteRecord(id, loc, 0, function(data) { 
 																				openRecord( xslTransform.serialize(data), 'editorone' ) 
 																			});
 																		}
@@ -1284,24 +1285,48 @@ biblios.app = function() {
 																biblios.app.displayRecordView();
 															},
 															beforenodedrop: function(e) {
-																var sel = e.data.selections;
+																// if we have a grid row
 																var editorid = e.target.attributes.editorid;
-																if( e.data.selections.length > 1 ) {
-																	Ext.MessageBox('Error', 'Please drag only 1 record to an editor');
-																	return false;
-																}
-																var gridid = e.data.grid.id;
-																var id = e.data.grid.store.data.get(e.data.rowIndex).data.Id;
-																if( gridid == 'savegrid') {
-																	showStatusMsg('Opening record...');
-																	var xml = getLocalXml(id);
+																if( e.data.grid ) {
+																	var sel = e.data.selections;
+																	if( e.data.selections.length > 1 ) {
+																		Ext.MessageBox('Error', 'Please drag only 1 record to an editor');
+																		return false;
+																	}
+																	var gridid = e.data.grid.id;
+																	var id = e.data.grid.store.data.get(e.data.rowIndex).data.Id;
+																	if( gridid == 'savegrid') {
+																		showStatusMsg('Opening record...');
+																		var xml = getLocalXml(id);
+																		UI.editor[editorid].id = id;
+																		openRecord( xml, editorid);
+																	} // record from save grid
+																	else if( gridid == 'searchgrid' ) {
+																		// FIXME
+																		var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+																		UI.editor[editorid].id = id;
+																		var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
+																		if( loc.length > 1 ) {
+																			Ext.Msg.alert('Error', 'This record is available at more than one location.  Please select a location by clicking the expander button next to this record in the grid and dragging it to editor one or two.');
+																			return false;
+																		}
+																		getRemoteRecord(id, loc, 0, function(data) { 
+																			openRecord( xslTransform.serialize(data), editorid ) 
+																		});
+																	} // record from search grid
+																} // if we have a grid row
+																else {
+																	var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																	UI.editor[editorid].id = id;
-																	openRecord( xml, editorid);
-																} // record from save grid
-																else if( gridid == 'searchgrid' ) {
-																	// FIXME
+																	var offset = e.source.id.substr(3); // "loc"+offset
+																	var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[offset];
+																	var record = Ext.getCmp('searchgrid').getSelections()[0];
+																	getRemoteRecord(id, loc.name, offset, function(data) { 
+																		openRecord( xslTransform.serialize(data), editorid ) 
+																	});
 
-																} // record from search grid
+
+																} // if we have a location from the search grid
 
 															} // before node drop for editors 
 														}, // save folder listeners
