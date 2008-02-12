@@ -508,7 +508,7 @@ biblios.app = function() {
 																			for( var i = 0; i < locations.length; i++) {
 																				var name = Ext.DomQuery.select('@name', locations[i])[0].firstChild.nodeValue;
 																				var id = Ext.DomQuery.select('@id', locations[i])[0].firstChild.nodeValue;
-																				html += '<li onclick="previewRecordOffset('+i+')">'+name+'</li>';
+																				html += '<li id="locitem-'+i+'" class="locationitem" onclick="previewRecordOffset('+i+')">'+name+'</li>';
 																			}
 																			html += '</ul>';
 																			return html;
@@ -548,9 +548,16 @@ biblios.app = function() {
 														}), // search grid selecion model
 														cm : new Ext.grid.ColumnModel([
 															(expander = new Ext.grid.RowExpander({
-																tpl: new Ext.Template(
-																	'<p class="locationinfo">{locationinfo}</p>'
-																)
+																remoteDataMethod: function(record, index) {
+																	var locations = record.data.location;
+																	var html = '';
+																	for( var i = 0; i < locations.length; i++) {
+																		html += '<p>' + locations[i].name + '</p>';
+
+																	}
+																	$('#remData'+index).html(html);
+
+																}
 															})),
 															{header: "Medium", width: 50, dataIndex: 'medium'},
 															{header: "Title", width: 180, dataIndex: 'title'},
