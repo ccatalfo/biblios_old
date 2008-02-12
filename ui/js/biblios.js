@@ -523,6 +523,7 @@ biblios.app = function() {
 																rowselect: function(selmodel, rowindex, record) {
 																	var id = record.id;
 																	if( record.data.count > 1 ) {
+																		
 
 																	}
 																	else {
@@ -558,9 +559,32 @@ biblios.app = function() {
 
 																	}
 																	$('#remData'+index).html(html);
-																	// set up drag source for each of these items
+																	// set up drag source and preview for each of these items
 																	for( var i = 0; i < locations.length; i++) {
 																		Ext.get('loc'+i).dd = new Ext.dd.DragSource('loc'+i, {ddGroup: 'RecordDrop'});
+																		Ext.get('loc'+i).on('click', function(e) {
+																			var record = Ext.getCmp('searchgrid').getSelections()[0];
+																			var id = record.id;
+																			var offset = e.getTarget().id.substr(3);
+																			getPazRecord(
+																				id,
+																				offset,
+																				// callback function for when pazpar2 returns record data
+																				function(data, o) {  
+																					var xml = xslTransform.serialize(data); 
+																					recordCache[o.id] = xml; 
+																					Ext.getCmp('searchpreview').el.mask();
+																					$('#searchprevrecord').getTransform(marcxsl, xml);
+																					Ext.getCmp('searchpreview').el.unmask();
+																				},
+																			// json literal containing hash of desired params in callback
+																			{
+																				id: id
+																			}
+																		);
+
+
+																		});
 																	}
 																}
 															})),
