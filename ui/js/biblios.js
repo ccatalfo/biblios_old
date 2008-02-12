@@ -50,7 +50,7 @@ biblios.app = function() {
 			Ext.get('varfields_editor').mask();
 			var progress = Ext.MessageBox.progress('Saving record');
 			// transform edited record back into marcxml
-			xml = UI.editor.record.XMLString();
+			xml = UI.editor[editorid].record.XMLString();
 			progress.updateProgress(.5, 'Extracing marcxml');
 			var recid = UI.editor[editorid].id;
 			// if we don't have a record id, add this record to the db first
@@ -66,10 +66,10 @@ biblios.app = function() {
 				try {
 					var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
 					if( record.marcflavour == 'marc21' ) {
-						record.title = UI.editor.record.getValue('245', 'a');
-						record.author = UI.editor.record.getValue('100', 'a');
-						record.publisher = UI.editor.record.getValue('260', 'b');
-						record.dateofpub = UI.editor.record.getValue('260', 'c');
+						record.title = UI.editor[editorid].record.getValue('245', 'a');
+						record.author = UI.editor[editorid].record.getValue('100', 'a');
+						record.publisher = UI.editor[editorid].record.getValue('260', 'b');
+						record.dateofpub = UI.editor[editorid].record.getValue('260', 'c');
 					}
 					record.xml = xml;
 					record.Savefiles_id = savefileid;
@@ -572,7 +572,7 @@ biblios.app = function() {
 														listeners: {
 															rowdblclick: function(grid, rowindex, e) {
 																var id = grid.getSelections()[0].id;
-																UI.editor.id = id;
+																UI.editor['editorone'].id = id;
 																var loc = grid.getSelections()[0].data.location;
 																getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize(data), 'editorone' ) }
 														);
@@ -581,7 +581,7 @@ biblios.app = function() {
 															keypress: function(e) {
 															  if( e.getKey() == Ext.EventObject.ENTER ) {
 																var id = Ext.getCmp('searchgrid').getSelections()[0].id;
-																UI.editor.id = id;
+																UI.editor['editorone'].id = id;
 																var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
 																  getRemoteRecord(id, loc, function(data) { openRecord( xslTransform.serialize( data), 'editorone' ) });
 																}	
@@ -611,7 +611,7 @@ biblios.app = function() {
 																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
 																		handler: function() {
 																			var id = Ext.getCmp('searchgrid').getSelections()[0].id;
-																			UI.editor.id = id;
+																			UI.editor['editorone'].id = id;
 																			var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
 																			getRemoteRecord(id, loc, function(data) { 
 																				openRecord( xslTransform.serialize(data), 'editorone' ) 
@@ -650,6 +650,7 @@ biblios.app = function() {
 													{
 														region: 'center',
 														id: 'editorone',
+														cls: 'marceditor',
 														autoScroll: true,
 														split: true,
 														height: 300,
@@ -686,8 +687,9 @@ biblios.app = function() {
 																cls: 'x-btn-text-icon', // icon and text class
 																icon: libPath + 'ui/images/process-stop.png',
 																id: 'editorOneCancelMenu',
+																editorid: 'editorone',
 																text: 'Cancel',
-																handler: function() {
+																handler: function(btn) {
 																	showStatusMsg('Cancelling record...');
 																	if( UI.lastWindowOpen  == 'savegrid' ) {
 																		biblios.app.displaySaveView();
@@ -695,6 +697,7 @@ biblios.app = function() {
 																	else if( UI.lastWindowOpen  == 'searchgrid' ) {
 																		biblios.app.displaySearchView();
 																	}
+																	clear_editor(btn.editorid);
 																	clearStatusMsg();
 																}
 															},
@@ -718,6 +721,7 @@ biblios.app = function() {
 													{
 														region: 'south',
 														id: 'editortwo',
+														cls: 'marceditor',
 														autoScroll: true,
 														split: true,
 														collapsible: true,
@@ -757,6 +761,7 @@ biblios.app = function() {
 																cls: 'x-btn-text-icon', // icon and text class
 																icon: libPath + 'ui/images/process-stop.png',
 																id: 'editorTwoCancelMenu',
+																editorid: 'editortwo',
 																text: 'Cancel',
 																handler: function() {
 																	showStatusMsg('Cancelling record...');
@@ -766,6 +771,7 @@ biblios.app = function() {
 																	else if( UI.lastWindowOpen  == 'searchgrid' ) {
 																		biblios.app.displaySearchView();
 																	}
+																	clear_editor('editortwo');
 																	clearStatusMsg();
 																}
 															},
@@ -844,16 +850,16 @@ biblios.app = function() {
 															listeners: {
 																rowdblclick: function(grid, rowIndex, e) {
 																	var id = grid.store.data.get(rowIndex).data.Id;
-																	UI.editor.id = id;
 																	showStatusMsg('Opening record...');
 																	var xml = getLocalXml(id);
+																	UI.editor.id = id;
 																	openRecord( xml, 'editorone');
 																},// save grid row dbl click handler
 																keypress: function(e) {
 																	if( e.getKey() == Ext.EventObject.ENTER ) {
 																		var sel = Ext.getCmp('savegrid').getSelectionModel().getSelected();
 																		var id = sel.data.Id;
-																		UI.editor.id = id;
+																		UI.editor['editorone'].id = id;
 																		var xml = getLocalXml(id);
 																		openRecord( xml, 'editorone' );
 																		showStatusMsg('Opening record...');
@@ -885,7 +891,7 @@ biblios.app = function() {
 																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
 																		handler: function() {
 																			var id = Ext.getCmp('savegrid').getSelections()[0].data.Id;
-																			UI.editor.id = id;
+																			UI.editor['editorone'].id = id;
 																			showStatusMsg('Opening record...');
 																			var xml = getLocalXml(id);
 																			openRecord( xml, 'editorone');

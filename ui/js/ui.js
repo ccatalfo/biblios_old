@@ -10,36 +10,42 @@ UI.savepreview.id = '';
 UI.savepreview.xml = '';
 UI.editor = {};
 UI.editor.id = '';
+UI.editor.lastFocusedEl = '';
+// marc editor one metadata
 UI.editor.editorone = {};
 UI.editor.editorone.id = '';
 UI.editor.editorone.ffed = '';
 UI.editor.editorone.vared = '';
+UI.editor.editorone.location = '';
+UI.editor.editorone.savedRemote  = {};
+UI.editor.editorone.savefileid  = '';
+UI.editor.editorone.record = new MarcEditor('', '');
+UI.editor.editorone.comboboxes = new Array();
+// marc editor two metadata
 UI.editor.editortwo = {};
 UI.editor.editortwo.id = '';
 UI.editor.editortwo.ffed = '';
 UI.editor.editortwo.vared = '';
-UI.editor.doc = null;
-UI.editor.location = '';
-UI.editor.savedRemote = {};
-UI.editor.savefileid = '';
-UI.editor.xml = '';
-UI.editor.lastFocusedEl = '';
-UI.editor.record = new MarcEditor('', '');
-UI.editor.comboboxes = new Array();
-// one editor has focus at a time
-UI.editor.ffed = '';
-UI.editor.vared = '';
+UI.editor.editortwo.location = '';
+UI.editor.editortwo.savedRemote  = {};
+UI.editor.editortwo.savefileid  = '';
+UI.editor.editortwo.record = new MarcEditor('', '');
+UI.editor.editortwo.comboboxes = new Array();
+// search state
 UI.search = {};
 UI.search.currQuery = '';
 UI.search.limitby = {};
+// save state
 UI.save = {};
 UI.save.savefile = {};
 UI.savefilesql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
 UI.currSaveFile = '';
 UI.currSaveFileName = '';
+// window state
 UI.lastWindowOpen = '';
 UI.lastSearchPreviewed = '';
 UI.lastSavePreview = '';
+// keymaps
 UI.keymaps = {};
 // layouts
 UI.optionsLayout = {};
@@ -1673,7 +1679,7 @@ function openRecord(xml, editorelem) {
     $(vared).getTransform( varfxsl, xml);
 	UI.editor[editorelem].ffed = ffed;
 	UI.editor[editorelem].vared = vared;
-	create_static_editor(ffed, vared);
+	create_static_editor(ffed, vared, editorelem);
 	// show fixed field editor, hide ldr and 008 divs
 	$(ffed).show();
 	// hide leader and 008
