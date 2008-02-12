@@ -552,11 +552,15 @@ biblios.app = function() {
 																	var locations = record.data.location;
 																	var html = '';
 																	for( var i = 0; i < locations.length; i++) {
-																		html += '<p>' + locations[i].name + '</p>';
+																		var id = 'loc'+i;
+																		html += '<p id="'+id+'">' + locations[i].name + '</p>';
 
 																	}
 																	$('#remData'+index).html(html);
-
+																	// set up drag source for each of these items
+																	for( var i = 0; i < locations.length; i++) {
+																		Ext.get('loc'+i).dd = new Ext.dd.DragSource('loc'+i, {ddGroup: 'RecordDrop'});
+																	}
 																}
 															})),
 															{header: "Medium", width: 50, dataIndex: 'medium'},
