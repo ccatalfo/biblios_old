@@ -147,6 +147,7 @@ biblios.app = function() {
 
 	displayRecordView : function displayRecordView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(1);
+		openState = 'editorPanel';
 
 	}
 
@@ -649,7 +650,7 @@ biblios.app = function() {
 																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
 																		handler: function() {
 																			var id = Ext.getCmp('searchgrid').getSelections()[0].id;
-																			UI.editor['editorone'].id = id;
+																			UI.editor['editorone'].id = '';
 																			var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
 																			getRemoteRecord(id, loc, 0, function(data) { 
 																				openRecord( xslTransform.serialize(data), 'editorone' ) 
@@ -1375,7 +1376,7 @@ biblios.app = function() {
 																	text: 'Editor One',
 																	id: 'editoroneNode',
 																	editorid: 'editorone',
-																	leaf: false,
+																	leaf: true,
 																	allowDrop: true,
 																	enableDD: true,
 																	ddGroup: 'RecordDrop',
@@ -1391,7 +1392,7 @@ biblios.app = function() {
 																	text: 'Editor two',
 																	id: 'editortwoNode',
 																	editorid: 'editortwo',
-																	leaf: false,
+																	leaf: true,
 																	allowDrop: true,
 																	ddGroup: 'RecordDrop',
 																	enableDD: true,
