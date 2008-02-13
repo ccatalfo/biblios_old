@@ -766,7 +766,7 @@ biblios.app = function() {
 														collapsible: true,
 														collapsed: true,
 														title: 'Editor 2',
-														height: 300,
+														height: 230,
 														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
 														tbar: [
 															{
