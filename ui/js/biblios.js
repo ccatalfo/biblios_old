@@ -1338,7 +1338,7 @@ biblios.app = function() {
 																	else if( gridid == 'searchgrid' ) {
 																		// FIXME
 																		var id = Ext.getCmp('searchgrid').getSelections()[0].id;
-																		UI.editor[editorid].id = id;
+																		UI.editor[editorid].id = '';
 																		var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
 																		if( loc.length > 1 ) {
 																			Ext.Msg.alert('Error', 'This record is available at more than one location.  Please select a location by clicking the expander button next to this record in the grid and dragging it to editor one or two.');
@@ -1352,7 +1352,7 @@ biblios.app = function() {
 																// we have a location from search grid
 																else {
 																	var id = Ext.getCmp('searchgrid').getSelections()[0].id;
-																	UI.editor[editorid].id = id;
+																	UI.editor[editorid].id = '';
 																	var offset = e.source.id.substr(3); // "loc"+offset
 																	var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[offset];
 																	var record = Ext.getCmp('searchgrid').getSelections()[0];
