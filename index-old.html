@@ -1,0 +1,260 @@
+<html>
+<head>
+<!-- paths for loading xsl stylesheets for manipulating marc records -->
+<script type="text/javascript">
+var libPath = '';
+var hostPort = '';
+var cgiDir = '/cgi-bin/';
+var showMarcXslPath = libPath + "ui/xsl/MARC21slim2HTML.xsl";
+var fixedFieldXslPath = libPath + "ui/xsl/fixedfields_editor.xsl";
+var varFieldsXslPath = libPath + "ui/xsl/varfields_inputboxes.xsl";
+var confPath = libPath + "conf/webcatdb.conf";
+</script>
+
+<script type="text/javascript" src="lib/google_gears/gears_init.js"></script>
+<script>
+  if (!window.google || !google.gears) {
+	  location.href = "http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application" +
+                    "&return="+document.URL;
+  }
+</script>
+<script type="text/javascript">
+  // set debug to 0 to disable logging to firebug
+var debug = 0;
+var db_debug = 0;
+</script>
+<!-- fckeditor 
+<script type="text/javascript" src="lib/fckeditor/fckeditor.js"></script>
+-->
+
+<!-- gears related -->
+<script type="text/javascript" src="lib/google_gears/GearsORM_all.js"></script>
+<!--<script type="text/javascript" src="lib/google_gears/GearsORM_all.js"></script>-->
+<script type="text/javascript" src="lib/google_gears/GearsORMShift.js"></script>
+<!-- Sarissa -->
+<script type="text/javascript" src="lib/sarissa/sarissa.js"></script>
+<script src="lib/sarissa/sarissa_ieemu_xpath.js"		type="text/javascript"></script>
+<!-- Jquery -->
+<script type="text/javascript" src="lib/jquery/jquery-1.1.3.1.pack.js"></script>
+<script src="lib/jquery/jquery.debug.js"	type="text/javascript"></script>
+<script type="text/javascript" src="lib/jquery/jquery.xslTransform.packed.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery-plugins.js"></script>
+<script type="text/javascript" src="lib/jquery/interface.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery.hotkeys.js"></script>
+
+<!-- ExtJs -->
+<script type="text/javascript" src="lib/extjs/ext-jquery-adapter.js"></script>
+<script type="text/javascript" src="lib/extjs/ext-all.js"></script>
+
+<!-- pazpar2 library -->
+<script type="text/javascript" src="lib/pz2.js"></script>
+
+<!-- our own javascript app files -->
+<script type="text/javascript" src="ui/js/biblios_packed.js"></script>
+
+<!-- additions to Extjs library for this project -->
+<script type="text/javascript" src="lib/extjs/PagingToolbarRemoveButton.js"></script>
+<script type="text/javascript" src="lib/extjs/PagingMemoryProxy.js"></script>
+<script type="text/javascript" src="lib/extjs/GoogleGearsProxy.js"></script>
+
+<link type="text/css" rel="stylesheet" href="lib/extjs/resources/css/ext-all.css" />
+
+<!-- our own style sheets -->
+<link type="text/css" rel="stylesheet" href="ui/css/styles.css" />
+<link type="text/css" rel="stylesheet" href="ui/css/editor-styles.css" />
+
+<style>
+.loading-indicator {
+  font-size:8pt;
+  background-image: url('lib/extjs/resources/images/default/grid/loading.gif');
+  background-repeat: no-repeat;
+  background-position:top left;
+  padding-left:20px;
+	height:18px;
+	text-align:left;
+}
+#loading{
+	position:absolute;
+	left:45%;
+	top:40%;
+	border:1px solid #6593cf;
+	padding:2px;
+	background:#c3daf9;
+	width:150px;
+	text-align:center;
+	z-index:20001;
+}
+#loading .loading-indicator{
+	border:1px solid #a3bad9;
+	background:white url('lib/extjs/resources/images/block-bg.gif') repeat-x;
+	color:#003366;
+	font:bold 13px tahoma,arial,helvetica;
+	padding:10px;
+	margin:0;
+}
+
+</style>
+
+</head>
+
+<body>
+<!-- loading mask area -->
+<div id="loading-mask" style="width:100%;height:100%;background:#c3daf9;p osition:absolute;z-index:20000;left:0;top:0;"> </div>
+<div id="loading">
+<div class="loading-indicator"><img src="lib/extjs/resources/images/default/grid/loading.gif" style="width:16px;height:16px;" align="absmiddle"> Loading...</div>
+</div>
+
+<div id='top-panel'>
+	<div id='header'>
+		<div id='login'>Logged in as </div>
+	</div>
+	<div id='header_search'>
+	  <div id='searchform'>
+	 	<p class='searchtip'>Enter a search term and choose a search type</p>
+		<form onsubmit='doSearch(this); return false;'>
+			<input id='query' class='focus' type='text' size='40' name='query'/>
+			<select id='searchtype'>	
+				<option value=''>Keyword</option>
+				<option value='ti'>Title</option>
+				<option value='au'>Author</option>
+				<option value='su'>Subject</option>
+				<option value='isbn'>ISBN</option>
+				<option value='issn'>ISSN</option>
+			</select>
+			<select id='searchloc'>
+				<option value='All'>All</option>
+				<option value='SearchTargets'>Search Targets</option>
+				<option value='LocalFolders'>Local Folders</option>
+				<option value='Vendors'>Vendors</option>
+			</select>
+			<input type='submit' value='Search'>
+		</form>
+	  </div>
+	</div>
+</div> <!-- top panel -->
+<div id="tab-panel">
+	<div id='hometab'>
+
+	</div>
+	<div id='optionstab'>
+		<div id='database_options'>
+			<div id='dbform'></div>
+		</div>
+		<div id='macro_options'></div>
+		<div id='plugin_options'></div>
+		<div id='target_options'>
+		  <div id='targetgrid-toolbar'></div>
+		  <div id='targetgrid'></div>
+		</div>
+		<div id='sendtarget_options'>
+		  <div id='sendtargetgrid-toolbar'></div>
+		  <div id='sendtargetgrid'></div>
+		</div>
+		<div id='keyboard_options'></div>
+
+	</div>
+	<div id='acqtab'>
+		<div id='acqsearchgrid-toolbar'></div>
+		<div id='acqsearchgrid'></div>
+
+	</div>
+    <div id='bibliotab'>
+		<div id='folder-list'>
+		  <div id='status-box'></div>
+		</div>
+        <div id='work-panel'>
+            <div id='upper-panel'>
+					<div id='home-panel'>
+
+					</div>
+					<div id='searchgridpanel'>
+						  <div id='searchgrid-toolbar'></div>
+						  <div id='searchgrid'></div>
+					</div>
+					<div id='savegridpanel'>
+						  <div id='savegrid-toolbar'></div>
+						  <div id='savegrid'></div>
+					</div>
+					 <div id='marceditor'>
+							  <div id='editor-toolbar'></div>
+							  <div id='record-toolbar'>
+									<ul>
+										<li class='recordtoolbar' id='record-toolbar-handle'></li>
+										<li class='recordtoolbar' id='tb1'></li>
+										<li class='recordtoolbar' id='tb2'></li>
+										<li class='recordtoolbar' id='tb3'></li>
+									</ul>
+								</div>
+							  <div id='marccontent'>
+								  <div id='ffeditor'></div>
+								  <div id='vareditor'>
+									<!--
+								  <script type="text/javascript">
+									  var oFCKeditor = new FCKeditor('FCKeditor1');
+									  oFCKeditor.BasePath = "lib/fckeditor/";
+									  oFCKeditor.Create();
+								  </script>
+									-->
+								  
+								  </div>
+							  </div>
+					 </div>
+             </div> <!-- upper-panel -->
+             <div id='left-panel'></div>
+			<div id='search-preview-panel'></div>
+			<div id='save-preview-panel'></div>
+            <div id='right-panel'></div>
+        </div> <!-- work-panel -->
+    </div>
+</div>
+<div id='south'></div>
+
+<!-- dialogs -->
+<div id='options-dlg'></div>
+<div id='search-dlg'></div>
+<div id='upload-dlg'></div>
+<div id='newrecord-dlg'></div>
+
+<script>
+Ext.onReady(function(){
+    init_gears();
+    initPrefs();
+    initUI();
+    createHomeTab();	
+	createBiblioTab();
+    createOptionsTab();	
+	createAcqTab();
+
+	// fixes for embedding into koha (eliminate css clashes with koha css)
+	// borders on unclassed td
+	$('td').css('border-left', 'none').css('border-top', 'none').css('border-bottom', 'none').css('background-color', 'transparent');
+	// borders on tables
+	$('table').css('border-collapse', 'separate').css('border-right', 'none').css('border-top', 'none');
+	// prevent scrollbars from overlapping grid (noted in mac ff and windows ff)
+	$('.x-grid-scroller').css('overflow', 'hidden');
+	// make "More" koha dropdown appear correctly
+	$('.outerbox.inner').css('position', '');
+// remove loading box
+  var loading = Ext.get('loading');
+  var mask = Ext.get('loading-mask');
+  mask.setOpacity(.8);
+  mask.shift({
+  	xy:loading.getXY(),
+  	width:loading.getWidth(),
+  	height:loading.getHeight(), 
+  	remove:true,
+  	duration:1,
+  	opacity:.3,
+  	easing:'bounceOut',
+  	callback : function(){
+  		loading.fadeOut({duration:.2,remove:true});
+  	}
+  });
+});
+
+
+
+</script>
+</body>
+</html>
+
