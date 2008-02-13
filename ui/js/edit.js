@@ -93,8 +93,9 @@ function get008FromEditor(ff_ed) {
 		var char27 = " "; // undefined
 	    var govpub = $("#GovPub", ff_ed).val(); 
 		var char2934 = "     "; // 5 undefines
-		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, char1821, audn, char2325, file, char27, govpub, char2934 );
+		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, char1821, audn, char2325, file, char27, govpub, char2934, lang, mrec, srce );
 	}
+	// maps
 	else if( type == 'e'|| type =='f' ) {
 		var relief = $("#Relief", ff_ed).val();
 		var proj = $("#Proj", ff_ed).val();
@@ -105,9 +106,10 @@ function get008FromEditor(ff_ed) {
 	    var form = $("#Form", ff_ed ).val();
 	    var indx = $("#Indx", ff_ed).val();
 		var spchar = $("#SpChar", ff_ed).val();
-		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, relief, proj, undef1, cart, undef2, govpub, form, undef1, indx, undef1, spchar );
+		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, relief, proj, undef1, cart, undef2, govpub, form, undef1, indx, undef1, spchar, lang, mrec, srce );
 	}
-	else if( type == 'c' || type == 'd' || type == 'j' ) {
+	// musical materials
+	else if( type == 'c' || type == 'd' || type == 'j' || type = 'i') {
 		var compform = $("#CompForm", ff_ed).val();
 		var format = $("#Format", ff_ed).val();
 		var parts = $("#Parts", ff_ed).val();
@@ -117,7 +119,22 @@ function get008FromEditor(ff_ed) {
 		var littext = $("#LitText", ff_ed).val();
 		var undef1 = " ";
 		var trarr = $("#TrArr", ff_ed).val();
-		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, compform, format, parts, audn, form, accomp, littext, undef1, trarr, undef1 );
+		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, compform, format, parts, audn, form, accomp, littext, undef1, trarr, undef1, lang, mrec, srce );
+	}
+	// visual materials
+	else if( type == 'g' || type == 'k' || type == 'o' || type = 'r') {
+		var rtime = $("#RTime", ff_ed).val();
+		var audn = $("#Audn", ff_ed).val();
+		var govpub = $("#GovPub", ff_ed).val();
+		var form = $("#Form", ff_ed).val();
+		var vistype = $("#VisType", ff_ed).val();
+		var tech = $("#Tech", ff_ed).val();
+		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, rtime, " ", audn, "     ", govpub, form, "   ", vistype, tech, lang, mrec, srce );
+	}
+	// mixed materials
+	else if( type == 'p') {
+		var form = $("#Form", ff_ed).val();
+		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, "     ", form, "           ", lang, mrec, srce );
 	}
 	if( tag008val.length != 40 ) {
 		throw {
