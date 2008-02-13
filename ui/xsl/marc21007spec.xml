@@ -1,0 +1,939 @@
+<fields>
+   <field mattype="MAP" code="007">
+      <value name="Category" position="0" length="1">
+         <option description="Map">a</option>
+      </value>
+      <value name="Specific" position="1" length="1">
+         <option description="Atlas">d</option>
+         <option description="Map A two-dimensional map.">j</option>
+         <option description="Unspecified">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)">
+         <option description="Blank or #"> </option>
+         <option description="Fill character">|</option>
+      </value>
+      <value name="Color Indicates" position="3" length="1">
+         <option description="One color">a</option>
+         <option description="Multicolored">c</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Physical" position="4" length="1">
+         <option description="Paper Any kind of cellulose-based paper.">a</option>
+         <option description="Stone">c</option>
+         <option description="Metal">d</option>
+         <option description="Textile Includes all natural or synthetic fiber fabrics.">g</option>
+         <option description="Glass">j</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Type" position="5" length="1">
+         <option description="Facsimile">f</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Production/reproduction" position="6" length="1">
+         <option description="Photocopy">b</option>
+         <option description="Pre-production">c</option>
+         <option description="Film">d</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Positive/negative" position="7" length="1">
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="ELECTRONIC" code="007">
+      <value name="Category" position="0" length="1">
+         <option description="Electronic resource">c</option>
+      </value>
+      <value name="Specific" position="1" length="1">
+         <option description="Tape cartridge">a</option>
+         <option description="Chip cartridge">b</option>
+         <option description="Computer optical disc cartridge">c</option>
+         <option description="Tape cassette">f</option>
+         <option description="Tape reel">h</option>
+         <option description="Magnetic disk">j</option>
+         <option description="Magneto-optical disc">m</option>
+         <option description="Optical disc">o</option>
+         <option description="Remote">r</option>
+         <option description="Unspecified">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)">
+         <option description="Blank or #"> </option>
+         <option description="Fill character">|</option>
+      </value>
+      <value name="Color Indicates" position="3" length="1">
+         <option description="One color">a</option>
+         <option description="Black-and-white">b</option>
+         <option description="Multicolored">c</option>
+         <option description="Gray scale">g</option>
+         <option description="Mixed">m</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Dimensions Indicates" position="4" length="1">
+         <option description="3 1/2 in.">a</option>
+         <option description="12 in.">e</option>
+         <option description="4 3/4 in. or 12 cm.">g</option>
+         <option description="1 1/8 x 2 3/8 in.">i</option>
+         <option description="3 7/8 x 2 1/2 in.">j</option>
+         <option description="Not applicable">n</option>
+         <option description="5 1/4 in.">o</option>
+         <option description="Unknown">u</option>
+         <option description="8 in.">v</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Sound Indicates" position="5" length="1">
+         <option description="No sound (silent)">#</option>
+         <option description="Sound on medium">a</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="08" position="6" length="3">
+         <option description="Exact bit depth">001-999</option>
+         <option description="Multiple">mmm</option>
+         <option description="Not applicable">nnn</option>
+         <option description="Unknown">---</option>
+         <option description="No attempt to code">|||</option>
+      </value>
+      <value name="File" position="9" length="1">
+         <option description="One">a</option>
+         <option description="Multiple">m</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Quality" position="10" length="1">
+         <option description="Absent">a</option>
+         <option description="Not applicable">n</option>
+         <option description="Present">p</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Antecedent/source A" position="11" length="1">
+         <option description="File reproduced from an electronic resource">c</option>
+         <option description="Mixed">m</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Level" position="12" length="1">
+         <option description="Uncompressed">a</option>
+         <option description="Lossless">b</option>
+         <option description="Lossy">d</option>
+         <option description="Mixed">m</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Reformatting" position="13" length="1">
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="GLOBE" code="007">
+      <value name="Category" position="0" length="1">
+         <option description="Globe">d</option>
+      </value>
+      <value name="Specific" position="1" length="1">
+         <option description="Terrestrial globe">c</option>
+         <option description="Earth moon globe">e</option>
+         <option description="Unspecified">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)">
+         <option description="Blank or #"> </option>
+         <option description="Fill character">|</option>
+      </value>
+      <value name="Color" position="3" length="1">
+         <option description="One color">a</option>
+         <option description="Multicolored">c</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Physical" position="4" length="1">
+         <option description="Paper">a</option>
+         <option description="Wood">b</option>
+         <option description="Stone">c</option>
+         <option description="Metal">d</option>
+         <option description="Synthetic">e</option>
+         <option description="Skin">f</option>
+         <option description="Textile">g</option>
+         <option description="Plaster">p</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Type" position="5" length="1">
+         <option description="Facsimile">f</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="TACTILE" code="007">
+      <value name="Category" position="0" length="1">
+         <option description="Tactile material">f</option>
+      </value>
+      <value name="Specific" position="1" length="1">
+         <option description="Moon">a</option>
+         <option description="Braille">b</option>
+         <option description="Combination">c</option>
+         <option description="Tactile, with no writing system">d</option>
+         <option description="Unspecified">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)">
+         <option description="Blank or #"> </option>
+         <option description="Fill character">|</option>
+      </value>
+      <value name="04" position="3" length="2">
+         <option description="No specified class of braille writing">#</option>
+         <option description="Literary braille">a</option>
+         <option description="Format code braille">b</option>
+         <option description="Computer braille">d</option>
+         <option description="Music braille">e</option>
+         <option description="Multiple braille types">m</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Level" position="5" length="1">
+         <option description="Uncontracted">a</option>
+         <option description="Contracted">b</option>
+         <option description="Combination">m</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="08" position="6" length="3">
+         <option description="No specified braille music format">#</option>
+         <option description="Bar over bar">a</option>
+         <option description="Bar by bar">b</option>
+         <option description="Line over line">c</option>
+         <option description="Paragraph">d</option>
+         <option description="Single line">e</option>
+         <option description="Section by section">f</option>
+         <option description="Line by line">g</option>
+         <option description="Open score">h</option>
+         <option description="Spanner short form scoring">i</option>
+         <option description="Short form scoring">j</option>
+         <option description="Outline">k</option>
+         <option description="Vertical score">l</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Specific" position="9" length="1">
+         <option description="Print/braille">a</option>
+         <option description="Jumbo or enlarged braille">b</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="PROJECTED" code="007">
+      <value name="Category" position="0" length="1"></value>
+      <value name="Specific" position="1" length="1">
+         <option description="Filmstrip roll">o</option>
+         <option description="Slide Includes modern stereographs.">s</option>
+         <option description="Transparency">t</option>
+         <option description="Unspecified">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)">
+         <option description="Blank or #"> </option>
+         <option description="Fill character">|</option>
+      </value>
+      <value name="Color Indicates" position="3" length="1">
+         <option description="One color Does not include black.">a</option>
+         <option description="Multicolored">c</option>
+         <option description="Hand colored">h</option>
+         <option description="Mixed">m</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Base" position="4" length="1">
+         <option description="Glass">d</option>
+         <option description="Synthetic">e</option>
+         <option description="Safety film">j</option>
+         <option description="Paper Any kind of cellulose-based paper.">o</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Sound" position="5" length="1">
+         <option description="No sound (silent)">#</option>
+         <option description="Sound on medium">a</option>
+         <option description="Sound separate from medium The sound is on an accompanying item.">b</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Medium" position="6" length="1">
+         <option description="No sound (silent)">#</option>
+         <option description="Sound disc">d</option>
+         <option description="Videotape">h</option>
+         <option description="Videodisc">i</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Dimensions Indicates" position="7" length="1">
+         <option description="Standard 8 mm.">a</option>
+         <option description="9.5 mm.">c</option>
+         <option description="16 mm.">d</option>
+         <option description="28 mm.">e</option>
+         <option description="35 mm.">f</option>
+         <option description="70 mm.">g</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Secondary" position="8" length="1">
+         <option description="Cardboard">c</option>
+         <option description="Glass">d</option>
+         <option description="Synthetic">e</option>
+         <option description="Metal">h</option>
+         <option description="Metal and glass">j</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="MICROFORM" code="007">
+      <value name="Category" position="0" length="1">
+         <option description="Microform">h</option>
+      </value>
+      <value name="Specific" position="1" length="1">
+         <option description="Aperture card">a</option>
+         <option description="Microfilm reel">d</option>
+         <option description="Microfiche">e</option>
+         <option description="Microopaque">g</option>
+         <option description="Unspecified">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)">
+         <option description="Blank or #"> </option>
+         <option description="Fill character">|</option>
+      </value>
+      <value name="Positive/negative" position="3" length="1">
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Dimensions Indicates" position="4" length="1">
+         <option description="8 mm.">a</option>
+         <option description="16 mm.">d</option>
+         <option description="35 mm.">f</option>
+         <option description="70 mm.">g</option>
+         <option description="105 mm.">h</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Reduction" position="5" length="1">
+         <option description="Low reduction Less than 16:1 ratio (less than 016).">a</option>
+         <option description="Normal reduction Between 16:1 and 30:1 (016-030).">b</option>
+         <option description="High reduction Between 31:1 and 60:1 (031-060).">c</option>
+         <option description="Very high reduction Between 61:1 and 90:1 (061-090).">d</option>
+         <option description="Ultra high reduction Over 90:1 (over 090).">e</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="08" position="6" length="3"></value>
+      <value name="Color Indicates" position="9" length="1">
+         <option description="Multicolored">c</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Emulsion" position="10" length="1">
+         <option description="Silver halide">a</option>
+         <option description="Diazo">b</option>
+         <option description="Vesicular">c</option>
+         <option description="Mixed emulsion">m</option>
+         <option description="Not applicable Used for microopaques.">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Generation Indicates" position="11" length="1">
+         <option description="Mixed generation">m</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Base" position="12" length="1">
+         <option description="Safety base, diacetate">d</option>
+         <option description="Safety base, polyester">p</option>
+         <option description="Safety base, triacetate">t</option>
+         <option description="Nitrate base">i</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="NONPROJECTED" code="007">
+      <value name="Category" position="0" length="1"></value>
+      <value name="Specific" position="1" length="1">
+         <option description="Collage">c</option>
+         <option description="Drawing">d</option>
+         <option description="Painting">e</option>
+         <option description="Photonegative">g</option>
+         <option description="Photoprint">h</option>
+         <option description="Print">j</option>
+         <option description="Technical drawing">l</option>
+         <option description="Chart">n</option>
+         <option description="Flash card">o</option>
+         <option description="Unspecified">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)">
+         <option description="Blank or #"> </option>
+         <option description="Fill character">|</option>
+      </value>
+      <value name="Color Indicates" position="3" length="1">
+         <option description="One color Does not include black.">a</option>
+         <option description="Black-and-white">b</option>
+         <option description="Multicolored">c</option>
+         <option description="Hand colored">h</option>
+         <option description="Mixed">m</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Primary" position="4" length="1">
+         <option description="Canvas">a</option>
+         <option description="Bristol board">b</option>
+         <option description="Glass">d</option>
+         <option description="Metal">h</option>
+         <option description="Paper Any kind of cellulose-based paper.">o</option>
+         <option description="Hardboard">q</option>
+         <option description="Porcelain Used only for clay-based porcelain.">r</option>
+         <option description="Stone">s</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Secondary" position="5" length="1">
+         <option description="Canvas">a</option>
+         <option description="Bristol board">b</option>
+         <option description="Glass">d</option>
+         <option description="Synthetic Does not include synthetics formed to resemble textiles.">e</option>
+         <option description="Skin Does not include synthetic materials that resemble skin.">f</option>
+         <option description="Textile Includes all natural or synthetic fibre fabrics except canvas.">g</option>
+         <option description="Metal">h</option>
+         <option description="Mixed collection The secondary support material varies for different items in a collection">m</option>
+         <option description="Paper Any kind of cellulose-based paper.">o</option>
+         <option description="Plaster Includes mixtures of ground solids and plaster.">p</option>
+         <option description="Hardboard">q</option>
+         <option description="Porcelain Used only for clay-based porcelain.">r</option>
+         <option description="Stone">s</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="MOTION" code="007">
+      <value name="Category" position="0" length="1"></value>
+      <value name="Specific" position="1" length="1">
+         <option description="Film cartridge">c</option>
+         <option description="Film cassette">f</option>
+         <option description="Unspecified">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)">
+         <option description="Blank or #"> </option>
+         <option description="Fill character">|</option>
+      </value>
+      <value name="Color Indicates" position="3" length="1">
+         <option description="Black-and-white">b</option>
+         <option description="Multicolored">c</option>
+         <option description="Hand colored">h</option>
+         <option description="Mixed">m</option>
+         <option description="Not applicable The item has no images.">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Motion" position="4" length="1">
+         <option description="3D">c</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Sound" position="5" length="1">
+         <option description="No sound (silent)">#</option>
+         <option description="Sound on medium">a</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Medium" position="6" length="1">
+         <option description="No sound (silent)">#</option>
+         <option description="Sound disc">d</option>
+         <option description="Videotape">h</option>
+         <option description="Videodisc">i</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Dimensions Indicates" position="7" length="1">
+         <option description="Standard 8 mm.">a</option>
+         <option description="9.5 mm.">c</option>
+         <option description="16 mm.">d</option>
+         <option description="28 mm.">e</option>
+         <option description="35 mm.">f</option>
+         <option description="70 mm.">g</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Configuration" position="8" length="1">
+         <option description="Monaural">m</option>
+         <option description="Stereophonic">s</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Production" position="9" length="1">
+         <option description="Outtakes Discarded shots.">c</option>
+         <option description="Not applicable">n</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Positive/negative" position="10" length="1">
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Generation Indicates" position="11" length="1">
+         <option description="Duplicate">d</option>
+         <option description="Master">e</option>
+         <option description="Original">o</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Base" position="12" length="1">
+         <option description="Nitrate base">i</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Refined" position="13" length="1">
+         <option description="3 layer color">a</option>
+         <option description="3 strip color">e</option>
+         <option description="2 strip color">f</option>
+         <option description="Red strip">g</option>
+         <option description="Cyan strip">i</option>
+         <option description="Magenta strip">j</option>
+         <option description="Yellow strip">k</option>
+         <option description="S E N 2">l</option>
+         <option description="S E N 3">m</option>
+         <option description="Not applicable">n</option>
+         <option description="Sepia tone">p</option>
+         <option description="Other tone">q</option>
+         <option description="Tint">r</option>
+         <option description="Tinted and toned">s</option>
+         <option description="Stencil color">t</option>
+         <option description="Unknown">u</option>
+         <option description="Hand colored">v</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Kind" position="14" length="1">
+         <option description="Three layer stock">b</option>
+         <option description="Duplitized stock">d</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Deterioration" position="15" length="1">
+         <option description="None apparent">a</option>
+         <option description="Nitrate: sticky">e</option>
+         <option description="Nitrate: powder">h</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Completeness Indicates" position="16" length="1">
+         <option description="Complete">c</option>
+         <option description="Incomplete">i</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="22" position="17" length="6"></value>
+   </field>
+   <field mattype="KIT" code="007">
+      <value name="Category" position="0" length="1">
+         <option description="Kit">o</option>
+      </value>
+      <value name="Specific" position="1" length="1">
+         <option description="Unspecified">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="NOTATED" code="007">
+      <value name="Category" position="0" length="1">
+         <option description="Notated music">q</option>
+      </value>
+      <value name="Specific" position="1" length="1">
+         <option description="Unspecified">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="REMOTE" code="007">
+      <value name="Category" position="0" length="1"></value>
+      <value name="Specific" position="1" length="1">
+         <option description="Unspecified">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)">
+         <option description="Blank or #"> </option>
+         <option description="Fill character">|</option>
+      </value>
+      <value name="Altitude" position="3" length="1">
+         <option description="Surface">a</option>
+         <option description="Airborne">b</option>
+         <option description="Spaceborne">c</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Attitude" position="4" length="1">
+         <option description="Low oblique">a</option>
+         <option description="High oblique">b</option>
+         <option description="Vertical">c</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Cloud" position="5" length="1">
+         <option description="0-9%">0</option>
+         <option description="10-19%">1</option>
+         <option description="20-29%">2</option>
+         <option description="30-39%">3</option>
+         <option description="40-49%">4</option>
+         <option description="50-59%">5</option>
+         <option description="60-69%">6</option>
+         <option description="70-79%">7</option>
+         <option description="80-89%">8</option>
+         <option description="90-100%">9</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Platform" position="6" length="1">
+         <option description="Balloon">a</option>
+         <option description="Aircraft--low altitude">b</option>
+         <option description="Aircraft--medium altitude">c</option>
+         <option description="Aircraft--high altitude">d</option>
+         <option description="Manned spacecraft">e</option>
+         <option description="Unmanned spacecraft">f</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Platform" position="7" length="1">
+         <option description="Meteorological">a</option>
+         <option description="Surface observing">b</option>
+         <option description="Space observing">c</option>
+         <option description="Mixed uses">m</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Sensor" position="8" length="1">
+         <option description="Active">a</option>
+         <option description="Passive">b</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="10" position="9" length="2">
+         <option description="Visible light">aa</option>
+         <option description="Near infrared">da</option>
+         <option description="Middle infrared">db</option>
+         <option description="Far infrared">dc</option>
+         <option description="Thermal infrared">dd</option>
+         <option description="Shortwave infrared (SWIR)">de</option>
+         <option description="Reflective infrared">df</option>
+         <option description="Combinations">dv</option>
+         <option description="Other infrared data">dz</option>
+         <option description="SAR-like polarization">gd</option>
+         <option description="SAR-cross polarization">ge</option>
+         <option description="Infometric SAR">gf</option>
+         <option description="polarmetric SAR">gg</option>
+         <option description="Passive microwave mapping">gu</option>
+         <option description="Other microwave data">gz</option>
+         <option description="Far ultraviolet">ja</option>
+         <option description="Middle ultraviolet">jb</option>
+         <option description="Near ultraviolet">jc</option>
+         <option description="Ultraviolet combinations">jv</option>
+         <option description="Other ultraviolet data">jz</option>
+         <option description="Multi-spectral, multidata">ma</option>
+         <option description="Multi-temporal">mb</option>
+         <option description="Not applicable">nn</option>
+         <option description="Sonar--water depth">pa</option>
+         <option description="Sonar--bottom topography images, sidescan">pb</option>
+         <option description="Sonar--bottom topography, near surface">pc</option>
+         <option description="Sonar--bottom topography, near bottom">pd</option>
+         <option description="Seismic surveys">pe</option>
+         <option description="Other acoustical data">pz</option>
+         <option description="Free-air">rb</option>
+         <option description="Bouger">rc</option>
+         <option description="Isostatic">rd</option>
+         <option description="Magnetic field">sa</option>
+         <option description="radiometric surveys">ta</option>
+         <option description="Unknown">uu</option>
+         <option description="Other">zz</option>
+         <option description="No attempt to code">||</option>
+      </value>
+   </field>
+   <field mattype="SOUND" code="007">
+      <value name="Category" position="0" length="1"></value>
+      <value name="Specific" position="1" length="1">
+         <option description="Sound disc">d</option>
+         <option description="Cylinder">e</option>
+         <option description="Sound cartridge">g</option>
+         <option description="Sound-track film">i</option>
+         <option description="Roll">q</option>
+         <option description="Sound cassette">s</option>
+         <option description="Sound-tape reel">t</option>
+         <option description="Unspecified">u</option>
+         <option description="Wire recording">w</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)">
+         <option description="Blank or #"> </option>
+         <option description="Fill character">|</option>
+      </value>
+      <value name="Speed Indicates" position="3" length="1">
+         <option description="16 rpm">a</option>
+         <option description="33 1/3 rpm">b</option>
+         <option description="45 rpm">c</option>
+         <option description="78 rpm">d</option>
+         <option description="8 rpm">e</option>
+         <option description="1.4 m. per sec.">f</option>
+         <option description="120 rpm">h</option>
+         <option description="160 rpm">i</option>
+         <option description="15/16 ips">k</option>
+         <option description="1 7/8 ips">l</option>
+         <option description="3 3/4 ips">m</option>
+         <option description="7 1/2 ips">o</option>
+         <option description="15 ips">p</option>
+         <option description="30 ips">r</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Configuration" position="4" length="1">
+         <option description="Monaural">m</option>
+         <option description="Quadraphonic">q</option>
+         <option description="Stereophonic">s</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Groove" position="5" length="1">
+         <option description="Microgroove/fine">m</option>
+         <option description="Not applicable">n</option>
+         <option description="Coarse/standard">s</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Dimensions Indicates" position="6" length="1">
+         <option description="3 in.">a</option>
+         <option description="5 in.">b</option>
+         <option description="7 in.">c</option>
+         <option description="10 in.">d</option>
+         <option description="12 in.">e</option>
+         <option description="16 in.">f</option>
+         <option description="3 7/8 x 2 1/2 in.">j</option>
+         <option description="5 1/4 x 3 7/8 in.">o</option>
+         <option description="Not applicable">n</option>
+         <option description="2 3/4 x 4 in.">s</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Tape" position="7" length="1">
+         <option description="1/8 in.">l</option>
+         <option description="1/4 in.">m</option>
+         <option description="Not applicable">n</option>
+         <option description="1/2 in.">o</option>
+         <option description="1 in.">p</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Tape" position="8" length="1">
+         <option description="Full (1) track">a</option>
+         <option description="Half (2) track">b</option>
+         <option description="Quarter (4) track">c</option>
+         <option description="Eight track">d</option>
+         <option description="Twelve track">e</option>
+         <option description="Sixteen track">f</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Kind" position="9" length="1">
+         <option description="Not applicable">n</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Kind" position="10" length="1">
+         <option description="Lacquer coating">a</option>
+         <option description="Cellulose nitrate">b</option>
+         <option description="Acetate tape with ferrous oxide">c</option>
+         <option description="Glass with lacquer">g</option>
+         <option description="Aluminum with lacquer">i</option>
+         <option description="Metal">l</option>
+         <option description="Plastic with metal">m</option>
+         <option description="Plastic">p</option>
+         <option description="Paper with lacquer or ferrous oxide">r</option>
+         <option description="Shellac">s</option>
+         <option description="Unknown">u</option>
+         <option description="Wax">w</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Kind" position="11" length="1">
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Special" position="12" length="1">
+         <option description="Dolby-B encoded">c</option>
+         <option description="dbx encoded">d</option>
+         <option description="Digital recording">e</option>
+         <option description="Dolby-A encoded">f</option>
+         <option description="Dolby-C encoded">g</option>
+         <option description="CX encoded">h</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Capture" position="13" length="1">
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="TEXT" code="007">
+      <value name="Category" position="0" length="1">
+         <option description="Text">t</option>
+      </value>
+      <value name="Specific" position="1" length="1">
+         <option description="Regular print">a</option>
+         <option description="Large print">b</option>
+         <option description="Braille">c</option>
+         <option description="Unspecified">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="VIDEORECORDING" code="007">
+      <value name="Category" position="0" length="1">
+         <option description="Videorecording">v</option>
+      </value>
+      <value name="Specific" position="1" length="1">
+         <option description="Videocartridge">c</option>
+         <option description="Videodisc">d</option>
+         <option description="Videocassette">f</option>
+         <option description="Videoreel">r</option>
+         <option description="Unspecified">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)">
+         <option description="Blank or #"> </option>
+         <option description="Fill character">|</option>
+      </value>
+      <value name="Color Indicates" position="3" length="1">
+         <option description="One color">a</option>
+         <option description="Black-and-white">b</option>
+         <option description="Multicolored">c</option>
+         <option description="Mixed">m</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Videorecording" position="4" length="1">
+         <option description="Laserdisc">g</option>
+         <option description="8 mm.">p</option>
+         <option description="Hi-8 mm.">q</option>
+         <option description="Unknown">u</option>
+         <option description="DVD">v</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Sound" position="5" length="1">
+         <option description="No sound (silent)">#</option>
+         <option description="Sound on medium">a</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Medium" position="6" length="1">
+         <option description="No sound (silent)">#</option>
+         <option description="Sound disc">d</option>
+         <option description="Videotape">h</option>
+         <option description="Videodisc">i</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Dimensions Indicates" position="7" length="1">
+         <option description="8 mm.">a</option>
+         <option description="1/4 in.">m</option>
+         <option description="1/2 in.">o</option>
+         <option description="1 in.">p</option>
+         <option description="2 in.">q</option>
+         <option description="3/4 in.">r</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value name="Configuration" position="8" length="1">
+         <option description="Monaural">m</option>
+         <option description="Stereophonic">s</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field mattype="UNSPECIFIED" code="007">
+      <value name="Category" position="0" length="1">
+         <option description="Unspecified">z</option>
+      </value>
+      <value name="Specific" position="1" length="1">
+         <option description="Unspecified">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+</fields>
