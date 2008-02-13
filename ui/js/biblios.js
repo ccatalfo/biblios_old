@@ -1321,6 +1321,10 @@ biblios.app = function() {
 															beforenodedrop: function(e) {
 																// if we have a grid row
 																var editorid = e.target.attributes.editorid;
+																if( editorid == 'editortwo') {
+																	e.target.expand();
+																}
+																
 																if( e.data.grid ) {
 																	var sel = e.data.selections;
 																	if( e.data.selections.length > 1 ) {
