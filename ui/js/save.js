@@ -37,8 +37,9 @@ function doSaveRemote(loc, xmldoc) {
 }
 
 
-function addRecordFromSearch(id, data, savefileid, newxml) {
+function addRecordFromSearch(id, offset, editorid, data, savefileid, newxml) {
 	var xml = getPazRecord(id, 
+		offset,
 		// this function gets called when pazpar2 returns the xml for record with this id
 		function(data, params) {
 		// data param is this record's xml as returned by pazpar2
@@ -48,12 +49,12 @@ function addRecordFromSearch(id, data, savefileid, newxml) {
 			var target = DB.SearchTargets.select('name=?', [params.recData.location]).getOne();
 			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [params.savefileid]).getOne();
 			var record = new DB.Records({
-				title: UI.editor.record.getValue('245', 'a') || params.recData.title || '',
-				author: UI.editor.record.getValue('100', 'a') || params.recData.author || '',
+				title: UI.editor[editorid]? UI.editor[editorid].record.getValue('245', 'a') : params.recData.title || '',
+				author: UI.editor[editorid]? UI.editor[editorid].record.getValue('100', 'a'):  params.recData.author || '',
 				location: params.recData.location || '',
-				publisher: UI.editor.record.getValue('260', 'b') || params.recData.publication || '',
+				publisher:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'b'): params.recData.publication || '',
 				medium: params.recData.medium || '',
-				date: UI.editor.record.getValue('260', 'c') || params.recData.date|| '',
+				date:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'c'): params.recData.date|| '',
 				status: 'new',
 				xml: params.newxml || data || '<record></record>',
 				date_added: new Date().toString(),

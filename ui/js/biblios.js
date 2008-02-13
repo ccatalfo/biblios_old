@@ -36,7 +36,8 @@ biblios.app = function() {
 
 
     // private functions
-	doSaveLocal = function doSaveLocal(savefileid, editorid) {
+	doSaveLocal = function doSaveLocal(savefileid, editorid, offset ) {
+		var recoffset = offset || 0;
 		if( !savefileid ) {
 			if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
 				savefileid = 2; // Drafts
@@ -59,7 +60,7 @@ biblios.app = function() {
 				var data = Ext.getCmp('searchgrid').getSelections()[0].data;
 				var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 				progress.updateProgress(.6, 'Retrieving record from server');
-				recid = addRecordFromSearch(id, data, savefileid, xml);
+				recid = addRecordFromSearch(id, 0, editorid, data, savefileid, xml);
 				if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
 			}
 			else { // recid isn't empty so we've already saved this record, just update it
@@ -110,6 +111,7 @@ biblios.app = function() {
 				}
 			}
 		}
+		// if we're picking from the search grid
 		else if( openState == 'searchgrid' ) {
 			var grid = Ext.getCmp( 'searchgrid' );
 			var ds = grid.store;
@@ -117,7 +119,7 @@ biblios.app = function() {
 			for( var i = 0; i < sel.length; i++) {
 				var id = sel[i].id;
 				var data = sel[i].data;
-				addRecordFromSearch(id, data, savefileid);
+				addRecordFromSearch(id, recoffset, editorid, data, savefileid);
 			}
 		}
 		showStatusMsg("Record(s) saved to "+savefilename);
@@ -1148,10 +1150,17 @@ biblios.app = function() {
 														}),
 														listeners: {
 															beforenodedrop: function(e) {
-																var sel = e.data.selections;
 																var droppedsavefileid = e.target.attributes.savefileid;
-																doSaveLocal(droppedsavefileid);
-															}, // beforenodedrop
+																if( e.data.selections) {
+																	doSaveLocal(droppedsavefileid, '', 0);
+																}
+																// we have a record from a location in search grid
+																else {
+																	var offset = e.source.id.substr(3); // "loc"+offset
+																	var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+																	doSaveLocal(droppedsavefileid, '', offset);
+																}
+															}, // savefolders beforenodedrop
 															contextmenu: function(node, e) {
 																var Menu = new Ext.menu.Menu({
 																	id:'menu',
@@ -1339,6 +1348,7 @@ biblios.app = function() {
 																		});
 																	} // record from search grid
 																} // if we have a grid row
+																// we have a location from search grid
 																else {
 																	var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																	UI.editor[editorid].id = id;
