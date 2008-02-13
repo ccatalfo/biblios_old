@@ -1,18 +1,15 @@
 function doSearch(form) {
 	if( $('#searchloc').val() == 'All' ) {
 		doPazPar2Search();
-		doLocalFolderSearch();
-		doVendorSearch();
+		//doLocalFolderSearch();
 	}
 	else if( $('#searchloc').val() == 'SearchTargets' ) {
 		doPazPar2Search();
 	}
 	else if( $('#searchloc').val() == 'LocalFolders') {
-		doLocalFolderSearch();
+		//doLocalFolderSearch();
 	}
-	else if( $('#searchloc').val() == 'Vendors' ) {
-		doVendorSearch();
-	}
+	return false;
 }
 
 function doLocalFolderSearch() {
@@ -41,7 +38,7 @@ paz = new pz2({
 					"oninit": options.initCallback || function() {},
 					"onping": options.pingCallback || function(){},
 					"onshow": function(data){ 
-						searchds.reload(); 
+						Ext.getCmp('searchgrid').store.reload(); 
 						if(data.activeclients == 0 ) {
 							// remove 'Searching' status msg
 							clearStatusMsg();
@@ -49,16 +46,10 @@ paz = new pz2({
 					},
 					"termlist": "subject,author,date,publication-name",
 					"onterm": function(data) { 
-						removeFacets();
-						displaySearchFacets(data, 'subject', 'su'); 
-						displaySearchFacets(data, 'author', 'au'); 
-						displaySearchFacets(data, 'date', 'date'); 
-						displaySearchFacets(data, 'publication-name', 'pub'); 
-						//hideDisabledFacets();
+						Ext.getCmp('facetsTreePanel').root.reload();
 					},
                     "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
                     "pazpar2path": pazpar2url,
-                    "termlist": "subject,author",
 					"usesessions" : true,
 					"clear": 1
 				});
@@ -148,11 +139,14 @@ function pazPar2Error(data) {
 		}
 }
 
-function doPazPar2Search() {
-	//get rid of old facets from previous searches
-	if( UI.search.currQuery != '') {
-		removeFacets();
+function clearSearchLimits() {
+	for( l in UI.searchLimits ) { 
+		delete UI.searchLimits[l]; 
 	}
+}
+
+function doPazPar2Search() {
+	clearSearchLimits();
 	var query = $("#query").val();
 	var searchtype  = $("#searchtype").val();
 	var searchquery = '';
@@ -163,14 +157,14 @@ function doPazPar2Search() {
 		searchquery = searchtype + '="' + query + '"';
 	}
 	// save this query
-	UI.search.currQuery = searchquery;
+	biblios.app.currQuery = searchquery;
 	// reset search ds's proxy url to get rid of old sort params
-	searchds.proxy.conn.url = paz.pz2String + '?command=show&session=' + paz.sessionID;
+	Ext.getCmp('searchgrid').store.proxy.conn.url = paz.pz2String + '?command=show&session=' + paz.sessionID;
     paz.search( searchquery );
-    displaySearchView();
+    biblios.app.displaySearchView();
 }
 
-function getRemoteRecord(id, loc, callback) {
+function getRemoteRecord(id, loc, offset, callback) {
 		showStatusMsg('Opening record...');
 		UI.editor.id = '';
 		UI.editor.location = loc;
@@ -179,7 +173,7 @@ function getRemoteRecord(id, loc, callback) {
 			getRecordFromLocation(id, loc, callback);
 		}
 		else {
-			var xml = getPazRecord(id, callback);
+			var xml = getPazRecord(id, offset, callback);
 		}
 }
 
@@ -192,7 +186,7 @@ function getRecordFromLocation(id, loc, callback) {
 	Prefs.remoteILS[loc].instance.retrieve(marcxml);
 }
 
-function getPazRecord(recId, callback, callbackParamObject) {
+function getPazRecord(recId, offset, callback, callbackParamObject) {
 	if( recordCache[recId] ) {
 		if(debug) { console.info('retreiving record from cache')}
 		// call the callback with record from record cache
@@ -208,7 +202,7 @@ function getPazRecord(recId, callback, callbackParamObject) {
 					session: paz.sessionID,
 					command: 'record',
 					id: recId,
-					offset: '0'
+					offset: offset
 				},
 				type: 'GET',
 				dataType: 'xml',
@@ -239,7 +233,7 @@ function displaySearchFacets(data, type, searchtype) {
 					+ data[type][i].freq
 					+ ')</span>'
 					+ '<br/>';
-		if( UI.search.limitby[data[type][i].name] ) {
+		if( searchLimits[data[type][i].name] ) {
 			newnode = new Ext.tree.TreeNode({
 				leaf: true,
 				name: data[type][i].name,
@@ -262,10 +256,10 @@ function displaySearchFacets(data, type, searchtype) {
 		root.appendChild(newnode);
 		newnode.on('checkchange', function(node, checked) {
 			if( checked ) {
-				UI.search.limitby[node.attributes.name] = node.attributes.searchtype;
+				searchLimits[node.attributes.name] = node.attributes.searchtype;
 			}
 			else {
-				delete UI.search.limitby[node.attributes.name];
+				delete searchLimits[node.attributes.name];
 			}
 			limitSearch();	
 		}); // checkchange handler
@@ -352,13 +346,29 @@ function removeFacets() {
 	facetsRoot.setText("Facets <img src='"+libPath+"ui/images/ajax-loader.gif'>");
 }
 
+function term2searchterm(term) {
+	switch(term) {
+		case 'title':
+			return 'ti';
+			break;
+		case 'date':
+			return 'date';
+			break;
+		case 'subject':
+			return 'su';
+			break;
+		case 'publication-name':
+			return 'pub';
+			break;
+	}
+}
 function limitSearch() {
 	// start w/ original query and build from there
-	var query = UI.search.currQuery;
-	for( name in UI.search.limitby ) {
-		query += ' and ' + UI.search.limitby[name] + '="' + name + '"';
+	var query = biblios.app.currQuery;
+	for( name in UI.searchLimits ) {
+		query += ' and ' + term2searchterm(UI.searchLimits[name]) + '="' + name + '"';
 	}
 	paz.search(query);
 	paz.show();
-	displaySearchView();
+	biblios.app.displaySearchView();
 }

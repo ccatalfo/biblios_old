@@ -4,30 +4,48 @@ UI.search.remoteILS = {};
 UI.searchpreview = {};
 UI.searchpreview.id = '';
 UI.searchpreview.xml = '';
+UI.searchLimits = {};
 UI.savepreview = {};
 UI.savepreview.id = '';
 UI.savepreview.xml = '';
 UI.editor = {};
 UI.editor.id = '';
-UI.editor.doc = null;
-UI.editor.location = '';
-UI.editor.savedRemote = {};
-UI.editor.savefileid = '';
-UI.editor.xml = '';
 UI.editor.lastFocusedEl = '';
-UI.editor.record = '';
-UI.editor.comboboxes = new Array();
+// marc editor one metadata
+UI.editor.editorone = {};
+UI.editor.editorone.id = '';
+UI.editor.editorone.ffed = '';
+UI.editor.editorone.vared = '';
+UI.editor.editorone.location = '';
+UI.editor.editorone.savedRemote  = {};
+UI.editor.editorone.savefileid  = '';
+UI.editor.editorone.record = new MarcEditor('', '');
+UI.editor.editorone.comboboxes = new Array();
+// marc editor two metadata
+UI.editor.editortwo = {};
+UI.editor.editortwo.id = '';
+UI.editor.editortwo.ffed = '';
+UI.editor.editortwo.vared = '';
+UI.editor.editortwo.location = '';
+UI.editor.editortwo.savedRemote  = {};
+UI.editor.editortwo.savefileid  = '';
+UI.editor.editortwo.record = new MarcEditor('', '');
+UI.editor.editortwo.comboboxes = new Array();
+// search state
 UI.search = {};
 UI.search.currQuery = '';
 UI.search.limitby = {};
+// save state
 UI.save = {};
 UI.save.savefile = {};
 UI.savefilesql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
 UI.currSaveFile = '';
 UI.currSaveFileName = '';
+// window state
 UI.lastWindowOpen = '';
 UI.lastSearchPreviewed = '';
 UI.lastSavePreview = '';
+// keymaps
 UI.keymaps = {};
 // layouts
 UI.optionsLayout = {};
@@ -202,82 +220,55 @@ function createSendTargetGrid() {
 			header: 'Name', 
 			dataIndex: 'name', 
 			sortable: true,
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{	
 			header: 'Location Name', 
 			dataIndex: 'location', 
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'Url', 
 			dataIndex: 'url', 
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'User', 
 			dataIndex: 'user', 
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'Password', 
 			dataIndex: 'password', 
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'Plugin Location',
 			dataIndex: 'pluginlocation',
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'Plugin Init',
 			dataIndex: 'plugininit',
-			editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+			editor: new Ext.form.TextField()
 		},
 		{
 			header: 'Enabled', 
 			dataIndex: 'enabled', 
 			renderer: formatBoolean,
-			editor: new Ext.grid.GridEditor(new Ext.form.Checkbox())
+			editor: new Ext.form.Checkbox()
 		}
 	]);
 	cm.defaultSortable = true;
 
-	var sendtargetgrid = new Ext.grid.EditorGrid('sendtargetgrid', {
+	var sendtargetgrid = new Ext.grid.EditorGridPanel({
 		id: 'sendtargetgrid',
 		ds: ds,
 		cm: cm,
 		autoHeight: true,
 		autoWidth: true,
-		autoExpandColumn: 1
-	});
-	sendtargetgrid.on('afteredit', function(e) {
-		var id = e.record.data.id;
-		var field = e.field;
-		var value = e.value;
-		if( typeof(value) == 'boolean' ) {
-			if( value == true ) {
-				value = 1;
-			}
-			else if( value == false ) {
-				value = 0;
-			}
-		}
-		var rs;
-		try {
-			rs = db.execute('update SendTargets set '+field+' = ? where rowid = ?', [value, id]);
-			rs.close();
-		}
-		catch(ex) {
-			Ext.MessageBox.alert('Error', ex.message);
-		}
-	});
-	Ext.ComponentMgr.register(sendtargetgrid);
-	sendtargetgrid.render();
-	ds.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
-
-	var gridHeader = sendtargetgrid.getView().getHeaderPanel(true);
-	var tb = new Ext.Toolbar(gridHeader, [
+		autoExpandColumn: 1,
+		tbar: [
 		{
 			text: 'Add Send Target',
 			handler: function() {
@@ -322,8 +313,33 @@ function createSendTargetGrid() {
 				Ext.ComponentMgr.get('sendtargetgrid').dataSource.reload();
 			}
 		}
-	]);
+	] // send target grid toolbar
+	});
+	sendtargetgrid.on('afteredit', function(e) {
+		var id = e.record.data.id;
+		var field = e.field;
+		var value = e.value;
+		if( typeof(value) == 'boolean' ) {
+			if( value == true ) {
+				value = 1;
+			}
+			else if( value == false ) {
+				value = 0;
+			}
+		}
+		var rs;
+		try {
+			rs = db.execute('update SendTargets set '+field+' = ? where rowid = ?', [value, id]);
+			rs.close();
+		}
+		catch(ex) {
+			Ext.MessageBox.alert('Error', ex.message);
+		}
+	});
+	ds.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
+	return sendtargetgrid;
 }
+
 function createTargetGrid() {
 	var Target = Ext.data.Record.create([
 		{name: 'rowid'},
@@ -827,21 +843,6 @@ function createSaveFileFolders(parentid) {
 
 */
 function createFolderList() {
-    $("#folder-list").append("<div id='tree-wrapper'><div id='tree-div'/></div>");
-
-    // tree for servers to search 
-   folderTree = new Ext.tree.TreePanel('tree-div', {
-    animate:true,
-    enableDD:true,
-    ddGroup: 'RecordDrop',
-    containerScroll: true,
-    lines:false,
-    rootVisible:false
-    });
-    var sm = folderTree.getSelectionModel();
-    treeEditor = new Ext.tree.TreeEditor(folderTree, {
-    autosize:true
-    });
     folderRoot = new Ext.tree.TreeNode({
         allowDrag:false,
         allowDrop:false,
@@ -1098,6 +1099,7 @@ function createFolderList() {
 		}
 		 return true;
     });
+	return folderRoot;
 }
 
 function createFacetFolder() {
@@ -1141,7 +1143,7 @@ function updateSearchTargets() {
 }
 
 function updateSearchTargetFolders() {
-	var searchRoot = Ext.ComponentMgr.get('searchRoot');
+	var searchRoot = Ext.getCmp('searchRoot');
 
 	// remove old nodes
 	for( var i = searchRoot.childNodes.length-1; i >= 0; i--) {
@@ -1664,24 +1666,24 @@ function displaySaveView() {
    None.
 
 */
-function openRecord(xml) {
-	$("#vareditor").empty();
-	$("ffeditor").empty();
-    $("#ffeditor").getTransform( ffxsl, xml);
-    $("#vareditor").getTransform( varfxsl, xml);
-	 create_static_editor($('#ffeditor'), $('#vareditor') );
-	 //create_jquery_editor();
-	//create_yui_rte_editor();
-	//create_yui_rte_editor();
+function openRecord(xml, editorelem) {
+	// we need to display record view first since editors are lazily rendered
+	UI.lastWindowOpen = openState;
+	openState = 'editorPanel';
+	biblios.app.displayRecordView();
+	var ffed =	$('#'+editorelem).find(".ffeditor");
+	$(ffed).empty();
+	var vared = $('#'+editorelem).find(".vareditor");
+	$(vared).empty();
+    $(ffed).getTransform( ffxsl, xml);
+    $(vared).getTransform( varfxsl, xml);
+	UI.editor[editorelem].ffed = ffed;
+	UI.editor[editorelem].vared = vared;
+	create_static_editor(ffed, vared, editorelem);
 	// show fixed field editor, hide ldr and 008 divs
-	$("#ffeditor").show();
+	$(ffed).show();
 	// hide leader and 008
-	$("#000, #008").css('display', 'none');
-
-
-	$("#help-panel").append("This is the Help panel");
-
-	displayRecordView();
+	$('#'+editorelem).find("#000, #008").css('display', 'none');
 }
 
 function makeSubfieldsDraggable() {
@@ -1718,111 +1720,64 @@ function makeSubfieldsDraggable() {
    See Also:
    <handleDownload>
 */
-function doDownloadRecords() {
-        var xml ='';
-        var recsep = "<!-- end of record -->";
-        showStatusMsg("<p>Downloading records</p>");
-        var currtab = tabs.getActiveTab();
-        if( Ext.get('savegrid').isVisible() ) {
-            var grid = Ext.ComponentMgr.get('save-file-grid');
-            var ds = grid.getDataSource();
-            var sel = grid.getSelectionModel().getSelections()
-            for( var i = 0; i < sel.length; i++) {
-                var id = sel[i].data.Id;
-                try {
-                  var rs = db.execute('select xml from Records where id =?', [id]);
-                  while( rs.isValidRow() ) {
-                    xml += rs.fieldByName('xml');
-                    xml += recsep;
-                    rs.next();
-                  }
-                }
-                catch(ex) {
-                  console.error('db error: ' + ex.message);
-                }
-            }
-        rs.close();
-        }
-        else if( Ext.get('searchgrid').isVisible() ) {
-            var grid = Ext.ComponentMgr.get('search-grid');
-            var ds = grid.getDataSource();
-            var sel = grid.getSelectionModel().getSelections()
-            for( var i = 0; i < sel.length; i++) {
-                var id = sel[i].data.Id;
-                try {
-                  var rs = db.execute('select xml from Records where id=?', [id]);
-                  while( rs.isValidRow() ) {
-                    xml += rs.fieldByName('xml');
-                    xml += recsep;
-                    rs.next();
-                  }
-                }
-                catch(ex) {
-                  console.error('db error: ' + ex.message);
-                }
-            }
-        rs.close();
-        }
-        // else if we have an open record in the editor
-    else if( Ext.get('marceditor').isVisible() ) {
-        var ff_ed = $("#fixedfields_editor");
-        var var_ed = UI.editor.doc;
-        // transform edited record back into marcxml
-        if( marcFlavor == 'marc21' ) {
-			xml = UI.editor.record.XMLString();
-        }
-        else if( marcFlavor == 'unimarc' ) {
-            Ext.MessageBox.alert("Unimarc support not yet implemented");
-        }
-        }
-    dlg = new Ext.BasicDialog("newrecord-dlg", {
-        height: 200,
-        width: 400,
-        minHeight: 100,
-        minWidth: 150,
-        modal: false,
-        proxyDrag: true,
-        shadow: true
-    });
-        dlg.body.dom.innerHTML = "<div id='form'></div>";
-
-    var form = new Ext.form.Form({
-    });
-    var store = new Ext.data.SimpleStore({
-    fields: ['name', 'format'],
-    data: [ ['MARC21', 'marc21'],
-            ['MARCXML', 'marcxml']
-          ]
-    });
-   form.add(
-    new Ext.form.ComboBox({
-        id: 'recordformat',
-        store: store,
-        displayField:'name',
-        valueField: 'format',
-        typeAhead: true,
-        mode: 'local',
-        triggerAction: 'all',
-        fieldLabel: 'Choose record type',
-        emptyText:'Select a record type...',
-        selectOnFocus:true  
-    })
-    );
-    form.render('form');
-    encoding='utf-8';
-    if(debug){ console.info("dl rec: xml=" + xml);}
-    dlg.addButton('Select',
-    function() {  
-      format = Ext.ComponentMgr.get('recordformat').getValue();
-        handleDownload(format, encoding, xml);
-        dlg.hide();
-		clearStatusMsg();
-    },
-    dlg);
-    dlg.addButton('Cancel', dlg.hide, dlg);
-    dlg.addKeyListener(27, dlg.hide, dlg); // ESCAPE
-    dlg.show();
+function doDownloadRecords(format) {
+	var xml ='';
+	var grid;
+	var recsep = "<!-- end of record -->";
+	showStatusMsg("<p>Downloading records</p>");
+	// if we're exporting a record from the marc editor
+	if( openState == 'marceditor' ) {
+			// transform edited record back into marcxml
+			if( marcFlavor == 'marc21' ) {
+				xml = UI.editor.record.XMLString();
+			}
+			else if( marcFlavor == 'unimarc' ) {
+				Ext.MessageBox.alert("Unimarc support not yet implemented");
+			}
+	}
+	// if we're exporting from a grid
+	else {
+        if( openState == 'savegrid' ) {
+            var grid = Ext.getCmp('savegrid');
+		}
+		else if( openState == 'searchgrid') {
+            var grid = Ext.getCmp('searchgrid');
+		}
+		var ds = grid.store;
+		var sel = grid.getSelectionModel().getSelections();
+		for( var i = 0; i < sel.length; i++) {
+			var id = sel[i].data.Id;
+			try {
+			  var recXml = DB.Records.select('Records.rowid=?', [id]).getOne().xml;
+				xml += recXml;
+				xml += recsep;
+			}
+			catch(ex) {
+			  console.error('db error: ' + ex.message);
+			}
+		}
+    } // if we have a grid open 
+	var encoding = 'utf-8';
+	handleDownload(format, encoding, xml);
 }
+
+function getExportMenuItems() {
+	var list = new Array();
+	var formats = new Array('MARC21', 'MARCXML');
+	for( var i = 0; i < formats.length; i++) {
+		var o = {
+			text: formats[i],
+			id: formats[i],
+			handler: function(btn) {
+				doDownloadRecords(btn.text);
+			}
+		}
+	list.push(o);
+	}
+	return list;
+
+}
+
 
 /*
    Function: handleDownload
@@ -1914,13 +1869,12 @@ function doUploadMarc() {
 
 */
 function doNewRecord() {
-    var dlg = new Ext.BasicDialog("newrecord-dlg", {
+    var dlg = new Ext.Window({
         height: 200,
         width: 400,
         minHeight: 100,
         minWidth: 150,
         modal: false,
-        proxyDrag: true,
         shadow: true
     });
         dlg.body.dom.innerHTML = "<div id='form'></div>";
@@ -1963,6 +1917,42 @@ function doNewRecord() {
     dlg.show();
 }
 
+function getRecordTemplates() {
+    var list = new Array();
+    $("template", configDoc).each( function() {
+		var template = {name: $("name", $(this)).text(), file: $("file", $(this)).text() };
+		list.push(template);
+    });
+	return list;
+}
+
+function getNewRecordMenu() {
+	var list = new Array();
+	var templates = getRecordTemplates();
+	for( var i = 0; i < templates.length; i++) {
+		o = {
+			text: templates[i].name,
+			file: templates[i].file,
+			id: templates[i].name,
+			handler: function(btn) {
+				Ext.Ajax.request({
+							url: btn.file,
+							method: 'GET',
+							callback: function(options, isSuccess, resp) { 
+								var xml = resp.responseText; 
+								srchResults = (new DOMParser()).parseFromString(xml, "text/xml");
+								var record = srchResults.getElementsByTagName('record')[0];
+								var xml = (new XMLSerializer().serializeToString(record));
+								openRecord(xml, 'editorone');
+						} // ajax callback
+				}) // ajax request
+			} // do new record handler
+		} // new record menu item
+		list.push(o);
+	}
+	return list;
+}
+
 /*
    Function: doCreateNewRecord
 
@@ -1978,7 +1968,6 @@ function doNewRecord() {
 
 */
 function doCreateNewRecord() {
-        var filename = Ext.ComponentMgr.get('recordtype').getValue();       
         Ext.Ajax.request({
 			url: filename,
 			method: 'GET',

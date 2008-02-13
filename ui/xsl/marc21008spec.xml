@@ -1,0 +1,755 @@
+<fields>
+   <field code="008" type="ALL MATERIALS">
+      <value position="0" description="Date entered on file" length="6" details="The computer-generated, six-character numeric string that indicates the date the MARC record was created. The date is recorded in the pattern yymmdd. 06 - Type of date/Publication status A one-character code that indicates that categorizes the type of dates given in 008/07-10 (Date 1) and 008/11-14 (Date 2). For continuing resources, the code in 008/06 also indicates the publication status. The choice of code for 008/06 is made concurrently with a determination of the appropriate dates for 008/07-14. For most records data is derived from information in field 260 (Publication, Distribution, etc. (Imprint)), field 362 (Dates of Publication and/or Sequential Designation), or from note fields.">
+         <option description="No dates given; B.C. date involved">b</option>
+         <option description="Continuing resource currently published">c</option>
+         <option description="Continuing resource ceased publication">d</option>
+         <option description="Detailed date">e</option>
+         <option description="Inclusive dates of collection">i</option>
+         <option description="Range of years of bulk of collection">k</option>
+         <option description="Multiple dates">m</option>
+         <option description="Dates unknown">n</option>
+         <option description="Date of distribution/release/issue and production/recording session when different">p</option>
+         <option description="Questionable date">q</option>
+         <option description="Reprint/reissue date and original date">r</option>
+         <option description="Single known date/probable date">s</option>
+         <option description="Publication date and copyright date">t</option>
+         <option description="Continuing resource status unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="7" description="Date 1" length="4" details="The determination of dates for 008/07-10 is made concurrently with the choice of code for 008/06 (Type of date/publication status). The use of fill characters in 008/07-10, although possible, is discouraged since the data in Date 1 is used for retrieval and duplicate detection in many systems. When fill is used in 008/07-10, all four positions must contain the fill character.">
+         <option description="Date digit">1-9</option>
+         <option description="Date element is not applicable">#</option>
+         <option description="Date element is totally or partially unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="11" description="Date 2" length="4" details="The determination of dates for 008/11-14 is made concurrently with the choice of code for 008/06 (Type of date/publication status). When fill is used in 008/11-14, all four positions must contain the fill character.">
+         <option description="Date digit">1-9</option>
+         <option description="Date element is not applicable">#</option>
+         <option description="Date element is totally or partially unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="15" description="Place of publication, production, or execution" length="3" details="A two- or three-character MARC code that indicates the place of publication, production, or execution. The place code is an authoritative-agency data element. The source of the code is MARC Code List for Countries . Choice of a MARC code is generally related to information in field 260 (Publication, Distribution, etc. (Imprint)). The code recorded in 008/15-17 is used in conjunction with field 044 (Country of Producer Code) when more than one code is appropriate to an item. The first code in subfield $a of field 044 is recorded in 008/15-17. Three fill characters (|||) may be used in place of a valid code, but their use in 008/15-17 is discouraged. The data in this field 008 data element is used for retrieval and duplicate detection in many systems. When fill is used in 008/15-17, all three positions must contain the fill character. 35-37 - Language A three-character MARC code that indicates the language of the item. The source of the code is MARC Code List for Languages . Choice of a MARC code is based on the predominant language of the item. Three fill characters (|||) may also be used if no attempt is made to code the language or if non-MARC language coding is preferred (and coded in field 041 (Language code)). 38 - Modified record A one-character code that indicates whether any data in a bibliographic record is a modification of information that appeared on the item being cataloged or that was intended to be included in the MARC record. Codes are assigned a priority (recorded in the order of the following list) that determines which code is input when more than one code applies to the item.">
+         <option description="Not modified">#</option>
+         <option description="Shortened">s</option>
+         <option description="Dashed-on information omitted">d</option>
+         <option description="Missing characters">x</option>
+         <option description="Completely romanized/printed cards in script">r</option>
+         <option description="Completely romanized/printed cards romanized">o</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="39" description="Cataloging source" length="1" details="A one-character code that indicates the creator of the original cataloging record. If the cataloging source is known, it is identified in subfield $a of field 040 (Cataloging Source).">
+         <option description="National bibliographic agency">#</option>
+         <option description="Cooperative cataloging program">c</option>
+         <option description="Other">d</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field code="008" type="BOOKS">
+      <value position="18" description="Illustrations" length="4" details="Up to four one-character codes (recorded in alphabetical order) that indicate the presence of types of illustrations in the item. If fewer than four codes are assigned, the codes are left justified and each unused position contains a blank (#).">
+         <option description="No illustrations">#</option>
+         <option description="Illustrations">a</option>
+         <option description="Maps">b</option>
+         <option description="Portraits">c</option>
+         <option description="Charts">d</option>
+         <option description="Plans">e</option>
+         <option description="Plates">f</option>
+         <option description="Music">g</option>
+         <option description="Facsimiles">h</option>
+         <option description="Coats of arms">i</option>
+         <option description="Genealogical tables">j</option>
+         <option description="Forms">k</option>
+         <option description="Samples">l</option>
+         <option description="Phonodisc, phonowire, etc.">m</option>
+         <option description="Photographs">o</option>
+         <option description="Illuminations">p</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="22" description="Target audience" length="1" details="A one-character code that indicates the audience for which the item is intended.">
+         <option description="Unknown or not specified">#</option>
+         <option description="Preschool">a</option>
+         <option description="Primary">b</option>
+         <option description="Pre-adolescent">c</option>
+         <option description="Adolescent">d</option>
+         <option description="Adult">e</option>
+         <option description="Specialized">f</option>
+         <option description="General">g</option>
+         <option description="Juvenile">j</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="23" description="Form of item" length="1" details="A one-character code that indicates the form of material for the item.">
+         <option description="None of the following">#</option>
+         <option description="Microfilm">a</option>
+         <option description="Microfiche">b</option>
+         <option description="Microopaque">c</option>
+         <option description="Large print">d</option>
+         <option description="Braille">f</option>
+         <option description="Regular print reproduction">r</option>
+         <option description="Electronic">s</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="24" description="Nature of contents" length="4" details="Up to four one-character codes (recorded in alphabetical order) that indicate whether a significant part of the item is or contains certain types of material. If fewer than four codes are assigned, the codes are left justified and each unused position contains a blank (#).">
+         <option description="No specified nature of contents">#</option>
+         <option description="Abstracts/summaries">a</option>
+         <option description="Bibliographies">b</option>
+         <option description="Catalogs">c</option>
+         <option description="Dictionaries">d</option>
+         <option description="Encyclopedias">e</option>
+         <option description="Handbooks">f</option>
+         <option description="Legal articles">g</option>
+         <option description="Indexes">i</option>
+         <option description="Patent document">j</option>
+         <option description="Discographies">k</option>
+         <option description="Legislation">l</option>
+         <option description="Theses">m</option>
+         <option description="Surveys of literature in a subject area">n</option>
+         <option description="Reviews">o</option>
+         <option description="Programmed texts">p</option>
+         <option description="Filmographies">q</option>
+         <option description="Directories">r</option>
+         <option description="Statistics">s</option>
+         <option description="Technical reports">t</option>
+         <option description="Standards/specifications">u</option>
+         <option description="Legal cases and case notes">v</option>
+         <option description="Law reports and digests">w</option>
+         <option description="Treaties">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="28" description="Government publication" length="1" details="A one-character code that indicates whether the item is published or produced by or for a government agency, and, if so, the jurisdictional level of the agency.">
+         <option description="Not a government publication">#</option>
+         <option description="Autonomous or semi-autonomous component">a</option>
+         <option description="Multilocal">c</option>
+         <option description="Federal/national">f</option>
+         <option description="International intergovernmental">i</option>
+         <option description="Local">l</option>
+         <option description="Multistate">m</option>
+         <option description="Government publication--level undetermined">o</option>
+         <option description="State, provincial, territorial, dependent, etc.">s</option>
+         <option description="Unknown if item is government publication">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="29" description="Conference publication" length="1" details="A one-character code that indicates whether the item consists of the proceedings, reports, or summaries of a conference.">
+         <option description="Not a conference publication">0</option>
+         <option description="Conference publication">1</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="30" description="Festschrift" length="1" details="A one-character code that indicates whether the item is a festschrift.">
+         <option description="Not a festschrift">0</option>
+         <option description="Festschrift">1</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="31" description="Index" length="1" details="A one-character code that indicates whether the item includes an index to its own contents.">
+         <option description="No index">0</option>
+         <option description="Index present">1</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="32" description="Undefined" length="1" details="Contains a blank (#) or fill character (|) 33 - Literary form Indicates the literary form of an item. Numeric codes 0 and 1 provide a generic identification of whether or not the item is a work of fiction. Alphabetic codes may be used to identify specific literary forms.">
+         <option description="Not fiction (not further specified)">0</option>
+         <option description="Fiction (not further specified)">1</option>
+         <option description="Comic strips">c</option>
+         <option description="Dramas">d</option>
+         <option description="Essays">e</option>
+         <option description="Novels">f</option>
+         <option description="Humor, satires, etc.">h</option>
+         <option description="Letters">i</option>
+         <option description="Short stories">j</option>
+         <option description="Mixed forms">m</option>
+         <option description="Poetry">p</option>
+         <option description="Speeches">s</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="34" description="Biography" length="1" details="A one-character code that indicates whether the item contains biographical material, and, if so, what the biographical characteristics are.">
+         <option description="No biographical material">#</option>
+         <option description="Autobiography">a</option>
+         <option description="Individual biography">b</option>
+         <option description="Collective biography">c</option>
+         <option description="Contains biographical information">d</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field code="008" type="COMPUTER FILES">
+      <value position="18" description="Undefined" length="4" details="Each contains a blank (#) or fill character (|) 22 - Target audience A one-character code that indicates the audience for which the item is intended.">
+         <option description="Unknown or not specified">#</option>
+         <option description="Preschool">a</option>
+         <option description="Primary">b</option>
+         <option description="Pre-adolescent">c</option>
+         <option description="Adolescent">d</option>
+         <option description="Adult">e</option>
+         <option description="Specialized">f</option>
+         <option description="General">g</option>
+         <option description="Juvenile">j</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="23" description="Undefined" length="3" details="Each contains a blank (#) or fill character (|) 26 - Type of computer file A one-character code that indicates the type of computer file described in the bibliographic record.">
+         <option description="Numeric data">a</option>
+         <option description="Computer program">b</option>
+         <option description="Representational">c</option>
+         <option description="Document">d</option>
+         <option description="Bibliographic data">e</option>
+         <option description="Font">f</option>
+         <option description="Game">g</option>
+         <option description="Sound">h</option>
+         <option description="Interactive multimedia">i</option>
+         <option description="Online system or service">j</option>
+         <option description="Combination">m</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="27" description="Undefined" length="1" details="Contains a blank (#) or fill character (|) 28 - Government publication A one-character code that indicates whether the computer file is published or produced by or for a government agency, and, if so, the jurisdictional level of the agency.">
+         <option description="Not a government publication">#</option>
+         <option description="Autonomous or semi-autonomous component">a</option>
+         <option description="Multilocal">c</option>
+         <option description="Federal/national">f</option>
+         <option description="International intergovernmental">i</option>
+         <option description="Local">l</option>
+         <option description="Multistate">m</option>
+         <option description="Government publication--level undetermined">o</option>
+         <option description="State, provincial, territorial, dependent, etc.">s</option>
+         <option description="Unknown if item is government publication">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="29" description="Undefined" length="6" details="Each contains a blank (#) or fill character (|) Go to top of document 008--MAPS Character Positions"></value>
+      <value position="18" description="Relief" length="4" details="Up to four one-character codes that indicate the relief type specified on the item. Codes are recorded in order of their importance to the described item. If fewer than four codes are assigned, the codes are left justified and each unused position contains a blank (#).">
+         <option description="No relief shown">#</option>
+         <option description="Contours">a</option>
+         <option description="Shading">b</option>
+         <option description="Gradient and bathymetric tints">c</option>
+         <option description="Hachures">d</option>
+         <option description="Bathymetry/soundings">e</option>
+         <option description="Form lines">f</option>
+         <option description="Spot heights">g</option>
+         <option description="Pictorially">i</option>
+         <option description="Land forms">j</option>
+         <option description="Bathymetry/isolines">k</option>
+         <option description="Rock drawings">m</option>
+         <option description="Other relief type">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="22" description="Projection" length="2" details="A two-character code that indicates the projection used in producing the item.">
+         <option description="Projection not specified">##</option>
+         <option description="Aitoff">aa</option>
+         <option description="Gnomic">ab</option>
+         <option description="Lambert's azimuthal equal area">ac</option>
+         <option description="Orthographic">ad</option>
+         <option description="Azimuthal equidistant">ae</option>
+         <option description="Stereographic">af</option>
+         <option description="General vertical near-sided">ag</option>
+         <option description="Modified stereographic for Alaska">am</option>
+         <option description="Chamberlin trimetric">an</option>
+         <option description="Polar stereographic">ap</option>
+         <option description="Azimuthal, specific type unknown">au</option>
+         <option description="Azimuthal, other">az</option>
+         <option description="Gall">ba</option>
+         <option description="Goode's homolographic">bb</option>
+         <option description="Lambert's cylindrical equal area">bc</option>
+         <option description="Mercator">bd</option>
+         <option description="Miller">be</option>
+         <option description="Mollweide">bf</option>
+         <option description="Sinusoidal">bg</option>
+         <option description="Transverse Mercator">bh</option>
+         <option description="Gauss-Kruger">bi</option>
+         <option description="Equirectangular">bj</option>
+         <option description="Oblique Mercator">bo</option>
+         <option description="Robinson">br</option>
+         <option description="Space oblique Mercator">bs</option>
+         <option description="Cylindrical, specific type unknown">bu</option>
+         <option description="Cylindrical, other">bz</option>
+         <option description="Alber's equal area">ca</option>
+         <option description="Bonne">cb</option>
+         <option description="Lambert's conformal conic">cc</option>
+         <option description="Equidistant conic">ce</option>
+         <option description="Polyconic">cp</option>
+         <option description="Conic, specific type unknown">cu</option>
+         <option description="Conic, other">cz</option>
+         <option description="Armadillo">da</option>
+         <option description="Butterfly">db</option>
+         <option description="Eckert">dc</option>
+         <option description="Goode's homolosine">dd</option>
+         <option description="Miller's bipolar oblique conformal conic">de</option>
+         <option description="Van Der Grinten">df</option>
+         <option description="Dimaxion">dg</option>
+         <option description="Cordiform">dh</option>
+         <option description="Lambert conformal">dl</option>
+         <option description="Other">zz</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="24" description="Undefined" length="1" details="Each contains a blank (#) or fill character (|) 25 - Type of cartographic material A one-character code that indicates the type of cartographic item described in the bibliographic record.">
+         <option description="Single map">a</option>
+         <option description="Map series">b</option>
+         <option description="Map serial">c</option>
+         <option description="Globe">d</option>
+         <option description="Atlas">e</option>
+         <option description="Separate map supplement to another work">f</option>
+         <option description="Map bound as part of another work">g</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="26" description="Undefined" length="2" details="Each contains a blank (#) or fill character (|) 28 - Government publication A one-character code that indicates whether the item is published or produced by or for a government agency, and, if so, the jurisdictional level of the agency.">
+         <option description="Not a government publication">#</option>
+         <option description="Autonomous or semi-autonomous component">a</option>
+         <option description="Multilocal">c</option>
+         <option description="Federal/national">f</option>
+         <option description="International intergovernmental">i</option>
+         <option description="Local">l</option>
+         <option description="Multistate">m</option>
+         <option description="Government publication--level undetermined">o</option>
+         <option description="State, provincial, territorial, dependent, etc.">s</option>
+         <option description="Unknown if item is government publication">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="29" description="Form of item" length="1" details="A one-character code that indicates the form of material for the item.">
+         <option description="None of the following">#</option>
+         <option description="Microfilm">a</option>
+         <option description="Microfiche">b</option>
+         <option description="Microopaque">c</option>
+         <option description="Large print">d</option>
+         <option description="Braille">f</option>
+         <option description="Regular print reproduction">r</option>
+         <option description="Electronic">s</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="30" description="Undefined" length="1" details="Contains a blank (#) or fill character (|) 31 - Index A one-character code that indicates whether the item or accompanying material includes a location index or gazetteer.">
+         <option description="No index">0</option>
+         <option description="Index present">1</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="32" description="Undefined" length="1" details="Contains a blank (#) or fill character (|) 33-34 - Special format characteristics Up to two one-character codes that indicate the special format characteristics of the map. Codes are recorded in order of their importance to the described item. If only one code is assigned, it is left justified and the unused position contains a blank (#).">
+         <option description="No specified special format characteristics">#</option>
+         <option description="Manuscript">e</option>
+         <option description="Picture card, post card">j</option>
+         <option description="Calendar">k</option>
+         <option description="Puzzle">l</option>
+         <option description="Game">n</option>
+         <option description="Wall map">o</option>
+         <option description="Playing cards">p</option>
+         <option description="Loose-leaf">r</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field code="008" type="MUSIC">
+      <value position="18" description="Form of composition" length="2" details="A two-character code that indicates the form of composition. The codes are based on Library of Congress subject headings. If more than one code is appropriate, the code mu (Multiple forms) is used in 008/18-19 and all appropriate specific codes are given in field 047 (Form of Composition). Code mu (Multiple forms) may also signify that field 047 (Form of Composition) contains non-MARC composition codes.">
+         <option description="Anthems">an</option>
+         <option description="Ballads">bd</option>
+         <option description="Bluegrass music">bg</option>
+         <option description="Blues">bl</option>
+         <option description="Ballets">bt</option>
+         <option description="Chaconnes">ca</option>
+         <option description="Chants, Other religions">cb</option>
+         <option description="Chant, Christian">cc</option>
+         <option description="Concerti grossi">cg</option>
+         <option description="Chorales">ch</option>
+         <option description="Chorale preludes">cl</option>
+         <option description="Canons and rounds">cn</option>
+         <option description="Concertos">co</option>
+         <option description="Chansons, polyphonic">cp</option>
+         <option description="Carols">cr</option>
+         <option description="Chance compositions">cs</option>
+         <option description="Cantatas">ct</option>
+         <option description="Country music">cy</option>
+         <option description="Canzonas">cz</option>
+         <option description="Dance forms">df</option>
+         <option description="Divertimentos, serenades, cassations, divertissements, notturni">dv</option>
+         <option description="Fugues">fg</option>
+         <option description="Folk music">fm</option>
+         <option description="Fantasias">ft</option>
+         <option description="Gospel music">gm</option>
+         <option description="Hymns">hy</option>
+         <option description="Jazz">jz</option>
+         <option description="Musical revues and comedies">mc</option>
+         <option description="Madrigals">md</option>
+         <option description="Minuets">mi</option>
+         <option description="Motets">mo</option>
+         <option description="Motion picture music">mp</option>
+         <option description="Marches">mr</option>
+         <option description="Masses">ms</option>
+         <option description="Multiple forms">mu</option>
+         <option description="Mazurkas">mz</option>
+         <option description="Nocturnes">nc</option>
+         <option description="Not applicable">nn</option>
+         <option description="Operas">op</option>
+         <option description="Oratorios">or</option>
+         <option description="Overtures">ov</option>
+         <option description="Program music">pg</option>
+         <option description="Passion music">pm</option>
+         <option description="Polonaises">po</option>
+         <option description="Popular music">pp</option>
+         <option description="Preludes">pr</option>
+         <option description="Passacaglias">ps</option>
+         <option description="Part-songs">pt</option>
+         <option description="Pavans">pv</option>
+         <option description="Rock music">rc</option>
+         <option description="Rondos">rd</option>
+         <option description="Ragtime music">rg</option>
+         <option description="Ricercars">ri</option>
+         <option description="Rhapsodies">rp</option>
+         <option description="Requiems">rq</option>
+         <option description="Square dance music">sd</option>
+         <option description="Songs">sg</option>
+         <option description="Sonatas">sn</option>
+         <option description="Symphonic poems">sp</option>
+         <option description="Studies and exercises">st</option>
+         <option description="Suites">su</option>
+         <option description="Symphonies">sy</option>
+         <option description="Toccatas">tc</option>
+         <option description="Trio-sonatas">ts</option>
+         <option description="Unknown">uu</option>
+         <option description="Variations">vr</option>
+         <option description="Waltzes">wz</option>
+         <option description="Other">zz</option>
+         <option description="No attempt to code">||</option>
+      </value>
+      <value position="20" description="Format of music" length="1" details="A one-character code that indicates the format of a musical composition.">
+         <option description="Full score">a</option>
+         <option description="Full score, miniature or study size">b</option>
+         <option description="Accompaniment reduced for keyboard">c</option>
+         <option description="Voice score">d</option>
+         <option description="Condensed score or piano-conductor score">e</option>
+         <option description="Close score">g</option>
+         <option description="Multiple score formats">m</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="21" description="Music parts" length="1" details="">
+         <option description="No parts in hand or not specified">#</option>
+         <option description="Instrumental and vocal parts">d</option>
+         <option description="Instrumental parts">e</option>
+         <option description="Vocal parts">f</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="22" description="Target audience" length="1" details="Indicates the audience for which the item is intended.">
+         <option description="Unknown or not specified">#</option>
+         <option description="Preschool">a</option>
+         <option description="Primary">b</option>
+         <option description="Pre-adolescent">c</option>
+         <option description="Adolescent">d</option>
+         <option description="Adult">e</option>
+         <option description="Specialized">f</option>
+         <option description="General">g</option>
+         <option description="Juvenile">j</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="23" description="Form of item" length="1" details="A one-character code that indicates the form of material for the item being described.">
+         <option description="None of the following">#</option>
+         <option description="Microfilm">a</option>
+         <option description="Microfiche">b</option>
+         <option description="Microopaque">c</option>
+         <option description="Large print">d</option>
+         <option description="Braille">f</option>
+         <option description="Regular print reproduction">r</option>
+         <option description="Electronic">s</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="24" description="Accompanying matter" length="6" details="Up to six one-character codes (recorded in alphabetical order) that indicate the contents of program notes and other accompanying material for the sound recording, manuscript notated music, or notated music. If fewer than six codes are assigned, the codes are left justified and each unused position contains a blank (#).">
+         <option description="No accompanying matter">#</option>
+         <option description="Discography">a</option>
+         <option description="Bibliography">b</option>
+         <option description="Thematic index">c</option>
+         <option description="Libretto or text">d</option>
+         <option description="Biography of composer or author">e</option>
+         <option description="Biography of performer or history of ensemble">f</option>
+         <option description="Technical and/or historical information on instruments">g</option>
+         <option description="Technical information on music">h</option>
+         <option description="Historical information">i</option>
+         <option description="Ethnological information">k</option>
+         <option description="Instructional materials">r</option>
+         <option description="Music">s</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="30" description="Literary text for sound recordings" length="2" details="Up to two one-character codes (recorded in the order of the following list) that indicate the type of literary text contained in a nonmusical sound recording. If only one code is assigned, it is left justified and the unused position contains a blank (#).">
+         <option description="Item is a musical sound recording">#</option>
+         <option description="Autobiography">a</option>
+         <option description="Biography">b</option>
+         <option description="Conference proceedings">c</option>
+         <option description="Drama">d</option>
+         <option description="Essays">e</option>
+         <option description="Fiction">f</option>
+         <option description="Reporting">g</option>
+         <option description="History">h</option>
+         <option description="Instruction">i</option>
+         <option description="Language instruction">j</option>
+         <option description="Comedy">k</option>
+         <option description="Lectures, speeches">l</option>
+         <option description="Memoirs">m</option>
+         <option description="Not applicable">n</option>
+         <option description="Folktales">o</option>
+         <option description="Poetry">p</option>
+         <option description="Rehearsals">r</option>
+         <option description="Sounds">s</option>
+         <option description="Interviews">t</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="32" description="Undefined" length="1" details="Contains a blank (#) or fill character (|) 33 - Transposition and arrangement">
+         <option description="Not arrangement or transposition or not specified">#</option>
+         <option description="Transposition">a</option>
+         <option description="Arrangement">b</option>
+         <option description="Both transposed and arranged">c</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="34" description="Undefined" length="1" details="Contains a blank (#) or fill character (|) Go to top of document 008--CONTINUING RESOURCES Character Positions"></value>
+      <value position="18" description="Frequency" length="1" details="A one-character code that indicates the frequency of an item; used in conjunction with 008/19 (Regularity).">
+         <option description="No determinable frequency">#</option>
+         <option description="Annual">a</option>
+         <option description="Bimonthly">b</option>
+         <option description="Semiweekly">c</option>
+         <option description="Daily">d</option>
+         <option description="Biweekly">e</option>
+         <option description="Semiannual">f</option>
+         <option description="Biennial">g</option>
+         <option description="Triennial">h</option>
+         <option description="Three times a week">i</option>
+         <option description="Three times a month">j</option>
+         <option description="Continuously updated">k</option>
+         <option description="Monthly">m</option>
+         <option description="Quarterly">q</option>
+         <option description="Semimonthly">s</option>
+         <option description="Three times a year">t</option>
+         <option description="Unknown">u</option>
+         <option description="Weekly">w</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="19" description="Regularity" length="1" details="A one-character code that indicates the intended regularity of an item; used in conjunction with 008/18 (Frequency).">
+         <option description="Normalized irregular">n</option>
+         <option description="Regular">r</option>
+         <option description="Unknown">u</option>
+         <option description="Completely irregular">x</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="20" description="Undefined" length="1" details="Contains a blank (#) or fill character (|) 21 - Type of continuing resource A one-character code that indicates the type of continuing resource.">
+         <option description="None of the following">#</option>
+         <option description="Updating database">d</option>
+         <option description="Updating loose-leaf">l</option>
+         <option description="Monographic series">m</option>
+         <option description="Newspaper">n</option>
+         <option description="Periodical">p</option>
+         <option description="Updating Web site">w</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="22" description="Form of original item" length="1" details="A one-character code that indicates the form of material in which an item was originally published.">
+         <option description="None of the following">#</option>
+         <option description="Microfilm">a</option>
+         <option description="Microfiche">b</option>
+         <option description="Microopaque">c</option>
+         <option description="Large print">d</option>
+         <option description="Newspaper format">e</option>
+         <option description="Braille">f</option>
+         <option description="Electronic">s</option>
+      </value>
+      <value position="23" description="Form of item" length="1" details="A one-character code that indicates the form of material for the item being described.">
+         <option description="None of the following">#</option>
+         <option description="Microfilm">a</option>
+         <option description="Microfiche">b</option>
+         <option description="Microopaque">c</option>
+         <option description="Large print">d</option>
+         <option description="Braille">f</option>
+         <option description="Regular print reproduction">r</option>
+         <option description="Electronic">s</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="24" description="Nature of entire work" length="1" details="A one-character code that indicates the nature of an item if it consists entirely of a certain type of material. If more than one code is applicable, 008/24 contains a blank (#) and up to three codes may be recorded in 008/25-27 (Nature of contents).">
+         <option description="No specified nature of entire work">#</option>
+         <option description="Abstracts/summaries">a</option>
+         <option description="Bibliographies">b</option>
+         <option description="Catalogs">c</option>
+         <option description="Dictionaries">d</option>
+         <option description="Encyclopedias">e</option>
+         <option description="Handbooks">f</option>
+         <option description="Legal articles">g</option>
+         <option description="Biography">h</option>
+         <option description="Indexes">i</option>
+         <option description="Discographies">k</option>
+         <option description="Legislation">l</option>
+         <option description="Theses">m</option>
+         <option description="Surveys of literature in a subject area">n</option>
+         <option description="Reviews">o</option>
+         <option description="Programmed texts">p</option>
+         <option description="Filmographies">q</option>
+         <option description="Directories">r</option>
+         <option description="Statistics">s</option>
+         <option description="Technical reports">t</option>
+         <option description="Standards/specifications">u</option>
+         <option description="Legal cases and case notes">v</option>
+         <option description="Law reports and digests">w</option>
+         <option description="Treaties">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="25" description="Nature of contents" length="3" details="Up to three one-character codes (recorded in alphabetical order) that indicate that a work contains certain types of materials. If fewer than three codes are assigned, the codes are left justified and each unused position contains a blank (#).">
+         <option description="No specified nature of contents">#</option>
+         <option description="Abstracts/summaries">a</option>
+         <option description="Bibliographies">b</option>
+         <option description="Catalogs">c</option>
+         <option description="Dictionaries">d</option>
+         <option description="Encyclopedias">e</option>
+         <option description="Handbooks">f</option>
+         <option description="Legal articles">g</option>
+         <option description="Biography">h</option>
+         <option description="Indexes">i</option>
+         <option description="Discographies">k</option>
+         <option description="Legislation">l</option>
+         <option description="Theses">m</option>
+         <option description="Surveys of literature in a subject area">n</option>
+         <option description="Reviews">o</option>
+         <option description="Programmed texts">p</option>
+         <option description="Filmographies">q</option>
+         <option description="Directories">r</option>
+         <option description="Statistics">s</option>
+         <option description="Technical reports">t</option>
+         <option description="Standards/specifications">u</option>
+         <option description="Legal cases and case notes">v</option>
+         <option description="Law reports and digests">w</option>
+         <option description="Treaties">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="28" description="Government publication" length="1" details="A one-character code that indicates whether an item is published or produced by or for a government agency, and, if so, the jurisdictional level of the agency.">
+         <option description="Not a government publication">#</option>
+         <option description="Autonomous or semi-autonomous component">a</option>
+         <option description="Multilocal">c</option>
+         <option description="Federal/national">f</option>
+         <option description="International intergovernmental">i</option>
+         <option description="Local">l</option>
+         <option description="Multistate">m</option>
+         <option description="Government publication--level undetermined">o</option>
+         <option description="State, provincial, territorial, dependent, etc.">s</option>
+         <option description="Unknown if item is government publication">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="29" description="Conference publication" length="1" details="A one-character code that indicates whether an item consists of the proceedings, reports, or summaries of a conference.">
+         <option description="Not a conference publication">0</option>
+         <option description="Conference publication">1</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="30" description="Undefined" length="3" details="Each contains a blank (#) or fill character (|) 33 - Original alphabet or script of title A one-character code that indicates the original alphabet or script of the language of the title on the source item upon which the key title (field 222) is based.">
+         <option description="No alphabet or script given/no key title">#</option>
+         <option description="Basic Roman">a</option>
+         <option description="Extended Roman">b</option>
+         <option description="Cyrillic">c</option>
+         <option description="Japanese">d</option>
+         <option description="Chinese">e</option>
+         <option description="Arabic">f</option>
+         <option description="Greek">g</option>
+         <option description="Hebrew">h</option>
+         <option description="Thai">i</option>
+         <option description="Devanagari">j</option>
+         <option description="Korean">k</option>
+         <option description="Tamil">l</option>
+         <option description="Unknown">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="34" description="Entry convention" length="1" details="A one-character code that indicates whether an item was cataloged according to successive entry, latest entry or integrated entry cataloging conventions.">
+         <option description="Successive entry">0</option>
+         <option description="Latest entry">1</option>
+         <option description="Integrated entry">2</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field code="008" type="VISUAL MATERIALS">
+      <value position="18" description="Running time for motion pictures and videorecordings" length="3" details="A three-digit number that indicates the total running time of the motion picture or videorecording. The number is right justified and each unused position contains a zero."></value>
+      <value position="0" description="Running time exceeds three characters" length="1" details=""></value>
+      <value position="99" description="Running time" length="1" details="">
+         <option description="Running time unknown">---</option>
+         <option description="Not applicable">nnn</option>
+         <option description="No attempt to code">|||</option>
+      </value>
+      <value position="21" description="Undefined" length="1" details="Contains a blank (#) or fill character (|) 22 - Target audience A one-character code that indicates the audience for which the item is intended.">
+         <option description="Unknown or not specified">#</option>
+         <option description="Preschool">a</option>
+         <option description="Primary">b</option>
+         <option description="Pre-adolescent">c</option>
+         <option description="Adolescent">d</option>
+         <option description="Adult">e</option>
+         <option description="Specialized">f</option>
+         <option description="General">g</option>
+         <option description="Juvenile">j</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="23" description="Undefined" length="5" details="Each contains a blank (#) or fill character (|) 28 - Government publication A one-character code that indicates whether the item is published or produced by or for a government agency, and, if so, the jurisdictional level of the agency.">
+         <option description="Not a government publication">#</option>
+         <option description="Autonomous or semi-autonomous component">a</option>
+         <option description="Multilocal">c</option>
+         <option description="Federal/national">f</option>
+         <option description="International intergovernmental">i</option>
+         <option description="Local">l</option>
+         <option description="Multistate">m</option>
+         <option description="Government publication--level undetermined">o</option>
+         <option description="State, provincial, territorial, dependent, etc.">s</option>
+         <option description="Unknown if item is government publication">u</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="29" description="Form of item" length="1" details="A one-character code that indicates the form of material for the item.">
+         <option description="None of the following">#</option>
+         <option description="Microfilm">a</option>
+         <option description="Microfiche">b</option>
+         <option description="Microopaque">c</option>
+         <option description="Large print">d</option>
+         <option description="Braille">f</option>
+         <option description="Regular print reproduction">r</option>
+         <option description="Electronic">s</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="30" description="Undefined" length="3" details="Each contains a blank (#) or fill character (|) 33 - Type of visual material A one-character code that indicates the type of visual material item.">
+         <option description="Art original">a</option>
+         <option description="Kit">b</option>
+         <option description="Art reproduction">c</option>
+         <option description="Diorama">d</option>
+         <option description="Filmstrip">f</option>
+         <option description="Game">g</option>
+         <option description="Picture">i</option>
+         <option description="Graphic">k</option>
+         <option description="Technical drawing">l</option>
+         <option description="Motion picture">m</option>
+         <option description="Chart">n</option>
+         <option description="Flash card">o</option>
+         <option description="Microscope slide">p</option>
+         <option description="Model">q</option>
+         <option description="Realia">r</option>
+         <option description="Slide">s</option>
+         <option description="Transparency">t</option>
+         <option description="Videorecording">v</option>
+         <option description="Toy">w</option>
+         <option description="Other">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="34" description="Technique" length="1" details="A one-character code that indicates the technique used in creating motion in the motion picture or videorecording.">
+         <option description="Animation">a</option>
+         <option description="Animation and live action">c</option>
+         <option description="Live action">l</option>
+         <option description="Not applicable">n</option>
+         <option description="Unknown">u</option>
+         <option description="Other technique">z</option>
+         <option description="No attempt to code">|</option>
+      </value>
+   </field>
+   <field code="008" type="MIXED MATERIALS">
+      <value position="18" description="Undefined" length="5" details="Each contains a blank (#) or fill character (|) 23 - Form of item A one-character code that indicates the form of material for the item.">
+         <option description="None of the following">#</option>
+         <option description="Microfilm">a</option>
+         <option description="Microfiche">b</option>
+         <option description="Microopaque">c</option>
+         <option description="Large print">d</option>
+         <option description="Braille">f</option>
+         <option description="Regular print reproduction">r</option>
+         <option description="Electronic">s</option>
+         <option description="No attempt to code">|</option>
+      </value>
+      <value position="24" description="Undefined" length="11" details="Each contains a blank (#) or fill character (|) Go to top of document Go to: MARC 21 Concise Bibliographic Format | MARC Home Page Library of Congress Library of Congress Library of Congress Help Desk ( 05/10/2007 )"></value>
+   </field>
+</fields>

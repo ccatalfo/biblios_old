@@ -148,17 +148,17 @@ function get008FromEditor(ff_ed) {
 /*
 
 */
-function updateFFEditor(ff_ed, var_ed) {
+function updateFFEditor(editorid, ff_ed, var_ed) {
 	if(debug) { console.info("updating fixed field editor from leader and 008 tags"); }
     var oDomDoc = Sarissa.getDomDocument();
-    var leaderval = $("#000", var_ed).children('.controlfield').val();
+    var leaderval = $('#'+editorid).find("#000", var_ed).children('.controlfield').val();
 	if( leaderval.length != 24 ) {
 		throw {
 			error: "InvalidLeader",
 			msg: "Invalid length of Leader"
 		}
 	}
-    var tag008val = $("#008", var_ed).children('.controlfield').val();
+    var tag008val = $('#'+editorid).find("#008", var_ed).children('.controlfield').val();
 	if( tag008val.length != 40 ) {
 		throw {
 			error: "Invalid008",
@@ -180,8 +180,8 @@ function updateFFEditor(ff_ed, var_ed) {
     newff += "</record>";
     newff += "</collection>";
 	//FIXME make this an jquery.xslTransform call
-    $("#ffeditor").empty();
-    $("#ffeditor").getTransform( fixedFieldXslPath, newff);
+    $('#'+editorid).find(".ffeditor").empty();
+    $('#'+editorid).find(".ffeditor").getTransform( fixedFieldXslPath, newff);
 }
 
 function editorGetSelectedElement() {
@@ -947,11 +947,11 @@ function editorCheckHighlighting(o) {
     None.
 
 */
-function transferFF_EdToTags(ff_ed, var_ed) {
+function transferFF_EdToTags(editorid, ff_ed, var_ed ) {
     var leaderval = getLeaderFromEditor(ff_ed);
-    $("#000", var_ed).children('.controlfield').val(leaderval);
+    $('#'+editorid).find("#000", var_ed).children('.controlfield').val(leaderval);
     var tag008val = get008FromEditor(ff_ed);
-    $("#008", var_ed).children('.controlfield').val(tag008val);
+    $('#'+editorid).find("#008", var_ed).children('.controlfield').val(tag008val);
     if(debug) {
         console.info('Transferring leader value from fixed field editor into leader tag: ' + leaderval);
         console.info('Transferring 008 value from fixed field editor into 008 tag: ' + tag008val);
@@ -960,23 +960,24 @@ function transferFF_EdToTags(ff_ed, var_ed) {
 
 
 function toggleFixedFieldDisplay(btn, toggled) {
-	var ff_ed = $("#ffeditor");
-	var var_ed = $("#vareditor");
+	var editorid = btn.editorid;
+	var ff_ed = $('#'+editorid).find(".ffeditor");
+	var var_ed = $('#'+editorid).find(".vareditor");
 	if( btn.pressed == false ) {
 		// hide fixed field editor
-		$("#ffeditor").hide();
+		$('#'+editorid).find(".ffeditor").hide();
         // transfer values from fixed field editor into tags
-        transferFF_EdToTags(ff_ed, var_ed);
+        transferFF_EdToTags(editorid, ff_ed, var_ed);
 		// show leader and 008
-		$("#000", UI.editor.doc).show();
-		$("#008", UI.editor.doc).show();
+		$('#'+editorid).find("#000", UI.editor[editorid].doc).show();
+		$('#'+editorid).find("#008", UI.editor[editorid].doc).show();
 	}
 	else {
-        updateFFEditor(ff_ed, var_ed);
-		$("#ffeditor").show();
+        updateFFEditor(editorid, ff_ed, var_ed);
+		$('#'+editorid).find(".ffeditor").show();
 		// hide leader and 008
-		$("#000", UI.editor.doc).hide();
-		$("#008", UI.editor.doc).hide();
+		$('#'+editorid).find("#000", UI.editor.doc).hide();
+		$('#'+editorid).find("#008", UI.editor.doc).hide();
 	}
 
 }
@@ -1029,20 +1030,19 @@ function removeTag(tagnumber, i) {
 }
 
 
-function create_static_editor() {
-	UI.editor.editorDoc = $('#vareditor');
+function create_static_editor(ffed, vared, editorid) {
 	// setup marceditor macro functionality
-	UI.editor.record = setupMacros($('#fixedfields_editor'), UI.editor.editorDoc);
+	UI.editor[editorid].record = setupMacros(ffed, vared);
 	// setup reserved (locked) tags based on remote ils bib profile
-	if( Prefs.remoteILS[ UI.editor.location ] ) {
-		setupReservedTags( Prefs.remoteILS[ UI.editor.location ], UI.editor.editorDoc);
-		setupSpecialEntries( Prefs.remoteILS[ UI.editor.location ], UI.editor.editorDoc);
+	if( Prefs.remoteILS[ UI.editor[editorid].location ] ) {
+		setupReservedTags( Prefs.remoteILS[ UI.editor[editorid].location ], vared);
+		setupSpecialEntries( Prefs.remoteILS[ UI.editor[editorid].location ], vared);
 	}
 	// add editor hotkeys
-	setupEditorHotkeys();
+	setupEditorHotkeys(editorid);
 
 	// apply ExtJS comboboxes for live searching of authority data
-	setupMarc21AuthorityLiveSearches();
+	setupMarc21AuthorityLiveSearches(editorid);
 }
 
 function onFocus(elem) {
@@ -1051,15 +1051,13 @@ function onFocus(elem) {
 
 function onBlur(elem) {
 	$(elem).removeClass('focused');
-	UI.editor.record.update(elem);
-	UI.editor.lastFocusedEl = elem;
+	var editorid = $(elem).parents('.marceditor').get(0).id;
+	UI.editor[editorid].record.update(elem);
+	UI.editor[editorid].lastFocusedEl = elem;
 }
 
 function onFixedFieldEditorBlur(elem) {
-	// transfer the fixed field editor values to fixed field tags
-	var ff_ed = $("#ffeditor");
-	var var_ed = $("#vareditor");
-	transferFF_EdToTags(ff_ed, var_ed);
+	transferFF_EdToTags(UI.editor.ffed, UI.editor.vared);
 	UI.editor.record.update($('#000').find('.controlfield'));
 	UI.editor.record.update($('#008').find('.controlfield'));
 }
@@ -1130,9 +1128,9 @@ function setupMacros(ffeditor, vareditor) {
 }
 
 
-function setupEditorHotkeys() {
+function setupEditorHotkeys(editorelem) {
 	// focus prev tagnumber on shift-return
-	var inputs = Ext.select('input', false, 'marceditor');
+	var inputs = Ext.select('input', false, $(editorelem)[0]);
 	inputs.addKeyMap({
 		key: Ext.EventObject.ENTER,
 		fn: function(key, e) {
@@ -1175,7 +1173,7 @@ function setupEditorHotkeys() {
 	});
 }
 
-function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, recordSchema) {
+function createAuthComboBox(editorid, tagelem, xmlReader, displayField, queryIndex, recordSchema) {
 	var subfield_text = $(tagelem);
 	if( subfield_text.length == 0 ) {
 		return;
@@ -1185,7 +1183,8 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 		proxy: new Ext.data.HttpProxy(
 			{
 				url: kohaauthurl,
-				method: 'GET'
+				method: 'GET',
+				disableCaching: false
 			
 			}),
 		baseParams: {
@@ -1213,7 +1212,8 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 		displayField: displayField,
 		loadingText: 'Searching...',
 		cls: 'authority-field',
-		lazyRender: true
+		lazyRender: false,
+		applyTo: $(subfield_text).get(0).id
 	});
 	cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
 		combo.query = combo.combo.queryIndex + "=" + combo.query;
@@ -1221,7 +1221,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 	cb.on('select', function(combo, record, index) {
 		var tagnumber = $(combo.el.dom).parents('.tag').children('.tagnumber').val();
 		var tag = $(combo.el.dom).parents('.tag');
-		var tagindex = UI.editor.record.getIndexOf( tag );
+		var tagindex = UI.editor[editorid].record.getIndexOf( tag );
 		// create/update subfields
 		if( record.store.reader.meta.deleteSubfields == true ) {
 			// delete any subfields following the first (subfield $a)
@@ -1242,26 +1242,25 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 			}
 			// add new one if we have a value for it
 			else if( value != '' || null ) {
-				UI.editor.record.addSubfield(tagnumber, tagindex, subfieldcode, value);
+				UI.editor[editorid].record.addSubfield(tagnumber, tagindex, subfieldcode, value);
 			}
 		}
-		UI.editor.cbOpen = false;
+		UI.editor[editorid].cbOpen = false;
 
 	});
 	cb.on('specialkey', function(cb, e) {
 		e.stopEvent();
 	});
 	cb.on('expand', function(cb, e) {
-		UI.editor.cbOpen = true;
+		UI.editor[editorid].cbOpen = true;
 	});
 	cb.on('hide', function(cb, e) {
 	});
-	UI.editor.comboboxes.push(cb);
-	cb.applyTo($(subfield_text).get(0).id);
+	UI.editor[editorid].comboboxes.push(cb);
 	return true;
 }
 
-function setupMarc21AuthorityLiveSearches() {
+function setupMarc21AuthorityLiveSearches(editorid) {
 	var topicalTermXmlReader = new Ext.data.XmlReader({
 		record: 'record',
 		deleteSubfields: false, // don't remote following subfields
@@ -1340,204 +1339,41 @@ function setupMarc21AuthorityLiveSearches() {
 	);
 	// personal names
 	Ext.select('div[id^=100] .a .subfield-text, div[id^=700] .a .subfield-text, div[id^=600] .a .subfield-text, div[id^=800] .a .subfield-text').each( function(item) {
-		createAuthComboBox( $(item.dom), pnameXmlReader, 'pname', 'bath.personalName', 'marcxml' );
+		createAuthComboBox(editorid,  $(item.dom), pnameXmlReader, 'pname', 'bath.personalName', 'marcxml' );
 		return true;
 	});
 	
 	Ext.select('div[id^=110] .a .subfield-text, div[id^=710] .a .subfield-text, div[id^=610] .a .subfield-text, div[id^=810] .a .subfield-text').each( function(item) {
-		createAuthComboBox( $(item.dom), corpnameXmlReader, 'corpname', 'bath.corporateName', 'marcxml' );
+		createAuthComboBox(editorid,  $(item.dom), corpnameXmlReader, 'corpname', 'bath.corporateName', 'marcxml' );
 		return true;
 	});
 	Ext.select('div[id^=111] .a .subfield-text, div[id^=711] .a .subfield-text, div[id^=611] .a .subfield-text, div[id^=811] .a .subfield-text').each( function(item) {
-		createAuthComboBox( $(item.dom), confnameXmlReader, 'confname', 'bath.conferenceName', 'marcxml' );
+		createAuthComboBox(editorid,  $(item.dom), confnameXmlReader, 'confname', 'bath.conferenceName', 'marcxml' );
 		return true;
 	});
 	Ext.select('div[id^=240] .a .subfield-text, div[id^=130] .a .subfield-text, div[id^=740] .a .subfield-text, div[id^=630] .a .subfield-text').each( function(item) {
-		createAuthComboBox( $(item.dom), uniformtitleXmlReader, 'title', 'bath.uniformTitle', 'marcxml' );
+		createAuthComboBox(editorid,  $(item.dom), uniformtitleXmlReader, 'title', 'bath.uniformTitle', 'marcxml' );
 		return true;
 	});
 	// subject headings
 	Ext.select('div[id^=650] .a .subfield-text').each( function(item) {
-		createAuthComboBox( $(item.dom), topicalTermXmlReader, 'topicalterm', 'bath.topicalSubject', 'marcxml' );
+		createAuthComboBox(editorid,  $(item.dom), topicalTermXmlReader, 'topicalterm', 'bath.topicalSubject', 'marcxml' );
 		return true;
 	});
 	Ext.select('div[id^=651] .a .subfield-text').each( function(item) {
-		createAuthComboBox( $(item.dom), geoTermXmlReader, 'geoterm', 'bath.geographicName', 'marcxml' );
+		createAuthComboBox(editorid,  $(item.dom), geoTermXmlReader, 'geoterm', 'bath.geographicName', 'marcxml' );
 		return true;
 	});
 	Ext.select('div[id^=655] .a .subfield-text').each( function(item) {
-		createAuthComboBox( $(item.dom), genreTermXmlReader, 'genreterm', 'bath.genreForm', 'marcxml' );
+		createAuthComboBox(editorid,  $(item.dom), genreTermXmlReader, 'genreterm', 'bath.genreForm', 'marcxml' );
 		return true;
 	});
 }
 
-function create_ext_editor_static() {
-	UI.editor.editorDoc = $('#vareditor');
-	$('.subfield-text').each( function() {
-		var value = $(this).text();
-		$(this).text('');
-		var ite = new Ext.form.TextField(
-		{	
-			value: value,
-			grow: true, 
-			focusClass: 'focused-subfield-text',
-			cls: 'subfield-text',
-			fieldClass: 'subfield-text'
-		});
-		ite.render($(this).get(0));
-	});
-	$('.subfield-delimiter').each( function() {
-		var value = $(this).text();
-		$(this).text('');
-		var ite = new Ext.form.TextField(
-		{
-			value: value,
-			grow: true, 
-			maxLength: 2,
-			focusClass: 'focused-subfield-delimiter',
-			cls: 'subfield-delimiter',
-			fieldClass: 'subfield-delimiter'
-		});
-		ite.render($(this).get(0));
-	});
-	$('.tagnumber').each( function() {
-		var value = $(this).text();
-		var id = $(this).id;
-		$(this).text('');
-		var ite = new Ext.form.TextField(
-		{
-			id: id,
-			value: value,
-			grow: true, 
-			maxLength: 3,
-			cls: 'tagnumber',
-			fieldClass: 'tagnumber',
-			focusClass: 'focused-tagnumber'
-		});
-		ite.render($(this).get(0));
-	});
-	$('.indicator').each( function() {
-		var value = $(this).text();
-		$(this).text('');
-		var ite = new Ext.form.TextField(
-		{
-			value: value,
-			grow: true, 
-			maxLength: 1,
-			focusClass: 'focused-indicator',
-			cls: 'indicator',
-			fieldClass: 'indicator'
-		});
-		ite.render($(this).get(0));
-	});
-	$('.controlfield').each( function() {
-		var value = $(this).text();
-		$(this).text('');
-		var ite = new Ext.form.TextField(
-		{
-			value: value,
-			grow: false,
-			focusClass: 'focused-controlfield',
-			cls: 'subfield-text',
-			fieldClass: 'subfield-text'
-		});
-		ite.render($(this).get(0));
-	});
-	$("#000").hide();
-	$("#008").hide();
-	// focus first input element
-	$('input', '#vareditor').get(0).focus();
-}
 
-function create_jquery_editor() {
-	UI.editor.editorDoc = '';
-	//$('.subfield-text').click( function() {
-//		$('input').filter('.subfield-text').replaceWith("<span>");
-//		$('span').removeClass('focused-subfield-text');
-//		$(this).replaceWith("<input type='text'>").addClass('focused').focus();
-//	});
-	// jeditable
-	$('.subfield-text').editable(
-		function(value, settings) {
-			console.log(this);
-			console.log(value);
-			console.log(settings);
-			return(value);
-		},
-		{
-			//type: 'textarea',
-			//event: "mouseover",
-			style: 'display: inline; background-color: yellow;',
-			onblur: 'submit'
-	});
-	$('.subfield-delimiter').editable(
-		function(value, settings) {
-			console.log(this);
-			console.log(value);
-			console.log(settings);
-			return(value);
-		},
-		{
-			//event: "mouseover",
-			style: 'inherit',
-			onblur: 'submit'
-	});
-	$('.tagnumber').editable(
-		function(value, settings) {
-			console.log(this);
-			console.log(value);
-			console.log(settings);
-			return(value);
-		},
-		{
-			//event: "mouseover",
-			style: "inherit",
-			onblur: 'submit'
-	});
-}
 
-function create_yui_rte_editor() {
-	var vared = $("#vareditor").html();
-	$("#vareditor").empty();
-  $("#vareditor").append("<textarea id='rte_placeholder' name='rte_placeholder' id='rte_placeholder'>"+vared+"</textarea>");
-	rte_editor = new YAHOO.widget.Editor('rte_placeholder', {
-		height: '700px',
-		width: '722px',
-		dompath: false, //Turns on the bar at the bottom
-		animate: false, //Animates the opening, closing and moving of Editor windows
-		css: editor_css + autocomplete_css
-	});
-	rte_editor.render();
-	rte_editor.on('editorContentLoaded', function() {
-		// move the cursor to 001 tag so we can use it even though leader will be invisible
-		var editorSelection = rte_editor._getSelection();
-		var tag001 = $("#001", rte_editor._getDoc()).get(0);
-		editorSelection.extend(tag001, 0);
-		editorSelection.collapseToEnd();
-		editorSetFocus( $(editorSelection.focusNode).children('.tagnumber') );
-		rte_editor._focusWindow();
-		$("#000", rte_editor._getDoc()).hide();
-		$("#008", rte_editor._getDoc()).hide();
-		// add metadata div with associated savefile id and record id
-		$("#marceditor").prepend("<div id='metadata' style='display: none;'><span id='id'>"+id+"</span><span id='savefileid'>"+savefileid+"</span></div>");
-	});
-	rte_editor.on('editorKeyPress', editorKeyPress );
-	rte_editor.on('editorKeyPress', editorCheckHighlighting );
-	rte_editor.on('editorKeyUp', function(o) {
-	});
-	rte_editor.on('editorMouseUp', editorMouseUp );
-	UI.editor.editorDoc = rte_editor._getDoc();
-}
 
-function editorMouseUp(o) {
-  YAHOO.util.Event.stopEvent(o.ev);
-  editorSelection = rte_editor._getSelection();
-  var selectedElement = editorGetSelectedElement();
-  editorSetFocus( selectedElement );
-  if(debug) { console.info( "mouseUP: selected node text: " + $(selectedElement).text() );}
-  if(debug) { console.info( "mouseUp: " + selectedElement);}
-  if(debug) { console.info( "mouseUp: " + editorSelection);}
-}
+
 
 /* 
    Function: clearEditor
@@ -1555,14 +1391,15 @@ function editorMouseUp(o) {
    See Also:
    <openRecord>
 */
-function clear_editor() {
+function clear_editor(editorid) {
     // reset current open record to none
-    UI.editor.id = '';
-	UI.editor.location = '';
-	UI.editor.comboboxes = new Array();
+    UI.editor[editorid].id = '';
+	UI.editor[editorid].location = '';
+	UI.editor[editorid].record = '';
+	UI.editor[editorid].comboboxes = new Array();
    // clear the marceditor divs
-   $("#fixedfields_editor").empty();
-   $("#varfields_editor").empty();
+   $('#'+editorid).find("#fixedfields_editor").empty();
+   $('#'+editorid).find("#varfields_editor").empty();
 }
 
 function getEditorForTag(tagnumber, marcxml) {

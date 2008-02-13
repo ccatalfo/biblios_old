@@ -14,7 +14,7 @@ function MarcEditor(ffeditor, vareditor) {
 
 	// private methods
 	function createFieldList() {
-		$('.tag').each( function(i) {
+		$('.tag', vared).each( function(i) {
 			fieldlist.push($(this).get(0).id.substring(0,3));
 		});
 	}
@@ -23,7 +23,7 @@ function MarcEditor(ffeditor, vareditor) {
 		// make sure we start w/ empty arrays
 		fields.length = 0;
 		fieldlist.length = 0;
-		var editorfields = $('.tag');
+		var editorfields = $('.tag', vared);
 		for( var i = 0; i < editorfields.length; i++) {
 				var newfield = createField( $(editorfields).eq(i) );
 				fields.push(newfield);
@@ -34,16 +34,16 @@ function MarcEditor(ffeditor, vareditor) {
 	
 	function createField(elem) {
 		var newfield;
-		var tagnumber = $(elem).children('.tagnumber').eq(0).val();
+		var tagnumber = $(elem).children('.tagnumber', vared).eq(0).val();
 		var id = $(elem).get(0).id;
-		var ind1 = $(elem).children('.indicator').eq(0).val();
-		var ind2 = $(elem).children('.indicator').eq(1).val();
+		var ind1 = $(elem).children('.indicator', vared).eq(0).val();
+		var ind2 = $(elem).children('.indicator', vared).eq(1).val();
 		if( tagnumber < '010' ) {
-			var value = $(elem).children('.controlfield').val();	
+			var value = $(elem).children('.controlfield', vared).val();	
 			newfield = new Field(tagnumber, ind1, ind2, [{code: '', value: value}]);
 		}
 		else {
-			var editorsubfields = $('[@id='+id+']').children('.subfields').children('.subfield');
+			var editorsubfields = $('[@id='+id+']', vared).children('.subfields').children('.subfield');
 			var subfields = new Array();
 			for(var j = 0; j < editorsubfields.length; j++) {
 				var code = editorsubfields.eq(j).find('.subfield-delimiter').val().substring(1);
@@ -126,32 +126,32 @@ function MarcEditor(ffeditor, vareditor) {
 
 	this._getValue = function(tag, subfield) {
 		if( subfield != null ) {
-			return $('[@id^='+tag+'] .'+subfield+' .subfield-text').val();
+			return $('[@id^='+tag+'] .'+subfield+' .subfield-text', vared).val();
 		}
 		else {
-			return $('[@id^='+tag+']').children('.controlfield').val();
+			return $('[@id^='+tag+']').children('.controlfield', vared).val();
 		}
 	}
 
 	this._rawFields = function() {
-		return $('.tag');
+		return $('.tag', vared);
 	}
 
 	this._rawField = function(tagnumber, i) {
 		if( !Ext.isEmpty(i) ) {
-			return $('.tag').filter('[@id*='+tagnumber+']').eq(i);
+			return $('.tag', vared).filter('[@id*='+tagnumber+']').eq(i);
 		}
 		else {
-			return $('.tag').filter('[@id*='+tagnumber+']');
+			return $('.tag', vared).filter('[@id*='+tagnumber+']');
 		}
 	}
 
 	this._rawSubfields = function(tagnumber, i) {
 		if( !Ext.isEmpty(i) ) {
-			return $('.tag').filter('[@id*='+tagnumber+']').eq(i).children('.subfields').children('.subfield');
+			return $('.tag', vared).filter('[@id*='+tagnumber+']').eq(i).children('.subfields').children('.subfield');
 		}
 		else {
-			return $('.tag').filter('[@id*='+tagnumber+']').children('.subfields').children('.subfield');
+			return $('.tag', vared).filter('[@id*='+tagnumber+']').children('.subfields').children('.subfield');
 		}
 	}
 
@@ -171,7 +171,7 @@ function MarcEditor(ffeditor, vareditor) {
 			if(debug) { console.info("Adding tag with tagnumber: " + tagnumber);  }; 
 
 			// insert the new field in numerical order among the existing tags
-			var tags = $(".tag", UI.editor.doc );
+			var tags = $(".tag",vared  );
 			var tagToInsertAfter; // the tag just before where we'll insert the new tag
 			var highestSuffix = 1; // highest number appended to tag id's with this tag number.  Add 1 to it to get suffix for new tag
 			var newSuffix = 1;
@@ -202,7 +202,7 @@ function MarcEditor(ffeditor, vareditor) {
 				  newtag += '<input id="'+tagnumber+newId+i+'text"class="subfield-text" size="'+textlength+'" value="'+sf[i]['text']+'">';
 				}
 			// insert out new tag after the tag we just found
-			$(tagToInsertAfter, UI.editor.doc).after(newtag);
+			$(tagToInsertAfter, vared).after(newtag);
 			update();
 			// set the focus to this new tag
 			//$( newId ).get(0).focus();
@@ -213,11 +213,11 @@ function MarcEditor(ffeditor, vareditor) {
 		if( tagnumber ) {
 			// remove  the ith tagnumber if we were passed an i
 			if( !Ext.isEmpty(i) ) {
-				$('.tag').filter('[@id*='+tagnumber+']').eq(i).remove();
+				$('.tag', vared).filter('[@id*='+tagnumber+']').eq(i).remove();
 			}
 			// else remove all!
 			else {
-				$('.tag').filter('[@id*='+tagnumber+']').remove();
+				$('.tag', vared).filter('[@id*='+tagnumber+']').remove();
 			}
 			update();
 		}
@@ -240,7 +240,7 @@ function MarcEditor(ffeditor, vareditor) {
 		var id = $(elem).get(0).id;
 		var tagnumber = id.substr(0,3);
 		// find all tags with this tagnumber
-		var tags = $("div[@id^="+tagnumber+"]");
+		var tags = $("div[@id^="+tagnumber+"]", vared);
 		for( var i = 0; i < tags.length; i++ ) {
 			if( tags.get(i).id == id ) {
 				return i;
@@ -250,8 +250,8 @@ function MarcEditor(ffeditor, vareditor) {
 
 	this._addSubfield = function(tag, index, subfield, value) {
 		// get last subfield in this tag
-		var numsf = $('div[@id^='+tag+']').eq(index).find('.subfield-text').length;
-		var lastsf = $('div[@id^='+tag+']').eq(index).find('.subfield-text').eq(numsf-1);
+		var numsf = $('div[@id^='+tag+']', vared).eq(index).find('.subfield-text').length;
+		var lastsf = $('div[@id^='+tag+']', vared).eq(index).find('.subfield-text').eq(numsf-1);
 		// add a subfield after it
 		addSubfield(lastsf);
 		// now set its delimiter to the passed in subfield code
@@ -267,23 +267,23 @@ function MarcEditor(ffeditor, vareditor) {
 	}
 
 	this._deleteSubfield = function(tag, index, subfield) {
-		var sf = $('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
+		var sf = $('[@id^='+tag+']', vared).children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
 		UI.editor.lastFocusedEl = sf;
 		removeSubfield();
 		update();
 	}
 
 	this._deleteSubfields = function(tag) {
-		$('[@id^='+tag+']').children('.subfields').find('.subfield').remove();
+		$('[@id^='+tag+']', vared).children('.subfields').find('.subfield').remove();
 		update();
 	}
 
 	this._focusTag = function(tag) {
-		$('[@id^='+tag+']').children('.tagnumber').focus();
+		$('[@id^='+tag+']', vared).children('.tagnumber').focus();
 	}
 
 	this._focusSubfield = function(tag, subfield) {
-		$('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').focus();
+		$('[@id^='+tag+']', vared).children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').focus();
 	}
 	
 	this._XML = function() {

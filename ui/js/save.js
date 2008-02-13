@@ -15,95 +15,7 @@
    None.
 
 */
-function doSaveLocal(savefileid) {
-    if( !savefileid ) {
-		if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
-			savefileid = 2; // Drafts
-    }
-	var savefilename = UI.save.savefile[savefileid];
-	showStatusMsg('Saving to '+ savefilename);
-    var rs, xml;
-    // if we have a record open in the marceditor, get its xml and save to drafts
-    if( Ext.get('marceditor').isVisible() ) {
-		Ext.get('fixedfields_editor').mask();
-		Ext.get('varfields_editor').mask();
-		var progress = Ext.MessageBox.progress('Saving record');
-        var ff_ed = $("#fixedfields_editor");
-        var var_ed = UI.editor.editorDoc;
-        // transform edited record back into marcxml
-		xml = UI.editor.record.XMLString();
-		progress.updateProgress(.5, 'Extracing marcxml');
-        var recid = UI.editor.id;
-        // if we don't have a record id, add this record to the db first
-        if( recid == '' ) {
-            if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
-            var data = searchgrid.getSelections()[0].data;
-			var id = searchgrid.getSelections()[0].id;
-			progress.updateProgress(.6, 'Retrieving record from server');
-            recid = addRecordFromSearch(id, data, savefileid);
-			if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
-        }
-		else { // recid isn't empty so we've already saved this record, just update it
-			try {
-				var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
-				if( record.marcflavour == 'marc21' ) {
-					record.title = UI.editor.record.getValue('245', 'a');
-					record.author = UI.editor.record.getValue('100', 'a');
-					record.publisher = UI.editor.record.getValue('260', 'b');
-					record.dateofpub = UI.editor.record.getValue('260', 'c');
-				}
-				record.xml = xml;
-				record.Savefiles_id = savefileid;
-				record.status = 'edited';
-				record.date_modified = new Date();
-				record.save();
-				if(debug) { 
-					console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
-			}
-				progress.updateProgress(1, 'Saving record to local database');
-			} catch(ex) {
-					Ext.MessageBox.alert('Database error',ex.message);
-			}
-		}
-		progress.hide();
-		Ext.get('fixedfields_editor').unmask();
-		Ext.get('varfields_editor').unmask();
-        return true;
-    } // save record from marc editor
-    // if we're picking from the savefile grid 
-    else if( (Ext.get('savegrid').isVisible() ) ) {
-        var grid = Ext.ComponentMgr.get( 'save-file-grid' );
-        var ds = grid.getDataSource();
-        var sel = grid.getSelectionModel().getSelections();
-		// update the record(s) based on current selection
-		for( var i = 0; i < sel.length; i++) {
-			var id = sel[i].data.Id;
-			try {
-				var record = DB.Records.select('Records.rowid=?',[id]).getOne();
-				record.status = 'edited';
-				record.date_modified = new Date().toString();
-				record.Savefiles_id = savefileid;
-				record.save();
-				if(debug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
-			}
-			catch(ex) {
-				Ext.MessageBox.alert("Database error", ex.message);
-			}
-		}
-	}
-    else if( Ext.get('searchgrid').isVisible() ) {
-        var grid = Ext.ComponentMgr.get( 'searchgrid' );
-        var ds = searchgrid.getDataSource();
-        var sel = searchgrid.getSelectionModel().getSelections();
-		for( var i = 0; i < sel.length; i++) {
-			var id = sel[i].id;
-			var data = sel[i].data;
-            addRecordFromSearch(id, data, savefileid);
-		}
-    }
-    showStatusMsg("Record(s) saved to "+savefilename);
-    return true;
-}
+
 
 function doSaveRemote(loc, xmldoc) {
 	Ext.get('ffeditor').mask();
@@ -125,25 +37,26 @@ function doSaveRemote(loc, xmldoc) {
 }
 
 
-function addRecordFromSearch(id, data, savefileid) {
+function addRecordFromSearch(id, offset, editorid, data, savefileid, newxml) {
 	var xml = getPazRecord(id, 
+		offset,
 		// this function gets called when pazpar2 returns the xml for record with this id
-		function(data, o) {
+		function(data, params) {
 		// data param is this record's xml as returned by pazpar2
 		// o is a json literal containing the record id, grid data and savefileid for this record
-		if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + data.title);}
+		if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + params.title);}
 		try {
-			var target = DB.SearchTargets.select('name=?', [o.recData.location]).getOne();
-			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [o.savefileid]).getOne();
+			var target = DB.SearchTargets.select('name=?', [params.recData.location]).getOne();
+			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [params.savefileid]).getOne();
 			var record = new DB.Records({
-				title: o.recData.title || '',
-				author: o.recData.author || '',
-				location: o.recData.location || '',
-				publisher: o.recData.publisher || '',
-				medium: o.recData.medium || '',
-				date: o.recData.date || '',
+				title: UI.editor[editorid]? UI.editor[editorid].record.getValue('245', 'a') : params.recData.title || '',
+				author: UI.editor[editorid]? UI.editor[editorid].record.getValue('100', 'a'):  params.recData.author || '',
+				location: params.recData.location || '',
+				publisher:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'b'): params.recData.publication || '',
+				medium: params.recData.medium || '',
+				date:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'c'): params.recData.date|| '',
 				status: 'new',
-				xml: data || '<record></record>',
+				xml: params.newxml || data || '<record></record>',
 				date_added: new Date().toString(),
 				date_modified: new Date().toString(),
 				SearchTargets_id: target.rowid,
@@ -161,7 +74,8 @@ function addRecordFromSearch(id, data, savefileid) {
 	{
 		id: id,
 		savefileid: savefileid,
-		recData: data
+		recData: data,
+		newxml: newxml
 	} 
 	);
 	return db.lastInsertRowId;
@@ -188,7 +102,7 @@ function updateSaveMenu() {
 	Ext.menu.MenuMgr.get('saveMenu').removeAll();
 	var savefiles = getSaveFileMenuItems();
 	for( sf in savefiles ) {
-		Ext.menu.MenuMgr.get('saveMenu').add( savefiles[sf] );
+		Ext.menu.MenuMgr.get('saveMenu').add( UI.save.savefile[sf] );
 	}
 }
 
@@ -225,16 +139,18 @@ function getSendFileMenuItems() {
 	return list;
 }
 
-function getSaveFileMenuItems() {
+function getSaveFileMenuItems(editorid) {
 	var list = new Array();
 	getSaveFileNames();
 	for ( sf in UI.save.savefile ) {
 		var o = {
 			text: UI.save.savefile[sf],
 			id: sf,
+			editorid: editorid,
 			handler: function(btn) {
 				var savefileid = btn.id;
-				doSaveLocal(savefileid);
+				var editorid = btn.editorid;
+				doSaveLocal(savefileid, editorid);
 			}
 		};
 		list.push(o);
