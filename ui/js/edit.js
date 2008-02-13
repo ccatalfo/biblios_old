@@ -109,7 +109,7 @@ function get008FromEditor(ff_ed) {
 		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, relief, proj, undef1, cart, undef2, govpub, form, undef1, indx, undef1, spchar, lang, mrec, srce );
 	}
 	// musical materials
-	else if( type == 'c' || type == 'd' || type == 'j' || type = 'i') {
+	else if( type == 'c' || type == 'd' || type == 'j' || type == 'i') {
 		var compform = $("#CompForm", ff_ed).val();
 		var format = $("#Format", ff_ed).val();
 		var parts = $("#Parts", ff_ed).val();
@@ -122,7 +122,7 @@ function get008FromEditor(ff_ed) {
 		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, compform, format, parts, audn, form, accomp, littext, undef1, trarr, undef1, lang, mrec, srce );
 	}
 	// visual materials
-	else if( type == 'g' || type == 'k' || type == 'o' || type = 'r') {
+	else if( type == 'g' || type == 'k' || type == 'o' || type == 'r') {
 		var rtime = $("#RTime", ff_ed).val();
 		var audn = $("#Audn", ff_ed).val();
 		var govpub = $("#GovPub", ff_ed).val();
