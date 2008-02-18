@@ -1690,6 +1690,9 @@ biblios.app = function() {
 																			Ext.MessageBox.alert('Error', ex.message);
 																		}
 																		e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
+																		if( field == 'enabled' ) {
+																			setILSTargets();
+																		}
 																	} // afteredit handler
 																},
 																sm: new Ext.grid.RowSelectionModel({
@@ -1761,8 +1764,8 @@ biblios.app = function() {
 																				url: '',
 																				user: '',
 																				password: '',
-																				pluginlocation: '',
-																				plugininit: '',
+																				pluginlocation: 'plugins/koha.js',
+																				plugininit: 'new koha()',
 																				enabled: 0
 																			});
 																			var sendtargetgrid = Ext.ComponentMgr.get('sendtargetsgrid');

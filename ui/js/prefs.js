@@ -22,17 +22,22 @@ function getRemoteBibProfiles() {
 
 function setILSTargets() {
 	// get remote ILS location names so we know when to ask remote ILS for record
-	DB.SendTargets.select('SendTargets.enabled = "true"').each( function(ils) {
-			Prefs.remoteILS[ ils.name ] = {};
-			// get params for this ils
-			Prefs.remoteILS[ils.name].location = ils.location;
-			Prefs.remoteILS[ils.name].user = ils.user;
-			Prefs.remoteILS[ils.name].pw = ils.password;
-			Prefs.remoteILS[ils.name].url = ils.url;
-			var initcall = ils.plugininit;
-			// initialize and authorize for this ils instance
-			Prefs.remoteILS[ils.name].instance = eval( initcall );
-			Prefs.remoteILS[ils.name].instance.init(ils.url, ils.user, ils.password);
+	DB.SendTargets.select().each( function(ils) {
+			if( ils.enabled == 0 ) {
+				delete Prefs.remoteILS[ils.name];
+			}
+			else if (ils.enabled == 1 ) {
+				Prefs.remoteILS[ ils.name ] = {};
+				// get params for this ils
+				Prefs.remoteILS[ils.name].location = ils.location;
+				Prefs.remoteILS[ils.name].user = ils.user;
+				Prefs.remoteILS[ils.name].pw = ils.password;
+				Prefs.remoteILS[ils.name].url = ils.url;
+				var initcall = ils.plugininit;
+				// initialize and authorize for this ils instance
+				Prefs.remoteILS[ils.name].instance = eval( initcall );
+				Prefs.remoteILS[ils.name].instance.init(ils.url, ils.user, ils.password);
+			}
 	});
 }
 
