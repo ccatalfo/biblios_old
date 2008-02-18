@@ -21,7 +21,7 @@ while(<>) {
 			if( $writer->in_element('field') ) {
 				$writer->endTag('field');
 			}
-			$writer->startTag('field', 'mattype' => $1);
+			$writer->startTag('field', 'mattype' => $1, 'tag' => '007');
 	}
 	if( /<li>(\d{2}(?:-\d{2})?) - Undefined/g ) {
 		if( $writer->in_element('value') ) {
@@ -38,7 +38,7 @@ while(<>) {
 			print "computed length = $length\n";
 		}
 		$position = removeLeadingZero($position);
-		$writer->startTag('value', 'name'=>'Undefined', 'position' => $position, 'length' => $length, 'description' => 'Each contains a blank (#) or fill character (|)' );
+		$writer->startTag('value', 'name'=>'Undefined', 'position' => $position, 'length' => $length, 'description' => 'Each contains a blank (#) or fill character (|)', 'inputtype' => 'menubox' );
 		$writer->dataElement('option', ' ', 'description' => 'Blank or #');
 		$writer->dataElement('option', '|', 'description' => 'Fill character');
 		$writer->endTag();
@@ -60,7 +60,7 @@ while(<>) {
 			print "computed length = $length\n";
 		}
 		$position = removeLeadingZero($position);
-		$writer->startTag('value', 'name' => trim($hs->parse($2)), 'position' => $position, 'length' => $length);
+		$writer->startTag('value', 'name' => trim($hs->parse($2)), 'position' => $position, 'length' => $length, 'inputtype' => 'menubox');
 	}
 	# if we have a possible valid value
 	elsif ( /^<li>(\S*)\s-\s(.*)<\/ul>/m ) {
