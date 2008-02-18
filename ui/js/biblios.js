@@ -1658,7 +1658,7 @@ biblios.app = function() {
 																		record.enabled = record.enabled ? 1 : 0;
 																		if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
 																			try {
-																				var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, pluginlocation = ?, plugininit= ?, enabled = ? where rowid = ?', [record.data.name, record.data.location, record.data.user, record.data.password, record.data.pluginlocation, record.data.pluginit, record.data.enabled, record.data.rowid]);
+																				var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, pluginlocation = ?, plugininit= ?, enabled = ? where rowid = ?', [record.data.name, record.data.location, record.data.user, record.data.password, record.data.pluginlocation, record.data.plugininit, record.data.enabled, record.data.rowid]);
 																				rs.close()
 																			}
 																			catch(ex) {
