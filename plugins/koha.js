@@ -26,7 +26,6 @@ koha.prototype = {
 			this.user = user;
 			this.password = password;
 			this.auth();
-			this.bibprofile();
 		}, // end init
 
 		auth: function() {
@@ -40,6 +39,7 @@ koha.prototype = {
 					that: this,
 					success: function(xml, status) {
 						this.that.sessionStatus = $('status', xml).text();
+						this.that.bibprofile();
 					}
 			});
 		},
