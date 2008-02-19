@@ -947,7 +947,7 @@ function editorCheckHighlighting(o) {
     None.
 
 */
-function transferFF_EdToTags(editorid, ff_ed, var_ed ) {
+function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
     var leaderval = getLeaderFromEditor(ff_ed);
     $('#'+editorid).find("#000", var_ed).children('.controlfield').val(leaderval);
     var tag008val = get008FromEditor(ff_ed);
@@ -1057,9 +1057,10 @@ function onBlur(elem) {
 }
 
 function onFixedFieldEditorBlur(elem) {
-	transferFF_EdToTags(UI.editor.ffed, UI.editor.vared);
-	UI.editor.record.update($('#000').find('.controlfield'));
-	UI.editor.record.update($('#008').find('.controlfield'));
+	var editorid = $(elem).parents('.marceditor').get(0).id;
+	transferFF_EdToTags(UI.editor[editorid].ffed, UI.editor[editorid].vared, editorid);
+	UI.editor[editorid].record.update($('#000').find('.controlfield'));
+	UI.editor[editorid].record.update($('#008').find('.controlfield'));
 }
 
 function setupSpecialEntries(loc, editor) {
