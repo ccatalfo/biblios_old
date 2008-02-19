@@ -1514,6 +1514,7 @@ biblios.app = function() {
 																		catch(ex) {
 																			Ext.MessageBox.alert('Error', ex.message);
 																		}
+																		setPazPar2Targets();
 
 																	} // after edit event on search target grid
 																}, // search target grid listeners
@@ -1683,16 +1684,14 @@ biblios.app = function() {
 																		}
 																		var rs;
 																		try {
-																			rs = db.execute('update SendTargets set '+field+' = ? where rowid = ?', [value, id]);
+																			rs = db.execute('update SendTargets set '+field+' = ? where SendTargets.rowid = ?', [value, id]);
 																			rs.close();
 																		}
 																		catch(ex) {
 																			Ext.MessageBox.alert('Error', ex.message);
 																		}
 																		e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
-																		if( field == 'enabled' ) {
-																			setILSTargets();
-																		}
+																		setILSTargets();
 																	} // afteredit handler
 																},
 																sm: new Ext.grid.RowSelectionModel({

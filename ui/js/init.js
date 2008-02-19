@@ -101,7 +101,7 @@ var SendTarget = Ext.data.Record.create([
 	{name: 'user', type: 'string'},
 	{name: 'password', type: 'string',},
 	{name: 'pluginlocation', type: 'string',},
-	{name: 'pluginit', type: 'string',},
+	{name: 'plugininit', type: 'string',},
 	{name: 'enabled', type: 'bool'}
 ]);
 var searches = new Array(); // Array of pazpar2 searches
