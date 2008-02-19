@@ -1690,7 +1690,7 @@ biblios.app = function() {
 																		catch(ex) {
 																			Ext.MessageBox.alert('Error', ex.message);
 																		}
-																		e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
+																		//e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
 																		setILSTargets();
 																	} // afteredit handler
 																},
@@ -1777,7 +1777,7 @@ biblios.app = function() {
 																	{
 																		text: 'Remove Target',
 																		handler: function() {
-																			var records = Ext.ComponentMgr.get('sendtargetsgrid').getSelectionModel().getSelections();
+																			var records = Ext.ComponentMgr.get('sendtargetsgrid').getSelections();
 																			for( var i = 0; i < records.length; i++) {
 																				try {
 																					DB.SendTargets.select('SendTargets.rowid=?', [records[i].data.rowid]).getOne().remove();
