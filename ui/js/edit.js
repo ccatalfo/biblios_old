@@ -1066,8 +1066,8 @@ function setupSpecialEntries(loc, editor) {
 	var specialentries = loc.instance.special_entries;
 	for( var i = 0; i < specialentries.length; i++) {
 		var entry = specialentries.eq(i);
-		var tagnumber = $('field/tag', entry).text();	
-		var subfield = $('field/subfield', entry).text();	
+		var tagnumber = $('field tag', entry).text();	
+		var subfield = $('field/ ubfield', entry).text();	
 		// get the element to replace w/ combobox
 		var elemToReplace = $('[@id^='+tagnumber+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
 		if(elemToReplace.length == 0) {
@@ -1079,7 +1079,7 @@ function setupSpecialEntries(loc, editor) {
 		var subfield = $(elemToReplace).parents('.subfield');
 		// remove current text of elemToReplace
 		//$(elemToReplace).remove();
-		var valid_values = $('valid_values/value', entry);
+		var valid_values = $('valid_values value', entry);
 		var storevalues = new Array();
 		for( j = 0; j < valid_values.length; j++) {
 			var value = valid_values.eq(j);
@@ -1104,10 +1104,10 @@ function setupSpecialEntries(loc, editor) {
 			selectOnFocus: true,
 			value: currentValue,
 			triggerAction: 'all',
+			applyTo: $(elemToReplace).get(0)
 		});
 		Ext.ComponentMgr.register(combo);
 		if(debug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry')}
-		combo.applyTo( $(elemToReplace).get(0) );
 		
 	}
 }
