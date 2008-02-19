@@ -105,7 +105,7 @@ koha.prototype = {
 					var marcxml = $('record', resp.responseXML).get(0);
 					options.scope.recordCache[ options.id ] = marcxml;
 				}
-				options.scope.saveHandler( marcxml );
+				options.scope.saveHandler( marcxml , status);
 				Ext.Ajax.purgeListeners();
 			});
 			Ext.Ajax.request({

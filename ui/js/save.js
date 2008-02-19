@@ -23,12 +23,18 @@ function doSaveRemote(loc, xmldoc, editorid) {
 	UI.editor.progress = Ext.MessageBox.progress('Saving record to remote server', '');
 	if(debug) { console.info('Saving open record to ' + loc); }
 	// set UI.editor.location to point to this record so we get special entries etc.
-	Prefs.remoteILS[loc].instance.saveHandler = function(xml) {
-		UI.editor.progress.updateProgress(.7, 'Retrieved remote record');
-		openRecord(xml, editorid);
-		/*Ext.get('ffeditor').unmask();
-		Ext.get('vareditor').unmask();*/
-		UI.editor.progress.hide();
+	Prefs.remoteILS[loc].instance.saveHandler = function(xml, status) {
+		if( status == 'failed' ) {
+			UI.editor.progress.hide();
+			Ext.MessageBox.alert('Remote Send Target failure', "Remote send target couldn't save record");
+		} 
+		else {
+			UI.editor.progress.updateProgress(.7, 'Retrieved remote record');
+			openRecord(xml, editorid);
+			/*Ext.get('ffeditor').unmask();
+			Ext.get('vareditor').unmask();*/
+			UI.editor.progress.hide();
+		}
 	}
 	Prefs.remoteILS[loc].instance.save(xmldoc);
 	UI.editor.progress.updateProgress(.5, 'Sending to remote server');
