@@ -166,8 +166,6 @@ function doPazPar2Search() {
 
 function getRemoteRecord(id, loc, offset, callback) {
 		showStatusMsg('Opening record...');
-		UI.editor.id = '';
-		UI.editor.location = loc;
 		// if this location is in our Prefs.remoteILS hash, retrieve it specially
 		if( Prefs.remoteILS[loc] ) {
 			getRecordFromLocation(id, loc, callback);

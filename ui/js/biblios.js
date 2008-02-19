@@ -612,7 +612,8 @@ biblios.app = function() {
 															rowdblclick: function(grid, rowindex, e) {
 																var id = grid.getSelections()[0].id;
 																UI.editor['editorone'].id = id;
-																var loc = grid.getSelections()[0].data.location;
+																var loc = grid.getSelections()[0].data.location[0].name;
+																UI.editor['editorone'].location = loc;
 																getRemoteRecord(id, loc, 0, function(data) { openRecord( xslTransform.serialize(data), 'editorone' ) }
 														);
 
@@ -621,7 +622,8 @@ biblios.app = function() {
 															  if( e.getKey() == Ext.EventObject.ENTER ) {
 																var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																UI.editor['editorone'].id = id;
-																var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
+																var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[0].name;
+																UI.editor['editorone'].location = loc;
 																  getRemoteRecord(id, loc, 0, function(data) { openRecord( xslTransform.serialize( data), 'editorone' ) });
 																}	
 															} // on ENTER keypress
@@ -651,7 +653,8 @@ biblios.app = function() {
 																		handler: function() {
 																			var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																			UI.editor['editorone'].id = '';
-																			var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
+																			var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[0].name;
+																			UI.editor['editorone'].location = loc;
 																			getRemoteRecord(id, loc, 0, function(data) { 
 																				openRecord( xslTransform.serialize(data), 'editorone' ) 
 																			});
@@ -1343,7 +1346,8 @@ biblios.app = function() {
 																		// FIXME
 																		var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																		UI.editor[editorid].id = '';
-																		var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
+																		var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[0].name;
+																		UI.editor[editorid].location = loc;
 																		if( loc.length > 1 ) {
 																			Ext.Msg.alert('Error', 'This record is available at more than one location.  Please select a location by clicking the expander button next to this record in the grid and dragging it to editor one or two.');
 																			return false;
@@ -1358,7 +1362,8 @@ biblios.app = function() {
 																	var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																	UI.editor[editorid].id = '';
 																	var offset = e.source.id.substr(3); // "loc"+offset
-																	var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[offset];
+																	var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[offset].name;
+																	UI.editor[editorid].location = loc;
 																	var record = Ext.getCmp('searchgrid').getSelections()[0];
 																	getRemoteRecord(id, loc.name, offset, function(data) { 
 																		openRecord( xslTransform.serialize(data), editorid ) 

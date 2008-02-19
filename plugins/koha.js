@@ -48,12 +48,13 @@ koha.prototype = {
 			$.ajax({
 				url: this.url + 'cgi-bin/koha/svc/bib_profile',
 				method: 'get',
+				dataType: 'xml',
 				that: this,
 				success: function(xml, status) {
 					this.that.bibprofilexml = xml;
 					// construct record id xpath expression from bib profile
-					var tag = $('bib_number/tag', xml).text();
-					var subfield = $('bib_number/subfield', xml).text();
+					var tag = $('bib_number tag', xml).text();
+					var subfield = $('bib_number subfield', xml).text();
 					this.that.recidXpath = 'datafield[@tag='+tag+'] subfield[@code='+subfield+']';
 					this.that.mandatory_tags = $('mandatory_tags', xml).children();
 					this.that.mandatory_subfields = $('mandatory_subfields', xml).children();
@@ -71,6 +72,7 @@ koha.prototype = {
 				url: this.url + 'cgi-bin/koha/svc/bib/' + recid,
 				method: 'get',
 				that: this,
+				dataType: 'xml',
 				id: recid,
 				success: function(xml, status) {
 					this.that.recordCache[ this.id ] = xml;
