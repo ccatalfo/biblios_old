@@ -1487,7 +1487,6 @@ biblios.app = function() {
 																	},
 																	listeners: {
 																		update: function(store, record, operation) {
-																			record.enabled = record.enabled ? 1 : 0;
 																			if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT) {
 																				try {
 																					var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where rowid = ?', [record.data.name, record.data.hostname, record.data.port, record.data.dbname, record.data.description, record.data.userid, record.data.password, record.data.enabled, record.data.rowid]);
@@ -1506,17 +1505,9 @@ biblios.app = function() {
 																		var id = e.record.data.id;
 																		var field = e.field;
 																		var value = e.value;
-																		if( typeof(value) == 'boolean' ) {
-																			if( value == true ) {
-																				value = 1;
-																			}
-																			else if( value == false ) {
-																				value = 0;
-																			}
-																		}
 																		var rs;
 																		try {
-																			rs = db.execute('update SearchTargets set '+field+' = ? where rowid = ?', [value, id]);
+																			rs = db.execute('update SearchTargets set '+field+' = ? where SearchTargets.rowid = ?', [value, id]);
 																			rs.close();
 																		}
 																		catch(ex) {
@@ -1664,7 +1655,6 @@ biblios.app = function() {
 																	},
 																listeners: {
 																	update: function(store, record, operation) {
-																		record.enabled = record.enabled ? 1 : 0;
 																		if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
 																			try {
 																				var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, pluginlocation = ?, plugininit= ?, enabled = ? where rowid = ?', [record.data.name, record.data.location, record.data.user, record.data.password, record.data.pluginlocation, record.data.plugininit, record.data.enabled, record.data.rowid]);
