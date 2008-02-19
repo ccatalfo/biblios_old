@@ -412,6 +412,7 @@ biblios.app = function() {
 		},
 
         init: function() {
+			setILSTargets();
             this.viewport = new Ext.Viewport({
 				layout: 'border',
 				items: [
@@ -713,6 +714,7 @@ biblios.app = function() {
 																text: 'Send',
 																menu: {
 																	id: 'editorOneSendMenu',
+																	editorid: 'editorone',
 																	items: getSendFileMenuItems('editorone')
 																}
 															},
@@ -787,6 +789,7 @@ biblios.app = function() {
 																text: 'Send',
 																menu: {
 																	id: 'editorTwoSendMenu',
+																	editorid: 'editortwo',
 																	items: getSendFileMenuItems('editortwo')
 																}
 															},

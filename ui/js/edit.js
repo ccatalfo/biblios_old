@@ -1104,6 +1104,7 @@ function setupSpecialEntries(loc, editor) {
 			selectOnFocus: true,
 			value: currentValue,
 			triggerAction: 'all',
+			hideTrigger: true,
 			applyTo: $(elemToReplace).get(0)
 		});
 		Ext.ComponentMgr.register(combo);
