@@ -191,9 +191,9 @@ function MarcEditor(ffeditor, vareditor) {
 			newSuffix = highestSuffix + 1;
 			var newId = tagnumber + "-" + newSuffix;
 			  var newtag = '<div class="tag" id="'+newId+'">';
-			  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" class="tagnumber" id="d'+tagnumber+'" value="'+tagnumber+'" />';
-			  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+'"/>';
-			  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+'"/>';
+			  newtag += '<input size="3" onblur="onBlur(this)" onfocus="onFocus(this)" class="tagnumber" id="d'+tagnumber+'" value="'+tagnumber+'" />';
+			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+'"/>';
+			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+'"/>';
 			  newtag += '<span class="subfields" id="dsubfields'+newId+'">';
 			  for( var i = 0; i< sf.length; i++) {
 				  newtag += '<span class="subfield" id="dsubfields'+tagnumber+newId+'">';

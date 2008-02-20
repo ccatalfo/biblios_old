@@ -327,60 +327,8 @@ function addSubfield(afterEl) {
 
 */
 function addField(tagnumber, ind1, ind2, subfields) {
-	if( tagnumber ) {
-		_addField(tagnumber, ind1, ind2, subfields);
-	}
-	else {
-		Ext.MessageBox.prompt('Add tag', 'Choose a tag number', function(btn, tagnumber) {
-			_addField(tagnumber);
-		});
-	}
-
-	function _addField(tagnumber, ind1, ind2, subfields) {
-		var firstind = ind1 || '#';
-		var secondind = ind2 || '#';
-		var sf = subfields || [ {'delimiter': 'a', 'text': ''} ];
-		if(debug) { console.info("Adding tag with tagnumber: " + tagnumber);  }; 
-
-		// insert the new field in numerical order among the existing tags
-		var tags = $(".tag", UI.editor.doc );
-		var tagToInsertAfter; // the tag just before where we'll insert the new tag
-		var highestSuffix = 1; // highest number appended to tag id's with this tag number.  Add 1 to it to get suffix for new tag
-		var newSuffix = 1;
-		for( var i = 0; i<tags.length; i++) {
-			var id = $(tags[i]).attr('id').substr(0,3);
-			if( id < tagnumber) {
-				tagToInsertAfter = tags[i];
-			}
-			// get a new suffix number for our new tags id
-			else if( id == tagnumber ) {
-				var currSuffix = $(tags[i]).attr('id').substr(3);
-				if( currSuffix > highestSuffix ) {
-					highestSuffix = currSuffix;
-				} 
-			}
-		}
-		newSuffix = highestSuffix + 1;
-		var newId = tagnumber + "-" + newSuffix;
-		  var newtag = '<div class="tag" id="'+newId+'">';
-		  newtag += '<input class="tagnumber" id="d'+tagnumber+'" value="'+tagnumber+'" />';
-		  newtag += '<input size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+'"/>';
-		  newtag += '<input size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+'"/>';
-		  newtag += '<span class="subfields" id="dsubfields'+newId+'">';
-		  for( var i = 0; i< sf.length; i++) {
-			  newtag += '<span class="subfield '+sf[i]['delimiter']+'" id="'+tagnumber+newId+'">';
-			  newtag += '<input size="2" maxlength="2" onfocus="onFocus(this)" onblur="onBlur(this)" class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;'+sf[i]['delimiter']+'">';
-			  var textlength = sf[i]['text'].length;
-			  newtag += '<input onfocus="onFocus(this)" onblur="onBlur(this)" id="'+tagnumber+newId+i+'text"class="subfield-text" size="'+textlength+'" value="'+sf[i]['text']+'">';
-			  newtag += '</span>'; // subfield span
-		}
-		newtag += '</span>'; // subfields span
-		newtag += '</div>'; // tag div
-		// insert out new tag after the tag we just found
-		$(tagToInsertAfter, UI.editor.doc).after(newtag);
-		// set the focus to this new tag
-		$( newId ).get(0).focus();
-  }
+	var editorid = $(UI.editor.lastFocusedEl).parents('.marceditor').get(0).id;
+	UI.editor[editorid].record.addField();
 }
 
 /*
