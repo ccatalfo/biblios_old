@@ -1722,7 +1722,7 @@ function makeSubfieldsDraggable() {
    See Also:
    <handleDownload>
 */
-function doDownloadRecords(format) {
+function doDownloadRecords(format, editorid) {
 	var xml ='';
 	var grid;
 	var recsep = "<!-- end of record -->";
@@ -1731,7 +1731,7 @@ function doDownloadRecords(format) {
 	if( openState == 'marceditor' ) {
 			// transform edited record back into marcxml
 			if( marcFlavor == 'marc21' ) {
-				xml = UI.editor.record.XMLString();
+				xml = UI.editor[editorid].record.XMLString();
 			}
 			else if( marcFlavor == 'unimarc' ) {
 				Ext.MessageBox.alert("Unimarc support not yet implemented");
@@ -1763,15 +1763,16 @@ function doDownloadRecords(format) {
 	handleDownload(format, encoding, xml);
 }
 
-function getExportMenuItems() {
+function getExportMenuItems(editorid) {
 	var list = new Array();
 	var formats = new Array('MARC21', 'MARCXML');
 	for( var i = 0; i < formats.length; i++) {
 		var o = {
 			text: formats[i],
 			id: formats[i],
+			editorid: editorid,
 			handler: function(btn) {
-				doDownloadRecords(btn.text);
+				doDownloadRecords(btn.text, btn.editorid);
 			}
 		}
 	list.push(o);

@@ -10,7 +10,7 @@ use File::Basename;
 
 
 my $cgi = CGI->new();
-my $format = $cgi->param('format') || 'marc21';
+my $format = $cgi->param('format') || 'MARC21';
 my $xml = $cgi->param('xml');
 my $encoding = $cgi->param('encoding') || 'utf-8';
 
@@ -26,7 +26,7 @@ foreach my $record (@records) {
 #print $cgi->header('Content-Description: File Transfer');
 #print $cgi->header( 'Content-Type: application/force-download' );
 #print $cgi->header( 'Content-Disposition: attachment; filename="marc.xml"');
-if( $format eq 'marcxml' ) {
+if( $format eq 'MARCXML' ) {
   print $cgi->header( -type => 'text/plain');
   my ($fh, $filepath) = tempfile(UNLINK => 0, SUFFIX=>'.xml', DIR=>"/tmp/") or die "$!";
   print $fh MARC::File::XML::header();
@@ -41,7 +41,7 @@ if( $format eq 'marcxml' ) {
   my $filename = fileparse($filepath);
   print $filename;
 }
-elsif( $format eq 'marc21' ) {
+elsif( $format eq 'MARC21' ) {
   print $cgi->header( -type => 'text/plain');
   my ($fh, $filepath) = tempfile(UNLINK => 0, SUFFIX=>'.mrc', DIR=>"/tmp/") or die "$!";
   foreach my $rec (@records) {
