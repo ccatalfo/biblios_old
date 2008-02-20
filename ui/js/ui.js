@@ -1736,31 +1736,41 @@ function doDownloadRecords(format, editorid) {
 			else if( marcFlavor == 'unimarc' ) {
 				Ext.MessageBox.alert("Unimarc support not yet implemented");
 			}
+			var encoding = 'utf-8';
+			handleDownload(format, encoding, xml);
 	}
 	// if we're exporting from a grid
 	else {
         if( openState == 'savegrid' ) {
             var grid = Ext.getCmp('savegrid');
+			var ds = grid.store;
+			var sel = grid.getSelectionModel().getSelections();
+			for( var i = 0; i < sel.length; i++) {
+				var id = sel[i].data.Id;
+				var recXml = '';
+				  recXml = DB.Records.select('Records.rowid=?', [id]).getOne().xml;
+					xml += recXml;
+					xml += recsep;
+				}
+			var encoding = 'utf-8';
+			handleDownload(format, encoding, xml);
 		}
-		else if( openState == 'searchgrid') {
+		if( openState == 'searchgrid') {
             var grid = Ext.getCmp('searchgrid');
-		}
-		var ds = grid.store;
-		var sel = grid.getSelectionModel().getSelections();
-		for( var i = 0; i < sel.length; i++) {
-			var id = sel[i].data.Id;
-			try {
-			  var recXml = DB.Records.select('Records.rowid=?', [id]).getOne().xml;
-				xml += recXml;
-				xml += recsep;
-			}
-			catch(ex) {
-			  console.error('db error: ' + ex.message);
+			var ds = grid.store;
+			var sel = grid.getSelectionModel().getSelections();
+			for( var i = 0; i < sel.length; i++) {
+				var id = sel[i].id;
+				var recXml = '';
+				getPazRecord(id, 0, function(data, o) {
+					xml = xslTransform.serialize(data);
+					var encoding = 'utf-8';
+					handleDownload(format, encoding, xml);
+				}, 
+				{});
 			}
 		}
     } // if we have a grid open 
-	var encoding = 'utf-8';
-	handleDownload(format, encoding, xml);
 }
 
 function getExportMenuItems(editorid) {
