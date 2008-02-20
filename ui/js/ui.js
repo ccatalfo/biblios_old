@@ -1806,8 +1806,13 @@ function handleDownload(format, encoding, xml) {
         {format: format, encoding: encoding, xml: xml}, 
           function(data) {
             //if(debug){ alert(data);}
-            $("<iframe id='dl' src="+cgiDir+"'download.pl?filename="+data+"'/>").appendTo("body");
+            //$("<iframe id='dl' src="+cgiDir+"'download.pl?filename="+data+"'/>").appendTo("#downloads");
             //$("#dl").remove();
+			var MIF = new Ext.ux.ManagedIFrame({ autoCreate:{src:cgiDir+'download.pl?filename='+data,height:350,width:'100%'}
+
+                     ,loadMask :false 
+
+                   });
           }
         );
 }
