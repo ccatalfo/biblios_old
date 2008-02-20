@@ -1655,6 +1655,12 @@ biblios.app = function() {
 																	},
 																listeners: {
 																	update: function(store, record, operation) {
+																		if( record.data.enabled == 'true') {
+																			record.data.enabled = 1;
+																		}
+																		else if( record.data.enabled == 'false') {
+																			record.data.enabled = 0;
+																		}
 																		if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
 																			try {
 																				var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, pluginlocation = ?, plugininit= ?, enabled = ? where rowid = ?', [record.data.name, record.data.location, record.data.user, record.data.password, record.data.pluginlocation, record.data.plugininit, record.data.enabled, record.data.rowid]);
@@ -1688,7 +1694,7 @@ biblios.app = function() {
 																		catch(ex) {
 																			Ext.MessageBox.alert('Error', ex.message);
 																		}
-																		//e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
+																		e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
 																		setILSTargets();
 																	} // afteredit handler
 																},
