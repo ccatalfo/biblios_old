@@ -1003,23 +1003,23 @@ function removeSubfield() {
 }
 
 
-function removeTag(tagnumber, i) {
+function removeTag(editorid, tagnumber, i ) {
 	//if(debug) { console.info('removing tag: ' + $(UI.editor.lastFocusedEl).parents('.tag').get(0).id)}
 	if( tagnumber ) {
 		// remove  the ith tagnumber if we were passed an i
 		if( !Ext.isEmpty(i) ) {
-			$('.tag').filter('[@id*='+tagnumber+']').eq(i).remove();
+			$('#'+editorid).find('.tag').filter('[@id*='+tagnumber+']').eq(i).remove();
 		}
 		// else remove all!
 		else {
-			$('.tag').filter('[@id*='+tagnumber+']').remove();
+			$('#'+editorid).find('.tag').filter('[@id*='+tagnumber+']').remove();
 		}
 	}
 	else {
 		// focus previous or next tag
-		var prev = $(UI.editor.lastFocusedEl).parents('.tag').prev().children('.tagnumber');
-		var next = $(UI.editor.lastFocusedEl).parents('.tag').next().children('.tagnumber');
-		$(UI.editor.lastFocusedEl).parents('.tag').remove();
+		var prev = $(UI.editor[editorid].lastFocusedEl).parents('.tag').prev().children('.tagnumber');
+		var next = $(UI.editor[editorid].lastFocusedEl).parents('.tag').next().children('.tagnumber');
+		$(UI.editor[editorid].lastFocusedEl).parents('.tag').remove();
 		if( $(next).length ) {
 			$(next).focus();
 		}
@@ -1053,6 +1053,7 @@ function onBlur(elem) {
 	$(elem).removeClass('focused');
 	var editorid = $(elem).parents('.marceditor').get(0).id;
 	UI.editor[editorid].record.update(elem);
+	UI.editor.lastFocusedEl = elem;
 	UI.editor[editorid].lastFocusedEl = elem;
 }
 

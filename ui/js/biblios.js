@@ -700,6 +700,50 @@ biblios.app = function() {
 														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
 														tbar: (editorToolbar = [
 															{
+																cls: 'x-btn-text-icon',
+																icon: libPath + 'ui/images/edit-copy.png',
+																id: 'editortasks',
+																editorid: 'editorone',
+																text: 'Tools',
+																menu: {
+																	id: 'editortasksmenu',
+																	items: [
+																		{
+																			id: 'addField',
+																			editorid: 'editorone',
+																			text: 'Add Field',
+																			handler: function(btn) {
+																				UI.editor.editorone.record.addField();
+																			}
+																		},
+																		{
+																			id: 'removeField',
+																			editorid: 'editorone',
+																			text: 'Remove Field',
+																			handler: function(btn) {
+																				removeTag('editorone');
+																			}
+																		},
+																		{
+																			id: 'addSubfield',
+																			editorid: 'editorone',
+																			text: 'Add Subfield',
+																			handler: function(btn) {
+																				addSubfield(UI.editor.editorone.lastFocusedEl);
+																			}
+																		},
+																		{	
+																			id: 'removeSubfield',
+																			editorid: 'editorone',
+																			text: 'Remove subfield',
+																			handler: function(btn) {
+																				removeSubfield();
+																			}
+																		}
+																	]
+																}
+															},
+															{
 																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/document-save.png',
 																text: 'Save',

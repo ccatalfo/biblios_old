@@ -191,15 +191,15 @@ function MarcEditor(ffeditor, vareditor) {
 			newSuffix = highestSuffix + 1;
 			var newId = tagnumber + "-" + newSuffix;
 			  var newtag = '<div class="tag" id="'+newId+'">';
-			  newtag += '<input class="tagnumber" id="d'+tagnumber+'" value="'+tagnumber+'" />';
-			  newtag += '<input size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+'"/>';
-			  newtag += '<input size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+'"/>';
+			  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" class="tagnumber" id="d'+tagnumber+'" value="'+tagnumber+'" />';
+			  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+'"/>';
+			  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+'"/>';
 			  newtag += '<span class="subfields" id="dsubfields'+newId+'">';
 			  for( var i = 0; i< sf.length; i++) {
-				  newtag += '<span class="subfield" id="'+tagnumber+newId+'">';
-				  newtag += '<input class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;'+sf[i]['delimiter']+'">';
+				  newtag += '<span class="subfield" id="dsubfields'+tagnumber+newId+'">';
+				  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;'+sf[i]['delimiter']+'">';
 				  var textlength = sf[i]['text'].length;
-				  newtag += '<input id="'+tagnumber+newId+i+'text"class="subfield-text" size="'+textlength+'" value="'+sf[i]['text']+'">';
+				  newtag += '<input id="dsubfields'+newId+i+'text" onfocus="onFocus(this)" onblur="onBlur(this)" class="subfield-text" size="'+textlength+'" value="'+sf[i]['text']+'">';
 				}
 			// insert out new tag after the tag we just found
 			$(tagToInsertAfter, vared).after(newtag);
