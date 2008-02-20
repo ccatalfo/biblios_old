@@ -1172,7 +1172,8 @@ function setupEditorHotkeys(editorelem) {
 
 	// save record
 	$.hotkeys.add('Ctrl+s', function(e) {
-		doSaveLocal();
+		var editorid = $(UI.editor.lastFocusedEl).parents('.marceditor').get(0).id;
+		doSaveLocal(UI.currSaveFile, editorid);
 	});
 }
 

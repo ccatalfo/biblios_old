@@ -1684,6 +1684,8 @@ function openRecord(xml, editorelem) {
 	$(ffed).show();
 	// hide leader and 008
 	$('#'+editorelem).find("#000, #008").css('display', 'none');
+	UI.editor.lastFocusedEl = $('#'+editorelem).find('#000').get(0);
+	UI.editor[editorelem].lastFocusedEl = $('#'+editorelem).find('#000').get(0);
 }
 
 function makeSubfieldsDraggable() {
