@@ -1740,6 +1740,7 @@ biblios.app = function() {
 																		}
 																		e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
 																		setILSTargets();
+																		updateSendMenu();
 																	} // afteredit handler
 																},
 																sm: new Ext.grid.RowSelectionModel({

@@ -91,7 +91,36 @@ koha.prototype = {
 			else {
 				savepath = 'new_bib';
 			}
-			Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
+			$.ajax({
+				contentType: 'application/xml',
+				processData: false,
+				data: xmldoc,
+				dataType: 'xml',
+				url: this.url + 'cgi-bin/koha/svc/' + savepath,
+				type: 'POST',
+				scope: this,
+				id: recid,
+				success: function(data, textStatus) {
+					// check response is ok
+					var status = $('status', data).text();
+					if( status == 'failed' ) {
+						this.scope.saveStatus = 'failed';
+					}
+					else if( status == 'ok' ) {
+						this.scope.saveStatus = 'ok';
+						var biblionumber = $('biblionumber', data).text();
+						this.scope.savedBiblionumber = biblionumber;
+						// replace marcxml in recordcache	
+						var marcxml = $('record', data).get(0);
+						this.scope.recordCache[ this.id ] = marcxml;
+					}
+					this.scope.saveHandler( marcxml , status);
+				},
+				error: function(req, textStatus, error) {
+					Ext.MessageBox.alert('Error', textStatus);
+				}
+			});
+			/*Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
 				// check response is ok
 				var status = $('status', resp.responseXML).text();
 				if( status == 'failed' ) {
@@ -110,12 +139,13 @@ koha.prototype = {
 			});
 			Ext.Ajax.request({
 				url: this.url + 'cgi-bin/koha/svc/' + savepath,
-				method: 'post',
+				method: 'POST',
 				id: recid,
 				xmlData: xmldoc,
 				scope: this,
-				params: {}
-			});
+				headers: { 'Content-Type': 'application/xml'},
+				useDefaultHeader: false
+			});*/
 		}
 }; // end public properties
 

@@ -113,10 +113,15 @@ function updateSaveMenu() {
 
 function updateSendMenu() {
 	// remove old send menu items
-	Ext.menu.MenuMgr.get('sendMenu').removeAll();
-	var sendfiles = getSendFileMenuItems();
+	Ext.menu.MenuMgr.get('editorOneSendMenu').removeAll();
+	var sendfiles = getSendFileMenuItems('editorone');
 	for( sf in sendfiles ) {
-		Ext.menu.MenuMgr.get('sendMenu').add( sendfiles[sf] );
+		Ext.menu.MenuMgr.get('editorOneSendMenu').add( sendfiles[sf] );
+	}
+	Ext.menu.MenuMgr.get('editorTwoSendMenu').removeAll();
+	var sendfiles = getSendFileMenuItems('editortwo');
+	for( sf in sendfiles ) {
+		Ext.menu.MenuMgr.get('editorTwoSendMenu').add( sendfiles[sf] );
 	}
 }
 
