@@ -5,22 +5,24 @@ function createFixedFieldCell(string, elem, offset) {
 	var position = $(elem).attr('position') - offset;
 	var length = $(elem).attr('length');
 	var inputtype = $(elem).attr('inputtype');
+	var hidden = $(elem).attr('hidden');
 	html += '<td>';
 	html += name;
 	html += '</td>';
 	html += '<td>';
 	var value = string.substr(position, length);	
 	if( inputtype == 'textbox' ) {
-		html += '<input type="text" size="'+value.length+'" class="fixedfield" value="'+value+'">';
+		html += '<input id="'+name+'" type="text" onblur="onFixedFieldEditorBlur(this)" maxlength="'+value.length+'" size="'+value.length+'" class="fixedfield" value="'+value+'">';
 	}
 	else if (inputtype == 'menulist' || inputtype == 'menubox') {
-		html += '<select>';
+		html += '<select name="'+name+'" onblur="onFixedFieldEditorBlur(this)" id="'+name+'" >';
 		$('option', elem).each( function(j) {
 			if( $(this).text() == value ) {
-				html += '<option selected>';
+				html += '<option selected value="'+$(this).text()+'">';
+
 			}
 			else {
-				html += '<option>';
+				html += '<option value="'+$(this).text()+'">';
 			}
 			html += $(this).text()+'</option>';
 		});
@@ -337,7 +339,7 @@ function MarcEditor(ffeditor, vareditor) {
 		var string = $('leader', marcXmlDoc).text();
 		html += '<tr>';
 		$('field[@tag=000] value', marc21defs).each( function(i) {
-			html += createFixedFieldCell(string, $(this));
+			html += createFixedFieldCell(string, $(this), 0);
 		});
 		//end leader row
 		html += '</tr>';
@@ -348,7 +350,7 @@ function MarcEditor(ffeditor, vareditor) {
 		$('mattypes mattype[@value=All] position', marc21defs).each( function(i) {
 			var type = $(this).text();
 			$('field[@tag=008] value[@name='+type+']', marc21defs).each( function(j) {
-				html += createFixedFieldCell(tag008, $(this) );
+				html += createFixedFieldCell(tag008, $(this), 0 );
 			});
 		});
 		html += '</tr>';

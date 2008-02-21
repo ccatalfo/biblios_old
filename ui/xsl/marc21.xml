@@ -76,7 +76,6 @@
 		<option desc="UCS/UNICODE">a</option>
 	</value>
 	<value name="Ctrl" position="8" length="1" inputtype="menulist">
-	    <description>Type of Control  Blank: No specific type.  a: Archival</description>
 		<option desc="No specific type"> </option>
 		<option desc="Archival">a</option>
 	</value>
