@@ -697,7 +697,7 @@ biblios.app = function() {
 														autoScroll: true,
 														split: true,
 														height: 300,
-														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
+														html: '<div id="marceditorone"><div class="ffeditor"></div><div class="vareditor"></div></div>',
 														tbar: (editorToolbar = [
 															{
 																cls: 'x-btn-text-icon',
@@ -816,7 +816,7 @@ biblios.app = function() {
 														collapsed: true,
 														title: 'Editor 2',
 														height: 230,
-														html: '<div class="ffeditor"></div><div class="vareditor"></div>',
+														html: '<div id="marceditortwo"><div class="ffeditor"></div><div class="vareditor"></div></div>',
 														tbar: [
 															{
 																cls: 'x-btn-text-icon bmenu', // icon and text class

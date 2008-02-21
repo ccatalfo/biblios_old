@@ -1675,11 +1675,25 @@ function openRecord(xml, editorelem) {
 	$(ffed).empty();
 	var vared = $('#'+editorelem).find(".vareditor");
 	$(vared).empty();
-    $(ffed).getTransform( ffxsl, xml);
-    $(vared).getTransform( varfxsl, xml);
+
+	UI.editor[editorelem].record = new MarcEditor();
+	var xmldoc;
+	if( Ext.isIE ) {
+		xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
+		xmldoc.async = false; 
+		xmldoc.loadXML(xml);
+	}
+	else {
+		xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
+	}
+	html = UI.editor[editorelem].record.loadXml( xmldoc );
+	Ext.get('marc'+editorelem).update(html);
+	var ffed =	$('#'+editorelem).find(".ffeditor");
+	var vared = $('#'+editorelem).find(".vareditor");
+
 	UI.editor[editorelem].ffed = ffed;
 	UI.editor[editorelem].vared = vared;
-	create_static_editor(ffed, vared, editorelem);
+
 	// show fixed field editor, hide ldr and 008 divs
 	$(ffed).show();
 	// hide leader and 008
