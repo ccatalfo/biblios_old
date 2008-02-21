@@ -1,4 +1,34 @@
 // Object -> marc editor wrapper
+function createFixedFieldCell(string, elem, offset) {
+	var html = '';
+	var name = $(elem).attr('name');
+	var position = $(elem).attr('position') - offset;
+	var length = $(elem).attr('length');
+	var inputtype = $(elem).attr('inputtype');
+	html += '<td>';
+	html += name;
+	html += '</td>';
+	html += '<td>';
+	var value = string.substr(position, length);	
+	if( inputtype == 'textbox' ) {
+		html += '<input type="text" size="'+value.length+'" class="fixedfield" value="'+value+'">';
+	}
+	else if (inputtype == 'menulist' || inputtype == 'menubox') {
+		html += '<select>';
+		$('option', elem).each( function(j) {
+			if( $(this).text() == value ) {
+				html += '<option selected>';
+			}
+			else {
+				html += '<option>';
+			}
+			html += $(this).text()+'</option>';
+		});
+		html += '</select>';
+	}
+	return html;
+} // createFixedFieldCell
+
 function MarcEditor(ffeditor, vareditor) {
 	// private
 	var that = this;
@@ -297,6 +327,220 @@ function MarcEditor(ffeditor, vareditor) {
 	this._update = function(elem) {
 		update(elem);
 	}
+
+	this._loadXml = function(marcXmlDoc) {
+		var html = '';
+		html += '<div class="ffeditor">';
+		html += '<div id="fixedfields_editor">';
+		html += '<table id="fixed_field_grid">';
+		// leader
+		var string = $('leader', marcXmlDoc).text();
+		html += '<tr>';
+		$('field[@tag=000] value', marc21defs).each( function(i) {
+			html += createFixedFieldCell(string, $(this));
+		});
+		//end leader row
+		html += '</tr>';
+		// 008 row
+		var tag008 = $('controlfield[@tag=008]', marcXmlDoc).text();
+		var rectype = $('leader', marcXmlDoc).text().substr(6,1);
+		html += '<tr>';
+		$('mattypes mattype[@value=All] position', marc21defs).each( function(i) {
+			var type = $(this).text();
+			$('field[@tag=008] value[@name='+type+']', marc21defs).each( function(j) {
+				html += createFixedFieldCell(tag008, $(this) );
+			});
+		});
+		html += '</tr>';
+		// material specific 008 row
+		html += '<tr>';
+		var mattype = '';
+		if( rectype == 'a' || rectype == 't' ) {
+			mattype = 'Books';
+		}
+		if( rectype == 'm' ) {
+			mattype = 'ComputerFile';
+		}
+		if( rectype == 'e' || rectype == 'f' ) {
+			mattype = 'Maps';
+		}
+		if( rectype == 'c' || rectype == 'd' || rectype == 'j' || rectype == 'i') {
+			mattype = 'Music';
+		}
+		if( rectype == 'g' || rectype == 'k' || rectype == 'o' || rectype == 'r') {
+			mattype = 'Visual';
+		}
+		if( rectype == 'p' ) {
+			mattype = 'Mixed';
+		}
+			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
+				var type = $(this).text();
+				$('field[@tag=008] value[@name='+type+']', marc21defs).each( function(j) {
+					html += createFixedFieldCell(tag008, $(this) , 0);
+				});
+			});
+		html += '</tr>';
+
+		// 006 row
+		if( $('controlfield[@tag=006]', marcXmlDoc).length > 0 ) {
+			html += '<tr>';
+			var mattype = '';
+			if( rectype == 'a' || rectype == 't' ) {
+				mattype = 'Books';
+			}
+			if( rectype == 'm' ) {
+				mattype = 'ComputerFile';
+			}
+			if( rectype == 'e' || rectype == 'f' ) {
+				mattype = 'Maps';
+			}
+			if( rectype == 'c' || rectype == 'd' || rectype == 'j' || rectype == 'i') {
+				mattype = 'Music';
+			}
+			if( rectype == 'g' || rectype == 'k' || rectype == 'o' || rectype == 'r') {
+				mattype = 'Visual';
+			}
+			if( rectype == 'p' ) {
+				mattype = 'Mixed';
+			}
+			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
+				var type = $(this).text();
+				$('field[@tag=006] value[@name='+type+']', marc21defs).each( function(j) {
+					html += createFixedFieldCell(tag006, $(this) , 17);
+				});
+			});
+			html += '</tr>'; // end 006 row
+		}
+		// 007 row
+		if( $('controlfield[@tag=007]', marcXmlDoc ).length > 0 )  {
+			html += '<tr>';
+			var cat = $('controlfield[@tag=007]', marcXmlDoc).text().substr(0,1);
+			var tag007 = $('controlfield[@tag=007]', marcXmlDoc).text();
+			var mattype = '';
+			if( cat == 'a' ) {
+				mattype = 'MAP';
+			}
+			if( cat == 'c' ) {
+				mattype = 'ELECTRONIC';
+			}
+			if( cat == 'd' ) {
+				mattype = 'GLOBE';
+			}
+			if( cat == 'f' ) {
+				mattype = 'TACTILE';
+			}
+			if( cat == 'g' ) {
+				mattype = 'PROJECTED';
+			}
+			if( cat == 'h' ) {
+				mattype = 'MICROFORM';
+			}
+			if( cat == 'k' ) {
+				mattype = 'NONPROJECTED';
+			}
+			if( cat == 'm' ) {
+				mattype = 'MOTION';
+			}
+			if( cat == 'o' ) {
+				mattype = 'KIT';
+			}
+			if( cat == 'q' ) {
+				mattype = 'NOTATED';
+			}
+			if( cat == 'r' ) {
+				mattype = 'REMOTE';
+			}
+			if( cat == 's' ) {
+				mattype = 'SOUND';
+			}
+			if( cat == 't' ) {
+				mattype = 'TEXT';
+			}
+			if( cat == 'v' ) {
+				mattype = 'VIDEORECORDING';
+			}
+			if( rectype == 'z' ) {
+				mattype = 'UNSPECIFIED';
+			}
+			// find field def for this 007 mat type
+			$('field[@tag=007][@mattype='+mattype+']', marc21defs).each( function(i) {
+				$('value', this).each( function(j) {
+					html += createFixedFieldCell(tag007, $(this) , 0);
+				}); // loop through positions in 007
+
+			});
+
+			html += '</tr>';
+		}
+		html += '</table>';
+		html += '</div>'; // close fixedfields_editor
+		html += '</div>'; // close ff_editor
+		var leader = $('leader', marcXmlDoc).text();
+		html += '<div class="leader" class="controlfield" id="leader"><input type="text" class="tagnumber" value="000"><input type="text" class="indicator" value="#"><input type="text" class="indicator" value="#"><input class="controlfield" type="text" value="'+leader+'"></div>';
+
+		html += '<div class="vareditor">';
+		html += '<div id="varfields_editor">';
+		$('controlfield', marcXmlDoc).each( function(i) {
+			val = $(this).text();
+			tag = $(this).attr('tag');
+			html += '<div class="tag controlfield ';
+			html += tag
+			html += '"';
+			html += '>';
+			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tag+'">';
+			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+'#'+'">';
+			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+'#'+'">';
+			html += '<input onblur="onBlur(this)" onfocus="onFocus(this)" ';
+			html += 'type="text" '; 
+			html += 'value="'+val+'" ';
+			html += 'class="controlfield ';
+			html += tag;
+			html += '"';
+			html += '>';
+			html += '</div>';
+			fields.push( new Field(tag, '', '', [{code: '', value: val}]) );
+		});	
+
+		$('datafield', marcXmlDoc).each(function(i) {
+			var val = $(this).text();
+			var tag = $(this).attr('tag');
+			var ind1 = $(this).attr('ind1') || ' ';
+			var ind2 = $(this).attr('ind2') || ' ';
+			var id = tag+'-'+i;
+			html += '<div class=" tag datafield ';
+			html += tag;
+			html += '" ';
+			html += 'id="'+id+'"';
+			html += '>';
+			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tag+'">';
+			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+ind1+'">';
+			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+ind2+'">';
+			
+			var id = tag+'-'+i;
+			html += '<span class="subfields" id="'+id+'">';
+			var subfields = new Array();
+			$('subfield', this).each(function(j) {
+				var sfval = $(this).text();
+				var sfcode = $(this).attr('code');
+				subfields.push( new Subfield(sfcode, sfval) );
+				var sfid = 'dsubfields'+tag+'-'+i;
+				html += '<span class="subfield '+sfcode+'" id="'+sfid+'">';
+				html += '<input maxlength="2" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="subfield-delimiter" value="&#8225;'+sfcode+' ">';
+				html += '<input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="subfield-text" value="'+sfval+' ">';
+				// close subfield span
+				html += '</span>';
+			});
+				// close subfields span
+			html + '</span>';
+			html += '</div>'; // close datafield div	
+			fields.push( new Field(tag, ind1, ind2, subfields) );
+		});
+		html += '</div>'; // end vareditor div
+		html += '</div>'; // varfields_editor div
+		marcrecord = new MarcRecord(fields);
+		return html;
+	}
+
 }
 // Public methods 
 MarcEditor.prototype.getValue = function(tag, subfield) {
@@ -386,3 +630,12 @@ MarcEditor.prototype.update = function(elem) {
 MarcEditor.prototype.getIndexOf = function(elem) {
 	return this._getIndexOf(elem);
 }
+
+MarcEditor.prototype.loadXml = function(xmldoc) {
+	return this._loadXml(xmldoc);
+}
+
+MarcEditor.prototype.editorHtml = function() {
+	return this.html;
+}
+

@@ -38,6 +38,7 @@ Ext.Ajax.request({
 var marcxsl = xslTransform.loadFile(showMarcXslPath);
 var ffxsl = xslTransform.loadFile(fixedFieldXslPath);
 var varfxsl = xslTransform.loadFile(varFieldsXslPath);
+var marc21defs = xslTransform.loadFile(marc21defsPath);
 
 var recordNum = 0; // number of individual records found and saved to db
 var newRecordNum = 0; // number of individual records found and saved to db
