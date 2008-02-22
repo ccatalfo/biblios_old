@@ -97,6 +97,107 @@ function get008FromEditor(ff_ed) {
     return tag008val;
 }
 
+function get006FromEditor(ff_ed) {
+		var tag006val = '';
+		var rectype = $('#Type').val();
+		var mattype = '';
+		if( rectype == 'a' || rectype == 't' ) {
+			mattype = 'Books';
+		}
+		if( rectype == 'm' ) {
+			mattype = 'ComputerFile';
+		}
+		if( rectype == 'e' || rectype == 'f' ) {
+			mattype = 'Maps';
+		}
+		if( rectype == 'c' || rectype == 'd' || rectype == 'j' || rectype == 'i') {
+			mattype = 'Music';
+		}
+		if( rectype == 'g' || rectype == 'k' || rectype == 'o' || rectype == 'r') {
+			mattype = 'Visual';
+		}
+		if( rectype == 'p' ) {
+			mattype = 'Mixed';
+		}
+		$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
+			var type = $(this).text();
+			if( type.substr(0, 4) == 'Undef') {
+				var length = type.substr(5,1);
+				for( var k = 0; k<length; k++) {
+					tag006val += ' ';
+				}
+			}
+			var value = $('#'+type).val();
+			tag006val += value;
+		});
+    return tag006val;
+}
+function get007FromEditor() {
+	var tag007val = '';
+	var cat = $('#Category').val();
+			var mattype = '';
+			if( cat == 'a' ) {
+				mattype = 'MAP';
+			}
+			if( cat == 'c' ) {
+				mattype = 'ELECTRONIC';
+			}
+			if( cat == 'd' ) {
+				mattype = 'GLOBE';
+			}
+			if( cat == 'f' ) {
+				mattype = 'TACTILE';
+			}
+			if( cat == 'g' ) {
+				mattype = 'PROJECTED';
+			}
+			if( cat == 'h' ) {
+				mattype = 'MICROFORM';
+			}
+			if( cat == 'k' ) {
+				mattype = 'NONPROJECTED';
+			}
+			if( cat == 'm' ) {
+				mattype = 'MOTION';
+			}
+			if( cat == 'o' ) {
+				mattype = 'KIT';
+			}
+			if( cat == 'q' ) {
+				mattype = 'NOTATED';
+			}
+			if( cat == 'r' ) {
+				mattype = 'REMOTE';
+			}
+			if( cat == 's' ) {
+				mattype = 'SOUND';
+			}
+			if( cat == 't' ) {
+				mattype = 'TEXT';
+			}
+			if( cat == 'v' ) {
+				mattype = 'VIDEORECORDING';
+			}
+			if( cat == 'z' ) {
+				mattype = 'UNSPECIFIED';
+			}
+			$('field[@tag=007][@mattype='+mattype+']', marc21defs).each( function(i) {
+				$('value', this).each( function(j) {
+					var type = $(this).attr('name');
+					if( type == 'Undefined') {
+						var length = $(this).attr('length');
+						for( var k = 0; k<length; k++) {
+							tag007val += ' ';
+						}
+					}
+					var value = $('#'+type).val() || '';
+					tag007val += value;
+				}); // loop through positions in 007
+			});
+			return tag007val;
+}
+
+
 /*
 
 */
@@ -852,6 +953,16 @@ function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
     $('#'+editorid).find("#000", var_ed).children('.controlfield').val(leaderval);
     var tag008val = get008FromEditor(ff_ed);
     $('#'+editorid).find("#008", var_ed).children('.controlfield').val(tag008val);
+	if( $('#'+editorid).find('#006').length > 0 ) {
+		var tag006val = get006FromEditor(ff_ed);
+		$('#'+editorid).find("#006", var_ed).children('.controlfield').val(tag006val);
+        console.info('Transferring 006 value from fixed field editor into 006 tag: ' + tag006val);
+	}
+	if( $('#'+editorid).find('#007').length > 0 ) {
+		var tag007val = get007FromEditor(ff_ed);
+		$('#'+editorid).find("#007", var_ed).children('.controlfield').val(tag007val);
+        console.info('Transferring 007 value from fixed field editor into 007 tag: ' + tag007val);
+	}
     if(debug) {
         console.info('Transferring leader value from fixed field editor into leader tag: ' + leaderval);
         console.info('Transferring 008 value from fixed field editor into 008 tag: ' + tag008val);

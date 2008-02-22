@@ -477,7 +477,7 @@ function MarcEditor(ffeditor, vareditor) {
 			if( cat == 'v' ) {
 				mattype = 'VIDEORECORDING';
 			}
-			if( rectype == 'z' ) {
+			if( cat == 'z' ) {
 				mattype = 'UNSPECIFIED';
 			}
 			// find field def for this 007 mat type
@@ -501,7 +501,7 @@ function MarcEditor(ffeditor, vareditor) {
 		$('controlfield', marcXmlDoc).each( function(i) {
 			val = $(this).text();
 			tag = $(this).attr('tag');
-			html += '<div class="tag controlfield ';
+			html += '<div id="'+tag+'" class="tag controlfield ';
 			html += tag
 			html += '"';
 			html += '>';
