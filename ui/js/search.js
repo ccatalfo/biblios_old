@@ -63,7 +63,7 @@ paz = new pz2({
 function setPazPar2Targets() {
 	var targets = getTargets();
 	$.each( targets, function(i, n){
-		if( targets[i].enabled == 'true' ) {
+		if( targets[i].enabled == 1 ) {
 			var db = n.hostname+":"+n.port+"/"+n.dbname;
 			$.get(  paz.pz2String +
 					'?' +

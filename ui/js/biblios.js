@@ -1613,6 +1613,7 @@ biblios.app = function() {
 																	listeners: {
 																		update: function(store, record, operation) {
 																			if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT) {
+																				record.data.enabled = record.data.enabled ? 1 : 0;
 																				try {
 																					var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where rowid = ?', [record.data.name, record.data.hostname, record.data.port, record.data.dbname, record.data.description, record.data.userid, record.data.password, record.data.enabled, record.data.rowid]);
 																					rs.close()
@@ -1630,6 +1631,9 @@ biblios.app = function() {
 																		var id = e.record.data.id;
 																		var field = e.field;
 																		var value = e.value;
+																		if(field == 'enabled') {
+																			value = value ? 1 : 0;
+																		}
 																		var rs;
 																		try {
 																			rs = db.execute('update SearchTargets set '+field+' = ? where SearchTargets.rowid = ?', [value, id]);
@@ -1944,7 +1948,7 @@ biblios.app = function() {
 			completeOnEnter: true,
 			id: 'saveTreeEditor',
 			listeners: {
-				beforecomplete: function(editor, value, startValue) {
+				complete: function(editor, value, startValue) {
 					var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelected();
 					var folder = DB.SaveFiles.select('Savefiles.rowid=?', [n.attributes.id]).getOne();
 					folder.name = value;
