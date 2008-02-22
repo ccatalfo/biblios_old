@@ -1,18 +1,29 @@
 // Object -> marc editor wrapper
 function createFixedFieldCell(string, elem, offset) {
-	var html = '';
 	var name = $(elem).attr('name');
 	var position = $(elem).attr('position') - offset;
 	var length = $(elem).attr('length');
 	var inputtype = $(elem).attr('inputtype');
 	var hidden = $(elem).attr('hidden');
-	html += '<td>';
+	var html = '';
+	html += '<td';
+	html += '>';
 	html += name;
 	html += '</td>';
 	html += '<td>';
 	var value = string.substr(position, length);	
 	if( inputtype == 'textbox' ) {
 		html += '<input id="'+name+'" type="text" onblur="onFixedFieldEditorBlur(this)" maxlength="'+value.length+'" size="'+value.length+'" class="fixedfield" value="'+value+'">';
+	}
+	else if(inputtype == 'blank' ) {
+		value = '';
+		for( var k = 0; k < length; k++) {
+			value += ' ';
+		}
+		html += '<input id="'+name+'" size="'+length+'" maxlength="'+length+'" style="display: none;" type="text" value="'+value+'">';
+	}
+	else if(inputtype == 'hidden') {
+		html += '<input id="'+name+'" size="'+length+'" maxlength="'+length+'" style="display: none;" type="text" value="'+value+'">';
 	}
 	else if (inputtype == 'menulist' || inputtype == 'menubox') {
 		html += '<select name="'+name+'" onblur="onFixedFieldEditorBlur(this)" id="'+name+'" >';
@@ -28,6 +39,7 @@ function createFixedFieldCell(string, elem, offset) {
 		});
 		html += '</select>';
 	}
+	html += '</td>';
 	return html;
 } // createFixedFieldCell
 
@@ -346,15 +358,7 @@ function MarcEditor(ffeditor, vareditor) {
 		// 008 row
 		var tag008 = $('controlfield[@tag=008]', marcXmlDoc).text();
 		var rectype = $('leader', marcXmlDoc).text().substr(6,1);
-		html += '<tr>';
-		$('mattypes mattype[@value=All] position', marc21defs).each( function(i) {
-			var type = $(this).text();
-			$('field[@tag=008] value[@name='+type+']', marc21defs).each( function(j) {
-				html += createFixedFieldCell(tag008, $(this), 0 );
-			});
-		});
-		html += '</tr>';
-		// material specific 008 row
+		// 008 row
 		html += '<tr>';
 		var mattype = '';
 		if( rectype == 'a' || rectype == 't' ) {

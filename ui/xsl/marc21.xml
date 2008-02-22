@@ -3,10 +3,14 @@
 <fields>
     <field tag="000" length="24" repeatable="false" mandatory="true" fixedfield="true">
 	<description>Leader</description>
-	<value name="RLen" position="0" length="5" inputtype="textbox">
+	<value name="Link" position="19" length="1" inputtype="menulist">
+		<option> </option>
+		<option>r</option>
+	</value>
+	<value name="RLen" position="0" length="5" inputtype="hidden">
 		<description>The computer-generated, five-character numeric string that specifies the length of the entire record. The number is right justified and each unused position contains a zero.</description>
 	</value>
-	<value name="Base" position="12" length="5" inputtype="textbox">
+	<value name="Base" position="12" length="5" inputtype="hidden">
 	    <description>The computer-generated, five-character numeric string that indicates the first character position of the first variable control field in a record. The number is right justified and each unused position contains a zero.</description>
 	</value>
 
@@ -19,7 +23,6 @@
 		<description>Indicates the relation of the record to a file.</description>
 	</value>
 	<value name="BLvl" position="7" length="1" inputtype="menulist">
-	    <description>Bibliographic Level</description>
 		<option desc="a A monographic bibliographic unit that is physically attached to or contained in another unit">a</option>
 		<option desc="b A serial bibliographic unit that is physically attached to or contained in another serial unit">b</option>
 		<option desc="c A made-up multipart group of items that were not originally published, distributed, or produced together">c</option>
@@ -36,7 +39,6 @@
 	    <description>Descriptive Cataloging Form: black: non-ISBD, a:AACR2, i:ISBD, u:Unknown</description>
 	</value>
 	<value name="Type" position="6" length="1" inputtype="menulist">
-	    <description>Type of record</description>
 		<option>a</option>
 		<option>c</option>
 		<option>d</option>
@@ -52,15 +54,14 @@
 		<option>r</option>
 		<option>t</option>
 	</value>
-	<value name="Indc" position="10" length="1">
+	<value name="Indc" position="10" length="1" inputtype="hidden">
 		<option>2</option>
 	</value>
-	<value name="Subc" position="12" length="1">
+	<value name="Subc" position="12" length="1" inputtype="hidden">
 		<option>2</option>
 	</value>
 
 	<value name="ELvl" position="17" length="1" inputtype="menulist">
-	    <description>Indicates the fullness of the bibliographic information and/or content designation of the MARC record.</description>
 		<option> </option>
 		<option>1</option>
 		<option>2</option>
@@ -71,7 +72,6 @@
 		<option>7</option>
 	</value>
 	<value name="Enc" position="9" length="1" inputtype="menulist">
-	    	<description>Character coding scheme.  Blank: MARC-8.  a: UCS/Unicode</description>
 		<option desc="MARC-8"> </option>
 		<option desc="UCS/UNICODE">a</option>
 	</value>
@@ -79,13 +79,19 @@
 		<option desc="No specific type"> </option>
 		<option desc="Archival">a</option>
 	</value>
-	<value name="Entry" position="20" length="4">
+	<value name="Entry" position="20" length="4" inputtype="hidden">
 		<option>4500</option>
 	</value>
     </field>
     <field tag="008" length="40" repeatable="false" mandatory="true" fixedfield="true">
 	<description>008 Fixed Field</description>
-	<value name="DateEntered" position="0" length="6" inputtype="textbox"></value>
+	<value name="DateEntered" position="0" length="6" inputtype="hidden"></value>
+	<value name="Undef1" position="0" length="1" inputtype="blank"></value>
+	<value name="Undef2" position="0" length="2" inputtype="blank"></value>
+	<value name="Undef3" position="0" length="3" inputtype="blank"></value>
+	<value name="Undef4" position="0" length="4" inputtype="blank"></value>
+	<value name="Undef5" position="0" length="5" inputtype="blank"></value>
+	<value name="Undef6" position="0" length="6" inputtype="blank"></value>
 	<value name="Form" position="23" length="1" inputtype="menulist">
 		<option> </option>
 		<option>a</option>
@@ -233,11 +239,6 @@
 		<option>0</option>
 		<option>1</option>
 		<option>|</option>
-	</value>
-	<value name="Link" position="19" length="1" inputtype="menulist">
-		<description>Indicates whether a note containing basic identification information (i.e., main entry and title, main entry and uniform title, main entry under uniform title, title, uniform title, Standard Technical Report Number, or report number) can be generated from a Linking Entry field (76X-78X).</description>
-		<option> </option>
-		<option>r</option>
 	</value>
 	<value name="Contents" position="24" length="4" inputtype="textbox">
 	    <option> </option>
@@ -1678,29 +1679,44 @@
 
 <mattypes>
 	<mattype value="All">
+		<!-- 00..17 -->
+		<position>DateEntered</position>
 		<position>DtSt</position>
 		<position>Date1</position>
 		<position>Date2</position>
 		<position>Ctry</position>
+		<!-- 35..40 -->
 		<position>Lang</position>
-		<position>Srce</position>
 		<position>MRec</position>
-		<position>Link</position>
-		<position>DateEntered</position>
+		<position>Srce</position>
 	</mattype>
 	<mattype value="Books">
+		<position>DateEntered</position>
+		<position>DtSt</position>
+		<position>Date1</position>
+		<position>Date2</position>
+		<position>Ctry</position>
 		<position>Ills</position>
-		<position>LitF</position>
-		<position>Indx</position>
 		<position>Audn</position>
 		<position>Form</position>
 		<position>Contents</position>
 		<position>GovPub</position>
-		<position>Fest</position>
 		<position>Conf</position>
+		<position>Fest</position>
+		<position>Indx</position>
+		<position>Undef1</position>
+		<position>LitF</position>
 		<position>Bio</position>
+		<position>Lang</position>
+		<position>MRec</position>
+		<position>Srce</position>
 	</mattype>
 	<mattype value="Music">
+		<position>DateEntered</position>
+		<position>DtSt</position>
+		<position>Date1</position>
+		<position>Date2</position>
+		<position>Ctry</position>
 		<position>CompForm</position>
 		<position>Format</position>
 		<position>Parts</position>
@@ -1708,32 +1724,82 @@
 		<position>Form</position>
 		<position>Accomp</position>
 		<position>LitText</position>
+		<position>Undef1</position>
 		<position>TrArr</position>
+		<position>Undef1</position>
+		<position>Lang</position>
+		<position>MRec</position>
+		<position>Srce</position>
 	</mattype>
 	<mattype value="Maps">
+		<position>DateEntered</position>
+		<position>DtSt</position>
+		<position>Date1</position>
+		<position>Date2</position>
+		<position>Ctry</position>
 		<position>Relief</position>
 		<position>Proj</position>
+		<position>Undef1</position>
 		<position>Cart</position>
+		<position>Undef2</position>
 		<position>GovPub</position>
 		<position>Form</position>
+		<position>Undef1</position>
 		<position>Indx</position>
+		<position>Undef1</position>
 		<position>SpChar</position>
+		<position>Lang</position>
+		<position>MRec</position>
+		<position>Srce</position>
 	</mattype>
 	<mattype value="ComputerFile">
+		<position>DateEntered</position>
+		<position>DtSt</position>
+		<position>Date1</position>
+		<position>Date2</position>
+		<position>Ctry</position>
+		<position>Undef4</position>
 		<position>Audn</position>
+		<position>Undef3</position>
 		<position>File</position>
+		<position>Undef1</position>
 		<position>GovPub</position>
+		<position>Undef6</position>
+		<position>Lang</position>
+		<position>MRec</position>
+		<position>Srce</position>
 	</mattype>
 	<mattype value="Visual">
+		<position>DateEntered</position>
+		<position>DtSt</position>
+		<position>Date1</position>
+		<position>Date2</position>
+		<position>Ctry</position>
 		<position>RTime</position>
+		<position>Undef1</position>
 		<position>Audn</position>
+		<position>Undef1</position>
 		<position>GovPub</position>
 		<position>Form</position>
+		<position>Undef3</position>
 		<position>VisType</position>
 		<position>Tech</position>
+		<position>Lang</position>
+		<position>MRec</position>
+		<position>Srce</position>
 	</mattype>
 	<mattype value="Mixed">
+		<position>DateEntered</position>
+		<position>DtSt</position>
+		<position>Date1</position>
+		<position>Date2</position>
+		<position>Ctry</position>
+		<position>Undef5</position>
 		<position>Form</position>
+		<position>Undef11</position>
+		<position>Lang</position>
+		<position>MRec</position>
+		<position>Srce</position>
 	</mattype>
 </mattypes>
 

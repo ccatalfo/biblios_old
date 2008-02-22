@@ -56,86 +56,38 @@ function getLeaderFromEditor(ff_ed) {
 */
 
 function get008FromEditor(ff_ed) {
-	var tag008val = '';
-	var dateentered = $("#DateEntered", ff_ed ).val();
-	var datestatement  = $("#DtSt", ff_ed ).val();
-	var date1 = $("#Date1", ff_ed ).val();
-	var date2 = $("#Date2", ff_ed ).val();
-	var ctry = $("#Ctry", ff_ed ).val();
-	var lang = $("#Lang", ff_ed ).val();
-	var mrec = $("#MRec", ff_ed ).val();
-	var srce = $("#Srce", ff_ed ).val();
-
-	var type = $("#Type", ff_ed ).val();
-	if(debug) {console.info('record type is: ' + type);}
-	// if we have a print material
-	if( type == 'a' || type == 't') { 
-	    var ill = $("#Ills", ff_ed ).val();
-	    var audn = $("#Audn", ff_ed ).val();
-	    var form = $("#Form", ff_ed ).val();
-	    var contents = $("#Contents", ff_ed).val(); 
-	    var govpub = $("#GovPub", ff_ed).val(); 
-	    var conf = $("#Conf", ff_ed).val();
-	    var fest = $("#Fest", ff_ed).val();
-	    var indx = $("#Indx", ff_ed).val();
-	    var undef = " "; // undefined: either blank or |
-	    var litf = $("#LitF", ff_ed).val();
-	    var bio = $("#Bio", ff_ed).val();
-	    // add these vals to complete 008 for books
-	    tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, ill, audn, form, contents, govpub, conf, fest, indx, undef, litf, bio, lang, mrec, srce);
-	}
-	// computer files
-	else if( type == 'm' ) {
-		var char1821 = "    "; // 4 undefines
-	    var audn = $("#Audn", ff_ed ).val();
-		var char2325 = "   "; // 3 undefines
-		var file = $("#File", ff_ed ).val();
-		var char27 = " "; // undefined
-	    var govpub = $("#GovPub", ff_ed).val(); 
-		var char2934 = "     "; // 5 undefines
-		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, char1821, audn, char2325, file, char27, govpub, char2934, lang, mrec, srce );
-	}
-	// maps
-	else if( type == 'e'|| type =='f' ) {
-		var relief = $("#Relief", ff_ed).val();
-		var proj = $("#Proj", ff_ed).val();
-		var undef1 = " ";
-		var cart = $("#Cart", ff_ed).val();
-		var undef2 = "  "; 
-	    var govpub = $("#GovPub", ff_ed).val(); 
-	    var form = $("#Form", ff_ed ).val();
-	    var indx = $("#Indx", ff_ed).val();
-		var spchar = $("#SpChar", ff_ed).val();
-		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, relief, proj, undef1, cart, undef2, govpub, form, undef1, indx, undef1, spchar, lang, mrec, srce );
-	}
-	// musical materials
-	else if( type == 'c' || type == 'd' || type == 'j' || type == 'i') {
-		var compform = $("#CompForm", ff_ed).val();
-		var format = $("#Format", ff_ed).val();
-		var parts = $("#Parts", ff_ed).val();
-		var audn = $("#Audn", ff_ed).val();
-	    var form = $("#Form", ff_ed ).val();
-		var accomp = $("#Accomp", ff_ed).val();
-		var littext = $("#LitText", ff_ed).val();
-		var undef1 = " ";
-		var trarr = $("#TrArr", ff_ed).val();
-		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, compform, format, parts, audn, form, accomp, littext, undef1, trarr, undef1, lang, mrec, srce );
-	}
-	// visual materials
-	else if( type == 'g' || type == 'k' || type == 'o' || type == 'r') {
-		var rtime = $("#RTime", ff_ed).val();
-		var audn = $("#Audn", ff_ed).val();
-		var govpub = $("#GovPub", ff_ed).val();
-		var form = $("#Form", ff_ed).val();
-		var vistype = $("#VisType", ff_ed).val();
-		var tech = $("#Tech", ff_ed).val();
-		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, rtime, " ", audn, "     ", govpub, form, "   ", vistype, tech, lang, mrec, srce );
-	}
-	// mixed materials
-	else if( type == 'p') {
-		var form = $("#Form", ff_ed).val();
-		tag008val = tag008val.concat( dateentered, datestatement, date1, date2, ctry, "     ", form, "           ", lang, mrec, srce );
-	}
+		var tag008val = '';
+		var rectype = $('#Type').val();
+		var mattype = '';
+		if( rectype == 'a' || rectype == 't' ) {
+			mattype = 'Books';
+		}
+		if( rectype == 'm' ) {
+			mattype = 'ComputerFile';
+		}
+		if( rectype == 'e' || rectype == 'f' ) {
+			mattype = 'Maps';
+		}
+		if( rectype == 'c' || rectype == 'd' || rectype == 'j' || rectype == 'i') {
+			mattype = 'Music';
+		}
+		if( rectype == 'g' || rectype == 'k' || rectype == 'o' || rectype == 'r') {
+			mattype = 'Visual';
+		}
+		if( rectype == 'p' ) {
+			mattype = 'Mixed';
+		}
+			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
+				var type = $(this).text();
+				if( type.substr(0, 4) == 'Undef') {
+					var length = type.substr(5,1);
+					for( var k = 0; k<length; k++) {
+						tag008val += ' ';
+					}
+				}
+				var value = $('#'+type).val();
+				tag008val += value;
+			});
 	if( tag008val.length != 40 ) {
 		throw {
 			error: "Invalid008",
