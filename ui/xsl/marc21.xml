@@ -603,7 +603,7 @@
    <option>|</option>
 		
 	</value>
-	<value name="Accomp" position="24" length="6" inputtype="menulist">
+	<value name="Accomp" position="24" length="6" inputtype="textbox">
    <option>#</option>
 
    <option>a</option>
@@ -635,7 +635,7 @@
    <option>|</option>
 
 	</value>
-	<value name="LitText" position="30" length="2" inputtype="menulist">
+	<value name="LitText" position="30" length="2" inputtype="textbox">
    <option>#</option>
 
    <option>a</option>
