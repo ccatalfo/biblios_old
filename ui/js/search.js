@@ -110,13 +110,13 @@ function resetPazPar2(options) {
 				if(debug) { console.info('pazpar2 initCallback: resetting sessionID for searching and setting Z targets') }
 				if(statusOK == true) {
 					// reset search grid's url for new session id
-					searchds.proxy.conn.url = paz.pz2String + "?command=show&session=" + paz.sessionID;
+					Ext.getCmp('searchgrid').store.proxy.conn.url = paz.pz2String + "?command=show&session=" + paz.sessionID;
 					setPazPar2Targets(paz);
 					if(options) {
 						if(debug) { console.info("re-running search with pazpar2") }
 						paz.search( options.currQuery );
 						paz.show(options.currStart, options.currNum);
-						getPazRecord(options.currRecId);
+						getPazRecord(options.currRecId, 0, function(data) {previewRecord(data);}, {});
 					}
 				}
 			}
