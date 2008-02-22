@@ -7,10 +7,17 @@ function createFixedFieldCell(string, elem, offset) {
 	var hidden = $(elem).attr('hidden');
 	var html = '';
 	html += '<td';
+	if( inputtype == 'hidden' || inputtype == 'blank' ) {
+		html += ' style="display:none;"';
+	}
 	html += '>';
 	html += name;
 	html += '</td>';
-	html += '<td>';
+	html += '<td';
+	if( inputtype == 'hidden' || inputtype == 'blank' ) {
+		html += ' style="display:none;"';
+	}
+	html += '>';
 	var value = string.substr(position, length);	
 	if( inputtype == 'textbox' ) {
 		html += '<input id="'+name+'" type="text" onblur="onFixedFieldEditorBlur(this)" maxlength="'+value.length+'" size="'+value.length+'" class="fixedfield" value="'+value+'">';

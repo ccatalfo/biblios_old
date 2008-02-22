@@ -738,7 +738,7 @@
 
 </field>
    <field mattype="MAP" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox">
+      <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Map">a</option>
       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
@@ -787,7 +787,7 @@
       </value>
    </field>
    <field mattype="ELECTRONIC" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox">
+      <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Electronic resource">c</option>
       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
@@ -880,7 +880,7 @@
       </value>
    </field>
    <field mattype="GLOBE" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox">
+      <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Globe">d</option>
       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
@@ -921,7 +921,7 @@
       </value>
    </field>
    <field mattype="TACTILE" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox">
+      <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Tactile material">f</option>
       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
@@ -987,7 +987,7 @@
       </value>
    </field>
    <field mattype="PROJECTED" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox"></value>
+      <value name="Category" position="0" length="1" inputtype="hidden"></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Filmstrip roll">o</option>
          <option description="Slide Includes modern stereographs.">s</option>
@@ -1057,7 +1057,7 @@
       </value>
    </field>
    <field mattype="MICROFORM" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox">
+      <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Microform">h</option>
       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
@@ -1128,7 +1128,7 @@
       </value>
    </field>
    <field mattype="NONPROJECTED" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox"></value>
+      <value name="Category" position="0" length="1" inputtype="hidden"></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Collage">c</option>
          <option description="Drawing">d</option>
@@ -1188,7 +1188,7 @@
       </value>
    </field>
    <field mattype="MOTION" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox"></value>
+      <value name="Category" position="0" length="1" inputtype="hidden"></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Film cartridge">c</option>
          <option description="Film cassette">f</option>
@@ -1320,7 +1320,7 @@
       <value name="22" position="17" length="6" inputtype="menubox"></value>
    </field>
    <field mattype="KIT" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox">
+      <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Kit">o</option>
       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
@@ -1329,7 +1329,7 @@
       </value>
    </field>
    <field mattype="NOTATED" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox">
+      <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Notated music">q</option>
       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
@@ -1338,7 +1338,7 @@
       </value>
    </field>
    <field mattype="REMOTE" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox"></value>
+      <value name="Category" position="0" length="1" inputtype="hidden"></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Unspecified">u</option>
          <option description="No attempt to code">|</option>
@@ -1449,7 +1449,7 @@
       </value>
    </field>
    <field mattype="SOUND" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox"></value>
+      <value name="Category" position="0" length="1" inputtype="hidden"></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Sound disc">d</option>
          <option description="Cylinder">e</option>
@@ -1583,7 +1583,7 @@
       </value>
    </field>
    <field mattype="TEXT" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox">
+      <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Text">t</option>
       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
@@ -1596,7 +1596,7 @@
       </value>
    </field>
    <field mattype="VIDEORECORDING" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox">
+      <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Videorecording">v</option>
       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
@@ -1665,7 +1665,7 @@
       </value>
    </field>
    <field mattype="UNSPECIFIED" tag="007">
-      <value name="Category" position="0" length="1" inputtype="menubox">
+      <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Unspecified">z</option>
       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
