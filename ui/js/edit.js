@@ -1351,7 +1351,7 @@ function setupMarc21AuthorityLiveSearches(editorid) {
 	var pnameXmlReader = new Ext.data.XmlReader({
 			record: 'record',
 			deleteSubfields: true,
-			id: 'controlfield[tag=001]',
+			id: 'controlfield[tag=001]'
 			},
 			[
 				// field mapping
