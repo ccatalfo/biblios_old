@@ -1237,6 +1237,16 @@ biblios.app = function() {
 																		db: db,
 																		selectSql: 'select Savefiles.rowid, name, parentid, description, icon, allowDelete, allowAdd, allowDrag, allowDrop, allowRename, ddGroup from Savefiles ',
 																		whereClause: ' where parentid = ?',
+																		baseAttrs: {
+																			listeners: {
+																				click: function(node, e) {
+																					UI.currSaveFile = node.attributes.id;
+																					UI.currSaveFileName = node.text;
+																					biblios.app.displaySaveFile( node.attributes.id );
+																					biblios.app.displaySaveView();
+																				}
+																			}, // save folder listeners
+																		}, // inner save folder baseAttrs
 																		processData: function(data) {
 																			var json = '[';
 																			for( var i = 0; i < data.length; i++) {
