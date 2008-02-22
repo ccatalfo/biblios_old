@@ -46,7 +46,9 @@ paz = new pz2({
 					},
 					"termlist": "subject,author,date,publication-name",
 					"onterm": function(data) { 
-						Ext.getCmp('facetsTreePanel').root.reload();
+						if( data.activeClients == 0 ) {
+							Ext.getCmp('facetsTreePanel').root.reload();
+						}
 					},
                     "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
                     "pazpar2path": pazpar2url,

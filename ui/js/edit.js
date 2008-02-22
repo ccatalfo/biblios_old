@@ -1062,6 +1062,7 @@ function create_static_editor(ffed, vared, editorid) {
 
 function onFocus(elem) {
 	$(elem).addClass('focused');
+	Ext.get('helpIframe').reset();
 	// retrieve help for this tag
 	var tag = $(elem).parents('.tag').get(0).id.substr(0,3);
 	var pageurl = '';
@@ -1081,7 +1082,7 @@ function onFocus(elem) {
 		pageurl = firstletter+'xx/'+ tag +'.shtm';
 	}
 	var url = 'http://' + location.host + '/oclc/bibformats/en/' + pageurl;
-	Ext.get('helpIframe').load(url);	
+	Ext.get('helpIframe').load(url);
 }
 
 function onBlur(elem) {

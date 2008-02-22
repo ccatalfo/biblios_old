@@ -1245,7 +1245,7 @@ biblios.app = function() {
 																					biblios.app.displaySaveFile( node.attributes.id );
 																					biblios.app.displaySaveView();
 																				}
-																			}, // save folder listeners
+																			} // save folder listeners
 																		}, // inner save folder baseAttrs
 																		processData: function(data) {
 																			var json = '[';
