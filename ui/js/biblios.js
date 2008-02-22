@@ -1540,7 +1540,6 @@ biblios.app = function() {
 										collapsible: true,
 										collapsed: true,
 										width: 200,
-										maxSize: 200,
 										title: 'Help',
 										items: [
 											new Ext.ux.ManagedIframePanel({

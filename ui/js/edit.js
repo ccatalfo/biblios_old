@@ -1062,6 +1062,26 @@ function create_static_editor(ffed, vared, editorid) {
 
 function onFocus(elem) {
 	$(elem).addClass('focused');
+	// retrieve help for this tag
+	var tag = $(elem).parents('.tag').get(0).id.substr(0,3);
+	var pageurl = '';
+	if( tag == '000' || tag == '008' || tag == '006') {
+		pageurl = 'fixedfield/default.shtm';
+	}
+	else if( tag == '001' || tag == '003' || tag == '005' ) {
+		// no page for these
+		Ext.get('helpIframe').update('');
+		return;
+	}
+	else if ( tag == '007' ) {
+		pageurl = '00x/default.shtm';	
+	}
+	else {
+		var firstletter = tag.substr(0,1);
+		pageurl = firstletter+'xx/'+ tag +'.shtm';
+	}
+	var url = 'http://' + location.host + '/oclc/bibformats/en/' + pageurl;
+	Ext.get('helpIframe').load(url);	
 }
 
 function onBlur(elem) {
