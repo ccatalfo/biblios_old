@@ -386,10 +386,15 @@ function MarcEditor(ffeditor, vareditor) {
 		if( rectype == 'p' ) {
 			mattype = 'Mixed';
 		}
+		var cell = 0;
 			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 				var type = $(this).text();
 				$('field[@tag=008] value[@name='+type+']', marc21defs).each( function(j) {
+					if( cell == 9 ) {
+						html += '</tr><tr>';
+					}
 					html += createFixedFieldCell(tag008, $(this) , 0);
+					cell++;
 				});
 			});
 		html += '</tr>';
