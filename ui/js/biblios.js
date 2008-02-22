@@ -1541,8 +1541,12 @@ biblios.app = function() {
 										collapsed: true,
 										width: 200,
 										maxSize: 200,
-										title: 'Help'
-
+										title: 'Help',
+										items: [
+											new Ext.ux.ManagedIframePanel({
+												id: 'helpIframe',
+											}),
+										]
 									}  // biblio tab east
 								] // biblio tab items
 							}, // biblio tab config
