@@ -987,7 +987,7 @@
       </value>
    </field>
    <field mattype="PROJECTED" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden"></value>
+      <value name="Category" position="0" length="1" inputtype="hidden"><option>g</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Filmstrip roll">o</option>
          <option description="Slide Includes modern stereographs.">s</option>
@@ -1128,7 +1128,7 @@
       </value>
    </field>
    <field mattype="NONPROJECTED" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden"></value>
+      <value name="Category" position="0" length="1" inputtype="hidden"><option>k</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Collage">c</option>
          <option description="Drawing">d</option>
@@ -1188,7 +1188,7 @@
       </value>
    </field>
    <field mattype="MOTION" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden"></value>
+      <value name="Category" position="0" length="1" inputtype="hidden"><option>m</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Film cartridge">c</option>
          <option description="Film cassette">f</option>
@@ -1338,7 +1338,7 @@
       </value>
    </field>
    <field mattype="REMOTE" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden"></value>
+      <value name="Category" position="0" length="1" inputtype="hidden"><option>r</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Unspecified">u</option>
          <option description="No attempt to code">|</option>
@@ -1449,7 +1449,7 @@
       </value>
    </field>
    <field mattype="SOUND" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden"></value>
+      <value name="Category" position="0" length="1" inputtype="hidden"><option>s</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Sound disc">d</option>
          <option description="Cylinder">e</option>
