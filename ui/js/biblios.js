@@ -637,7 +637,7 @@ biblios.app = function() {
 															emptyMsg: 'No records to display',
 															items: [
 																{
-																	id: 'newrecordbutton',
+																	id: 'newrecordbutton-search',
 																	icon: libPath + 'ui/images/document-new.png',
 																	cls: 'x-btn-text-icon bmenu',
 																	text: 'New',
@@ -831,6 +831,62 @@ biblios.app = function() {
 														html: '<div id="marceditortwo"><div class="ffeditor"></div><div class="vareditor"></div></div>',
 														tbar: [
 															{
+																cls: 'x-btn-text-icon',
+																icon: libPath + 'ui/images/edit-copy.png',
+																id: 'editortasks-two',
+																editorid: 'editortwo',
+																text: 'Tools',
+																menu: {
+																	id: 'editortasksmenu',
+																	items: [
+																		{
+																			id: 'toggleFixedFieldGrid',
+																			editorid: 'editorone',
+																			text: 'Toggle Fixed Field Editor',
+																			enableToggle: true,
+																			pressed: true,
+																			listeners: {
+																				toggle: function(btn, pressed) {
+																					toggleFixedFieldDisplay(btn, pressed);
+																				}
+																			}
+																		},
+																		{
+																			id: 'addField',
+																			editorid: 'editorone',
+																			text: 'Add Field',
+																			handler: function(btn) {
+																				UI.editor.editorone.record.addField();
+																			}
+																		},
+																		{
+																			id: 'removeField',
+																			editorid: 'editorone',
+																			text: 'Remove Field',
+																			handler: function(btn) {
+																				removeTag('editorone');
+																			}
+																		},
+																		{
+																			id: 'addSubfield',
+																			editorid: 'editorone',
+																			text: 'Add Subfield',
+																			handler: function(btn) {
+																				addSubfield(UI.editor.editorone.lastFocusedEl);
+																			}
+																		},
+																		{	
+																			id: 'removeSubfield',
+																			editorid: 'editorone',
+																			text: 'Remove subfield',
+																			handler: function(btn) {
+																				removeSubfield();
+																			}
+																		}
+																	]
+																}
+															},
+															{
 																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/document-save.png',
 																text: 'Save',
@@ -976,7 +1032,7 @@ biblios.app = function() {
 																emptyMsg: 'No records to display',
 																items: [
 																{
-																	id: 'newrecordbutton',
+																	id: 'newrecordbutton-save',
 																	icon: libPath + 'ui/images/document-new.png',
 																	cls: 'x-btn-text-icon bmenu',
 																	text: 'New',
