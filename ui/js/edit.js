@@ -980,15 +980,19 @@ function toggleFixedFieldDisplay(btn, toggled) {
         // transfer values from fixed field editor into tags
         transferFF_EdToTags(editorid, ff_ed, var_ed);
 		// show leader and 008
-		$('#'+editorid).find("#000", UI.editor[editorid].doc).show();
-		$('#'+editorid).find("#008", UI.editor[editorid].doc).show();
+		$('#'+editorid).find("#000", UI.editor[editorid].vared).show();
+		$('#'+editorid).find("#008", UI.editor[editorid].vared).show();
+		$('#'+editorid).find("#006", UI.editor[editorid].vared).show();
+		$('#'+editorid).find("#007", UI.editor[editorid].vared).show();
 	}
 	else {
         updateFFEditor(editorid, ff_ed, var_ed);
 		$('#'+editorid).find(".ffeditor").show();
 		// hide leader and 008
-		$('#'+editorid).find("#000", UI.editor.doc).hide();
-		$('#'+editorid).find("#008", UI.editor.doc).hide();
+		$('#'+editorid).find("#000", UI.editor[editorid].vared).hide();
+		$('#'+editorid).find("#008", UI.editor[editorid].vared).hide();
+		$('#'+editorid).find("#006", UI.editor[editorid].vared).hide();
+		$('#'+editorid).find("#007", UI.editor[editorid].vared).hide();
 	}
 
 }

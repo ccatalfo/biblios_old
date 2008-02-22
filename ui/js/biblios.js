@@ -709,6 +709,18 @@ biblios.app = function() {
 																	id: 'editortasksmenu',
 																	items: [
 																		{
+																			id: 'toggleFixedFieldGrid',
+																			editorid: 'editorone',
+																			text: 'Toggle Fixed Field Editor',
+																			enableToggle: true,
+																			pressed: true,
+																			listeners: {
+																				toggle: function(btn, pressed) {
+																					toggleFixedFieldDisplay(btn, pressed);
+																				}
+																			}
+																		},
+																		{
 																			id: 'addField',
 																			editorid: 'editorone',
 																			text: 'Add Field',
