@@ -90,8 +90,8 @@ var SearchTarget = Ext.data.Record.create([
 	{name: 'dbname', type: 'string'},
 	{name: 'description', type: 'string'},
 	{name: 'userid', type: 'string'},
-	{name: 'password', type: 'string',},
-	{name: 'syntax', type: 'string',},
+	{name: 'password', type: 'string'},
+	{name: 'syntax', type: 'string'},
 	{name: 'enabled', type: 'bool'}
 ]);
 var SendTarget = Ext.data.Record.create([
@@ -100,9 +100,9 @@ var SendTarget = Ext.data.Record.create([
 	{name: 'location', type: 'string'},
 	{name: 'url', type: 'string'},
 	{name: 'user', type: 'string'},
-	{name: 'password', type: 'string',},
-	{name: 'pluginlocation', type: 'string',},
-	{name: 'plugininit', type: 'string',},
+	{name: 'password', type: 'string'},
+	{name: 'pluginlocation', type: 'string'},
+	{name: 'plugininit', type: 'string'},
 	{name: 'enabled', type: 'bool'}
 ]);
 var searches = new Array(); // Array of pazpar2 searches
@@ -163,7 +163,7 @@ function initUI() {
       },
 	  south: {
 	  	split: false,
-		titlebar: false,
+		titlebar: false
 	}
   });
 
@@ -255,10 +255,10 @@ function initUI() {
 		//icon: 'ui/images/fixed-field-show-icon.png',
 		text: 'FF Editor',
 		enableToggle: true,
-		pressed: true,
+		pressed: true
 	});
 	ffbutton.on('toggle', function(btn, pressed) {
-		toggleFixedFieldDisplay(btn, pressed)
+		toggleFixedFieldDisplay(btn, pressed);
 	});
 	rectb1.add(ffbutton);
 	var rectb2 = new Ext.Toolbar('tb2');
