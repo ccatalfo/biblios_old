@@ -1147,7 +1147,7 @@ biblios.app = function() {
 																		json += '"id":"'+data[i][0]+'",';
 																		json += '"hostname":"'+data[i][2]+'",';
 																		json += '"port":"'+data[i][3]+'",';
-																		json += '"dbname":"'+data[i][4]+'",';
+																		json += '"dbname":"'+data[i][4]+'"';
 																		json += '}';
 																	}
 																	json += ']';
