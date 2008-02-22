@@ -59,10 +59,6 @@ function MarcEditor(ffeditor, vareditor) {
 	var fields = new Array();
 	var marcrecord = null;
 
-	// inititalize
-	createFieldList();
-	createFields();
-
 	// private methods
 	function createFieldList() {
 		$('.tag', vared).each( function(i) {
@@ -493,11 +489,12 @@ function MarcEditor(ffeditor, vareditor) {
 		html += '</table>';
 		html += '</div>'; // close fixedfields_editor
 		html += '</div>'; // close ff_editor
-		var leader = $('leader', marcXmlDoc).text();
-		html += '<div class="leader" class="controlfield" id="leader"><input type="text" class="tagnumber" value="000"><input type="text" class="indicator" value="#"><input type="text" class="indicator" value="#"><input class="controlfield" type="text" value="'+leader+'"></div>';
-
 		html += '<div class="vareditor">';
 		html += '<div id="varfields_editor">';
+		var leader = $('leader', marcXmlDoc).text();
+		html += '<div class="tag controlfield 000" id="000"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="000"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="#"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="#"><input class="controlfield" type="text" size="24" maxlength="24" value="'+leader+'"></div>';
+		fields.push( new Field('000', '', '', [{code: '', value: leader}]) );
+
 		$('controlfield', marcXmlDoc).each( function(i) {
 			val = $(this).text();
 			tag = $(this).attr('tag');

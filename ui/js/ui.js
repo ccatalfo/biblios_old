@@ -1696,8 +1696,8 @@ function openRecord(xml, editorelem) {
 
 	// show fixed field editor, hide ldr and 008 divs
 	$(ffed).show();
-	// hide leader and 008
-	$('#'+editorelem).find("#000, #008").css('display', 'none');
+	// hide fixed field controlfields
+	$('#'+editorelem).find("#000, #008, #006, #007").css('display', 'none');
 	UI.editor.lastFocusedEl = $('#'+editorelem).find('#000').get(0);
 	UI.editor[editorelem].lastFocusedEl = $('#'+editorelem).find('#000').get(0);
 }
