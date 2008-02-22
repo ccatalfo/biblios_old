@@ -115,7 +115,7 @@ GearsORMShift.rules = [
 			DB.Savefiles.remove('name="Drafts"');
 			return true;
 		}
-	},
+	}
 ];
 
 function createTestTargets() {
@@ -255,7 +255,7 @@ function init_gears() {
 					template: new GearsORM.Fields.String({defaultValue: 'null'}),
 					marcformat: new GearsORM.Fields.String({defaultValue: 'null'}),
 					Savefiles_id: new GearsORM.Fields.Integer(),
-					SearchTargets_id: new GearsORM.Fields.Integer(),
+					SearchTargets_id: new GearsORM.Fields.Integer()
 				}
 			});
 			DB.SendTargets = new GearsORM.Model({

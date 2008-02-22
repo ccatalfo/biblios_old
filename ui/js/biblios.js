@@ -355,7 +355,7 @@ biblios.app = function() {
     folderRoot = new Ext.tree.TreeNode({
         allowDrag:false,
         allowDrop:false,
-        id:'folderRoot',
+        id:'folderRoot'
     });
 
     var savefilesRoot = createSaveFileFolders('null'); 
@@ -1002,7 +1002,7 @@ biblios.app = function() {
 																{header: "DateOfPub", width: 80, dataIndex: 'DateOfPub', sortable: true},
 																{header: "Status", width: 100, dataIndex: 'Status', sortable: true},
 																{header: "Date Added", width: 120, dataIndex: 'Date Added', sortable: true},
-																{header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true},
+																{header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true}
 															]),
 															listeners: {
 																rowdblclick: function(grid, rowIndex, e) {
@@ -1074,7 +1074,7 @@ biblios.app = function() {
 														collapsible: true,
 														height: 150,
 														autoScroll: true,
-														html: '<div id="select"></div><div id="saveprevrecord"></div>',
+														html: '<div id="select"></div><div id="saveprevrecord"></div>'
 													} // savepanel south
 												] // savepanel items
 											} // savefilegrid region 
@@ -1154,7 +1154,7 @@ biblios.app = function() {
 																	return json;
 																}
 															})
-														}),
+														})
 													}), // resources treepanel with treeeditor applied
 													new Ext.tree.TreePanel({
 														id: 'facetsTreePanel',
@@ -1164,7 +1164,7 @@ biblios.app = function() {
 														applyLoader: false,
 														loader: new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+paz.sessionID+'&command=termlist&name=author,subject,date,publication-name'}),
 														root: new Ext.tree.AsyncTreeNode({
-															text: 'Facets',
+															text: 'Facets'
 														}),
 														listeners: {
 															checkchange: function(node, checked) {
@@ -1261,7 +1261,7 @@ biblios.app = function() {
 																			}
 																			json += ']';
 																			return json;
-																		}, // processData for savefiles 
+																		} // processData for savefiles 
 																	}) // gears loader for subsequent savefile nodes
 																	
 																} // baseAttrs for savefile children nodes
@@ -1415,13 +1415,13 @@ biblios.app = function() {
 																	}, // rename node handler
 																	cls: 'rename',
 																	text: 'Rename folder' 
-																	},
+																	}
 																	]
 																});
 																this.getSelectionModel().select(node); // displaySaveView selects root save so select the node user clicked
 																Menu.showAt(e.getXY());
 															} // save folder tree context menu
-														},
+														}
 													}), // resources treepanel with treeeditor applied
 													new Ext.tree.TreePanel({
 														id: 'editorsTreePanel',
@@ -1543,8 +1543,8 @@ biblios.app = function() {
 										title: 'Help',
 										items: [
 											new Ext.ux.ManagedIframePanel({
-												id: 'helpIframe',
-											}),
+												id: 'helpIframe'
+											})
 										]
 									}  // biblio tab east
 								] // biblio tab items
