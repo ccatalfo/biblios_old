@@ -5,7 +5,7 @@ SRCS=ui/js/*.js
 ALLSRC=$(SRCS) index.html
 
 all: $(SRCS)
-	$(CAT) ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js > ui/js/biblios_all.js
+	$(CAT) ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js ui/js/biblios.js > ui/js/biblios_all.js
 	$(JSMIN) <ui/js/biblios_all.js >ui/js/biblios_packed.js
 
 dist: $(SRCS)
@@ -23,7 +23,8 @@ tags: $(SRCS)
 	$(CTAGS) ui/js/biblios.js ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js
 
 debug: 
-	sed -f sed_generate_index_debug < index.html > index-debug.html
+	#sed -f sed_generate_index_debug < index.html > index-debug.html
+	cp index.html index-debug.html
 
 testRecords:
 	xalan -in test/testRecords/006.xml -xsl ui/xsl/fixedfields_editor.xsl -out test/generatedFiles/ff_006.html -param debug 1
