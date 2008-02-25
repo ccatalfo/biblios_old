@@ -104,10 +104,15 @@ function getSaveFileNameFromId(savefileid) {
 
 function updateSaveMenu() {
 	// remove old Save menu items
-	Ext.menu.MenuMgr.get('saveMenu').removeAll();
-	var savefiles = getSaveFileMenuItems();
+	Ext.menu.MenuMgr.get('editorOneSaveMenu').removeAll();
+	Ext.menu.MenuMgr.get('editorTwoSaveMenu').removeAll();
+	var savefiles = getSaveFileMenuItems('editorone');
 	for( sf in savefiles ) {
-		Ext.menu.MenuMgr.get('saveMenu').add( UI.save.savefile[sf] );
+		Ext.menu.MenuMgr.get('editorOneSaveMenu').add( savefiles[sf] );
+	}
+	var savefiles = getSaveFileMenuItems('editortwo');
+	for( sf in savefiles) {
+		Ext.menu.MenuMgr.get('editorTwoSaveMenu').add( savefiles[sf] );
 	}
 }
 

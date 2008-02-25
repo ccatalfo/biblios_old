@@ -1952,17 +1952,16 @@ biblios.app = function() {
 		treeEditor = new Ext.tree.TreeEditor( Ext.getCmp('FoldersTreePanel'), {
 			cancelOnEsc: true,
 			completeOnEnter: true,
-			id: 'saveTreeEditor',
-			listeners: {
-				complete: function(editor, value, startValue) {
-					var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelected();
-					var folder = DB.SaveFiles.select('Savefiles.rowid=?', [n.attributes.id]).getOne();
+			id: 'saveTreeEditor'
+		});
+		treeEditor.on('complete', function(editor, value, startValue) {
+					var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
+					var folder = DB.Savefiles.select('Savefiles.rowid=?', [n.attributes.id]).getOne();
 					folder.name = value;
 					folder.save();
-					//updateSaveMenu();
-				}
-			}
+					updateSaveMenu();
 		});
+
 		treeEditor.render();
 		alert('Application successfully initialized');
         }
