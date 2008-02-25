@@ -37,7 +37,7 @@ testRecords:
 	cat test/generatedFiles/*.html >test/generatedFiles/ff_all.html
 
 koha:
-	perl integration/updateForEmbedding.pl index-debug.html index-koha.html "/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/" "/cgi-bin/koha/plugins/biblios/" "$(KOHASTAFFPORT)" "<!-- TMPL_INCLUDE NAME=\"doc-head-open.inc\" --><!-- TMPL_INCLUDE NAME=\"doc-head-close-biblios.inc\" -->" "<!-- TMPL_INCLUDE NAME=\"header.inc\" -->"
+	perl integration/updateForEmbedding.pl index-debug.html index-koha.html "/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/" "/cgi-bin/koha/plugins/biblios/" "$(KOHASTAFFPORT)" "<!-- TMPL_INCLUDE NAME=\"doc-head-open.inc\" --><!-- TMPL_INCLUDE NAME=\"doc-head-close.inc\" -->" "<!-- TMPL_INCLUDE NAME=\"header.inc\" -->" integration/koha/fixes.js
 
 koha-install:
 	cp index-koha.html $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/modules/cataloguing/biblios.tmpl
