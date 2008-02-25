@@ -153,6 +153,7 @@ biblios.app = function() {
 
 	displaySaveView: function displaySaveView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(2);
+		openState = 'savegrid';
 	}
 	
 	showStatusMsg : function showStatusMsg(msg) {
