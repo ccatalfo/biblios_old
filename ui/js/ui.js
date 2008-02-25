@@ -136,6 +136,7 @@ function openRecord(xml, editorelem) {
 	var vared = $('#'+editorelem).find(".vareditor");
 	$(vared).empty();
 
+	UI.editor.progress = Ext.MessageBox.progress('Loading record', '');
 	UI.editor[editorelem].record = new MarcEditor();
 	var xmldoc;
 	if( Ext.isIE ) {
@@ -154,7 +155,9 @@ function openRecord(xml, editorelem) {
 	UI.editor[editorelem].ffed = ffed;
 	UI.editor[editorelem].vared = vared;
 
+	UI.editor.progress.updateProgress(.9, 'Setting up editor hot keys');
 	setupEditorHotkeys(editorelem);
+	UI.editor.progress.updateProgress(.9, 'Setting up authority control');
 	setupMarc21AuthorityLiveSearches(editorelem);
 
 	// show fixed field editor, hide ldr and 008 divs
@@ -163,6 +166,8 @@ function openRecord(xml, editorelem) {
 	$('#'+editorelem).find("#000, #008, #006, #007").css('display', 'none');
 	UI.editor.lastFocusedEl = $('#'+editorelem).find('#000').get(0);
 	UI.editor[editorelem].lastFocusedEl = $('#'+editorelem).find('#000').get(0);
+	UI.editor.progress.updateProgress(1, 'MarcEditor loaded');
+	UI.editor.progress.hide();
 }
 
 function makeSubfieldsDraggable() {
