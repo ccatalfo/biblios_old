@@ -43,8 +43,8 @@ while(<IN>) {
 		print "Updating <head> for extra includes\n";
 		$_ =~ s/$1/<head>$headincludes/;
 	}
-	if( $_ =~ /(<div id='header'>)/ ) {
-		print "Updating <div id='header'> for header html\n";
+	if( $_ =~ /(<div id='branding-area'>)/ ) {
+		print "Updating <div id='branding-area'> for header html\n";
 		my $newheader = $1 . $headerhtml;
 		$_ =~ s/$1/$newheader/;
 	}
