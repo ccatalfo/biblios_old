@@ -15,6 +15,7 @@ biblios.app = function() {
  
     // private variables
 	var debug = 1;
+	init_gears();
 	var viewport; 
 	var viewState = '';
 	var paz = initializePazPar2(pazpar2url, {
