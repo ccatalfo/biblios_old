@@ -9,6 +9,7 @@ UI.savepreview = {};
 UI.savepreview.id = '';
 UI.savepreview.xml = '';
 UI.editor = {};
+UI.editor.lastElemHelpShown = '';
 UI.editor.id = '';
 UI.editor.lastFocusedEl = '';
 // marc editor one metadata

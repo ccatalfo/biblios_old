@@ -1066,6 +1066,9 @@ function onFocus(elem) {
 }
 
 function showTagHelp(elem) {
+	if( UI.editor.lastElemHelpShown == elem ) {
+		return;
+	}
 	Ext.get('helpIframe').update('');
 	// retrieve help for this tag
 	var tag = $(elem).parents('.tag').get(0).id.substr(0,3);
@@ -1086,8 +1089,16 @@ function showTagHelp(elem) {
 		pageurl = firstletter+'xx/'+ tag +'.shtm';
 	}
 	var url = 'http://' + location.host + '/oclc/bibformats/en/' + pageurl;
-	Ext.get('helpIframe').load(url);
-
+	Ext.get('helpIframe').load({
+		url: url,
+		params: {}, // no params
+		scripts: false,
+		callback: function processOCLC(element, success, response, options) {
+			alert(response);
+		},
+		nocache: false
+	});
+	UI.editor.lastElemHelpShown = elem;
 }
 
 function onBlur(elem) {
