@@ -241,6 +241,10 @@ function MarcEditor(ffeditor, vareditor) {
 			  newtag += '<input size="3" onblur="onBlur(this)" onfocus="onFocus(this)" class="tagnumber" id="d'+tagnumber+'" value="'+tagnumber+'" />';
 			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+'"/>';
 			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+'"/>';
+			if( tagnumber < '010' ) {
+				newtag += '<input type="text" onblue="onBlur(this)" onfocus="onFocus(this)" class="controlfield '+tagnumber+'" value="">';
+			} // insert controlfield
+			else {
 			  newtag += '<span class="subfields" id="dsubfields'+newId+'">';
 			  for( var i = 0; i< sf.length; i++) {
 				  newtag += '<span class="subfield" id="dsubfields'+tagnumber+newId+'">';
@@ -248,6 +252,7 @@ function MarcEditor(ffeditor, vareditor) {
 				  var textlength = sf[i]['text'].length;
 				  newtag += '<input id="dsubfields'+newId+i+'text" onfocus="onFocus(this)" onblur="onBlur(this)" class="subfield-text" size="'+textlength+'" value="'+sf[i]['text']+'">';
 				}
+			} // insert datafield
 			// insert out new tag after the tag we just found
 			$(tagToInsertAfter, vared).after(newtag);
 			update();
