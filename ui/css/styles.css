@@ -92,3 +92,8 @@
 	font-size: large;
 	font-weight; bold;
 }
+
+.helpText {
+	font-size: medium;
+	padding-bottom: 20px;
+}

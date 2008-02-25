@@ -458,6 +458,7 @@ biblios.app = function() {
 								listeners: {
 									activate: function(p) {
 										biblios.app.viewport.doLayout();
+										displayHelpMsg(UI.messages.help.en.welcome);
 									}
 								}, //biblio tab listeners
 								items: [
@@ -1555,7 +1556,7 @@ biblios.app = function() {
 										region: 'east',
 										split: true,
 										collapsible: true,
-										collapsed: true,
+										collapsed: false,
 										width: 200,
 										autoScroll: true,
 										title: 'Help',

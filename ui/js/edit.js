@@ -825,7 +825,6 @@ Returns:
 */
 function displayHelpMsg(msg) {
 	Ext.getCmp('helpIframe').el.update(msg);
-
 }
 
 /* 

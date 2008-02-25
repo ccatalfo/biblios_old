@@ -54,10 +54,10 @@ UI.optionsLayout = {};
 UI.messages = {
 	help: {
 		en: {
-			'searchview': '<p class="helpTitle">Searching</p><p>Click on a row in the grid to display a preview.</p>',
-			'saveview': '<p class="helpTitle">Save Folders</p><p>Click on a row in the grid to display a preview.</p>',
-			'recordview': '<p class="helpTitle">Record Editing</p><p>Save a record to local save files with Save button.</p>'
-
+			'welcome': '<p class="helpTitle">Welcome to Biblios!</p><p class="helpText">version 0.9 beta</p><p class="helpText">Supports searching Z39.50 servers (Search Targets) defined under Options->Search Targets.</p><p class="helpText">Edit monograph records using integrated marc editors (see Editors in sidepanel at left).</p>',
+			'searchview': '<p class="helpTitle">Searching</p><br/><p class="helpText">Click on a row in the grid to display a preview.</p><p class="helpText">Create a new record with New button.</p><p class="helpText">Drag 1 or more records to a save folder to save records to that folder.</p><p class="helpText">Select Export to export selected records to MARC21 or MARCXML formats.</p><p class="helpText">Once you have performed a search, click on the Facets folder at left to view search facets.  Checking a facet will re-run the search and limit the results to those matching that facet.</p>',
+			'saveview': '<p class="helpTitle">Save Folders</p><br/><p class="helpText">Click on a row in the grid to display a preview.</p><p class="helpText">Create a new record with New button.</p><p class="helpText">Drag 1 or more records to a save folder to save records to that folder.</p><p class="helpText">Select Export to export selected records to MARC21 or MARCXML formats.</p><p class="helpText">Right-click on a save folder item to add, remove, or rename folders.</p>',
+			'recordview': '<p class="helpTitle">Record Editing</p><br/><p class="helpText">Save a record to local save files with Save button.</p><p class="helpText">Save a record to a remote ILT with Send button.</p><p class="helpText">Add or remove fields or subfields with Tools button.</p><p class="helpText">Export a record to MARC21 or MARCXML with Export button.</p><p class="helpText">Editing an authority controlled field (in blue with underline) will perform a query of the authority server defined for this instance of Biblios for valid headings to enter.</p>'
 		}
 
 	},
