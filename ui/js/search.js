@@ -1,4 +1,5 @@
 function doSearch(form) {
+	showStatusMsg('Searching...');
 	if( $('#searchloc').val() == 'All' ) {
 		doPazPar2Search();
 		//doLocalFolderSearch();

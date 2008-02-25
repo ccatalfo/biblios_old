@@ -628,26 +628,13 @@ function doChangeStatus(recstatus) {
     None.
 */
 function showStatusMsg(msg) {
-	$('#status').css('display', 'block');
-	$('#status').empty();
-	if( $("#status").length == 0 ) {
-		$("#folder-list").append("<div id='status'></div>");
-	}
-	if( $("#status").text() == msg) {
-		// don't show this same status message twice
-		return false;
-	}
-	else {
-		$("#status").append(msg);
-		//$("#status").SlideInLeft(1000);
-		//$("#status").SlideOutLeft(2000);
-	}
+	Ext.get('status-msg').update(msg);
+	Ext.get('status-msg').slideIn();
 }
 
 function clearStatusMsg() {
-	/*if( $("#status").length > 0 ) {
-		$("#status").SlideOutDown(2000);
-	}*/
+	Ext.get('status-msg').slideOut();
+	Ext.get('status-msg').update('');
 }
 
 /* Function: filterSearchResultsByServer

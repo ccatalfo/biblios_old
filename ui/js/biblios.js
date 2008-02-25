@@ -126,15 +126,6 @@ biblios.app = function() {
 		showStatusMsg("Record(s) saved to "+savefilename);
 		return true;
 	}
-	getSaveFileNames : function getSaveFileNames() {
-	var savefilenames = new Array();
-	DB.Savefiles.select().each( function(savefile) {
-		var o = {id: savefile.rowid, name: savefile.name};
-		savefilenames.push( o );
-		savefiles[ savefile.rowid ] = savefile.name;
-	});
-	return savefilenames;
-}
 	displaySearchView : function displaySearchView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(0);
 		openState = 'searchgrid';
@@ -161,234 +152,9 @@ biblios.app = function() {
 	}
 	
 	showStatusMsg : function showStatusMsg(msg) {
-	$('#status').css('display', 'block');
-	$('#status').empty();
-	if( $("#status").length == 0 ) {
-		$("#folder-list").append("<div id='status'></div>");
-	}
-	if( $("#status").text() == msg) {
-		// don't show this same status message twice
-		return false;
-	}
-	else {
-		$("#status").append(msg);
-		//$("#status").SlideInLeft(1000);
-		//$("#status").SlideOutLeft(2000);
-	}
-}
-	updateSearchTargetFolders: function updateSearchTargetFolders() {
-	var searchRoot = Ext.ComponentMgr.get('searchRoot');
 
-	// remove old nodes
-	for( var i = searchRoot.childNodes.length-1; i >= 0; i--) {
-		searchRoot.removeChild( searchRoot.childNodes[i] );
 	}
-	// re-create targets and add them
-    var searchTreeChildren = new Array();
-    var targets = getTargets();
-    for( var i = 0; i < targets.length; i++) {
-        var data = targets[i];
-        var targetnode = new Ext.tree.TreeNode(
-          {
-            text: data.name, 
-            servername: data.name,
-            id: data.rowid, 
-			hostname: data.hostname,
-			port: data.port,
-			dbname: data.dbname,
-            checked: data.enabled?true:false,
-            qtip: data.description, 
-            leaf: false, 
-            allowDelete:false, 
-            allowAdd: false,
-            allowDrag: false, 
-            allowDrop:true, 
-            ddGroup:'RecordDrop', 
-            icon: libPath + 'ui/images/network-server.png'
-          });
-        var serverleaf = new Ext.tree.TreeNode(
-          {
-            text: '<span class="database-details">Server:</span> ' + data.hostname,
-            leaf: true
-          });
-        var portleaf = new Ext.tree.TreeNode( 
-          {
-            text: '<span class="database-details">Port:</span> ' + data.port,
-            leaf: true
-          });
-        var dbnameleaf = new Ext.tree.TreeNode(
-          { 
-            text: '<span class="database-details">Database:</span> ' + data.dbname,
-            leaf: true
-          });
-        var userleaf = new Ext.tree.TreeNode (
-          {
-            text: '<span class="database-details">User:</span> ' + data.userid,
-            leaf: true
-          });
-        targetnode.on('checkchange', function(node, checked) {
-          filterSearchResultsByServer();
-          //setEnableTargets();
-        });
-        targetnode.appendChild([serverleaf, portleaf, dbnameleaf, userleaf]);
-        searchTreeChildren.push(targetnode);
-    }
-	if( searchTreeChildren.length > 0 ) {
-		searchRoot.appendChild(searchTreeChildren);
-	}
-	searchRoot.on('click', function(n) {
-		displaySearchView();
-        //folderTree.getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
-	});
-	// expand searchRoot if it's been rendered
-	if( searchRoot.rendered == true ) {
-		searchRoot.expand();
-	}
-}
-	getNodeBySaveFileId : function getNodeBySaveFileId(savefileid) {
-    var wanted_node;
-    // visit each node under savefiles root and find one w/ savefileid
-    saveFilesRoot.cascade( function(n){
-    if(n.attributes.savefileid == savefileid ) {
-        wanted_node = n;
-    }
-    });
-    return wanted_node;
-}
-	createFacetFolder : function createFacetFolder() {
-	facetsRoot = new Ext.tree.TreeNode({
-		text: 'Facets',
-		leaf: false,
-		disabled: true,
-		id: 'facetsRoot'
-	});
-	Ext.ComponentMgr.register(facetsRoot);
-	var subjectRoot =  new Ext.tree.TreeNode({
-		name: 'subjectRoot',
-		text: "<b>Subjects</b>",
-		leaf: false
-	});
-	var authorRoot =  new Ext.tree.TreeNode({
-		name: 'authorRoot',
-		text: "<b>Authors</b>",
-		leaf: false
-	});
-	var dateRoot =  new Ext.tree.TreeNode({
-		name: 'dateRoot',
-		text: "<b>Dates</b>",
-		leaf: false
-	});
-	var pubRoot =  new Ext.tree.TreeNode({
-		name: 'publication-nameRoot',
-		text: "<b>Publisher</b>",
-		leaf: false
-	});
-	facetsRoot.appendChild(subjectRoot, authorRoot, dateRoot, pubRoot);
-	facetsRoot.eachChild(function(n) {
-		n.on('afterchildrenrendered', hideDisabledFacets);
-	});
-	return facetsRoot;
-}
-	createSaveFileFolders : function createSaveFileFolders(parentid) {
-	if( ! Ext.ComponentMgr.get('saveFileRoot') ) {
-		saveFilesRoot = new Ext.tree.TreeNode({
-			allowDrag:false,
-			allowDrop:false,
-			allowDelete: false,
-			allowAdd: true,
-			allowRename: false,
-			id:'saveFileRoot',
-			parentid: 'null',
-			savefileid: 'null',
-			leaf:false,
-			text: 'Folders',
-			icon: libPath + 'ui/images/folder.png',
-			cls: 'rootFolders'
-		});
-		Ext.ComponentMgr.register(saveFilesRoot);
-		saveFilesRoot.on('click', function() {
-			displaySaveView();
-		});
-	}
-    // get all savefiles at the root level, then for each append its children
-    var current_root;
-	var savefiles = new Array();
-    if( parentid == 'null' ) {
-		savefiles = DB.Savefiles.select('parentid is null');
-        current_root = saveFilesRoot;
-    }
-    else {
-		savefiles = DB.Savefiles.select('parentid = ?', [parentid]);
-        current_root = getNodeBySaveFileId(parentid);
-    }
-	savefiles.each( function(savefile) {
-        // create a treenode for this save file
-        var newnode = new Ext.tree.TreeNode({
-            id: savefile.name,
-            text: savefile.name, 
-            savefileid: savefile.rowid, 
-            parentid: savefile.parentid,
-            qtip: savefile.description, 
-            icon: savefile.icon,
-            leaf: false, 
-            allowDelete: savefile.allowDelete, 
-            allowAdd: savefile.allowAdd,
-            allowDrag: savefile.allowDrag, 
-            allowDrop: savefile.allowDrop, 
-            ddGroup: savefile.ddGroup
-        }); 
-        current_root.appendChild(newnode);
-        newnode.on('click', function(n) {
-			showStatusMsg('Displaying ' + n.attributes.id);
-			currSaveFile = n.attributes.savefileid;
-			currSaveFileName = n.text;
-            displaySaveView();
-            Ext.getCmp('resourcesTree').getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
-            displaySaveFile(n.attributes.savefileid); 
-			//clearStatusMsg();
-        });
-        // setup dropnode for Trash
-        if( name == 'Trash' ) {
 
-        }
-        createSaveFileFolders(savefile.rowid);
-    }); 
-	return saveFilesRoot;
-}
-
-	createFolderList: function createFolderList() {
-    folderRoot = new Ext.tree.TreeNode({
-        allowDrag:false,
-        allowDrop:false,
-        id:'folderRoot'
-    });
-
-    var savefilesRoot = createSaveFileFolders('null'); 
-	var searchRoot = createTargetFolders();
-	var facetsRoot = createFacetFolder();
-
-	folderRoot.appendChild([searchRoot, facetsRoot, saveFilesRoot]);
-    //saveFilesRoot.expand();
-    //searchRoot.expand();
-
-	return folderRoot;
-	} 
-	createTargetFolders: function createTargetFolders() {
-	// remove old searchRoot if it exists to clear out any old entries
-	var folderRoot = Ext.ComponentMgr.get('folderRoot');
-	var searchRoot = new Ext.tree.TreeNode({
-		allowDrag:false,
-		allowDrop:false,
-		id:'searchRoot',
-		leaf: false,
-		text: 'Resources',
-		icon: libPath + 'ui/images/folder-remote.png'
-	});
-	Ext.ComponentMgr.register(searchRoot);
-
-	updateSearchTargetFolders();
-	return searchRoot;
-}
     // public space
     return {
         // public properties, e.g. strings to translate
@@ -398,8 +164,6 @@ biblios.app = function() {
 		db : {
 			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets',
 			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets'
-
-			
 		},
 		
         // public methods
@@ -437,7 +201,8 @@ biblios.app = function() {
 							},
 							{
 								region: 'east',
-								html: '<div id="status"></div>'
+								width: 60,
+								html: '<div id="status" ><p id="status-msg"></p></div>'
 							}
 						] // north region items
 					}, // viewport north region

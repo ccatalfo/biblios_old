@@ -35,9 +35,6 @@
   float: right;
 }
 
-#status-box {
-  bottom: 0;
-}
 
 #varfields_editor {
   background-color: #eeeeee,
@@ -64,12 +61,8 @@
   cursor: hand;
 }
 
-#status {
-	position: static;	
-  margin-top: 200px;
-  font-size: medium;
-  background-color: #33FF66;
-  display: block;
+#status-msg {
+	background-color: red;
 }
 
 .yui-toolbar-subcont{
