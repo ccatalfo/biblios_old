@@ -50,6 +50,30 @@ UI.lastSavePreview = '';
 UI.keymaps = {};
 // layouts
 UI.optionsLayout = {};
+// msgs
+UI.messages = {
+	help: {
+		en: {
+			'searchview': '<p class="helpTitle">Searching</p><p>Click on a row in the grid to display a preview.</p>',
+			'saveview': '<p class="helpTitle">Save Folders</p><p>Click on a row in the grid to display a preview.</p>',
+			'recordview': '<p class="helpTitle">Record Editing</p><p>Save a record to local save files with Save button.</p>'
+
+		}
+
+	},
+	menu: {
+		en: {
+
+		}
+
+	},
+	error: {
+		en: {
+
+		}
+
+	}
+};
 
 function createDatabaseOptions() {
 	var dbform = new Ext.form.Form();

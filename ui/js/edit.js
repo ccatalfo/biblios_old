@@ -824,6 +824,7 @@ Returns:
 
 */
 function displayHelpMsg(msg) {
+	Ext.getCmp('helpIframe').el.update(msg);
 
 }
 
@@ -1062,7 +1063,7 @@ function create_static_editor(ffed, vared, editorid) {
 
 function onFocus(elem) {
 	$(elem).addClass('focused');
-	showTagHelp(elem);
+	//showTagHelp(elem);
 }
 
 function showTagHelp(elem) {

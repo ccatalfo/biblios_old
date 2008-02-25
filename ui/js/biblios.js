@@ -137,23 +137,26 @@ biblios.app = function() {
 	displaySearchView : function displaySearchView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(0);
 		openState = 'searchgrid';
+		displayHelpMsg(UI.messages.help.en.searchview);
 	}
 
 	displaySaveFile : function displaySaveFile(id) {
 		Ext.getCmp('savegrid').store.load({db: db, selectSql: savefileSelectSql + ' where Savefiles_id = '+id});
 		biblios.app.displaySaveView();
 		openState = 'savegrid';
+		displayHelpMsg(UI.messages.help.en.saveview);
 	}
 
 	displayRecordView : function displayRecordView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(1);
 		openState = 'editorPanel';
-
+		displayHelpMsg(UI.messages.help.en.recordview);
 	}
 
 	displaySaveView: function displaySaveView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(2);
 		openState = 'savegrid';
+		displayHelpMsg(UI.messages.help.en.saveview);
 	}
 	
 	showStatusMsg : function showStatusMsg(msg) {

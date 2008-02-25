@@ -87,3 +87,8 @@
 #save-preview-panel th {
 	background-color: transparent;
 }
+
+.helpTitle {
+	font-size: large;
+	font-weight; bold;
+}
