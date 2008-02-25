@@ -156,7 +156,6 @@ function openRecord(xml, editorelem) {
 
 	setupEditorHotkeys(editorelem);
 	setupMarc21AuthorityLiveSearches(editorelem);
-	setupReservedTags(UI.editor[editorelem].location, editorelem);
 
 	// show fixed field editor, hide ldr and 008 divs
 	$(ffed).show();
