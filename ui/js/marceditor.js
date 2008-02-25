@@ -167,7 +167,7 @@ function MarcEditor(ffeditor, vareditor) {
 	}
 
 	this._setValue = function(tag, subfield, value) {
-		$('[@id^='+tag+']').children('.subfields').children('[@id*='+subfield+']').find('.subfield-text').val(value);
+		$('[@id^='+tag+'] .'+subfield+' .subfield-text', vared).val(value);
 		update();
 	}
 
@@ -497,48 +497,48 @@ function MarcEditor(ffeditor, vareditor) {
 
 		$('controlfield', marcXmlDoc).each( function(i) {
 			val = $(this).text();
-			tag = $(this).attr('tag');
-			html += '<div id="'+tag+'" class="tag controlfield ';
-			html += tag
+			tagnumber = $(this).attr('tag');
+			html += '<div id="'+tagnumber+'" class="tag controlfield ';
+			html += tagnumber;
 			html += '"';
 			html += '>';
-			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tag+'">';
+			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tagnumber+'">';
 			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+'#'+'">';
 			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+'#'+'">';
 			html += '<input onblur="onBlur(this)" onfocus="onFocus(this)" ';
 			html += 'type="text" '; 
 			html += 'value="'+val+'" ';
 			html += 'class="controlfield ';
-			html += tag;
+			html += tagnumber;
 			html += '"';
 			html += '>';
 			html += '</div>';
-			fields.push( new Field(tag, '', '', [{code: '', value: val}]) );
+			fields.push( new Field(tagnumber, '', '', [{code: '', value: val}]) );
 		});	
 
 		$('datafield', marcXmlDoc).each(function(i) {
-			var val = $(this).text();
-			var tag = $(this).attr('tag');
+			var value = $(this).text();
+			var tagnumber = $(this).attr('tag');
 			var ind1 = $(this).attr('ind1') || ' ';
 			var ind2 = $(this).attr('ind2') || ' ';
-			var id = tag+'-'+i;
+			var id = tagnumber+'-'+i;
 			html += '<div class=" tag datafield ';
-			html += tag;
+			html += tagnumber;
 			html += '" ';
 			html += 'id="'+id+'"';
 			html += '>';
-			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tag+'">';
+			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tagnumber+'">';
 			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+ind1+'">';
 			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+ind2+'">';
 			
-			var id = tag+'-'+i;
+			var id = tagnumber+'-'+i;
 			html += '<span class="subfields" id="'+id+'">';
 			var subfields = new Array();
 			$('subfield', this).each(function(j) {
 				var sfval = $(this).text();
 				var sfcode = $(this).attr('code');
 				subfields.push( new Subfield(sfcode, sfval) );
-				var sfid = 'dsubfields'+tag+'-'+i;
+				var sfid = 'dsubfields'+tagnumber+sfcode+'-'+i;
 				html += '<span class="subfield '+sfcode+'" id="'+sfid+'">';
 				html += '<input maxlength="2" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="subfield-delimiter" value="&#8225;'+sfcode+' ">';
 				html += '<input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="subfield-text" value="'+sfval+' ">';
@@ -548,7 +548,7 @@ function MarcEditor(ffeditor, vareditor) {
 				// close subfields span
 			html + '</span>';
 			html += '</div>'; // close datafield div	
-			fields.push( new Field(tag, ind1, ind2, subfields) );
+			fields.push( new Field(tagnumber, ind1, ind2, subfields) );
 		});
 		html += '</div>'; // end vareditor div
 		html += '</div>'; // varfields_editor div
