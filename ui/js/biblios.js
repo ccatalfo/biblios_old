@@ -305,6 +305,7 @@ biblios.app = function() {
 
 																	}
 																	else {
+																		showStatusMsg('Previewing...');
 																		// get the marcxml for this record and send to preview()
 																		getPazRecord(
 																			id,
@@ -316,6 +317,7 @@ biblios.app = function() {
 																				Ext.getCmp('searchpreview').el.mask();
 																				$('#searchprevrecord').getTransform(marcxsl, xml);
 																				Ext.getCmp('searchpreview').el.unmask();
+																				clearStatusMsg();
 																			},
 																			// json literal containing hash of desired params in callback
 																			{
@@ -341,6 +343,7 @@ biblios.app = function() {
 																	for( var i = 0; i < locations.length; i++) {
 																		Ext.get('loc'+i).dd = new Ext.dd.DragSource('loc'+i, {ddGroup: 'RecordDrop'});
 																		Ext.get('loc'+i).on('click', function(e) {
+																			showStatusMsg('Previewing...');
 																			var record = Ext.getCmp('searchgrid').getSelections()[0];
 																			var id = record.id;
 																			var offset = e.getTarget().id.substr(3);
@@ -354,6 +357,7 @@ biblios.app = function() {
 																					Ext.getCmp('searchpreview').el.mask();
 																					$('#searchprevrecord').getTransform(marcxsl, xml);
 																					Ext.getCmp('searchpreview').el.unmask();
+																					clearStatusMsg();
 																				},
 																			// json literal containing hash of desired params in callback
 																			{
@@ -760,11 +764,13 @@ biblios.app = function() {
 															sm: new Ext.grid.RowSelectionModel({
 																listeners: {
 																	rowselect: function(selmodel, rowindex, record) {
+																		showStatusMsg('Previewing...');
 																		var id = record.data.Id;
 																		var xml = getLocalXml(id);
 																		Ext.getCmp('savepreview').el.mask();
 																		$('#saveprevrecord').getTransform(marcxsl, xml);
 																		Ext.getCmp('savepreview').el.unmask();
+																		clearStatusMsg();
 																	}
 																} // selection listeners
 															}), // save grid selecion model
