@@ -191,6 +191,11 @@ biblios.app = function() {
 						layout: 'border',
 						items: [
 							{
+								region: 'north',
+								id: 'branding',
+								contentEl: 'branding-area'
+							},
+							{
 								region: 'center',
 								id: 'searchformpanel',
 								contentEl: 'searchform'
