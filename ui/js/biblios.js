@@ -1553,6 +1553,7 @@ biblios.app = function() {
 										collapsible: true,
 										collapsed: true,
 										width: 200,
+										autoScroll: true,
 										title: 'Help',
 										items: [
 											new Ext.ux.ManagedIframePanel({

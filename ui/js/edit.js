@@ -1094,7 +1094,7 @@ function showTagHelp(elem) {
 		params: {}, // no params
 		scripts: false,
 		callback: function processOCLC(element, success, response, options) {
-			alert(response);
+			//Ext.getCmp('helpIframe').update( $('#contentarea', response.responseText).html() );
 		},
 		nocache: false
 	});
