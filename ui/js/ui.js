@@ -206,14 +206,9 @@ function doDownloadRecords(format, editorid) {
 	var recsep = "<!-- end of record -->";
 	showStatusMsg("<p>Downloading records</p>");
 	// if we're exporting a record from the marc editor
-	if( openState == 'marceditor' ) {
+	if( openState == 'editorPanel' ) {
 			// transform edited record back into marcxml
-			if( marcFlavor == 'marc21' ) {
-				xml = UI.editor[editorid].record.XMLString();
-			}
-			else if( marcFlavor == 'unimarc' ) {
-				Ext.MessageBox.alert("Unimarc support not yet implemented");
-			}
+			xml = UI.editor[editorid].record.XMLString();
 			var encoding = 'utf-8';
 			handleDownload(format, encoding, xml);
 	}
