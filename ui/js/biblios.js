@@ -478,6 +478,9 @@ biblios.app = function() {
 														width: 300,
 														id: 'searchgrid',
 														store : (ds = new Ext.data.Store({
+															baseParams: {
+																disableCaching: false
+															},
 															proxy: new Ext.data.HttpProxy({url: pazpar2url+'?session='+paz.sessionID+'&command=show'}),
 															reader: 
 																new Ext.ux.NestedXmlReader({
@@ -1570,8 +1573,9 @@ biblios.app = function() {
 										region: 'center',
 										items: [
 											{
-												title: 'Setup'
-
+												title: 'Setup',
+												border: 'layout',
+												html: '<input type="submit" value="Create Test Search Targets" onclick="createTestTargets(); setPazPar2Targets();">'
 											}, // setup tab
 											{
 												title: 'Macros',
