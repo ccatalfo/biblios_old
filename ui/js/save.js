@@ -1,20 +1,3 @@
-/*
-   Function: doSaveLocal
-
-   Save record(s) to Google Gears sqlite database.
-
-   Parameters:
-
-   savefileid: id of the savefile to save to (if records have been dropped onto savefile tree)
-   savefilename: name of the savefile to save to
-   sel: Ext selection for records which have been dropped
-   dd: Ext drag and drop object for records which have been dropped and Ext drop target (folder list)
-
-   Returns:
-
-   None.
-
-*/
 
 
 function doSaveRemote(loc, xmldoc, editorid) {
