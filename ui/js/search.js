@@ -6,9 +6,11 @@ function doSearch(form) {
 	}
 	else if( $('#searchloc').val() == 'SearchTargets' ) {
 		doPazPar2Search();
+		biblios.app.displaySearchView();
 	}
 	else if( $('#searchloc').val() == 'LocalFolders') {
 		doLocalFolderSearch();
+		biblios.app.displaySaveView();
 	}
 	return false;
 }
@@ -43,7 +45,6 @@ function doLocalFolderSearch() {
 	sql += col + ' like "%' + query + '%"';
 	selectSql += sql;
 	Ext.getCmp('savegrid').store.load({db: db, selectSql: selectSql});
-	biblios.app.displaySaveView();
 }
 
 function initializePazPar2(pazpar2url, options) {
