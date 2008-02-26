@@ -623,7 +623,7 @@ biblios.app = function() {
 													},
 													// editor two
 													{
-														region: 'south',
+														region: 'east',
 														id: 'editortwo',
 														cls: 'marceditor',
 														autoScroll: true,
@@ -631,7 +631,7 @@ biblios.app = function() {
 														collapsible: true,
 														collapsed: true,
 														title: 'Editor 2',
-														height: 230,
+														width: 300,
 														html: '<div id="marceditortwo"><div class="ffeditor"></div><div class="vareditor"></div></div>',
 														tbar: [
 															{
