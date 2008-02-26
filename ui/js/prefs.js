@@ -2,17 +2,6 @@
 var Prefs = {};
 Prefs.remoteILS = {};
 
-function initPrefs() {
-	setPazPar2Targets(paz);
-	setILSTargets();
-	getSaveFileNames();
-	//getRemoteBibProfiles();
-}
-
-function getVendors() {
-	return 'Amazon';
-}
-
 function getRemoteBibProfiles() {
 	// get bib profiles for each remoteILS now (so xhr requests aren't overlapping)
 	for ( ils in Prefs.remoteILS ) {
@@ -44,21 +33,6 @@ function setILSTargets() {
 function getTargets() {
 	var targets = DB.SearchTargets.select().toArray();
 	return targets;
-}
-
-function setEnableTargets() {
-  // loop through search targets.  If checked, set enable in Targets table to true. Otherwise set to false.
-  var targetnodes = searchRoot.childNodes;
-  for( var i = 0; i < targetnodes.length; i++) {
-    var id = targetnodes[i].attributes.id;
-    var enabled = 0; // assume not checked
-    if( targetnodes[i].attributes.checked == true ) {
-        enabled = 1;
-    }
-	t = DB.SearchTargets.select('rowid=?', [id]).getOne();
-	t.enabled = enabled;
-	t.save();
-  }
 }
 
 function getSaveFileNames() {

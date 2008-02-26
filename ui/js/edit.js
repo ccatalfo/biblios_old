@@ -370,7 +370,7 @@ function toggleFixedFieldDisplay(btn, toggled) {
 	else {
         updateFFEditor(editorid, ff_ed, var_ed);
 		$('#'+editorid).find(".ffeditor").show();
-		// hide leader and 008
+		// hide leader and fixed fields
 		$('#'+editorid).find("#000", UI.editor[editorid].vared).hide();
 		$('#'+editorid).find("#008", UI.editor[editorid].vared).hide();
 		$('#'+editorid).find("#006", UI.editor[editorid].vared).hide();
