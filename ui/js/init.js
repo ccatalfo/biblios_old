@@ -43,43 +43,8 @@ var recordNum = 0; // number of individual records found and saved to db
 var newRecordNum = 0; // number of individual records found and saved to db
 var resultsDoc;
 
-// tabs
-var tabs;
-var bibliotab;
-var hometab;
-var optionstab;
-// toolbars, menus
-var RecentSearchesMenu;
-var searchsavetoolbar;
-var editor_toolbar;
-var searchbar;
-var searchform;
-var statusbox;
-// layouts
-var layout;
-var innerLayout;
-var searchSaveNestedLayout;
-var folder_and_status_layout;
-var editorlayout;
-// grid and data store for searches
-var searchgrid;
-var searchds;
-var searchmodel;
-// grid and data store for save file
-var savefilegrid;
-var savefileds;
-var savefilemodel;
-var searchgridpaging;
-var savegridpaging;
 // record cache for search results
 var recordCache = {};
-// panels
-var status_panel, folderlist_panel, toolbar_panel, work_panel, upper_panel, lower_panel, right_panel, left_panel;
-// trees
-var searchTree, saveTree, saveFilesTree, treeEditor;
-var folderRoot, searchRoot, saveRoot, saveFilesRoot, facetsRoot;
-// YUI rich text editor
-var rte_editor;
 	
 var SearchTarget = Ext.data.Record.create([
 	{name: 'rowid'},
