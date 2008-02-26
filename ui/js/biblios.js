@@ -1107,145 +1107,167 @@ biblios.app = function() {
 																}
 															}, // savefolders beforenodedrop
 															contextmenu: function(node, e) {
-																var Menu = new Ext.menu.Menu({
-																	id:'menu',
-																	listeners: {
-																		click: function(menu, menuItem, e) {
-																			menu.hide();
-																		}
-																	}, // save folder context menu listeners
-																	items: [{
-																			id:'removeNode',
-																			handler:function() {
-																				var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
-																				if(n && n.attributes.allowDelete) {
-																						// do we really want to do this???
-																						Ext.MessageBox.confirm("Delete", "Really delete this folder and all records in it?", 
-																							function(btn, text) {
-																							if( btn == 'yes' ) {
-																								var id = n.attributes.savefileid;
-																								Ext.getCmp('FoldersTreePanel').getSelectionModel().selectPrevious();
-																								n.parentNode.removeChild(n);
-																								// update db
-																								try {
-																									DB.Savefiles.select('rowid = ?', [id]).getOne().remove();
-																									return true;
-																									// update our hash of savefile id/names
-																									getSaveFileNames();
-																									updateSaveMenu();
-																								}
-																								catch(ex) {
-																									Ext.MessageBox.alert("Database error", ex.message);
-																									return false;
-																								}
-																								return true;
-																							}
-																							else {
-																								return false;   
-																							}
-																						} // on user confirmation of delete
-																					);
-																				}
-																			}, // remove handler
-																			cls:'remove',
-																			text: 'Delete folder'
-																	},
-																	{
-																	id: 'addNode',
-																	handler: function() {
-																		var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
-																		if((n.attributes.allowAdd == true)) {
-																			// update db with new save file and get its id so we can pass it to TreeNode config
-																			var parentid;
-																			parentid = n.attributes.savefileid;
-																			if( parentid == 'null') {
-																				parentid = null;
+																if( node.attributes.savefileid == 1 ) {
+																	var trashMenu = new Ext.menu.Menu({
+																		id: 'trashMenu',
+																		listeners: {
+																			click: function(menu, menuItem, e) {
+																				menu.hide();
 																			}
-																			try {
-																				var savefile = new DB.Savefiles({
-																					name: "New Folder",
-																					description: '',
-																					parentid: parentid,
-																					allowDelete: 1,
-																					allowAdd: 1,
-																					allowRename: 1,
-																					allowDrag: 1,
-																					allowDrop: 1,
-																					ddGroup: 'RecordDrop',
-																					icon: libPath + 'ui/images/drive-harddisk.png',
-																					date_added: '',
-																					date_modified: ''
-																				}).save();
-																			}
-																			catch(ex) {
-																				Ext.MessageBox.alert("Database error", ex.message);
-																			}
-																			try {
-																				id = DB.Savefiles.count();
-																			}
-																			catch(ex) {
-																				  Ext.MessageBox.alert("Database error", ex.message);
-																			}
-																			var newnode = new Ext.tree.TreeNode(
+																		},
+																		items: [
 																			{
-																				text: 'New Folder', 
-																				savefileid: id, 
-																				id: id,
-																				qtip:'', 
-																				icon: libPath + 'ui/images/drive-harddisk.png',
-																				leaf: false, 
-																				allowDelete:true, 
-																				allowAdd: true,
-																				allowRename: true,
-																				allowEdit: true,
-																				allowDrag:true, 
-																				allowDrop:true, 
-																				ddGroup:'SaveFileNodeDrop',
-																				listeners: {
-																					click: function(node, e) {
-																						UI.currSaveFile = node.attributes.id;
-																						UI.currSaveFileName = node.text;
-																						biblios.app.displaySaveFile( node.attributes.id );
-																						biblios.app.displaySaveView();
+																				id: 'emptyTrash',
+																				text: 'Empty trash',
+																				handler: function() {
+																					DB.Records.remove('Savefiles_id=1');
+																				}
+																			}
+																		]
+																	});
+																	trashMenu.showAt(e.getXY());
+																}
+																else {
+																	var Menu = new Ext.menu.Menu({
+																		id:'menu',
+																		listeners: {
+																			click: function(menu, menuItem, e) {
+																				menu.hide();
+																			}
+																		}, // save folder context menu listeners
+																		items: [{
+																				id:'removeNode',
+																				handler:function() {
+																					var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
+																					if(n && n.attributes.allowDelete) {
+																							// do we really want to do this???
+																							Ext.MessageBox.confirm("Delete", "Really delete this folder and all records in it?", 
+																								function(btn, text) {
+																								if( btn == 'yes' ) {
+																									var id = n.attributes.savefileid;
+																									Ext.getCmp('FoldersTreePanel').getSelectionModel().selectPrevious();
+																									n.parentNode.removeChild(n);
+																									// update db
+																									try {
+																										DB.Savefiles.select('rowid = ?', [id]).getOne().remove();
+																										return true;
+																										// update our hash of savefile id/names
+																										getSaveFileNames();
+																										updateSaveMenu();
+																									}
+																									catch(ex) {
+																										Ext.MessageBox.alert("Database error", ex.message);
+																										return false;
+																									}
+																									return true;
+																								}
+																								else {
+																									return false;   
+																								}
+																							} // on user confirmation of delete
+																						);
 																					}
-																				} // save folder listeners
-																			});
-																			n.appendChild(newnode);
-																			n.expand();
-																			newnode.on('click', function(n) {
-																				displaySaveView();
-																				Ext.getCmp('FoldersTreePanel').getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
-																				showStatusMsg('Displaying ' + n.attributes.id);
-																				displaySaveFile(n.attributes.savefileid, n.text); 
-																				clearStatusMsg();
-																			});
-																			Ext.getCmp('FoldersTreePanel').getSelectionModel().select(newnode);
-																			treeEditor.editNode = newnode;
-																			treeEditor.startEdit(newnode.ui.textNode);
-																	} // if this node allows us to add to it
-																	}, // addnode handler
-																	cls: 'add',
-																	text: 'Add folder' 
-																	},
-																	{
-																	id: 'renameNode',
-																	handler: function() {
-																		var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
-																		if((n.attributes.allowRename == true)){
-																			treeEditor.editNode = n;
-																			treeEditor.startEdit(n.ui.textNode);
+																				}, // remove handler
+																				cls:'remove',
+																				text: 'Delete folder'
+																		},
+																		{
+																		id: 'addNode',
+																		handler: function() {
+																			var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
+																			if((n.attributes.allowAdd == true)) {
+																				// update db with new save file and get its id so we can pass it to TreeNode config
+																				var parentid;
+																				parentid = n.attributes.savefileid;
+																				if( parentid == 'null') {
+																					parentid = null;
+																				}
+																				try {
+																					var savefile = new DB.Savefiles({
+																						name: "New Folder",
+																						description: '',
+																						parentid: parentid,
+																						allowDelete: 1,
+																						allowAdd: 1,
+																						allowRename: 1,
+																						allowDrag: 1,
+																						allowDrop: 1,
+																						ddGroup: 'RecordDrop',
+																						icon: libPath + 'ui/images/drive-harddisk.png',
+																						date_added: '',
+																						date_modified: ''
+																					}).save();
+																				}
+																				catch(ex) {
+																					Ext.MessageBox.alert("Database error", ex.message);
+																				}
+																				try {
+																					id = DB.Savefiles.count();
+																				}
+																				catch(ex) {
+																					  Ext.MessageBox.alert("Database error", ex.message);
+																				}
+																				var newnode = new Ext.tree.TreeNode(
+																				{
+																					text: 'New Folder', 
+																					savefileid: id, 
+																					id: id,
+																					qtip:'', 
+																					icon: libPath + 'ui/images/drive-harddisk.png',
+																					leaf: false, 
+																					allowDelete:true, 
+																					allowAdd: true,
+																					allowRename: true,
+																					allowEdit: true,
+																					allowDrag:true, 
+																					allowDrop:true, 
+																					ddGroup:'SaveFileNodeDrop',
+																					listeners: {
+																						click: function(node, e) {
+																							UI.currSaveFile = node.attributes.id;
+																							UI.currSaveFileName = node.text;
+																							biblios.app.displaySaveFile( node.attributes.id );
+																							biblios.app.displaySaveView();
+																						}
+																					} // save folder listeners
+																				});
+																				n.appendChild(newnode);
+																				n.expand();
+																				newnode.on('click', function(n) {
+																					displaySaveView();
+																					Ext.getCmp('FoldersTreePanel').getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
+																					showStatusMsg('Displaying ' + n.attributes.id);
+																					displaySaveFile(n.attributes.savefileid, n.text); 
+																					clearStatusMsg();
+																				});
+																				Ext.getCmp('FoldersTreePanel').getSelectionModel().select(newnode);
+																				treeEditor.editNode = newnode;
+																				treeEditor.startEdit(newnode.ui.textNode);
+																		} // if this node allows us to add to it
+																		}, // addnode handler
+																		cls: 'add',
+																		text: 'Add folder' 
+																		},
+																		{
+																		id: 'renameNode',
+																		handler: function() {
+																			var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
+																			if((n.attributes.allowRename == true)){
+																				treeEditor.editNode = n;
+																				treeEditor.startEdit(n.ui.textNode);
+																			}
+																			else {
+																				return false;
+																			}
+																		}, // rename node handler
+																		cls: 'rename',
+																		text: 'Rename folder' 
 																		}
-																		else {
-																			return false;
-																		}
-																	}, // rename node handler
-																	cls: 'rename',
-																	text: 'Rename folder' 
-																	}
-																	]
-																});
-																this.getSelectionModel().select(node); // displaySaveView selects root save so select the node user clicked
-																Menu.showAt(e.getXY());
+																		]
+																	});
+																	this.getSelectionModel().select(node); // displaySaveView selects root save so select the node user clicked
+																	Menu.showAt(e.getXY());
+																}
 															} // save folder tree context menu
 														}
 													}), // resources treepanel with treeeditor applied
