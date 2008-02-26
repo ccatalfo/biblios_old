@@ -111,33 +111,6 @@ function createDatabaseOptions() {
 }
 
 /*
-   Function: getNodeBySaveFileId
-
-   Returnes the Ext.tree.TreeNode represenging the savefile id.
-
-   Parameters:
-
-   savefileid: the id in the database for the savefile whose node we're looking for
-
-   Returns:
-
-   ext.tree.TreeNode 
-
-*/
-function getNodeBySaveFileId(savefileid) {
-    var wanted_node;
-    // visit each node under savefiles root and find one w/ savefileid
-    saveFilesRoot.cascade( function(n){
-    if(n.attributes.savefileid == savefileid ) {
-        wanted_node = n;
-    }
-    });
-    return wanted_node;
-}
-
-
-
-/*
    Function: openRecord
 
    Display the record whose id is passed in in the marc editor for editing.
@@ -370,73 +343,6 @@ function doUploadMarc() {
         uploadDlg.show();
 }
 
-/*
-   Function: doNewRecord
-
-   Prompt the user for the type of record to create (based on configuration file), then display marceditor to edit it.
-
-   Parameters:
-
-   None.
-
-   Returns:
-
-   None.
-
-   See Also:
-
-   <doCreateNewRecord>
-
-*/
-function doNewRecord() {
-    var dlg = new Ext.Window({
-        height: 200,
-        width: 400,
-        minHeight: 100,
-        minWidth: 150,
-        modal: false,
-        shadow: true
-    });
-        dlg.body.dom.innerHTML = "<div id='form'></div>";
-
-    var form = new Ext.form.Form({
-    });
-
-    var myData = new Array();
-    $("template", configDoc).each( function() {
-    var template = new Array( $("name", $(this)).text(), $("file", $(this)).text() );
-    myData.push(template);
-    });
-    var store = new Ext.data.SimpleStore({
-    fields: ['name', 'file'],
-    data: myData
-    });
-     form.add(
-    new Ext.form.ComboBox({
-        id: 'recordtype',
-        store: store,
-        displayField:'name',
-        valueField: 'file',
-        typeAhead: true,
-        mode: 'local',
-        triggerAction: 'all',
-        emptyText:'Select a record type...',
-        selectOnFocus:true  
-    })
-    );
-    form.render('form');
-
-    dlg.addButton('Select', 
-    function(btn) {
-        doCreateNewRecord();
-        dlg.hide();
-    },
-    dlg);    
-    dlg.addButton('Cancel', dlg.hide, dlg);
-    dlg.addKeyListener(27, dlg.hide, dlg); // ESCAPE
-    dlg.show();
-}
-
 function getRecordTemplates() {
     var list = new Array();
     $("template", configDoc).each( function() {
@@ -562,59 +468,6 @@ function doDeleteFromSaveFile(sel) {
     displaySaveFile(currentNode.attributes.savefileid, currentNode.text); 
     displaySaveView();
   }
-}
-
-/*
-   Function: doChangeStatus
-
-   Handler for changing the status field of a record or records.
-
-   Parameters:
-
-   recstatus: String to set the record(s)' status to.
-
-   Returns:
-
-   None.
-
-*/
-function doChangeStatus(recstatus) {
-  Ext.MessageBox.prompt('Change status', 'Choose a record status', function(btn, recstatus) {
-        showStatusMsg("<p>Updating status in Save File to " + recstatus + "</p>");
-        var currtab = tabs.getActiveTab();
-        if( currtab.id == 'savefile' ) {
-            var grid = Ext.ComponentMgr.get('save-file-grid');
-            var ds = grid.getDataSource();
-            var sel = grid.getSelectionModel().getSelections()
-            for( var i = 0; i < sel.length; i++) {
-                var id = sel[i].data.Id;
-                try {
-                  db.execute("update Records set status = ? where id = ?", [recstatus, id]);
-                }
-                catch(ex) {
-                  console.error('db error: ' + ex.message);
-                }
-            }
-            displayLocalFile();
-        }
-        // else if we're on search results give error msg: have to save to save file first
-        else if( currtab.recid.match('search') ) {
-            Ext.Msg.alert('Error', 'You must open record or save record to Save File before editing or changing status');
-        }
-        // else if we have an open record in the editor
-        else {
-            try {
-              var id = currtab.recid.substr(6);
-              db.execute("update Records set status = ? where id = ?", [recstatus, id]);
-            }
-            catch(ex) {
-              console.error('db error: ' + ex.message);
-            }
-            
-        }
-        showStatusMsg("<p>Updated status in Save File to " + recstatus + "</p>");
-		clearStatusMsg();
-    });
 }
 
 /*
