@@ -507,7 +507,7 @@ biblios.app = function() {
 																		{
 																			id: 'addField',
 																			editorid: 'editorone',
-																			text: 'Add Field',
+																			text: 'Add Field Ctrl-n',
 																			handler: function(btn) {
 																				UI.editor.editorone.record.addField();
 																			}
@@ -515,7 +515,7 @@ biblios.app = function() {
 																		{
 																			id: 'removeField',
 																			editorid: 'editorone',
-																			text: 'Remove Field',
+																			text: 'Remove Field Ctrl-k',
 																			handler: function(btn) {
 																				removeTag('editorone');
 																			}
@@ -523,13 +523,13 @@ biblios.app = function() {
 																		{
 																			id: 'addSubfield',
 																			editorid: 'editorone',
-																			text: 'Add Subfield',
+																			text: 'Add Subfield Ctrl-m',
 																			handler: function(btn) {
 																				addSubfield(UI.editor.editorone.lastFocusedEl);
 																			}
 																		},
 																		{	
-																			id: 'removeSubfield',
+																			id: 'removeSubfield Ctrl-d',
 																			editorid: 'editorone',
 																			text: 'Remove subfield',
 																			handler: function(btn) {
@@ -542,7 +542,7 @@ biblios.app = function() {
 															{
 																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/document-save.png',
-																text: 'Save',
+																text: 'Save Ctrl-s',
 																menu: {
 																	id: 'editorOneSaveMenu',
 																	items: getSaveFileMenuItems('editorone')
