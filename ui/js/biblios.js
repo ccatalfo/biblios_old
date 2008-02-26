@@ -315,23 +315,7 @@ biblios.app = function() {
 																	else {
 																		showStatusMsg('Previewing...');
 																		// get the marcxml for this record and send to preview()
-																		getPazRecord(
-																			id,
-																			0,
-																			// callback function for when pazpar2 returns record data
-																			function(data, o) {  
-																				var xml = xslTransform.serialize(data); 
-																				recordCache[o.id] = xml; 
-																				Ext.getCmp('searchpreview').el.mask();
-																				$('#searchprevrecord').getTransform(marcxsl, xml);
-																				Ext.getCmp('searchpreview').el.unmask();
-																				clearStatusMsg();
-																			},
-																			// json literal containing hash of desired params in callback
-																			{
-																				id: id
-																			}
-																		);
+																		previewRemoteRecord(id, 0);
 																	}
 																} // search grid row select handler
 															} // selection listeners
@@ -355,25 +339,7 @@ biblios.app = function() {
 																			var record = Ext.getCmp('searchgrid').getSelections()[0];
 																			var id = record.id;
 																			var offset = e.getTarget().id.substr(3);
-																			getPazRecord(
-																				id,
-																				offset,
-																				// callback function for when pazpar2 returns record data
-																				function(data, o) {  
-																					var xml = xslTransform.serialize(data); 
-																					recordCache[o.id] = xml; 
-																					Ext.getCmp('searchpreview').el.mask();
-																					$('#searchprevrecord').getTransform(marcxsl, xml);
-																					Ext.getCmp('searchpreview').el.unmask();
-																					clearStatusMsg();
-																				},
-																			// json literal containing hash of desired params in callback
-																			{
-																				id: id
-																			}
-																		);
-
-
+																			previewRemoteRecord(id, offset);	
 																		});
 																	}
 																}

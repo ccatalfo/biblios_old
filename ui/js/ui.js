@@ -168,6 +168,27 @@ function openRecord(xml, editorelem) {
 	UI.editor.progress.hide();
 }
 
+function previewRemoteRecord(id, offset) {
+	getPazRecord(
+		id,
+		offset,
+		// callback function for when pazpar2 returns record data
+		function(data, o) {  
+			var xml = xslTransform.serialize(data); 
+			recordCache[o.id] = xml; 
+			Ext.getCmp('searchpreview').el.mask();
+			$('#searchprevrecord').getTransform(marcxsl, xml);
+			Ext.getCmp('searchpreview').el.unmask();
+			clearStatusMsg();
+		},
+		// json literal containing hash of desired params in callback
+		{
+			id: id
+		}
+	);
+
+}
+
 function makeSubfieldsDraggable() {
 	 // add jquery draggable and droppable to subfields
 	$('.subfield').Draggable();
