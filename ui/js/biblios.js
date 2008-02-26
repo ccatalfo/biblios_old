@@ -48,6 +48,8 @@ biblios.app = function() {
 		var rs, xml;
 		// if we have a record open in the marceditor, get its xml and save to drafts
 		if( openState == 'editorPanel' ) {
+			// make sure we have up to date record
+			UI.editor[editorid].record.update();
 			Ext.get('fixedfields_editor').mask();
 			Ext.get('varfields_editor').mask();
 			var progress = Ext.MessageBox.progress('Saving record');
@@ -512,6 +514,7 @@ biblios.app = function() {
 																			text: 'Add Field',
 																			handler: function(btn) {
 																				UI.editor.editorone.record.addField();
+																				UI.editor[btn.editorid].record.update();
 																			}
 																		},
 																		{
@@ -520,6 +523,7 @@ biblios.app = function() {
 																			text: 'Remove Field',
 																			handler: function(btn) {
 																				removeTag('editorone');
+																				UI.editor[btn.editorid].record.update();
 																			}
 																		},
 																		{
@@ -528,6 +532,7 @@ biblios.app = function() {
 																			text: 'Add Subfield',
 																			handler: function(btn) {
 																				addSubfield(UI.editor.editorone.lastFocusedEl);
+																				UI.editor[btn.editorid].record.update();
 																			}
 																		},
 																		{	
@@ -535,7 +540,8 @@ biblios.app = function() {
 																			editorid: 'editorone',
 																			text: 'Remove subfield',
 																			handler: function(btn) {
-																				removeSubfield();
+																				removeSubfield(btn.editorid);
+																				UI.editor[btn.editorid].record.update();
 																			}
 																		}
 																	]
@@ -657,6 +663,7 @@ biblios.app = function() {
 																			text: 'Add Field',
 																			handler: function(btn) {
 																				UI.editor.editorone.record.addField();
+																				UI.editor[btn.editorid].record.update();
 																			}
 																		},
 																		{
@@ -665,6 +672,7 @@ biblios.app = function() {
 																			text: 'Remove Field',
 																			handler: function(btn) {
 																				removeTag('editorone');
+																				UI.editor[btn.editorid].record.update();
 																			}
 																		},
 																		{
@@ -673,6 +681,7 @@ biblios.app = function() {
 																			text: 'Add Subfield',
 																			handler: function(btn) {
 																				addSubfield(UI.editor.editorone.lastFocusedEl);
+																				UI.editor[btn.editorid].record.update();
 																			}
 																		},
 																		{	
@@ -680,7 +689,8 @@ biblios.app = function() {
 																			editorid: 'editorone',
 																			text: 'Remove subfield',
 																			handler: function(btn) {
-																				removeSubfield();
+																				removeSubfield(btn.editorid);
+																				UI.editor[btn.editorid].record.update();
 																			}
 																		}
 																	]

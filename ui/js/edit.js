@@ -997,23 +997,26 @@ function toggleFixedFieldDisplay(btn, toggled) {
 
 }
 
-function removeSubfield() {
+function removeSubfield(editorid) {
 	if(debug) { console.info('removing subfield with text: ' + $(UI.editor.lastFocusedEl).val());}
-	var next = $(UI.editor.lastFocusedEl).parents('.subfield').next().children('.subfield-delimiter');
-	var prev = $(UI.editor.lastFocusedEl).parents('.subfield').prev().children('.subfield-delimiter');
-	var ind2 = $(UI.editor.lastFocusedEl).parents('.tag').children('.indicator').eq(1);
+	var next = $(UI.editor[editorid].lastFocusedEl).parents('.subfield').next().children('.subfield-delimiter');
+	var prev = $(UI.editor[editorid].lastFocusedEl).parents('.subfield').prev().children('.subfield-delimiter');
+	var ind2 = $(UI.editor[editorid].lastFocusedEl).parents('.tag').children('.indicator').eq(1);
 	// remove current subfield
-	$(UI.editor.lastFocusedEl).parents('.subfield').remove();
+	$(UI.editor[editorid].lastFocusedEl).parents('.subfield').remove();
 	// focus next subfield 
-	if( $(UI.editor.lastFocusedEl.parents('.subfield').next().length ) ) {
-		$(next).focus();
+	if( $(UI.editor[editorid].lastFocusedEl).parents('.subfield').next().length )  {
+		$(next).get(0).focus();	
+		UI.editor[editorid].lastFocusedEl = $(next);
 	}
-	else if( $(UI.editor.lastFocusedEl.parents('.subfield').prev().length ) ) {
-		$(prev).focus();
+	else if( $(UI.editor.lastFocusedEl).parents('.subfield').prev().length )  {
+		$(prev).get(0).focus();
+		UI.editor[editorid].lastFocusedEl = $(prev);
 	}
 	// or indicator
-	else {
-		$(ind2).focus();
+	else if( $(ind2).length) {
+		$(ind2).get(0).focus();
+		UI.editor[editorid].lastFocusedEl = $(ind2);
 	}
 }
 
@@ -1032,14 +1035,16 @@ function removeTag(editorid, tagnumber, i ) {
 	}
 	else {
 		// focus previous or next tag
-		var prev = $(UI.editor[editorid].lastFocusedEl).parents('.tag').prev().children('.tagnumber');
-		var next = $(UI.editor[editorid].lastFocusedEl).parents('.tag').next().children('.tagnumber');
+		var prev = $(UI.editor[editorid].lastFocusedEl).parents('.tag').prev();
+		var next = $(UI.editor[editorid].lastFocusedEl).parents('.tag').next();
 		$(UI.editor[editorid].lastFocusedEl).parents('.tag').remove();
 		if( $(next).length ) {
-			$(next).focus();
+			$(next).get(0).focus();
+			UI.editor[editorid].lastFocusedEl = $(next);
 		}
-		else {
-			$(prev).focus();
+		else if( $(prev).length ) {
+			$(prev).get(0).focus();
+			UI.editor[editorid].lastFocusedEl = $(prev);
 		}
 	}
 }
@@ -1062,6 +1067,9 @@ function create_static_editor(ffed, vared, editorid) {
 
 function onFocus(elem) {
 	$(elem).addClass('focused');
+	var editorid = $(elem).parents('.marceditor').get(0).id;
+	UI.editor.lastFocusedEl = elem;
+	UI.editor[editorid].lastFocusedEl = elem;
 	//showTagHelp(elem);
 }
 
@@ -1215,11 +1223,13 @@ function setupEditorHotkeys(editorelem) {
 
 	// remove a subfield
 	$.hotkeys.add('Ctrl+d', function(e) {
-		removeSubfield();
+		var editorid = $(UI.editor.lastFocusedEl).parents('.marceditor').get(0).id;
+		removeSubfield(editorid);
 	});
 	// remove a field
-	$.hotkeys.add('Ctrl+k', function(e) {
-		removeTag();	
+	$.hotkeys.add('Ctrl+r', function(e) {
+		var editorid = $(UI.editor.lastFocusedEl).parents('.marceditor').get(0).id;
+		removeTag(editorid);	
 	});
 
 	// save record
