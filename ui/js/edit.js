@@ -1237,6 +1237,9 @@ function setupEditorHotkeys(editorelem) {
 	// save record
 	$.hotkeys.add('Ctrl+s', function(e) {
 		var editorid = UI.editor.lastEditorId;
+		if( editorid == '' || editorid == null) {
+			Ext.MessageBox.alert('Error', 'Please click in the editor you wish to save before using the save hotkey');	
+		}
 		doSaveLocal(UI.currSaveFile, editorid);
 	});
 }
