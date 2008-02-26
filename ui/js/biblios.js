@@ -498,7 +498,8 @@ biblios.app = function() {
 																			enableToggle: true,
 																			pressed: true,
 																			listeners: {
-																				toggle: function(btn, pressed) {
+																				click: function(btn, pressed) {
+																					btn.pressed = btn.pressed ? false : true;
 																					toggleFixedFieldDisplay(btn, pressed);
 																				}
 																			}

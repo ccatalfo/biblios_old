@@ -978,7 +978,7 @@ function toggleFixedFieldDisplay(btn, toggled) {
 		// hide fixed field editor
 		$('#'+editorid).find(".ffeditor").hide();
         // transfer values from fixed field editor into tags
-        transferFF_EdToTags(editorid, ff_ed, var_ed);
+        transferFF_EdToTags(ff_ed, var_ed, editorid);
 		// show leader and 008
 		$('#'+editorid).find("#000", UI.editor[editorid].vared).show();
 		$('#'+editorid).find("#008", UI.editor[editorid].vared).show();
