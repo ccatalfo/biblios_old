@@ -228,11 +228,22 @@ function updateFFEditor(editorid, ff_ed, var_ed) {
     newff += "<controlfield tag='008'>";
     newff += tag008val;
     newff += "</controlfield>";
+	if( $('#'+editorid).find("#006", var_ed).length > 0 ) {
+		var tag006val = $('#'+editorid).find("#006", var_ed).children('.controlfield').val();
+		newff += "<controlfield tag='006'>" + tag006val + "</controlfield>";
+	}
+	if( $('#'+editorid).find("#007", var_ed).length > 0 ) {
+		var tag007val = $('#'+editorid).find("#007", var_ed).children('.controlfield').val();
+		newff += "<controlfield tag='007'>" + tag007val + "</controlfield>";
+	}
     newff += "</record>";
     newff += "</collection>";
+	var xmldoc = xslTransform.loadString(newff);
 	//FIXME make this an jquery.xslTransform call
     $('#'+editorid).find(".ffeditor").empty();
-    $('#'+editorid).find(".ffeditor").getTransform( fixedFieldXslPath, newff);
+	var temprec = new MarcEditor();
+	var htmled = temprec.loadXml( xmldoc );
+    $('#'+editorid).find(".ffeditor").html(htmled);
 }
 
 
