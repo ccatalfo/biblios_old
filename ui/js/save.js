@@ -1,4 +1,94 @@
-
+function doSaveLocal(savefileid, editorid, offset ) {
+		var recoffset = offset || 0;
+		if( !savefileid ) {
+			if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
+				savefileid = 2; // Drafts
+		}
+		var savefilename = getSaveFileNameFromId(savefileid);
+		showStatusMsg('Saving to '+ savefilename);
+		var rs, xml;
+		// if we have a record open in the marceditor, get its xml and save to drafts
+		if( openState == 'editorPanel' ) {
+			// make sure we have up to date record
+			UI.editor[editorid].record.update();
+			Ext.get('fixedfields_editor').mask();
+			Ext.get('varfields_editor').mask();
+			var progress = Ext.MessageBox.progress('Saving record');
+			// transform edited record back into marcxml
+			xml = UI.editor[editorid].record.XMLString();
+			progress.updateProgress(.5, 'Extracing marcxml');
+			var recid = UI.editor[editorid].id;
+			// if we don't have a record id, add this record to the db first
+			if( recid == '' ) {
+				if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
+				var data = Ext.getCmp('searchgrid').getSelections()[0].data;
+				var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+				progress.updateProgress(.6, 'Retrieving record from server');
+				recid = addRecordFromSearch(id, 0, editorid, data, savefileid, xml);
+				if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
+			}
+			else { // recid isn't empty so we've already saved this record, just update it
+				try {
+					var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
+					if( record.marcflavour == 'marc21' ) {
+						record.title = UI.editor[editorid].record.getValue('245', 'a');
+						record.author = UI.editor[editorid].record.getValue('100', 'a');
+						record.publisher = UI.editor[editorid].record.getValue('260', 'b');
+						record.dateofpub = UI.editor[editorid].record.getValue('260', 'c');
+					}
+					record.xml = xml;
+					record.Savefiles_id = savefileid;
+					record.status = 'edited';
+					record.date_modified = new Date();
+					record.save();
+					if(debug) { 
+						console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
+				}
+					progress.updateProgress(1, 'Saving record to local database');
+				} catch(ex) {
+						Ext.MessageBox.alert('Database error',ex.message);
+				}
+			}
+			progress.hide();
+			Ext.get('fixedfields_editor').unmask();
+			Ext.get('varfields_editor').unmask();
+			return true;
+		} // save record from marc editor
+		// if we're picking from the savefile grid 
+		else if( openState == 'savegrid' ) {
+			var grid = Ext.getCmp( 'savegrid' );
+			var ds = grid.store;
+			var sel = grid.getSelectionModel().getSelections();
+			// update the record(s) based on current selection
+			for( var i = 0; i < sel.length; i++) {
+				var id = sel[i].data.Id;
+				try {
+					var record = DB.Records.select('Records.rowid=?',[id]).getOne();
+					record.status = 'edited';
+					record.date_modified = new Date().toString();
+					record.Savefiles_id = savefileid;
+					record.save();
+					if(debug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
+				}
+				catch(ex) {
+					Ext.MessageBox.alert("Database error", ex.message);
+				}
+			}
+		}
+		// if we're picking from the search grid
+		else if( openState == 'searchgrid' ) {
+			var grid = Ext.getCmp( 'searchgrid' );
+			var ds = grid.store;
+			var sel = grid.getSelectionModel().getSelections();
+			for( var i = 0; i < sel.length; i++) {
+				var id = sel[i].id;
+				var data = sel[i].data;
+				addRecordFromSearch(id, recoffset, editorid, data, savefileid);
+			}
+		}
+		showStatusMsg("Record(s) saved to "+savefilename);
+		return true;
+	}
 
 function doSaveRemote(loc, xmldoc, editorid) {
 	/*Ext.get('ffeditor').mask();
