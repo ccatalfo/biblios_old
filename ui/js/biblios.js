@@ -181,6 +181,7 @@ biblios.app = function() {
 		},
 
         init: function() {
+			Ext.QuickTips.init();
 			setILSTargets();
             this.viewport = new Ext.Viewport({
 				layout: 'border',
@@ -488,6 +489,7 @@ biblios.app = function() {
 																id: 'editortasks',
 																editorid: 'editorone',
 																text: 'Tools',
+																tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-k<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
 																menu: {
 																	id: 'editortasksmenu',
 																	items: [
@@ -507,7 +509,7 @@ biblios.app = function() {
 																		{
 																			id: 'addField',
 																			editorid: 'editorone',
-																			text: 'Add Field Ctrl-n',
+																			text: 'Add Field',
 																			handler: function(btn) {
 																				UI.editor.editorone.record.addField();
 																			}
@@ -515,7 +517,7 @@ biblios.app = function() {
 																		{
 																			id: 'removeField',
 																			editorid: 'editorone',
-																			text: 'Remove Field Ctrl-k',
+																			text: 'Remove Field',
 																			handler: function(btn) {
 																				removeTag('editorone');
 																			}
@@ -523,13 +525,13 @@ biblios.app = function() {
 																		{
 																			id: 'addSubfield',
 																			editorid: 'editorone',
-																			text: 'Add Subfield Ctrl-m',
+																			text: 'Add Subfield',
 																			handler: function(btn) {
 																				addSubfield(UI.editor.editorone.lastFocusedEl);
 																			}
 																		},
 																		{	
-																			id: 'removeSubfield Ctrl-d',
+																			id: 'removeSubfield',
 																			editorid: 'editorone',
 																			text: 'Remove subfield',
 																			handler: function(btn) {
@@ -542,7 +544,8 @@ biblios.app = function() {
 															{
 																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/document-save.png',
-																text: 'Save Ctrl-s',
+																text: 'Save',
+																tooltip: {title: 'Save', text: 'Ctrl-s'},
 																menu: {
 																	id: 'editorOneSaveMenu',
 																	items: getSaveFileMenuItems('editorone')
@@ -552,6 +555,7 @@ biblios.app = function() {
 																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/document-save.png',
 																text: 'Send',
+																tooltip: {text: 'Send record to remote ILS'},
 																menu: {
 																	id: 'editorOneSendMenu',
 																	editorid: 'editorone',
@@ -562,6 +566,7 @@ biblios.app = function() {
 																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/network-receive.png',
 																text: 'Export',
+																tooltip: {text: 'Export record to marc21 or marcxml'},
 																menu: {
 																	id: 'editorOneExportMenu',
 																	items: getExportMenuItems('editorone')
@@ -573,6 +578,7 @@ biblios.app = function() {
 																id: 'editorOneCancelMenu',
 																editorid: 'editorone',
 																text: 'Cancel',
+																tooltip: {text: 'Cancel editing of this record'},
 																handler: function(btn) {
 																	showStatusMsg('Cancelling record...');
 																	if( UI.lastWindowOpen  == 'savegrid' ) {
@@ -590,6 +596,14 @@ biblios.app = function() {
 																icon: libPath + 'ui/images/edit-copy.png',
 																text: 'Merge',
 																handler: doMerge,
+																disabled: true
+															},
+															{
+																cls: 'x-btn-text-icon', // icon and text class
+																icon: libPath + 'ui/images/edit-copy.png',
+																text: 'Validate',
+																editorid: 'editorone',
+																handler: doValidate,
 																disabled: true
 															},
 															{
@@ -620,13 +634,15 @@ biblios.app = function() {
 																id: 'editortasks-two',
 																editorid: 'editortwo',
 																text: 'Tools',
+																tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-k<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
 																menu: {
 																	id: 'editortasksmenu',
 																	items: [
 																		{
 																			id: 'toggleFixedFieldGrid',
-																			editorid: 'editorone',
+																			editorid: 'editortwo',
 																			text: 'Toggle Fixed Field Editor',
+																			tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-k<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
 																			enableToggle: true,
 																			pressed: true,
 																			listeners: {
@@ -674,6 +690,7 @@ biblios.app = function() {
 																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/document-save.png',
 																text: 'Save',
+																tooltip: {title: 'Save', text: 'Ctrl-s'},
 																menu: {
 																	id: 'editorTwoSaveMenu',
 																	items: getSaveFileMenuItems('editortwo')
@@ -683,6 +700,7 @@ biblios.app = function() {
 																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/document-save.png',
 																text: 'Send',
+																tooltip: {title: 'Save', text: 'Ctrl-s'},
 																menu: {
 																	id: 'editorTwoSendMenu',
 																	editorid: 'editortwo',
@@ -693,6 +711,7 @@ biblios.app = function() {
 																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/network-receive.png',
 																text: 'Export',
+																tooltip: {text: 'Export record to marc21 or marcxml'},
 																menu: {
 																	id: 'editorTwoExportMenu',
 																	items: getExportMenuItems('editortwo')
@@ -704,6 +723,7 @@ biblios.app = function() {
 																id: 'editorTwoCancelMenu',
 																editorid: 'editortwo',
 																text: 'Cancel',
+																tooltip: {text: 'Cancel editing of this record'},
 																handler: function() {
 																	showStatusMsg('Cancelling record...');
 																	if( UI.lastWindowOpen  == 'savegrid' ) {

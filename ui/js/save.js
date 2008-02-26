@@ -201,3 +201,9 @@ function validateRemote(editorid, loc) {
 	return subfieldsvalid && tagsvalid;
 }
 
+function doValidate(btn) {
+	var editorid = btn.editorid;
+	xml = UI.editor[editorid].record.XMLString();
+
+}
+
