@@ -43,7 +43,7 @@ biblios.app = function() {
 			if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
 				savefileid = 2; // Drafts
 		}
-		var savefilename = savefiles[savefileid];
+		var savefilename = getSaveFileNameFromId(savefileid);
 		showStatusMsg('Saving to '+ savefilename);
 		var rs, xml;
 		// if we have a record open in the marceditor, get its xml and save to drafts

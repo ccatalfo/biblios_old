@@ -91,18 +91,14 @@ function addRecordFromSearch(id, offset, editorid, data, savefileid, newxml) {
 
 function getSaveFileNameFromId(savefileid) {
 	// get savefilename for this savefileid
-	var rs;
+	var name = '';
 	try {
-		rs = db.execute('select name from Savefiles where id=?', [savefileid]);
+		name = DB.Savefiles.select('Savefiles.rowid=?', [savefileid]).getOne().name;
 	}
 	catch(ex) {
 		Ext.MessageBox.alert('DB Error', ex.message);
 	}
-	while(rs.isValidRow() ) {
-		savefilename = rs.fieldByName('name');
-		rs.next();
-	}
-	return savefilename;
+	return name;
 }
 
 function updateSaveMenu() {
