@@ -8,28 +8,41 @@ function doSearch(form) {
 		doPazPar2Search();
 	}
 	else if( $('#searchloc').val() == 'LocalFolders') {
-		//doLocalFolderSearch();
+		doLocalFolderSearch();
 	}
 	return false;
 }
 
 function doLocalFolderSearch() {
 	//Ext.MessageBox.alert('Error', 'Not yet implemented');
-}
-
-function doVendorSearch() {
-	var vendors = getVendors();
-	var searchtype = $('#searchtype').val();
 	var query = $('#query').val();
-	Ext.ComponentMgr.get('acqsearchgrid').dataSource.load(
-		{params: {
-			start: 0,
-			limit: 20,
-			vendors: vendors,
-			searchtype: searchtype,
-			query: query
-		}
-	});
+	var searchtype  = $("#searchtype").val();
+	var selectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
+	var sql = ' where ';
+	var col = '';
+	switch(searchtype) {
+		case '': 
+			col = 'title or author or xml or publisher '
+			break;
+		case 'ti':
+			col = 'title ';
+			break;
+		case 'au':
+			col = 'author ';
+			break;
+		case 'su':
+			col = 'xml ';
+			break;
+		case 'isbn':
+			col = 'xml ';
+			break;
+		case 'issn':
+			col = 'xml ';
+			break;
+	}
+	sql += col + ' like "%' + query + '%"';
+	selectSql += sql;
+	Ext.getCmp('savegrid').store.load({db: db, selectSql: selectSql});
 }
 
 function initializePazPar2(pazpar2url, options) {
