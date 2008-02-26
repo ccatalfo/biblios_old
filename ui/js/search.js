@@ -2,7 +2,7 @@ function doSearch(form) {
 	showStatusMsg('Searching...');
 	if( $('#searchloc').val() == 'All' ) {
 		doPazPar2Search();
-		//doLocalFolderSearch();
+		doLocalFolderSearch();
 	}
 	else if( $('#searchloc').val() == 'SearchTargets' ) {
 		doPazPar2Search();
@@ -43,6 +43,7 @@ function doLocalFolderSearch() {
 	sql += col + ' like "%' + query + '%"';
 	selectSql += sql;
 	Ext.getCmp('savegrid').store.load({db: db, selectSql: selectSql});
+	biblios.app.displaySaveView();
 }
 
 function initializePazPar2(pazpar2url, options) {
