@@ -11,6 +11,7 @@ UI.savepreview.xml = '';
 UI.editor = {};
 UI.editor.lastElemHelpShown = '';
 UI.editor.id = '';
+UI.editor.lastEditorId = '';
 UI.editor.lastFocusedEl = '';
 // marc editor one metadata
 UI.editor.editorone = {};

@@ -1069,6 +1069,7 @@ function onFocus(elem) {
 	$(elem).addClass('focused');
 	var editorid = $(elem).parents('.marceditor').get(0).id;
 	UI.editor.lastFocusedEl = elem;
+	UI.editor.lastEditorId = editorid;
 	UI.editor[editorid].lastFocusedEl = elem;
 	//showTagHelp(elem);
 }
@@ -1113,6 +1114,7 @@ function onBlur(elem) {
 	$(elem).removeClass('focused');
 	var editorid = $(elem).parents('.marceditor').get(0).id;
 	UI.editor[editorid].record.update(elem);
+	UI.editor.lastEditorId = editorid;
 	UI.editor.lastFocusedEl = elem;
 	UI.editor[editorid].lastFocusedEl = elem;
 }
@@ -1223,18 +1225,18 @@ function setupEditorHotkeys(editorelem) {
 
 	// remove a subfield
 	$.hotkeys.add('Ctrl+d', function(e) {
-		var editorid = $(UI.editor.lastFocusedEl).parents('.marceditor').get(0).id;
+		var editorid = UI.editor.lastEditorId;
 		removeSubfield(editorid);
 	});
 	// remove a field
 	$.hotkeys.add('Ctrl+r', function(e) {
-		var editorid = $(UI.editor.lastFocusedEl).parents('.marceditor').get(0).id;
+		var editorid = UI.editor.lastEditorId;
 		removeTag(editorid);	
 	});
 
 	// save record
 	$.hotkeys.add('Ctrl+s', function(e) {
-		var editorid = $(UI.editor.lastFocusedEl).parents('.marceditor').get(0).id;
+		var editorid = UI.editor.lastEditorId;
 		doSaveLocal(UI.currSaveFile, editorid);
 	});
 }
