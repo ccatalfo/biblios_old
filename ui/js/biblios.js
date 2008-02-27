@@ -1668,7 +1668,7 @@ biblios.app = function() {
 		});
 
 		treeEditor.render();
-		alert('Application successfully initialized');
+	//	alert('Application successfully initialized');
         }
     };
 }(); // end of app
