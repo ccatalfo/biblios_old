@@ -1180,7 +1180,7 @@ biblios.app = function() {
 																		// FIXME
 																		var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																		UI.editor[editorid].id = '';
-																		var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[0].name;
+																		var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location;
 																		UI.editor[editorid].location = loc;
 																		if( loc.length > 1 ) {
 																			Ext.Msg.alert('Error', 'This record is available at more than one location.  Please select a location by clicking the expander button next to this record in the grid and dragging it to editor one or two.');
