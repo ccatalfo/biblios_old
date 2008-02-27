@@ -92,7 +92,7 @@ koha.prototype = {
 				savepath = 'new_bib';
 			}
 			$.ajax({
-				contentType: 'application/xml',
+				contentType: 'text/xml',
 				processData: false,
 				data: xmldoc,
 				dataType: 'xml',
