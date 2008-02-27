@@ -281,14 +281,16 @@ function init_gears() {
 // test prefs for koha integration
 function setupKohaPlugin() {
 	var koha = new DB.SendTargets({
-		name: 'Koha-cfc',
-		location: 'Koha-cfc',
-		url: 'http://eowyn.metavore.com'+hostPort+'/kohaapi/',
+		name: 'Koha',
+		location: 'Koha',
+		url: 'http://eowyn.metavore.com'+hostPort+'/kohastaffdemo/',
 		user: 'kohaadmin',
 		password: 'katikoan',
 		pluginlocation: libPath + 'plugins/koha.js',
 		plugininit: 'new koha()',
 		enabled: 1
 	}).save();
+	setILSTargets();
+	updateSendMenu();
 }
 
