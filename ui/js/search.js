@@ -62,7 +62,7 @@ paz = new pz2({
 					},
 					"termlist": "subject,author,date,publication-name",
 					"onterm": function(data) { 
-						if( data.activeClients == 0 ) {
+						if( data.activeclients == 0 ) {
 							Ext.getCmp('facetsTreePanel').root.reload();
 						}
 					},

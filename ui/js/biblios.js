@@ -849,7 +849,7 @@ biblios.app = function() {
 														leaf: false,
 														lines: false,
 														applyLoader: false,
-														loader: new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+paz.sessionID+'&command=termlist&name=author,subject,date,publication-name'}),
+														loader: new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+paz.sessionID+'&command=termlist&name=author,subject,date'}),
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Facets'
 														}),
