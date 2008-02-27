@@ -29,6 +29,12 @@ var marc21defsPath = libPath + "ui/xsl/marc21.xml";
 	<script type="text/javascript" src="lib/google_gears/gears_init.js"></script>
 	<script type="text/javascript" src="lib/google_gears/GearsORM_all.js"></script>
 	<script type="text/javascript" src="lib/google_gears/GearsORMShift.js"></script>
+<script>
+  if (!window.google || !google.gears) {
+	  location.href = "http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application" +
+                    "&return="+document.URL;
+  }
+</script>
 <!-- pazpar2 -->
 <script type="text/javascript" src="lib/pz2.js"></script>
 <!-- jquery -->
