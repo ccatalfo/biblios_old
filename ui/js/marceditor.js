@@ -61,9 +61,9 @@ function MarcEditor(ffeditor, vareditor) {
 
 	// private methods
 	function createFieldList() {
-		$('.tag', vared).each( function(i) {
-			fieldlist.push($(this).get(0).id.substring(0,3));
-		});
+		for( var i = 0; i<fields.length; i++) {
+			fieldlist.push( fields[i].tagnumber() );
+		}
 	}
 
 	function createFields() {
@@ -507,49 +507,49 @@ function MarcEditor(ffeditor, vareditor) {
 
 		$('controlfield', marcXmlDoc).each( function(i) {
 			val = $(this).text();
-			tagnumber = $(this).attr('tag');
-			html += '<div id="'+tagnumber+'" class="tag controlfield ';
-			html += tagnumber;
+			tagnum = $(this).attr('tag');
+			html += '<div id="'+tagnum+'" class="tag controlfield ';
+			html += tagnum;
 			html += '"';
 			html += '>';
-			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tagnumber+'">';
+			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tagnum+'">';
 			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+'#'+'">';
 			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+'#'+'">';
 			html += '<input onblur="onBlur(this)" onfocus="onFocus(this)" ';
 			html += 'type="text" '; 
 			html += 'value="'+val+'" ';
 			html += 'class="controlfield ';
-			html += tagnumber;
+			html += tagnum;
 			html += '"';
 			html += '>';
 			html += '</div>';
-			fields.push( new Field(tagnumber, '', '', [{code: '', value: val}]) );
+			fields.push( new Field(tagnum, '', '', [{code: '', value: val}]) );
 		});	
 		UI.editor.progress.updateProgress(.6, 'Controlfields editor created');
 
 		$('datafield', marcXmlDoc).each(function(i) {
 			var value = $(this).text();
-			var tagnumber = $(this).attr('tag');
+			var tagnum = $(this).attr('tag');
 			var ind1 = $(this).attr('ind1') || ' ';
 			var ind2 = $(this).attr('ind2') || ' ';
-			var id = tagnumber+'-'+i;
+			var id = tagnum+'-'+i;
 			html += '<div class=" tag datafield ';
-			html += tagnumber;
+			html += tagnum;
 			html += '" ';
 			html += 'id="'+id+'"';
 			html += '>';
-			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tagnumber+'">';
+			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tagnum+'">';
 			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+ind1+'">';
 			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+ind2+'">';
 			
-			var id = tagnumber+'-'+i;
+			var id = tagnum+'-'+i;
 			html += '<span class="subfields" id="'+id+'">';
 			var subfields = new Array();
 			$('subfield', this).each(function(j) {
 				var sfval = $(this).text();
 				var sfcode = $(this).attr('code');
 				subfields.push( new Subfield(sfcode, sfval) );
-				var sfid = 'dsubfields'+tagnumber+sfcode+'-'+i;
+				var sfid = 'dsubfields'+tagnum+sfcode+'-'+i;
 				html += '<span class="subfield '+sfcode+'" id="'+sfid+'">';
 				html += '<input maxlength="2" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="subfield-delimiter" value="&#8225;'+sfcode+' ">';
 				html += '<input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="subfield-text" value="'+sfval+' ">';
@@ -559,12 +559,13 @@ function MarcEditor(ffeditor, vareditor) {
 				// close subfields span
 			html + '</span>';
 			html += '</div>'; // close datafield div	
-			fields.push( new Field(tagnumber, ind1, ind2, subfields) );
+			fields.push( new Field(tagnum, ind1, ind2, subfields) );
 		});
 		UI.editor.progress.updateProgress(.7, 'Datafields editor created');
 		html += '</div>'; // end vareditor div
 		html += '</div>'; // varfields_editor div
 		marcrecord = new MarcRecord(fields);
+		createFieldList();
 		UI.editor.progress.updateProgress(.8, 'MarcEditor created');
 		return html;
 	}
