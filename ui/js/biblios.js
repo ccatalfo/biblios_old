@@ -385,7 +385,6 @@ biblios.app = function() {
 																			text: 'Add Field',
 																			handler: function(btn) {
 																				UI.editor.editorone.record.addField();
-																				UI.editor[btn.editorid].record.update();
 																			}
 																		},
 																		{
@@ -393,8 +392,7 @@ biblios.app = function() {
 																			editorid: 'editorone',
 																			text: 'Remove Field',
 																			handler: function(btn) {
-																				removeTag('editorone');
-																				UI.editor[btn.editorid].record.update();
+																				UI.editor[btn.editorid].record.deleteField('editorone');
 																			}
 																		},
 																		{
@@ -402,8 +400,7 @@ biblios.app = function() {
 																			editorid: 'editorone',
 																			text: 'Add Subfield',
 																			handler: function(btn) {
-																				addSubfield(UI.editor.editorone.lastFocusedEl);
-																				UI.editor[btn.editorid].record.update();
+																				UI.editor[btn.editorid].record.addSubfield(btn.editorid);
 																			}
 																		},
 																		{	
@@ -411,8 +408,7 @@ biblios.app = function() {
 																			editorid: 'editorone',
 																			text: 'Remove subfield',
 																			handler: function(btn) {
-																				removeSubfield(btn.editorid);
-																				UI.editor[btn.editorid].record.update();
+																				UI.editor[btn.editorid].record.deleteSubfield(btn.editorid);
 																			}
 																		}
 																	]
@@ -542,7 +538,7 @@ biblios.app = function() {
 																			editorid: 'editorone',
 																			text: 'Remove Field',
 																			handler: function(btn) {
-																				removeTag('editorone');
+																				UI.editor[btn.editorid].record.deleteField('editorone');
 																				UI.editor[btn.editorid].record.update();
 																			}
 																		},
@@ -551,8 +547,7 @@ biblios.app = function() {
 																			editorid: 'editorone',
 																			text: 'Add Subfield',
 																			handler: function(btn) {
-																				addSubfield(UI.editor.editorone.lastFocusedEl);
-																				UI.editor[btn.editorid].record.update();
+																				UI.editor[btn.editorid].record.addSubfield(btn.editorid);
 																			}
 																		},
 																		{	
@@ -560,7 +555,7 @@ biblios.app = function() {
 																			editorid: 'editorone',
 																			text: 'Remove subfield',
 																			handler: function(btn) {
-																				removeSubfield(btn.editorid);
+																				UI.editor[btn.editorid].record.deleteSubfield(btn.editorid);
 																				UI.editor[btn.editorid].record.update();
 																			}
 																		}

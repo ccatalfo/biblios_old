@@ -202,16 +202,16 @@ function MarcEditor(ffeditor, vareditor) {
 		}
 	}
 
-	this._addField = function(tagnumber, ind1, ind2, subfields) {
+	this._addField = function(editorid, tagnumber, ind1, ind2, subfields) {
 		if( tagnumber ) {
-			doAddField(tagnumber, ind1, ind2, subfields);
+			doAddField(editorid, tagnumber, ind1, ind2, subfields);
 		}
 		else {
 			Ext.MessageBox.prompt('Add tag', 'Choose a tag number', function(btn, tagnumber) {
-				doAddField(tagnumber);
+				doAddField(editorid, tagnumber);
 			});
 		}
-		function doAddField(tagnumber, ind1, ind2, subfields) {
+		function doAddField(editorid, tagnumber, ind1, ind2, subfields) {
 			var firstind = ind1 || '#';
 			var secondind = ind2 || '#';
 			var sf = subfields || [ {'delimiter': 'a', 'text': ''} ];
@@ -261,31 +261,33 @@ function MarcEditor(ffeditor, vareditor) {
 		}
 	}
 
-	this._deleteField = function(tagnumber, i) {
+	this._deleteField = function(editorid, tagnumber, i) {
+		//if(debug) { console.info('removing tag: ' + $(UI.editor.lastFocusedEl).parents('.tag').get(0).id)}
 		if( tagnumber ) {
 			// remove  the ith tagnumber if we were passed an i
 			if( !Ext.isEmpty(i) ) {
-				$('.tag', vared).filter('[@id*='+tagnumber+']').eq(i).remove();
+				$('#'+editorid).find('.tag').filter('[@id*='+tagnumber+']').eq(i).remove();
 			}
 			// else remove all!
 			else {
-				$('.tag', vared).filter('[@id*='+tagnumber+']').remove();
+				$('#'+editorid).find('.tag').filter('[@id*='+tagnumber+']').remove();
 			}
-			update();
 		}
 		else {
 			// focus previous or next tag
-			var prev = $(UI.editor.lastFocusedEl).parents('.tag').prev().children('.tagnumber');
-			var next = $(UI.editor.lastFocusedEl).parents('.tag').next().children('.tagnumber');
-			$(UI.editor.lastFocusedEl).parents('.tag').remove();
-			update();
+			var prev = $(UI.editor[editorid].lastFocusedEl).parents('.tag').prev();
+			var next = $(UI.editor[editorid].lastFocusedEl).parents('.tag').next();
+			$(UI.editor[editorid].lastFocusedEl).parents('.tag').remove();
 			if( $(next).length ) {
-				$(next).focus();
+				$(next).get(0).focus();
+				UI.editor[editorid].lastFocusedEl = $(next);
 			}
-			else {
-				$(prev).focus();
+			else if( $(prev).length ) {
+				$(prev).get(0).focus();
+				UI.editor[editorid].lastFocusedEl = $(prev);
 			}
 		}
+		update();
 	}
 	
 	this._getIndexOf = function(elem) {
@@ -300,28 +302,57 @@ function MarcEditor(ffeditor, vareditor) {
 		}
 	}
 
-	this._addSubfield = function(tag, index, subfield, value) {
+	this._addSubfield = function(editorid, tag, index, subfield, value) {
 		// get last subfield in this tag
 		var numsf = $('div[@id^='+tag+']', vared).eq(index).find('.subfield-text').length;
 		var lastsf = $('div[@id^='+tag+']', vared).eq(index).find('.subfield-text').eq(numsf-1);
-		// add a subfield after it
-		addSubfield(lastsf);
-		// now set its delimiter to the passed in subfield code
-		var oldval = $(lastsf).parents('.subfield').next().children('.subfield-delimiter').val();
-		$(lastsf).parents('.subfield').next().children('.subfield-delimiter').val(oldval+subfield);
-		if(value) {
-			// set its value to pass in param
-			$(lastsf).parents('.subfield').next().children('.subfield-text').val(value);
+		var lastFocused = UI.editor[editorid].lastFocusedEl;
+		// if we're adding tag w/ tagnumber via macro
+		if( tag ) {
+			var afterEl = lastsf;	
+			 // get a new random id for the new elements
+			 var newid="newsubfield-" + Math.floor(Math.random()*100);    
+			$(afterEl).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text'></span>");
+			// now set its delimiter to the passed in subfield code
+			var oldval = $(lastsf).parents('.subfield').next().children('.subfield-delimiter').val();
+			$(lastsf).parents('.subfield').next().children('.subfield-delimiter').val(oldval+subfield);
+			if(value) {
+				// set its value to pass in param
+				$(lastsf).parents('.subfield').next().children('.subfield-text').val(value);
+			}
+			// focus the new subfield-text
+			$(lastsf).parents('.subfield').next().children('.subfield-text').focus();
+		}
+		// if we're just adding a sf w/ kb or toolbar tn
+		else {
+			var afterEl = lastFocused;	
+			var newid="newsubfield-" + Math.floor(Math.random()*100);    
+			$(afterEl).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text'></span>");
 		}
 		update();
-		// focus the new subfield-text
-		$(lastsf).parents('.subfield').next().children('.subfield-text').focus();
 	}
 
-	this._deleteSubfield = function(tag, index, subfield) {
-		var sf = $('[@id^='+tag+']', vared).children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
-		UI.editor.lastFocusedEl = sf;
-		removeSubfield();
+	this._deleteSubfield = function(editorid, tag, index, subfield) {
+		if(debug) { console.info('removing subfield with text: ' + $(UI.editor.lastFocusedEl).val());}
+		var next = $(UI.editor[editorid].lastFocusedEl).parents('.subfield').next().children('.subfield-delimiter');
+		var prev = $(UI.editor[editorid].lastFocusedEl).parents('.subfield').prev().children('.subfield-delimiter');
+		var ind2 = $(UI.editor[editorid].lastFocusedEl).parents('.tag').children('.indicator').eq(1);
+		// remove current subfield
+		$(UI.editor[editorid].lastFocusedEl).parents('.subfield').remove();
+		// focus next subfield 
+		if( $(UI.editor[editorid].lastFocusedEl).parents('.subfield').next().length )  {
+			$(next).get(0).focus();	
+			UI.editor[editorid].lastFocusedEl = $(next);
+		}
+		else if( $(UI.editor.lastFocusedEl).parents('.subfield').prev().length )  {
+			$(prev).get(0).focus();
+			UI.editor[editorid].lastFocusedEl = $(prev);
+		}
+		// or indicator
+		else if( $(ind2).length) {
+			$(ind2).get(0).focus();
+			UI.editor[editorid].lastFocusedEl = $(ind2);
+		}
 		update();
 	}
 
@@ -580,16 +611,16 @@ MarcEditor.prototype.setValue = function(tag, subfield, value) {
 	this._setValue(tag, subfield, value);
 }
 
-MarcEditor.prototype.deleteSubfield = function(tag, index, subfield) {
-	this._deleteSubfield(tag, index, subfield);
+MarcEditor.prototype.deleteSubfield = function(editorid, tag, index, subfield) {
+	this._deleteSubfield(editorid, tag, index, subfield);
 }
 
 MarcEditor.prototype.deleteSubfields = function(tag) {
 	this._deleteSubfields(tag);
 }
 
-MarcEditor.prototype.addSubfield = function(tag, index, subfield, value) {
-	this._addSubfield(tag, index, subfield, value);
+MarcEditor.prototype.addSubfield = function(editorid, tag, index, subfield, value) {
+	this._addSubfield(editorid, tag, index, subfield, value);
 }
 
 MarcEditor.prototype.focusTag = function(tag) {
@@ -600,12 +631,12 @@ MarcEditor.prototype.focusSubfield = function(tag, subfield) {
 	this._focusSubfield(tag, subfield);
 }
 
-MarcEditor.prototype.addField = function(tag, ind1, ind2, subfields) {
-	this._addField(tag, ind1, ind2, subfields);
+MarcEditor.prototype.addField = function(editorid, tag, ind1, ind2, subfields) {
+	this._addField(editorid, tag, ind1, ind2, subfields);
 }
 
-MarcEditor.prototype.deleteField = function(tagnumber, i) {
-	this._deleteField(tagnumber, i);
+MarcEditor.prototype.deleteField = function(editorid, tagnumber, i) {
+	this._deleteField(editorid, tagnumber, i);
 }
 
 MarcEditor.prototype.getFieldList = function() {

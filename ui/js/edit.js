@@ -257,46 +257,6 @@ function doMerge() {
 }
 
 
-/* Function: addSubfield
-
-   Insert a new subfield node into an existing marcxml document at the cursor insertion point.
-
-   Parameters:
-
-   selectedElement: the element in the editor which is currently selected
-   editorSelection: the selection currently in the editor
-
-   Returns:
-
-   None.
-
-*/
-function addSubfield(afterEl) {
-		 // get a new random id for the new elements
-		 var newid="newsubfield-" + Math.floor(Math.random()*100);    
-		$(afterEl).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text'></span>");
-		//$('delimiter'+newid).get(0).focus();
-}
-
-/*
-   Function: doAddField
-
-   Prompt the user to choose a marc tag to add, then add that field to the marceditor.
-
-   Parameters:
-
-   None.
-
-   Returns:
-
-   None.
-
-*/
-function addField(tagnumber, ind1, ind2, subfields) {
-	var editorid = $(UI.editor.lastFocusedEl).parents('.marceditor').get(0).id;
-	UI.editor[editorid].record.addField();
-}
-
 /*
 Function: displayHelpMsg
 
@@ -378,59 +338,6 @@ function toggleFixedFieldDisplay(btn, toggled) {
 	}
 
 }
-
-function removeSubfield(editorid) {
-	if(debug) { console.info('removing subfield with text: ' + $(UI.editor.lastFocusedEl).val());}
-	var next = $(UI.editor[editorid].lastFocusedEl).parents('.subfield').next().children('.subfield-delimiter');
-	var prev = $(UI.editor[editorid].lastFocusedEl).parents('.subfield').prev().children('.subfield-delimiter');
-	var ind2 = $(UI.editor[editorid].lastFocusedEl).parents('.tag').children('.indicator').eq(1);
-	// remove current subfield
-	$(UI.editor[editorid].lastFocusedEl).parents('.subfield').remove();
-	// focus next subfield 
-	if( $(UI.editor[editorid].lastFocusedEl).parents('.subfield').next().length )  {
-		$(next).get(0).focus();	
-		UI.editor[editorid].lastFocusedEl = $(next);
-	}
-	else if( $(UI.editor.lastFocusedEl).parents('.subfield').prev().length )  {
-		$(prev).get(0).focus();
-		UI.editor[editorid].lastFocusedEl = $(prev);
-	}
-	// or indicator
-	else if( $(ind2).length) {
-		$(ind2).get(0).focus();
-		UI.editor[editorid].lastFocusedEl = $(ind2);
-	}
-}
-
-
-function removeTag(editorid, tagnumber, i ) {
-	//if(debug) { console.info('removing tag: ' + $(UI.editor.lastFocusedEl).parents('.tag').get(0).id)}
-	if( tagnumber ) {
-		// remove  the ith tagnumber if we were passed an i
-		if( !Ext.isEmpty(i) ) {
-			$('#'+editorid).find('.tag').filter('[@id*='+tagnumber+']').eq(i).remove();
-		}
-		// else remove all!
-		else {
-			$('#'+editorid).find('.tag').filter('[@id*='+tagnumber+']').remove();
-		}
-	}
-	else {
-		// focus previous or next tag
-		var prev = $(UI.editor[editorid].lastFocusedEl).parents('.tag').prev();
-		var next = $(UI.editor[editorid].lastFocusedEl).parents('.tag').next();
-		$(UI.editor[editorid].lastFocusedEl).parents('.tag').remove();
-		if( $(next).length ) {
-			$(next).get(0).focus();
-			UI.editor[editorid].lastFocusedEl = $(next);
-		}
-		else if( $(prev).length ) {
-			$(prev).get(0).focus();
-			UI.editor[editorid].lastFocusedEl = $(prev);
-		}
-	}
-}
-
 
 function create_static_editor(ffed, vared, editorid) {
 	// setup marceditor macro functionality
@@ -597,23 +504,25 @@ function setupEditorHotkeys(editorelem) {
 
 	// add a new subfield
 	$.hotkeys.add('Ctrl+m', function(e) {	
-		addSubfield(UI.editor.lastFocusedEl);
+		var editorid = UI.editor.lastEditorId;
+		UI.editor[editorid].record.addSubfield(editorid);
 	});
 	
 	// add a new field
 	$.hotkeys.add('Ctrl+n', function(e) {
-		addField();
+		var editorid = UI.editor.lastEditorId;
+		UI.editor[editorid].record.addField(editorid);
 	});
 
 	// remove a subfield
 	$.hotkeys.add('Ctrl+d', function(e) {
 		var editorid = UI.editor.lastEditorId;
-		removeSubfield(editorid);
+		UI.editor[editorid].record.deleteSubfield(editorid);
 	});
 	// remove a field
 	$.hotkeys.add('Ctrl+r', function(e) {
 		var editorid = UI.editor.lastEditorId;
-		removeTag(editorid);	
+		UI.editor[editorid].record.deleteField(editorid);
 	});
 
 	// save record
