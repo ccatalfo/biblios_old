@@ -89,8 +89,11 @@ biblios.app = function() {
         init: function() {
 			Ext.QuickTips.init();
 			setILSTargets();
-            this.viewport = new Ext.Viewport({
+            this.viewport = new Ext.Panel({
 				layout: 'border',
+				renderTo: 'biblios',
+				height: 600,
+				width: Ext.getBody().getComputedWidth(),
 				items: [
 					{
 						region: 'north',
@@ -100,16 +103,18 @@ biblios.app = function() {
 							{
 								region: 'north',
 								id: 'branding',
-								contentEl: 'branding-area'
+								//contentEl: 'branding-area'
 							},
 							{
 								region: 'center',
 								id: 'searchformpanel',
+								height: 50,
+								width: 100,
 								contentEl: 'searchform'
 							},
 							{
 								region: 'west',
-								html: '<img src="ui/images/biblios-logo.gif"/>'
+								html: {tag: 'img', src: biblioslogo}
 							},
 							{
 								region: 'east',

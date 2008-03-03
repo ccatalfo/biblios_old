@@ -4,16 +4,19 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="lib/extjs2/resources/css/ext-all.css">
+    <link rel="stylesheet" type="text/css" href="ui/css/reset.css">
 <!-- properties which need to be modified on a global basis -->
 <script type="text/javascript">
 var libPath = '';
 var hostPort = '';
 var cgiDir = '/cgi-bin/';
+// reference local blank image
 var showMarcXslPath = libPath + "ui/xsl/MARC21slim2HTML.xsl";
 var fixedFieldXslPath = libPath + "ui/xsl/fixedfields_editor.xsl";
 var varFieldsXslPath = libPath + "ui/xsl/varfields_inputboxes.xsl";
 var confPath = libPath + "conf/webcatdb.conf";
 var marc21defsPath = libPath + "ui/xsl/marc21.xml";
+var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
 </script>
 <!-- extjs -->
     <script type="text/javascript" src="lib/extjs2/adapter/ext/ext-base.js"></script>
@@ -66,6 +69,7 @@ var marc21defsPath = libPath + "ui/xsl/marc21.xml";
     <script type="text/javascript">
 		var debug = 1;
         Ext.onReady(function() {
+			Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs2/resources/images/default/s.gif';
 			biblios.app.init();
 			// placeholder
 		}, biblios.app);
@@ -74,6 +78,7 @@ var marc21defsPath = libPath + "ui/xsl/marc21.xml";
 </head>
 <body>
 <div id='branding-area'></div>
+<div id='biblios'>
 <div id='downloads'></div>
 <div id='searchform'>
 	 	<p class='searchtip'>Enter a search term and choose a search type</p>
@@ -96,6 +101,6 @@ var marc21defsPath = libPath + "ui/xsl/marc21.xml";
 			<input type='submit' value='Search'>
 		</form>
 	  </div>
-
+</div>
 </body>
 </html>
