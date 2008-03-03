@@ -43,7 +43,7 @@ while(<IN>) {
 		my $newport = "':" . $port . "'";
 		$_ =~ s/$1/$newport/;
 	}
-	if( $_ =~ /(<head>)/ ) {
+	if( $_ =~ /(<!-- extraheadincludes -->)/ ) {
 		print "Updating <head> for extra includes: $headincludes\n";
 		$_ =~ s/$1/<head>$headincludes/;
 	}

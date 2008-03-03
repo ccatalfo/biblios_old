@@ -1,4 +1,4 @@
-body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
+div#biblios div,div#biblios dl,div#biblios dt,div#biblios dd,div#biblios ul,div#biblios ol,div#biblios li,div#biblios h1,div#biblios h2,div#biblios h3,div#biblios h4,div#biblios h5,div#biblios h6,div#biblios pre,div#biblios form,div#biblios fieldset,div#biblios input,div#biblios textarea,div#biblios p,div#biblios blockquote,div#biblios th,div#biblios td { 
 
 	margin:0;
 
@@ -6,7 +6,14 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,
 
 }
 
-table {
+div#biblios td, div#biblios th {
+
+	background-color: transparent;
+
+	border: medium none;
+}
+
+div#biblios table {
 
 	border-collapse:collapse;
 
@@ -14,13 +21,13 @@ table {
 
 }
 
-fieldset,img { 
+div#biblios fieldset,div#biblios img { 
 
 	border:0;
 
 }
 
-address,caption,cite,code,dfn,em,strong,th,var {
+div#biblios address,div#biblios caption,div#biblios cite,div#biblios code,div#biblios dfn,div#biblios em,div#biblios strong,div#biblios th,div#biblios var {
 
 	font-style:normal;
 
@@ -28,19 +35,23 @@ address,caption,cite,code,dfn,em,strong,th,var {
 
 }
 
-ol,ul {
+div#biblios ol,div#biblios ul {
 
 	list-style:none;
 
 }
 
-caption,th {
+div#biblios ul li {
+	list-style-type: none;
+}
+
+div#biblios caption,div#biblios th {
 
 	text-align:left;
 
 }
 
-h1,h2,h3,h4,h5,h6 {
+div#biblios h1,div#biblios h2,div#biblios h3,div#biblios h4,div#biblios h5,div#biblios h6 {
 
 	font-size:100%;
 
@@ -48,12 +59,12 @@ h1,h2,h3,h4,h5,h6 {
 
 }
 
-q:before,q:after {
+div#biblios q:before,div#biblios q:after {
 
 	content:'';
 
 }
 
-abbr,acronym { border:0;
+div#biblios abbr,div#biblios acronym { border:0;
 
 }
