@@ -272,7 +272,7 @@ biblios.app = function() {
 																UI.editor['editorone'].id = id;
 																var loc = grid.getSelections()[0].data.location[0].name;
 																UI.editor['editorone'].location = loc;
-																getRemoteRecord(id, loc, 0, function(data) { openRecord( xslTransform.serialize(data), 'editorone' ) }
+																getRemoteRecord(id, loc, 0, function(data) { openRecord( xslTransform.serialize(data), 'editorone' ); }
 														);
 
 															},
@@ -282,7 +282,7 @@ biblios.app = function() {
 																UI.editor['editorone'].id = id;
 																var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[0].name;
 																UI.editor['editorone'].location = loc;
-																  getRemoteRecord(id, loc, 0, function(data) { openRecord( xslTransform.serialize( data), 'editorone' ) });
+																  getRemoteRecord(id, loc, 0, function(data) { openRecord( xslTransform.serialize( data), 'editorone' ); });
 																}	
 															} // on ENTER keypress
 														}, // search grid listeners
@@ -314,7 +314,7 @@ biblios.app = function() {
 																			var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[0].name;
 																			UI.editor['editorone'].location = loc;
 																			getRemoteRecord(id, loc, 0, function(data) { 
-																				openRecord( xslTransform.serialize(data), 'editorone' ) 
+																				openRecord( xslTransform.serialize(data), 'editorone' ); 
 																			});
 																		}
 																	},
@@ -1016,10 +1016,10 @@ biblios.app = function() {
 																									// update db
 																									try {
 																										DB.Savefiles.select('rowid = ?', [id]).getOne().remove();
-																										return true;
 																										// update our hash of savefile id/names
 																										getSaveFileNames();
 																										updateSaveMenu();
+																										return true;
 																									}
 																									catch(ex) {
 																										Ext.MessageBox.alert("Database error", ex.message);
@@ -1182,7 +1182,7 @@ biblios.app = function() {
 																			return false;
 																		}
 																		getRemoteRecord(id, loc, 0, function(data) { 
-																			openRecord( xslTransform.serialize(data), editorid ) 
+																			openRecord( xslTransform.serialize(data), editorid );
 																		});
 																	} // record from search grid
 																} // if we have a grid row
@@ -1195,7 +1195,7 @@ biblios.app = function() {
 																	UI.editor[editorid].location = loc;
 																	var record = Ext.getCmp('searchgrid').getSelections()[0];
 																	getRemoteRecord(id, loc.name, offset, function(data) { 
-																		openRecord( xslTransform.serialize(data), editorid ) 
+																		openRecord( xslTransform.serialize(data), editorid ); 
 																	});
 
 
@@ -1322,7 +1322,7 @@ biblios.app = function() {
 																				record.data.enabled = record.data.enabled ? 1 : 0;
 																				try {
 																					var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where rowid = ?', [record.data.name, record.data.hostname, record.data.port, record.data.dbname, record.data.description, record.data.userid, record.data.password, record.data.enabled, record.data.rowid]);
-																					rs.close()
+																					rs.close();
 																				}
 																				catch(ex) {
 																					Ext.MessageBox.alert('Error', ex.message);
@@ -1499,7 +1499,7 @@ biblios.app = function() {
 																		if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
 																			try {
 																				var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, pluginlocation = ?, plugininit= ?, enabled = ? where rowid = ?', [record.data.name, record.data.location, record.data.user, record.data.password, record.data.pluginlocation, record.data.plugininit, record.data.enabled, record.data.rowid]);
-																				rs.close()
+																				rs.close();
 																			}
 																			catch(ex) {
 																				Ext.MessageBox.alert('Error', ex.message);

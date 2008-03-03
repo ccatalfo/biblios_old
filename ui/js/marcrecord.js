@@ -7,7 +7,7 @@ function MarcRecord(fieldlist) {
 
 	this.fields = function() {
 		return fields;
-	}
+	};
 
 	this._field = function(fieldno) {
 		for(var i=0; i<fields.length; i++){
@@ -16,11 +16,11 @@ function MarcRecord(fieldlist) {
 			}
 		}
 		return false;
-	}
+	};
 
 	this._addField = function(field) {
 		fields.push(field);
-	}
+	};
 
 	this._removeField = function(fieldno) {
 		for(var i=0; i<fields.length; i++){
@@ -28,7 +28,7 @@ function MarcRecord(fieldlist) {
 				fields.splice(i, 1);
 			}
 		}
-	}
+	};
 
 	this._XML = function() {
 		// fixme this isn't working correctly: it's failing on trying to add xml fragment 
@@ -39,7 +39,7 @@ function MarcRecord(fieldlist) {
 		//}
 		//return xml;
 		return xslTransform.loadString( this._XMLString() );
-	}
+	};
 
 	this._XMLString = function() {
 		var xml = '<record xmlns="http://www.loc.gov/MARC21/slim">';
@@ -48,33 +48,33 @@ function MarcRecord(fieldlist) {
 		}
 		xml += '</record>';
 		return xml;
-	}
+	};
 
 }
 
 MarcRecord.prototype.field = function(fieldno) {
 	return this._field(fieldno);
-}
+};
  
 MarcRecord.prototype.fields = function() {
 	return this.fields();
-}
+};
 
 MarcRecord.prototype.addField = function(field) {
 	this._addField(field);
-}
+};
 
 MarcRecord.prototype.removeField = function(fieldno) {
 	this._removeField(fieldno);
-}
+};
 
 MarcRecord.prototype.XML = function() {
 	return this._XML();
-}
+};
 
 MarcRecord.prototype.XMLString = function() {
 	return this._XMLString();
-}
+};
 
 function Field(tagnumber, indicator1, indicator2, subfields) {
 	var that = this;
@@ -84,18 +84,18 @@ function Field(tagnumber, indicator1, indicator2, subfields) {
 
 	this._tagnumber = function() {
 		return tagnumber;
-	}
+	};
 
 	this._indicator = function(num, val) {
 		if( !Ext.isEmpty(val) ) {
 			indicators[num] = val;
 		}
 		return indicators[num];
-	}
+	};
 
 	this._indicators = function() {
 		return indicators;
-	}
+	};
 
 	this._hasSubfield = function(code) {
 		for(var i = 0; i<subfields.length; i++) {
@@ -104,11 +104,11 @@ function Field(tagnumber, indicator1, indicator2, subfields) {
 			}
 		}
 		return false;
-	}
+	};
 		
 	this._subfields = function() {
 		return subfields;
-	}
+	};
 
 	this._subfield = function(code, val) {
 		var sf = '';
@@ -121,7 +121,7 @@ function Field(tagnumber, indicator1, indicator2, subfields) {
 			sf.value = val;
 		}
 		return sf;
-	}
+	};
 
 	this._XML = function() {
 		var marcxml = Sarissa.getDomDocument('', '');
@@ -157,44 +157,44 @@ function Field(tagnumber, indicator1, indicator2, subfields) {
 			}
 			return df;
 		}
-	}
+	};
 
 	this._XMLString = function() {
 		return xslTransform.serialize( this.XML() );
-	}
+	};
 }
 
 Field.prototype.XML = function() {
 	return this._XML();
-}
+};
 
 Field.prototype.XMLString = function() {
 	return this._XMLString();
-}
+};
 
 Field.prototype.subfields = function() {
 	return this._subfields();	
-}
+};
 
 Field.prototype.subfield = function(code, val) {
 	return this._subfield(code, val);
-}
+};
 
 Field.prototype.hasSubfield = function(code) {
 	return this._hasSubfield(code);
-}
+};
 
 Field.prototype.tagnumber = function() {
 	return this._tagnumber();
-}
+};
 
 Field.prototype.indicator = function(num, val) {
 	return this._indicator(num, val);
-}
+};
 
 Field.prototype.indicators = function() {
 	return this._indicators();
-}
+};
 
 
 function Subfield(code, value) {
@@ -205,18 +205,18 @@ function Subfield(code, value) {
 
 Subfield.prototype.setCode = function(code) {
 	this.code = code;
-}
+};
 
 Subfield.prototype.getCode = function(code) {
 	return this.code;
-}
+};
 
 Subfield.prototype.setValue = function(value) {
 	this.value = value;
-}
+};
 
 Subfield.prototype.getValue = function(value) {
 	return this.value;
-}
+};
 
 

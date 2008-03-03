@@ -24,7 +24,7 @@ function doLocalFolderSearch() {
 	var col = '';
 	switch(searchtype) {
 		case '': 
-			col = 'title or author or xml or publisher '
+			col = 'title or author or xml or publisher ';
 			break;
 		case 'ti':
 			col = 'title ';
@@ -48,7 +48,7 @@ function doLocalFolderSearch() {
 }
 
 function initializePazPar2(pazpar2url, options) {
-if(!options) { options = {} }
+if(!options) { options = {}; }
 paz = new pz2({ 
 					"errorhandler": pazPar2Error,
 					"oninit": options.initCallback || function() {},
@@ -68,6 +68,19 @@ paz = new pz2({
 					},
                     "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
                     "pazpar2path": pazpar2url,
+					"onbytarget": function(data) {
+							var nodes = Ext.getCmp('TargetsTreePanel').root.childNodes;
+							for( var i = 0; i < data.length; i++) {
+								for( var j = 0; j < nodes.length; j++ ) {
+									var id = nodes[j].attributes.hostname + ':' + nodes[j].attributes.port + '/' + nodes[j].attributes.dbname;
+									if( id == data[i].id ) {
+										if( nodes[j] ) {
+											nodes[j].setText( nodes[j].attributes.servername + ' (' + data[i].hits + ')' );
+										}
+									}
+								}
+							}
+					},
 					"usesessions" : true,
 					"clear": 1
 				});
@@ -122,16 +135,16 @@ function changePazPar2TargetStatus(o) {
 }
 
 function resetPazPar2(options) {
-	if(debug){ console.info('resetting pazpar2') }
+	if(debug){ console.info('resetting pazpar2'); }
 	paz = initializePazPar2(pazpar2url, {
 			initCallback: function(statusOK) {
-				if(debug) { console.info('pazpar2 initCallback: resetting sessionID for searching and setting Z targets') }
+				if(debug) { console.info('pazpar2 initCallback: resetting sessionID for searching and setting Z targets'); }
 				if(statusOK == true) {
 					// reset search grid's url for new session id
 					Ext.getCmp('searchgrid').store.proxy.conn.url = paz.pz2String + "?command=show&session=" + paz.sessionID;
 					setPazPar2Targets(paz);
 					if(options) {
-						if(debug) { console.info("re-running search with pazpar2") }
+						if(debug) { console.info("re-running search with pazpar2"); }
 						paz.search( options.currQuery );
 						paz.show(options.currStart, options.currNum);
 						getPazRecord(options.currRecId, 0, function(data) {previewRecord(data);}, {});
@@ -142,13 +155,13 @@ function resetPazPar2(options) {
 }
 
 function pazPar2Error(data) {
-		if(debug){ console.info('pazpar2 error: ' + data.code)}
+		if(debug){ console.info('pazpar2 error: ' + data.code);}
 		if( data.code == 'HTTP' ) {
 			Ext.MessageBox.alert('Initialization error', 'Pazpar2 search server is unavailble. Please check your configuration and try again');
 		}
 		// if session does not exist  or record is missing
 		if( data.code == '1' || data.code == '7') {
-			if(debug) { console.info("pazpar2 error: session does not exist or record is missing") }
+			if(debug) { console.info("pazpar2 error: session does not exist or record is missing"); }
 			var currQuery = paz.currQuery;
 			var currStart = paz.currentStart;
 			var currNum = paz.currNum;
@@ -204,13 +217,13 @@ function getRecordFromLocation(id, loc, callback) {
 
 function getPazRecord(recId, offset, callback, callbackParamObject) {
 	if( recordCache[recId] ) {
-		if(debug) { console.info('retreiving record from cache')}
+		if(debug) { console.info('retreiving record from cache');}
 		// call the callback with record from record cache
 		callback.call(this, recordCache[recId], callbackParamObject);
 	}
 	// if the record isn't in the cache, ask pazpar2 for it with the supplied callback for record retrieval
 	else {
-		if(debug) { console.info('retreiving record from pazpar2')}
+		if(debug) { console.info('retreiving record from pazpar2');}
         try {
 		 	$.ajax({
 				url: pazpar2url,

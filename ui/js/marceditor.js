@@ -55,6 +55,9 @@ function MarcEditor(ffeditor, vareditor) {
 	var that = this;
 	var ffed = ffeditor;
 	var vared = vareditor;
+	var htmled = '';	
+	var lastFocusedEl;
+	var currFocusedEl;
 	var fieldlist = new Array();
 	var fields = new Array();
 	var marcrecord = null;
@@ -129,11 +132,11 @@ function MarcEditor(ffeditor, vareditor) {
 	// privileged methods
 	this._getFieldList = function() {
 		return fieldlist;
-	}
+	};
 
 	this._getFields = function() {
 		return fields;
-	}
+	};
 
 	this._getField = function(tagnumber) {
 		for ( f in fields ) {
@@ -141,7 +144,7 @@ function MarcEditor(ffeditor, vareditor) {
 				return fields[f];
 			}
 		}
-	}
+	};
 
 	// privileged
 	this._hasField = function(tagnumber) {
@@ -151,7 +154,7 @@ function MarcEditor(ffeditor, vareditor) {
 		else {
 			return false;
 		}
-	}
+	};
 	
 	this._hasFieldAndSubfield = function(tagnumber, subfieldcode) {
 		if( this._hasField(tagnumber) ) {
@@ -160,16 +163,16 @@ function MarcEditor(ffeditor, vareditor) {
 		else {
 			return false;
 		}
-	}
+	};
 
 	this._fieldIndex = function(tagnumber) {
 		return fieldlist.indexOf(tagnumber);
-	}
+	};
 
 	this._setValue = function(tag, subfield, value) {
 		$('[@id^='+tag+'] .'+subfield+' .subfield-text', vared).val(value);
 		update();
-	}
+	};
 
 	this._getValue = function(tag, subfield) {
 		if( subfield != null ) {
@@ -178,11 +181,11 @@ function MarcEditor(ffeditor, vareditor) {
 		else {
 			return $('[@id^='+tag+']').children('.controlfield', vared).val();
 		}
-	}
+	};
 
 	this._rawFields = function() {
 		return $('.tag', vared);
-	}
+	};
 
 	this._rawField = function(tagnumber, i) {
 		if( !Ext.isEmpty(i) ) {
@@ -191,7 +194,7 @@ function MarcEditor(ffeditor, vareditor) {
 		else {
 			return $('.tag', vared).filter('[@id*='+tagnumber+']');
 		}
-	}
+	};
 
 	this._rawSubfields = function(tagnumber, i) {
 		if( !Ext.isEmpty(i) ) {
@@ -200,7 +203,7 @@ function MarcEditor(ffeditor, vareditor) {
 		else {
 			return $('.tag', vared).filter('[@id*='+tagnumber+']').children('.subfields').children('.subfield');
 		}
-	}
+	};
 
 	this._addField = function(editorid, tagnumber, ind1, ind2, subfields) {
 		if( tagnumber ) {
@@ -215,7 +218,7 @@ function MarcEditor(ffeditor, vareditor) {
 			var firstind = ind1 || '#';
 			var secondind = ind2 || '#';
 			var sf = subfields || [ {'delimiter': 'a', 'text': ''} ];
-			if(debug) { console.info("Adding tag with tagnumber: " + tagnumber);  }; 
+			if(debug) { console.info("Adding tag with tagnumber: " + tagnumber);  }
 
 			// insert the new field in numerical order among the existing tags
 			var tags = $(".tag",vared  );
@@ -259,7 +262,7 @@ function MarcEditor(ffeditor, vareditor) {
 			// set the focus to this new tag
 			//$( newId ).get(0).focus();
 		}
-	}
+	};
 
 	this._deleteField = function(editorid, tagnumber, i) {
 		//if(debug) { console.info('removing tag: ' + $(UI.editor.lastFocusedEl).parents('.tag').get(0).id)}
@@ -288,7 +291,7 @@ function MarcEditor(ffeditor, vareditor) {
 			}
 		}
 		update();
-	}
+	};
 	
 	this._getIndexOf = function(elem) {
 		var id = $(elem).get(0).id;
@@ -300,7 +303,7 @@ function MarcEditor(ffeditor, vareditor) {
 				return i;
 			}
 		}
-	}
+	};
 
 	this._addSubfield = function(editorid, tag, index, subfield, value) {
 		// get last subfield in this tag
@@ -330,7 +333,7 @@ function MarcEditor(ffeditor, vareditor) {
 			$(afterEl).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text'></span>");
 		}
 		update();
-	}
+	};
 
 	this._deleteSubfield = function(editorid, tag, index, subfield) {
 		if(debug) { console.info('removing subfield with text: ' + $(UI.editor.lastFocusedEl).val());}
@@ -354,32 +357,32 @@ function MarcEditor(ffeditor, vareditor) {
 			UI.editor[editorid].lastFocusedEl = $(ind2);
 		}
 		update();
-	}
+	};
 
 	this._deleteSubfields = function(tag) {
 		$('[@id^='+tag+']', vared).children('.subfields').find('.subfield').remove();
 		update();
-	}
+	};
 
 	this._focusTag = function(tag) {
 		$('[@id^='+tag+']', vared).children('.tagnumber').focus();
-	}
+	};
 
 	this._focusSubfield = function(tag, subfield) {
 		$('[@id^='+tag+']', vared).children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').focus();
-	}
+	};
 	
 	this._XML = function() {
 		return marcrecord.XML();
-	}
+	};
 
 	this._XMLString = function() {
 		return marcrecord.XMLString();
-	}
+	};
 
 	this._update = function(elem) {
 		update(elem);
-	}
+	};
 
 	this._loadXml = function(marcXmlDoc) {
 		var html = '';
@@ -598,104 +601,109 @@ function MarcEditor(ffeditor, vareditor) {
 		marcrecord = new MarcRecord(fields);
 		createFieldList();
 		UI.editor.progress.updateProgress(.8, 'MarcEditor created');
+		htmled = html;
 		return html;
-	}
+	};
+
+	this._getEditorHtml = function() {
+		return htmled;
+	};
 
 }
 // Public methods 
 MarcEditor.prototype.getValue = function(tag, subfield) {
 	return this._getValue(tag, subfield);
-}
+};
 
 MarcEditor.prototype.setValue = function(tag, subfield, value) {
 	this._setValue(tag, subfield, value);
-}
+};
 
 MarcEditor.prototype.deleteSubfield = function(editorid, tag, index, subfield) {
 	this._deleteSubfield(editorid, tag, index, subfield);
-}
+};
 
 MarcEditor.prototype.deleteSubfields = function(tag) {
 	this._deleteSubfields(tag);
-}
+};
 
 MarcEditor.prototype.addSubfield = function(editorid, tag, index, subfield, value) {
 	this._addSubfield(editorid, tag, index, subfield, value);
-}
+};
 
 MarcEditor.prototype.focusTag = function(tag) {
 	this._focusTag(tag);
-}
+};
 
 MarcEditor.prototype.focusSubfield = function(tag, subfield) {
 	this._focusSubfield(tag, subfield);
-}
+};
 
 MarcEditor.prototype.addField = function(editorid, tag, ind1, ind2, subfields) {
 	this._addField(editorid, tag, ind1, ind2, subfields);
-}
+};
 
 MarcEditor.prototype.deleteField = function(editorid, tagnumber, i) {
 	this._deleteField(editorid, tagnumber, i);
-}
+};
 
 MarcEditor.prototype.getFieldList = function() {
 	return this._getFieldList();
-}
+};
 
 MarcEditor.prototype.hasField = function(tagnumber) {
 	return this._hasField(tagnumber);
-}
+};
 
 MarcEditor.prototype.hasFieldAndSubfield = function(tagnumber, subfieldcode) {
 	return this._hasFieldAndSubfield(tagnumber, subfieldcode);
-}
+};
 
 MarcEditor.prototype.fieldIndex = function(tagnumber, i) {
 	return this._fieldIndex(tagnumber, i);
-}
+};
 
 MarcEditor.prototype.rawSubfields = function(tagnumber, i) {
 	return this._rawSubfields(tagnumber, i);
-}
+};
 
 MarcEditor.prototype.rawField = function(tagnumber, i) {
 	return this._rawField(tagnumber, i);
-}
+};
 
 MarcEditor.prototype.rawFields = function() {
 	return this._rawFields();
-}
+};
 
 MarcEditor.prototype.getFields = function() {
 	return this._getFields();
-}
+};
 
 MarcEditor.prototype.getField = function(tagnumber) {
 	return this._getField(tagnumber);
-}
+};
 
 MarcEditor.prototype.XML = function() {
 	return this._XML();
-}
+};
 
 MarcEditor.prototype.XMLString = function() {
 	return this._XMLString();
-}
+};
 
 MarcEditor.prototype.update = function(elem) {
 	return this._update(elem);
-}
+};
 
 MarcEditor.prototype.getIndexOf = function(elem) {
 	return this._getIndexOf(elem);
-}
+};
 
 MarcEditor.prototype.loadXml = function(xmldoc) {
 	return this._loadXml(xmldoc);
-}
+};
 
-MarcEditor.prototype.editorHtml = function() {
-	return this.html;
-}
+MarcEditor.prototype.getEditorHtml = function() {
+	return this._getEditorHtml();
+};
 

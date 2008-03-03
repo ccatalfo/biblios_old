@@ -1,7 +1,7 @@
 function doSaveLocal(savefileid, editorid, offset ) {
 		var recoffset = offset || 0;
 		if( !savefileid ) {
-			if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" )}
+			if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" );}
 				savefileid = 2; // Drafts
 		}
 		var savefilename = getSaveFileNameFromId(savefileid);
@@ -111,7 +111,7 @@ function doSaveRemote(loc, xmldoc, editorid) {
 			Ext.get('vareditor').unmask();*/
 			UI.editor.progress.hide();
 		}
-	}
+	};
 	Prefs.remoteILS[loc].instance.save(xmldoc);
 	UI.editor.progress.updateProgress(.5, 'Sending to remote server');
 	UI.editor[editorid].savedRemote[loc] = true;
@@ -221,7 +221,7 @@ function getSendFileMenuItems(editorid) {
 						doSaveRemote(btn.id, UI.editor[editorid].record.XML(), btn.editorid);
 				}
 			}
-		}
+		};
 		list.push(o);
 	}
 	return list;

@@ -280,7 +280,7 @@ function getExportMenuItems(editorid) {
 			handler: function(btn) {
 				doDownloadRecords(btn.text, btn.editorid);
 			}
-		}
+		};
 	list.push(o);
 	}
 	return list;
@@ -394,7 +394,7 @@ function getNewRecordMenu() {
 						} // ajax callback
 				}); // ajax request
 			} // do new record handler
-		} // new record menu item
+		}; // new record menu item
 		list.push(o);
 	}
 	return list;

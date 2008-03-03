@@ -33,7 +33,7 @@ function getLeaderFromEditor(ff_ed) {
 		throw {
 			error: "InvalidLeader",
 			msg: "Invalid length of Leader"
-		}
+		};
 	}
     return leaderval;
 }
@@ -90,7 +90,7 @@ function get008FromEditor(ff_ed) {
 		throw {
 			error: "Invalid008",
 			msg: "Invalid length of 008"
-		}
+		};
 	}
     return tag008val;
 }
@@ -207,14 +207,14 @@ function updateFFEditor(editorid, ff_ed, var_ed) {
 		throw {
 			error: "InvalidLeader",
 			msg: "Invalid length of Leader"
-		}
+		};
 	}
     var tag008val = $('#'+editorid).find("#008", var_ed).children('.controlfield').val();
 	if( tag008val.length != 40 ) {
 		throw {
 			error: "Invalid008",
 			msg: "Invalid length of 008"
-		}
+		};
 	}
     if(debug) {
         console.info('Transferring leader value to fixed field editor from leader tag: ' + leaderval);
@@ -441,7 +441,7 @@ function setupSpecialEntries(loc, editor) {
 			// store valid values in store
 			storevalues.push([code, desc]);
 		}
-		if(debug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry')}
+		if(debug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry');}
 		var store = new Ext.data.SimpleStore({
 			fields: ['code', 'desc'],
 			data: storevalues
@@ -461,7 +461,7 @@ function setupSpecialEntries(loc, editor) {
 			applyTo: $(elemToReplace).get(0)
 		});
 		Ext.ComponentMgr.register(combo);
-		if(debug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry')}
+		if(debug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry');}
 		
 	}
 }
@@ -473,7 +473,7 @@ function setupReservedTags(loc, editor) {
 		// set readonly for tagnumber and indicators
 		$('.tag[@id^='+tagnumber+']').children('input').attr('readonly', 'readonly').addClass('reserved_tag');
 		// set readonly for subfields
-		$('.tag[@id^='+tagnumber+']').children('.subfields').children('.subfield').children('input').attr('readonly', 'readonly').addClass('reserved_tag');;
+		$('.tag[@id^='+tagnumber+']').children('.subfields').children('.subfield').children('input').attr('readonly', 'readonly').addClass('reserved_tag');
 	}	
 }
 
