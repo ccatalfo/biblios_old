@@ -52,9 +52,5 @@ while(<IN>) {
 		my $newheader = $1 . $headerhtml;
 		$_ =~ s/$1/$newheader/;
 	}
-	if( $_ =~ /placeholder/ ) {
-		print "Adding fixes from $fixesfile to Ext.onReady\nUpdating $1 with $cssfixes\n";
-		print OUT $cssfixes;
-	}
 	print OUT $_;
 }

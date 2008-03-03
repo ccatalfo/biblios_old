@@ -102,8 +102,7 @@ biblios.app = function() {
 						items: [
 							{
 								region: 'north',
-								id: 'branding',
-								//contentEl: 'branding-area'
+								id: 'branding'
 							},
 							{
 								region: 'center',
