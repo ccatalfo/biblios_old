@@ -540,7 +540,7 @@ function createAuthComboBox(editorid, tagelem, xmlReader, displayField, queryInd
 	if( subfield_text.length == 0 ) {
 		return;
 	}
-	console.info('applying combobox to '+ $(subfield_text).val() );
+	if(debug) {console.info('applying combobox to '+ $(subfield_text).val() ); }
 	var ds = new Ext.data.Store({
 		proxy: new Ext.data.HttpProxy(
 			{
