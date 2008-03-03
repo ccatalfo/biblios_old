@@ -227,7 +227,7 @@ function doDownloadRecords(format, editorid) {
 	var xml ='';
 	var grid;
 	var recsep = "<!-- end of record -->";
-	showStatusMsg("<p>Downloading records</p>");
+	showStatusMsg("Downloading record(s)");
 	// if we're exporting a record from the marc editor
 	if( openState == 'editorPanel' ) {
 			// transform edited record back into marcxml
@@ -482,7 +482,7 @@ function doDeleteFromSaveFile(sel) {
             console.error('db error: ' + ex.message);
           }
       }
-    showStatusMsg("<p>Deleted "+ sel.length + " record(s).</p>");
+    showStatusMsg("Deleted "+ sel.length + " record(s).");
 	clearStatusMsg();
     // redisplay current savefile (to show moved record)
     var currentNode = folderTree.getSelectionModel().getSelectedNode();
