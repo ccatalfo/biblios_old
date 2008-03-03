@@ -66,7 +66,7 @@ paz = new pz2({
 							Ext.getCmp('facetsTreePanel').root.reload();
 						}
 					},
-                    "showtime": 500,            //each timer (show, stat, term, bytarget) can be specified this way
+                    "showtime": 1500,            //each timer (show, stat, term, bytarget) can be specified this way
                     "pazpar2path": pazpar2url,
 					"onbytarget": function(data) {
 							var nodes = Ext.getCmp('TargetsTreePanel').root.childNodes;
