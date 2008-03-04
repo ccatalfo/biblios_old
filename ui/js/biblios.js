@@ -97,15 +97,18 @@ biblios.app = function() {
 				items: [
 					{
 						region: 'north',
+						border: false,
 						height: 60,
 						layout: 'border',
 						items: [
 							{
 								region: 'north',
-								id: 'branding'
+								id: 'branding',
+								border: false
 							},
 							{
 								region: 'center',
+								border: false,
 								id: 'searchformpanel',
 								height: 50,
 								width: 100,
@@ -113,10 +116,12 @@ biblios.app = function() {
 							},
 							{
 								region: 'west',
+								border: false,
 								html: {tag: 'img', src: biblioslogo}
 							},
 							{
 								region: 'east',
+								border: false,
 								width: 60,
 								html: '<div id="status" ><p id="status-msg"></p></div>'
 							}
