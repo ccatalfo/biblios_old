@@ -60,9 +60,7 @@
     var recBook, recMusic, recVideo;
 	var marc21defs;
     var xml;
-	var marceditor;
-    var ff_ed;
-    var var_ed;
+	var bookeditor, musiceditor, videoeditor;
 	UI = {};
 	UI.editor = {};
 	UI.editor.editorone = {};
@@ -73,17 +71,54 @@
         recVideo = xslTransform.load("../testRecords/video.xml"); 
 		marc21defs = xslTransform.load("../../ui/xsl/marc21.xml");
 		// generate editor for book
-        $('#marcxml-book').getTransform(recBook);
 		marceditor = new MarcEditor();
-		marceditor.loadXml(recBook);
-		xml = marceditor.XML();	
+		bookeditor = marceditor.loadXml(recBook);
+		$('#editor-book').html(bookeditor);
+
+		// generate editor for music
+		marceditor = new MarcEditor();
+		editor = marceditor.loadXml(recMusic);
+		$('#editor-music').html(editor);
+
+		// generate editor for video
+		marceditor = new MarcEditor();
+		editor = marceditor.loadXml(recMusic);
+		$('#editor-video').html(editor);
 		setUpPageStatus = "complete";
     }
 
-	function testLeader() {
-		
+	function testLeaderBook() {
+		var oldleader = $('leader', recBook).text();
+		var editorleader = $('#editor-book').find('#000').find('.controlfield').val();
+		assertEquals( oldleader, editorleader);	
+	}
+	function testLeaderMusic() {
+		var oldleader = $('leader', recMusic).text();
+		var editorleader = $('#editor-music').find('#000').find('.controlfield').val();
+		assertEquals( oldleader, editorleader);	
+	}
+	function testLeaderVideo() {
+		var oldleader = $('leader', recVideo).text();
+		var editorleader = $('#editor-video').find('#000').find('.controlfield').val();
+		assertEquals( oldleader, editorleader);	
 	}
 
+	function testBook008() {
+		var old008 = $('controlfield[@tag=008]', recBook).text();
+		var editor008 = $('#editor-book').find('#008').find('.controlfield').val();
+		assertEquals( old008, editor008 );
+	}
+	function testMusic008() {
+		var old008 = $('controlfield[@tag=008]', recMusic).text();
+		var editor008 = $('#editor-music').find('#008').find('.controlfield').val();
+		assertEquals( old008, editor008 );
+	}
+
+	function testVideo008() {
+		var old008 = $('controlfield[@tag=008]', recVideo).text();
+		var editor008 = $('#editor-video').find('#008').find('.controlfield').val();
+		assertEquals( old008, editor008 );
+	}
    </script>
 </head>
 
@@ -92,15 +127,18 @@
 <div class='area' id='book-area'>
 <p class='title'>Book record</p>
 <div id='marcxml-book'></div>
+<div id='editor-book'></div>
 </div>
 
 <div class='area' id='music-area'>
 <p class='title'>Music record</p>
 <div id='marcxml-music'></div>
+<div id='editor-music'></div>
 </div>
 <div class='area' id='video-area'>
 <p class='title'>Video record</p>
 <div id='marcxml-video'></div>
+<div id='editor-video'></div>
 </div>
 </body>
 </html>
