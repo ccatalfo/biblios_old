@@ -96,7 +96,7 @@ function MarcEditor(ffeditor, vareditor) {
 			var editorsubfields = $('[@id='+id+']', vared).children('.subfields').children('.subfield');
 			var subfields = new Array();
 			for(var j = 0; j < editorsubfields.length; j++) {
-				var code = editorsubfields.eq(j).find('.subfield-delimiter').val().substring(1);
+				var code = editorsubfields.eq(j).find('.subfield-delimiter').val().substr(1, 1);
 				var value = editorsubfields.eq(j).find('.subfield-text').val();
 				var newsf = new Subfield(code, value);
 				subfields.push(newsf);
