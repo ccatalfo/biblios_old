@@ -127,6 +127,19 @@ function setPazPar2Targets() {
 					'pz:cclmap:pub['+db+']='+'u=1018 s=al'
 			);
 		}
+		else if( targets[i].enabled == 0) {
+			var db = n.hostname+":"+n.port+"/"+n.dbname;
+			$.get(  paz.pz2String +
+					'?' +
+					'command=settings'+
+					'&' +
+					'session='+paz.sessionID +
+					'&' +
+					'pz:name['+db+']='+ n.name +
+					'&' +
+					'pz:allow[' + db + ']=0'
+			);
+		}
 	});
 }
 
