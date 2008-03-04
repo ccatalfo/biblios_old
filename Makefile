@@ -23,7 +23,7 @@ tags: $(SRCS)
 	$(CTAGS) ui/js/biblios.js ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js
 
 debug: 
-	#sed -f sed_generate_index_debug < index.html > index-debug.html
+	sed -f sed_generate_index_debug < index.html > index-debug.html
 	cp index.html index-debug.html
 
 testRecords:
@@ -42,7 +42,6 @@ koha:
 koha-install:
 	cp index-koha.html $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/modules/cataloguing/biblios.tmpl
 	cp integration/koha/biblios.pl $(KOHADIR)/cataloguing/
-	sed s'|/lib/jquery/jquery.js|/lib/biblios/lib/jquery/jquery-1.1.3.1.js|' < $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/includes/doc-head-close.inc >$(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/includes/doc-head-close-biblios.inc 
 	mkdir -p $(KOHADIR)/plugins/biblios
 	cp cgi-bin/downloadMarc.pl cgi-bin/vendorSearch $(KOHADIR)/plugins/biblios/
 	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
