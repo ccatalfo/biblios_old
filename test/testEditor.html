@@ -119,6 +119,11 @@
 		var editor008 = $('#editor-video').find('#008').find('.controlfield').val();
 		assertEquals( old008, editor008 );
 	}
+	function testMusic007() {
+		var old007 = $('controlfield[@tag=007]', recMusic).text();
+		var editor007 = $('#editor-music').find('#007').find('.controlfield').val();
+		assertEquals( old007, editor007 );
+	}
 	function testVideo007() {
 		var old007 = $('controlfield[@tag=007]', recVideo).text();
 		var editor007 = $('#editor-video').find('#007').find('.controlfield').val();
