@@ -39,7 +39,7 @@ This next step will copy biblios' files to the appropriate paths in koha:
        # proxy for sru authority server
        ProxyPass /kohaauth/ <your koha sru auth server e.g. http://eowyn.metavore.com:9999/>
 
-       proxy for koha save/retrieve api
+       #proxy for koha save/retrieve api
        ProxyPass /kohaapi/ <your koha intranet instance e.g. http://eowyn.metavore.com:8001>
    
 </IfModule>
@@ -48,9 +48,9 @@ Get Pazpar2 up and running:
 install pazpar2:
 8. sudo apt-get install pazpar2
 
-run pazpar2 with included config files and search targets with the following command from your biblios directory.
-9. pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
+Run pazpar2 with included config files and search targets with the following command from your biblios directory.
+9. pazpar2 -D -l pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
 
 10. Install perl dependencies if necessary:
-sudo cpan Net::Amazon\ XML::Writer\ Cache::File\ File::Temp\ File::Basename\ Term::Clui
+sudo cpan XML::Writer\ Cache::File\ File::Temp\ File::Basename\ Term::Clui
 
