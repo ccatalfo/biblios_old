@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>jquery.xslTransform</title>
+
+    <script type="text/javascript" src="../lib/extjs2/adapter/ext/ext-base.js"></script>
+	<script src="../lib/extjs2/ext-all.js"					type="text/javascript"></script>
+	<script src="../lib/sarissa/sarissa.js"					type="text/javascript"></script>
+	<script src="../lib/sarissa/sarissa_ieemu_xpath.js"		type="text/javascript"></script>
+
+	<script src="../lib/jquery/jquery-1.2.2.js"					type="text/javascript"></script>
+	<script src="../lib/jquery/jquery.debug.js"	type="text/javascript"></script>
+	<script src="../lib/jquery/jquery.xslTransform.packed.js"		type="text/javascript"></script>
+	<script src="jsUnitCore.js"		type="text/javascript"></script>
+
+    <script src="../ui/js/save.js" type="text/javascript"></script>
+    <script src="../ui/js/edit.js" type="text/javascript"></script>
+    <script src="../ui/js/marceditor.js" type="text/javascript"></script>
+    <script src="../ui/js/marcrecord.js" type="text/javascript"></script>
+
+	<style>
+		.title {
+			color: blue;
+		}
+
+		.area {
+			background-color: #eeffff;
+			border: 1px solid;
+			margin-bottom: 10px;
+		}
+
+		.ffed {
+			border: 1px solid;
+			margin-bottom: 5px;
+		}
+
+		.vared {
+			border: 1px solid;
+			margin-bottom: 5px;
+		}
+	</style>
+
+	<script type="text/javascript">
+	// turn on debugging (see jquery.xslTransform.js)
+	var DEBUG = true;
+
+	// check for jQuery and Sarissa
+	try{
+		jQuery;
+	}catch(e){
+		alert('You need to include jQuery!');
+	}
+	try{
+		Sarissa;
+	}catch(e){
+		alert('You need to include Sarissa!');
+	}
+    var setUpPageStatus;
+    var recBook, recMusic, recVideo;
+	var marc21defs;
+    var xml;
+	var marceditor;
+    var ff_ed;
+    var var_ed;
+	UI = {};
+	UI.editor = {};
+	UI.editor.editorone = {};
+	//UI.editor.progress = Ext.MessageBox.progress();
+    function setUpPage() {
+        recBook = xslTransform.load("../testRecords/book.xml"); 
+        recMusic = xslTransform.load("../testRecords/music.xml"); 
+        recVideo = xslTransform.load("../testRecords/video.xml"); 
+		marc21defs = xslTransform.load("../../ui/xsl/marc21.xml");
+		// generate editor for book
+        $('#marcxml-book').getTransform(recBook);
+		marceditor = new MarcEditor();
+		marceditor.loadXml(recBook);
+		xml = marceditor.XML();	
+		setUpPageStatus = "complete";
+    }
+
+	function testLeader() {
+		
+	}
+
+   </script>
+</head>
+
+<body>
+
+<div class='area' id='book-area'>
+<p class='title'>Book record</p>
+<div id='marcxml-book'></div>
+</div>
+
+<div class='area' id='music-area'>
+<p class='title'>Music record</p>
+<div id='marcxml-music'></div>
+</div>
+<div class='area' id='video-area'>
+<p class='title'>Video record</p>
+<div id='marcxml-video'></div>
+</div>
+</body>
+</html>

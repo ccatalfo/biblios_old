@@ -395,7 +395,7 @@ function MarcEditor(ffeditor, vareditor) {
 		$('field[@tag=000] value', marc21defs).each( function(i) {
 			html += createFixedFieldCell(string, $(this), 0);
 		});
-		UI.editor.progress.updateProgress(.2, 'Leader editor created');
+		//UI.editor.progress.updateProgress(.2, 'Leader editor created');
 		//end leader row
 		html += '</tr>';
 		// 008 row
@@ -435,7 +435,7 @@ function MarcEditor(ffeditor, vareditor) {
 				});
 			});
 		html += '</tr>';
-		UI.editor.progress.updateProgress(.3, '008 editor created');
+		//UI.editor.progress.updateProgress(.3, '008 editor created');
 
 		// 006 row
 		if( $('controlfield[@tag=006]', marcXmlDoc).length > 0 ) {
@@ -466,7 +466,7 @@ function MarcEditor(ffeditor, vareditor) {
 				});
 			});
 			html += '</tr>'; // end 006 row
-			UI.editor.progress.updateProgress(.4, '006 editor created');
+			//UI.editor.progress.updateProgress(.4, '006 editor created');
 		}
 		// 007 row
 		if( $('controlfield[@tag=007]', marcXmlDoc ).length > 0 )  {
@@ -528,7 +528,7 @@ function MarcEditor(ffeditor, vareditor) {
 			});
 
 			html += '</tr>';
-			UI.editor.progress.updateProgress(.5, '007 editor created');
+			//UI.editor.progress.updateProgress(.5, '007 editor created');
 		}
 		html += '</table>';
 		html += '</div>'; // close fixedfields_editor
@@ -559,7 +559,7 @@ function MarcEditor(ffeditor, vareditor) {
 			html += '</div>';
 			fields.push( new Field(tagnum, '', '', [{code: '', value: val}]) );
 		});	
-		UI.editor.progress.updateProgress(.6, 'Controlfields editor created');
+		//UI.editor.progress.updateProgress(.6, 'Controlfields editor created');
 
 		$('datafield', marcXmlDoc).each(function(i) {
 			var value = $(this).text();
@@ -595,12 +595,12 @@ function MarcEditor(ffeditor, vareditor) {
 			html += '</div>'; // close datafield div	
 			fields.push( new Field(tagnum, ind1, ind2, subfields) );
 		});
-		UI.editor.progress.updateProgress(.7, 'Datafields editor created');
+		//UI.editor.progress.updateProgress(.7, 'Datafields editor created');
 		html += '</div>'; // end vareditor div
 		html += '</div>'; // varfields_editor div
 		marcrecord = new MarcRecord(fields);
 		createFieldList();
-		UI.editor.progress.updateProgress(.8, 'MarcEditor created');
+		//UI.editor.progress.updateProgress(.8, 'MarcEditor created');
 		htmled = html;
 		return html;
 	};
