@@ -11,6 +11,7 @@ my $port = shift(@ARGV);
 my $headincludes = shift(@ARGV);
 my $headerhtml = shift(@ARGV);
 my $fixesfile = shift(@ARGV);
+my $debug = shift(@ARGV);
 
 open(IN, $infile) or die "can't open $infile for reading $!";
 open(OUT, ">$outfile") or die "can't open $outfile for writing $!";
@@ -51,6 +52,13 @@ while(<IN>) {
 		print "Updating <div id='branding-area'> to $headerhtml\n";
 		my $newheader = $1 . $headerhtml;
 		$_ =~ s/$1/$newheader/;
+	}
+	if( $_ =~ /(<html>)/ ) {
+		if( $debug ) {
+			print "Adding firebug-lite\n";
+			my $newheader = "<html debug='true'>";
+			$_ =~ s/$1/$newheader/;
+		}
 	}
 	print OUT $_;
 }
