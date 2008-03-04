@@ -139,9 +139,9 @@ function MarcEditor(ffeditor, vareditor) {
 	};
 
 	this._getField = function(tagnumber) {
-		for ( f in fields ) {
-			if( fields[f].tagnumber() == tagnumber ) {
-				return fields[f];
+		for ( var i = 0; i < fields.length; i++ ) {
+			if( fields[i].tagnumber() == tagnumber ) {
+				return fields[i];
 			}
 		}
 	};
