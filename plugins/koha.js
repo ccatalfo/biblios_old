@@ -29,19 +29,39 @@ koha.prototype = {
 		}, // end init
 
 		auth: function() {
-			$.ajax({
-					url: this.url + 'cgi-bin/koha/svc/authentication',
-					method: 'post',
-					data: {	
-							userid: this.user,
-							password: this.password
-					},
-					that: this,
-					success: function(xml, status) {
-						this.that.sessionStatus = $('status', xml).text();
-						this.that.bibprofile();
-					}
-			});
+			// get value of CGISESSID ?
+			var cgisessid = $.cookie('CGISESSID') || null;
+			if( cgisessid ) {
+				// if CGISESSID has already been set, we've already authenticated to koha
+				$.ajax({
+						url: this.url + 'cgi-bin/koha/svc/authentication',
+						method: 'post',
+						that: this,
+						success: function(xml, status) {
+							this.that.sessionStatus = $('status', xml).text();
+							this.that.bibprofile();
+						},
+						beforeSend: function(req) {
+						}
+				});
+			}
+			else {
+				$.ajax({
+						url: this.url + 'cgi-bin/koha/svc/authentication',
+						method: 'post',
+						data: {	
+								userid: this.user,
+								password: this.password
+						},
+						that: this,
+						success: function(xml, status) {
+							this.that.sessionStatus = $('status', xml).text();
+							this.that.bibprofile();
+						},
+						beforeSend: function(req) {
+						}
+				});
+			}
 		},
 
 		bibprofile: function() {
@@ -51,7 +71,7 @@ koha.prototype = {
 				dataType: 'xml',
 				that: this,
 				success: function(xml, status) {
-					this.that.bibprofilexml = xml;
+					this.bibprofilexml = xml;
 					// construct record id xpath expression from bib profile
 					var tag = $('bib_number tag', xml).text();
 					var subfield = $('bib_number subfield', xml).text();
