@@ -1606,7 +1606,7 @@ biblios.app = function() {
 																				Ext.MessageBox.alert('Error', ex.message);
 																			}
 																			var t = new SendTarget({
-																				id: db.lastInsertRowId,
+																				rowid: db.lastInsertRowId,
 																				name: '',
 																				location: '',
 																				url: '',
