@@ -135,7 +135,7 @@ koha.prototype = {
 				dataType: 'xml',
 				url: this.url + 'cgi-bin/koha/svc/' + savepath,
 				type: 'POST',
-				scope: this,
+				that: this,
 				id: recid,
 				success: function(data, textStatus) {
 					// check response is ok
@@ -144,14 +144,14 @@ koha.prototype = {
 						this.scope.saveStatus = 'failed';
 					}
 					else if( status == 'ok' ) {
-						this.scope.saveStatus = 'ok';
+						this.that.saveStatus = 'ok';
 						var biblionumber = $('biblionumber', data).text();
-						this.scope.savedBiblionumber = biblionumber;
+						this.that.savedBiblionumber = biblionumber;
 						// replace marcxml in recordcache	
 						var marcxml = $('record', data).get(0);
-						this.scope.recordCache[ this.id ] = marcxml;
+						this.that.recordCache[ this.id ] = marcxml;
 					}
-					this.scope.saveHandler( marcxml , status);
+					this.that.saveHandler( marcxml , status);
 				},
 				error: function(req, textStatus, error) {
 					Ext.MessageBox.alert('Error', textStatus);
