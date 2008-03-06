@@ -7,6 +7,10 @@
   background-color: #f3f3f3;
 }
 
+#logo {
+	padding-right: 10px;
+}
+
 #login {
 	position: absolute;
 	right: 0.5em;
@@ -24,11 +28,22 @@
 
 .searchtip {
 	color: gray;
+	margin:0.5em 0pt;
 }
 
 
 #searchform {
 	float: left;
+	padding-left: 10px;
+}
+
+#searchform input[type="text"] {
+	font-size:1.3em;
+	background-color: #FFFFA0;
+}
+
+.x-border-layout-ct {
+	background: #ffffff;
 }
 
 #info-panel {

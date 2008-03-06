@@ -44,6 +44,10 @@ while(<IN>) {
 		my $newport = "':" . $port . "'";
 		$_ =~ s/$1/$newport/;
 	}
+	if( $_ =~ /var biblioslogo/ ) {
+		print 'Updating ' . $_ . 'to ' . '/intranet-tmpl/prog/img/koha-logo-medium.gif' . "\n";
+		$_ = "var biblioslogo = '/intranet-tmpl/prog/img/koha-logo-medium.gif';\n";
+	}
 	if( $_ =~ /(<!-- extraheadincludes -->)/ ) {
 		print "Updating <head> for extra includes: $headincludes\n";
 		$_ =~ s/$1/<head>$headincludes/;

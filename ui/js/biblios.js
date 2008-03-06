@@ -112,12 +112,14 @@ biblios.app = function() {
 								id: 'searchformpanel',
 								height: 50,
 								width: 100,
+								style: 'padding-left: 15px;',
 								contentEl: 'searchform'
 							},
 							{
 								region: 'west',
 								border: false,
-								html: {tag: 'img', src: biblioslogo}
+								width: 170,
+								html: {tag: 'img', id: 'logo', src: biblioslogo}
 							},
 							{
 								region: 'east',
