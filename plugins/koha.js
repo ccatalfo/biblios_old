@@ -4,6 +4,7 @@ var koha = function() {
 	this.url = '';
 	this.user = '';
 	this.password = '';
+	this.cgisessid = '';
 	this.initHandler = function(){};
 	// bib profile
 	this.bibprofileHandler = function(){};
@@ -32,6 +33,7 @@ koha.prototype = {
 		auth: function() {
 			// get value of CGISESSID ?
 			var cgisessid = $.cookie('CGISESSID') || null;
+			this.cgisessid = cgisessid;
 			if( cgisessid ) {
 				// if CGISESSID has already been set, we've already authenticated to koha
 				$.ajax({
@@ -44,6 +46,9 @@ koha.prototype = {
 							this.that.initHandler(sessionStatus);
 						},
 						beforeSend: function(req) {
+						},
+						complete: function(req, textStatus) {
+
 						}
 				});
 			}
@@ -62,6 +67,9 @@ koha.prototype = {
 							this.that.initHandler(sessionStatus);
 						},
 						beforeSend: function(req) {
+						},
+						complete: function(req, textStatus) {
+							this.that.cgisessid = req.getResponseHeader('Set-Cookie');
 						}
 				});
 			}
@@ -84,6 +92,9 @@ koha.prototype = {
 					this.that.reserved_tags = $('reserved_tags', xml).children();
 					this.that.special_entries = $('special_entry', xml);
 					this.that.bibprofileHandler( xml );
+				},
+				beforeSend: function(req) {
+					req.setRequestHeader('Cookie', this.that.cgisessid);
 				}
 			});
 		},
@@ -100,6 +111,9 @@ koha.prototype = {
 				success: function(xml, status) {
 					this.that.recordCache[ this.id ] = xml;
 					this.that.retrieveHandler(xml);
+				},
+				beforeSend: function(req) {
+					req.setRequestHeader('Cookie', this.that.cgisessid);
 				}
 			});
 		},
@@ -141,34 +155,11 @@ koha.prototype = {
 				},
 				error: function(req, textStatus, error) {
 					Ext.MessageBox.alert('Error', textStatus);
+				},
+				beforeSend: function(req) {
+					req.setRequestHeader('Cookie', this.that.cgisessid);
 				}
 			});
-			/*Ext.Ajax.on('requestcomplete', function(conn, resp, options) {
-				// check response is ok
-				var status = $('status', resp.responseXML).text();
-				if( status == 'failed' ) {
-					options.scope.saveStatus = 'failed';
-				}
-				else if( status == 'ok' ) {
-					options.scope.saveStatus = 'ok';
-					var biblionumber = $('biblionumber', resp.responseXML).text();
-					options.scope.savedBiblionumber = biblionumber;
-					// replace marcxml in recordcache	
-					var marcxml = $('record', resp.responseXML).get(0);
-					options.scope.recordCache[ options.id ] = marcxml;
-				}
-				options.scope.saveHandler( marcxml , status);
-				Ext.Ajax.purgeListeners();
-			});
-			Ext.Ajax.request({
-				url: this.url + 'cgi-bin/koha/svc/' + savepath,
-				method: 'POST',
-				id: recid,
-				xmlData: xmldoc,
-				scope: this,
-				headers: { 'Content-Type': 'application/xml'},
-				useDefaultHeader: false
-			});*/
 		}
 }; // end public properties
 
