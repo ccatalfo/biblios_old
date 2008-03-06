@@ -1499,10 +1499,10 @@ biblios.app = function() {
 																	},
 																listeners: {
 																	update: function(store, record, operation) {
-																		if( record.data.enabled == 'true') {
+																		if( record.data.enabled == true) {
 																			record.data.enabled = 1;
 																		}
-																		else if( record.data.enabled == 'false') {
+																		else if( record.data.enabled == false) {
 																			record.data.enabled = 0;
 																		}
 																		if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
@@ -1522,7 +1522,7 @@ biblios.app = function() {
 																		var id = e.record.data.rowid;
 																		var field = e.field;
 																		var value = e.value;
-																		if( typeof(value) == 'boolean' ) {
+																		if( e.field == 'enabled' ) {
 																			if( value == true ) {
 																				value = 1;
 																			}
