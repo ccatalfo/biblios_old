@@ -12,6 +12,7 @@ my $headincludes = shift(@ARGV);
 my $headerhtml = shift(@ARGV);
 my $fixesfile = shift(@ARGV);
 my $debug = shift(@ARGV);
+my $kohaurl = shift(@ARGV);
 
 open(IN, $infile) or die "can't open $infile for reading $!";
 open(OUT, ">$outfile") or die "can't open $outfile for writing $!";
@@ -43,6 +44,10 @@ while(<IN>) {
 		print 'Updating ' . $_ . 'to ' . $port . "\n";
 		my $newport = "':" . $port . "'";
 		$_ =~ s/$1/$newport/;
+	}
+	if( $_ =~ /var embeddedUrl = ('.*');/) {
+		my $embeddedurl = "'$kohaurl'";
+		$_ =~ s/$1/$embeddedurl/;
 	}
 	if( $_ =~ /var biblioslogo/ ) {
 		print 'Updating ' . $_ . 'to ' . '/intranet-tmpl/prog/img/koha-logo-medium.gif' . "\n";

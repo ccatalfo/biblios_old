@@ -34,7 +34,7 @@ koha.prototype = {
 			// get value of CGISESSID ?
 			var cgisessid = $.cookie('CGISESSID') || null;
 			this.cgisessid = cgisessid;
-			if( cgisessid ) {
+			if( cgisessid && (embeddedUrl == this.url) ) {
 				// if CGISESSID has already been set, we've already authenticated to koha
 				$.ajax({
 						url: this.url + 'cgi-bin/koha/svc/authentication',
