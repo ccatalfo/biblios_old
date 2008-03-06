@@ -4,6 +4,7 @@ var koha = function() {
 	this.url = '';
 	this.user = '';
 	this.password = '';
+	this.initHandler = function(){};
 	// bib profile
 	this.bibprofileHandler = function(){};
 	this.bibprofilexml = '';
@@ -38,8 +39,9 @@ koha.prototype = {
 						method: 'post',
 						that: this,
 						success: function(xml, status) {
-							this.that.sessionStatus = $('status', xml).text();
-							this.that.bibprofile();
+							var sessionStatus = $('status', xml).text();
+							this.that.sessionStatus = sessionStatus;
+							this.that.initHandler(sessionStatus);
 						},
 						beforeSend: function(req) {
 						}
@@ -55,8 +57,9 @@ koha.prototype = {
 						},
 						that: this,
 						success: function(xml, status) {
-							this.that.sessionStatus = $('status', xml).text();
-							this.that.bibprofile();
+							var sessionStatus = $('status', xml).text();
+							this.that.sessionStatus = sessionStatus;
+							this.that.initHandler(sessionStatus);
 						},
 						beforeSend: function(req) {
 						}

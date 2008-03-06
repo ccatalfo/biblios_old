@@ -26,7 +26,15 @@ function setILSTargets() {
 				// initialize and authorize for this ils instance
 				Prefs.remoteILS[ils.name].instance = eval( initcall );
 				Prefs.remoteILS[ils.name].instance.init(ils.url, ils.user, ils.password);
+				Prefs.remoteILS[ils.name].instance.initHandler = function(sessionStatus) {
+					if( sessionStatus != 'ok' ) {
+						Ext.MessageBox.alert('Plugin error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
+					}
+					else {
+						Prefs.remoteILS[ils.name].instance.bibprofile();
+					}
 			}
+		}
 	});
 }
 
