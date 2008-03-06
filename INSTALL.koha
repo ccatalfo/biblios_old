@@ -40,7 +40,7 @@ This next step will copy biblios' files to the appropriate paths in koha:
        ProxyPass /kohaauth/ <your koha sru auth server e.g. http://eowyn.metavore.com:9999/>
 
        #proxy for koha save/retrieve api
-       ProxyPass /kohaapi/ <your koha intranet instance e.g. http://eowyn.metavore.com:8001>
+       ProxyPass /kohaapi/ <your koha intranet instance e.g. http://eowyn.metavore.com:8001/>
    
 </IfModule>
 
