@@ -1656,6 +1656,15 @@ biblios.app = function() {
 																			var initcall = record.data.plugininit;
 																			var instance = eval( initcall );
 																			instance.init( record.data.url, record.data.user, record.data.password);
+																			instance.initHandler = function(sessionStatus) {
+																				if( sessionStatus != 'ok' ) {
+																					Ext.MessageBox.alert('Connection error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
+																				}
+																				else {
+																					Ext.MessageBox.alert('Connection successful', 'Authentication to Koha server at ' + this.url + ' was successful.  Response: ' + sessionStatus + '.');
+
+																				}
+																			};
 																		}
 																	}
 																] // send target grid toolbar
