@@ -1419,7 +1419,7 @@ biblios.app = function() {
 																]),
 																tbar: [
 																	{
-																		text: 'Add Target',
+																		text: 'Add Search Target',
 																		handler: function() {
 																			// insert new target into db so we get it's id
 																			var rs;
@@ -1448,7 +1448,7 @@ biblios.app = function() {
 																		}
 																	},
 																	{
-																		text: 'Remove Target',
+																		text: 'Remove Search Target',
 																		handler: function() {
 																			var records = Ext.getCmp('searchtargetsgrid').getSelectionModel().getSelections();
 																			for( var i = 0; i < records.length; i++) {
@@ -1626,7 +1626,7 @@ biblios.app = function() {
 																		}
 																	}, // sendtarget add target tb button
 																	{
-																		text: 'Remove Target',
+																		text: 'Remove Send Target',
 																		handler: function() {
 																			var records = Ext.ComponentMgr.get('sendtargetsgrid').getSelections();
 																			for( var i = 0; i < records.length; i++) {
@@ -1639,7 +1639,25 @@ biblios.app = function() {
 																			}
 																			Ext.ComponentMgr.get('sendtargetsgrid').store.reload();
 																		}
-																	} // send grid remove target tb button
+																	}, // send grid remove target tb button
+																	{
+																		text: 'Test Connection',
+																		handler: function() {
+																			var sel = Ext.getCmp('sendtargetsgrid').getSelections();
+																			if(sel.length > 1 ) {
+																				Ext.MessageBox.alert('Error', 'Please select just 1 Send Target to test');
+																				return false;
+																			}
+																			var record = sel[0];
+																			if( record.data.url == '' || record.data.pluginlocation == '' || record.data.plugininit == '' ) {
+																				Ext.MessageBox.alert('Error', 'Please enter at least url, plugin location and plugin init to test this connection');
+																				return false;
+																			}
+																			var initcall = record.data.plugininit;
+																			var instance = eval( initcall );
+																			instance.init( record.data.url, record.data.user, record.data.password);
+																		}
+																	}
 																] // send target grid toolbar
 															}) // sendtarget editorgridpanel constructor
 														] // send targets tab items
