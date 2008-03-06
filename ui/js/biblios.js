@@ -48,6 +48,8 @@ biblios.app = function() {
 	displayRecordView : function displayRecordView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(1);
 		openState = 'editorPanel';
+		updateSendMenu();
+		updateSaveMenu();
 		displayHelpMsg(UI.messages.help.en.recordview);
 	}
 
@@ -1029,7 +1031,6 @@ biblios.app = function() {
 																										DB.Savefiles.select('rowid = ?', [id]).getOne().remove();
 																										// update our hash of savefile id/names
 																										getSaveFileNames();
-																										updateSaveMenu();
 																										return true;
 																									}
 																									catch(ex) {
@@ -1542,7 +1543,6 @@ biblios.app = function() {
 																		}
 																		e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
 																		setILSTargets();
-																		updateSendMenu();
 																	} // afteredit handler
 																},
 																sm: new Ext.grid.RowSelectionModel({
@@ -1697,7 +1697,6 @@ biblios.app = function() {
 					var folder = DB.Savefiles.select('Savefiles.rowid=?', [n.attributes.id]).getOne();
 					folder.name = value;
 					folder.save();
-					updateSaveMenu();
 		});
 
 		treeEditor.render();
