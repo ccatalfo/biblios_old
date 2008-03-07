@@ -49,6 +49,10 @@ while(<IN>) {
 		my $embeddedurl = "'$kohaurl'";
 		$_ =~ s/$1/$embeddedurl/;
 	}
+	if( $_ =~ /var embeddedSESSID = ('.*');/) {
+		my $embeddedurl = "\$.cookie('CGISESSID')";
+		$_ =~ s/$1/$embeddedurl/;
+	}
 	if( $_ =~ /var biblioslogo/ ) {
 		print 'Updating ' . $_ . 'to ' . '/intranet-tmpl/prog/img/koha-logo-medium.gif' . "\n";
 		$_ = "var biblioslogo = '/intranet-tmpl/prog/img/koha-logo-medium.gif';\n";

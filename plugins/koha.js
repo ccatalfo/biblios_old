@@ -53,7 +53,7 @@ koha.prototype = {
 						},
 						complete: function(req, textStatus) {
 							this.that.cgisessid = req.getResponseHeader('Set-Cookie').substr(10, 32);
-							createCookie('CGISESSID', 'CGISESSID=' + this.that.cgisessid);
+							createCookie('CGISESSID', embeddedSESSID);
 							this.that.bibprofile();
 						}
 				});
@@ -107,9 +107,7 @@ koha.prototype = {
 				},
 				complete: function(req, textStatus) {
 					eraseCookie('CGISESSID');
-					if( this.that.embedded ) {
-						createCookie('CGISESSID', this.that.cgisessid);
-					}
+					createCookie('CGISESSID', embeddedSESSID);
 				}
 			});
 		},
@@ -133,9 +131,7 @@ koha.prototype = {
 				},
 				complete: function(req, textStatus) {
 					eraseCookie('CGISESSID');
-					if( this.that.embedded ) {
-						createCookie('CGISESSID', this.that.cgisessid);
-					}
+					createCookie('CGISESSID', embeddedSESSID);
 				}
 			});
 		},
@@ -184,9 +180,7 @@ koha.prototype = {
 				},
 				complete: function(req, textStatus) {
 					eraseCookie('CGISESSID');
-					if( this.that.embedded ) {
-						createCookie('CGISESSID', this.that.cgisessid);
-					}
+					createCookie('CGISESSID', embeddedSESSID);
 				}
 			});
 		}

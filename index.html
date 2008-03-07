@@ -6,20 +6,6 @@
 	<!-- extraheadincludes -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="lib/extjs2/resources/css/ext-all.css">
-<!-- properties which need to be modified on a global basis -->
-<script type="text/javascript">
-var libPath = '';
-var hostPort = '';
-var cgiDir = '/cgi-bin/';
-var embeddedUrl = '';
-// reference local blank image
-var showMarcXslPath = libPath + "ui/xsl/MARC21slim2HTML.xsl";
-var fixedFieldXslPath = libPath + "ui/xsl/fixedfields_editor.xsl";
-var varFieldsXslPath = libPath + "ui/xsl/varfields_inputboxes.xsl";
-var confPath = libPath + "conf/webcatdb.conf";
-var marc21defsPath = libPath + "ui/xsl/marc21.xml";
-var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
-</script>
 <!-- firebug lite -->
 
     <script type="text/javascript" src="lib/firebug/firebug.js"></script>
@@ -57,6 +43,21 @@ var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
 	<script type="text/javascript" src="lib/sarissa/sarissa.js"></script>
 	<script type="text/javascript" src="lib/jquery/jquery.xslTransform.packed.js"></script>
 	<script src="lib/sarissa/sarissa_ieemu_xpath.js"		type="text/javascript"></script>
+<!-- properties which need to be modified on a global basis -->
+<script type="text/javascript">
+var libPath = '';
+var hostPort = '';
+var cgiDir = '/cgi-bin/';
+var embeddedUrl = '';
+var embeddedSESSID = '';
+// reference local blank image
+var showMarcXslPath = libPath + "ui/xsl/MARC21slim2HTML.xsl";
+var fixedFieldXslPath = libPath + "ui/xsl/fixedfields_editor.xsl";
+var varFieldsXslPath = libPath + "ui/xsl/varfields_inputboxes.xsl";
+var confPath = libPath + "conf/webcatdb.conf";
+var marc21defsPath = libPath + "ui/xsl/marc21.xml";
+var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
+</script>
 <!-- biblios -->
     <script type="text/javascript" src="ui/js/db.js"></script>
     <script type="text/javascript" src="ui/js/marceditor.js"></script>
