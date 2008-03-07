@@ -48,7 +48,8 @@ koha.prototype = {
 						beforeSend: function(req) {
 						},
 						complete: function(req, textStatus) {
-
+							this.that.cgisessid = req.getResponseHeader('Set-Cookie');
+							this.that.bibprofile();
 						}
 				});
 			}
@@ -70,12 +71,14 @@ koha.prototype = {
 						},
 						complete: function(req, textStatus) {
 							this.that.cgisessid = req.getResponseHeader('Set-Cookie');
+							this.that.bibprofile();
 						}
 				});
 			}
 		},
 
 		bibprofile: function() {
+			eraseCookie('CGISESSID');
 			$.ajax({
 				url: this.url + 'cgi-bin/koha/svc/bib_profile',
 				method: 'get',
@@ -95,11 +98,15 @@ koha.prototype = {
 				},
 				beforeSend: function(req) {
 					req.setRequestHeader('Cookie', this.that.cgisessid);
+				},
+				complete: function(req, textStatus) {
+
 				}
 			});
 		},
 
 		retrieve: function(xmldoc, callback) {
+			eraseCookie('CGISESSID');
 			//alert('retrieving record from koha!');	
 			var recid = $(this.recidXpath, xmldoc).text();
 			$.ajax({
@@ -119,6 +126,7 @@ koha.prototype = {
 		},
 
 		save: function(xmldoc) {
+			eraseCookie('CGISESSID');
 			// if we have a bib number, replace. Otherwise, new bib
 			var recid = $(this.recidXpath, xmldoc).text();
 			var savepath = '';

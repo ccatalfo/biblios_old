@@ -30,9 +30,6 @@ function setILSTargets() {
 					if( sessionStatus != 'ok' ) {
 						Ext.MessageBox.alert('Plugin error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
 					}
-					else {
-						Prefs.remoteILS[ils.name].instance.bibprofile();
-					}
 			}
 		}
 	});
