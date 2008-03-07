@@ -17,6 +17,7 @@ var koha = function() {
 	// record save and retrieval
 	this.recordCache = {};
 	this.saveStatus = '';
+	this.embedded = false; 
 	this.savedBiblionumber = '';
 	this.retrieveHandler = function() {};
 	this.saveHandler = function() {};
@@ -27,14 +28,17 @@ koha.prototype = {
 			this.url = url;
 			this.user = user;
 			this.password = password;
+			if ( embeddedUrl + '/' == this.url ) {
+				this.embedded = true;
+			}
+			else {
+				this.embedded = false;
+			}
 			this.auth();
 		}, // end init
 
 		auth: function() {
-			// get value of CGISESSID ?
-			var cgisessid = $.cookie('CGISESSID') || null;
-			this.cgisessid = cgisessid;
-			if( cgisessid && (embeddedUrl == this.url) ) {
+			if( this.embedded ) {
 				// if CGISESSID has already been set, we've already authenticated to koha
 				$.ajax({
 						url: this.url + 'cgi-bin/koha/svc/authentication',
@@ -48,7 +52,8 @@ koha.prototype = {
 						beforeSend: function(req) {
 						},
 						complete: function(req, textStatus) {
-							this.that.cgisessid = req.getResponseHeader('Set-Cookie');
+							this.that.cgisessid = req.getResponseHeader('Set-Cookie').substr(10, 32);
+							createCookie('CGISESSID', 'CGISESSID=' + this.that.cgisessid);
 							this.that.bibprofile();
 						}
 				});
@@ -70,7 +75,8 @@ koha.prototype = {
 						beforeSend: function(req) {
 						},
 						complete: function(req, textStatus) {
-							this.that.cgisessid = req.getResponseHeader('Set-Cookie');
+							eraseCookie('CGISESSID');
+							this.that.cgisessid = req.getResponseHeader('Set-Cookie').substr(10, 32);
 							this.that.bibprofile();
 						}
 				});
@@ -97,10 +103,13 @@ koha.prototype = {
 					this.that.bibprofileHandler( xml );
 				},
 				beforeSend: function(req) {
-					req.setRequestHeader('Cookie', this.that.cgisessid);
+					req.setRequestHeader('Cookie', 'CGISESSID=' + this.that.cgisessid);
 				},
 				complete: function(req, textStatus) {
-
+					eraseCookie('CGISESSID');
+					if( this.that.embedded ) {
+						createCookie('CGISESSID', this.that.cgisessid);
+					}
 				}
 			});
 		},
@@ -120,7 +129,13 @@ koha.prototype = {
 					this.that.retrieveHandler(xml);
 				},
 				beforeSend: function(req) {
-					req.setRequestHeader('Cookie', this.that.cgisessid);
+					req.setRequestHeader('Cookie', 'CGISESSID=' + this.that.cgisessid);
+				},
+				complete: function(req, textStatus) {
+					eraseCookie('CGISESSID');
+					if( this.that.embedded ) {
+						createCookie('CGISESSID', this.that.cgisessid);
+					}
 				}
 			});
 		},
@@ -165,7 +180,13 @@ koha.prototype = {
 					Ext.MessageBox.alert('Error', textStatus);
 				},
 				beforeSend: function(req) {
-					req.setRequestHeader('Cookie', this.that.cgisessid);
+					req.setRequestHeader('Cookie', 'CGISESSID=' + this.that.cgisessid);
+				},
+				complete: function(req, textStatus) {
+					eraseCookie('CGISESSID');
+					if( this.that.embedded ) {
+						createCookie('CGISESSID', this.that.cgisessid);
+					}
 				}
 			});
 		}
