@@ -709,13 +709,12 @@ biblios.app = function() {
 																},// save grid row dbl click handler
 																keypress: function(e) {
 																	if( e.getKey() == Ext.EventObject.ENTER ) {
+																		showStatusMsg('Opening record...');
 																		var sel = Ext.getCmp('savegrid').getSelectionModel().getSelected();
 																		var id = sel.data.Id;
 																		UI.editor['editorone'].id = id;
 																		var xml = getLocalXml(id);
 																		openRecord( xml, 'editorone' );
-																		showStatusMsg('Opening record...');
-																		//clearStatusMsg();
 																	} // ENTER
 																} // savegrid keypress
 															}, // save grid listeners

@@ -166,6 +166,7 @@ function openRecord(xml, editorelem) {
 	UI.editor[editorelem].lastFocusedEl = $('#'+editorelem).find('#000').get(0);
 	UI.editor.progress.updateProgress(1, 'MarcEditor loaded');
 	UI.editor.progress.hide();
+	clearStatusMsg();
 }
 
 function previewRemoteRecord(id, offset) {
