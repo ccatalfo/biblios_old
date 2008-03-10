@@ -233,10 +233,11 @@ function getSendFileMenuItems(editorid) {
 function getSaveFileMenuItems(editorid) {
 	var list = new Array();
 	getSaveFileNames();
-	for ( sf in UI.save.savefile ) {
+	var savefiles = DB.Savefiles.select().toArray();
+	for ( var i = 0; i < savefiles.length; i++) {
 		var o = {
-			text: UI.save.savefile[sf],
-			id: sf,
+			text: savefiles[i].name,
+			id: savefiles[i].rowid,
 			editorid: editorid,
 			handler: function(btn) {
 				var savefileid = btn.id;
