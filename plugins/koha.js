@@ -92,6 +92,7 @@ koha.prototype = {
 				that: this,
 				success: function(xml, status) {
 					this.bibprofilexml = xml;
+					var bibprofileStatus = $('auth_status', xml).text();
 					// construct record id xpath expression from bib profile
 					var tag = $('bib_number tag', xml).text();
 					var subfield = $('bib_number subfield', xml).text();
@@ -100,7 +101,7 @@ koha.prototype = {
 					this.that.mandatory_subfields = $('mandatory_subfields', xml).children();
 					this.that.reserved_tags = $('reserved_tags', xml).children();
 					this.that.special_entries = $('special_entry', xml);
-					this.that.bibprofileHandler( xml );
+					this.that.bibprofileHandler( xml , bibprofileStatus);
 				},
 				beforeSend: function(req) {
 					req.setRequestHeader('Cookie', 'CGISESSID=' + this.that.cgisessid);

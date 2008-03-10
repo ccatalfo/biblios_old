@@ -31,6 +31,12 @@ function setILSTargets() {
 						Ext.MessageBox.alert('Plugin error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
 					}
 			}
+			Prefs.remoteILS[ils.name].instance.bibprofileHandler = function(xml, bibprofileStatus) {
+				if( bibprofileStatus != 'ok' ) {
+						Ext.MessageBox.alert('Plugin error', 'Retrieval of bibliographic format information from Koha server at ' + this.url + ' failed.  Response: ' + bibprofileStatus + '.');
+				}
+
+			}
 		}
 	});
 }
