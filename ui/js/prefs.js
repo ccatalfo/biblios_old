@@ -25,20 +25,20 @@ function setILSTargets() {
 				var initcall = ils.plugininit;
 				// initialize and authorize for this ils instance
 				Prefs.remoteILS[ils.name].instance = eval( initcall );
-				Prefs.remoteILS[ils.name].instance.init(ils.url, ils.user, ils.password);
 				Prefs.remoteILS[ils.name].instance.initHandler = function(sessionStatus) {
 					if( sessionStatus != 'ok' ) {
 						Ext.MessageBox.alert('Plugin error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
 					}
 			}
-			Prefs.remoteILS[ils.name].instance.bibprofileHandler = function(xml, bibprofileStatus) {
-				if( bibprofileStatus != 'ok' ) {
-						Ext.MessageBox.alert('Plugin error', 'Retrieval of bibliographic format information from Koha server at ' + this.url + ' failed.  Response: ' + bibprofileStatus + '.');
+				Prefs.remoteILS[ils.name].instance.bibprofileHandler = function(xml, bibprofileStatus) {
+					if( bibprofileStatus != 'ok' ) {
+							Ext.MessageBox.alert('Plugin error', 'Retrieval of bibliographic format information from Koha server at ' + this.url + ' failed.  Response: ' + bibprofileStatus + '.');
+					}
+					// disable this send target for saving since we have no bib profile for it
+					var sendtarget = DB.SendTargets.select('url=?', [ this.url ] ).getOne();
+					Prefs.remoteILS[ sendtarget.name ].enabled = 0;
 				}
-				// disable this send target for saving since we have no bib profile for it
-				var sendtarget = DB.SendTargets.select('url=?', [ this.url ] ).getOne();
-				Prefs.remoteILS[ sendtarget.name ].enabled = 0;
-			}
+				Prefs.remoteILS[ils.name].instance.init(ils.url, ils.user, ils.password);
 		};
 	});
 }
