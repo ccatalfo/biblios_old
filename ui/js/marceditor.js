@@ -586,7 +586,7 @@ function MarcEditor(ffeditor, vareditor) {
 				var sfid = 'dsubfields'+tagnum+sfcode+'-'+i;
 				html += '<span class="subfield '+sfcode+'" id="'+sfid+'">';
 				html += '<input maxlength="2" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="subfield-delimiter" value="&#8225;'+sfcode+' ">';
-				html += '<input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="subfield-text" value="'+sfval+' ">';
+				html += '<input onblur=\'onBlur(this)\' onfocus=\'onFocus(this)\' type=\'text\' class=\'subfield-text\' value=\''+sfval+'\'>';
 				// close subfield span
 				html += '</span>';
 			});
