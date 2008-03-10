@@ -206,10 +206,11 @@ function updateSendMenu() {
 
 function getSendFileMenuItems(editorid) {
 	var list = new Array();
-	for( ils in Prefs.remoteILS ) {
+	var sendtargets = DB.SendTargets.select('enabled=1').toArray();
+	for( var i = 0; i < sendtargets.length; i++) {
 		var o = {
-			text: ils,
-			id: ils,
+			text: sendtargets[i].name,
+			id: sendtargets[i].name,
 			editorid: editorid,
 			handler: function(btn) {
 				// if this record has already been saved to this location
