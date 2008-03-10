@@ -589,7 +589,12 @@ biblios.app = function() {
 																tooltip: {title: 'Save', text: 'Ctrl-s'},
 																menu: {
 																	id: 'editorTwoSaveMenu',
-																	items: getSaveFileMenuItems('editortwo')
+																	items: getSaveFileMenuItems('editortwo'),
+																	listeners: {
+																		beforeshow: function(menu, menuItem, e) {
+																			updateSaveMenu();
+																		}
+																	}
 																}
 															},
 															{
@@ -600,7 +605,12 @@ biblios.app = function() {
 																menu: {
 																	id: 'editorTwoSendMenu',
 																	editorid: 'editortwo',
-																	items: getSendFileMenuItems('editortwo')
+																	items: getSendFileMenuItems('editortwo'),
+																	listeners: {
+																		beforeshow: function(menu, menuItem, e) {
+																			updateSendMenu();
+																		}
+																	}
 																}
 															},
 															{   
