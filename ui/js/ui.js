@@ -384,7 +384,7 @@ function getNewRecordMenu() {
 			id: templates[i].name,
 			handler: function(btn) {
 				Ext.Ajax.request({
-							url: btn.file,
+							url: libPath + btn.file,
 							method: 'GET',
 							callback: function(options, isSuccess, resp) { 
 								var xml = resp.responseText; 
