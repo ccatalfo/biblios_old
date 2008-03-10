@@ -12,9 +12,11 @@ Ext.namespace('biblios');
 // create application
 biblios.app = function() {
     // private variables
+	Ext.get('loadingtext').update('Loading database');
 	init_gears();
 	var viewport; 
 	var viewState = '';
+	Ext.get('loadingtext').update('Setting up search session');
 	var paz = initializePazPar2(pazpar2url, {
 		initCallback: function(data) {
 			paz.sessionID = this.sessionID;
@@ -90,6 +92,7 @@ biblios.app = function() {
 
         init: function() {
 			Ext.QuickTips.init();
+			Ext.get('loadingtext').update('Setting up search targets');
 			setILSTargets();
             this.viewport = new Ext.Panel({
 				layout: 'border',
@@ -134,12 +137,6 @@ biblios.app = function() {
 					new Ext.TabPanel({
 						region: 'center',
 						items: [
-							{
-								title: 'Home',
-								closable: false,
-								autoScroll: true,
-								id: 'hometab'
-							}, // home tab
 							{
 								title: 'Biblio',
 								closable: false,
@@ -1699,7 +1696,37 @@ biblios.app = function() {
 		});
 
 		treeEditor.render();
+		Ext.get('loadingtext').update('Finishing initializing');
 	//	alert('Application successfully initialized');
+var loading = Ext.get('loading');
+
+var mask = Ext.get('loading-mask');
+
+mask.setOpacity(.8);
+
+mask.shift({
+
+xy:loading.getXY(),
+
+width:loading.getWidth(),
+
+height:loading.getHeight(),
+
+remove:true,
+
+duration:1,
+
+opacity:.3,
+
+easing:'bounceOut',
+
+callback : function(){
+
+loading.fadeOut({duration:.2,remove:true});
+
+}
+
+});
         }
     };
 }(); // end of app

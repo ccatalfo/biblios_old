@@ -6,6 +6,23 @@
 	<!-- extraheadincludes -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="lib/extjs2/resources/css/ext-all.css">
+	<!-- our own style sheets -->
+	<link type="text/css" rel="stylesheet" href="ui/css/styles.css" />
+	<link type="text/css" rel="stylesheet" href="ui/css/editor-styles.css" />
+    <title>Biblios</title>
+</head>
+<body>
+<!-- Loading mask and image -->
+
+<div id="loading-mask" ></div>
+
+<div id="loading">
+
+	<div class="loading-ind">
+		<img src="ui/images/biblios-logo.gif"><p id='loadingtext'>Loading...</p>
+	</div>
+
+</div>
 <!-- firebug lite -->
 
     <script type="text/javascript" src="lib/firebug/firebug.js"></script>
@@ -26,9 +43,9 @@
 	<script type="text/javascript" src="lib/google_gears/GearsORM_all.js"></script>
 	<script type="text/javascript" src="lib/google_gears/GearsORMShift.js"></script>
 <script>
+	Ext.get('loadingtext').update('Checking for Google Gears');
   if (!window.google || !google.gears) {
-	  location.href = "http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application" +
-                    "&return="+document.URL;
+	Ext.get('loadingtext').update('Unable to load Google Gears. Please visit the following url to install: http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application');
   }
 </script>
 <!-- pazpar2 -->
@@ -70,21 +87,6 @@ var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
     <script type="text/javascript" src="ui/js/ui.js"></script>
     <script type="text/javascript" src="ui/js/edit.js"></script>
     <script type="text/javascript" src="plugins/koha.js"></script>
-	<!-- our own style sheets -->
-	<link type="text/css" rel="stylesheet" href="ui/css/styles.css" />
-	<link type="text/css" rel="stylesheet" href="ui/css/editor-styles.css" />
-    <!-- A Localization Script File comes here -->
-    <script type="text/javascript">
-		var debug = 0;
-        Ext.onReady(function() {
-			Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs2/resources/images/default/s.gif';
-			biblios.app.init();
-			// placeholder
-		}, biblios.app);
-    </script>
-    <title>Biblios</title>
-</head>
-<body>
 <div id='branding-area'></div>
 <div id='biblios'>
 <div id='downloads'></div>
@@ -110,5 +112,15 @@ var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
 		</form>
 	  </div>
 </div>
+    <!-- A Localization Script File comes here -->
+    <script type="text/javascript">
+		var debug = 0;
+        Ext.onReady(function() {
+			Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs2/resources/images/default/s.gif';
+			biblios.app.init();
+			Ext.fly('loading').remove();
+			// placeholder
+		}, biblios.app);
+    </script>
 </body>
 </html>
