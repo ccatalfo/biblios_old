@@ -168,7 +168,7 @@ biblios.app = function() {
 														ddGroup: 'RecordDrop',
 														region: 'center',
 														height: 300,
-														width: 300,
+														autoWidth: true,
 														id: 'searchgrid',
 														store : (ds = new Ext.data.Store({
 															baseParams: {
@@ -258,11 +258,11 @@ biblios.app = function() {
 																}
 															})),
 															{header: "Medium", width: 50, dataIndex: 'medium'},
-															{header: "Title", width: 180, dataIndex: 'title'},
-															{header: "Author", width: 120, dataIndex: 'title-responsibility'},
+															{header: "Title", width: 280, dataIndex: 'title'},
+															{header: "Author", width: 170, dataIndex: 'title-responsibility'},
 															{header: "Publisher", width: 120, dataIndex: 'publication'},
-															{header: "Date", width: 50, dataIndex: 'date'},
-															{header: "Location", width: 100, dataIndex: 'location',
+															{header: "Date", width: 40, dataIndex: 'date'},
+															{header: "Location", width: 110, dataIndex: 'location',
 																renderer: function(data, meta, record, row, col, store) {
 																			if( record.data.location.length == 1 ) {
 																				return record.data.location[0].name;
