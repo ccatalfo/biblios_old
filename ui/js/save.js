@@ -87,8 +87,8 @@ function doSaveLocal(savefileid, editorid, offset ) {
 			}
 		}
 		showStatusMsg("Record(s) saved to "+savefilename);
-		return true;
 		clearStatusMsg();
+		return true;
 	}
 
 function doSaveRemote(loc, xmldoc, editorid) {
