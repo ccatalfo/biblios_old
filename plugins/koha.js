@@ -173,9 +173,6 @@ koha.prototype = {
 					}
 					this.that.saveHandler( marcxml , status);
 				},
-				error: function(req, textStatus, error) {
-					Ext.MessageBox.alert('Error', textStatus);
-				},
 				beforeSend: function(req) {
 					req.setRequestHeader('Cookie', 'CGISESSID=' + this.that.cgisessid);
 				},
