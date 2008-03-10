@@ -320,6 +320,7 @@ function handleDownload(format, encoding, xml) {
                      ,loadMask :false 
 
                    });
+			clearStatusMsg();
           }
         );
 }
