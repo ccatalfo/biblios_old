@@ -223,9 +223,7 @@ biblios.app = function() {
 																rowselect: function(selmodel, rowindex, record) {
 																	var id = record.id;
 																	if( record.data.count > 1 ) {
-																		Ext.getCmp('searchpreview').el.update("<p>This record is available at more than one location. <br/> Please click the plus icon to the left of this record to view locations from which the record can be previewed.<br/>  Click on a location's name to view that location's version of the record.</p>");
-																		
-
+																		Ext.get('searchprevrecord').update("<p>This record is available at more than one location. <br/> Please click the plus icon to the left of this record to view locations from which the record can be previewed.<br/>  Click on a location's name to view that location's version of the record.</p>");
 																	}
 																	else {
 																		showStatusMsg('Previewing...');
