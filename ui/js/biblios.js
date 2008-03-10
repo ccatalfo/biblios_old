@@ -1628,6 +1628,8 @@ biblios.app = function() {
 																			for( var i = 0; i < records.length; i++) {
 																				try {
 																					DB.SendTargets.select('SendTargets.rowid=?', [records[i].data.rowid]).getOne().remove();
+																					// remove from Prefs hash
+																					delete Prefs.remoteILS[ records[i].data.location ];
 																				}
 																				catch(ex) {
 																					Ext.MessageBox.alert('Error', ex.message);
