@@ -768,3 +768,9 @@ function getEditorForTag(tagnumber, marcxml) {
 
 }
 
+function checkEditorLimits(elem) {
+	if( $(':checked').length == 3 ) {
+		elem.checked = false;
+		Ext.MessageBox.alert('Error', 'Please select only 2 records to edit at one time');
+	}
+}
