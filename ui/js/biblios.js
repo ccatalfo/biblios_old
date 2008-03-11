@@ -221,6 +221,8 @@ biblios.app = function() {
 														sm: new Ext.grid.RowSelectionModel({
 															listeners: {
 																rowselect: function(selmodel, rowindex, record) {
+																	Ext.getCmp('searchgridExportBtn').enable();
+																	Ext.getCmp('searchgridEditBtn').enable();
 																	var id = record.id;
 																	if( record.data.count > 1 ) {
 																		Ext.get('searchprevrecord').update("<p>This record is available at more than one location. <br/> Please click the plus icon to the left of this record to view locations from which the record can be previewed.<br/>  Click on a location's name to view that location's version of the record.</p>");
@@ -314,8 +316,9 @@ biblios.app = function() {
 																{
 																		cls: 'x-btn-text-icon',
 																		icon: libPath + 'ui/images/document-open.png',
+																		id: 'searchgridEditBtn',
+																		disabled: true,
 																		text: 'Edit',
-																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
 																		handler: function() {
 																			var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																			UI.editor['editorone'].id = '';
@@ -330,6 +333,8 @@ biblios.app = function() {
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
 																		icon: libPath + 'ui/images/network-receive.png',
 																		text: 'Export',
+																		id: 'searchgridExportBtn',
+																		disabled: true,
 																		menu: {
 																			id: 'exportMenu',
 																			items: getExportMenuItems()
@@ -695,6 +700,8 @@ biblios.app = function() {
 																listeners: {
 																	rowselect: function(selmodel, rowindex, record) {
 																		showStatusMsg('Previewing...');
+																		Ext.getCmp('savegridEditBtn').enable();
+																		Ext.getCmp('savegridExportBtn').enable();
 																		var id = record.data.Id;
 																		var xml = getLocalXml(id);
 																		Ext.getCmp('savepreview').el.mask();
@@ -754,7 +761,8 @@ biblios.app = function() {
 																		cls: 'x-btn-text-icon',
 																		icon: libPath + 'ui/images/document-open.png',
 																		text: 'Edit',
-																		disabled: false, // start disabled.  enable if there are records in the datastore (searchsaveds)
+																		id: 'savegridEditBtn',
+																		disabled: true,
 																		handler: function() {
 																			var id = Ext.getCmp('savegrid').getSelections()[0].data.Id;
 																			UI.editor['editorone'].id = id;
@@ -767,6 +775,8 @@ biblios.app = function() {
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
 																		icon: libPath + 'ui/images/network-receive.png',
 																		text: 'Export',
+																		id: 'savegridExportBtn',
+																		disabled: true,
 																		menu: {
 																			id: 'exportMenu',
 																			items: getExportMenuItems()
@@ -903,6 +913,8 @@ biblios.app = function() {
 															listeners: {
 																click: function(node, e) {
 																	biblios.app.displaySaveView();
+																	Ext.getCmp('savegridEditBtn').disable();
+																	Ext.getCmp('savegridExportBtn').disable();
 																}
 															}, // save folder listeners
 															loader: new Ext.ux.GearsTreeLoader({
@@ -936,6 +948,8 @@ biblios.app = function() {
 																baseAttrs: {
 																	listeners: {
 																		click: function(node, e) {
+																			Ext.getCmp('savegridEditBtn').disable();
+																			Ext.getCmp('savegridExportBtn').disable();
 																			UI.currSaveFile = node.attributes.id;
 																			UI.currSaveFileName = node.text;
 																			biblios.app.displaySaveFile( node.attributes.id );

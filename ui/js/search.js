@@ -191,6 +191,8 @@ function clearSearchLimits() {
 
 function doPazPar2Search() {
 	clearSearchLimits();
+	Ext.getCmp('searchgridEditBtn').disable();
+	Ext.getCmp('searchgridExportBtn').disable();
 	var query = $("#query").val();
 	var searchtype  = $("#searchtype").val();
 	var searchquery = '';
