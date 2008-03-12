@@ -208,9 +208,10 @@ biblios.app = function() {
 																				var name = Ext.DomQuery.select('@name', locations[i])[0].firstChild.nodeValue;
 																				var id = Ext.DomQuery.select('@id', locations[i])[0].firstChild.nodeValue;
 																				var recid = Ext.DomQuery.select('recid', rec)[0].textContent;
-																				html += '<li id="loc'+i+recid+'" class="locationitem" onclick="previewRemoteRecord(\''+recid+'\','+i+')">'+name+'</li>';
+																				html += '<li id="loc'+i+recid+'" class="locationitem" onclick="handleLocationClick(\''+recid+'\','+i+')">'+name+'</li>';
 																			}
 																			html += '</ul>';
+																			html += '<br/>';
 																			return html;
 																		} // locationinfo mapping function
 																	} // locationinfo mapping
@@ -228,6 +229,8 @@ biblios.app = function() {
 																		//Ext.get('searchprevrecord').update("<p>This record is available at more than one location. <br/> Please click the plus icon to the left of this record to view locations from which the record can be previewed.<br/>  Click on a location's name to view that location's version of the record.</p>");
 																	}
 																	else {
+																		// remove any classes from selected locations
+																		Ext.select('.locationitem').removeClass('location-click');
 																		showStatusMsg('Previewing...');
 																		// get the marcxml for this record and send to preview()
 																		previewRemoteRecord(id, 0);
@@ -239,11 +242,12 @@ biblios.app = function() {
 															(expander = new Ext.grid.RowExpander({
 																remoteDataMethod: function(record, index) {
 																	$('#remData'+index).html(record.data.locationinfo);
-																	// set up drag source and preview for each of these items
+																	// set up drag source, click/focus css and preview for each of these items
 																	var locations = record.data.location;
 																	var recid = record.id;
 																	for( var i = 0; i < locations.length; i++) {
 																		Ext.get('loc'+i+recid).dd = new Ext.dd.DragSource('loc'+i+recid, {ddGroup: 'RecordDrop'});
+																		Ext.get('loc'+i+recid).addClassOnOver('location-over');
 																	}
 																}
 															})),

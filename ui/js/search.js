@@ -302,3 +302,9 @@ function limitSearch() {
 	paz.show();
 	biblios.app.displaySearchView();
 }
+
+function handleLocationClick(recid, offset) {
+	Ext.select('.locationitem').removeClass('location-click');
+	Ext.get('loc'+offset+recid).addClass('location-click');
+	previewRemoteRecord(recid, offset);
+}

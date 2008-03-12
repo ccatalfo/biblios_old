@@ -126,3 +126,11 @@
 	font-size: medium;
 	padding-bottom: 20px;
 }
+
+.location-click {
+	font-weight: bold;
+}
+
+.location-over {
+	background: green;
+}
