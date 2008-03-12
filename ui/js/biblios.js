@@ -363,6 +363,7 @@ biblios.app = function() {
 													{
 														region: 'center',
 														id: 'editorone',
+														title: 'Editor 1',
 														cls: 'marceditor',
 														autoScroll: true,
 														split: true,
