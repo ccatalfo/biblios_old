@@ -160,7 +160,16 @@ function resetPazPar2(options) {
 						if(debug) { console.info("re-running search with pazpar2"); }
 						paz.search( options.currQuery );
 						paz.show(options.currStart, options.currNum);
-						getPazRecord(options.currRecId, 0, function(data) {previewRecord(data);}, {});
+						getPazRecord(options.currRecId, options.currRecOffset, 
+							function(data) {
+								var xml = xslTransform.serialize(data); 
+								recordCache[o.id] = xml; 
+								Ext.getCmp('searchpreview').el.mask();
+								$('#searchprevrecord').getTransform(marcxsl, xml);
+								Ext.getCmp('searchpreview').el.unmask();
+								clearStatusMsg();
+							}, 
+						{});
 					}
 				}
 			}

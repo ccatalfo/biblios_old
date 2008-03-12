@@ -175,16 +175,24 @@ function previewRemoteRecord(id, offset) {
 		offset,
 		// callback function for when pazpar2 returns record data
 		function(data, o) {  
-			var xml = xslTransform.serialize(data); 
-			recordCache[o.id] = xml; 
-			Ext.getCmp('searchpreview').el.mask();
-			$('#searchprevrecord').getTransform(marcxsl, xml);
-			Ext.getCmp('searchpreview').el.unmask();
-			clearStatusMsg();
+			if( $('error', data).length > 0 ) {
+				Ext.getCmp('searchpreview').el.mask();
+				$('#searchprevrecord').html('Error retrieving remote record.  Attempting to reset connection...');
+				resetPazPar2({currRecId: o.id, currRecOffset: o.offset});
+			}
+			else {
+				var xml = xslTransform.serialize(data); 
+				recordCache[o.id] = xml; 
+				Ext.getCmp('searchpreview').el.mask();
+				$('#searchprevrecord').getTransform(marcxsl, xml);
+				Ext.getCmp('searchpreview').el.unmask();
+				clearStatusMsg();
+			}
 		},
 		// json literal containing hash of desired params in callback
 		{
-			id: id
+			id: id,
+			offset: offset
 		}
 	);
 

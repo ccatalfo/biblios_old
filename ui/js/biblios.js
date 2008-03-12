@@ -50,8 +50,7 @@ biblios.app = function() {
 	displayRecordView : function displayRecordView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(1);
 		openState = 'editorPanel';
-		updateSendMenu();
-		updateSaveMenu();
+		Ext.getCmp('helpPanel').collapse();
 		displayHelpMsg(UI.messages.help.en.recordview);
 	}
 
@@ -204,11 +203,12 @@ biblios.app = function() {
 																	{name: 'locationinfo', mapping: 
 																		function(rec) {
 																			var locations = Ext.DomQuery.select('location', rec);
-																			var html = '<ul class="locationlist"';
+																			var html = '<ul class="locationlist">';
 																			for( var i = 0; i < locations.length; i++) {
 																				var name = Ext.DomQuery.select('@name', locations[i])[0].firstChild.nodeValue;
 																				var id = Ext.DomQuery.select('@id', locations[i])[0].firstChild.nodeValue;
-																				html += '<li id="locitem-'+i+'" class="locationitem" onclick="previewRecordOffset('+i+')">'+name+'</li>';
+																				var recid = Ext.DomQuery.select('recid', rec)[0].textContent;
+																				html += '<li id="loc'+i+recid+'" class="locationitem" onclick="previewRemoteRecord(\''+recid+'\','+i+')">'+name+'</li>';
 																			}
 																			html += '</ul>';
 																			return html;
@@ -225,7 +225,7 @@ biblios.app = function() {
 																	Ext.getCmp('searchgridEditBtn').enable();
 																	var id = record.id;
 																	if( record.data.count > 1 ) {
-																		Ext.get('searchprevrecord').update("<p>This record is available at more than one location. <br/> Please click the plus icon to the left of this record to view locations from which the record can be previewed.<br/>  Click on a location's name to view that location's version of the record.</p>");
+																		//Ext.get('searchprevrecord').update("<p>This record is available at more than one location. <br/> Please click the plus icon to the left of this record to view locations from which the record can be previewed.<br/>  Click on a location's name to view that location's version of the record.</p>");
 																	}
 																	else {
 																		showStatusMsg('Previewing...');
@@ -238,24 +238,12 @@ biblios.app = function() {
 														cm : new Ext.grid.ColumnModel([
 															(expander = new Ext.grid.RowExpander({
 																remoteDataMethod: function(record, index) {
-																	var locations = record.data.location;
-																	var html = '';
-																	for( var i = 0; i < locations.length; i++) {
-																		var id = 'loc'+i;
-																		html += '<p id="'+id+'">' + locations[i].name + '</p>';
-
-																	}
-																	$('#remData'+index).html(html);
+																	$('#remData'+index).html(record.data.locationinfo);
 																	// set up drag source and preview for each of these items
+																	var locations = record.data.location;
+																	var recid = record.id;
 																	for( var i = 0; i < locations.length; i++) {
-																		Ext.get('loc'+i).dd = new Ext.dd.DragSource('loc'+i, {ddGroup: 'RecordDrop'});
-																		Ext.get('loc'+i).on('click', function(e) {
-																			showStatusMsg('Previewing...');
-																			var record = Ext.getCmp('searchgrid').getSelections()[0];
-																			var id = record.id;
-																			var offset = e.getTarget().id.substr(3);
-																			previewRemoteRecord(id, offset);	
-																		});
+																		Ext.get('loc'+i+recid).dd = new Ext.dd.DragSource('loc'+i+recid, {ddGroup: 'RecordDrop'});
 																	}
 																}
 															})),
@@ -1195,7 +1183,8 @@ biblios.app = function() {
 																// if we have a grid row
 																var editorid = e.target.attributes.editorid;
 																if( editorid == 'editortwo') {
-																	e.target.expand();
+																	biblios.app.displayRecordView();
+																	Ext.getCmp(editorid).expand();
 																}
 																
 																if( e.data.grid ) {
@@ -1229,10 +1218,10 @@ biblios.app = function() {
 																} // if we have a grid row
 																// we have a location from search grid
 																else {
-																	var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+																	var id = e.source.id.substr(4); // "loc"+offset+recid
 																	UI.editor[editorid].id = '';
 																	var offset = e.source.id.substr(3); // "loc"+offset
-																	var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[offset].name;
+																	var loc = $(e.source.el.dom).text(); // text of el
 																	UI.editor[editorid].location = loc;
 																	var record = Ext.getCmp('searchgrid').getSelections()[0];
 																	getRemoteRecord(id, loc.name, offset, function(data) { 
@@ -1297,6 +1286,7 @@ biblios.app = function() {
 										width: 200,
 										autoScroll: true,
 										title: 'Help',
+										id: 'helpPanel',
 										items: [
 											new Ext.ux.ManagedIframePanel({
 												id: 'helpIframe'
