@@ -314,14 +314,34 @@ biblios.app = function() {
 																		disabled: true,
 																		text: 'Edit',
 																		handler: function() {
-																			var id = Ext.getCmp('searchgrid').getSelections()[0].id;
-																			UI.editor['editorone'].id = '';
-																			var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[0].name;
-																			UI.editor['editorone'].location = loc;
-																			getRemoteRecord(id, loc, 0, function(data) { 
-																				openRecord( xslTransform.serialize(data), 'editorone' ); 
-																			});
-																		}
+																			var checked = $(':checked');
+																			for( var i = 0; i < checked.length; i++ ) {
+																				var editorid = '';
+																				if( i == 0 ) {
+																					editorid = 'editorone';
+																				}
+																				else if( i == 1) {
+																					editorid = 'editortwo';
+																				}
+																				var id = checked[i].id.substr(6);
+																				var offset = checked[i].id.substr(5,1);
+																				UI.editor[editorid].id = '';
+																				// get location info
+																				var loc = ''
+																				if( $(':checked').eq(0).parents('.locationitem').length > 0 ) {
+																					
+																					loc = $(checked).eq(i).parents('.locationitem').text();
+
+																				}
+																				else {
+																					loc = Ext.getCmp('searchgrid').store.getById(id).data.location[0].name;
+																				}
+																				UI.editor[editorid].location = loc;
+																				getRemoteRecord(id, loc, 0, function(data) { 
+																					openRecord( xslTransform.serialize(data), editorid ); 
+																				});
+																			} // for each checked record
+																		} // search grid Edit btn handler
 																	},
 																	{   
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
@@ -516,7 +536,7 @@ biblios.app = function() {
 														collapsible: true,
 														collapsed: true,
 														title: 'Editor 2',
-														width: 300,
+														width: 400,
 														html: '<div id="marceditortwo"><div class="ffeditor"></div><div class="vareditor"></div></div>',
 														tbar: [
 															{

@@ -129,6 +129,9 @@ function openRecord(xml, editorelem) {
 	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
 	biblios.app.displayRecordView();
+	if( editorelem == 'editortwo') {
+		Ext.getCmp('editortwo').expand();
+	}
 	var ffed =	$('#'+editorelem).find(".ffeditor");
 	$(ffed).empty();
 	var vared = $('#'+editorelem).find(".vareditor");
