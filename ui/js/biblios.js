@@ -208,7 +208,9 @@ biblios.app = function() {
 																				var name = Ext.DomQuery.select('@name', locations[i])[0].firstChild.nodeValue;
 																				var id = Ext.DomQuery.select('@id', locations[i])[0].firstChild.nodeValue;
 																				var recid = Ext.DomQuery.select('recid', rec)[0].textContent;
-																				html += '<li id="loc'+i+recid+'" class="locationitem" onclick="handleLocationClick(\''+recid+'\','+i+')">'+name+'</li>';
+																				html += '<li id="loc'+i+recid+'" class="locationitem" onclick="handleLocationClick(\''+recid+'\','+i+')">';
+																				html += '<input type="checkbox" id="check'+i+recid+'">';
+																				html += name+'</li>';
 																			}
 																			html += '</ul>';
 																			html += '<br/>';
