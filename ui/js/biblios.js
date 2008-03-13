@@ -315,6 +315,10 @@ biblios.app = function() {
 																		text: 'Edit',
 																		handler: function() {
 																			var checked = $(':checked');
+																			if( checked.length == 0 ) {
+																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the record title, then clicking this button again.');
+																				return false;
+																			}
 																			for( var i = 0; i < checked.length; i++ ) {
 																				var editorid = '';
 																				if( i == 0 ) {
