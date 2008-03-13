@@ -172,6 +172,9 @@ function resetPazPar2(options) {
 						{});
 					}
 				}
+				else {
+					Ext.MessageBox.alert('Error', 'Unable to re-initialize search session.  Please contact your system administrator to check PazPar2 search.');
+				}
 			}
 	});
 }
@@ -260,6 +263,7 @@ function getPazRecord(recId, offset, callback, callbackParamObject) {
 				type: 'GET',
 				dataType: 'xml',
 				recId: recId,
+				offset: offset,
 				callback: callback,
 				callbackParamObject: callbackParamObject,
 				success: function(data, textStatus) {
@@ -267,6 +271,21 @@ function getPazRecord(recId, offset, callback, callbackParamObject) {
 					var callback = this.callback;
 					var callbackParamObject = this.callbackParamObject;
 					callback.call(this, data, callbackParamObject);
+				},
+				error: function(req, textStatus, errorThrown) {
+						var code = $('error', req.responseXML).attr('code');
+						var msg = $('error', req.responseXML).attr('msg');
+						var httpstatus = req.status;
+						if(bibliosdebug) {
+							console.info('pazpar2 error on record retrieval.  HTTP resp: '+ httpstatus + '. Code: ' + code + '. Msg: ' + msg + '.');
+							console.info('Resetting pazpar2');
+						}
+						showStatusMsg('Search error: resetting');
+						resetPazPar2({
+							currQuery: biblios.app.currQuery,
+							currRecId: this.recId,
+							currRecOffset: this.offset
+						});
 				}
 			});
 		}
