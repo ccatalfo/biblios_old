@@ -167,7 +167,7 @@ biblios.app = function() {
 														ddGroup: 'RecordDrop',
 														region: 'center',
 														height: 300,
-														autoWidth: true,
+														//autoWidth: true,
 														id: 'searchgrid',
 														store : (ds = new Ext.data.Store({
 															baseParams: {
