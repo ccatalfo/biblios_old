@@ -278,9 +278,9 @@ function MarcEditor(ffeditor, vareditor) {
 		}
 		else {
 			// focus previous or next tag
-			var prev = $(UI.editor[editorid].lastFocusedEl).parents('.tag').prev();
-			var next = $(UI.editor[editorid].lastFocusedEl).parents('.tag').next();
-			$(UI.editor[editorid].lastFocusedEl).parents('.tag').remove();
+			var prev = $(UI.editor[editorid].lastFocusedEl).parents('.tag').slice(0,1).prev();
+			var next = $(UI.editor[editorid].lastFocusedEl).parents('.tag').slice(0,1).next();
+			$(UI.editor[editorid].lastFocusedEl).parents('.tag').slice(0,1).remove();
 			if( $(next).length ) {
 				$(next).get(0).focus();
 				UI.editor[editorid].lastFocusedEl = $(next);
