@@ -55,9 +55,12 @@ paz = new pz2({
 					"onping": options.pingCallback || function(){},
 					"onshow": function(data){ 
 						Ext.getCmp('searchgrid').store.reload(); 
+						Ext.getCmp('searchgrid').el.mask('Searching...');
 						if(data.activeclients == 0 ) {
 							// remove 'Searching' status msg
 							clearStatusMsg();
+							// unmask grid
+							Ext.getCmp('searchgrid').el.unmask();
 						}
 					},
 					"termlist": "subject,author,date,publication-name",
@@ -67,6 +70,7 @@ paz = new pz2({
 						}
 					},
                     "showtime": 1500,            //each timer (show, stat, term, bytarget) can be specified this way
+					"termtime": 1500,
                     "pazpar2path": pazpar2url,
 					"onbytarget": function(data) {
 							var nodes = Ext.getCmp('TargetsTreePanel').root.childNodes;

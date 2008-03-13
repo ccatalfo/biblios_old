@@ -125,6 +125,7 @@ function createDatabaseOptions() {
 
 */
 function openRecord(xml, editorelem) {
+	UI.editor.progress = Ext.MessageBox.progress('Loading record', '');
 	// we need to display record view first since editors are lazily rendered
 	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
@@ -137,7 +138,6 @@ function openRecord(xml, editorelem) {
 	var vared = $('#'+editorelem).find(".vareditor");
 	$(vared).empty();
 
-	UI.editor.progress = Ext.MessageBox.progress('Loading record', '');
 	UI.editor[editorelem].record = new MarcEditor();
 	var xmldoc;
 	if( Ext.isIE ) {
