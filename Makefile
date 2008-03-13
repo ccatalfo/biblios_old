@@ -26,16 +26,6 @@ debug:
 	sed -f sed_generate_index_debug < index.html > index-debug.html
 	cp index.html index-debug.html
 
-testRecords:
-	xalan -in test/testRecords/006.xml -xsl ui/xsl/fixedfields_editor.xsl -out test/generatedFiles/ff_006.html -param debug 1
-	 xalan -in test/testRecords/sandburg.xml -xsl ui/xsl/fixedfields_editor.xsl -out test/generatedFiles/ff_books.html -param debug 1
-	 xalan -in test/testRecords/computer.xml -xsl ui/xsl/fixedfields_editor.xsl -out test/generatedFiles/ff_computer.html -param debug 1
-	 xalan -in test/testRecords/map.xml -xsl ui/xsl/fixedfields_editor.xsl -out test/generatedFiles/ff_map.html -param debug 1
-	 xalan -in test/testRecords/music.xml -xsl ui/xsl/fixedfields_editor.xsl -out test/generatedFiles/ff_music.html -param debug 1
-	 xalan -in test/testRecords/visual.xml -xsl ui/xsl/fixedfields_editor.xsl -out test/generatedFiles/ff_visual.html -param debug 1
-	rm -f test/generatedFiles/ff_all.html
-	cat test/generatedFiles/*.html >test/generatedFiles/ff_all.html
-
 koha:
 	perl integration/updateForEmbedding.pl index-debug.html index-koha.html "/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/" "/cgi-bin/koha/plugins/biblios/" "$(KOHASTAFFPORT)" "<!-- TMPL_INCLUDE NAME=\"doc-head-open.inc\" --><!-- TMPL_INCLUDE NAME=\"doc-head-close.inc\" -->" "<!-- TMPL_INCLUDE NAME=\"header.inc\" -->" integration/koha/fixes.js $(DEBUG) $(KOHAURL)
 
