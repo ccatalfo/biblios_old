@@ -46,6 +46,8 @@
 	Ext.get('loadingtext').update('Checking for Google Gears');
   if (!window.google || !google.gears) {
 	Ext.get('loadingtext').update('Unable to load Google Gears. Please visit the following url to install: http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application');
+	location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
+                    "&return="+location.href;
   }
 </script>
 <!-- pazpar2 -->
