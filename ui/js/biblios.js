@@ -471,7 +471,7 @@ biblios.app = function() {
 																			updateSendMenu();
 																		}
 																	}
-																},
+																}
 															},
 															{   
 																cls: 'x-btn-text-icon bmenu', // icon and text class
