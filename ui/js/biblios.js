@@ -91,7 +91,7 @@ biblios.app = function() {
 
         init: function() {
 			Ext.QuickTips.init();
-			Ext.get('loadingtext').update('Setting up search targets');
+			Ext.get('loadingtext').update('Setting up send targets');
 			setILSTargets();
             this.viewport = new Ext.Panel({
 				layout: 'border',

@@ -32,11 +32,13 @@ function setILSTargets() {
 			}
 				Prefs.remoteILS[ils.name].instance.bibprofileHandler = function(xml, bibprofileStatus) {
 					if( bibprofileStatus != 'ok' ) {
-							Ext.MessageBox.alert('Plugin error', 'Retrieval of bibliographic format information from Koha server at ' + this.url + ' failed.  Response: ' + bibprofileStatus + '.');
+							Ext.MessageBox.alert('Plugin error', 'Retrieval of bibliographic format information from Koha server at ' + this.url + ' failed.  Response: ' + bibprofileStatus + '.  Disabling this plugin.');
 					}
 					// disable this send target for saving since we have no bib profile for it
 					var sendtarget = DB.SendTargets.select('url=?', [ this.url ] ).getOne();
-					Prefs.remoteILS[ sendtarget.name ].enabled = 0;
+					delete Prefs.remoteILS[ sendtarget.name ];
+					sendtarget.enabled = 0;
+					sendtarget.save();
 				}
 				Prefs.remoteILS[ils.name].instance.init(ils.url, ils.user, ils.password);
 		};
