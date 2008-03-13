@@ -319,6 +319,8 @@ biblios.app = function() {
 																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the record title, then clicking this button again.');
 																				return false;
 																			}
+																			// mask search grid 
+																			Ext.getCmp('searchgrid').el.mask('Loading record(s)');
 																			for( var i = 0; i < checked.length; i++ ) {
 																				var editorid = '';
 																				if( i == 0 ) {
@@ -345,6 +347,7 @@ biblios.app = function() {
 																					openRecord( xslTransform.serialize(data), editorid ); 
 																				});
 																			} // for each checked record
+																			Ext.getCmp('searchgrid').el.unmask();
 																		} // search grid Edit btn handler
 																	},
 																	{   
