@@ -788,9 +788,11 @@ biblios.app = function() {
 																		handler: function() {
 																			var id = Ext.getCmp('savegrid').getSelections()[0].data.Id;
 																			UI.editor['editorone'].id = id;
+																			Ext.getCmp('savegrid').el.mask('Loading record');
 																			showStatusMsg('Opening record...');
 																			var xml = getLocalXml(id);
 																			openRecord( xml, 'editorone');
+																			Ext.getCmp('savegrid').el.unmask();
 																		}
 																	},
 																	{   
