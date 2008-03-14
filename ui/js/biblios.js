@@ -734,6 +734,12 @@ biblios.app = function() {
 																} // selection listeners
 															}), // save grid selecion model
 															cm: new Ext.grid.ColumnModel([
+																{header: '', width: 20, 
+																	renderer: function(data, meta, record, row, col, store) {
+																	var recid = record.data.Id;
+																	return '<input id="'+recid+'" type="checkbox">';
+																	} // renderer
+																}, // checkbox 
 																{header: "Medium", dataIndex: 'Medium', sortable: true},
 																{header: "Title", width: 200, dataIndex: 'Title', sortable: true},
 																{header: "Author", width: 160, dataIndex: 'Author', sortable: true},
@@ -786,13 +792,28 @@ biblios.app = function() {
 																		id: 'savegridEditBtn',
 																		disabled: true,
 																		handler: function() {
-																			var id = Ext.getCmp('savegrid').getSelections()[0].data.Id;
-																			UI.editor['editorone'].id = id;
-																			Ext.getCmp('savegrid').el.mask('Loading record');
-																			showStatusMsg('Opening record...');
-																			var xml = getLocalXml(id);
-																			openRecord( xml, 'editorone');
-																			Ext.getCmp('savegrid').el.unmask();
+																			var checked = $(':checked');
+																			var editorid = '';
+																			if( checked.length == 0 ) {
+																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the title, then click this button again.');
+																			}
+																			else {
+																				for( var i = 0; i < checked.length; i++) {
+																					if( i == 0 ) {
+																						editorid = 'editorone';
+																					}
+																					else if( i == 1 ) {
+																						editorid = 'editortwo';
+																					}
+																					var id = $(checked).get(i).id;
+																					UI.editor[editorid].id = id;
+																					Ext.getCmp('savegrid').el.mask('Loading record');
+																					showStatusMsg('Opening record...');
+																					var xml = getLocalXml(id);
+																					openRecord( xml, editorid);
+																					Ext.getCmp('savegrid').el.unmask();
+																				}
+																			} // 1 or 2 checkboxes are checked in save grid
 																		}
 																	},
 																	{   
