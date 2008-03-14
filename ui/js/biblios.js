@@ -209,7 +209,7 @@ biblios.app = function() {
 																				var id = Ext.DomQuery.select('@id', locations[i])[0].firstChild.nodeValue;
 																				var recid = Ext.DomQuery.select('recid', rec)[0].textContent;
 																				html += '<li id="loc'+i+recid+'" class="locationitem" onclick="handleLocationClick(\''+recid+'\','+i+')">';
-																				html += '<input type="checkbox" id="check'+i+recid+'">';
+																				html += '<input type="checkbox" class="searchgridcheckbox" id="check'+i+recid+'">';
 																				html += name+'</li>';
 																			}
 																			html += '</ul>';
@@ -314,7 +314,7 @@ biblios.app = function() {
 																		disabled: true,
 																		text: 'Edit',
 																		handler: function() {
-																			var checked = $(':checked');
+																			var checked = $(':checked.searchgridcheckbox');
 																			if( checked.length == 0 ) {
 																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the record title, then clicking this button again.');
 																				return false;
@@ -737,7 +737,7 @@ biblios.app = function() {
 																{header: '', width: 20, 
 																	renderer: function(data, meta, record, row, col, store) {
 																	var recid = record.data.Id;
-																	return '<input id="'+recid+'" type="checkbox">';
+																	return '<input id="'+recid+'" class="savegridcheckbox" type="checkbox">';
 																	} // renderer
 																}, // checkbox 
 																{header: "Medium", dataIndex: 'Medium', sortable: true},
@@ -792,7 +792,7 @@ biblios.app = function() {
 																		id: 'savegridEditBtn',
 																		disabled: true,
 																		handler: function() {
-																			var checked = $(':checked');
+																			var checked = $(':checked.savegridcheckbox');
 																			var editorid = '';
 																			if( checked.length == 0 ) {
 																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the title, then click this button again.');
