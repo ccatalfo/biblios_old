@@ -161,7 +161,10 @@ function openRecord(xml, editorelem) {
 	UI.editor.progress.updateProgress(.9, 'Setting up authority control');
 	setupMarc21AuthorityLiveSearches(editorelem);
 
+	// setup comboboxes for ctry and lang fixed fields
 	setupFFEditorLangCombo(editorelem);
+	setupFFEditorCtryCombo(editorelem);
+
 	// show fixed field editor, hide ldr and 008 divs
 	$(ffed).show();
 	// hide fixed field controlfields
