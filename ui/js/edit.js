@@ -761,6 +761,34 @@ function setupFFEditorLangCombo(editorid) {
 	cb.render();
 }
 
+function setupFFEditorCtryCombo(editorid) {
+	var select = $('#Ctry', $('#'+editorid));
+	var val = $(select).val();
+
+	var store = new Ext.data.Store({
+		proxy: new Ext.data.MemoryProxy(),
+		reader: new Ext.data.XmlReader({
+			record: 'country',
+			id: 'uri'
+			}, [
+				{name: 'name'},
+				{name: 'code'}
+			])
+		});
+	store.loadData(marc21ctrydefs);
+
+	var cb = new Ext.form.ComboBox({
+		id: 'ctrycombobox'+editorid,
+		store: store,
+		transform: $(select).get(0),
+		typeAhead: true,
+		displayField: 'name',
+		valueField: 'code',
+		value: val,
+		mode: 'local'
+	});
+	cb.render();
+}
 
 
 
