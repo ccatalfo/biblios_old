@@ -574,7 +574,7 @@ biblios.app = function() {
 																		},
 																		{
 																			id: 'addField',
-																			editorid: 'editorone',
+																			editorid: 'editortwo',
 																			text: 'Add Field',
 																			handler: function(btn) {
 																				UI.editor.editorone.record.addField();
@@ -583,7 +583,7 @@ biblios.app = function() {
 																		},
 																		{
 																			id: 'removeField',
-																			editorid: 'editorone',
+																			editorid: 'editortwo',
 																			text: 'Remove Field',
 																			handler: function(btn) {
 																				UI.editor[btn.editorid].record.deleteField('editorone');
@@ -592,7 +592,7 @@ biblios.app = function() {
 																		},
 																		{
 																			id: 'addSubfield',
-																			editorid: 'editorone',
+																			editorid: 'editortwo',
 																			text: 'Add Subfield',
 																			handler: function(btn) {
 																				UI.editor[btn.editorid].record.addSubfield(btn.editorid);
@@ -600,7 +600,7 @@ biblios.app = function() {
 																		},
 																		{	
 																			id: 'removeSubfield',
-																			editorid: 'editorone',
+																			editorid: 'editortwo',
 																			text: 'Remove subfield',
 																			handler: function(btn) {
 																				UI.editor[btn.editorid].record.deleteSubfield(btn.editorid);
