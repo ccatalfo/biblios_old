@@ -112,20 +112,21 @@
 		<option>o</option>
 		<option>|</option>
 	</value>
-	<value name="Lang" position="35" length="3" inputtype="menulist">
+	<value name="Lang" position="35" length="3" inputtype="textbox">
 		<option>   </option>
 		<option>eng</option>
 		<option>fre</option>
 		<option>ita</option>
 		<option>rus</option>
 	</value>
-	<value name="Ctry" position="15" length="3" inputtype="menulist">
+	<value name="Ctry" position="15" length="3" inputtype="textbox">
 		<option>nyu</option>
 		<option>cau</option>
 		<option>dcu</option>
 		<option>fre</option>
 		<option>ger</option>
 		<option>mdu</option>
+		<option>enk</option>
 	</value>
 	<value name="Srce" position="39" length="1" inputtype="menulist">
 		<option> </option>
