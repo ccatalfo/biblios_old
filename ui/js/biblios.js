@@ -1767,6 +1767,7 @@ biblios.app = function() {
 		treeEditor = new Ext.tree.TreeEditor( Ext.getCmp('FoldersTreePanel'), {
 			cancelOnEsc: true,
 			completeOnEnter: true,
+			editDelay: 100,
 			id: 'saveTreeEditor'
 		});
 		treeEditor.on('complete', function(editor, value, startValue) {

@@ -19,6 +19,12 @@ function createFixedFieldCell(string, elem, offset) {
 	}
 	html += '>';
 	var value = string.substr(position, length);	
+	// fix ctry codes which can be 2 chars instead of 3
+	if( name == 'Ctry' ) {
+		if (value.substr(2,1) == ' ' ) {
+			value = value.substr(0,2);
+		}
+	}
 	if( inputtype == 'textbox' ) {
 		html += '<input id="'+name+'" type="text" onblur="onFixedFieldEditorBlur(this)" maxlength="'+value.length+'" size="'+value.length+'" class="fixedfield" value="'+value+'">';
 	}
