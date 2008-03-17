@@ -36,6 +36,7 @@ biblios.app = function() {
     // private functions
 	displaySearchView : function displaySearchView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(0);
+		Ext.getCmp('resourcesPanel').expand();
 		openState = 'searchgrid';
 		displayHelpMsg(UI.messages.help.en.searchview);
 	}
@@ -51,11 +52,13 @@ biblios.app = function() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(1);
 		openState = 'editorPanel';
 		Ext.getCmp('helpPanel').collapse();
+		Ext.getCmp('resourcesPanel').collapse();
 		displayHelpMsg(UI.messages.help.en.recordview);
 	}
 
 	displaySaveView: function displaySaveView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(2);
+		Ext.getCmp('resourcesPanel').expand();
 		openState = 'savegrid';
 		displayHelpMsg(UI.messages.help.en.saveview);
 	}
@@ -543,7 +546,7 @@ biblios.app = function() {
 														collapsible: true,
 														collapsed: true,
 														title: 'Editor 2',
-														width: 400,
+														width: 500,
 														html: '<div id="marceditortwo"><div class="ffeditor"></div><div class="vareditor"></div></div>',
 														tbar: [
 															{
@@ -853,6 +856,7 @@ biblios.app = function() {
 										maxSize: 200,
 										title: 'Resources',
 										layout: 'border',
+										id: 'resourcesPanel',
 										items: [
 											{
 												region: 'center',
