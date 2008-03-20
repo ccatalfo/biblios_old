@@ -2,6 +2,7 @@ var koha = function() {
 	var that = this;
 	// auth stuff
 	this.url = '';
+	this.name = '';
 	this.user = '';
 	this.password = '';
 	this.cgisessid = '';
@@ -24,8 +25,9 @@ var koha = function() {
 };
 
 koha.prototype = {	
-		init: function(url, user, password) {
+		init: function(url, name, user, password) {
 			this.url = url;
+			this.name = name;
 			this.user = user;
 			this.password = password;
 			if ( embeddedUrl + '/' == this.url ) {

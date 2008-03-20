@@ -138,6 +138,7 @@ biblios.app = function() {
 					}, // viewport north region
 					new Ext.TabPanel({
 						region: 'center',
+						id: 'tabpanel',
 						items: [
 							{
 								title: 'Biblio',
@@ -1783,37 +1784,38 @@ biblios.app = function() {
 
 		treeEditor.render();
 		Ext.get('loadingtext').update('Finishing initializing');
-	//	alert('Application successfully initialized');
-var loading = Ext.get('loading');
+		//	alert('Application successfully initialized');
+		var loading = Ext.get('loading');
 
-var mask = Ext.get('loading-mask');
+		var mask = Ext.get('loading-mask');
 
-mask.setOpacity(.8);
+		mask.setOpacity(.8);
 
-mask.shift({
+		mask.shift({
 
-xy:loading.getXY(),
+			xy:loading.getXY(),
 
-width:loading.getWidth(),
+			width:loading.getWidth(),
 
-height:loading.getHeight(),
+			height:loading.getHeight(),
 
-remove:true,
+			remove:true,
 
-duration:1,
+			duration:1,
 
-opacity:.3,
+			opacity:.3,
 
-easing:'bounceOut',
+			easing:'bounceOut',
 
-callback : function(){
+			callback : function(){
 
-loading.fadeOut({duration:.2,remove:true});
+				loading.fadeOut({duration:.2,remove:true});
 
-}
+			}
+		});
 
-});
-        }
-    };
+		Ext.getCmp('tabpanel').activate(0);
+        } // end of init method
+    }; // end of public biblios.app space
 }(); // end of app
  

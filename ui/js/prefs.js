@@ -41,15 +41,29 @@ function setILSTargets() {
 							sendtarget.save();
 							Ext.getCmp('sendtargetsgrid').store.reload();
 						}
+						else {
+							// if openOnLoadRecId if defined, request it from the plugin whose url matches embeddedUrl
+							if( openOnLoadRecId ) {
+								if( this.embedded ) {
+									UI.editor['editorone'].location = this.name;
+									UI.editor['editorone'].id = '';
+									getRemoteRecord( openOnLoadRecId, this.name, 0, function(data) {
+										openRecord( xslTransform.serialize(data), 'editorone');
+									});
+									// make sure we don't try to open this again if we reset this send target
+									delete openOnLoadRecId;
+								}
+							}
+						}
 					}
-					Prefs.remoteILS[ils.name].instance.init(ils.url, ils.user, ils.password);
-				}
+					Prefs.remoteILS[ils.name].instance.init(ils.url, ils.name, ils.user, ils.password);
+				} // try clause for xmlhttp req
 				catch( ex ) {
 					if( ex == 'Permission denied to call method XMLHttpRequest.open' ) {
 						Ext.MessageBox.alert('Error', "Error trying to set remote ILS target.<br/>The ILS target's url must be set in Apache's configuration file so that Biblios can request a remote ILS koha instance.  It is currently set to "+ils.url+ " which prevents Biblios from sending and receiving data.  Please check with your system administrator to fix the problem.");
 					}
-				}
-		};
+				} // catch xmlhttp req exception
+		}; // if this sendtarget is enabled
 	});
 }
 
