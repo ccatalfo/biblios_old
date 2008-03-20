@@ -59,12 +59,19 @@ while(<IN>) {
 	}
 	if( $_ =~ /(<!-- extraheadincludes -->)/ ) {
 		print "Updating <head> for extra includes: $headincludes\n";
-		$_ =~ s/$1/<head>$headincludes/;
+		$_ =~ s/$1/$headincludes/;
 	}
 	if( $_ =~ /(<div id='branding-area'>)/ ) {
 		print "Updating <div id='branding-area'> to $headerhtml\n";
 		my $newheader = $1 . $headerhtml;
 		$_ =~ s/$1/$newheader/;
+	}
+	if( $_ =~ (/(<!-- openRecordHolder -->)/ ) ) {
+		print "Adding template logic to include marcxml from koha if requested\n";
+		my $marcxmlinclude = "<!-- TMPL_IF NAME=\"xmlrec\" -->";
+		$marcxmlinclude .= "<script type=\"text/javascript\">var xmlrec = '<!-- TMPL_VAR ESCAPE=HTML NAME=\"xmlrec\" -->';</script>";
+		$marcxmlinclude .= "<!-- /TMPL_IF -->";
+		$_ =~ s/$1/$marcxmlinclude/;
 	}
 	if( $_ =~ /(<html>)/ ) {
 		if( $debug ) {
