@@ -416,7 +416,7 @@ function onFixedFieldEditorBlur(elem) {
 }
 
 function setupSpecialEntries(loc, editor) {
-	var specialentries = loc.instance.special_entries;
+	var specialentries = Prefs.remoteILS[loc].instance.special_entries;
 	for( var i = 0; i < specialentries.length; i++) {
 		var entry = specialentries.eq(i);
 		var tagnumber = $('field tag', entry).text();	
@@ -467,7 +467,7 @@ function setupSpecialEntries(loc, editor) {
 }
 
 function setupReservedTags(loc, editor) {
-	var reservedtags = loc.instance.reserved_tags;
+	var reservedtags = Prefs.remoteILS[loc].instance.reserved_tags;
 	for( var i = 0; i< reservedtags.length; i++) {
 		var tagnumber = $(reservedtags).eq(i).text();
 		// set readonly for tagnumber and indicators

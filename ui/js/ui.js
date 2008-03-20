@@ -165,6 +165,11 @@ function openRecord(xml, editorelem) {
 	setupFFEditorLangCombo(editorelem);
 	setupFFEditorCtryCombo(editorelem);
 
+	// setup remote ils-controlled fields
+	if( Prefs.remoteILS[ UI.editor[editorelem].location ] ) {
+		setupReservedTags( UI.editor[editorelem].location, editorelem);
+		setupSpecialEntries( UI.editor[editorelem].location, editorelem);
+	}
 	// show fixed field editor, hide ldr and 008 divs
 	$(ffed).show();
 	// hide fixed field controlfields
