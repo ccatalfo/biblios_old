@@ -107,8 +107,8 @@ function doSaveRemote(loc, xmldoc, editorid) {
 			var xml = xslTransform.serialize(xmldoc);
 			UI.editor.progress.updateProgress(.7, 'Retrieved remote record');
 			openRecord(xml, editorid);
-			setupReservedTags(Prefs.remoteILS[UI.editor[editorid].location], editorid);
-			setupSpecialEntries(Prefs.remoteILS[UI.editor[editorid].location], editorid);
+			setupReservedTags(loc, editorid);
+			setupSpecialEntries(loc, editorid);
 			/*Ext.get('ffeditor').unmask();
 			Ext.get('vareditor').unmask();*/
 			UI.editor.progress.hide();
