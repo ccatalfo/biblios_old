@@ -35,7 +35,7 @@ koha-install:
 	mkdir -p $(KOHADIR)/plugins/biblios
 	cp cgi-bin/downloadMarc.pl cgi-bin/download.pl cgi-bin/vendorSearch $(KOHADIR)/plugins/biblios/
 	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
-	cp -r lib templates ui conf plugins $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/
+	cp -r lib tools templates ui conf plugins $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/
 
 koha-uninstall:
 	@echo Uninstalling biblios files from koha path $(KOHADIR)
