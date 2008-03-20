@@ -230,20 +230,30 @@ function getRemoteRecord(id, loc, offset, callback) {
 		showStatusMsg('Opening record...');
 		// if this location is in our Prefs.remoteILS hash, retrieve it specially
 		if( Prefs.remoteILS[loc] ) {
-			getRecordFromLocation(id, loc, callback);
+			// the recid we'll request
+			var recid = '';
+			// get xml for the record we wantt to retrieve
+			var xml = recordCache[id];
+			if( xml ) {
+				// try to load xmldoc from xml string and extract recid based on this location's xpath for recid
+				try {
+					xmldoc = xslTransform.loadString(xml);
+					recid = $(Prefs.remoteILS[loc].instance.recidXpath, xmldoc).text();
+				}
+				catch(ex) {
+					Ext.MessageBox.alert('Error', 'Error loading xml for record id ' + id);
+				}
+			}
+			// otherwise we're requesting from remote ils via its own recid already
+			else {
+				recid = id;
+			}
+			Prefs.remoteILS[loc].instance.retrieveHandler = callback;
+			Prefs.remoteILS[loc].instance.retrieve(recid);
 		}
 		else {
 			var xml = getPazRecord(id, offset, callback);
 		}
-}
-
-function getRecordFromLocation(id, loc, callback) {
-	// get xml for the record we wantt to retrieve
-	xml = recordCache[id];
-	marcxml = xslTransform.loadString(xml);
-
-	Prefs.remoteILS[loc].instance.retrieveHandler = callback;
-	Prefs.remoteILS[loc].instance.retrieve(marcxml);
 }
 
 function getPazRecord(recId, offset, callback, callbackParamObject) {

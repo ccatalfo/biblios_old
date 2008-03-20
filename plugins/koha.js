@@ -91,7 +91,7 @@ koha.prototype = {
 				dataType: 'xml',
 				that: this,
 				success: function(xml, status) {
-					this.bibprofilexml = xml;
+					this.that.bibprofilexml = xml;
 					var bibprofileStatus = $('auth_status', xml).text();
 					// construct record id xpath expression from bib profile
 					var tag = $('bib_number tag', xml).text();
@@ -113,10 +113,9 @@ koha.prototype = {
 			});
 		},
 
-		retrieve: function(xmldoc, callback) {
+		retrieve: function(recid, callback) {
 			eraseCookie('CGISESSID');
 			//alert('retrieving record from koha!');	
-			var recid = $(this.recidXpath, xmldoc).text();
 			$.ajax({
 				url: this.url + 'cgi-bin/koha/svc/bib/' + recid,
 				method: 'get',
