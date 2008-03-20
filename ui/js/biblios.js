@@ -296,7 +296,7 @@ biblios.app = function() {
 														}, // search grid listeners
 														tbar: new Ext.PagingToolbar({
 															pageSize: 15,
-															height: 50,
+															id: 'searchgridtbar',
 															store: ds,
 															displayInfo: true,
 															displayMsg: 'Displaying records {0} - {1} of {2}',
@@ -774,6 +774,7 @@ biblios.app = function() {
 																} // savegrid keypress
 															}, // save grid listeners
 															tbar: new Ext.PagingToolbar({
+																id: 'savegridtbar',
 																pageSize: 15,
 																store: ds,
 																displayInfo: true,
