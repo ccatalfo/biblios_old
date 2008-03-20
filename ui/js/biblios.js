@@ -296,6 +296,7 @@ biblios.app = function() {
 														}, // search grid listeners
 														tbar: new Ext.PagingToolbar({
 															pageSize: 15,
+															height: 50,
 															store: ds,
 															displayInfo: true,
 															displayMsg: 'Displaying records {0} - {1} of {2}',

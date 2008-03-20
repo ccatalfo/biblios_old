@@ -66,12 +66,10 @@ while(<IN>) {
 		my $newheader = $1 . $headerhtml;
 		$_ =~ s/$1/$newheader/;
 	}
-	if( $_ =~ (/(<!-- openRecordHolder -->)/ ) ) {
+	if( $_ =~ (/(var openOnLoadRecId = '';)/ ) ) {
 		print "Adding template logic to include marcxml from koha if requested\n";
-		my $marcxmlinclude = "<!-- TMPL_IF NAME=\"biblionumber\" -->";
-		$marcxmlinclude .= "<script type=\"text/javascript\">var openOnLoadRecId = '<!-- TMPL_VAR NAME=\"biblionumber\" -->';</script>";
-		$marcxmlinclude .= "<!-- /TMPL_IF -->";
-		$_ =~ s/$1/$marcxmlinclude/;
+		my $openOnLoad = "var openOnLoadRecId = '<!-- TMPL_VAR NAME=\"biblionumber\" -->';";
+		$_ =~ s/$1/$openOnLoad/;
 	}
 	if( $_ =~ /(<html>)/ ) {
 		if( $debug ) {
