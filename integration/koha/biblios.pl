@@ -39,10 +39,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 my $biblionumber = $query->param('biblionumber');
-if( $biblionumber ) {
-	my $record = GetMarcBiblio($biblionumber);
-	my $xmlrec = $record->as_xml();
-	$template->param( xmlrec => $xmlrec );
-}
+$template->param( biblionumber => $biblionumber );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -68,8 +68,8 @@ while(<IN>) {
 	}
 	if( $_ =~ (/(<!-- openRecordHolder -->)/ ) ) {
 		print "Adding template logic to include marcxml from koha if requested\n";
-		my $marcxmlinclude = "<!-- TMPL_IF NAME=\"xmlrec\" -->";
-		$marcxmlinclude .= "<script type=\"text/javascript\">var xmlrec = '<!-- TMPL_VAR ESCAPE=HTML NAME=\"xmlrec\" -->';</script>";
+		my $marcxmlinclude = "<!-- TMPL_IF NAME=\"biblionumber\" -->";
+		$marcxmlinclude .= "<script type=\"text/javascript\">var openOnLoadRecId = '<!-- TMPL_VAR NAME=\"biblionumber\" -->';</script>";
 		$marcxmlinclude .= "<!-- /TMPL_IF -->";
 		$_ =~ s/$1/$marcxmlinclude/;
 	}
