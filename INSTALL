@@ -27,7 +27,7 @@ make all
 make debug 
 
 4. Enable apache2's http_proxy module:
-sudo a2enmod proxy_http
+sudo a2enmod http_proxy
 
 5. Add reverse proxies to your apache configuration file.  Substitute your own server urls where indicated in the configuration section which follows:
 <IfModule mod_proxy.c>
@@ -47,7 +47,7 @@ sudo a2enmod proxy_http
        # proxy for sru authority server
        ProxyPass /kohaauth/ <your koha sru auth server e.g. http://eowyn.metavore.com:9999/>
 
-       proxy for koha save/retrieve api
+       #proxy for koha save/retrieve api
        ProxyPass /kohaapi/ <your koha intranet instance e.g. http://eowyn.metavore.com:8001>
    
 </IfModule>
