@@ -402,7 +402,7 @@ function showTagHelp(elem) {
 function onBlur(elem) {
 	$(elem).removeClass('focused');
 	var editorid = $(elem).parents('.marceditor').get(0).id;
-	UI.editor[editorid].record.update(elem);
+	//UI.editor[editorid].record.update(elem);
 	UI.editor.lastEditorId = editorid;
 	UI.editor.lastFocusedEl = elem;
 	UI.editor[editorid].lastFocusedEl = elem;
@@ -752,6 +752,8 @@ function setupFFEditorLangCombo(editorid) {
 		id: 'langcombobox'+editorid,
 		store: store,
 		transform: $(select).get(0),
+		forceSelection: true,
+		hideTrigger: true,
 		typeAhead: true,
 		displayField: 'name',
 		valueField: 'code',
@@ -781,6 +783,8 @@ function setupFFEditorCtryCombo(editorid) {
 		id: 'ctrycombobox'+editorid,
 		store: store,
 		transform: $(select).get(0),
+		forceSelection: true,
+		hideTrigger: true,
 		typeAhead: true,
 		displayField: 'name',
 		valueField: 'code',
