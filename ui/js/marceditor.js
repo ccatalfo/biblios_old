@@ -113,24 +113,7 @@ function MarcEditor(ffeditor, vareditor) {
 	}
 
 	function update(elem) {
-		// if we're passed a single element, just update that one
-		if( elem ) {
-			// get the tagnumber to update var tagnumber = $(elem).parents('.tag').children('.tagnumber').val();
-			// replace with this tag
-			var tag = $(elem).parents('.tag');
-			var tagnumber = $(elem).parents('.tag').find('.tagnumber').val();
-			// loop through fields in this marceditor instance, replacing the one whose tagnumber
-			// we're modifying
-			for( var i = 0; i < fields.length; i++) {
-				if( fields[i].tagnumber() == tagnumber ) {
-					fields[i] = createField(tag); 		
-				}
-			}
-		}
-		// otherwise update them all
-		else {
-			createFields();
-		}
+		createFields();
 		//update marcrecord instance
 		marcrecord = new MarcRecord(fields);
 	}
@@ -230,21 +213,13 @@ function MarcEditor(ffeditor, vareditor) {
 			var tags = $(".tag",vared  );
 			var tagToInsertAfter; // the tag just before where we'll insert the new tag
 			var highestSuffix = 1; // highest number appended to tag id's with this tag number.  Add 1 to it to get suffix for new tag
-			var newSuffix = 1;
+			var newSuffix = tags.length +1;
 			for( var i = 0; i<tags.length; i++) {
 				var id = $(tags[i]).attr('id').substr(0,3);
 				if( id < tagnumber) {
 					tagToInsertAfter = tags[i];
 				}
-				// get a new suffix number for our new tags id
-				else if( id == tagnumber ) {
-					var currSuffix = $(tags[i]).attr('id').substr(3);
-					if( currSuffix > highestSuffix ) {
-						highestSuffix = currSuffix;
-					} 
-				}
 			}
-			newSuffix = highestSuffix + 1;
 			var newId = tagnumber + "-" + newSuffix;
 			  var newtag = '<div class="tag" id="'+newId+'">';
 			  newtag += '<input size="3" onblur="onBlur(this)" onfocus="onFocus(this)" class="tagnumber" id="d'+tagnumber+'" value="'+tagnumber+'" />';
