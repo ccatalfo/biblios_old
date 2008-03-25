@@ -301,9 +301,17 @@ biblios.app = function() {
 															displayInfo: true,
 															displayMsg: 'Displaying records {0} - {1} of {2}',
 															emptyMsg: 'No records to display',
-															plugins: [
-																new Ext.ux.PagingToolbarInfoRow('<span class="selectall" onclick="selectAll()">Select all</span>  <span class="selectnone" onclick="selectNone()">Select none</span>')
-															],
+															listeners: {
+																beforerender: function(tbar) {
+																	var msg = 'Select: <span class="gridselector" onclick="selectAll()">All</span>,<span class="gridselector" onclick="selectNone()">None</span>';
+																	tbar.autoCreate.html = '<table cellspacing="0"><tr></tr><tr id="';
+																	tbar.autoCreate.html += 'searchgridtbarinfo',
+																	tbar.autoCreate.html += '">';
+																	tbar.autoCreate.html += '<td>' + msg + '</td>';
+																	tbar.autoCreate.html += '</tr></table>';
+
+																}
+															},
 															items: [
 																{
 																	id: 'newrecordbutton-search',
@@ -783,9 +791,17 @@ biblios.app = function() {
 																displayInfo: true,
 																displayMsg: 'Displaying records {0} - {1} of {2}',
 																emptyMsg: 'No records to display',
-																plugins: [
-																	new Ext.ux.PagingToolbarInfoRow('<span class="selectall" onclick="selectAll()">Select all</span>  <span class="selectnone" onclick="selectNone()">Select none</span>')
-																],
+																listeners: {
+																	beforerender: function(tbar) {
+																		var msg = 'Select: <span class="gridselector" onclick="selectAll()">All</span>,<span class="gridselector" onclick="selectNone()">None</span>';
+																		tbar.autoCreate.html = '<table cellspacing="0"><tr></tr><tr id="';
+																		tbar.autoCreate.html += 'savegridtbarinfo',
+																		tbar.autoCreate.html += '">';
+																		tbar.autoCreate.html += '<td>' + msg + '</td>';
+																		tbar.autoCreate.html += '</tr></table>';
+
+																	}
+																},
 																items: [
 																{
 																	id: 'newrecordbutton-save',

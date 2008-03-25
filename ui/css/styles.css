@@ -134,3 +134,8 @@
 .location-over {
 	background: green;
 }
+
+.gridselector {
+	color: blue;
+	cursor: pointer;
+}
