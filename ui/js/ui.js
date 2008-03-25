@@ -576,3 +576,21 @@ function getLocalXml(id) {
 	var xml = DB.Records.select('Records.rowid=?',[id]).getOne().xml;
 	return xml;
 }
+
+function selectAll() {
+	if(openState == 'searchgrid') {
+		$('#searchgrid :checkbox').attr('checked', 'checked');
+	}
+	else if( openState == 'savegrid') {
+		$('#savegrid :checkbox').attr('checked', 'checked');
+	}
+}
+
+function selectNone() {
+	if(openState == 'searchgrid') {
+		$('#searchgrid :checkbox').attr('checked', '');
+	}
+	else if( openState == 'savegrid') {
+		$('#savegrid :checkbox').attr('checked', '');
+	}
+}

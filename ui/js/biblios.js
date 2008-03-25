@@ -301,6 +301,9 @@ biblios.app = function() {
 															displayInfo: true,
 															displayMsg: 'Displaying records {0} - {1} of {2}',
 															emptyMsg: 'No records to display',
+															plugins: [
+																new Ext.ux.PagingToolbarInfoRow('<span class="selectall" onclick="selectAll()">Select all</span>  <span class="selectnone" onclick="selectNone()">Select none</span>')
+															],
 															items: [
 																{
 																	id: 'newrecordbutton-search',
@@ -780,6 +783,9 @@ biblios.app = function() {
 																displayInfo: true,
 																displayMsg: 'Displaying records {0} - {1} of {2}',
 																emptyMsg: 'No records to display',
+																plugins: [
+																	new Ext.ux.PagingToolbarInfoRow('<span class="selectall" onclick="selectAll()">Select all</span>  <span class="selectnone" onclick="selectNone()">Select none</span>')
+																],
 																items: [
 																{
 																	id: 'newrecordbutton-save',
