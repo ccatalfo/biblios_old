@@ -221,8 +221,8 @@ function MarcEditor(ffeditor, vareditor) {
 			});
 		}
 		function doAddField(editorid, tagnumber, ind1, ind2, subfields) {
-			var firstind = ind1 || '#';
-			var secondind = ind2 || '#';
+			var firstind = ind1 || ' ';
+			var secondind = ind2 || ' ';
 			var sf = subfields || [ {'delimiter': 'a', 'text': ''} ];
 			if(debug) { console.info("Adding tag with tagnumber: " + tagnumber);  }
 
