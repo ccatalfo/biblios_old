@@ -619,11 +619,13 @@ function selectNone() {
 		$('#searchgridtbarSelectAll').hide();
 		Ext.getCmp('searchgridExportBtn').disable();
 		Ext.getCmp('searchgridSendBtn').disable();
+		biblios.app.selectedRecords.allSelected = false;
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', '');
 		$('#savegridtbarSelectAll').hide();
 		Ext.getCmp('savegridExportBtn').disable();
 		Ext.getCmp('savegridSendBtn').disable();
+		biblios.app.selectedRecords.allSelected = false;
 	}
 }

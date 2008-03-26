@@ -246,6 +246,7 @@ function getSendFileMenuItems(recordSource) {
 					getRemoteRecord(id, loc, offset, function(data) { 
 						var xmldoc = xslTransform.serialize(data);
 						Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
+							var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
 							showStatusMsg('Saved ' + title + ' to ' + btn.id);
 						};
 						Prefs.remoteILS[btn.id].instance.save(xmldoc);
@@ -255,29 +256,48 @@ function getSendFileMenuItems(recordSource) {
 		}
 	}
 	else if (recordSource == 'savegrid') {
-		if( biblios.app.selectedRecords.allSelected == true ) {
-
-		}
-		else {
-			var checked = $(':checked.savegridcheckbox');
-			for( var i = 0; i < checked.length; i++) {
-
+		handler = function(btn) {
+			if( biblios.app.selectedRecords.allSelected == true ) {
+				Ext.getCmp('savegrid').store.each( function(record) {
+					var id = record.data.Id;
+					var title = record.data.Title;
+					var xmldoc = getLocalXml(id);
+					Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
+						var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
+						showStatusMsg('Saved ' + title + ' to ' + btn.id);
+					};
+					Prefs.remoteILS[btn.id].instance.save(xmldoc);
+				});
+			}
+			else {
+				var checked = $(':checked.savegridcheckbox');
+				for( var i = 0; i < checked.length; i++) {
+					var id = $(checked).get(i).id;
+					var title = Ext.getCmp('savegrid').store.getAt(id).data.Title;
+					showStatusMsg('Sending ' + title + ' to ' + btn.id);
+					var xmldoc = getLocalXml(id);
+					Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
+						var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
+						showStatusMsg('Saved ' + title + ' to ' + btn.id);
+					};
+					Prefs.remoteILS[btn.id].instance.save(xmldoc);
+				}
 			}
 		}
 	}
 	else {
 		handler = function(btn) {
-				// if this record has already been saved to this location
-				if( UI.editor[btn.recordSource].savedRemote[btn.id] == true ) {
-					if( validateRemote(btn.recordSource, btn.id) ) {
-						doSaveRemote(btn.id, UI.editor[btn.recordSource].record.XML(), btn.recordSource);
-					}
-				}
-				// if the record has not already been saved remotely
-				else {
-						doSaveRemote(btn.id, UI.editor[recordSource].record.XML(), btn.recordSource);
+			// if this record has already been saved to this location
+			if( UI.editor[btn.recordSource].savedRemote[btn.id] == true ) {
+				if( validateRemote(btn.recordSource, btn.id) ) {
+					doSaveRemote(btn.id, UI.editor[btn.recordSource].record.XML(), btn.recordSource);
 				}
 			}
+			// if the record has not already been saved remotely
+			else {
+					doSaveRemote(btn.id, UI.editor[recordSource].record.XML(), btn.recordSource);
+			}
+		}
 	}
 	for( var i = 0; i < sendtargets.length; i++) {
 		var o = {
