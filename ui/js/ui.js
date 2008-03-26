@@ -600,6 +600,7 @@ function selectAll() {
 		biblios.app.selectedRecords.allSelected = false;
 		biblios.app.selectedRecords.selectedSource = 'searchgrid';
 		Ext.getCmp('searchgridExportBtn').enable();
+		Ext.getCmp('searchgridSendBtn').enable();
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', 'checked');
@@ -608,6 +609,7 @@ function selectAll() {
 		biblios.app.selectedRecords.allSelected = false;
 		biblios.app.selectedRecords.selectedSource = 'savegrid';
 		Ext.getCmp('savegridExportBtn').enable();
+		Ext.getCmp('savegridSendBtn').enable();
 	}
 }
 
@@ -615,9 +617,13 @@ function selectNone() {
 	if(openState == 'searchgrid') {
 		$('#searchgrid :checkbox').attr('checked', '');
 		$('#searchgridtbarSelectAll').hide();
+		Ext.getCmp('searchgridExportBtn').disable();
+		Ext.getCmp('searchgridSendBtn').disable();
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', '');
 		$('#savegridtbarSelectAll').hide();
+		Ext.getCmp('savegridExportBtn').disable();
+		Ext.getCmp('savegridSendBtn').disable();
 	}
 }

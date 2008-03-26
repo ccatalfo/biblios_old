@@ -240,6 +240,7 @@ biblios.app = function() {
 																rowselect: function(selmodel, rowindex, record) {
 																	Ext.getCmp('searchgridExportBtn').enable();
 																	Ext.getCmp('searchgridEditBtn').enable();
+																	Ext.getCmp('searchgridSendBtn').enable();
 																	var id = record.id;
 																	if( record.data.count > 1 ) {
 																		//Ext.get('searchprevrecord').update("<p>This record is available at more than one location. <br/> Please click the plus icon to the left of this record to view locations from which the record can be previewed.<br/>  Click on a location's name to view that location's version of the record.</p>");
@@ -392,11 +393,12 @@ biblios.app = function() {
 																	{
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
 																		icon: libPath + 'ui/images/document-save.png',
+																		id: 'searchgridSendBtn',
+																		disabled: true,
 																		text: 'Send',
 																		tooltip: {text: 'Send record to remote ILS'},
 																		menu: {
-																			id: 'searchgridSendBtn',
-																			items: getSendFileMenuItems('editorone'),
+																			items: getSendFileMenuItems('searchgrid'),
 																			listeners: {
 																				beforeshow: function(menu, menuItem, e) {
 																					updateSendMenu();
@@ -767,6 +769,7 @@ biblios.app = function() {
 																		showStatusMsg('Previewing...');
 																		Ext.getCmp('savegridEditBtn').enable();
 																		Ext.getCmp('savegridExportBtn').enable();
+																		Ext.getCmp('savegridSendBtn').enable();
 																		var id = record.data.Id;
 																		var xml = getLocalXml(id);
 																		Ext.getCmp('savepreview').el.mask();
@@ -882,7 +885,23 @@ biblios.app = function() {
 																			id: 'exportMenu',
 																			items: getExportMenuItems()
 																		}
-																	}
+																	},
+																	{
+																		id: 'savegridSendBtn',
+																		cls: 'x-btn-text-icon bmenu', // icon and text class
+																		icon: libPath + 'ui/images/document-save.png',
+																		disabled: true,
+																		text: 'Send',
+																		tooltip: {text: 'Send record to remote ILS'},
+																		menu: {
+																			items: getSendFileMenuItems('savegrid'),
+																			listeners: {
+																				beforeshow: function(menu, menuItem, e) {
+																					updateSendMenu();
+																				}
+																			}
+																		}
+																	},
 																]
 															}) // save grid paging toolbar
 													}), // savepanel center
@@ -1017,6 +1036,7 @@ biblios.app = function() {
 																	biblios.app.displaySaveView();
 																	Ext.getCmp('savegridEditBtn').disable();
 																	Ext.getCmp('savegridExportBtn').disable();
+																	Ext.getCmp('savegridSendBtn').disable();
 																}
 															}, // save folder listeners
 															loader: new Ext.ux.GearsTreeLoader({
@@ -1052,6 +1072,7 @@ biblios.app = function() {
 																		click: function(node, e) {
 																			Ext.getCmp('savegridEditBtn').disable();
 																			Ext.getCmp('savegridExportBtn').disable();
+																			Ext.getCmp('savegridSendBtn').disable();
 																			UI.currSaveFile = node.attributes.id;
 																			UI.currSaveFileName = node.text;
 																			biblios.app.displaySaveFile( node.attributes.id );
