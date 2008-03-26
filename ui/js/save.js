@@ -209,10 +209,61 @@ function getSendFileMenuItems(recordSource) {
 	var sendtargets = DB.SendTargets.select('enabled=1').toArray();
 	var handler;
 	if( recordSource == 'searchgrid') {
+		handler = function(btn) {
+			showStatusMsg('Sending to ' + btn.id);
+			if( biblios.app.selectedRecords.allSelected == true ) {
+				Ext.getCmp('searchgrid').store.each( function(record) {
+					var id = record.id;
+					var title = record.data.title;
+					var loc = record.data.location[0].name;
+					var offset = 0;
+					getRemoteRecord(id, loc, offset, function(data) { 
+						var xmldoc = xslTransform.serialize(data);
+						Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
+							var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
+							showStatusMsg('Saved ' + title + ' to ' + btn.id);
+						};
+						Prefs.remoteILS[btn.id].instance.save(xmldoc);
+					});
+				});
+			}
+			else {
+				var checked = $(':checked.searchgridcheckbox');
+				for( var i = 0; i < checked.length; i++) {
+					var id = checked[i].id.substr(6);
+					var title = Ext.getCmp('searchgrid').store.getById(id).data.title;
+					var offset = checked[i].id.substr(5,1);
+					var loc = ''
+					if( $(':checked').eq(0).parents('.locationitem').length > 0 ) {
+						
+						loc = $(checked).eq(i).parents('.locationitem').text();
 
+					}
+					else {
+						loc = Ext.getCmp('searchgrid').store.getById(id).data.location[0].name;
+					}
+					showStatusMsg('Sending ' + title + ' to ' + btn.id);
+					getRemoteRecord(id, loc, offset, function(data) { 
+						var xmldoc = xslTransform.serialize(data);
+						Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
+							showStatusMsg('Saved ' + title + ' to ' + btn.id);
+						};
+						Prefs.remoteILS[btn.id].instance.save(xmldoc);
+					});
+				}
+			}
+		}
 	}
 	else if (recordSource == 'savegrid') {
+		if( biblios.app.selectedRecords.allSelected == true ) {
 
+		}
+		else {
+			var checked = $(':checked.savegridcheckbox');
+			for( var i = 0; i < checked.length; i++) {
+
+			}
+		}
 	}
 	else {
 		handler = function(btn) {

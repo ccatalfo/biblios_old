@@ -227,7 +227,6 @@ function doPazPar2Search() {
 }
 
 function getRemoteRecord(id, loc, offset, callback) {
-		showStatusMsg('Opening record...');
 		// if this location is in our Prefs.remoteILS hash, retrieve it specially
 		if( Prefs.remoteILS[loc] ) {
 			// the recid we'll request
