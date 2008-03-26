@@ -388,7 +388,22 @@ biblios.app = function() {
 																			id: 'exportMenu',
 																			items: getExportMenuItems()
 																		}
-																	}
+																	},
+																	{
+																		cls: 'x-btn-text-icon bmenu', // icon and text class
+																		icon: libPath + 'ui/images/document-save.png',
+																		text: 'Send',
+																		tooltip: {text: 'Send record to remote ILS'},
+																		menu: {
+																			id: 'searchgridSendBtn',
+																			items: getSendFileMenuItems('editorone'),
+																			listeners: {
+																				beforeshow: function(menu, menuItem, e) {
+																					updateSendMenu();
+																				}
+																			}
+																		}
+																	},
 																] // grid toolbar items
 														}) // search grid paging toolbar
 													}), // search results grid panel

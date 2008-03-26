@@ -204,26 +204,36 @@ function updateSendMenu() {
 	}
 }
 
-function getSendFileMenuItems(editorid) {
+function getSendFileMenuItems(recordSource) {
 	var list = new Array();
 	var sendtargets = DB.SendTargets.select('enabled=1').toArray();
-	for( var i = 0; i < sendtargets.length; i++) {
-		var o = {
-			text: sendtargets[i].name,
-			id: sendtargets[i].name,
-			editorid: editorid,
-			handler: function(btn) {
+	var handler;
+	if( recordSource == 'searchgrid') {
+
+	}
+	else if (recordSource == 'savegrid') {
+
+	}
+	else {
+		handler = function(btn) {
 				// if this record has already been saved to this location
-				if( UI.editor[btn.editorid].savedRemote[btn.id] == true ) {
-					if( validateRemote(btn.editorid, btn.id) ) {
-						doSaveRemote(btn.id, UI.editor[btn.editorid].record.XML(), btn.editorid);
+				if( UI.editor[btn.recordSource].savedRemote[btn.id] == true ) {
+					if( validateRemote(btn.recordSource, btn.id) ) {
+						doSaveRemote(btn.id, UI.editor[btn.recordSource].record.XML(), btn.recordSource);
 					}
 				}
 				// if the record has not already been saved remotely
 				else {
-						doSaveRemote(btn.id, UI.editor[editorid].record.XML(), btn.editorid);
+						doSaveRemote(btn.id, UI.editor[recordSource].record.XML(), btn.recordSource);
 				}
 			}
+	}
+	for( var i = 0; i < sendtargets.length; i++) {
+		var o = {
+			text: sendtargets[i].name,
+			id: sendtargets[i].name,
+			recordSource: recordSource,
+			handler: handler
 		};
 		list.push(o);
 	}
