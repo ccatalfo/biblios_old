@@ -599,6 +599,7 @@ function selectAll() {
 		$('#searchgridtbarSelectAll').show();
 		biblios.app.selectedRecords.allSelected = false;
 		biblios.app.selectedRecords.selectedSource = 'searchgrid';
+		Ext.getCmp('searchgridExportBtn').enable();
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', 'checked');
@@ -606,6 +607,7 @@ function selectAll() {
 		$('#savegridtbarSelectAll').show();
 		biblios.app.selectedRecords.allSelected = false;
 		biblios.app.selectedRecords.selectedSource = 'savegrid';
+		Ext.getCmp('savegridExportBtn').enable();
 	}
 }
 
