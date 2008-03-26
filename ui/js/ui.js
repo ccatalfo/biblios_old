@@ -580,17 +580,23 @@ function getLocalXml(id) {
 function selectAll() {
 	if(openState == 'searchgrid') {
 		$('#searchgrid :checkbox').attr('checked', 'checked');
+		$('#searchgridtotalcount').html( Ext.getCmp('searchgrid').store.getTotalCount() );
+		$('#searchgridtbarSelectAll').show();
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', 'checked');
+		$('#savegridtotalcount').html( Ext.getCmp('savegrid').store.getCount() );
+		$('#savegridtbarSelectAll').show();
 	}
 }
 
 function selectNone() {
 	if(openState == 'searchgrid') {
 		$('#searchgrid :checkbox').attr('checked', '');
+		$('#searchgridtbarSelectAll').hide();
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', '');
+		$('#savegridtbarSelectAll').hide();
 	}
 }

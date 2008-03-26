@@ -139,3 +139,10 @@
 	color: blue;
 	cursor: pointer;
 }
+
+#searchgridtbarSelectAll {
+	display: none;
+}
+#savegridtbarSelectAll {
+	display: none;
+}

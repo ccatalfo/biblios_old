@@ -308,7 +308,9 @@ biblios.app = function() {
 																	tbar.autoCreate.html += 'searchgridtbarinfo',
 																	tbar.autoCreate.html += '">';
 																	tbar.autoCreate.html += '<td>' + msg + '</td>';
-																	tbar.autoCreate.html += '</tr></table>';
+																	tbar.autoCreate.html += '</tr>';
+																	tbar.autoCreate.html += '<tr id="searchgridtbarSelectAll"><td class="gridselector">Select all <span id="searchgridtotalcount">' + tbar.store.getTotalCount() + '</span> in search results.</td></tr>';
+																	tbar.autoCreate.html += '</table>';
 
 																}
 															},
@@ -798,8 +800,9 @@ biblios.app = function() {
 																		tbar.autoCreate.html += 'savegridtbarinfo',
 																		tbar.autoCreate.html += '">';
 																		tbar.autoCreate.html += '<td>' + msg + '</td>';
-																		tbar.autoCreate.html += '</tr></table>';
-
+																		tbar.autoCreate.html += '</tr>';
+																		tbar.autoCreate.html += '<tr id="savegridtbarSelectAll"><td class="gridselector">Select all <span id="savegridtotalcount">' + tbar.store.getTotalCount() + '</span> records in this folder.</td></tr>';
+																		tbar.autoCreate.html += '</table>';
 																	}
 																},
 																items: [
