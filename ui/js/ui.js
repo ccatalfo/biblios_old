@@ -577,16 +577,35 @@ function getLocalXml(id) {
 	return xml;
 }
 
+function selectAllInObject() {
+	if(openState == 'searchgrid') {
+		biblios.app.selectedRecords.allSelected = true;
+		biblios.app.selectedRecords.selectedSource = 'searchgrid';
+
+	}
+	else if (openState == 'savegrid') {
+		var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
+		var savefileid = n.attributes.savefileid;
+		biblios.app.selectedRecords.allSelected = true;
+		biblios.app.selectedRecords.selectedSource = 'savegrid';
+		biblios.app.selectedRecords.savefileid = savefileid;
+	}
+}
+
 function selectAll() {
 	if(openState == 'searchgrid') {
 		$('#searchgrid :checkbox').attr('checked', 'checked');
 		$('#searchgridtotalcount').html( Ext.getCmp('searchgrid').store.getTotalCount() );
 		$('#searchgridtbarSelectAll').show();
+		biblios.app.selectedRecords.allSelected = false;
+		biblios.app.selectedRecords.selectedSource = 'searchgrid';
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', 'checked');
 		$('#savegridtotalcount').html( Ext.getCmp('savegrid').store.getCount() );
 		$('#savegridtbarSelectAll').show();
+		biblios.app.selectedRecords.allSelected = false;
+		biblios.app.selectedRecords.selectedSource = 'savegrid';
 	}
 }
 

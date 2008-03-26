@@ -73,6 +73,16 @@ biblios.app = function() {
 		viewport : this.viewport,
 		currQuery : this.currQuery,
 		savefiles : this.savefiles,
+		export: {
+			numToExport : 0,
+			exportSource: '',
+			records: new Array()
+		},
+		selectedRecords: {
+			selectedSource: '',
+			allSelected: false,
+			savefileid: ''
+		},
 		db : {
 			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets',
 			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets'
@@ -309,7 +319,7 @@ biblios.app = function() {
 																	tbar.autoCreate.html += '">';
 																	tbar.autoCreate.html += '<td>' + msg + '</td>';
 																	tbar.autoCreate.html += '</tr>';
-																	tbar.autoCreate.html += '<tr id="searchgridtbarSelectAll"><td class="gridselector">Select all <span id="searchgridtotalcount">' + tbar.store.getTotalCount() + '</span> in search results.</td></tr>';
+																	tbar.autoCreate.html += '<tr id="searchgridtbarSelectAll"><td class="gridselector" onclick="selectAllInObject()">Select all <span id="searchgridtotalcount">' + tbar.store.getTotalCount() + '</span> in search results.</td></tr>';
 																	tbar.autoCreate.html += '</table>';
 
 																}
@@ -801,7 +811,7 @@ biblios.app = function() {
 																		tbar.autoCreate.html += '">';
 																		tbar.autoCreate.html += '<td>' + msg + '</td>';
 																		tbar.autoCreate.html += '</tr>';
-																		tbar.autoCreate.html += '<tr id="savegridtbarSelectAll"><td class="gridselector">Select all <span id="savegridtotalcount">' + tbar.store.getTotalCount() + '</span> records in this folder.</td></tr>';
+																		tbar.autoCreate.html += '<tr id="savegridtbarSelectAll"><td class="gridselector" onclick="selectAllInObject()">Select all <span id="savegridtotalcount">' + tbar.store.getTotalCount() + '</span> records in this folder.</td></tr>';
 																		tbar.autoCreate.html += '</table>';
 																	}
 																},
