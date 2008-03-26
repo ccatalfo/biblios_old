@@ -276,13 +276,19 @@ function doDownloadRecords(format, editorid) {
             var grid = Ext.getCmp('searchgrid');
 			var ds = grid.store;
 			var sel = grid.getSelectionModel().getSelections();
+			biblios.app.download.numToExport = sel.length;
 			for( var i = 0; i < sel.length; i++) {
 				var id = sel[i].id;
 				var recXml = '';
 				getPazRecord(id, 0, function(data, o) {
 					xml = xslTransform.serialize(data);
+					biblios.app.download.recordsString += xml;
+					biblios.app.download.recordsString += recsep;
+					biblios.app.download.numToExport--;
 					var encoding = 'utf-8';
-					handleDownload(format, encoding, xml);
+					if( biblios.app.download.numToExport == 0 ) {
+						handleDownload(format, encoding, biblios.app.download.recordsString);
+					}
 				}, 
 				{});
 			}

@@ -73,10 +73,11 @@ biblios.app = function() {
 		viewport : this.viewport,
 		currQuery : this.currQuery,
 		savefiles : this.savefiles,
-		export: {
+		download: {
 			numToExport : 0,
 			exportSource: '',
-			records: new Array()
+			records: new Array(),
+			recordsString : ''
 		},
 		selectedRecords: {
 			selectedSource: '',
