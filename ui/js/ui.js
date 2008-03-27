@@ -273,13 +273,10 @@ function doDownloadRecords(format, editorid) {
 			handleDownload(format, encoding, xml);
 		}
 		if( openState == 'searchgrid') {
-            var grid = Ext.getCmp('searchgrid');
-			var ds = grid.store;
-			var sel = grid.getSelectionModel().getSelections();
+			biblios.app.download.records = getSelectedSearchGridRecords();
 			biblios.app.download.numToExport = sel.length;
-			for( var i = 0; i < sel.length; i++) {
-				var id = sel[i].id;
-				var recXml = '';
+			for( var i = 0; i < biblios.app.download.records; i++) {
+				var id = biblios.app.download.records[i].id
 				getPazRecord(id, 0, function(data, o) {
 					xml = xslTransform.serialize(data);
 					biblios.app.download.recordsString += xml;

@@ -204,12 +204,46 @@ function updateSendMenu() {
 	}
 }
 
+function getSelectedSearchGridRecords() {
+	var records = new Array();
+	if( biblios.app.selectedRecords.allSelected == true ) {
+		Ext.getCmp('searchgrid').store.each( function(record) {
+			var id = record.id;
+			var title = record.data.title;
+			var loc = record.data.location[0].name;
+			var offset = 0;
+			records.push( { id: id, title: title, loc: loc, offset: offset });
+		});
+	}
+	else {
+		var checked = $(':checked.searchgridcheckbox');
+		for( var i = 0; i < checked.length; i++) {
+			var id = checked[i].id.substr(6);
+			var title = Ext.getCmp('searchgrid').store.getById(id).data.title;
+			var offset = checked[i].id.substr(5,1);
+			var loc = ''
+			if( $(':checked').eq(0).parents('.locationitem').length > 0 ) {
+				
+				loc = $(checked).eq(i).parents('.locationitem').text();
+
+			}
+			else {
+				loc = Ext.getCmp('searchgrid').store.getById(id).data.location[0].name;
+			}
+			records.push( { id: id, title: title, loc: loc, offset: offset });
+		}
+	}
+	return records;
+}
+
 function getSendFileMenuItems(recordSource) {
 	var list = new Array();
 	var sendtargets = DB.SendTargets.select('enabled=1').toArray();
 	var handler;
 	if( recordSource == 'searchgrid') {
 		handler = function(btn) {
+			biblios.app.send.numToSend = 0;
+			biblios.app.send.records.length = 0;
 			Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
 				var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
 				showStatusMsg('Saved ' + title + ' to ' + btn.id);
@@ -219,37 +253,8 @@ function getSendFileMenuItems(recordSource) {
 					clearStatusMsg();
 				}
 			};
-			biblios.app.send.numToSend = 0;
-			showStatusMsg('Sending to ' + btn.id);
-			if( biblios.app.selectedRecords.allSelected == true ) {
-				biblios.app.send.numToSend = Ext.getCmp('searchgrid').store.getTotalCount();
-				Ext.getCmp('searchgrid').store.each( function(record) {
-					var id = record.id;
-					var title = record.data.title;
-					var loc = record.data.location[0].name;
-					var offset = 0;
-					biblios.app.send.records.push( { id: id, title: title, loc: loc, offset: offset });
-				});
-			}
-			else {
-				var checked = $(':checked.searchgridcheckbox');
-				biblios.app.send.numToSend = checked.length;
-				for( var i = 0; i < checked.length; i++) {
-					var id = checked[i].id.substr(6);
-					var title = Ext.getCmp('searchgrid').store.getById(id).data.title;
-					var offset = checked[i].id.substr(5,1);
-					var loc = ''
-					if( $(':checked').eq(0).parents('.locationitem').length > 0 ) {
-						
-						loc = $(checked).eq(i).parents('.locationitem').text();
-
-					}
-					else {
-						loc = Ext.getCmp('searchgrid').store.getById(id).data.location[0].name;
-					}
-					biblios.app.send.records.push( { id: id, title: title, loc: loc, offset: offset });
-				}
-			}
+			biblios.app.send.records = getSelectedSearchGridRecords();
+			biblios.app.send.numToSend = biblios.app.send.records.length;
 			for(var i= 0; i < biblios.app.send.records.length; i++) {
 				var id= biblios.app.send.records[i].id;
 				var loc= biblios.app.send.records[i].loc;

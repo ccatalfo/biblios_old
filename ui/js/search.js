@@ -61,6 +61,9 @@ paz = new pz2({
 							clearStatusMsg();
 							// unmask grid
 							Ext.getCmp('searchgrid').el.unmask();
+							if( openState == 'searchgrid') {
+								selectNone();
+							}
 						}
 					},
 					"termlist": "subject,author,date,publication-name",
