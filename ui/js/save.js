@@ -210,6 +210,15 @@ function getSendFileMenuItems(recordSource) {
 	var handler;
 	if( recordSource == 'searchgrid') {
 		handler = function(btn) {
+			Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
+				var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
+				showStatusMsg('Saved ' + title + ' to ' + btn.id);
+				biblios.app.send.numToSend--;
+				if( biblios.app.send.numToSend == 0) {
+					biblios.app.send.records.length = 0;
+					clearStatusMsg();
+				}
+			};
 			biblios.app.send.numToSend = 0;
 			showStatusMsg('Sending to ' + btn.id);
 			if( biblios.app.selectedRecords.allSelected == true ) {
@@ -246,16 +255,8 @@ function getSendFileMenuItems(recordSource) {
 				var loc= biblios.app.send.records[i].loc;
 				var offset= biblios.app.send.records[i].offset;
 				var title= biblios.app.send.records[i].title;
+				showStatusMsg('Sending ' + title + ' to ' + btn.id);
 				getRemoteRecord(id, loc, offset, function(data) { 
-					Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
-						var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
-						showStatusMsg('Saved ' + title + ' to ' + btn.id);
-						biblios.app.send.numToSend--;
-						if( biblios.app.send.numToSend == 0) {
-							biblios.app.send.records.length = 0;
-							clearStatusMsg();
-						}
-					};
 					Prefs.remoteILS[btn.id].instance.save(data);
 				});
 			}
@@ -263,32 +264,49 @@ function getSendFileMenuItems(recordSource) {
 	}
 	else if (recordSource == 'savegrid') {
 		handler = function(btn) {
+			Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
+				var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
+				showStatusMsg('Saved ' + title + ' to ' + btn.id);
+				biblios.app.send.numToSend--;
+				if( biblios.app.send.numToSend == 0) {
+					biblios.app.send.records.length = 0;
+					clearStatusMsg();
+				}
+			};
+			biblios.app.send.numToSend = 0;
 			if( biblios.app.selectedRecords.allSelected == true ) {
+				biblios.app.send.numToSend = Ext.getCmp('savegrid').store.getTotalCount();
 				Ext.getCmp('savegrid').store.each( function(record) {
 					var id = record.data.Id;
 					var title = record.data.Title;
 					var xmldoc = getLocalXml(id);
-					Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
-						var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
-						showStatusMsg('Saved ' + title + ' to ' + btn.id);
-					};
-					Prefs.remoteILS[btn.id].instance.save(xmldoc);
+					biblios.app.send.records.push( {id: id, title: title, xmldoc: xmldoc });
 				});
 			}
 			else {
 				var checked = $(':checked.savegridcheckbox');
+				biblios.app.send.numToSend = checked.length;
 				for( var i = 0; i < checked.length; i++) {
 					var rowid = $(checked).get(i).id;
 					var id = Ext.getCmp('savegrid').store.find('Id', rowid);
 					var title = Ext.getCmp('savegrid').store.getAt(id).data.Title;
-					showStatusMsg('Sending ' + title + ' to ' + btn.id);
 					var xmldoc = getLocalXml(rowid);
-					Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
-						var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
-						showStatusMsg('Saved ' + title + ' to ' + btn.id);
-					};
-					Prefs.remoteILS[btn.id].instance.save(xmldoc);
+					biblios.app.send.records.push( {id: id, title: title, xmldoc: xmldoc });
 				}
+			}
+			for( var i = 0; i < biblios.app.send.records.length; i++) {
+					showStatusMsg('Sending ' + biblios.app.send.records[i].title + ' to ' + btn.id);
+					var xml = biblios.app.send.records[i].xmldoc;
+					var xmldoc = '';
+					if( Ext.isIE ) {
+						xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
+						xmldoc.async = false; 
+						xmldoc.loadXML(xml);
+					}
+					else {
+						xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
+					}
+					Prefs.remoteILS[btn.id].instance.save(xmldoc);
 			}
 		}
 	}
