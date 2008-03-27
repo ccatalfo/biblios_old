@@ -272,10 +272,11 @@ function getSendFileMenuItems(recordSource) {
 			else {
 				var checked = $(':checked.savegridcheckbox');
 				for( var i = 0; i < checked.length; i++) {
-					var id = $(checked).get(i).id;
+					var rowid = $(checked).get(i).id;
+					var id = Ext.getCmp('savegrid').store.find('Id', rowid);
 					var title = Ext.getCmp('savegrid').store.getAt(id).data.Title;
 					showStatusMsg('Sending ' + title + ' to ' + btn.id);
-					var xmldoc = getLocalXml(id);
+					var xmldoc = getLocalXml(rowid);
 					Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
 						var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
 						showStatusMsg('Saved ' + title + ' to ' + btn.id);
