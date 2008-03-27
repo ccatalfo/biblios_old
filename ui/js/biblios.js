@@ -350,7 +350,7 @@ biblios.app = function() {
 																		text: 'Edit',
 																		handler: function() {
 																			var checked = $(':checked.searchgridcheckbox');
-																			if( checked.length == 0 ) {
+																			if( checked.length == 0 || checked.length > 2) {
 																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the record title, then clicking this button again.');
 																				return false;
 																			}
@@ -859,7 +859,7 @@ biblios.app = function() {
 																		handler: function() {
 																			var checked = $(':checked.savegridcheckbox');
 																			var editorid = '';
-																			if( checked.length == 0 ) {
+																			if( checked.length == 0 || checked.length > 2) {
 																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the title, then click this button again.');
 																			}
 																			else {
