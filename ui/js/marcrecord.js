@@ -1,6 +1,6 @@
 function MarcRecord(fieldlist) {
 	var fields = new Array();
-	if(fields) {
+	if(fieldlist) {
 		fields = fieldlist;
 	}
 	var numfields = fields.length;	
@@ -49,7 +49,29 @@ function MarcRecord(fieldlist) {
 		xml += '</record>';
 		return xml;
 	};
-
+	this._loadMarcXml = function(xmldoc) {
+		fields.length = 0;
+		var leader = $('leader', xmldoc).text();
+		fields.push( new Field('000', '', '', [{code: '', value: leader}]) );
+		$('controlfield', xmldoc).each( function(i) {
+			val = $(this).text();
+			tagnum = $(this).attr('tag');
+			fields.push( new Field(tagnum, '', '', [{code: '', value: val}]) );
+		});
+		$('datafield', xmldoc).each(function(i) {
+			var value = $(this).text();
+			var tagnum = $(this).attr('tag');
+			var ind1 = $(this).attr('ind1') || ' ';
+			var ind2 = $(this).attr('ind2') || ' ';
+			var subfields = new Array();
+			$('subfield', this).each(function(j) {
+				var sfval = $(this).text();
+				var sfcode = $(this).attr('code');
+				subfields.push( new Subfield(sfcode, sfval) );
+			});
+			fields.push( new Field(tagnum, ind1, ind2, subfields) );
+		});
+	}
 }
 
 MarcRecord.prototype.field = function(fieldno) {
@@ -76,6 +98,9 @@ MarcRecord.prototype.XMLString = function() {
 	return this._XMLString();
 };
 
+MarcRecord.prototype.loadMarcXml = function(xmldoc) {
+	return this._loadMarcXml(xmldoc);
+}
 function Field(tagnumber, indicator1, indicator2, subfields) {
 	var that = this;
 	var tagnumber = tagnumber;
