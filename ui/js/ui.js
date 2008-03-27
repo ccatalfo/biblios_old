@@ -274,8 +274,9 @@ function doDownloadRecords(format, editorid) {
 		}
 		if( openState == 'searchgrid') {
 			biblios.app.download.records = getSelectedSearchGridRecords();
-			biblios.app.download.numToExport = sel.length;
-			for( var i = 0; i < biblios.app.download.records; i++) {
+			biblios.app.download.recordsString = '';
+			biblios.app.download.numToExport = biblios.app.download.records.length;
+			for( var i = 0; i < biblios.app.download.records.length; i++) {
 				var id = biblios.app.download.records[i].id
 				getPazRecord(id, 0, function(data, o) {
 					xml = xslTransform.serialize(data);
