@@ -245,8 +245,9 @@ function makeSubfieldsDraggable() {
    <handleDownload>
 */
 function doDownloadRecords(format, editorid) {
-	var xml ='';
-	var grid;
+	biblios.app.download.records.length = 0;
+	biblios.app.download.numToExport = 0;
+	biblios.app.download.recordsString = '';
 	var recsep = "<!-- end of record -->";
 	showStatusMsg("Downloading record(s)");
 	// if we're exporting a record from the marc editor
@@ -259,18 +260,18 @@ function doDownloadRecords(format, editorid) {
 	// if we're exporting from a grid
 	else {
         if( openState == 'savegrid' ) {
-            var grid = Ext.getCmp('savegrid');
-			var ds = grid.store;
-			var sel = grid.getSelectionModel().getSelections();
-			for( var i = 0; i < sel.length; i++) {
-				var id = sel[i].data.Id;
-				var recXml = '';
-				  recXml = DB.Records.select('Records.rowid=?', [id]).getOne().xml;
-					xml += recXml;
-					xml += recsep;
+			biblios.app.download.records = getSelectedSaveGridRecords();
+			biblios.app.download.numToExport = biblios.app.download.records.length;
+			for( var i = 0; i < biblios.app.download.records.length; i++) {
+				var id = biblios.app.download.records[i].id;
+				var xml = DB.Records.select('Records.rowid=?', [id]).getOne().xml;
+				if( xml ) {
+					biblios.app.download.recordsString += xml;
+					biblios.app.download.recordsString += recsep;
 				}
+			}
 			var encoding = 'utf-8';
-			handleDownload(format, encoding, xml);
+			handleDownload(format, encoding, biblios.app.download.recordsString);
 		}
 		if( openState == 'searchgrid') {
 			biblios.app.download.records = getSelectedSearchGridRecords();
