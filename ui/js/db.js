@@ -6,6 +6,7 @@ DB.Targets = {};
 DB.ILS = {};
 DB.Prefs = {};
 DB.RemoteILS = {};
+DB.Macros = {};
 var db = {};
 
 /*
@@ -113,6 +114,18 @@ GearsORMShift.rules = [
 			DB.Savefiles.remove('name="Trash"');
 			DB.Savefiles.remove('name="Completed"');
 			DB.Savefiles.remove('name="Drafts"');
+			return true;
+		}
+	},
+	{
+		version: 3,
+		comment: 'Add Macros table',
+		up: function() {
+			DB.Macros.createTable();
+			return true;
+		},
+		down: function() {
+			DB.Macros.dropTable();
 			return true;
 		}
 	}
@@ -270,6 +283,17 @@ function init_gears() {
 					pluginlocation: new GearsORM.Fields.String(),
 					plugininit: new GearsORM.Fields.String(),
 					enabled: new GearsORM.Fields.Integer({defaultValue: 0})
+				}
+			});
+			DB.Macros = new GearsORM.Model({
+				name: 'Macros',
+				fields:
+				{
+					name: new GearsORM.Fields.String(),
+					code: new GearsORM.Fields.String(),
+					hotkey: new GearsORM.Fields.String(),
+					file: new GearsORM.Fields.String(),
+					enabled: new GearsORM.Fields.Integer({defaultValue:0})
 				}
 			});
 			GearsORMShift.init( DB.Info_Schema, true );

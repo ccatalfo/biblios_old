@@ -639,3 +639,24 @@ function selectNone() {
 		biblios.app.selectedRecords.allSelected = false;
 	}
 }
+
+function getMacroMenuItems() {
+	var items = new Array();
+	DB.Macros.select().each( function(macro) {
+		var i = {
+			text: macro.name,
+			id: macro.name,
+			code: macro.code,
+			handler: function(btn) {
+				runMacro(btn.id, btn.code)
+			}
+		}
+		items.push(i);
+	});
+	return items;
+}
+
+function runMacro(btn) {
+
+}
+

@@ -69,6 +69,13 @@ var SendTarget = Ext.data.Record.create([
 	{name: 'plugininit', type: 'string'},
 	{name: 'enabled', type: 'bool'}
 ]);
+var Macro = Ext.data.Record.create([
+	{name: 'rowid'},
+	{name: 'name'},
+	{name: 'code'},
+	{name: 'file'},
+	{name: 'enabled'}
+]);
 var searches = new Array(); // Array of pazpar2 searches
 var searchLimits = {};
 var currQuery;

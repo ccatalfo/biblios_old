@@ -91,7 +91,8 @@ biblios.app = function() {
 		},
 		db : {
 			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets',
-			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets'
+			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets',
+			selectSqlMacros: 'select Macros.rowid as rowid, name, code, hotkey, file, enabled from Macros'
 		},
 		
         // public methods
@@ -496,6 +497,20 @@ biblios.app = function() {
 																			handler: function(btn) {
 																				UI.editor[btn.editorid].record.deleteSubfield(btn.editorid);
 																			}
+																		},
+																		{
+																			id: 'editorOneMacrosBtn',
+																			cls: 'x-btn-text-icon bmenu',
+																			text: 'Macros',
+																			menu : {
+																				id: 'editorOnemacrosmenu',
+																				items: getMacroMenuItems(),
+																				listeners: {
+																					beforeshow: function(menu, menuItem, e) {
+																						updateMacrosMenu();
+																					}
+																				}
+																			}
 																		}
 																	]
 																}
@@ -653,6 +668,20 @@ biblios.app = function() {
 																			handler: function(btn) {
 																				UI.editor[btn.editorid].record.deleteSubfield(btn.editorid);
 																				UI.editor[btn.editorid].record.update();
+																			}
+																		},
+																		{
+																			id: 'editorTwoMacrosBtn',
+																			cls: 'x-btn-text-icon bmenu',
+																			text: 'Macros',
+																			menu : {
+																				id: 'editorTwomacrosmenu',
+																				items: getMacroMenuItems(),
+																				listeners: {
+																					beforeshow: function(menu, menuItem, e) {
+																						updateMacrosMenu();
+																					}
+																				}
 																			}
 																		}
 																	]
@@ -908,6 +937,32 @@ biblios.app = function() {
 																			}
 																		}
 																	},
+																	{
+																		id: 'savegridToolsBtn',
+																		cls: 'x-btn-text-icon bmenu', // icon and text class
+																		icon: libPath + 'ui/images/document-save.png',
+																		disabled: false,
+																		text: 'Tools',
+																		tooltip: {text: 'Tools'},
+																		menu: {
+																			items: [
+																				{
+																					id: 'savegridMacrosBtn',
+																					cls: 'x-btn-text-icon bmenu',
+																					text: 'Macros',
+																					menu : {
+																						id: 'savegridmacrosmenu',
+																						items: getMacroMenuItems(),
+																						listeners: {
+																							beforeshow: function(menu, menuItem, e) {
+																								updateMacrosMenu();
+																							}
+																						}
+																					}
+																				}
+																			]
+																		}
+																	}
 																]
 															}) // save grid paging toolbar
 													}), // savepanel center
@@ -1452,7 +1507,58 @@ biblios.app = function() {
 											}, // setup tab
 											{
 												title: 'Macros',
-												html: 'Coming soon'
+												layout: 'border',
+												listeners: {
+													activate: function(tab) {
+														Ext.getCmp('macrosgrid').store.load({db: db, selectSql: biblios.app.db.selectSqlMacros});
+													}
+												}, // macros tab listeners
+												items: [
+													new Ext.grid.GridPanel({
+														id: 'macrosgrid',
+														region: 'center',
+														height: 600,
+														ds: new Ext.data.Store({
+															proxy: new Ext.data.GoogleGearsProxy(new Array()),
+															reader: new Ext.data.ArrayReader({
+																record: 'name'
+															}, Macro),
+															remoteSort: false,
+															sortInfo: {
+																field: 'name',
+																direction: 'ASC'
+															},
+															listeners: {
+
+															}
+														}),
+														sm: new Ext.grid.RowSelectionModel({
+
+														}),
+														cm: new Ext.grid.ColumnModel([
+															{
+																header: 'Name',
+																dataIndex: 'name'
+															},
+															{
+																header: 'Code',
+																dataIndex: 'code'
+															},
+															{
+																header: 'Hotkey',
+																dataIndex: 'hotkey'
+															},
+															{
+																header: 'File',
+																dataIndex: 'file'
+															},
+															{
+																header: 'Enabled',
+																dataIndex: 'enabled'
+															}
+														])
+													}) // macros gridpanel
+												] // macros grid items
 											}, // macros
 											{
 												title: 'Plugins',

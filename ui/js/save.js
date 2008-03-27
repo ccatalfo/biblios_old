@@ -190,6 +190,14 @@ function updateSaveMenu() {
 	}
 }
 
+function updateMacrosMenu() {
+	Ext.menu.MenuMgr.get('savegridmacrosmenu').removeAll();
+	var macros = getMacroMenuItems();
+	for( m in macros) {
+		Ext.menu.MenuMgr.get('savegridmacrosmenu').add( macros[m] );
+	}
+}
+
 function updateSendMenu() {
 	// remove old send menu items
 	Ext.menu.MenuMgr.get('editorOneSendMenu').removeAll();
