@@ -130,6 +130,16 @@ function Field(tagnumber, indicator1, indicator2, subfields) {
 		}
 		return false;
 	};
+
+	this._removeSubfield = function(code) {
+		for(var i = 0; i<subfields.length; i++) {
+			if( subfields[i].code == code ) {	
+				subfields.splice(i,1);
+				return true;
+			}
+		}
+		return false;
+	}
 		
 	this._subfields = function() {
 		return subfields;
@@ -209,6 +219,9 @@ Field.prototype.hasSubfield = function(code) {
 	return this._hasSubfield(code);
 };
 
+Field.prototype.removeSubfield = function(code) {
+	return this._removeSubfield(code);
+}
 Field.prototype.tagnumber = function() {
 	return this._tagnumber();
 };
