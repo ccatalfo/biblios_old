@@ -210,25 +210,21 @@ function getSendFileMenuItems(recordSource) {
 	var handler;
 	if( recordSource == 'searchgrid') {
 		handler = function(btn) {
+			biblios.app.send.numToSend = 0;
 			showStatusMsg('Sending to ' + btn.id);
 			if( biblios.app.selectedRecords.allSelected == true ) {
+				biblios.app.send.numToSend = Ext.getCmp('searchgrid').store.getTotalCount();
 				Ext.getCmp('searchgrid').store.each( function(record) {
 					var id = record.id;
 					var title = record.data.title;
 					var loc = record.data.location[0].name;
 					var offset = 0;
-					getRemoteRecord(id, loc, offset, function(data) { 
-						var xmldoc = xslTransform.serialize(data);
-						Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
-							var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
-							showStatusMsg('Saved ' + title + ' to ' + btn.id);
-						};
-						Prefs.remoteILS[btn.id].instance.save(xmldoc);
-					});
+					biblios.app.send.records.push( { id: id, title: title, loc: loc, offset: offset });
 				});
 			}
 			else {
 				var checked = $(':checked.searchgridcheckbox');
+				biblios.app.send.numToSend = checked.length;
 				for( var i = 0; i < checked.length; i++) {
 					var id = checked[i].id.substr(6);
 					var title = Ext.getCmp('searchgrid').store.getById(id).data.title;
@@ -242,16 +238,26 @@ function getSendFileMenuItems(recordSource) {
 					else {
 						loc = Ext.getCmp('searchgrid').store.getById(id).data.location[0].name;
 					}
-					showStatusMsg('Sending ' + title + ' to ' + btn.id);
-					getRemoteRecord(id, loc, offset, function(data) { 
-						var xmldoc = xslTransform.serialize(data);
-						Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
-							var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
-							showStatusMsg('Saved ' + title + ' to ' + btn.id);
-						};
-						Prefs.remoteILS[btn.id].instance.save(xmldoc);
-					});
+					biblios.app.send.records.push( { id: id, title: title, loc: loc, offset: offset });
 				}
+			}
+			for(var i= 0; i < biblios.app.send.records.length; i++) {
+				var id= biblios.app.send.records[i].id;
+				var loc= biblios.app.send.records[i].loc;
+				var offset= biblios.app.send.records[i].offset;
+				var title= biblios.app.send.records[i].title;
+				getRemoteRecord(id, loc, offset, function(data) { 
+					Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
+						var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
+						showStatusMsg('Saved ' + title + ' to ' + btn.id);
+						biblios.app.send.numToSend--;
+						if( biblios.app.send.numToSend == 0) {
+							biblios.app.send.records.length = 0;
+							clearStatusMsg();
+						}
+					};
+					Prefs.remoteILS[btn.id].instance.save(data);
+				});
 			}
 		}
 	}
