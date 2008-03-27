@@ -145,6 +145,11 @@ function Field(tagnumber, indicator1, indicator2, subfields) {
 		return subfields;
 	};
 
+	this._addSubfield = function(sf) {
+		subfields.push(sf);
+		return true;
+	}
+
 	this._subfield = function(code, val) {
 		var sf = '';
 		for(var i = 0; i<subfields.length; i++) {
@@ -222,6 +227,11 @@ Field.prototype.hasSubfield = function(code) {
 Field.prototype.removeSubfield = function(code) {
 	return this._removeSubfield(code);
 }
+
+Field.prototype.addSubfield = function(sf) {
+	return this._addSubfield(sf);
+}
+
 Field.prototype.tagnumber = function() {
 	return this._tagnumber();
 };
