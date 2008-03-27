@@ -236,6 +236,30 @@ function getSelectedSearchGridRecords() {
 	return records;
 }
 
+function getSelectedSaveGridRecords() {
+	var records = new Array();
+	if( biblios.app.selectedRecords.allSelected == true ) {
+					Ext.getCmp('savegrid').store.each( function(record) {
+						var id = record.data.Id;
+						var title = record.data.Title;
+						var xmldoc = getLocalXml(id);
+						records.push( {id: id, title: title, xmldoc: xmldoc });
+					});
+				}
+	else {
+		var checked = $(':checked.savegridcheckbox');
+		biblios.app.send.numToSend = checked.length;
+		for( var i = 0; i < checked.length; i++) {
+			var rowid = $(checked).get(i).id;
+			var id = Ext.getCmp('savegrid').store.find('Id', rowid);
+			var title = Ext.getCmp('savegrid').store.getAt(id).data.Title;
+			var xmldoc = getLocalXml(rowid);
+			records.push( {id: id, title: title, xmldoc: xmldoc });
+		}
+	}
+	return records;
+}
+
 function getSendFileMenuItems(recordSource) {
 	var list = new Array();
 	var sendtargets = DB.SendTargets.select('enabled=1').toArray();
@@ -279,26 +303,8 @@ function getSendFileMenuItems(recordSource) {
 				}
 			};
 			biblios.app.send.numToSend = 0;
-			if( biblios.app.selectedRecords.allSelected == true ) {
-				biblios.app.send.numToSend = Ext.getCmp('savegrid').store.getTotalCount();
-				Ext.getCmp('savegrid').store.each( function(record) {
-					var id = record.data.Id;
-					var title = record.data.Title;
-					var xmldoc = getLocalXml(id);
-					biblios.app.send.records.push( {id: id, title: title, xmldoc: xmldoc });
-				});
-			}
-			else {
-				var checked = $(':checked.savegridcheckbox');
-				biblios.app.send.numToSend = checked.length;
-				for( var i = 0; i < checked.length; i++) {
-					var rowid = $(checked).get(i).id;
-					var id = Ext.getCmp('savegrid').store.find('Id', rowid);
-					var title = Ext.getCmp('savegrid').store.getAt(id).data.Title;
-					var xmldoc = getLocalXml(rowid);
-					biblios.app.send.records.push( {id: id, title: title, xmldoc: xmldoc });
-				}
-			}
+			biblios.app.send.records.length = 0;
+			biblios.app.send.records = getSelectedSaveGridRecords();
 			for( var i = 0; i < biblios.app.send.records.length; i++) {
 					showStatusMsg('Sending ' + biblios.app.send.records[i].title + ' to ' + btn.id);
 					var xml = biblios.app.send.records[i].xmldoc;
@@ -315,6 +321,7 @@ function getSendFileMenuItems(recordSource) {
 			}
 		}
 	}
+	// if we're in a marceditor
 	else {
 		handler = function(btn) {
 			// if this record has already been saved to this location
