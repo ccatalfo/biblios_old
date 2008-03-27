@@ -20,15 +20,27 @@ function MarcRecord(fieldlist) {
 
 	this._addField = function(field) {
 		fields.push(field);
+		return true;
 	};
 
 	this._removeField = function(fieldno) {
 		for(var i=0; i<fields.length; i++){
 			if( fields[i].tagnumber() == fieldno ) {
 				fields.splice(i, 1);
+				return true;
 			}
 		}
+		return false;
 	};
+
+	this._hasField = function(fieldno) {
+		for(var i=0; i<fields.length; i++){
+			if( fields[i].tagnumber() == fieldno ) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	this._XML = function() {
 		// fixme this isn't working correctly: it's failing on trying to add xml fragment 
@@ -83,12 +95,16 @@ MarcRecord.prototype.fields = function() {
 };
 
 MarcRecord.prototype.addField = function(field) {
-	this._addField(field);
+	return this._addField(field);
 };
 
 MarcRecord.prototype.removeField = function(fieldno) {
-	this._removeField(fieldno);
+	return this._removeField(fieldno);
 };
+
+MarcRecord.prototype.hasField = function(fieldno) {
+	return this._hasField(fieldno);
+}
 
 MarcRecord.prototype.XML = function() {
 	return this._XML();
