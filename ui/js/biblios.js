@@ -1422,7 +1422,7 @@ biblios.app = function() {
 										region: 'east',
 										split: true,
 										collapsible: true,
-										collapsed: false,
+										collapsed: true,
 										width: 200,
 										autoScroll: true,
 										title: 'Help',
