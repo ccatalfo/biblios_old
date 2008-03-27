@@ -321,7 +321,7 @@ biblios.app = function() {
 																	tbar.autoCreate.html += '">';
 																	tbar.autoCreate.html += '<td>' + msg + '</td>';
 																	tbar.autoCreate.html += '</tr>';
-																	tbar.autoCreate.html += '<tr id="searchgridtbarSelectAll"><td class="gridselector" onclick="selectAllInObject()">Select all <span id="searchgridtotalcount">' + tbar.store.getTotalCount() + '</span> in search results.</td></tr>';
+																	tbar.autoCreate.html += '<tr id="searchgridtbarSelectAll"><td class="gridselector" onclick="selectAllInObject()">Select all <span class="searchgridtotalcount">' + tbar.store.getTotalCount() + '</span> in search results.</td><td id="searchgridallSelectedStatus">All <span class="searchgridtotalcount">'+ tbar.store.getTotalCount() + '</span> are selected.  <span class="gridselector" onclick="selectNone()">Clear Selection</span></td></tr>';
 																	tbar.autoCreate.html += '</table>';
 
 																}
@@ -830,7 +830,7 @@ biblios.app = function() {
 																		tbar.autoCreate.html += '">';
 																		tbar.autoCreate.html += '<td>' + msg + '</td>';
 																		tbar.autoCreate.html += '</tr>';
-																		tbar.autoCreate.html += '<tr id="savegridtbarSelectAll"><td class="gridselector" onclick="selectAllInObject()">Select all <span id="savegridtotalcount">' + tbar.store.getTotalCount() + '</span> records in this folder.</td></tr>';
+																		tbar.autoCreate.html += '<tr id="savegridtbarSelectAll"><td class="gridselector" onclick="selectAllInObject()">Select all <span class="savegridtotalcount">' + tbar.store.getCount() + '</span> in this folder.</td><td id="savegridallSelectedStatus">All <span class="savegridtotalcount">'+ tbar.store.getCount() + '</span> are selected.  <span class="gridselector" onclick="selectNone()">Clear Selection</span></td></tr>';
 																		tbar.autoCreate.html += '</table>';
 																	}
 																},

@@ -587,7 +587,8 @@ function selectAllInObject() {
 	if(openState == 'searchgrid') {
 		biblios.app.selectedRecords.allSelected = true;
 		biblios.app.selectedRecords.selectedSource = 'searchgrid';
-
+		$('.searchgridtotalcount').html( Ext.getCmp('searchgrid').store.getTotalCount() );
+		$('#searchgridallSelectedStatus').show();
 	}
 	else if (openState == 'savegrid') {
 		var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
@@ -595,13 +596,15 @@ function selectAllInObject() {
 		biblios.app.selectedRecords.allSelected = true;
 		biblios.app.selectedRecords.selectedSource = 'savegrid';
 		biblios.app.selectedRecords.savefileid = savefileid;
+		$('.savegridtotalcount').html( Ext.getCmp('savegrid').store.getTotalCount() );
+		$('#savegridallSelectedStatus').show();
 	}
 }
 
 function selectAll() {
 	if(openState == 'searchgrid') {
 		$('#searchgrid :checkbox').attr('checked', 'checked');
-		$('#searchgridtotalcount').html( Ext.getCmp('searchgrid').store.getTotalCount() );
+		$('.searchgridtotalcount').html( Ext.getCmp('searchgrid').store.getTotalCount() );
 		$('#searchgridtbarSelectAll').show();
 		biblios.app.selectedRecords.allSelected = false;
 		biblios.app.selectedRecords.selectedSource = 'searchgrid';
@@ -610,7 +613,7 @@ function selectAll() {
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', 'checked');
-		$('#savegridtotalcount').html( Ext.getCmp('savegrid').store.getCount() );
+		$('.savegridtotalcount').html( Ext.getCmp('savegrid').store.getCount() );
 		$('#savegridtbarSelectAll').show();
 		biblios.app.selectedRecords.allSelected = false;
 		biblios.app.selectedRecords.selectedSource = 'savegrid';
@@ -623,6 +626,7 @@ function selectNone() {
 	if(openState == 'searchgrid') {
 		$('#searchgrid :checkbox').attr('checked', '');
 		$('#searchgridtbarSelectAll').hide();
+		$('#searchgridallSelectedStatus').hide();
 		Ext.getCmp('searchgridExportBtn').disable();
 		Ext.getCmp('searchgridSendBtn').disable();
 		biblios.app.selectedRecords.allSelected = false;
@@ -630,6 +634,7 @@ function selectNone() {
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', '');
 		$('#savegridtbarSelectAll').hide();
+		$('#savegridallSelectedStatus').hide();
 		Ext.getCmp('savegridExportBtn').disable();
 		Ext.getCmp('savegridSendBtn').disable();
 		biblios.app.selectedRecords.allSelected = false;

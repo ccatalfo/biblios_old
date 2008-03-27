@@ -142,7 +142,15 @@
 
 #searchgridtbarSelectAll {
 	display: none;
+	background: yellow;
 }
 #savegridtbarSelectAll {
+	display: none;
+	background: yellow;
+}
+#searchgridallSelectedStatus{
+	display: none;
+}
+#savegridallSelectedStatus{
 	display: none;
 }
