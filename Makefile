@@ -1,20 +1,25 @@
 CTAGS=ctags
 JSMIN=jsmin 
 CAT=cat
-SRCS=ui/js/*.js 
-ALLSRC=$(SRCS) index.html
+SRCS=ui
+ALLSRC=$(SRCS) index.html Makefile INSTALL INSTALL.koha lib cgi-bin conf templates plugins integration docs tools test
 VERSION=0.9
+PROGNAME=biblios-$(VERSION)
 
-all: 
+all: $(SRCS)
 	$(CAT) ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js ui/js/biblios.js > ui/js/biblios_all.js
 	$(JSMIN) <ui/js/biblios_all.js >ui/js/biblios_packed.js
 
-dist: 
-	cp -r INSTALL INSTALL.koha Makefile index.html ui lib cgi-bin conf templates plugins integration docs tools test dist/biblios
-	cd dist
-	tar -pcvf biblios-$(VERSION).tar.gz biblios
-	zip -r biblios-$(VERSION).zip biblios
-	cd ..
+dist: $(ALLSRC)
+	mkdir -p $(PROGNAME)
+	cp -r INSTALL INSTALL.koha Makefile index.html ui lib cgi-bin conf templates plugins integration docs tools test $(PROGNAME)
+	tar -pcvf $(PROGNAME).tar.gz $(PROGNAME)
+	zip -r $(PROGNAME).zip $(PROGNAME)
+
+distclean:
+	rm -rf $(PROGNAME)
+	rm -rf $(PROGNAME).zip
+	rm -rf $(PROGNAME).tar.gz
 
 clean: 
 	@echo "Removing concatenated and packed biblios files"
@@ -24,17 +29,17 @@ clean:
 	-rm -f index-debug.html 
 	-rm -f index-koha.html
 
-tags: 
+tags: $(SRCS)
 	$(CTAGS) ui/js/biblios.js ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js
 
-debug: 
+debug: index.html
 	sed -f sed_generate_index_debug < index.html > index-debug.html
 	cp index.html index-debug.html
 
-koha:
+koha: index-debug.html
 	perl integration/updateForEmbedding.pl index-debug.html index-koha.html "/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/" "/cgi-bin/koha/plugins/biblios/" "$(KOHASTAFFPORT)" "<!-- TMPL_INCLUDE NAME=\"doc-head-open.inc\" --><!-- TMPL_INCLUDE NAME=\"doc-head-close.inc\" -->" "<!-- TMPL_INCLUDE NAME=\"header.inc\" -->" integration/koha/fixes.js $(DEBUG) $(KOHAURL)
 
-koha-install:
+koha-install: index-koha.html
 	cp index-koha.html $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/modules/cataloguing/biblios.tmpl
 	cp integration/koha/biblios.pl $(KOHADIR)/cataloguing/
 	mkdir -p $(KOHADIR)/plugins/biblios
