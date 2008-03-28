@@ -73,6 +73,7 @@ var Macro = Ext.data.Record.create([
 	{name: 'rowid'},
 	{name: 'name'},
 	{name: 'code'},
+	{name: 'hotkey'},
 	{name: 'file'},
 	{name: 'enabled'}
 ]);
