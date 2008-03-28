@@ -1,17 +1,22 @@
 CTAGS=ctags
-JSMIN=tools/jsmin 
+JSMIN=jsmin 
 CAT=cat
 SRCS=ui/js/*.js 
 ALLSRC=$(SRCS) index.html
+VERSION=0.9
 
-all: $(SRCS)
+all: 
 	$(CAT) ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js ui/js/biblios.js > ui/js/biblios_all.js
 	$(JSMIN) <ui/js/biblios_all.js >ui/js/biblios_packed.js
 
-dist: $(SRCS)
-	tar -cvf biblios.tar.gz Makefile index.html ui lib cgi-bin conf templates plugins integration docs tools test
+dist: 
+	cp -r INSTALL INSTALL.koha Makefile index.html ui lib cgi-bin conf templates plugins integration docs tools test dist/biblios
+	cd dist
+	tar -pcvf biblios-$(VERSION).tar.gz biblios
+	zip -r biblios-$(VERSION).zip biblios
+	cd ..
 
-clean: $(SRCS)
+clean: 
 	@echo "Removing concatenated and packed biblios files"
 	-rm -f ui/js/biblios_all.js 
 	-rm -f ui/js/biblios_packed.js
@@ -19,7 +24,7 @@ clean: $(SRCS)
 	-rm -f index-debug.html 
 	-rm -f index-koha.html
 
-tags: $(SRCS)
+tags: 
 	$(CTAGS) ui/js/biblios.js ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js
 
 debug: 
