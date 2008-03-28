@@ -1526,7 +1526,7 @@ biblios.app = function() {
 													}
 												}, // macros tab listeners
 												items: [
-													new Ext.grid.GridPanel({
+													new Ext.grid.EditorGridPanel({
 														id: 'macrosgrid',
 														region: 'center',
 														height: 600,
@@ -1541,8 +1541,29 @@ biblios.app = function() {
 																direction: 'ASC'
 															},
 															listeners: {
-
-															}
+																update: function(store, record, operation) {
+																		if( record.data.enabled == true) {
+																			record.data.enabled = 1;
+																		}
+																		else if( record.data.enabled == false) {
+																			record.data.enabled = 0;
+																		}
+																		if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
+																			try {
+																				m = DB.Macros.select('Macros.rowid=?',[record.data.rowid]).getOne();
+																				m.name = record.data.name;
+																				m.code = record.data.code;
+																				m.hotkey = record.data.hotkey;
+																				m.file = record.data.file;
+																				m.enabled = record.data.enabled;
+																				m.save();
+																			}
+																			catch(ex) {
+																				Ext.MessageBox.alert('Error', ex.message);
+																			}
+																		} // commit, edit
+																	} // update listener
+																}
 														}),
 														sm: new Ext.grid.RowSelectionModel({
 
@@ -1550,23 +1571,30 @@ biblios.app = function() {
 														cm: new Ext.grid.ColumnModel([
 															{
 																header: 'Name',
-																dataIndex: 'name'
+																dataIndex: 'name',
+																editor: new Ext.form.TextField(),
 															},
 															{
 																header: 'Code',
-																dataIndex: 'code'
+																dataIndex: 'code',
+																editor: new Ext.form.TextArea()
 															},
 															{
 																header: 'Hotkey',
-																dataIndex: 'hotkey'
+																dataIndex: 'hotkey',
+																hidden: true,
+																editor: new Ext.form.TextField(),
 															},
 															{
 																header: 'File',
-																dataIndex: 'file'
+																dataIndex: 'file',
+																hidden: true,
+																editor: new Ext.form.TextField(),
 															},
 															{
 																header: 'Enabled',
-																dataIndex: 'enabled'
+																dataIndex: 'enabled',
+																editor: new Ext.form.Checkbox()
 															}
 														])
 													}) // macros gridpanel
