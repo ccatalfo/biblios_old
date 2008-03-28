@@ -190,13 +190,6 @@ function updateSaveMenu() {
 	}
 }
 
-function updateMacrosMenu() {
-	Ext.menu.MenuMgr.get('savegridmacrosmenu').removeAll();
-	var macros = getMacroMenuItems();
-	for( m in macros) {
-		Ext.menu.MenuMgr.get('savegridmacrosmenu').add( macros[m] );
-	}
-}
 
 function updateSendMenu() {
 	// remove old send menu items
@@ -262,7 +255,7 @@ function getSelectedSaveGridRecords() {
 			var id = Ext.getCmp('savegrid').store.find('Id', rowid);
 			var title = Ext.getCmp('savegrid').store.getAt(id).data.Title;
 			var xmldoc = getLocalXml(rowid);
-			records.push( {id: id, title: title, xmldoc: xmldoc });
+			records.push( {rowid: rowid, id: id, title: title, xmldoc: xmldoc });
 		}
 	}
 	return records;

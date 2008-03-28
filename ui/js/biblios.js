@@ -504,10 +504,14 @@ biblios.app = function() {
 																			text: 'Macros',
 																			menu : {
 																				id: 'editorOnemacrosmenu',
-																				items: getMacroMenuItems(),
+																				items: getMacroMenuItems('editorone'),
 																				listeners: {
 																					beforeshow: function(menu, menuItem, e) {
-																						updateMacrosMenu();
+																						menu.removeAll();
+																						var items = getMacroMenuItems('editorone');
+																						for( i in items) {
+																							menu.add( items[i] );
+																						}
 																					}
 																				}
 																			}
@@ -676,10 +680,14 @@ biblios.app = function() {
 																			text: 'Macros',
 																			menu : {
 																				id: 'editorTwomacrosmenu',
-																				items: getMacroMenuItems(),
+																				items: getMacroMenuItems('editortwo'),
 																				listeners: {
 																					beforeshow: function(menu, menuItem, e) {
-																						updateMacrosMenu();
+																						menu.removeAll();
+																						var items = getMacroMenuItems('editorone');
+																						for( i in items) {
+																							menu.add( items[i] );
+																						}
 																					}
 																				}
 																			}
@@ -952,10 +960,14 @@ biblios.app = function() {
 																					text: 'Macros',
 																					menu : {
 																						id: 'savegridmacrosmenu',
-																						items: getMacroMenuItems(),
+																						items: getMacroMenuItems('savegrid'),
 																						listeners: {
 																							beforeshow: function(menu, menuItem, e) {
-																								updateMacrosMenu();
+																								menu.removeAll();
+																								var items = getMacroMenuItems('savegrid');
+																								for( i in items) {
+																									menu.add( items[i] );
+																								}
 																							}
 																						}
 																					}

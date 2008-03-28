@@ -640,23 +640,70 @@ function selectNone() {
 	}
 }
 
-function getMacroMenuItems() {
+function getMacroMenuItems(recordSource) {
+	var handler = function(btn) {};
+	if( recordSource == 'searchgrid') {
+		var handler = function(btn) {
+			var records = getSelectedSearchGridRecords();
+			for( var i = 0; i < records.length; i++) {
+
+			}
+		}
+	}
+	else if( recordSource == 'savegrid' ) {
+		handler = function(btn) {
+			var records = getSelectedSaveGridRecords();
+			for( var i = 0; i < records.length; i++) {
+				var xmldoc = xslTransform.loadString( records[i].xmldoc  );
+				var dbrecord = DB.Records.select('Records.rowid=?', [ records[i].rowid ]).getOne();
+				var title = records[i].title;
+				var record = new MarcRecord();
+				record.loadMarcXml( xmldoc );
+				var macro = DB.Macros.select('Macros.rowid=?',[btn.id]).getOne();
+				showStatusMsg('Running ' + macro.name + ' on ' + title);
+				try {
+					eval( macro.code );
+					dbrecord.xml = record.XMLString();
+					dbrecord.save();
+				}
+				catch(ex) {
+					Ext.MessageBox.alert('Macro error', ex);
+				}
+				clearStatusMsg();
+			}
+		}
+	}
+	else {
+		handler = function(btn) {
+			var editorid = btn.recordSource;
+			var record = UI.editor[editorid].record;
+			var xmldoc = record.XML();
+			var macro = DB.Macros.select('Macros.rowid=?',[btn.id]).getOne();
+			showStatusMsg('Running macro ' + macro.name );
+			try {
+				eval( macro.code );
+			}
+			catch(ex) {
+				Ext.MessageBox.alert('Macro error', ex);
+			}
+			clearStatusMsg();
+		}
+	}
 	var items = new Array();
 	DB.Macros.select().each( function(macro) {
 		var i = {
 			text: macro.name,
-			id: macro.name,
+			id: macro.rowid,
+			recordSource:  recordSource,
 			code: macro.code,
-			handler: function(btn) {
-				runMacro(btn.id, btn.code)
-			}
+			handler: handler
 		}
 		items.push(i);
 	});
 	return items;
 }
 
-function runMacro(btn) {
+function runMacro() {
 
 }
 
