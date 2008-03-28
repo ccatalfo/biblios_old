@@ -676,12 +676,14 @@ function getMacroMenuItems(recordSource) {
 	else {
 		handler = function(btn) {
 			var editorid = btn.recordSource;
-			var record = UI.editor[editorid].record;
-			var xmldoc = record.XML();
+			var xmldoc = UI.editor[editorid].record.XML();
+			var record = new MarcRecord();
+			record.loadMarcXml( xmldoc );
 			var macro = DB.Macros.select('Macros.rowid=?',[btn.id]).getOne();
 			showStatusMsg('Running macro ' + macro.name );
 			try {
 				eval( macro.code );
+				openRecord(record.XMLString(), editorid);
 			}
 			catch(ex) {
 				Ext.MessageBox.alert('Macro error', ex);
@@ -690,7 +692,7 @@ function getMacroMenuItems(recordSource) {
 		}
 	}
 	var items = new Array();
-	DB.Macros.select().each( function(macro) {
+	DB.Macros.select('enabled=1').each( function(macro) {
 		var i = {
 			text: macro.name,
 			id: macro.rowid,
