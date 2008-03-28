@@ -1577,6 +1577,7 @@ biblios.app = function() {
 															{
 																header: 'Code',
 																dataIndex: 'code',
+																width: 700,
 																editor: new Ext.form.TextArea()
 															},
 															{
@@ -1596,7 +1597,37 @@ biblios.app = function() {
 																dataIndex: 'enabled',
 																editor: new Ext.form.Checkbox()
 															}
-														])
+														]),
+														tbar: [
+															{
+																text: 'Add Macro',
+																handler: function() {
+																	var rs = db.execute('insert into Macros (name) values("")');
+																	rs.close();
+																	var m = new Macro({
+																		rowid: db.lastInsertRowId,
+																		name: '',
+																		code: '',
+																		hotkey: '',
+																		file: '',
+																		enabled: 0
+																	});
+																	Ext.getCmp('macrosgrid').stopEditing();
+																	Ext.getCmp('macrosgrid').store.insert(0, m);
+																	Ext.getCmp('macrosgrid').startEditing(0, 0);
+																}
+															},
+															{
+																text: 'Delete Macro',
+																handler: function() {
+																	var records = Ext.getCmp('macrosgrid').getSelections();
+																	for( var i = 0; i < records.length; i++) {
+																		DB.Macros.select('Macros.rowid=?', [records[i].data.rowid]).getOne().remove();
+																	}
+																	Ext.getCmp('macrosgrid').store.reload();
+																}
+															}
+														] // macros grid toolbar
 													}) // macros gridpanel
 												] // macros grid items
 											}, // macros
