@@ -562,12 +562,13 @@ function MarcEditor(ffeditor, vareditor) {
 			var subfields = new Array();
 			$('subfield', this).each(function(j) {
 				var sfval = $(this).text();
+				var size = sfval.length;
 				var sfcode = $(this).attr('code');
 				subfields.push( new Subfield(sfcode, sfval) );
 				var sfid = 'dsubfields'+tagnum+sfcode+'-'+i;
 				html += '<span class="subfield '+sfcode+'" id="'+sfid+'">';
 				html += '<input maxlength="2" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="subfield-delimiter" value="&#8225;'+sfcode+' ">';
-				html += '<input onblur=\'onBlur(this)\' onfocus=\'onFocus(this)\' type=\'text\' class=\'subfield-text\' value=\''+sfval+'\'>';
+				html += '<input size=\''+size+'\' onblur=\'onBlur(this)\' onfocus=\'onFocus(this)\' type=\'text\' class=\'subfield-text\' value=\''+sfval+'\'>';
 				// close subfield span
 				html += '</span>';
 			});
