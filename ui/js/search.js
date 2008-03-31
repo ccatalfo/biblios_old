@@ -162,6 +162,8 @@ function resetPazPar2(options) {
 				if(statusOK == true) {
 					// reset search grid's url for new session id
 					Ext.getCmp('searchgrid').store.proxy.conn.url = paz.pz2String + "?command=show&session=" + paz.sessionID;
+					// reset facets tree loader for new session id
+					Ext.getCmp('facetsTreePanel').loader.dataUrl = pazpar2url + '?session='+paz.sessionID+'&command=termlist&name=author,subject,date';
 					setPazPar2Targets(paz);
 					if(options) {
 						if(debug) { console.info("re-running search with pazpar2"); }
