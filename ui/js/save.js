@@ -94,6 +94,9 @@ function doSaveLocal(savefileid, editorid, offset ) {
 function doSaveRemote(loc, xmldoc, editorid) {
 	/*Ext.get('ffeditor').mask();
 	Ext.get('vareditor').mask();*/
+	// make sure we have up to date record
+	UI.editor[editorid].record.update();
+	xmldoc = UI.editor[editorid].record.XML();
 	UI.editor[editorid].location = loc;
 	UI.editor.progress = Ext.MessageBox.progress('Saving record to remote server', '');
 	if(debug) { console.info('Saving open record to ' + loc); }
