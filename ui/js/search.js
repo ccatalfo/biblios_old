@@ -321,6 +321,9 @@ function term2searchterm(term) {
 		case 'date':
 			return 'date';
 			break;
+		case 'author':
+			return 'au';
+			break;
 		case 'subject':
 			return 'su';
 			break;
