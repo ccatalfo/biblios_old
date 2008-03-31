@@ -34,7 +34,6 @@ tags: $(SRCS)
 	$(CTAGS) ui/js/biblios.js ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js
 
 debug: index.html
-	sed -f sed_generate_index_debug < index.html > index-debug.html
 	cp index.html index-debug.html
 
 koha: index-debug.html
