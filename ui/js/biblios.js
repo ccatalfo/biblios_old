@@ -840,7 +840,7 @@ biblios.app = function() {
 															]),
 															listeners: {
 																rowdblclick: function(grid, rowIndex, e) {
-																	var id = grid.store.data.get(rowIndex).id;
+																	var id = grid.store.data.get(rowIndex).data.Id;
 																	showStatusMsg('Opening record...');
 																	var xml = getLocalXml(id);
 																	UI.editor.id = id;
