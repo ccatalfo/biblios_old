@@ -12,8 +12,9 @@ all: $(SRCS)
 
 dist: $(ALLSRC)
 	mkdir -p $(PROGNAME)
-	cp -r INSTALL INSTALL.koha Makefile index.html ui lib cgi-bin conf templates plugins integration docs tools test $(PROGNAME)
-	tar -pcvf $(PROGNAME).tar.gz $(PROGNAME)
+	cp -r INSTALL INSTALL.koha Makefile index.html ui lib cgi-bin conf templates plugins integration docs tools test uploads $(PROGNAME)
+	tar -cvf $(PROGNAME).tar $(PROGNAME)
+	gzip $(PROGNAME).tar
 	zip -r $(PROGNAME).zip $(PROGNAME)
 
 distclean:
