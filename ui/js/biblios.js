@@ -1593,6 +1593,7 @@ biblios.app = function() {
 																				}
 																			}
 																			Ext.getCmp('TargetsTreePanel').root.reload();
+																			resetPazPar2();
 																		} // search targets store update
 																	} // search targets grid store listeners
 																}),
@@ -1612,7 +1613,7 @@ biblios.app = function() {
 																		catch(ex) {
 																			Ext.MessageBox.alert('Error', ex.message);
 																		}
-																		setPazPar2Targets();
+																		resetPazPar2();
 
 																	} // after edit event on search target grid
 																}, // search target grid listeners
