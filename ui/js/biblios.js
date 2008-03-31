@@ -351,7 +351,19 @@ biblios.app = function() {
 																		text: 'Edit',
 																		handler: function() {
 																			var checked = $(':checked.searchgridcheckbox');
-																			if( checked.length == 0 || checked.length > 2) {
+																			var selections = Ext.getCmp('searchgrid').getSelections();
+																			if( checked.length == 0 && selections.length == 1) {
+																				var editorid = 'editorone';
+																				UI.editor[editorid].id = '';
+																				var id = selections[0].id;
+																				var loc = selections[0].data.location[0].name;
+																				UI.editor[editorid].location = loc;
+																				getRemoteRecord(id, loc, 0, function(data) { 
+																					openRecord( xslTransform.serialize(data), editorid ); 
+																				});
+
+																			}
+																			else if( (checked.length == 0 || checked.length > 2) && selections.length == 0) {
 																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the record title, then clicking this button again.');
 																				return false;
 																			}
@@ -895,8 +907,20 @@ biblios.app = function() {
 																		disabled: true,
 																		handler: function() {
 																			var checked = $(':checked.savegridcheckbox');
+																			var selections = Ext.getCmp('savegrid').getSelections();
 																			var editorid = '';
-																			if( checked.length == 0 || checked.length > 2) {
+																			if( checked.length == 0 && selections.length == 1) {
+																				editorid = 'editorone';
+																				var id = selections[0].data.Id;
+																				UI.editor[editorid].id = id;
+																				Ext.getCmp('savegrid').el.mask('Loading record');
+																				showStatusMsg('Opening record...');
+																				var xml = getLocalXml(id);
+																				openRecord( xml, editorid);
+																				Ext.getCmp('savegrid').el.unmask();
+
+																			}
+																			else if( (checked.length == 0 || checked.length > 2) && selections.length == 0) {
 																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the title, then click this button again.');
 																			}
 																			else {
