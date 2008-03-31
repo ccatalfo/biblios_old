@@ -1,33 +1,40 @@
 These are instructions for installing Biblios as a standalone web application.
 
 Dependencies:
-Apache2 with http_proxy
-Perl (for cgi scripts)
-Pazpar2 (for searching Z39.50 databases)
+Apache2 with proxy_http module
+Perl
+Perl modules:
+	CGI, CGI::Carp, MARC::Record, MARC::File::XML, File::Temp, File::BaseName
+Pazpar2
+Google Gears plugin for your web browser (Internet Explorer 6/7 or FireFox), available here: http://gears.google.com/.
 
-These instructions cover the installation of http_proxy for Apache2, several required Perl modules, and Pazpar2.
+1.Get a copy of biblios, via git 
 
-Get a copy of biblios, via git 
-1. 
-git clone <FIXME>
+	git clone git://git.biblios.net/pub/scm/biblios.git
 
-or by downloading a prepackaged .tar.gz or .zip file.
-wget <FIXME> 
-tar xzvf biblios.tar.gz
+or by downloading a prepackaged .tar.gz or .zip file:
+
+	wget http://biblios.net/sites/default/files/biblios-0.9.tar.gz
+	tar xzvf biblios.tar.gz
+
 OR
-unzip biblios.zip
 
-Go to your unpacked biblios tree
-2. 
-cd biblios
+	wget http://biblios.net/sites/default/files/biblios-0.9.zip
+	unzip biblios.zip
 
-Generate packed version of biblios files
-3. 
-make all 
-make debug 
+2.Go to your unpacked biblios tree
+ 
+	cd biblios
 
-4. Enable apache2's http_proxy module:
-sudo a2enmod http_proxy
+3. Generate packed and debug versions of biblios files
+
+	make all 
+	make debug 
+
+4. Enable apache2's proxy_http module:
+
+	sudo /usr/sbin/a2enmod proxy_http
+	sudo /usr/sbin/apache2ctl force-reload
 
 5. Add reverse proxies to your apache configuration file.  Substitute your own server urls where indicated in the configuration section which follows:
 <IfModule mod_proxy.c>
@@ -41,27 +48,24 @@ sudo a2enmod http_proxy
 
        ProxyVia Off
 
-       # proxy for pazpar2 daemon
+       # proxy for pazpar2 daemon (required to search z39.50 databases)
        ProxyPass /pazpar2/search.pz2 http://localhost:9004/search.pz2
 
-       # proxy for sru authority server
+       # proxy for sru authority server (required for authority-controlled fiels dropdowns to work)
        ProxyPass /kohaauth/ <your koha sru auth server e.g. http://eowyn.metavore.com:9999/>
-
-       #proxy for koha save/retrieve api
-       ProxyPass /kohaapi/ <your koha intranet instance e.g. http://eowyn.metavore.com:8001>
    
 </IfModule>
 
-Install pazpar2:
-8. 
-sudo apt-get install pazpar2
+8. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/.
 
-Run pazpar2 with included config files and search targets with the following command from your biblios directory.
-9. 
-pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
+9. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
+ 
+	pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
 
-10. Install perl dependencies if necessary:
-sudo cpan Net::Amazon\ XML::Writer\ Cache::File\ File::Temp\ File::Basename\ Term::Clui
+10. Install biblios and cgi scripts into appropriate paths for your web server:
+	Example: 
+		cp -r ../biblios-0.9 /var/www/biblios
+		cp cgi-bin/* /usr/lib/cgi-bin/
+		rm -rf /var/www/biblios/cgi-bin
 
-11. Install biblios and cgi scripts into appropriate paths on your web server
-make install WWWROOT=<the directory to install biblios' html, javascript and css files into> CGIROOT=<the path on your webserver where cgi scripts are contained>
+11. Point your browser to the appropriate path and catalog away...

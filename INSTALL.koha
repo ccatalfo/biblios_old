@@ -1,27 +1,44 @@
 These are instructions for installing Biblios into Koha in order to use it from within Koha.
 
-Get a copy of biblios, via git 
-1. git clone <FIXME>
-or by downloading a prepackaged .tar.gz or .zip file.
-wget <FIXME> 
-tar xzvf biblios.tar.gz
+Dependencies:
+Apache2 with http_proxy
+Perl
+Perl modules:
+	CGI, CGI::Carp, MARC::Record, MARC::File::XML, File::Temp, File::BaseName
+Pazpar2 
+Google Gears plugin for your web browser (Internet Explorer 6/7 or FireFox), available here: http://gears.google.com/.
+
+1.Get a copy of biblios, via git 
+
+	git clone git://git.biblios.net/pub/scm/biblios.git
+
+or by downloading a prepackaged .tar.gz or .zip file:
+
+	wget http://biblios.net/sites/default/files/biblios-0.9.tar.gz
+	tar xzvf biblios-0.9.tar.gz
+
 OR
-unzip biblios.zip
 
-Go to your unpacked biblios tree
-2. cd biblios
+	wget http://biblios.net/sites/default/files/biblios-0.9.zip
+	unzip biblios-0.9.zip
 
-Generate packed version of biblios files
-3. make all; make debug; 
+2.Go to your unpacked biblios tree
+ 
+	cd biblios-0.9
 
-4. make koha KOHALANGTHEME=<your koha installations lang and theme path e.g. /prog/en> KOHASTAFFPORT=<the port your koha staff intranet is running on e.g. 8080>
+3. Generate packed and debug versions of biblios files
 
-5. For safety's sake, make a new branch to let biblios copy its files into, just in case smth goes wrong.  cd ~/kohaclone; git-checkout -b biblios
+	make all 
+	make debug 
 
-This next step will copy biblios' files to the appropriate paths in koha:
-6. make koha-install KOHADIR=<your koha base dir, e.g. /home/you/kohaclone> KOHALANGTHEME=<your koha installations lang and theme path e.g. /prog/en> 
+4. Enable apache2's http_proxy module:
 
-7. Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site ajax reqs.  Edit conf/biblios-http.conf and copy those lines into your koha intranet's virtual host section in your koha-http.conf file.
+	sudo /usr/sbin/a2enmod proxy_http
+	sudo /usr/sbin/apache2ctl force-reload
+
+5. Setup Apache2 to proxy requests from biblios to appropriate urls:
+Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site ajax requests.  Copy these lines into your koha intranet's virtual host section in your koha-http.conf file, adding urls appropriate to your configuration.
+
 <IfModule mod_proxy.c>
        ProxyRequests Off
 
@@ -44,13 +61,26 @@ This next step will copy biblios' files to the appropriate paths in koha:
    
 </IfModule>
 
-Get Pazpar2 up and running:
-install pazpar2:
-8. sudo apt-get install pazpar2
+6. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/
 
-Run pazpar2 with included config files and search targets with the following command from your biblios directory.
-9. pazpar2 -D -l pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
+7. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
+ 
+pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
 
-10. Install perl dependencies if necessary:
-sudo cpan XML::Writer\ Cache::File\ File::Temp\ File::Basename\ Term::Clui
+8. Run the following command to modify biblios' index.html file to work within your koha installation:
+
+	make koha KOHALANGTHEME=<your koha installations lang and theme path e.g. /prog/en> KOHASTAFFPORT=<the port your koha staff intranet is running on e.g. 8080> KOHAURL=<your koha staff intranet's base url e.g. http://eowyn.metavore.com:8001> DEBUG=0
+
+	Example: make koha KOHALANGTHEME=/prog/en KOHASTAFFPORT=8001 KOHAURL=http://takeyourchoice.net:8001 DEBUG=0
+
+9. Copy biblios' files to the appropriate paths in koha with the following command:
+
+	make koha-install KOHADIR=<your koha base dir, e.g. /home/src/kohaclone> KOHALANGTHEME=<your koha installations lang and theme path e.g. /prog/en> 
+
+	Example: make koha-install KOHALANGTHEME=/prog/en KOHADIR=/home/src/kohaclone
+
+10. You should now be able to access biblios from within your koha staff intranet via the following url:
+
+	http://<your koha intranet url>/cgi-bin/koha/cataloguing/biblios.pl
+	Example: http://eowyn.metavore.com:8001/cgi-bin/koha/cataloguing/biblios.pl
 
