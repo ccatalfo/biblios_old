@@ -45,13 +45,17 @@ function setILSTargets() {
 							// if openOnLoadRecId if defined, request it from the plugin whose url matches embeddedUrl
 							if( openOnLoadRecId ) {
 								if( this.embedded ) {
+									UI.editor.progress = Ext.MessageBox.progress('Loading record', '');
 									UI.editor['editorone'].location = this.name;
 									UI.editor['editorone'].id = '';
+									UI.editor.progress.updateProgress(.4, 'Retrieving record from Koha');
 									getRemoteRecord( openOnLoadRecId, this.name, 0, function(data) {
 										openRecord( xslTransform.serialize(data), 'editorone');
+										UI.editor.progress.updateProgress(.8, 'Loading into Marc editor');
 									});
 									// make sure we don't try to open this again if we reset this send target
 									delete openOnLoadRecId;
+									UI.editor.progress.updateProgress(1, 'Loading completed');
 								}
 							}
 						}
