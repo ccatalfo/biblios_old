@@ -609,6 +609,7 @@ function selectAll() {
 		biblios.app.selectedRecords.selectedSource = 'searchgrid';
 		Ext.getCmp('searchgridExportBtn').enable();
 		Ext.getCmp('searchgridSendBtn').enable();
+		Ext.getCmp('searchgridSaveBtn').enable();
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', 'checked');
@@ -628,6 +629,7 @@ function selectNone() {
 		$('#searchgridallSelectedStatus').hide();
 		Ext.getCmp('searchgridExportBtn').disable();
 		Ext.getCmp('searchgridSendBtn').disable();
+		Ext.getCmp('searchgridSaveBtn').disable();
 		biblios.app.selectedRecords.allSelected = false;
 	}
 	else if( openState == 'savegrid') {

@@ -1,4 +1,4 @@
-function doSaveLocal(savefileid, editorid, offset ) {
+function doSaveLocal(savefileid, editorid, offset, dropped ) {
 		var recoffset = offset || 0;
 		if( !savefileid ) {
 			if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" );}
@@ -77,13 +77,23 @@ function doSaveLocal(savefileid, editorid, offset ) {
 		}
 		// if we're picking from the search grid
 		else if( openState == 'searchgrid' ) {
-			var grid = Ext.getCmp( 'searchgrid' );
-			var ds = grid.store;
-			var sel = grid.getSelectionModel().getSelections();
-			for( var i = 0; i < sel.length; i++) {
-				var id = sel[i].id;
-				var data = sel[i].data;
-				addRecordFromSearch(id, recoffset, editorid, data, savefileid);
+			if( dropped == true ) {
+				var sel = Ext.getCmp('searchgrid').getSelections();
+				for( var i = 0; i < sel.length; i++) {
+					var id = sel[i].id;
+					var data = sel[i].data;
+					addRecordFromSearch(id, recoffset, editorid, data, savefileid);		
+				}
+			}
+			else {
+				var sel = getSelectedSearchGridRecords();
+				for( var i = 0; i < sel.length; i++) {
+					var id = sel[i].id;
+					var data = sel[i].data;
+					var title = sel[i].title;
+					var offset =sel[i].offset;
+					addRecordFromSearch(id, offset, editorid, data, savefileid);
+				}
 			}
 		}
 		showStatusMsg("Record(s) saved to "+savefilename);
@@ -137,12 +147,12 @@ function addRecordFromSearch(id, offset, editorid, data, savefileid, newxml) {
 			var record = new DB.Records({
 				title: UI.editor[editorid]? UI.editor[editorid].record.getValue('245', 'a') : params.recData.title || '',
 				author: UI.editor[editorid]? UI.editor[editorid].record.getValue('100', 'a'):  params.recData.author || '',
-				location: params.recData.location || '',
+				location: params.recData.location[0].name || '',
 				publisher:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'b'): params.recData.publication || '',
 				medium: params.recData.medium || '',
 				date:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'c'): params.recData.date|| '',
 				status: 'new',
-				xml: params.newxml || data || '<record></record>',
+				xml: params.newxml || xslTransform.serialize(data) || '<record></record>',
 				date_added: new Date().toString(),
 				date_modified: new Date().toString(),
 				SearchTargets_id: target.rowid,
@@ -183,6 +193,7 @@ function updateSaveMenu() {
 	// remove old Save menu items
 	Ext.menu.MenuMgr.get('editorOneSaveMenu').removeAll();
 	Ext.menu.MenuMgr.get('editorTwoSaveMenu').removeAll();
+	Ext.menu.MenuMgr.get('searchgridSaveMenu').removeAll();
 	var savefiles = getSaveFileMenuItems('editorone');
 	for( sf in savefiles ) {
 		Ext.menu.MenuMgr.get('editorOneSaveMenu').add( savefiles[sf] );
@@ -190,6 +201,10 @@ function updateSaveMenu() {
 	var savefiles = getSaveFileMenuItems('editortwo');
 	for( sf in savefiles) {
 		Ext.menu.MenuMgr.get('editorTwoSaveMenu').add( savefiles[sf] );
+	}
+	var savefiles = getSaveFileMenuItems('searchgrid');
+	for( sf in savefiles) {
+		Ext.menu.MenuMgr.get('searchgridSaveMenu').add( savefiles[sf] );
 	}
 }
 
@@ -216,7 +231,8 @@ function getSelectedSearchGridRecords() {
 			var title = record.data.title;
 			var loc = record.data.location[0].name;
 			var offset = 0;
-			records.push( { id: id, title: title, loc: loc, offset: offset });
+			var data = record.data;
+			records.push( { id: id, title: title, data: data, loc: loc, offset: offset });
 		});
 	}
 	else {
@@ -224,6 +240,7 @@ function getSelectedSearchGridRecords() {
 		for( var i = 0; i < checked.length; i++) {
 			var id = checked[i].id.substr(6);
 			var title = Ext.getCmp('searchgrid').store.getById(id).data.title;
+			var data = Ext.getCmp('searchgrid').store.getById(id).data;
 			var offset = checked[i].id.substr(5,1);
 			var loc = ''
 			if( $(':checked').eq(0).parents('.locationitem').length > 0 ) {
@@ -234,7 +251,7 @@ function getSelectedSearchGridRecords() {
 			else {
 				loc = Ext.getCmp('searchgrid').store.getById(id).data.location[0].name;
 			}
-			records.push( { id: id, title: title, loc: loc, offset: offset });
+			records.push( { id: id, title: title, data: data, loc: loc, offset: offset });
 		}
 	}
 	return records;
@@ -352,7 +369,7 @@ function getSendFileMenuItems(recordSource) {
 	return list;
 }
 
-function getSaveFileMenuItems(editorid) {
+function getSaveFileMenuItems(recordSource) {
 	var list = new Array();
 	getSaveFileNames();
 	var savefiles = DB.Savefiles.select().toArray();
@@ -360,11 +377,11 @@ function getSaveFileMenuItems(editorid) {
 		var o = {
 			text: savefiles[i].name,
 			id: savefiles[i].rowid,
-			editorid: editorid,
+			recordSource: recordSource,
 			handler: function(btn) {
 				var savefileid = btn.id;
-				var editorid = btn.editorid;
-				doSaveLocal(savefileid, editorid);
+				var editorid = btn.recordSource;
+				doSaveLocal(savefileid, recordSource);
 			}
 		};
 		list.push(o);

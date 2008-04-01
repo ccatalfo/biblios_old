@@ -248,6 +248,7 @@ biblios.app = function() {
 																	Ext.getCmp('searchgridExportBtn').enable();
 																	Ext.getCmp('searchgridEditBtn').enable();
 																	Ext.getCmp('searchgridSendBtn').enable();
+																	Ext.getCmp('searchgridSaveBtn').enable();
 																	var id = record.id;
 																	if( record.data.count > 1 ) {
 																		//Ext.get('searchprevrecord').update("<p>This record is available at more than one location. <br/> Please click the plus icon to the left of this record to view locations from which the record can be previewed.<br/>  Click on a location's name to view that location's version of the record.</p>");
@@ -425,6 +426,23 @@ biblios.app = function() {
 																			}
 																		}
 																	},
+																	{
+																		cls: 'x-btn-text-icon bmenu', // icon and text class
+																		icon: libPath + 'ui/images/document-save.png',
+																		text: 'Save',
+																		id: 'searchgridSaveBtn',
+																		disabled: true,
+																		tooltip: {title: 'Save', text: 'Ctrl-s'},
+																		menu: {
+																			id: 'searchgridSaveMenu',
+																			items: getSaveFileMenuItems('searchgrid'),
+																			listeners: {
+																				beforeshow: function(menu, menuItem, e) {
+																					updateSaveMenu();
+																				}
+																			}
+																		}
+																	}
 																] // grid toolbar items
 														}) // search grid paging toolbar
 													}), // search results grid panel
@@ -1224,13 +1242,13 @@ biblios.app = function() {
 															beforenodedrop: function(e) {
 																var droppedsavefileid = e.target.attributes.savefileid;
 																if( e.data.selections) {
-																	doSaveLocal(droppedsavefileid, '', 0);
+																	doSaveLocal(droppedsavefileid, '', 0, true);
 																}
 																// we have a record from a location in search grid
 																else {
 																	var offset = e.source.id.substr(3); // "loc"+offset
 																	var id = Ext.getCmp('searchgrid').getSelections()[0].id;
-																	doSaveLocal(droppedsavefileid, '', offset);
+																	doSaveLocal(droppedsavefileid, '', offset, true);
 																}
 															}, // savefolders beforenodedrop
 															contextmenu: function(node, e) {
