@@ -360,42 +360,22 @@ function onFocus(elem) {
 	UI.editor.lastFocusedEl = elem;
 	UI.editor.lastEditorId = editorid;
 	UI.editor[editorid].lastFocusedEl = elem;
-	//showTagHelp(elem);
+	showTagHelp(elem);
 }
 
 function showTagHelp(elem) {
-	if( UI.editor.lastElemHelpShown == elem ) {
-		return;
-	}
+	var html = '';
 	Ext.get('helpIframe').update('');
 	// retrieve help for this tag
 	var tag = $(elem).parents('.tag').get(0).id.substr(0,3);
-	var pageurl = '';
-	if( tag == '000' || tag == '008' || tag == '006') {
-		pageurl = 'fixedfield/default.shtm';
-	}
-	else if( tag == '001' || tag == '003' || tag == '005' ) {
-		// no page for these
-		Ext.get('helpIframe').update('');
+	var subfieldcode = $(elem).parents('.subfield').get(0).id.substr(13,1)
+	if( tag == '000' ) {
 		return;
 	}
-	else if ( tag == '007' ) {
-		pageurl = '00x/default.shtm';	
-	}
 	else {
-		var firstletter = tag.substr(0,1);
-		pageurl = firstletter+'xx/'+ tag +'.shtm';
+		html = $('tag[@code='+tag+'] subfield[@code='+subfieldcode+']', marc21varfields).attr('name');
 	}
-	var url = 'http://' + location.host + '/oclc/bibformats/en/' + pageurl;
-	Ext.get('helpIframe').load({
-		url: url,
-		params: {}, // no params
-		scripts: false,
-		callback: function processOCLC(element, success, response, options) {
-			//Ext.getCmp('helpIframe').update( $('#contentarea', response.responseText).html() );
-		},
-		nocache: false
-	});
+	Ext.get('helpIframe').update(html);
 	UI.editor.lastElemHelpShown = elem;
 }
 
