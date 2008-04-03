@@ -51,6 +51,39 @@ UI.lastSavePreview = '';
 UI.keymaps = {};
 // layouts
 UI.optionsLayout = {};
+// templates
+UI.templates = {
+	tagHelp: new Ext.Template(
+		'<div class="taghelp" id="taghelp">',
+			'<p class="tagname">Tag: {tagname}</p>',
+			'<p class="tagdesc">Description: {tagdesc}</p>',
+			'<div id="indicatorshelp">',
+				'<p class="indicatorstitle">Indicators</p>',
+			'</div>',
+			'<div class="subfieldshelp" id="subfieldshelp">',
+				'<p class="subfieldstitle">Subfields</p>',
+			'</div>',
+		'</div>'
+	),
+	indicatorsHelp: new Ext.Template(
+		'<div id="indicatorhelp-{indicatornumber}" class="indicatorhelp">',
+			'<p class="indicatornumber">Indicator {indicatornumber}</p>',
+			'<p class="indicatordesc">Description: {indicatordesc}</p>',
+			'<div class="indicatorvalues" id="indicatorvalues-{indicatornumber}"></div>',
+		'</div>'
+	),
+	indicatorValue: new Ext.Template(
+		'<p class="optionname">Option name: {optionname}</p>',
+		'<p class="optiondesc">Option description: {optiondesc}</p>',
+		'<p class="optioncode">Option code: {optioncode}</p>'
+	),
+	subfieldsHelp: new Ext.Template(
+		'<div id="subfieldhelp-{subfieldcode}" class="subfieldhelp">',
+			'<p class="subfieldname">Subfield: {subfieldname}</p><p class="subfieldcode">Code: {subfieldcode}</p>',
+			'<p class="subfielddesc">Description: {subfielddesc}</p>',
+		'</div>'
+	)
+};
 // msgs
 UI.messages = {
 	help: {

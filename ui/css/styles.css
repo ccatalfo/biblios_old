@@ -154,3 +154,57 @@
 #savegridallSelectedStatus{
 	display: none;
 }
+.tagname {
+	font-weight: bold;
+}
+.tagdesc {
+	font-style: italic;
+}
+.indicatornumber{
+	font-weight: bold;
+}
+
+.indicatornumber{
+	font-weight: bold;
+}
+.indicatordesc {
+	font-style: italic;
+}
+
+.highlightedhelp {
+	background-color: yellow;
+}
+#indicatorshelp {
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+.indicatorstitle{
+	font-size: larger;
+	font-weight: bold;
+}
+.indicatorvalues{
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+.indicatorhelp {
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+.subfieldstitle{
+	font-size: larger;
+	font-weight: bold;
+}
+.subfieldname{
+	font-weight: bold;
+}
+.subfielddesc {
+	font-style: italic;
+}
+#subfieldshelp {
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+.subfieldhelp {
+	margin-top: 2em;
+	margin-bottom: 2em;
+}

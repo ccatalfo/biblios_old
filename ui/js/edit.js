@@ -364,18 +364,38 @@ function onFocus(elem) {
 }
 
 function showTagHelp(elem) {
-	var html = '';
 	Ext.get('helpIframe').update('');
 	// retrieve help for this tag
-	var tag = $(elem).parents('.tag').get(0).id.substr(0,3);
-	var subfieldcode = $(elem).parents('.subfield').get(0).id.substr(13,1)
-	if( tag == '000' ) {
+	var tagname = $(elem).parents('.tag').get(0).id.substr(0,3);
+	var subfieldcode = $(elem).parents('.subfield').get(0).id.substr(13,1);
+	var tagdesc = '';
+	if( tagname == '000' ) {
 		return;
 	}
 	else {
-		html = $('tag[@code='+tag+'] subfield[@code='+subfieldcode+']', marc21varfields).attr('name');
+		tagdesc = $('tag[@code='+tagname+']', marc21varfields).attr('description');
+		UI.templates.tagHelp.append('helpIframe', {tagname: tagname, tagdesc: tagdesc});
+		$('tag[@code='+tagname+']', marc21varfields).children('indicator').each( function(i) {
+			var indicatornumber = $(this).attr('number');
+			var indicatordesc = $(this).attr('description');
+			UI.templates.indicatorsHelp.append('indicatorshelp', {indicatornumber: indicatornumber, indicatordesc: indicatordesc});
+			$(this).children('option').each( function(i) {
+				var optioncode = $(this).attr('code');
+				var optiondesc = $(this).attr('description');
+				var optionname = $(this).attr('name');
+				UI.templates.indicatorValue.append('indicatorvalues-'+indicatornumber, {optioncode:optioncode, optionname: optionname, optiondesc: optiondesc});
+			});
+		});
+		$('tag[@code='+tagname+']', marc21varfields).children('subfield').each( function(i) {
+			var subfieldname = $(this).attr('name');
+			var subfieldcode = $(this).attr('code');
+			var subfielddesc = $(this).attr('description');
+			UI.templates.subfieldsHelp.append('subfieldshelp', {subfieldname:subfieldname, subfieldcode:subfieldcode,subfielddesc:subfielddesc  });
+		});
+		// highlight currently selected subfield
+		$('.subfieldhelp').removeClass('highlightedhelp');
+		$('#subfieldhelp-'+subfieldcode).addClass('highlightedhelp');
 	}
-	Ext.get('helpIframe').update(html);
 	UI.editor.lastElemHelpShown = elem;
 }
 

@@ -1429,7 +1429,7 @@ biblios.app = function() {
 										title: 'Help',
 										id: 'helpPanel',
 										items: [
-											new Ext.ux.ManagedIframePanel({
+											new Ext.Panel({
 												id: 'helpIframe'
 											})
 										]
