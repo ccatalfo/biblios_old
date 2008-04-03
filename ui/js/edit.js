@@ -366,8 +366,12 @@ function onFocus(elem) {
 function showTagHelp(elem) {
 	Ext.get('helpIframe').update('');
 	// retrieve help for this tag
+	var subfieldcode = 'a';
+	var indicatornumber = '1';
 	var tagname = $(elem).parents('.tag').get(0).id.substr(0,3);
-	var subfieldcode = $(elem).parents('.subfield').get(0).id.substr(13,1);
+	if( $(elem).hasClass('subfield,subfields,subfield-delimiter,subfield-text') ) {
+		subfieldcode = $(elem).parents('.subfield').get(0).id.substr(13,1);
+	}
 	var tagdesc = '';
 	if( tagname == '000' ) {
 		return;
