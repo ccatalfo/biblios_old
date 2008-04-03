@@ -1,0 +1,2122 @@
+<?xml version="1.0" ?>
+<marc21spec>
+   <tag code="000">
+      <position description="Computer-generated, five-character number equal to the length of the entire
+                              record, including itself and the record terminator. The number is right justified
+                              and unused positions contain zeros." name="Record length" position="00-04"/>
+      <position description="One-character alphabetic code that indicates the relationship of the record to a
+                              file for file maintenance purposes." name="Record status" position="05">
+         <value code="a" description="Increase in encoding level"/>
+         <value code="c" description="Corrected or revised"/>
+         <value code="d" description="Deleted"/>
+         <value code="n" description="New"/>
+         <value code="p" description="Increase in encoding level from prepublication"/>
+      </position>
+      <position description="One-character alphabetic code used to define the characteristics and components of
+                              the record." name="Type of record" position="06">
+         <value code="a" description="Language material"/>
+         <value code="c" description="Notated music"/>
+         <value code="d" description="Manuscript notated music"/>
+         <value code="e" description="Cartographic material"/>
+         <value code="f" description="Manuscript cartographic material"/>
+         <value code="g" description="Projected medium"/>
+         <value code="i" description="Nonmusical sound recording"/>
+         <value code="j" description="Musical sound recording"/>
+         <value code="k" description="Two-dimensional nonprojectable graphic"/>
+         <value code="m" description="Computer file"/>
+         <value code="o" description="Kit"/>
+         <value code="p" description="Mixed materials"/>
+         <value code="r" description="Three-dimensional artifact or naturally occurring object"/>
+         <value code="t" description="Manuscript language material"/>
+      </position>
+      <position description="One-character alphabetic code indicating the bibliographic level of the
+                           record." name="Bibliographic level" position="07">
+         <value code="a" description="Monographic component part"/>
+         <value code="b" description="Serial component part"/>
+         <value code="c" description="Collection"/>
+         <value code="d" description="Subunit"/>
+         <value code="i" description="Integrating resource"/>
+         <value code="m" description="Monograph/Item"/>
+         <value code="s" description="Serial"/>
+      </position>
+      <position name="Type of control" position="08">
+         <value code="#" description="No specified type"/>
+         <value code="a" description="Archival"/>
+      </position>
+      <position description=" Identifies the character coding scheme used in the record." name="Character coding scheme" position="09">
+         <value code="#" description="MARC-8"/>
+         <value code="a" description="UCS/Unicode"/>
+      </position>
+      <position description="Computer-generated number 2 that indicates the number of character positions used
+                              for indicators in a variable data field." name="Indicator count" position="10">
+         <value code="2" description="Number of character positions used for indicators"/>
+      </position>
+      <position description="Computer-generated number 2 that indicates the number of character positions used
+                              for each subfield code in a variable data field." name="Subfield code count" position="11">
+         <value code="2" description="Number of character positions used for a subfield code"/>
+      </position>
+      <position description="Computer-generated, five-character numeric string that indicates the first
+                              character position of the first variable control field in a record. The number is
+                              right justified and each unused position contains a zero." name="Base address of data" position="12-16">
+         <value code="[number]" description="Length of Leader and Directory"/>
+      </position>
+      <position description="One-character alphanumeric code that indicates the fullness of the bibliographic
+                              information and/or content designation of the MARC record." name="Encoding level" position="17">
+         <value code="#" description="Full level"/>
+         <value code="1" description="Full level, material not examined"/>
+         <value code="2" description="Less-than-full level, material not examined"/>
+         <value code="3" description="Abbreviated level"/>
+         <value code="4" description="Core level"/>
+         <value code="5" description="Partial (preliminary) level"/>
+         <value code="7" description="Minimal level"/>
+         <value code="8" description="Prepublication level"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Not applicable"/>
+      </position>
+      <position description="One-character alphanumeric code that indicates characteristics of the descriptive
+                              data in the record through reference to cataloging norms. Subfield $e
+                              (Description conventions) of field 040 (Cataloging Source) may contain additional
+                              information on the cataloging conventions used." name="Descriptive cataloging form" position="18">
+         <value code="#" description="Non-ISBD"/>
+         <value code="a" description="AACR 2"/>
+         <value code="i" description="ISBD"/>
+         <value code="u" description="Unknown"/>
+      </position>
+      <position name="Multipart resource record level" position="19">
+         <value code="c" description="Part with dependent title"/>
+      </position>
+      <position description="Always contains a 4." name="Length of the length-of-field portion" position="20">
+         <value code="4" description="Number of characters in the length-of-field portion of a Directory entry"/>
+      </position>
+      <position description="Always contains a 5." name="Length of the starting-character-position portion" position="21">
+         <value code="5" description="Number of characters in the starting-character-position portion of a Directory"/>
+      </position>
+      <position description="Always contains a 0." name="Length of the implementation-defined portion" position="22">
+         <value code="0" description="Number of characters in the implementation-defined portion of a Directory entry"/>
+      </position>
+      <position description="Always contains a 0." name="Undefined" position="23">
+         <value code="0" description="Undefined"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Map">
+      <position name="Category of material" position="00">
+         <value code="a" description="Map"/>
+      </position>
+      <position description="Special class of cartographic material to which the item belongs." name="Specific material designation" position="01">
+         <value code="d" description="Atlas"/>
+         <value code="g" description="Diagram"/>
+         <value code="j" description="Map"/>
+         <value code="k" description="Profile"/>
+         <value code="q" description="Model"/>
+         <value code="r" description="Remote-sensing image"/>
+         <value code="s" description="Section"/>
+         <value code="u" description="Unspecified"/>
+         <value code="y" description="View"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains a blank (#) or a fill character (|)." name="Undefined" position="02"/>
+      <position description="Whether the item is in one color or multicolored." name="Color" position="03">
+         <value code="a" description="One color"/>
+         <value code="c" description="Multicolored"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Material out of which the cartographic item is made." name="Physical medium" position="04">
+         <value code="a" description="Paper"/>
+         <value code="b" description="Wood"/>
+         <value code="c" description="Stone"/>
+         <value code="d" description="Metal"/>
+         <value code="e" description="Synthetic"/>
+         <value code="f" description="Skin"/>
+         <value code="g" description="Textiles"/>
+         <value code="j" description="Glass"/>
+         <value code="p" description="Plaster"/>
+         <value code="q" description="Flexible base photographic, positive"/>
+         <value code="r" description="Flexible base photographic, negative"/>
+         <value code="s" description="Non-flexible base photographic, positive"/>
+         <value code="t" description="Non-flexible base photographic, negative"/>
+         <value code="u" description="Unknown"/>
+         <value code="y" description="Other photographic medium"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Whether the cartographic item is a facsimile or other type of reproduction." name="Type of reproduction" position="05">
+         <value code="f" description="Facsimile"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Photographic technique used to produce the cartographic item." name="Production/reproduction details" position="06">
+         <value code="a" description="Photocopy, blueline print"/>
+         <value code="b" description="Photocopy"/>
+         <value code="c" description="Pre-production"/>
+         <value code="d" description="Film"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Positive/negative aspect of the photocopy or film of the cartographic item." name="Positive/negative aspect" position="07">
+         <value code="a" description="Positive"/>
+         <value code="b" description="Negative"/>
+         <value code="m" description="Mixed polarity"/>
+         <value code="n" description="Not applicable"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Electronic Resource">
+      <position name="Category of material" position="00">
+         <value code="c" description="Electronic resource"/>
+      </position>
+      <position description="Special class of material (usually the class of physical object) to which an item
+                              belongs (e.g., a magnetic disk)." name="Specific material designation" position="01">
+         <value code="a" description="Tape cartridge"/>
+         <value code="b" description="Chip cartridge"/>
+         <value code="c" description="Computer optical disc cartridge"/>
+         <value code="f" description="Tape cassette"/>
+         <value code="h" description="Tape reel"/>
+         <value code="j" description="Magnetic disk"/>
+         <value code="m" description="Magneto-optical disc"/>
+         <value code="o" description="Optical disc"/>
+         <value code="r" description="Remote"/>
+         <value code="u" description="Unspecified"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains a blank (#) or a fill character (|)." name="Undefined" position="02"/>
+      <position description="Whether the item is one color or multicolored." name="Color" position="03">
+         <value code="a" description="One color"/>
+         <value code="b" description="Black-and-white"/>
+         <value code="c" description="Multicolored"/>
+         <value code="g" description="Gray scale"/>
+         <value code="m" description="Mixed"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Dimensions of the medium used to encode the electronic resource." name="Dimensions" position="04">
+         <value code="a" description="3 1/2 in."/>
+         <value code="e" description="12 in."/>
+         <value code="g" description="4 3/4 in. or 12 cm."/>
+         <value code="i" description="1 1/8 x 2 3/8 in."/>
+         <value code="j" description="3 7/8 x 2 1/2 in."/>
+         <value code="n" description="Not applicable"/>
+         <value code="o" description="5 1/4 in."/>
+         <value code="u" description="Unknown"/>
+         <value code="v" description="8 in."/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Whether the production of sound is an integral part of an electronic resource." name="Sound" position="05">
+         <value code="#" description="No sound (silent)"/>
+         <value code="a" description="Sound"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Exact bit depth of the scanned image(s) that comprise the electronic resource, or
+                              a three-character alphabetic code which indicates that the exact bit depth cannot
+                              be recorded. Since only exact bit depth is useful, coding should not include
+                              missing digits represented by hyphens (-)." name="Image bit depth" position="06-08">
+         <value code="001-999" description="Exact bit depth"/>
+         <value code="mmm" description="Multiple"/>
+         <value code="nnn" description="Not applicable"/>
+         <value code="---" description="Unknown"/>
+         <value code="|||" description="No attempt to code"/>
+      </position>
+      <position description="Whether the file(s) which comprise the electronic resource are of the same format
+                              or type for digitally reformatted materials." name="File formats" position="09">
+         <value code="a" description="One file format"/>
+         <value code="m" description="Multiple file formats"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Whether quality assurance targets have been included appropriately at the time of
+                              reformatting/creation of the electronic resource." name="Quality assurance target(s)" position="10">
+         <value code="a" description="Absent"/>
+         <value code="n" description="Not applicable"/>
+         <value code="p" description="Present"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Information about the source of a digital file important to the creation, use and
+                              management of digitally reformatted materials." name="Antecedent/Source" position="11">
+         <value code="a" description="File reproduced from original"/>
+         <value code="b" description="File reproduced from microform"/>
+         <value code="c" description="File reproduced from an electronic resource"/>
+         <value code="d" description="File reproduced from an intermediate (not microform)"/>
+         <value code="m" description="Mixed"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Kind of compression the electronic resource has been subjected to." name="Level of compression" position="12">
+         <value code="a" description="Uncompressed"/>
+         <value code="b" description="Lossless"/>
+         <value code="d" description="Lossy"/>
+         <value code="m" description="Mixed"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Reformatting quality of the electronic resource; an overall assessment of the
+                              physical quality of the electronic resource in relation to its intended use. It
+                              can be used to judge the level of quality of a file, and an institution's
+                              commitment to maintain its availability over time." name="Reformatting Quality" position="13">
+         <value code="a" description="Access"/>
+         <value code="n" description="Not applicable"/>
+         <value code="p" description="Preservation"/>
+         <value code="r" description="Replacement"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Globe">
+      <position name="Category of material" position="00">
+         <value code="d" description="Globe"/>
+      </position>
+      <position description="Special class of material (usually the class of physical object) to which an item
+                              belongs, e.g., a celestial globe." name="Specific material designation" position="01">
+         <value code="a" description="Celestial globe"/>
+         <value code="b" description="Planetary or lunar globe"/>
+         <value code="c" description="Terrestrial globe"/>
+         <value code="e" description="Earth moon globe"/>
+         <value code="u" description="Unspecified"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains blank (#) or a fill character (|)." name="Undefined" position="02"/>
+      <position description="Whether the globe is in one color or multicolored." name="Color" position="03">
+         <value code="a" description="One color"/>
+         <value code="c" description="Multicolored"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Material out of which the globe is made." name="Physical medium" position="04">
+         <value code="a" description="Paper"/>
+         <value code="b" description="Wood"/>
+         <value code="c" description="Stone"/>
+         <value code="d" description="Metal"/>
+         <value code="e" description="Synthetic"/>
+         <value code="f" description="Skin"/>
+         <value code="g" description="Textile"/>
+         <value code="p" description="Plaster"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Whether the globe is a facsimile or other type of reproduction." name="Type of reproduction" position="05">
+         <value code="f" description="Facsimile"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Tactile Material">
+      <position name="Category of material" position="00">
+         <value code="f" description="Tactile material"/>
+      </position>
+      <position description="Special class of tactile materialspecific material to which the item belongs." name="Specific material designation" position="01">
+         <value code="a" description="Moon"/>
+         <value code="b" description="Braille"/>
+         <value code="c" description="Combination"/>
+         <value code="d" description="Tactile, with no writing system"/>
+         <value code="u" description="Unspecified"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains blank (#) or a fill character (|)." name="Undefined" position="02"/>
+      <position description="Family of braille to which the item belongs. This is not the particular braille
+                              code, but the type of braille code used, representing different types of written
+                              symbols. Up to two braille types may be indicated, or the cataloging agency can
+                              choose to encode only the predominate type. Multiple codes are coded in order of
+                              predominance, if any. If fewer than two codes are assigned, the codes are left
+                              justified and unused positions contain blanks (#)." name="Class of braille writing" position="03-04">
+         <value code="#" description="No specified class of braille writing"/>
+         <value code="a" description="Literary braille"/>
+         <value code="b" description="Format code braille"/>
+         <value code="c" description="Mathematics and scientific braille"/>
+         <value code="d" description="Computer braille"/>
+         <value code="e" description="Music braille"/>
+         <value code="m" description="Multiple braille types"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="||" description="No attempt to code"/>
+      </position>
+      <position description="Whether contractions are used." name="Level of contraction" position="05">
+         <value code="a" description="Uncontracted"/>
+         <value code="b" description="Contracted"/>
+         <value code="m" description="Combination"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Three-character code that indicates the braille music format of the item. The
+                              music formats are the way measures, sections, parts, and related information, such
+                              as words, are presented in relation to each other. Up to three formats may be
+                              indicated, left justified in order of predominance. If fewer than three codes are
+                              assigned, the codes are left justified and unused positions contain blanks (#)." name="Braille music format" position="06-08">
+         <value code="#" description="No specified braille music format"/>
+         <value code="a" description="Bar over bar"/>
+         <value code="b" description="Bar by bar"/>
+         <value code="c" description="Line over line"/>
+         <value code="d" description="Paragraph"/>
+         <value code="e" description="Single line"/>
+         <value code="f" description="Section by section"/>
+         <value code="g" description="Line by line"/>
+         <value code="h" description="Open score"/>
+         <value code="i" description="Spanner short form scoring"/>
+         <value code="j" description="Short form scoring"/>
+         <value code="k" description="Outline"/>
+         <value code="l" description="Vertical score"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|||" description="No attempt to code"/>
+      </position>
+      <position description="Other special physical characteristics about the braille." name="Special physical characteristics" position="09">
+         <value code="a" description="Print/braille"/>
+         <value code="b" description="Jumbo or enlarged braille"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Projected Graphic">
+      <position name="Category of material" position="00">
+         <value code="g" description="Projected graphic"/>
+      </position>
+      <position description="Special class of projected graphic to which the item belongs, e.g., a slide." name="Specific material designation" position="01">
+         <value code="c" description="Filmstrip cartridge"/>
+         <value code="d" description="Filmslip"/>
+         <value code="f" description="Other type of filmstrip"/>
+         <value code="o" description="Filmstrip roll"/>
+         <value code="s" description="Slide"/>
+         <value code="t" description="Transparency"/>
+         <value code="u" description="Unspecified"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains blank (#) or a fill character (|)." name="Undefined" position="02"/>
+      <position description="Color characteristics of a projected graphic." name="Color" position="03">
+         <value code="a" description="One color"/>
+         <value code="b" description="Black-and-white"/>
+         <value code="c" description="Multicolored"/>
+         <value code="h" description="Hand colored"/>
+         <value code="m" description="Mixed"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Type of material for the base of the emulsion of a photonegative, filmstrip,
+                              slide, or transparency." name="Base of emulsion" position="04">
+         <value code="d" description="Glass"/>
+         <value code="e" description="Synthetic"/>
+         <value code="j" description="Safety film"/>
+         <value code="k" description="Film base, other than safety film"/>
+         <value code="m" description="Mixed collection"/>
+         <value code="o" description="Paper"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Whether the sound is on or is separate from the projected graphic (i.e., on the
+                              accompanying material)." name="Sound on medium or separate" position="05">
+         <value code="#" description="No sound (silent)"/>
+         <value code="a" description="Sound on medium"/>
+         <value code="b" description="Sound separate from medium"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Specific medium used to carry the sound of an item (whether the sound is on the
+                              projected graphic or separate) and the type of sound playback required for the
+                              item." name="Medium for sound" position="06">
+         <value code="#" description="No sound (silent)"/>
+         <value code="a" description="Optical sound track on motion picture film"/>
+         <value code="b" description="Magnetic sound track on motion picture film"/>
+         <value code="c" description="Magnetic audio tape in cartridge"/>
+         <value code="d" description="Sound disc"/>
+         <value code="e" description="Magnetic audio tape on reel"/>
+         <value code="f" description="Magnetic audio tape in cassette"/>
+         <value code="g" description="Optical and magnetic sound track on motion picture film"/>
+         <value code="h" description="Videotape"/>
+         <value code="i" description="Videodisc"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Width or dimensions of the projected graphic item." name="Dimensions" position="07">
+         <value code="a" description="Standard 8 mm. film width"/>
+         <value code="b" description="Super 8 mm./single 8 mm. film width"/>
+         <value code="c" description="9.5 mm. film width"/>
+         <value code="d" description="16 mm. film width"/>
+         <value code="e" description="28 mm. film width"/>
+         <value code="f" description="35 mm. film width"/>
+         <value code="g" description="70 mm. film width"/>
+         <value code="j" description="2x2 in. or 5x5 cm. slide"/>
+         <value code="k" description="2 1/4 x 2 1/4 in. or 6x6 cm. slide"/>
+         <value code="s" description="4x5 in. or 10x13 cm. transparency"/>
+         <value code="t" description="5x7 in. or 13x18 cm. transparency"/>
+         <value code="v" description="8x10 in. or 21x26 cm. transparency"/>
+         <value code="w" description="9x9 in. or 23x23 cm. transparency"/>
+         <value code="x" description="10x10 in. or 26x26 cm. transparency"/>
+         <value code="y" description="7x7 in. or 18x18 cm. transparency"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Type of material of the mount of a slide or transparency for a projected
+                           graphic." name="Secondary support material" position="08">
+         <value code="#" description="No secondary support"/>
+         <value code="c" description="Cardboard"/>
+         <value code="d" description="Glass"/>
+         <value code="e" description="Synthetic"/>
+         <value code="h" description="Metal"/>
+         <value code="j" description="Metal and glass"/>
+         <value code="k" description="Synthetic and glass"/>
+         <value code="m" description="Mixed collection"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Microform">
+      <position name="Category of material" position="00">
+         <value code="h" description="Microform"/>
+      </position>
+      <position description="Special class of microform to which the item belongs. (e.g., a microopaque)." name="Specific material designation" position="01">
+         <value code="a" description="Aperture card"/>
+         <value code="b" description="Microfilm cartridge"/>
+         <value code="c" description="Microfilm cassette"/>
+         <value code="d" description="Microfilm reel"/>
+         <value code="e" description="Microfiche"/>
+         <value code="f" description="Microfiche cassette"/>
+         <value code="g" description="Microopaque"/>
+         <value code="u" description="Unspecified"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains blank (#) or a fill character (|)." name="Undefined" position="02"/>
+      <position description="Positive/negative polarity of the microform." name="Positive/negative aspect" position="03">
+         <value code="a" description="Positive"/>
+         <value code="b" description="Negative"/>
+         <value code="m" description="Mixed polarity"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position name="Dimensions" position="04">
+         <value code="a" description="8 mm."/>
+         <value code="d" description="16 mm."/>
+         <value code="f" description="35 mm."/>
+         <value code="g" description="70 mm."/>
+         <value code="h" description="105 mm."/>
+         <value code="l" description="3x5 in. or 8x13 cm."/>
+         <value code="m" description="4x6 in. or 11x15 cm."/>
+         <value code="o" description="6x9 in. or 16x23 cm."/>
+         <value code="p" description="3 1/4 x 7 3/8 in. or 9x19 cm."/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Reduction ratio range for a microform. The specific reduction ratio is recorded in
+                              007/06-08 (Reduction ratio)." name="Reduction ratio range" position="05">
+         <value code="a" description="Low reduction ratio"/>
+         <value code="b" description="Normal reduction"/>
+         <value code="c" description="High reduction"/>
+         <value code="d" description="Very high reduction"/>
+         <value code="e" description="Ultra high reduction"/>
+         <value code="u" description="Unknown"/>
+         <value code="v" description="Reduction rate varies"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Number specifying the reduction ratio for a microform, recorded as three digits.
+                              The number is right justified and each unused position contains a zero (e.g., 015,
+                              048). A hyphen is used for any unknown portion of the reduction ratio (e.g., 03-,
+                              1--, or ---)." name="Reduction ratio" position="06-08"/>
+      <position description="Color of the image for microforms." name="Color" position="09">
+         <value code="b" description="Black-and-white"/>
+         <value code="c" description="Multicolored"/>
+         <value code="m" description="Mixed"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Type of light-sensitive material on the film." name="Emulsion on film" position="10">
+         <value code="a" description="Silver halide"/>
+         <value code="b" description="Diazo"/>
+         <value code="c" description="Vesicular"/>
+         <value code="m" description="Mixed emulsion"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Generation aspect of a microform." name="Generation" position="11">
+         <value code="a" description="First generation (master)"/>
+         <value code="b" description="Printing master"/>
+         <value code="c" description="Service copy"/>
+         <value code="m" description="Mixed generation"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Base of the film." name="Base of film" position="12">
+         <value code="a" description="Safety base, undetermined"/>
+         <value code="c" description="Safety base, acetate undetermined"/>
+         <value code="d" description="Safety base, diacetate"/>
+         <value code="i" description="Nitrate base"/>
+         <value code="m" description="Mixed base (nitrate and safety)"/>
+         <value code="n" description="Not applicable"/>
+         <value code="p" description="Safety base, polyester"/>
+         <value code="r" description="Safety base, mixed"/>
+         <value code="t" description="Safety base, triacetate"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Nonprojected Graphic">
+      <position name="Category of material" position="00">
+         <value code="k" description="Nonprojected graphic"/>
+      </position>
+      <position description="Special class of nonprojected graphic to which the item belongs, (e.g., a
+                              picture)." name="Specific material designation" position="01">
+         <value code="c" description="Collage"/>
+         <value code="d" description="Drawing"/>
+         <value code="e" description="Painting"/>
+         <value code="f" description="Photomechanical print"/>
+         <value code="g" description="Photonegative"/>
+         <value code="h" description="Photoprint"/>
+         <value code="i" description="Picture"/>
+         <value code="j" description="Print"/>
+         <value code="l" description="Technical drawing"/>
+         <value code="n" description="Chart"/>
+         <value code="o" description="Flash card"/>
+         <value code="u" description="Unspecified"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains blank (#) or a fill character (|)." name="Undefined" position="02"/>
+      <position description="Color characteristics of the nonprojected graphic." name="Color" position="03">
+         <value code="a" description="One color"/>
+         <value code="b" description="Black-and-white"/>
+         <value code="c" description="Multicolored"/>
+         <value code="h" description="Hand colored"/>
+         <value code="m" description="Mixed"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Type of material used for the support or base on which an image is printed or
+                              executed." name="Primary support material" position="04">
+         <value code="a" description="Canvas"/>
+         <value code="b" description="Bristol board"/>
+         <value code="c" description="Cardboard/illustration board"/>
+         <value code="d" description="Glass"/>
+         <value code="e" description="Synthetic"/>
+         <value code="f" description="Skin"/>
+         <value code="g" description="Textile"/>
+         <value code="h" description="Metal"/>
+         <value code="m" description="Mixed collection"/>
+         <value code="o" description="Paper"/>
+         <value code="p" description="Plaster"/>
+         <value code="q" description="Hardboard"/>
+         <value code="r" description="Porcelain"/>
+         <value code="s" description="Stone"/>
+         <value code="t" description="Wood"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Type of material (other than normal museum matting) to which the secondary support
+                              (007/04) is attached." name="Secondary support material" position="05">
+         <value code="#" description="No secondary support"/>
+         <value code="a" description="Canvas"/>
+         <value code="b" description="Bristol board"/>
+         <value code="c" description="Cardboard/illustration board"/>
+         <value code="d" description="Glass"/>
+         <value code="e" description="Synthetic"/>
+         <value code="f" description="Skin"/>
+         <value code="g" description="Textile"/>
+         <value code="h" description="Metal"/>
+         <value code="m" description="Mixed collection"/>
+         <value code="o" description="Paper"/>
+         <value code="p" description="Plaster"/>
+         <value code="q" description="Hardboard"/>
+         <value code="r" description="Porcelain"/>
+         <value code="s" description="Stone"/>
+         <value code="t" description="Wood"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Motion Picture">
+      <position name="Category of material" position="00">
+         <value code="m" description="Motion picture"/>
+      </position>
+      <position description="Special class of motion picture to which the item belongs., e.g., a film reel." name="Specific material designation" position="01">
+         <value code="c" description="Film cartridge"/>
+         <value code="f" description="Film cassette"/>
+         <value code="r" description="Film reel"/>
+         <value code="u" description="Unspecified"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains blank (#) or a fill character (|)." name="Undefined" position="02"/>
+      <position description="Color characteristics of a motion picture." name="Color" position="03">
+         <value code="b" description="Black-and-white"/>
+         <value code="c" description="Multicolored"/>
+         <value code="h" description="Hand colored"/>
+         <value code="m" description="Mixed"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Presentation format for motion pictures." name="Motion picture presentation format" position="04">
+         <value code="a" description="Standard sound aperture (reduced frame)"/>
+         <value code="b" description="Nonanamorphic (wide-screen)"/>
+         <value code="c" description="3D"/>
+         <value code="d" description="Anamorphic (wide-screen)"/>
+         <value code="e" description="Other wide-screen format"/>
+         <value code="f" description="Standard silent aperture (full frame)"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Whether the sound is on the item or separate from the item." name="Sound on medium or separate" position="05">
+         <value code="#" description="No sound (silent)"/>
+         <value code="a" description="Sound on medium"/>
+         <value code="b" description="Sound separate from medium"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Specific medium used to carry the sound of an item (whether that sound is carried
+                              on the item itself or is in the form of accompanying material) and the type of
+                              sound playback required." name="Medium for sound" position="06">
+         <value code="#" description="No sound (silent)"/>
+         <value code="a" description="Optical sound track on motion picture film"/>
+         <value code="b" description="Magnetic sound track on motion picture film"/>
+         <value code="c" description="Magnetic audio tape in cartridge"/>
+         <value code="d" description="Sound disc"/>
+         <value code="e" description="Magnetic audio tape on reel"/>
+         <value code="f" description="Magnetic audio tape in cassette"/>
+         <value code="g" description="Optical and magnetic sound track on motion picture film"/>
+         <value code="h" description="Videotape"/>
+         <value code="i" description="Videodisc"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Width of a motion picture." name="Dimensions" position="07">
+         <value code="a" description="Standard 8 mm."/>
+         <value code="b" description="Super 8 mm./single 8 mm."/>
+         <value code="c" description="9.5 mm."/>
+         <value code="d" description="16 mm."/>
+         <value code="e" description="28 mm."/>
+         <value code="f" description="35 mm."/>
+         <value code="g" description="70 mm."/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Configuration of playback channels for the sound portion of a motion picture." name="Configuration of playback channels" position="08">
+         <value code="k" description="Mixed"/>
+         <value code="m" description="Monaural"/>
+         <value code="n" description="Not applicable"/>
+         <value code="q" description="Quadraphonic, multichannel, or surround"/>
+         <value code="s" description="Stereophonic"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Whether the film is part of a complete production or is a preliminary or
+                              post-production element." name="Production elements" position="09">
+         <value code="a" description="Workprint"/>
+         <value code="b" description="Trims"/>
+         <value code="c" description="Outtakes"/>
+         <value code="d" description="Rushes"/>
+         <value code="e" description="Mixing tracks"/>
+         <value code="f" description="Title bands/inter-title rolls"/>
+         <value code="g" description="Production rolls"/>
+         <value code="n" description="Not applicable"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Whether the film is positive or negative." name="Positive/negative aspect" position="10">
+         <value code="a" description="Positive"/>
+         <value code="b" description="Negative"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="How far away from the original material the item is (e.g., the actual negative
+                              film or original videotape in the camera). Generation data is used to evaluate the
+                              quality of available copies, to make preservation decisions, and to identify
+                              materials available for viewing and research." name="Generation" position="11">
+         <value code="d" description="Duplicate"/>
+         <value code="e" description="Master"/>
+         <value code="o" description="Original"/>
+         <value code="r" description="Reference print/viewing copy"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position name="Base of film" position="12">
+         <value code="a" description="Safety base, undetermined"/>
+         <value code="c" description="Safety base, acetate undetermined"/>
+         <value code="d" description="Safety base, diacetate"/>
+         <value code="i" description="Nitrate base"/>
+         <value code="m" description="Mixed base (nitrate and safety)"/>
+         <value code="n" description="Not applicable"/>
+         <value code="p" description="Safety base, polyester"/>
+         <value code="r" description="Safety base, mixed"/>
+         <value code="t" description="Safety base, triacetate"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="More specific color characteristics of the moving image than are contained in
+                              007/03 (Color)." name="Refined categories of color" position="13">
+         <value code="a" description="3 layer color"/>
+         <value code="b" description="2 color, single strip"/>
+         <value code="c" description="Undetermined 2 color"/>
+         <value code="d" description="Undetermined 3 color"/>
+         <value code="e" description="3 strip color"/>
+         <value code="f" description="2 strip color"/>
+         <value code="g" description="Red strip"/>
+         <value code="h" description="Blue or green strip"/>
+         <value code="i" description="Cyan strip"/>
+         <value code="j" description="Magenta strip"/>
+         <value code="k" description="Yellow strip"/>
+         <value code="l" description="S E N 2"/>
+         <value code="m" description="S E N 3"/>
+         <value code="n" description="Not applicable"/>
+         <value code="p" description="Sepia tone"/>
+         <value code="q" description="Other tone"/>
+         <value code="r" description="Tint"/>
+         <value code="s" description="Tinted and toned"/>
+         <value code="t" description="Stencil color"/>
+         <value code="u" description="Unknown"/>
+         <value code="v" description="Hand colored"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Type of color film stock or color print the item represents." name="Kind of color stock or print" position="14">
+         <value code="a" description="Imbibition dye transfer prints"/>
+         <value code="b" description="Three-layer stock"/>
+         <value code="c" description="Three layer stock, low fade"/>
+         <value code="d" description="Duplitized stock"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Level of deterioration of the motion picture film." name="Deterioration stage" position="15">
+         <value code="a" description="None apparent"/>
+         <value code="b" description="Nitrate: suspicious odor"/>
+         <value code="c" description="Nitrate: pungent odor"/>
+         <value code="d" description="Nitrate: brownish, discoloration, fading, dusty"/>
+         <value code="e" description="Nitrate: sticky"/>
+         <value code="f" description="Nitrate: frothy, bubbles, blisters"/>
+         <value code="g" description="Nitrate: congealed"/>
+         <value code="h" description="Nitrate: powder"/>
+         <value code="k" description="Non-nitrate: detectable deterioration"/>
+         <value code="l" description="Non-nitrate: advanced deterioration"/>
+         <value code="m" description="Non-nitrate: disaster"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Whether or not the item being cataloged is judged to be complete." name="Completeness" position="16">
+         <value code="c" description="Complete"/>
+         <value code="i" description="Incomplete"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position name="Film inspection date" position="17-22"/>
+   </tag>
+   <tag code="007" materialtype="Kit">
+      <position name="Category of material" position="00">
+         <value code="o" description="Kit"/>
+      </position>
+      <position description="Special class of textual material to which an item belongs." name="Specific material designation" position="01">
+         <value code="u" description="Unspecified"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Notated Music">
+      <position name="Category of material" position="00">
+         <value code="q" description="Notated music"/>
+      </position>
+      <position description="Special class of textual material to which an item belongs." name="Specific material designation" position="01">
+         <value code="u" description="Unspecified"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Remote-Sensing Image">
+      <position name="Category of material" position="00">
+         <value code="r" description="Remote-sensing image"/>
+      </position>
+      <position description="Special class of material, usually the class of physical object, to which an item
+                              belongs.." name="Specific material designation" position="01">
+         <value code="u" description="Unspecified"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains blank (#) or a fill character (|)." name="Undefined" position="02"/>
+      <position description="General position of the sensor relative to to the object under study." name="Altitude of sensor" position="03">
+         <value code="a" description="Surface"/>
+         <value code="b" description="Airborne"/>
+         <value code="c" description="Spaceborne"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="General angle of the device from which the remote-sensing image is made." name="Attitude of sensor" position="04">
+         <value code="a" description="Low oblique"/>
+         <value code="b" description="High oblique"/>
+         <value code="c" description="Vertical"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Amount of cloud cover that was present when a remote-sensing image was made." name="Cloud cover" position="05">
+         <value code="0" description="0-9%"/>
+         <value code="1" description="10-19%"/>
+         <value code="2" description="20-29%"/>
+         <value code="3" description="30-39%"/>
+         <value code="4" description="40-49%"/>
+         <value code="5" description="50-59%"/>
+         <value code="6" description="60-69%"/>
+         <value code="7" description="70-79%"/>
+         <value code="8" description="80-89%"/>
+         <value code="9" description="90-100%"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Type of construction of the platform serving as the base for the remote-sensing
+                              device. For the purposes of this data element, &quot;platform&quot; refers to any structure
+                              that serves as a base, not only flat surfaces." name="Platform construction type" position="06">
+         <value code="a" description="Balloon"/>
+         <value code="b" description="Aircraft--low altitude"/>
+         <value code="c" description="Aircraft--medium altitude"/>
+         <value code="d" description="Aircraft--high altitude"/>
+         <value code="e" description="Manned spacecraft"/>
+         <value code="f" description="Unmanned spacecraft"/>
+         <value code="g" description="Land-based remote-sensing device"/>
+         <value code="h" description="Water surface-based remote-sensing device"/>
+         <value code="i" description="Submersible remote-sensing device"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Primary use intended for the platform specified in 007/06 (Platform construction
+                              type)." name="Platform use category" position="07">
+         <value code="a" description="Meteorological"/>
+         <value code="b" description="Surface observing"/>
+         <value code="c" description="Space observing"/>
+         <value code="m" description="Mixed uses"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="For the recording mode of the remote-sensing device, specifically, whether the
+                              sensor is involved in the creation of the transmission it eventually measures." name="Sensor type" position="08">
+         <value code="a" description="Active"/>
+         <value code="b" description="Passive"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Spectral, acoustic, or magnetic characteristics of the data received by the device
+                              producing the remote-sensing image. It can be used to indicate both the wave
+                              length of radiation measured and the type of sensor used to measure it." name="Data type" position="09-10">
+         <value code="aa" description="Visible light"/>
+         <value code="da" description="Near infrared"/>
+         <value code="db" description="Middle infrared"/>
+         <value code="dc" description="Far infrared"/>
+         <value code="dd" description="Thermal infrared"/>
+         <value code="de" description="Shortwave infrared (SWIR)"/>
+         <value code="df" description="Reflective infrared"/>
+         <value code="dv" description="Combinations"/>
+         <value code="dz" description="Other infrared data"/>
+         <value code="ga" description="Sidelooking airborne radar (SLAR)"/>
+         <value code="gb" description="Synthetic aperture radar (SAR)-Single frequency"/>
+         <value code="gc" description="SAR-multi-frequency (multichannel)"/>
+         <value code="gd" description="SAR-like polarization"/>
+         <value code="ge" description="SAR-cross polarization"/>
+         <value code="gf" description="Infometric SAR"/>
+         <value code="gg" description="polarmetric SAR"/>
+         <value code="gu" description="Passive microwave mapping"/>
+         <value code="gz" description="Other microwave data"/>
+         <value code="ja" description="Far ultraviolet"/>
+         <value code="jb" description="Middle ultraviolet"/>
+         <value code="jc" description="Near ultraviolet"/>
+         <value code="jv" description="Ultraviolet combinations"/>
+         <value code="jz" description="Other ultraviolet data"/>
+         <value code="ma" description="Multi-spectral, multidata"/>
+         <value code="mb" description="Multi-temporal"/>
+         <value code="mm" description="Combination of various data types"/>
+         <value code="nn" description="Not applicable"/>
+         <value code="pa" description="Sonar--water depth"/>
+         <value code="pb" description="Sonar--bottom topography images, sidescan"/>
+         <value code="pc" description="Sonar--bottom topography, near-surface"/>
+         <value code="pd" description="Sonar--bottom topography, near-bottom"/>
+         <value code="pe" description="Seismic surveys"/>
+         <value code="pz" description="Other acoustical data"/>
+         <value code="ra" description="Gravity anomalies (general)"/>
+         <value code="rb" description="Free-air"/>
+         <value code="rc" description="Bouger"/>
+         <value code="rd" description="Isostatic"/>
+         <value code="sa" description="Magnetic field"/>
+         <value code="ta" description="radiometric surveys"/>
+         <value code="uu" description="Unknown"/>
+         <value code="zz" description="Other"/>
+         <value code="||" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Sound Recording">
+      <position name="Category of material" position="00">
+         <value code="s" description="Sound recording"/>
+      </position>
+      <position description="Special class of sound recording to which the item belongs (e.g., a cylinder)." name="Specific material designation" position="01">
+         <value code="d" description="Sound disc"/>
+         <value code="e" description="Cylinder"/>
+         <value code="g" description="Sound cartridge"/>
+         <value code="i" description="Sound-track film"/>
+         <value code="q" description="Roll"/>
+         <value code="s" description="Sound cassette"/>
+         <value code="t" description="Sound-tape reel"/>
+         <value code="u" description="Unspecified"/>
+         <value code="w" description="Wire recording"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains blank (#) or a fill character (|)." name="Undefined" position="02"/>
+      <position description="Playback speed of the sound recording." name="Speed" position="03">
+         <value code="a" description="16 rpm (discs)"/>
+         <value code="b" description="33 1/3 rpm (discs)"/>
+         <value code="c" description="45 rpm (discs)"/>
+         <value code="d" description="78 rpm (discs)"/>
+         <value code="e" description="8 rpm (discs)"/>
+         <value code="f" description="1.4 m. per second (discs)"/>
+         <value code="h" description="120 rpm (cylinders)"/>
+         <value code="i" description="160 rpm (cylinders)"/>
+         <value code="k" description="15/16 ips (tapes)"/>
+         <value code="l" description="1 7/8 ips (tapes)"/>
+         <value code="m" description="3 3/4 ips (tapes)"/>
+         <value code="o" description="7 1/2 ips (tapes)"/>
+         <value code="p" description="15 ips (tapes)"/>
+         <value code="r" description="30 ips (tape)"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Configuration of playback channels for a sound recording." name="Configuration of playback channels" position="04">
+         <value code="m" description="Monaural"/>
+         <value code="q" description="Quadraphonic"/>
+         <value code="s" description="Stereophonic"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Width of the groove of the recording for discs or the pitch of the groove for
+                              cylinders." name="Groove width/groove pitch" position="05">
+         <value code="m" description="Microgroove/fine"/>
+         <value code="n" description="Not applicable"/>
+         <value code="s" description="Coarse/standard"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Diameter of an open reel or disc, or the dimensions of a cassette, cartridge, or
+                              cylinder." name="Dimensions" position="06">
+         <value code="a" description="3 in. diameter"/>
+         <value code="b" description="5 in. diameter"/>
+         <value code="c" description="7 in. diameter"/>
+         <value code="d" description="10 in. diameter"/>
+         <value code="e" description="12 in. diameter"/>
+         <value code="f" description="16 in. diameter"/>
+         <value code="g" description="4 3/4 in. or 12 cm. diameter"/>
+         <value code="j" description="3 7/8 x 2 1/2 in."/>
+         <value code="n" description="Not applicable"/>
+         <value code="o" description="5 1/4 x 3 7/8 in."/>
+         <value code="s" description="2 3/4 x 4 in."/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Width of the tape." name="Tape width" position="07">
+         <value code="l" description="1/8 in."/>
+         <value code="m" description="1/4 in."/>
+         <value code="n" description="Not applicable"/>
+         <value code="o" description="1/2 in."/>
+         <value code="p" description="1 in."/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Number of tracks on a tape." name="Tape Configuration" position="08">
+         <value code="a" description="Full (1) track"/>
+         <value code="b" description="Half (2) track"/>
+         <value code="c" description="Quarter (4) track"/>
+         <value code="d" description="Eight track"/>
+         <value code="e" description="Twelve track"/>
+         <value code="f" description="Sixteen track"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position name="Kind of disc, cylinder or tape" position="09">
+         <value code="a" description="Master tape"/>
+         <value code="b" description="Tape duplication master"/>
+         <value code="d" description="Disc master (negative)"/>
+         <value code="i" description="Instantaneous (recorded on the spot)"/>
+         <value code="m" description="Mass-produced"/>
+         <value code="n" description="Not applicable"/>
+         <value code="r" description="Mother (positive)"/>
+         <value code="s" description="Stamper (negative)"/>
+         <value code="t" description="Test pressing"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Kind of material used in the manufacture of sound recordings (both instantaneous
+                              and mass-produced)." name="Kind of material" position="10">
+         <value code="a" description="Lacquer coating"/>
+         <value code="b" description="Cellulose nitrate"/>
+         <value code="c" description="Acetate tape with ferrous oxide"/>
+         <value code="g" description="Glass with lacquer"/>
+         <value code="i" description="Aluminum with lacquer"/>
+         <value code="l" description="Metal"/>
+         <value code="m" description="Plastic with metal"/>
+         <value code="p" description="Plastic"/>
+         <value code="r" description="Paper with lacquer or ferrous oxide"/>
+         <value code="s" description="Shellac"/>
+         <value code="w" description="Wax"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Kind of cutting of the grooves used on a disc." name="Kind of cutting" position="11">
+         <value code="h" description="Hill-and-dale cutting"/>
+         <value code="l" description="Lateral or combined cutting"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position name="Special playback characteristics" position="12">
+         <value code="a" description="NAB standard"/>
+         <value code="b" description="CCIR standard"/>
+         <value code="c" description="Dolby-B encoded"/>
+         <value code="d" description="dbx encoded"/>
+         <value code="e" description="Digital recording"/>
+         <value code="f" description="Dolby-A encoded"/>
+         <value code="g" description="Dolby-C encoded"/>
+         <value code="h" description="CX encoded"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="How the sound was originally captured and stored. Re-releases of recordings should
+                              be coded for the original capture and storage technique, even though such
+                              re-releases may have been enhanced using another technique." name="Capture and storage technique" position="13">
+         <value code="a" description="Acoustical capture, direct storage"/>
+         <value code="b" description="Direct storage, not acoustical"/>
+         <value code="d" description="Digital storage"/>
+         <value code="e" description="Analog electrical storage"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Text">
+      <position name="Category of material" position="00">
+         <value code="t" description="Text"/>
+      </position>
+      <position description="Special class of textual material to which an item belongs." name="Specific material designation" position="01">
+         <value code="a" description="Regular print"/>
+         <value code="b" description="Large print"/>
+         <value code="c" description="Braille"/>
+         <value code="d" description="Loose-leaf"/>
+         <value code="u" description="Unspecified"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Videorecording">
+      <position name="Category of material" position="00">
+         <value code="v" description="Videorecording"/>
+      </position>
+      <position description="Special class of videorecording to which an item belongs." name="Specific material designation" position="01">
+         <value code="c" description="Videocartridge"/>
+         <value code="d" description="Videodisc"/>
+         <value code="f" description="Videocassette"/>
+         <value code="r" description="Videoreel"/>
+         <value code="u" description="Unspecified"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains blank (#) or a fill character (|)." name="Undefined" position="02"/>
+      <position description="Color characteristics of a videorecording." name="Color" position="03">
+         <value code="a" description="One color"/>
+         <value code="b" description="Black-and-white"/>
+         <value code="c" description="Multicolored"/>
+         <value code="m" description="Mixed"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Videotape or videodisc recording format." name="Videorecording format" position="04">
+         <value code="a" description="Beta (1/2 in., videocassette)"/>
+         <value code="b" description="VHS (1/2 in., videocassette)"/>
+         <value code="c" description="U-matic (3/4 in., videocasstte)"/>
+         <value code="d" description="EIAJ (1/2 in., reel)"/>
+         <value code="e" description="Type C (1 in., reel)"/>
+         <value code="f" description="Quadruplex (1 in. or 2 in., reel)"/>
+         <value code="g" description="Laserdisc"/>
+         <value code="h" description="CED (Capacitance Electronic Disc) videodisc"/>
+         <value code="i" description="Betacam (1/2 in., videocassette)"/>
+         <value code="j" description="Betacam SP (1/2 in., videocassette)"/>
+         <value code="k" description="Super-VHS (1/2 in., videocassette)"/>
+         <value code="m" description="M-II (1/2 in., videocassette)"/>
+         <value code="o" description="D-2 (3/4 in., videocassette)"/>
+         <value code="p" description="8 mm."/>
+         <value code="q" description="Hi-8 mm."/>
+         <value code="u" description="Unknown"/>
+         <value code="v" description="DVD"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Whether the sound is on the item or separate from the item (i.e., on the
+                              accompanying material)." name="Sound on medium or separate" position="05">
+         <value code="#" description="No sound (silent)"/>
+         <value code="a" description="Sound on medium"/>
+         <value code="b" description="Sound separate from medium"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Specific medium used to carry the sound of an item, whether that sound is carried
+                              on the videorecording or is separate, and the type of sound playback required for
+                              the item." name="Medium for sound" position="06">
+         <value code="#" description="No sound (silent)"/>
+         <value code="a" description="Optical sound track on motion picture film"/>
+         <value code="b" description="Magnetic sound track on motion picture film"/>
+         <value code="c" description="Magnetic audio tape in cartridge"/>
+         <value code="d" description="Sound disc"/>
+         <value code="e" description="Magnetic audio tape on reel"/>
+         <value code="f" description="Magnetic audio tape in cassette"/>
+         <value code="g" description="Optical and magnetic sound track on motion picture film"/>
+         <value code="h" description="Videotape"/>
+         <value code="i" description="Videodisc"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Width of the videorecording." name="Dimensions" position="07">
+         <value code="a" description="8 mm."/>
+         <value code="m" description="1/4 in."/>
+         <value code="o" description="1/2 in."/>
+         <value code="p" description="1 in."/>
+         <value code="q" description="2 in."/>
+         <value code="r" description="3/4 in."/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Configuration of intended playback channels for the sound portion of a
+                              videorecording." name="Configuration of playback channels" position="08">
+         <value code="k" description="Mixed"/>
+         <value code="m" description="Monaural"/>
+         <value code="n" description="Not applicable"/>
+         <value code="q" description="Quadraphonic, multichannel, or surround"/>
+         <value code="s" description="Stereophonic"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="007" materialtype="Unspecified">
+      <position name="Category of material" position="00">
+         <value code="z" description="Unspecified"/>
+      </position>
+      <position description="Special class of material to which the item belongs." name="Specific material designation" position="01">
+         <value code="m" description="Multiple physical forms"/>
+         <value code="u" description="Unspecified"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="008" materialtype="All Materials">
+      <position name="Date entered on file" position="00-05"/>
+      <position description="One-character alphabetic code that indicates that categorizes the type of dates
+                              given in 008/07-10 (Date 1) and 008/11-14 (Date 2). For continuing resources, the
+                              code in 008/06 also indicates the publication status." name="Type of date/Publication status" position="06">
+         <value code="b" description="No dates given; B.C. date involved"/>
+         <value code="c" description="Continuing resource currently published"/>
+         <value code="d" description="Continuing resource ceased publication"/>
+         <value code="e" description="Detailed date"/>
+         <value code="i" description="Inclusive dates of collection"/>
+         <value code="k" description="Range of years of bulk of collection"/>
+         <value code="m" description="Multiple dates"/>
+         <value code="n" description="Dates unknown"/>
+         <value code="p" description="Date of distribution/release/issue and production/recording session when"/>
+         <value code="q" description="Questionable date"/>
+         <value code="r" description="Reprint/reissue date and original date"/>
+         <value code="s" description="Single known date/probable date"/>
+         <value code="t" description="Publication date and copyright date"/>
+         <value code="u" description="Continuing resource status unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="A date specified by the code in 008/06 (Type of date/Publication status)." name="Date 1" position="07-10">
+         <value code="1-9" description="Date digit"/>
+         <value code="#" description="Date element is not applicable"/>
+         <value code="u" description="Date element is totally or partially unknown"/>
+         <value code="||||" description="No attempt to code"/>
+      </position>
+      <position description="A date specified by the code in 008/06 (Type of date/Publication status)." name="Date 2" position="11-14">
+         <value code="1-9" description="Date digit"/>
+         <value code="#" description="Date element is not applicable"/>
+         <value code="u" description="Date element is totally or partially unknown"/>
+         <value code="||||" description="No attempt to code"/>
+      </position>
+      <position name="Place of publication, production, or execution" position="15-17">
+         <value code="xx#" description="No place, unknown, or undetermined"/>
+         <value code="vp#" description="Various places"/>
+         <value code="[aaa]" description="Three-character alphabetic code"/>
+         <value code="[aa#]" description="Two-character alphabetic code"/>
+      </position>
+      <position name="Material specific coded elements" position="18-34"/>
+      <position name="Language" position="35-37">
+         <value code="###" description="No information provided"/>
+         <value code="zxx" description="No linguistic content"/>
+         <value code="mul" description="Multiple languages"/>
+         <value code="sgn" description="Sign languages"/>
+         <value code="und" description="Undetermined"/>
+         <value code="[aaa]" description="Three-character alphabetic code"/>
+      </position>
+      <position description="One-character code that indicates whether any data in a bibliographic record is a
+                              modification of information that appeared on the item being cataloged or that was
+                              intended to be included in the MARC record." name="Modified record" position="38">
+         <value code="#" description="Not modified"/>
+         <value code="d" description="Dashed-on information omitted"/>
+         <value code="o" description="Completely romanized/printed cards romanized"/>
+         <value code="r" description="Completely romanized/printed cards in script"/>
+         <value code="s" description="Shortened"/>
+         <value code="x" description="Missing characters"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character code that indicates the original cataloging source of the record. If
+                              the cataloging source is known, it is identified in subfield $a of
+                              field 040 (Cataloging Source)." name="Cataloging source" position="39">
+         <value code="#" description="National bibliographic agency"/>
+         <value code="c" description="Cooperative cataloging program"/>
+         <value code="d" description="Other"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="008" materialtype="Books">
+      <position description="Up to four (4) one-character alphabetic codes (recorded in alphabetical order)that
+                              indicate the presence of types of illustrations in the item. If fewer than four
+                              alphabetic codes are assigned, the codes are left justified and unused positions
+                              contain blanks (#)." name="Illustrations   (006/01-04)" position="18-21">
+         <value code="#" description="No illustrations"/>
+         <value code="a" description="Illustrations"/>
+         <value code="b" description="Maps"/>
+         <value code="c" description="Portraits"/>
+         <value code="d" description="Charts"/>
+         <value code="e" description="Plans"/>
+         <value code="f" description="Plates"/>
+         <value code="g" description="Music"/>
+         <value code="h" description="Facsimiles"/>
+         <value code="i" description="Coats of arms"/>
+         <value code="j" description="Genealogical tables"/>
+         <value code="k" description="Forms"/>
+         <value code="l" description="Samples"/>
+         <value code="m" description="Phonodisc, phonowire, etc."/>
+         <value code="o" description="Photographs"/>
+         <value code="p" description="Illuminations"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that describes the intellectual level of the target
+                              audience for which the material is intended." name="Target audience   (006/05)" position="22">
+         <value code="#" description="Unknown or not specified"/>
+         <value code="a" description="Preschool"/>
+         <value code="b" description="Primary"/>
+         <value code="c" description="Pre-adolescent"/>
+         <value code="d" description="Adolescent"/>
+         <value code="e" description="Adult"/>
+         <value code="f" description="Specialized"/>
+         <value code="g" description="General"/>
+         <value code="j" description="Juvenile"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that specifies the form of material for the
+                           item." name="Form of item   (006/06)" position="23">
+         <value code="#" description="None of the following"/>
+         <value code="a" description="Microfilm"/>
+         <value code="b" description="Microfiche"/>
+         <value code="c" description="Microopaque"/>
+         <value code="d" description="Large print"/>
+         <value code="f" description="Braille"/>
+         <value code="r" description="Regular print reproduction"/>
+         <value code="s" description="Electronic"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Up to four one-character codes (recorded in alphabetical order) that indicate
+                              whether a significant part of the item is or contains certain types of material.
+                              If fewer than four codes are assigned, the codes are left justified and unused
+                              positions contain blanks (#)." name="Nature of contents   (006/07-10)" position="24-27">
+         <value code="#" description="No specified nature of contents"/>
+         <value code="a" description="Abstracts/summaries"/>
+         <value code="b" description="Bibliographies"/>
+         <value code="c" description="Catalogs"/>
+         <value code="d" description="Dictionaries"/>
+         <value code="e" description="Encyclopedias"/>
+         <value code="f" description="Handbooks"/>
+         <value code="g" description="Legal articles"/>
+         <value code="i" description="Indexes"/>
+         <value code="j" description="Patent document"/>
+         <value code="k" description="Discographies"/>
+         <value code="l" description="Legislation"/>
+         <value code="m" description="Theses"/>
+         <value code="n" description="Surveys of literature in a subject area"/>
+         <value code="o" description="Reviews"/>
+         <value code="p" description="Programmed texts"/>
+         <value code="q" description="Filmographies"/>
+         <value code="r" description="Directories"/>
+         <value code="s" description="Statistics"/>
+         <value code="t" description="Technical reports"/>
+         <value code="u" description="Standards/specifications"/>
+         <value code="v" description="Legal cases and case notes"/>
+         <value code="w" description="Law reports and digests"/>
+         <value code="z" description="Treaties"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character code that indicates whether or not the item is published or produced
+                              by or for an international, national, state, provincial, or local government
+                              agency, or by any subdivision of such a body." name="Government publication   (006/11)" position="28">
+         <value code="#" description="Not a government publication"/>
+         <value code="a" description="Autonomous or semi-autonomous component"/>
+         <value code="c" description="Multilocal"/>
+         <value code="f" description="Federal/national"/>
+         <value code="i" description="International intergovernmental"/>
+         <value code="l" description="Local"/>
+         <value code="m" description="Multistate"/>
+         <value code="o" description="Government publication-level undetermined"/>
+         <value code="s" description="State, provincial, territorial, dependent, etc."/>
+         <value code="u" description="Unknown if item is government publication"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character code that indicates whether the item consists of the proceedings,
+                              reports, or summaries of a conference." name="Conference publication   (006/12)" position="29">
+         <value code="0" description="Not a conference publication"/>
+         <value code="1" description="Conference publication"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character code that indicates whether the item is a festschrift." name="Festschrift   (006/13)" position="30">
+         <value code="0" description="Not a festschrift"/>
+         <value code="1" description="Festschrift"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character numeric code that indicates whether the item includes an index to
+                              its own contents." name="Index   (006/14)" position="31">
+         <value code="0" description="No index"/>
+         <value code="1" description="Index present"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Contains a blank (#) or a fill character (|)." name="Undefined   (006/15)" position="32"/>
+      <position description="One-character code used to indicate the literary form of an item. Numeric codes 0
+                              and 1 provide a generic identification of whether or not the item is a work of
+                              fiction. Alphabetic codes may be used to identify specific literary forms." name="Literary form   (006/16)" position="33">
+         <value code="0" description="Not fiction (not further specified)"/>
+         <value code="1" description="Fiction (not further specified)"/>
+         <value code="c" description="Comic strips"/>
+         <value code="d" description="Dramas"/>
+         <value code="e" description="Essays"/>
+         <value code="f" description="Novels"/>
+         <value code="h" description="Humor, satires, etc."/>
+         <value code="i" description="Letters"/>
+         <value code="j" description="Short stories"/>
+         <value code="m" description="Mixed forms"/>
+         <value code="p" description="Poetry"/>
+         <value code="s" description="Speeches"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that indicates whether or not an item contains
+                              biographical material, and if so, what the biographical characteristics are." name="Biography   (006/17)" position="34">
+         <value code="#" description="No biographical material"/>
+         <value code="a" description="Autobiography"/>
+         <value code="b" description="Individual biography"/>
+         <value code="c" description="Collective biography"/>
+         <value code="d" description="Contains biographical information"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="008" materialtype="Computer Files">
+      <position description="Undefined; each contains a blank (#) or a fill character (|)." name="Undefined   (006/01-04)" position="18-21"/>
+      <position description="One-character alphabetic code describes indicates the target audience for which
+                              the material is intended." name="Target audience   (006/05)" position="22">
+         <value code="#" description="Unknown or not specified"/>
+         <value code="a" description="Preschool"/>
+         <value code="b" description="Primary"/>
+         <value code="c" description="Pre-adolescent"/>
+         <value code="d" description="Adolescent"/>
+         <value code="e" description="Adult"/>
+         <value code="f" description="Specialized"/>
+         <value code="g" description="General"/>
+         <value code="j" description="Juvenile"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Three undefined character positions; each contains a blank (#) or a fill character
+                              (|)." name="Undefined   (006/06-08)" position="23-25"/>
+      <position description="One-character alphabetic code that indicates the type of computer file described
+                              in the bibliographic record." name="Type of computer file   (006/09)" position="26">
+         <value code="a" description="Numeric data"/>
+         <value code="b" description="Computer program"/>
+         <value code="c" description="Representational"/>
+         <value code="d" description="Document"/>
+         <value code="e" description="Bibliographic data"/>
+         <value code="f" description="Font"/>
+         <value code="g" description="Game"/>
+         <value code="h" description="Sound"/>
+         <value code="i" description="Interactive multimedia"/>
+         <value code="j" description="Online system or service"/>
+         <value code="m" description="Combination"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; contains a blank (#) or a fill character (|)." name="Undefined   (006/10)" position="27"/>
+      <position description="One-character alphabetic code that indicates whether the computer file is
+                              published or produced by or for an international, national, provincial, state, or
+                              local government agency (including intergovermental bodies of all types), any
+                              subdivision of such a body and, if so, the jurisdictional level of the agency." name="Government publication   (006/11)" position="28">
+         <value code="#" description="Not a government publication"/>
+         <value code="a" description="Autonomous or semi-autonomous component"/>
+         <value code="c" description="Multilocal"/>
+         <value code="f" description="Federal/national"/>
+         <value code="i" description="International intergovernmental"/>
+         <value code="l" description="Local"/>
+         <value code="m" description="Multistate"/>
+         <value code="o" description="Government publication-level undetermined"/>
+         <value code="s" description="State, provincial, territorial, dependent, etc."/>
+         <value code="u" description="Unknown if item is government publication"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Six undefined character positions; each contains a blank (#) or a fill character
+                              (|)." name="Undefined   (006/12-17)" position="29-34"/>
+   </tag>
+   <tag code="008" materialtype="Maps">
+      <position description="Up to four one-character alphabetic codes that indicate the relief type specified
+                              on the item. Codes are recorded in order of their importance to the described
+                              item. If fewer than four codes are assigned, the codes are left justified and each
+                              unused position contains a blank (#)." name="Relief   (006/01-04)" position="18-21">
+         <value code="#" description="No relief shown"/>
+         <value code="a" description="Contours"/>
+         <value code="b" description="Shading"/>
+         <value code="c" description="Gradient and bathymetric tints"/>
+         <value code="d" description="Hachures"/>
+         <value code="e" description="Bathymetry/soundings"/>
+         <value code="f" description="Form lines"/>
+         <value code="g" description="Spot heights"/>
+         <value code="i" description="Pictorially"/>
+         <value code="j" description="Land forms"/>
+         <value code="k" description="Bathymetry/isolines"/>
+         <value code="m" description="Rock drawings"/>
+         <value code="z" description="Other"/>
+         <value code="||||" description="No attempt to code"/>
+      </position>
+      <position description="Two-character alphabetic code that indicates the projection used in producing the
+                              item." name="Projection   (006/05-06)" position="22-23">
+         <value code="##" description="Projection not specified"/>
+         <value code="aa" description="Aitoff"/>
+         <value code="ab" description="Gnomic"/>
+         <value code="ac" description="Lambert's azimuthal equal area"/>
+         <value code="ad" description="Orthographic"/>
+         <value code="ae" description="Azimuthal equidistant"/>
+         <value code="af" description="Stereographic"/>
+         <value code="ag" description="General vertical near-sided"/>
+         <value code="am" description="Modified stereographic for Alaska"/>
+         <value code="an" description="Chamberlin trimetric"/>
+         <value code="ap" description="Polar stereographic"/>
+         <value code="au" description="Azimuthal, specific type unknown"/>
+         <value code="az" description="Azimuthal, other"/>
+         <value code="ba" description="Gall"/>
+         <value code="bb" description="Goode's homolographic"/>
+         <value code="bc" description="Lambert's cylindrical equal area"/>
+         <value code="bd" description="Mercator"/>
+         <value code="be" description="Miller"/>
+         <value code="bf" description="Mollweide"/>
+         <value code="bg" description="Sinusoidal"/>
+         <value code="bh" description="Transverse Mercator"/>
+         <value code="bi" description="Gauss-Kruger"/>
+         <value code="bj" description="Equirectangular"/>
+         <value code="bo" description="Oblique Mercator"/>
+         <value code="br" description="Robinson"/>
+         <value code="bs" description="Space oblique Mercator"/>
+         <value code="bu" description="Cylindrical, specific type unknown"/>
+         <value code="bz" description="Cylindrical, other"/>
+         <value code="ca" description="Alber's equal area"/>
+         <value code="cb" description="Bonne"/>
+         <value code="cc" description="Lambert's conformal conic"/>
+         <value code="ce" description="Equidistant conic"/>
+         <value code="cp" description="Polyconic"/>
+         <value code="cu" description="Conic, specific type unknown"/>
+         <value code="cz" description="Conic, other"/>
+         <value code="da" description="Armadillo"/>
+         <value code="db" description="Butterfly"/>
+         <value code="dc" description="Eckert"/>
+         <value code="dd" description="Goode's homolosine"/>
+         <value code="de" description="Miller's bipolar oblique conformal conic"/>
+         <value code="df" description="Van Der Grinten"/>
+         <value code="dg" description="Dimaxion"/>
+         <value code="dh" description="Cordiform"/>
+         <value code="dl" description="Lambert conformal"/>
+         <value code="zz" description="Other"/>
+         <value code="||" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; contains a blank (#) or a fill character (|)." name="Undefined   (006/07)" position="24"/>
+      <position description="One-character alphabetic code that indicates the type of cartographic item
+                              described." name="Type of cartographic material   (006/08)" position="25">
+         <value code="a" description="Single map"/>
+         <value code="b" description="Map series"/>
+         <value code="c" description="Map serial"/>
+         <value code="d" description="Globe"/>
+         <value code="e" description="Atlas"/>
+         <value code="f" description="Separate supplement to another work"/>
+         <value code="g" description="Bound as part of another work"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; each contains a blank (#) or a fill character (|)." name="Undefined   (006/09-10)" position="26-27"/>
+      <position description="One-character alphabetic code that indicates whether the item is published or
+                              produced by or for an international, national, provincial, state, or local
+                              government agency, or by any subdivision of such a body, and, if so, the
+                              jurisdictional level of the agency." name="Government publication   (006/11)" position="28">
+         <value code="#" description="Not a government publication"/>
+         <value code="a" description="Autonomous or semi-autonomous component"/>
+         <value code="c" description="Multilocal"/>
+         <value code="f" description="Federal/national"/>
+         <value code="i" description="International intergovernmental"/>
+         <value code="l" description="Local"/>
+         <value code="m" description="Multistate"/>
+         <value code="o" description="Government publication-level undetermined"/>
+         <value code="s" description="State, provincial, territorial, dependent, etc."/>
+         <value code="u" description="Unknown if item is government publication"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that indicates the form of material for the
+                           item." name="Form of item   (006/12)" position="29">
+         <value code="#" description="None of the following"/>
+         <value code="a" description="Microfilm"/>
+         <value code="b" description="Microfiche"/>
+         <value code="c" description="Microopaque"/>
+         <value code="d" description="Large print"/>
+         <value code="f" description="Braille"/>
+         <value code="r" description="Regular print reproduction"/>
+         <value code="s" description="Electronic"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; contains a blank (#) or a fill character (|)." name="Undefined   (006/13)" position="30"/>
+      <position description="One-character numeric code that indicates whether the item or accompanying
+                              material includes a location index or gazetteer." name="Index   (006/14)" position="31">
+         <value code="0" description="No index"/>
+         <value code="1" description="Index present"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; contains a blank (#) or a fill character (|)." name="Undefined   (006/15)" position="32"/>
+      <position description="Up to two one-character alphabetic codes that indicate the special format
+                              characteristics of the map. Codes are recorded in order of their importance to the
+                              described item. If only one code is assigned, it is left justified and the unused
+                              position contains a blank (#)." name="Special format characteristics   (006/16-17)" position="33-34">
+         <value code="#" description="No specified special format characteristics"/>
+         <value code="e" description="Manuscript"/>
+         <value code="j" description="Picture card, post card"/>
+         <value code="k" description="Calendar"/>
+         <value code="l" description="Puzzle"/>
+         <value code="n" description="Game"/>
+         <value code="o" description="Wall map"/>
+         <value code="p" description="Playing cards"/>
+         <value code="r" description="Loose-leaf"/>
+         <value code="z" description="Other"/>
+         <value code="||" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="008" materialtype="Music">
+      <position name="Form of composition   (006/01-02)" position="18-19">
+         <value code="an" description="Anthems"/>
+         <value code="bd" description="Ballads"/>
+         <value code="bg" description="Bluegrass music"/>
+         <value code="bl" description="Blues"/>
+         <value code="bt" description="Ballets"/>
+         <value code="ca" description="Chaconnes"/>
+         <value code="cb" description="Chants, Other religions"/>
+         <value code="cc" description="Chant, Christian"/>
+         <value code="cg" description="Concerti grossi"/>
+         <value code="ch" description="Chorales"/>
+         <value code="cl" description="Chorale preludes"/>
+         <value code="cn" description="Canons and rounds"/>
+         <value code="co" description="Concertos"/>
+         <value code="cp" description="Chansons, polyphonic"/>
+         <value code="cr" description="Carols"/>
+         <value code="cs" description="Chance compositions"/>
+         <value code="ct" description="Cantatas"/>
+         <value code="cy" description="Country music"/>
+         <value code="cz" description="Canzonas"/>
+         <value code="df" description="Dance forms"/>
+         <value code="dv" description="Divertimentos, serenades, cassations, divertissements, and notturni"/>
+         <value code="fg" description="Fugues"/>
+         <value code="fm" description="Folk music"/>
+         <value code="ft" description="Fantasias"/>
+         <value code="gm" description="Gospel music"/>
+         <value code="hy" description="Hymns"/>
+         <value code="jz" description="Jazz"/>
+         <value code="mc" description="Musical revues and comedies"/>
+         <value code="md" description="Madrigals"/>
+         <value code="mi" description="Minuets"/>
+         <value code="mo" description="Motets"/>
+         <value code="mp" description="Motion picture music"/>
+         <value code="mr" description="Marches"/>
+         <value code="ms" description="Masses"/>
+         <value code="mu" description="Multiple forms"/>
+         <value code="mz" description="Mazurkas"/>
+         <value code="nc" description="Nocturnes"/>
+         <value code="nn" description="Not applicable"/>
+         <value code="op" description="Operas"/>
+         <value code="or" description="Oratorios"/>
+         <value code="ov" description="Overtures"/>
+         <value code="pg" description="Program music"/>
+         <value code="pm" description="Passion music"/>
+         <value code="po" description="Polonaises"/>
+         <value code="pp" description="Popular music"/>
+         <value code="pr" description="Preludes"/>
+         <value code="ps" description="Passacaglias"/>
+         <value code="pt" description="Part-songs"/>
+         <value code="pv" description="Pavans"/>
+         <value code="rc" description="Rock music"/>
+         <value code="rd" description="Rondos"/>
+         <value code="rg" description="Ragtime music"/>
+         <value code="ri" description="Ricercars"/>
+         <value code="rp" description="Rhapsodies"/>
+         <value code="rq" description="Requiems"/>
+         <value code="sd" description="Square dance music"/>
+         <value code="sg" description="Songs"/>
+         <value code="sn" description="Sonatas"/>
+         <value code="sp" description="Symphonic poems"/>
+         <value code="st" description="Studies and exercises"/>
+         <value code="su" description="Suites"/>
+         <value code="sy" description="Symphonies"/>
+         <value code="tc" description="Toccatas"/>
+         <value code="ts" description="Trio-sonatas"/>
+         <value code="uu" description="Unknown"/>
+         <value code="vr" description="Variations"/>
+         <value code="wz" description="Waltzes"/>
+         <value code="zz" description="Other"/>
+         <value code="||" description="No attempt to code"/>
+      </position>
+      <position description="One-character code that indicates the format of a musical composition (e.g.,
+                                 piano-conductor score)." name="Format of music   (006/03)" position="20">
+         <value code="a" description="Full score"/>
+         <value code="b" description="Full score, miniature or study size"/>
+         <value code="c" description="Accompaniment reduced for keyboard"/>
+         <value code="d" description="Voice score"/>
+         <value code="e" description="Condensed score or piano-conductor score"/>
+         <value code="g" description="Close score"/>
+         <value code="m" description="Multiple score formats"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One character code that indicates whether the item being cataloged contains parts.
+                              This position is not used to indicate that parts may exist elsewhere." name="Music parts   (006/04)" position="21">
+         <value code="#" description="No parts in hand or not specified"/>
+         <value code="d" description="Instrumental and vocal parts"/>
+         <value code="e" description="Instrumental parts"/>
+         <value code="f" description="Vocal parts"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that describes the intellectual level of the
+                                 target audience for which the material is intended" name="Target audience   (006/05)" position="22">
+         <value code="#" description="Unknown or unspecified"/>
+         <value code="a" description="Preschool"/>
+         <value code="b" description="Primary"/>
+         <value code="c" description="Pre-adolescent"/>
+         <value code="d" description="Adolescent"/>
+         <value code="e" description="Adult"/>
+         <value code="f" description="Specialized"/>
+         <value code="g" description="General"/>
+         <value code="j" description="Juvenile"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that specifies the form of material for the item
+                                 being described." name="Form of item   (006/06)" position="23">
+         <value code="#" description="None of the following"/>
+         <value code="a" description="Microfilm"/>
+         <value code="b" description="Microfiche"/>
+         <value code="c" description="Microopaque"/>
+         <value code="d" description="Large print"/>
+         <value code="f" description="Braille"/>
+         <value code="r" description="Regular print reproduction"/>
+         <value code="s" description="Electronic"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Up to six one-character alphabetic codes (recorded in alphabetical order) that
+                                 indicate the contents of program notes and other accompanying material for
+                                 sound recording, music manuscripts, or notated music. If fewer than six codes
+                                 are assigned, the codes are left justified and each unused position contains a
+                                 blank (#)." name="Accompanying matter   (006/07-12)" position="24-29">
+         <value code="#" description="No accompanying matter"/>
+         <value code="a" description="Discography"/>
+         <value code="b" description="Bibliography"/>
+         <value code="c" description="Thematic index"/>
+         <value code="d" description="Libretto or text"/>
+         <value code="e" description="Biography of composer or author"/>
+         <value code="f" description="Biography of performer or history of ensemble"/>
+         <value code="g" description="Technical and/or historical information on instruments"/>
+         <value code="h" description="Technical information on music"/>
+         <value code="i" description="Historical information"/>
+         <value code="k" description="Ethnological information"/>
+         <value code="r" description="Instructional materials"/>
+         <value code="s" description="Music"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Up to two one-character codes (recorded in the order of the following list)
+                                 that indicate the type of literary text contained in a nonmusical sound
+                                 recording. If only one code is assigned, it is left justified and the unused
+                                 position contains a blank (#)." name="Literary text for sound recordings   (006/13-14)" position="30-31">
+         <value code="#" description="Item is a music sound recording"/>
+         <value code="a" description="Autobiography"/>
+         <value code="b" description="Biography"/>
+         <value code="c" description="Conference proceedings"/>
+         <value code="d" description="Drama"/>
+         <value code="e" description="Essays"/>
+         <value code="f" description="Fiction"/>
+         <value code="g" description="Reporting"/>
+         <value code="h" description="History"/>
+         <value code="i" description="Instruction"/>
+         <value code="j" description="Language instruction"/>
+         <value code="k" description="Comedy"/>
+         <value code="l" description="Lectures, speeches"/>
+         <value code="m" description="Memoirs"/>
+         <value code="n" description="Not applicable"/>
+         <value code="o" description="Folktales"/>
+         <value code="p" description="Poetry"/>
+         <value code="r" description="Rehearsals"/>
+         <value code="s" description="Sounds"/>
+         <value code="t" description="Interviews"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; contains a blank (#) or a fill character (|)." name="Undefined   (006/15)" position="32"/>
+      <position description="Whether all or part of the item being cataloged is a transposition and/or
+                              arrangement of another work." name="Transposition and arrangement   (006/16)" position="33">
+         <value code="#" description="Not arrangement or transposition or not specified"/>
+         <value code="a" description="Transposition"/>
+         <value code="b" description="Arrangement"/>
+         <value code="c" description="Both transposed and arranged"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; contains a blank (#) or a fill character (|)." name="Undefined   (006/17)" position="34"/>
+   </tag>
+   <tag code="008" materialtype="Continuing Resources">
+      <position description="One-character alphabetic code that indicates the frequency of an item; used in
+                              conjunction with 008/19 (Regularity)." name="Frequency   (006/01)" position="18">
+         <value code="#" description="No determinable frequency"/>
+         <value code="a" description="Annual"/>
+         <value code="b" description="Bimonthly"/>
+         <value code="c" description="Semiweekly"/>
+         <value code="d" description="Daily"/>
+         <value code="e" description="Biweekly"/>
+         <value code="f" description="Semiannual"/>
+         <value code="g" description="Biennial"/>
+         <value code="h" description="Triennial"/>
+         <value code="i" description="Three times a week"/>
+         <value code="j" description="Three times a month"/>
+         <value code="k" description="Continuously updated"/>
+         <value code="m" description="Monthly"/>
+         <value code="q" description="Quarterly"/>
+         <value code="s" description="Semimonthly"/>
+         <value code="t" description="Three times a year"/>
+         <value code="u" description="Unknown"/>
+         <value code="w" description="Weekly"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that indicates the intended regularity of an item;
+                              used in conjunction with 008/18 (Frequency)." name="Regularity   (006/02)" position="19">
+         <value code="n" description="Normalized irregular"/>
+         <value code="r" description="Regular"/>
+         <value code="u" description="Unknown"/>
+         <value code="x" description="Completely irregular"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; contains a blank (#) or a fill character (|)." name="Undefined   (006/03)" position="20"/>
+      <position description="One-character alphabetic code that indicates the type of continuing resource." name="Type of continuing resource   (006/04)" position="21">
+         <value code="#" description="None of the following"/>
+         <value code="d" description="Updating database"/>
+         <value code="l" description="Updating loose-leaf"/>
+         <value code="m" description="Monographic series"/>
+         <value code="n" description="Newspaper"/>
+         <value code="p" description="Periodical"/>
+         <value code="w" description="Updating Web site"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that indicates the form of material in which an item
+                              was originally published." name="Form of original item   (006/05)" position="22">
+         <value code="#" description="None of the following"/>
+         <value code="a" description="Microfilm"/>
+         <value code="b" description="Microfiche"/>
+         <value code="c" description="Microopaque"/>
+         <value code="d" description="Large print"/>
+         <value code="e" description="Newspaper format"/>
+         <value code="f" description="Braille"/>
+         <value code="s" description="Electronic"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that specifies the form of material for the item
+                              being described." name="Form of item   (006/06)" position="23">
+         <value code="#" description="None of the following"/>
+         <value code="a" description="Microfilm"/>
+         <value code="b" description="Microfiche"/>
+         <value code="c" description="Microopaque"/>
+         <value code="d" description="Large print"/>
+         <value code="f" description="Braille"/>
+         <value code="r" description="Regular print reproduction"/>
+         <value code="s" description="Electronic"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position name="Nature of entire work   (006/07)" position="24">
+         <value code="#" description="Not specified"/>
+         <value code="a" description="Abstracts/summaries"/>
+         <value code="b" description="Bibliographies"/>
+         <value code="c" description="Catalogs"/>
+         <value code="d" description="Dictionaries"/>
+         <value code="e" description="Encyclopedias"/>
+         <value code="f" description="Handbooks"/>
+         <value code="g" description="Legal articles"/>
+         <value code="h" description="Biography"/>
+         <value code="i" description="Indexes"/>
+         <value code="k" description="Discographies"/>
+         <value code="l" description="Legislation"/>
+         <value code="m" description="Theses"/>
+         <value code="n" description="Surveys of literature in a subject area"/>
+         <value code="o" description="Reviews"/>
+         <value code="p" description="Programmed texts"/>
+         <value code="q" description="Filmographies"/>
+         <value code="r" description="Directories"/>
+         <value code="s" description="Statistics"/>
+         <value code="t" description="Technical reports"/>
+         <value code="u" description="Standards/specifications"/>
+         <value code="v" description="Legal cases and case notes"/>
+         <value code="w" description="Law reports and digests"/>
+         <value code="z" description="Treaties"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position name="Nature of contents   (006/08-10)" position="25-27">
+         <value code="#" description="Not specified"/>
+         <value code="a" description="Abstracts/summaries"/>
+         <value code="b" description="Bibliographies"/>
+         <value code="c" description="Catalogs"/>
+         <value code="d" description="Dictionaries"/>
+         <value code="e" description="Encyclopedias"/>
+         <value code="f" description="Handbooks"/>
+         <value code="g" description="Legal articles"/>
+         <value code="h" description="Biography"/>
+         <value code="i" description="Indexes"/>
+         <value code="k" description="Discographies"/>
+         <value code="l" description="Legislation"/>
+         <value code="m" description="Theses"/>
+         <value code="n" description="Surveys of literature in a subject area"/>
+         <value code="o" description="Reviews"/>
+         <value code="p" description="Programmed texts"/>
+         <value code="q" description="Filmographies"/>
+         <value code="r" description="Directories"/>
+         <value code="s" description="Statistics"/>
+         <value code="t" description="Technical reports"/>
+         <value code="u" description="Standards/specifications"/>
+         <value code="v" description="Legal cases and case notes"/>
+         <value code="w" description="Law reports and digests"/>
+         <value code="z" description="Treaties"/>
+         <value code="|||" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that indicates whether an item is published or
+                              produced by or for an international, national, provincial, state, or local
+                              government agency, or by any subdivision of such a body, and, if so, the
+                              jurisdictional level of the agency." name="Government publication   (006/11)" position="28">
+         <value code="#" description="Not a government publication"/>
+         <value code="a" description="Autonomous or semi-autonomous component"/>
+         <value code="c" description="Multilocal"/>
+         <value code="f" description="Federal/national"/>
+         <value code="i" description="International intergovernmental"/>
+         <value code="l" description="Local"/>
+         <value code="m" description="Multistate"/>
+         <value code="o" description="Government publication-level undetermined"/>
+         <value code="s" description="State, provincial, territorial, dependent, etc."/>
+         <value code="u" description="Unknown if item is government publication"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character numeric code that indicates whether an item consists of the
+                              proceedings, reports, or summaries of a conference." name="Conference publication   (006/12)" position="29">
+         <value code="0" description="Not a conference publication"/>
+         <value code="1" description="Conference publication"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; each contains a blank (#) or a fill character (|)." name="Undefined   (006/13-15)" position="30-32"/>
+      <position description="One-character alphabetic code that indicates the original alphabet or script of
+                              the language of the title on the source item upon which the key title (field 222)
+                              is based." name="Original alphabet or script of title   (006/16)" position="33">
+         <value code="#" description="No alphabet or script given/No key title"/>
+         <value code="a" description="Basic Roman"/>
+         <value code="b" description="Extended Roman"/>
+         <value code="c" description="Cyrillic"/>
+         <value code="d" description="Japanese"/>
+         <value code="e" description="Chinese"/>
+         <value code="f" description="Arabic"/>
+         <value code="g" description="Greek"/>
+         <value code="h" description="Hebrew"/>
+         <value code="i" description="Thai"/>
+         <value code="j" description="Devanagari"/>
+         <value code="k" description="Korean"/>
+         <value code="l" description="Tamil"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character numeric code that indicates whether the item was cataloged according
+                              to successive entry, latest entry, or integrated entry cataloging conventions." name="Entry convention   (006/17)" position="34">
+         <value code="0" description="Successive entry"/>
+         <value code="1" description="Latest entry"/>
+         <value code="2" description="Integrated entry"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="008" materialtype="Visual Materials">
+      <position description="Three-digit number that indicates the total running time of the motion picture or
+                              videorecording. The number is right justified and each unused position contains a
+                              zero." name="Running time for motion pictures and videorecordings   (006/01-03)" position="18-20">
+         <value code="000" description="Running time exceeds three characters"/>
+         <value code="001-999" description="Running time"/>
+         <value code="nnn" description="Not applicable"/>
+         <value code="---" description="Unknown"/>
+         <value code="|||" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; contains a blank (#) or a fill character (|)." name="Undefined   (006/04)" position="21"/>
+      <position description="One-character alphabetic code that indicates the audience for which the item is
+                              intended." name="Target audience   (006/05)" position="22">
+         <value code="#" description="Unknown or not specified"/>
+         <value code="a" description="Preschool"/>
+         <value code="b" description="Primary"/>
+         <value code="c" description="Pre-adolescent"/>
+         <value code="d" description="Adolescent"/>
+         <value code="e" description="Adult"/>
+         <value code="f" description="Specialized"/>
+         <value code="g" description="General"/>
+         <value code="j" description="Juvenile"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; each contains a blank (#) or a fill character (|)." name="Undefined   (006/06-10)" position="23-27"/>
+      <position description="One-character alphabetic code that indicates whether the item is published or
+                              produced by or for an international, provincial, national, state, or local
+                              government agency, or by any subdivision of such a body, and, if so, the
+                              jurisdictional level of the agency." name="Government publication   (006/11)" position="28">
+         <value code="#" description="Not a government publication"/>
+         <value code="a" description="Autonomous or semi-autonomous component"/>
+         <value code="c" description="Multilocal"/>
+         <value code="f" description="Federal/national"/>
+         <value code="i" description="International intergovernmental"/>
+         <value code="l" description="Local"/>
+         <value code="m" description="Multistate"/>
+         <value code="o" description="Government publication-level undetermined"/>
+         <value code="s" description="State, provincial, territorial, dependent, etc."/>
+         <value code="u" description="Unknown if item is government publication"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that specifies the form of material." name="Form of item   (006/12)" position="29">
+         <value code="#" description="None of the following"/>
+         <value code="a" description="Microfilm"/>
+         <value code="b" description="Microfiche"/>
+         <value code="c" description="Microopaque"/>
+         <value code="d" description="Large print"/>
+         <value code="f" description="Braille"/>
+         <value code="r" description="Regular print reproduction"/>
+         <value code="s" description="Electronic"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; each contains a blank (#) or a fill character (|)." name="Undefined   (006/13-15)" position="30-32"/>
+      <position description="One-character alphabetic code that indicates the type of visual material being
+                              described." name="Type of visual material   (006/16)" position="33">
+         <value code="a" description="Art original"/>
+         <value code="b" description="Kit"/>
+         <value code="c" description="Art reproduction"/>
+         <value code="d" description="Diorama"/>
+         <value code="f" description="Filmstrip"/>
+         <value code="g" description="Game"/>
+         <value code="i" description="Picture"/>
+         <value code="k" description="Graphic"/>
+         <value code="l" description="Technical drawing"/>
+         <value code="m" description="Motion picture"/>
+         <value code="n" description="Chart"/>
+         <value code="o" description="Flash card"/>
+         <value code="p" description="Microscope slide"/>
+         <value code="q" description="Model"/>
+         <value code="r" description="Realia"/>
+         <value code="s" description="Slide"/>
+         <value code="t" description="Transparency"/>
+         <value code="v" description="Videorecording"/>
+         <value code="w" description="Toy"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="One-character alphabetic code that indicates the technique used in creating motion
+                              in motion pictures or videorecordings." name="Technique   (006/17)" position="34">
+         <value code="a" description="Animation"/>
+         <value code="c" description="Animation and live action"/>
+         <value code="l" description="Live action"/>
+         <value code="n" description="Not applicable"/>
+         <value code="u" description="Unknown"/>
+         <value code="z" description="Other"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+   </tag>
+   <tag code="008" materialtype="Mixed Materials">
+      <position description="Undefined; each contains a blank (#) or a fill character (|)." name="Undefined   (006/01-05)" position="18-22"/>
+      <position description="One-character alphabetic code that specifies the form of material for the
+                           item." name="Form of item   (006/06)" position="23">
+         <value code="#" description="None of the following"/>
+         <value code="a" description="Microfilm"/>
+         <value code="b" description="Microfiche"/>
+         <value code="c" description="Microopaque"/>
+         <value code="d" description="Large print"/>
+         <value code="f" description="Braille"/>
+         <value code="r" description="Regular print reproduction"/>
+         <value code="s" description="Electronic"/>
+         <value code="|" description="No attempt to code"/>
+      </position>
+      <position description="Undefined; each contains a blank (#) or a fill character (|)." name="Undefined   (006/07-17)" position="24-34"/>
+   </tag>
+</marc21spec>
