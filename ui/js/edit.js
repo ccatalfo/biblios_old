@@ -369,7 +369,7 @@ function showTagHelp(elem) {
 	var subfieldcode = 'a';
 	var indicatornumber = '1';
 	var tagname = $(elem).parents('.tag').get(0).id.substr(0,3);
-	if( $(elem).hasClass('subfield,subfields,subfield-delimiter,subfield-text') ) {
+	if( $(elem).hasClass('subfield-text') || $(elem).hasClass('subfield-delimiter')) {
 		subfieldcode = $(elem).parents('.subfield').get(0).id.substr(13,1);
 	}
 	var tagdesc = '';
