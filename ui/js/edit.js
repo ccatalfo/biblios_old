@@ -77,13 +77,19 @@ function get008FromEditor(ff_ed) {
 		}
 			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 				var type = $(this).text();
+				var value = '';
 				if( type.substr(0, 4) == 'Undef') {
 					var length = type.substr(5,1);
 					for( var k = 0; k<length; k++) {
 						tag008val += ' ';
 					}
 				}
-				var value = $('#'+type).val();
+				if( type == 'Lang' || type == 'Ctry' ) {
+					value = Ext.getCmp(type).getValue();
+				}
+				else {
+					value = $('#'+type).val();
+				}
 				tag008val += value;
 			});
 	if( tag008val.length != 40 ) {
@@ -244,6 +250,9 @@ function updateFFEditor(editorid, ff_ed, var_ed) {
 	var temprec = new MarcEditor();
 	var htmled = temprec.loadXml( xmldoc );
     $('#'+editorid).find(".ffeditor").html(htmled);
+	// setup ff editor's comboboxes
+	setupFFEditorCtryCombo(editorid);
+	setupFFEditorLangCombo(editorid);
 }
 
 
@@ -753,18 +762,18 @@ function setupFFEditorLangCombo(editorid) {
 	store.loadData(marc21langdefs);
 
 	var cb = new Ext.form.ComboBox({
-		id: 'langcombobox'+editorid,
+		id: 'Lang',
 		store: store,
-		transform: $(select).get(0),
 		forceSelection: true,
 		hideTrigger: true,
 		typeAhead: true,
 		displayField: 'name',
 		valueField: 'code',
 		value: val,
-		mode: 'local'
+		mode: 'local',
+		applyTo: $(select).get(0).id
 	});
-	cb.render();
+	cb.render( );
 }
 
 function setupFFEditorCtryCombo(editorid) {
@@ -784,16 +793,16 @@ function setupFFEditorCtryCombo(editorid) {
 	store.loadData(marc21ctrydefs);
 
 	var cb = new Ext.form.ComboBox({
-		id: 'ctrycombobox'+editorid,
+		id: 'Ctry',
 		store: store,
-		transform: $(select).get(0),
 		forceSelection: true,
 		hideTrigger: true,
 		typeAhead: true,
 		displayField: 'name',
 		valueField: 'code',
 		value: val,
-		mode: 'local'
+		mode: 'local',
+		applyTo: $(select).get(0).id
 	});
 	cb.render();
 }
