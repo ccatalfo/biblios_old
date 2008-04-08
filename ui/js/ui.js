@@ -82,6 +82,20 @@ UI.templates = {
 			'<p class="subfieldname">Subfield: {subfieldname}</p><p class="subfieldcode">Code: {subfieldcode}</p>',
 			'<p class="subfielddesc">Description: {subfielddesc}</p>',
 		'</div>'
+	),
+	fixedfieldHelp: new Ext.Template(
+		'<div id="ffhelp" class="ffhelp">',
+			'<p class="ffname">{ffname}</p>',
+			'<p class="ffdesc">{ffdesc}</p>',
+			'<div id="ffoptions"></div>',
+		'</div>'
+	),
+	ffOption: new Ext.Template(
+		'<div class="ffoption"></div>',
+			'<p class="ffoptioncode">{code}</p>',
+			'<p class="ffoptiondesc">{desc}</p>',
+			'<br/>',
+		'</div>'
 	)
 };
 // msgs

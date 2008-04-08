@@ -1,5 +1,5 @@
 // Object -> marc editor wrapper
-function createFixedFieldCell(string, elem, offset) {
+function createFixedFieldCell(string, elem, offset, tag) {
 	var name = $(elem).attr('name');
 	var position = $(elem).attr('position') - offset;
 	var length = $(elem).attr('length');
@@ -26,20 +26,20 @@ function createFixedFieldCell(string, elem, offset) {
 		}
 	}
 	if( inputtype == 'textbox' ) {
-		html += '<input id="'+name+'" type="text" onblur="onFixedFieldEditorBlur(this)" maxlength="'+value.length+'" size="'+value.length+'" class="fixedfield" value="'+value+'">';
+		html += '<input id="'+name+'" type="text" onclick="showTagHelp(this)" onblur="onFixedFieldEditorBlur(this)" maxlength="'+value.length+'" size="'+value.length+'" class="fixedfield '+tag+'" value="'+value+'">';
 	}
 	else if(inputtype == 'blank' ) {
 		value = '';
 		for( var k = 0; k < length; k++) {
 			value += ' ';
 		}
-		html += '<input id="'+name+'" size="'+length+'" maxlength="'+length+'" style="display: none;" type="text" value="'+value+'">';
+		html += '<input id="'+name+'" size="'+length+'" maxlength="'+length+'" onclick="showTagHelp(this)" style="display: none;" class="fixedfield '+tag+'" type="text" value="'+value+'">';
 	}
 	else if(inputtype == 'hidden') {
-		html += '<input id="'+name+'" size="'+length+'" maxlength="'+length+'" style="display: none;" type="text" value="'+value+'">';
+		html += '<input id="'+name+'" size="'+length+'" maxlength="'+length+'" class="fixedfield '+tag+'" style="display: none;" type="text" value="'+value+'">';
 	}
 	else if (inputtype == 'menulist' || inputtype == 'menubox') {
-		html += '<select name="'+name+'" onblur="onFixedFieldEditorBlur(this)" id="'+name+'" >';
+		html += '<select name="'+name+'" onclick="showTagHelp(this)" class="fixedfield '+tag+'" onblur="onFixedFieldEditorBlur(this)" id="'+name+'" >';
 		$('option', elem).each( function(j) {
 			if( $(this).text() == value ) {
 				html += '<option selected value="'+$(this).text()+'">';
@@ -374,7 +374,7 @@ function MarcEditor(ffeditor, vareditor) {
 		var string = $('leader', marcXmlDoc).text();
 		html += '<tr>';
 		$('field[@tag=000] value', marc21defs).each( function(i) {
-			html += createFixedFieldCell(string, $(this), 0);
+			html += createFixedFieldCell(string, $(this), 0, '000');
 		});
 		//UI.editor.progress.updateProgress(.2, 'Leader editor created');
 		//end leader row
@@ -411,7 +411,7 @@ function MarcEditor(ffeditor, vareditor) {
 					if( cell == 9 ) {
 						html += '</tr><tr>';
 					}
-					html += createFixedFieldCell(tag008, $(this) , 0);
+					html += createFixedFieldCell(tag008, $(this) , 0, '008');
 					cell++;
 				});
 			});
@@ -443,7 +443,7 @@ function MarcEditor(ffeditor, vareditor) {
 			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 				var type = $(this).text();
 				$('field[@tag=006] value[@name='+type+']', marc21defs).each( function(j) {
-					html += createFixedFieldCell(tag006, $(this) , 17);
+					html += createFixedFieldCell(tag006, $(this) , 17, '006');
 				});
 			});
 			html += '</tr>'; // end 006 row
@@ -503,7 +503,7 @@ function MarcEditor(ffeditor, vareditor) {
 			// find field def for this 007 mat type
 			$('field[@tag=007][@mattype='+mattype+']', marc21defs).each( function(i) {
 				$('value', this).each( function(j) {
-					html += createFixedFieldCell(tag007, $(this) , 0);
+					html += createFixedFieldCell(tag007, $(this) , 0, '007');
 				}); // loop through positions in 007
 
 			});

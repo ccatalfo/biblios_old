@@ -374,40 +374,77 @@ function onFocus(elem) {
 
 function showTagHelp(elem) {
 	Ext.get('helpIframe').update('');
-	// retrieve help for this tag
-	var subfieldcode = 'a';
-	var indicatornumber = '1';
-	var tagname = $(elem).parents('.tag').get(0).id.substr(0,3);
-	if( $(elem).hasClass('subfield-text') || $(elem).hasClass('subfield-delimiter')) {
-		subfieldcode = $(elem).parents('.subfield').get(0).id.substr(13,1);
-	}
-	var tagdesc = '';
-	if( tagname == '000' ) {
-		return;
+	// if we have a fixed field editor element
+	if( $(elem).parents('.ffeditor').length > 0 ) {
+		var name = $(elem).get(0).id;
+		var currval = $(elem).val();
+		// get position location
+		var position = $('value[@name='+name+']', marc21defs).attr('position');
+		// pad with leading zero
+		if( position.length == 1 ) {
+			position = '0'+position;
+		}
+		// get tag this field is part of
+		var tag = ''
+		if( $(elem).hasClass('000') ) {
+			tag = '000';
+		}
+		else if ( $(elem).hasClass('008') ) {
+			tag = '008';
+		}
+		else if( $(elem).hasClass('007') ) {
+			tag = '007';
+		}
+		else if( $(elem).hasClass('006') ) {
+			tag = '006';
+		}
+		// get the help text for this fixed field
+		var tagxml = $('tag[@code='+tag+'] position[@position='+position+']', marc21controlfields);
+		var ffdesc = $(tagxml).attr('description');
+		var ffname = $(tagxml).attr('name');
+		UI.templates.fixedfieldHelp.append('helpIframe', {ffname: ffname, ffdesc: ffdesc});
+		$(tagxml).children('value').each( function(i) {
+			var code = $(this).attr('code');
+			var desc = $(this).attr('description');
+			UI.templates.ffOption.append('ffoptions', {code: code, desc: desc });
+		});
 	}
 	else {
-		tagdesc = $('tag[@code='+tagname+']', marc21varfields).attr('description');
-		UI.templates.tagHelp.append('helpIframe', {tagname: tagname, tagdesc: tagdesc});
-		$('tag[@code='+tagname+']', marc21varfields).children('indicator').each( function(i) {
-			var indicatornumber = $(this).attr('number');
-			var indicatordesc = $(this).attr('description');
-			UI.templates.indicatorsHelp.append('indicatorshelp', {indicatornumber: indicatornumber, indicatordesc: indicatordesc});
-			$(this).children('option').each( function(i) {
-				var optioncode = $(this).attr('code');
-				var optiondesc = $(this).attr('description');
-				var optionname = $(this).attr('name');
-				UI.templates.indicatorValue.append('indicatorvalues-'+indicatornumber, {optioncode:optioncode, optionname: optionname, optiondesc: optiondesc});
+		// retrieve help for this tag
+		var subfieldcode = 'a';
+		var indicatornumber = '1';
+		var tagname = $(elem).parents('.tag').get(0).id.substr(0,3);
+		if( $(elem).hasClass('subfield-text') || $(elem).hasClass('subfield-delimiter')) {
+			subfieldcode = $(elem).parents('.subfield').get(0).id.substr(13,1);
+		}
+		var tagdesc = '';
+		if( tagname == '000' ) {
+			return;
+		}
+		else {
+			tagdesc = $('tag[@code='+tagname+']', marc21varfields).attr('description');
+			UI.templates.tagHelp.append('helpIframe', {tagname: tagname, tagdesc: tagdesc});
+			$('tag[@code='+tagname+']', marc21varfields).children('indicator').each( function(i) {
+				var indicatornumber = $(this).attr('number');
+				var indicatordesc = $(this).attr('description');
+				UI.templates.indicatorsHelp.append('indicatorshelp', {indicatornumber: indicatornumber, indicatordesc: indicatordesc});
+				$(this).children('option').each( function(i) {
+					var optioncode = $(this).attr('code');
+					var optiondesc = $(this).attr('description');
+					var optionname = $(this).attr('name');
+					UI.templates.indicatorValue.append('indicatorvalues-'+indicatornumber, {optioncode:optioncode, optionname: optionname, optiondesc: optiondesc});
+				});
 			});
-		});
-		$('tag[@code='+tagname+']', marc21varfields).children('subfield').each( function(i) {
-			var subfieldname = $(this).attr('name');
-			var subfieldcode = $(this).attr('code');
-			var subfielddesc = $(this).attr('description');
-			UI.templates.subfieldsHelp.append('subfieldshelp', {subfieldname:subfieldname, subfieldcode:subfieldcode,subfielddesc:subfielddesc  });
-		});
-		// highlight currently selected subfield
-		$('.subfieldhelp').removeClass('highlightedhelp');
-		$('#subfieldhelp-'+subfieldcode).addClass('highlightedhelp');
+			$('tag[@code='+tagname+']', marc21varfields).children('subfield').each( function(i) {
+				var subfieldname = $(this).attr('name');
+				var subfieldcode = $(this).attr('code');
+				var subfielddesc = $(this).attr('description');
+				UI.templates.subfieldsHelp.append('subfieldshelp', {subfieldname:subfieldname, subfieldcode:subfieldcode,subfielddesc:subfielddesc  });
+			});
+			// highlight currently selected subfield
+			$('.subfieldhelp').removeClass('highlightedhelp');
+			$('#subfieldhelp-'+subfieldcode).addClass('highlightedhelp');
+		}
 	}
 	UI.editor.lastElemHelpShown = elem;
 }
