@@ -619,6 +619,7 @@ function selectAllInObject() {
 	if(openState == 'searchgrid') {
 		biblios.app.selectedRecords.allSelected = true;
 		biblios.app.selectedRecords.selectedSource = 'searchgrid';
+		getSelectedSearchGridRecords();
 		$('.searchgridtotalcount').html( Ext.getCmp('searchgrid').store.getTotalCount() );
 		$('#searchgridallSelectedStatus').show();
 	}
@@ -639,10 +640,13 @@ function selectAll() {
 		$('.searchgridtotalcount').html( Ext.getCmp('searchgrid').store.getTotalCount() );
 		$('#searchgridtbarSelectAll').show();
 		biblios.app.selectedRecords.allSelected = false;
+		biblios.app.selectedRecords.retrieved = false;
 		biblios.app.selectedRecords.selectedSource = 'searchgrid';
 		Ext.getCmp('searchgridExportBtn').enable();
 		Ext.getCmp('searchgridSendBtn').enable();
 		Ext.getCmp('searchgridSaveBtn').enable();
+		// retrieve selected records from pazpar2
+		getSelectedSearchGridRecords();
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', 'checked');
@@ -664,6 +668,7 @@ function selectNone() {
 		Ext.getCmp('searchgridSendBtn').disable();
 		Ext.getCmp('searchgridSaveBtn').disable();
 		biblios.app.selectedRecords.allSelected = false;
+		biblios.app.selectedRecords.retrieved = false;
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', '');

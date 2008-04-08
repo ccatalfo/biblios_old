@@ -87,7 +87,8 @@ biblios.app = function() {
 		selectedRecords: {
 			selectedSource: '',
 			allSelected: false,
-			savefileid: ''
+			savefileid: '',
+			loading: false
 		},
 		db : {
 			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets',

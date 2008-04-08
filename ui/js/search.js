@@ -54,14 +54,14 @@ paz = new pz2({
 					"oninit": options.initCallback || function() {},
 					"onping": options.pingCallback || function(){},
 					"onshow": function(data){ 
-						Ext.getCmp('searchgrid').store.reload(); 
+						Ext.getCmp('searchgrid').store.reload();
 						Ext.getCmp('searchgrid').el.mask('Searching...');
 						if(data.activeclients == 0 ) {
 							// remove 'Searching' status msg
 							clearStatusMsg();
 							// unmask grid
 							Ext.getCmp('searchgrid').el.unmask();
-							if( openState == 'searchgrid') {
+							if( openState == 'searchgrid' ) {
 								selectNone();
 							}
 						}

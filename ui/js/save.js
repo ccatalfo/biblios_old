@@ -86,12 +86,13 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 				}
 			}
 			else {
-				var sel = getSelectedSearchGridRecords();
-				for( var i = 0; i < sel.length; i++) {
-					var id = sel[i].id;
-					var data = sel[i].data;
-					var title = sel[i].title;
-					var offset =sel[i].offset;
+				var records = biblios.app.selectedRecords.records;
+				for( var i = 0; i < records.length; i++) {
+					var id = records[i].id;
+					var data = records[i].data;
+					var title = records[i].title;
+					var offset =records[i].offset;
+					showStatusMsg('Saving ' + title);
 					addRecordFromSearch(id, offset, editorid, data, savefileid);
 				}
 			}
@@ -224,16 +225,26 @@ function updateSendMenu() {
 }
 
 function getSelectedSearchGridRecords() {
-	var records = new Array();
+	biblios.app.selectedRecords.records = new Array;
 	if( biblios.app.selectedRecords.allSelected == true ) {
-		Ext.getCmp('searchgrid').store.each( function(record) {
-			var id = record.id;
-			var title = record.data.title;
-			var loc = record.data.location[0].name;
-			var offset = 0;
-			var data = record.data;
-			records.push( { id: id, title: title, data: data, loc: loc, offset: offset });
+		var totalcount = Ext.getCmp('searchgrid').store.getTotalCount();
+		biblios.app.selectedRecords.loading = true;
+		Ext.getCmp('searchgrid').store.on('load', function(store, records, option) {
+			if( biblios.app.selectedRecords.loading == true ) {
+				for( var i = 0 ;i <records.length; i++) {
+					var id = records[i].id;
+					var title = records[i].data.title;
+					var loc = records[i].data.location[0].id;
+					var offset = 0;
+					var data = records[i].data;
+					biblios.app.selectedRecords.records.push( { id: id, title: title, data: data, loc: loc, offset: offset });
+				}
+			}
+			biblios.app.selectedRecords.retrieved = true;
+			biblios.app.selectedRecords.loading = false;
+			selectAll();
 		});
+		Ext.getCmp('searchgrid').store.load({params:{start:0, num:totalcount}});
 	}
 	else {
 		var checked = $(':checked.searchgridcheckbox');
@@ -251,10 +262,10 @@ function getSelectedSearchGridRecords() {
 			else {
 				loc = Ext.getCmp('searchgrid').store.getById(id).data.location[0].name;
 			}
-			records.push( { id: id, title: title, data: data, loc: loc, offset: offset });
+			biblios.app.selectedRecords.records.push( { id: id, title: title, data: data, loc: loc, offset: offset });
 		}
+		biblios.app.selectedRecords.retrieved = true;
 	}
-	return records;
 }
 
 function getSelectedSaveGridRecords() {
