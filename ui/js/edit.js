@@ -373,6 +373,10 @@ function onFocus(elem) {
 }
 
 function showTagHelp(elem) {
+	// if help panel isn't open, don't bother displaying help
+	if( Ext.getCmp('helpPanel').collapsed == true ) {
+		return;
+	}
 	Ext.get('helpIframe').update('');
 	// if we have a fixed field editor element
 	if( $(elem).parents('.ffeditor').length > 0 ) {
