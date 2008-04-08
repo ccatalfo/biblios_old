@@ -157,9 +157,9 @@ function changePazPar2TargetStatus(o) {
 function resetPazPar2(options) {
 	if(debug){ console.info('resetting pazpar2'); }
 	paz = initializePazPar2(pazpar2url, {
-			initCallback: function(statusOK) {
+			initCallback: function() {
 				if(debug) { console.info('pazpar2 initCallback: resetting sessionID for searching and setting Z targets'); }
-				if(statusOK == true) {
+				if(this.initStatusOK == true) {
 					// reset search grid's url for new session id
 					Ext.getCmp('searchgrid').store.proxy.conn.url = paz.pz2String + "?command=show&session=" + paz.sessionID;
 					// reset facets tree loader for new session id
