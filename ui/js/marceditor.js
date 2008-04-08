@@ -522,6 +522,7 @@ function MarcEditor(ffeditor, vareditor) {
 
 		$('controlfield', marcXmlDoc).each( function(i) {
 			val = $(this).text();
+			size = val.length;
 			tagnum = $(this).attr('tag');
 			html += '<div id="'+tagnum+'" class="tag controlfield ';
 			html += tagnum;
@@ -536,6 +537,7 @@ function MarcEditor(ffeditor, vareditor) {
 			html += 'class="controlfield ';
 			html += tagnum;
 			html += '"';
+			html += ' size="'+size+'"';
 			html += '>';
 			html += '</div>';
 			fields.push( new Field(tagnum, '', '', [{code: '', value: val}]) );
