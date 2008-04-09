@@ -382,21 +382,37 @@ function showTagHelp(elem) {
 			position = '0'+position;
 		}
 		// get tag this field is part of
-		var tag = ''
+		var tag = '';
+		// figure out material type if necessary
+		var rectype = $('#Type').val();
+		var mattype = '';
 		if( $(elem).hasClass('000') ) {
 			tag = '000';
 		}
 		else if ( $(elem).hasClass('008') ) {
 			tag = '008';
+			mattype = get008MaterialName(rectype);
 		}
 		else if( $(elem).hasClass('007') ) {
 			tag = '007';
+			mattype = get007MaterialName( $('#Category').val() );
 		}
 		else if( $(elem).hasClass('006') ) {
 			tag = '006';
+			mattype = get008MaterialName(rectype);
 		}
 		// get the help text for this fixed field
-		var tagxml = $('tag[@code='+tag+'] position[@position='+position+']', marc21controlfields);
+		var tagxml = '';
+		if( tag == '000' ) {
+			tagxml = $('tag[@code='+tag+'] position[@position='+position+']', marc21controlfields);
+		}
+		else {
+			$('tag[@code='+tag+']', marc21controlfields).each( function(i) {
+				if( $(this).attr('materialtype') == mattype ) {
+					tagxml = $(this).children('position[@position='+position+']', marc21controlfields);
+				}
+			});
+		}
 		var ffdesc = $(tagxml).attr('description');
 		var ffname = $(tagxml).attr('name');
 		UI.templates.fixedfieldHelp.append('helpIframe', {ffname: ffname, ffdesc: ffdesc});
