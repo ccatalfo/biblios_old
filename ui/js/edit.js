@@ -53,28 +53,33 @@ function getLeaderFromEditor(ff_ed) {
 
 */
 
+function get008MaterialName(rectype) {
+	var mattype = '';
+	if( rectype == 'a' || rectype == 't' ) {
+		mattype = 'Books';
+	}
+	if( rectype == 'm' ) {
+		mattype = 'Computer Files';
+	}
+	if( rectype == 'e' || rectype == 'f' ) {
+		mattype = 'Maps';
+	}
+	if( rectype == 'c' || rectype == 'd' || rectype == 'j' || rectype == 'i') {
+		mattype = 'Music';
+	}
+	if( rectype == 'g' || rectype == 'k' || rectype == 'o' || rectype == 'r') {
+		mattype = 'Visual Materials';
+	}
+	if( rectype == 'p' ) {
+		mattype = 'Mixed Materials';
+	}
+	return mattype;
+}
+
 function get008FromEditor(ff_ed) {
 		var tag008val = '';
 		var rectype = $('#Type').val();
-		var mattype = '';
-		if( rectype == 'a' || rectype == 't' ) {
-			mattype = 'Books';
-		}
-		if( rectype == 'm' ) {
-			mattype = 'ComputerFile';
-		}
-		if( rectype == 'e' || rectype == 'f' ) {
-			mattype = 'Maps';
-		}
-		if( rectype == 'c' || rectype == 'd' || rectype == 'j' || rectype == 'i') {
-			mattype = 'Music';
-		}
-		if( rectype == 'g' || rectype == 'k' || rectype == 'o' || rectype == 'r') {
-			mattype = 'Visual';
-		}
-		if( rectype == 'p' ) {
-			mattype = 'Mixed';
-		}
+		var mattype = get008MaterialName(rectype);
 			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 				var type = $(this).text();
 				var value = '';
@@ -104,25 +109,7 @@ function get008FromEditor(ff_ed) {
 function get006FromEditor(ff_ed) {
 		var tag006val = '';
 		var rectype = $('#Type').val();
-		var mattype = '';
-		if( rectype == 'a' || rectype == 't' ) {
-			mattype = 'Books';
-		}
-		if( rectype == 'm' ) {
-			mattype = 'ComputerFile';
-		}
-		if( rectype == 'e' || rectype == 'f' ) {
-			mattype = 'Maps';
-		}
-		if( rectype == 'c' || rectype == 'd' || rectype == 'j' || rectype == 'i') {
-			mattype = 'Music';
-		}
-		if( rectype == 'g' || rectype == 'k' || rectype == 'o' || rectype == 'r') {
-			mattype = 'Visual';
-		}
-		if( rectype == 'p' ) {
-			mattype = 'Mixed';
-		}
+		var mattype = get008MaterialName(rectype);
 		$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 			var type = $(this).text();
 			if( type.substr(0, 4) == 'Undef') {
@@ -136,55 +123,61 @@ function get006FromEditor(ff_ed) {
 		});
     return tag006val;
 }
+
+function get007MaterialName(cat) {
+	var mattype = '';
+	if( cat == 'a' ) {
+		mattype = 'Map';
+	}
+	if( cat == 'c' ) {
+		mattype = 'Electronic Resource';
+	}
+	if( cat == 'd' ) {
+		mattype = 'Globe';
+	}
+	if( cat == 'f' ) {
+		mattype = 'Tactile Material';
+	}
+	if( cat == 'g' ) {
+		mattype = 'Projected Graphic';
+	}
+	if( cat == 'h' ) {
+		mattype = 'Microform';
+	}
+	if( cat == 'k' ) {
+		mattype = 'Nonprojected Graphic';
+	}
+	if( cat == 'm' ) {
+		mattype = 'Motion Picture';
+	}
+	if( cat == 'o' ) {
+		mattype = 'Kit';
+	}
+	if( cat == 'q' ) {
+		mattype = 'Notated Music';
+	}
+	if( cat == 'r' ) {
+		mattype = 'Remote-Sensing Image';
+	}
+	if( cat == 's' ) {
+		mattype = 'Sound Recording';
+	}
+	if( cat == 't' ) {
+		mattype = 'Text';
+	}
+	if( cat == 'v' ) {
+		mattype = 'Videorecording';
+	}
+	if( cat == 'z' ) {
+		mattype = 'Unspecified';
+	}
+	return mattype;
+}
+
 function get007FromEditor() {
 	var tag007val = '';
 	var cat = $('#Category').val();
-			var mattype = '';
-			if( cat == 'a' ) {
-				mattype = 'MAP';
-			}
-			if( cat == 'c' ) {
-				mattype = 'ELECTRONIC';
-			}
-			if( cat == 'd' ) {
-				mattype = 'GLOBE';
-			}
-			if( cat == 'f' ) {
-				mattype = 'TACTILE';
-			}
-			if( cat == 'g' ) {
-				mattype = 'PROJECTED';
-			}
-			if( cat == 'h' ) {
-				mattype = 'MICROFORM';
-			}
-			if( cat == 'k' ) {
-				mattype = 'NONPROJECTED';
-			}
-			if( cat == 'm' ) {
-				mattype = 'MOTION';
-			}
-			if( cat == 'o' ) {
-				mattype = 'KIT';
-			}
-			if( cat == 'q' ) {
-				mattype = 'NOTATED';
-			}
-			if( cat == 'r' ) {
-				mattype = 'REMOTE';
-			}
-			if( cat == 's' ) {
-				mattype = 'SOUND';
-			}
-			if( cat == 't' ) {
-				mattype = 'TEXT';
-			}
-			if( cat == 'v' ) {
-				mattype = 'VIDEORECORDING';
-			}
-			if( cat == 'z' ) {
-				mattype = 'UNSPECIFIED';
-			}
+	var mattype = get007MaterialName(cat);
 			$('field[@tag=007][@mattype='+mattype+']', marc21defs).each( function(i) {
 				$('value', this).each( function(j) {
 					var type = $(this).attr('name');

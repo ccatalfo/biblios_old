@@ -383,27 +383,9 @@ function MarcEditor(ffeditor, vareditor) {
 		var tag008 = $('controlfield[@tag=008]', marcXmlDoc).text();
 		var rectype = $('leader', marcXmlDoc).text().substr(6,1);
 		var biblevel = $('leader', marcXmlDoc).text().substr(7,1);
+		var mattype = get008MaterialName(rectype);
 		// 008 row
 		html += '<tr>';
-		var mattype = '';
-		if( rectype == 'a' || rectype == 't' ) {
-			mattype = 'Books';
-		}
-		if( rectype == 'm' ) {
-			mattype = 'ComputerFile';
-		}
-		if( rectype == 'e' || rectype == 'f' ) {
-			mattype = 'Maps';
-		}
-		if( rectype == 'c' || rectype == 'd' || rectype == 'j' || rectype == 'i') {
-			mattype = 'Music';
-		}
-		if( rectype == 'g' || rectype == 'k' || rectype == 'o' || rectype == 'r') {
-			mattype = 'Visual';
-		}
-		if( rectype == 'p' ) {
-			mattype = 'Mixed';
-		}
 		var cell = 0;
 			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 				var type = $(this).text();
@@ -421,25 +403,7 @@ function MarcEditor(ffeditor, vareditor) {
 		// 006 row
 		if( $('controlfield[@tag=006]', marcXmlDoc).length > 0 ) {
 			html += '<tr>';
-			var mattype = '';
-			if( rectype == 'a' || rectype == 't' ) {
-				mattype = 'Books';
-			}
-			if( rectype == 'm' ) {
-				mattype = 'ComputerFile';
-			}
-			if( rectype == 'e' || rectype == 'f' ) {
-				mattype = 'Maps';
-			}
-			if( rectype == 'c' || rectype == 'd' || rectype == 'j' || rectype == 'i') {
-				mattype = 'Music';
-			}
-			if( rectype == 'g' || rectype == 'k' || rectype == 'o' || rectype == 'r') {
-				mattype = 'Visual';
-			}
-			if( rectype == 'p' ) {
-				mattype = 'Mixed';
-			}
+			var mattype = get008MaterialName(rectype);	
 			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 				var type = $(this).text();
 				$('field[@tag=006] value[@name='+type+']', marc21defs).each( function(j) {
@@ -454,52 +418,7 @@ function MarcEditor(ffeditor, vareditor) {
 			html += '<tr>';
 			var cat = $('controlfield[@tag=007]', marcXmlDoc).text().substr(0,1);
 			var tag007 = $('controlfield[@tag=007]', marcXmlDoc).text();
-			var mattype = '';
-			if( cat == 'a' ) {
-				mattype = 'MAP';
-			}
-			if( cat == 'c' ) {
-				mattype = 'ELECTRONIC';
-			}
-			if( cat == 'd' ) {
-				mattype = 'GLOBE';
-			}
-			if( cat == 'f' ) {
-				mattype = 'TACTILE';
-			}
-			if( cat == 'g' ) {
-				mattype = 'PROJECTED';
-			}
-			if( cat == 'h' ) {
-				mattype = 'MICROFORM';
-			}
-			if( cat == 'k' ) {
-				mattype = 'NONPROJECTED';
-			}
-			if( cat == 'm' ) {
-				mattype = 'MOTION';
-			}
-			if( cat == 'o' ) {
-				mattype = 'KIT';
-			}
-			if( cat == 'q' ) {
-				mattype = 'NOTATED';
-			}
-			if( cat == 'r' ) {
-				mattype = 'REMOTE';
-			}
-			if( cat == 's' ) {
-				mattype = 'SOUND';
-			}
-			if( cat == 't' ) {
-				mattype = 'TEXT';
-			}
-			if( cat == 'v' ) {
-				mattype = 'VIDEORECORDING';
-			}
-			if( cat == 'z' ) {
-				mattype = 'UNSPECIFIED';
-			}
+			var mattype = get007MaterialName(cat);
 			// find field def for this 007 mat type
 			$('field[@tag=007][@mattype='+mattype+']', marc21defs).each( function(i) {
 				$('value', this).each( function(j) {

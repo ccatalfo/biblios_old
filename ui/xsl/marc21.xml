@@ -738,7 +738,7 @@
 
 
 </field>
-   <field mattype="MAP" tag="007">
+   <field mattype="Map" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Map">a</option>
       </value>
@@ -787,7 +787,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="ELECTRONIC" tag="007">
+   <field mattype="Electronic Resource" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Electronic resource">c</option>
       </value>
@@ -880,7 +880,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="GLOBE" tag="007">
+   <field mattype="Globe" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Globe">d</option>
       </value>
@@ -921,7 +921,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="TACTILE" tag="007">
+   <field mattype="Tactile Material" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Tactile material">f</option>
       </value>
@@ -987,7 +987,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="PROJECTED" tag="007">
+   <field mattype="Projected Graphic" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden"><option>g</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Filmstrip roll">o</option>
@@ -1057,7 +1057,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="MICROFORM" tag="007">
+   <field mattype="Microform" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Microform">h</option>
       </value>
@@ -1128,7 +1128,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="NONPROJECTED" tag="007">
+   <field mattype="Nonprojected Graphic" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden"><option>k</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Collage">c</option>
@@ -1188,7 +1188,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="MOTION" tag="007">
+   <field mattype="Motion Picture" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden"><option>m</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Film cartridge">c</option>
@@ -1320,7 +1320,7 @@
       </value>
       <value name="22" position="17" length="6" inputtype="menubox"></value>
    </field>
-   <field mattype="KIT" tag="007">
+   <field mattype="Kit" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Kit">o</option>
       </value>
@@ -1329,7 +1329,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="NOTATED" tag="007">
+   <field mattype="Notated Music" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Notated music">q</option>
       </value>
@@ -1338,7 +1338,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="REMOTE" tag="007">
+   <field mattype="Remote-Sensing Image" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden"><option>r</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Unspecified">u</option>
@@ -1449,7 +1449,7 @@
          <option description="No attempt to code">||</option>
       </value>
    </field>
-   <field mattype="SOUND" tag="007">
+   <field mattype="Sound Recording" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden"><option>s</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Sound disc">d</option>
@@ -1583,7 +1583,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="TEXT" tag="007">
+   <field mattype="Text" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Text">t</option>
       </value>
@@ -1596,7 +1596,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="VIDEORECORDING" tag="007">
+   <field mattype="Videorecording" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Videorecording">v</option>
       </value>
@@ -1665,7 +1665,7 @@
          <option description="No attempt to code">|</option>
       </value>
    </field>
-   <field mattype="UNSPECIFIED" tag="007">
+   <field mattype="Unspecified" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Unspecified">z</option>
       </value>
@@ -1679,7 +1679,7 @@
 </fields>
 
 <mattypes>
-	<mattype value="All">
+	<mattype value="All Materials">
 		<!-- 00..17 -->
 		<position>DateEntered</position>
 		<position>DtSt</position>
@@ -1753,7 +1753,7 @@
 		<position>MRec</position>
 		<position>Srce</position>
 	</mattype>
-	<mattype value="ComputerFile">
+	<mattype value="Computer Files">
 		<position>DateEntered</position>
 		<position>DtSt</position>
 		<position>Date1</position>
@@ -1770,7 +1770,7 @@
 		<position>MRec</position>
 		<position>Srce</position>
 	</mattype>
-	<mattype value="Visual">
+	<mattype value="Visual Materials">
 		<position>DateEntered</position>
 		<position>DtSt</position>
 		<position>Date1</position>
@@ -1789,7 +1789,7 @@
 		<position>MRec</position>
 		<position>Srce</position>
 	</mattype>
-	<mattype value="Mixed">
+	<mattype value="Mixed Materials">
 		<position>DateEntered</position>
 		<position>DtSt</position>
 		<position>Date1</position>
