@@ -53,6 +53,16 @@ function getLeaderFromEditor(ff_ed) {
 
 */
 
+function check008AllMaterials(position) {
+	var allmaterialscodes = new Array('00', '01', '02','03', '04', '05', '06','07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '35', '36', '37', '38', '39', '40');
+	if( allmaterialscodes.indexOf(position) != -1 ) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 function get008MaterialName(rectype) {
 	var mattype = '';
 	if( rectype == 'a' || rectype == 't' ) {
@@ -392,7 +402,12 @@ function showTagHelp(elem) {
 		}
 		else if ( $(elem).hasClass('008') ) {
 			tag = '008';
-			mattype = get008MaterialName(rectype);
+			if( check008AllMaterials(position) == true ) {
+				mattype = 'All Materials';
+			}
+			else {
+				mattype = get008MaterialName(rectype);
+			}
 		}
 		else if( $(elem).hasClass('007') ) {
 			tag = '007';
@@ -405,12 +420,13 @@ function showTagHelp(elem) {
 		// get the help text for this fixed field
 		var tagxml = '';
 		if( tag == '000' ) {
-			tagxml = $('tag[@code='+tag+'] position[@position='+position+']', marc21controlfields);
+			tagxml = $('tag[@code='+tag+'] position[@position^='+position+']', marc21controlfields);
 		}
 		else {
 			$('tag[@code='+tag+']', marc21controlfields).each( function(i) {
 				if( $(this).attr('materialtype') == mattype ) {
-					tagxml = $(this).children('position[@position='+position+']', marc21controlfields);
+					tagxml = $(this).children('position[@position^='+position+']', marc21controlfields);
+					return false;
 				}
 			});
 		}
