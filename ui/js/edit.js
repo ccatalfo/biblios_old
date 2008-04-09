@@ -370,6 +370,7 @@ function showTagHelp(elem) {
 	if( Ext.getCmp('helpPanel').collapsed == true ) {
 		return;
 	}
+	Ext.get('helpIframe').mask('Loading...');
 	Ext.get('helpIframe').update('');
 	// if we have a fixed field editor element
 	if( $(elem).parents('.ffeditor').length > 0 ) {
@@ -460,6 +461,7 @@ function showTagHelp(elem) {
 		}
 	}
 	UI.editor.lastElemHelpShown = elem;
+	Ext.get('helpIframe').unmask();
 }
 
 function onBlur(elem) {
@@ -472,10 +474,12 @@ function onBlur(elem) {
 }
 
 function onFixedFieldEditorBlur(elem) {
+/*
 	var editorid = $(elem).parents('.marceditor').get(0).id;
 	transferFF_EdToTags(UI.editor[editorid].ffed, UI.editor[editorid].vared, editorid);
 	UI.editor[editorid].record.update($('#000').find('.controlfield'));
 	UI.editor[editorid].record.update($('#008').find('.controlfield'));
+*/
 }
 
 function setupSpecialEntries(loc, editor) {
