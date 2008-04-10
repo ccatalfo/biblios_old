@@ -310,12 +310,8 @@ function doDownloadRecords(format, editorid) {
 			biblios.app.download.records = getSelectedSaveGridRecords();
 			biblios.app.download.numToExport = biblios.app.download.records.length;
 			for( var i = 0; i < biblios.app.download.records.length; i++) {
-				var id = biblios.app.download.records[i].id;
-				var xml = DB.Records.select('Records.rowid=?', [id]).getOne().xml;
-				if( xml ) {
-					biblios.app.download.recordsString += xml;
-					biblios.app.download.recordsString += recsep;
-				}
+				biblios.app.download.recordsString += biblios.app.download.records[i].xmldoc;
+				biblios.app.download.recordsString += recsep;
 			}
 			var encoding = 'utf-8';
 			handleDownload(format, encoding, biblios.app.download.recordsString);
@@ -578,11 +574,11 @@ function doDeleteFromSaveFile(sel) {
 */
 function showStatusMsg(msg) {
 	Ext.get('status-msg').update(msg);
-	Ext.get('status-msg').slideIn();
+	//Ext.get('status-msg').slideIn();
 }
 
 function clearStatusMsg() {
-	Ext.get('status-msg').slideOut();
+	//Ext.get('status-msg').slideOut();
 	Ext.get('status-msg').update('');
 }
 
