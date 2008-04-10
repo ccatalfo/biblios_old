@@ -42,6 +42,12 @@ biblios.app = function() {
 	}
 
 	displaySaveFile : function displaySaveFile(id) {
+		if( (biblios.app.selectedRecords.savefileid == id) && (biblios.app.selectedRecords.loading == true) ) {
+			Ext.getCmp('savegrid').el.mask('Loading remote records...');
+		}
+		else {
+			Ext.getCmp('savegrid').el.unmask();
+		}
 		Ext.getCmp('savegrid').store.load({db: db, selectSql: savefileSelectSql + ' where Savefiles_id = '+id});
 		biblios.app.displaySaveView();
 		openState = 'savegrid';
@@ -88,7 +94,8 @@ biblios.app = function() {
 			selectedSource: '',
 			allSelected: false,
 			savefileid: '',
-			loading: false
+			loading: false,
+			numToGet: 0
 		},
 		db : {
 			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets',

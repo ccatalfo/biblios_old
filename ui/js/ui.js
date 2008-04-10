@@ -292,7 +292,7 @@ function makeSubfieldsDraggable() {
    <handleDownload>
 */
 function doDownloadRecords(format, editorid) {
-	biblios.app.download.records.length = 0;
+	biblios.app.download.records = new Array();
 	biblios.app.download.numToExport = 0;
 	biblios.app.download.recordsString = '';
 	var recsep = "<!-- end of record -->";
@@ -317,23 +317,25 @@ function doDownloadRecords(format, editorid) {
 			handleDownload(format, encoding, biblios.app.download.recordsString);
 		}
 		if( openState == 'searchgrid') {
-			biblios.app.download.records = getSelectedSearchGridRecords();
-			biblios.app.download.recordsString = '';
-			biblios.app.download.numToExport = biblios.app.download.records.length;
-			for( var i = 0; i < biblios.app.download.records.length; i++) {
-				var id = biblios.app.download.records[i].id
-				getPazRecord(id, 0, function(data, o) {
-					xml = xslTransform.serialize(data);
-					biblios.app.download.recordsString += xml;
-					biblios.app.download.recordsString += recsep;
-					biblios.app.download.numToExport--;
-					var encoding = 'utf-8';
-					if( biblios.app.download.numToExport == 0 ) {
-						handleDownload(format, encoding, biblios.app.download.recordsString);
-					}
-				}, 
-				{});
-			}
+			getSelectedSearchGridRecords(function() {
+				var records = biblios.app.selectedRecords.records;
+				biblios.app.download.recordsString = '';
+				biblios.app.download.numToExport = biblios.app.selectedRecords.records.length;
+				for( var i = 0; i < records.length; i++) {
+					var id = records[i].id
+					getPazRecord(id, 0, function(data, o) {
+						xml = xslTransform.serialize(data);
+						biblios.app.download.recordsString += xml;
+						biblios.app.download.recordsString += recsep;
+						biblios.app.download.numToExport--;
+						var encoding = 'utf-8';
+						if( biblios.app.download.numToExport == 0 ) {
+							handleDownload(format, encoding, biblios.app.download.recordsString);
+						}
+					}, 
+					{});
+				}
+			});
 		}
     } // if we have a grid open 
 }
@@ -629,7 +631,6 @@ function selectAllInObject() {
 	if(openState == 'searchgrid') {
 		biblios.app.selectedRecords.allSelected = true;
 		biblios.app.selectedRecords.selectedSource = 'searchgrid';
-		getSelectedSearchGridRecords();
 		$('.searchgridtotalcount').html( Ext.getCmp('searchgrid').store.getTotalCount() );
 		$('#searchgridallSelectedStatus').show();
 	}
@@ -655,8 +656,6 @@ function selectAll() {
 		Ext.getCmp('searchgridExportBtn').enable();
 		Ext.getCmp('searchgridSendBtn').enable();
 		Ext.getCmp('searchgridSaveBtn').enable();
-		// retrieve selected records from pazpar2
-		getSelectedSearchGridRecords();
 	}
 	else if( openState == 'savegrid') {
 		$('#savegrid :checkbox').attr('checked', 'checked');
@@ -695,9 +694,6 @@ function getMacroMenuItems(recordSource) {
 	if( recordSource == 'searchgrid') {
 		var handler = function(btn) {
 			var records = getSelectedSearchGridRecords();
-			for( var i = 0; i < records.length; i++) {
-
-			}
 		}
 	}
 	else if( recordSource == 'savegrid' ) {

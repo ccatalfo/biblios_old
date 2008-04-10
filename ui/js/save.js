@@ -87,15 +87,20 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 				}
 			}
 			else {
-				var records = biblios.app.selectedRecords.records;
-				for( var i = 0; i < records.length; i++) {
-					var id = records[i].id;
-					var data = records[i].data;
-					var title = records[i].title;
-					var offset =records[i].offset;
-					showStatusMsg('Saving ' + title);
-					addRecordFromSearch(id, offset, editorid, data, savefileid);
-				}
+				biblios.app.selectedRecords.savefileid = savefileid;
+				biblios.app.selectedRecords.loading = true;
+				showStatusMsg('Saving selected records');
+				var records = getSelectedSearchGridRecords( function() {
+					var records = biblios.app.selectedRecords.records;
+					biblios.app.selectedRecords.numToGet = records.length;
+					for( var i = 0; i < records.length; i++) {
+						var id = records[i].id;
+						var data = records[i].data;
+						var title = records[i].title;
+						var offset =records[i].offset;
+						addRecordFromSearch(id, offset, editorid, data, savefileid);
+					}
+				});
 			}
 		}
 		showStatusMsg("Record(s) saved to "+savefilename);
@@ -165,6 +170,17 @@ function addRecordFromSearch(id, offset, editorid, data, savefileid, newxml) {
 				template: null,
 				marcformat: null
 			}).save();
+			if (biblios.app.selectedRecords.loading = true) {
+				showStatusMsg('Saved ' + params.recData.title);
+				biblios.app.selectedRecords.numToGet--;
+				if( biblios.app.selectedRecords.numToGet == 0 ) {
+					showStatusMsg('Records saved');
+					biblios.app.selectedRecords.loading = false;
+					biblios.app.selectedRecords.savefileid = '';
+					Ext.getCmp('savegrid').el.unmask();
+					setTimeout( function(){ clearStatusMsg() }, 2000);
+				}
+			}
 		} catch(ex) {
 			Ext.MessageBox.alert('Database Error', ex.message);
 		}
@@ -226,11 +242,13 @@ function updateSendMenu() {
 	}
 }
 
-function getSelectedSearchGridRecords() {
+function getSelectedSearchGridRecords(callback) {
+	showStatusMsg('Retrieving remote records...');
+	biblios.app.selectedRecords.loading = true;
 	biblios.app.selectedRecords.records = new Array;
 	if( biblios.app.selectedRecords.allSelected == true ) {
 		var totalcount = Ext.getCmp('searchgrid').store.getTotalCount();
-		biblios.app.selectedRecords.loading = true;
+		biblios.app.selectedRecords.numToGet = totalcount;
 		Ext.getCmp('searchgrid').store.on('load', function(store, records, option) {
 			if( biblios.app.selectedRecords.loading == true ) {
 				for( var i = 0 ;i <records.length; i++) {
@@ -241,6 +259,7 @@ function getSelectedSearchGridRecords() {
 					var data = records[i].data;
 					biblios.app.selectedRecords.records.push( { id: id, title: title, data: data, loc: loc, offset: offset });
 				}
+				callback.call(this);
 			}
 			biblios.app.selectedRecords.retrieved = true;
 			biblios.app.selectedRecords.loading = false;
@@ -250,6 +269,7 @@ function getSelectedSearchGridRecords() {
 	}
 	else {
 		var checked = $(':checked.searchgridcheckbox');
+		biblios.app.selectedRecords.numToGet = checked.length;
 		for( var i = 0; i < checked.length; i++) {
 			var id = checked[i].id.substr(6);
 			var title = Ext.getCmp('searchgrid').store.getById(id).data.title;
@@ -267,6 +287,7 @@ function getSelectedSearchGridRecords() {
 			biblios.app.selectedRecords.records.push( { id: id, title: title, data: data, loc: loc, offset: offset });
 		}
 		biblios.app.selectedRecords.retrieved = true;
+		callback.call(this);
 	}
 }
 
