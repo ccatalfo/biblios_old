@@ -67,7 +67,38 @@ biblios.app = function() {
 			});
 		  } );
 		  z3950serversSave = $("saving//server", configDoc).each( function() {
-
+				var name = $(this).children('name').text();
+				var location = $(this).children('location').text();
+				var url = $(this).children('url').text();
+				var user = $(this).children('user').text();
+				var password = $(this).children('password').text();
+				var pluginlocation = $(this).children('pluginlocation').text();
+				var plugininit = $(this).children('plugininit').text();
+				var enabled = $(this).children('enabled').text();
+				// check db for sendtarget based on name field
+				if( t = DB.SendTargets.select('name=?', [name]).getOne() ) {
+					t.name = name;
+					t.location = location;
+					t.url = url;
+					t.user = user;
+					t.password = password;
+					t.pluginlocation = pluginlocation;
+					t.plugininit = plugininit;
+					t.enabled = enabled;
+					t.save();
+				}
+				else {
+					t = new DB.SendTargets({
+						name: name,
+						location: location,
+						url: url,
+						user: user,
+						password: password,
+						pluginlocation: pluginlocation,
+						plugininit: plugininit,
+						enabled: enabled
+					}).save();
+				}
 			setILSTargets();
 		  });
 		  cclfile = $("//cclfile", configDoc).text();
