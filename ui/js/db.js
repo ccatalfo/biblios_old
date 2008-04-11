@@ -151,6 +151,29 @@ GearsORMShift.rules = [
             // no drop column cmd
             return true;
         }
+    },
+    {
+        version: 5,
+        comment: 'Add allowModify field to Search and Send Targets tables',
+        up: function() {
+            try {
+                var rs = db.execute('ALTER TABLE SearchTargets ADD COLUMN allowModify integer');
+            }
+            catch(ex) {
+                console.info("Unable to add allowModify fields to search table: " + ex);
+            }
+            try {
+                var rs = db.execute('ALTER TABLE SendTargets ADD COLUMN allowModify integer');
+            }
+            catch(ex) {
+                console.info("Unable to add allowModify fields to send table" + ex);
+            }
+            return true;
+        },
+        down: function() {
+            // no drop column cmd
+            return true;
+        }
     }
 ];
 
@@ -227,7 +250,8 @@ function init_gears() {
 					position: new GearsORM.Fields.String(),
 					type: new GearsORM.Fields.String(),
 					pluginlocation: new GearsORM.Fields.String(),
-                    allowDelete: new GearsORM.Fields.Integer({defaultValue:1})
+                    allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
+                    allowModify: new GearsORM.Fields.Integer({defaultValue:1})
 				}
 			});
 			DB.Prefs = new GearsORM.Model({
@@ -292,7 +316,8 @@ function init_gears() {
 					pluginlocation: new GearsORM.Fields.String(),
 					plugininit: new GearsORM.Fields.String(),
 					enabled: new GearsORM.Fields.Integer({defaultValue: 0}),
-                    allowDelete: new GearsORM.Fields.Integer({defaultValue:1})
+                    allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
+                    allowModify: new GearsORM.Fields.Integer({defaultValue:1})
 				}
 			});
 			DB.Macros = new GearsORM.Model({

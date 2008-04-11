@@ -32,6 +32,8 @@ biblios.app = function() {
 			var name = $(this).children('name').text();
 			var enabled = $(this).children('enabled').text();
 			var description= $(this).children('description').text();
+			var allowDelete= $(this).children('allowDelete').text();
+			var allowModify= $(this).children('allowModify').text();
 			// check db if already exists based on name field
 			if( t = DB.SearchTargets.select('name=?', [name]).getOne() ) {
 				t.hostname = hostname;
@@ -43,6 +45,8 @@ biblios.app = function() {
 				t.enabled = enabled;
 				t.description = description;
 				t.syntax = 'marcxml';
+                t.allowDelete = allowDelete;
+                t.allowModify = allowModify;
 				t.save();
 			}
 			else {
@@ -55,6 +59,8 @@ biblios.app = function() {
 					name: name,
 					enabled: enabled,
 					description: description,
+                    allowDelete: allowDelete,
+                    allowModify: allowModify,
 					syntax: 'marcxml'
 				}).save();
 			}
@@ -75,6 +81,8 @@ biblios.app = function() {
 				var pluginlocation = $(this).children('pluginlocation').text();
 				var plugininit = $(this).children('plugininit').text();
 				var enabled = $(this).children('enabled').text();
+                var allowDelete= $(this).children('allowDelete').text();
+                var allowModify= $(this).children('allowModify').text();
 				// check db for sendtarget based on name field
 				if( t = DB.SendTargets.select('name=?', [name]).getOne() ) {
 					t.name = name;
@@ -85,6 +93,8 @@ biblios.app = function() {
 					t.pluginlocation = pluginlocation;
 					t.plugininit = plugininit;
 					t.enabled = enabled;
+                    t.allowDelete = allowDelete;
+                    t.allowModify = allowModify;
 					t.save();
 				}
 				else {
@@ -96,7 +106,9 @@ biblios.app = function() {
 						password: password,
 						pluginlocation: pluginlocation,
 						plugininit: plugininit,
-						enabled: enabled
+						enabled: enabled,
+                        allowDelete: allowDelete,
+                        allowModify: allowModify
 					}).save();
 				}
 			setILSTargets();
@@ -1696,6 +1708,11 @@ biblios.app = function() {
 																		update: function(store, record, operation) {
 																			if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT) {
 																				record.data.enabled = record.data.enabled ? 1 : 0;
+                                                                                t = DB.SearchTargets.select('SearchTargets.rowid=?', [record.data.rowid]).getOne();
+                                                                                if( t.allowModify == 0 ) {
+                                                                                   Ext.MessageBox.alert('Error', "This search target is defined in the Biblios configuration file.  Please contact your system administrator to change it's settings"); 
+                                                                                    return false;
+                                                                                }
 																				try {
 																					var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where rowid = ?', [record.data.name, record.data.hostname, record.data.port, record.data.dbname, record.data.description, record.data.userid, record.data.password, record.data.enabled, record.data.rowid]);
 																					rs.close();
@@ -1717,6 +1734,11 @@ biblios.app = function() {
 																		if(field == 'enabled') {
 																			value = value ? 1 : 0;
 																		}
+                                                                        t = DB.SearchTargets.select('SearchTargets.rowid=?', [id]).getOne();
+                                                                        if( t.allowModify == 0 ) {
+                                                                           Ext.MessageBox.alert('Error', "This search target is defined in the Biblios configuration file.  Please contact your system administrator to change it's settings"); 
+                                                                            return false;
+                                                                        }
 																		var rs;
 																		try {
 																			rs = db.execute('update SearchTargets set '+field+' = ? where SearchTargets.rowid = ?', [value, id]);
@@ -1879,6 +1901,11 @@ biblios.app = function() {
 																		else if( record.data.enabled == false) {
 																			record.data.enabled = 0;
 																		}
+                                                                        t = DB.SendTargets.select('SendTargets.rowid=?', [record.data.rowid]).getOne();
+                                                                        if( t.allowModify == 0 ) {
+                                                                            Ext.MessageBox.alert('Error', "This is a send target is defined in the biblios configuration file.  Please contact your system administrator to change it's settings");
+                                                                            return false;
+                                                                        }
 																		if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
 																			try {
 																				var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, pluginlocation = ?, plugininit= ?, enabled = ? where rowid = ?', [record.data.name, record.data.location, record.data.user, record.data.password, record.data.pluginlocation, record.data.plugininit, record.data.enabled, record.data.rowid]);
@@ -1894,6 +1921,11 @@ biblios.app = function() {
 																listeners: {
 																	afteredit: function(e) {
 																		var id = e.record.data.rowid;
+                                                                        var t = DB.SendTargets.select('SendTargets.rowid=?', [id]).getOne();
+                                                                        if( t.allowModify == 0 ) {
+                                                                            Ext.MessageBox.alert('Error', "This is a send target is defined in the biblios configuration file.  Please contact your system administrator to change it's settings");
+                                                                            return false;
+                                                                        }
 																		var field = e.field;
 																		var value = e.value;
 																		if( e.field == 'enabled' ) {
