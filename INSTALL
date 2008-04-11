@@ -56,6 +56,10 @@ OR
    
 </IfModule>
 
+6. Edit the conf/biblios-dist.conf file to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios-dist.conf file for the syntax.  
+
+7. Rename the biblios-dist.conf file to biblios.conf.
+
 8. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/.
 
 9. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
