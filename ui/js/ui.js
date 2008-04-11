@@ -693,7 +693,7 @@ function getMacroMenuItems(recordSource) {
 	var handler = function(btn) {};
 	if( recordSource == 'searchgrid') {
 		var handler = function(btn) {
-			var records = getSelectedSearchGridRecords();
+            // not implemented
 		}
 	}
 	else if( recordSource == 'savegrid' ) {
@@ -710,6 +710,11 @@ function getMacroMenuItems(recordSource) {
 				try {
 					eval( macro.code );
 					dbrecord.xml = record.XMLString();
+                    dbrecord.title = record.field('245').subfield('a').getValue();
+                    dbrecord.author = record.field('245').subfield('c').getValue();
+                    dbrecord.publisher = record.field('260').subfield('b').getValue();
+                    dbrecord.date = record.field('260').subfield('c').getValue();
+                    dbrecord.date_modified = new Date().toString();
 					dbrecord.save();
 				}
 				catch(ex) {
@@ -717,6 +722,7 @@ function getMacroMenuItems(recordSource) {
 				}
 				clearStatusMsg();
 			}
+            Ext.getCmp('savegrid').store.reload();
 		}
 	}
 	else {
