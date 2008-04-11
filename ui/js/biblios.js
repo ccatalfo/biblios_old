@@ -1819,7 +1819,13 @@ biblios.app = function() {
 																			var records = Ext.getCmp('searchtargetsgrid').getSelectionModel().getSelections();
 																			for( var i = 0; i < records.length; i++) {
 																				try {
-																					DB.SearchTargets.select('SearchTargets.rowid=?', [records[i].data.rowid]).getOne().remove();
+																					var t = DB.SearchTargets.select('SearchTargets.rowid=?', [records[i].data.rowid]).getOne();
+                                                                                    if( t.allowDelete == 1 ) {
+                                                                                        t.remove();
+                                                                                    }
+                                                                                    else {
+                                                                                       Ext.MessageBox.alert('Error', "This search target is defined in the Biblios configuration file.  Please contact your system administrator to change it's settings"); 
+                                                                                    }
 																				}
 																				catch(ex) {
 																					Ext.MessageBox.alert('Error', ex.message);
@@ -1996,9 +2002,15 @@ biblios.app = function() {
 																			var records = Ext.ComponentMgr.get('sendtargetsgrid').getSelections();
 																			for( var i = 0; i < records.length; i++) {
 																				try {
-																					DB.SendTargets.select('SendTargets.rowid=?', [records[i].data.rowid]).getOne().remove();
+																					var t = DB.SendTargets.select('SendTargets.rowid=?', [records[i].data.rowid]).getOne();
+                                                                                    if( t.allowDelete == 1 ) {
+                                                                                        t.remove();
+                                                                                        delete Prefs.remoteILS[ records[i].data.location ];
+                                                                                    }
+                                                                                    else {
+                                                                                        Ext.MessageBox.alert('Error', "This is a send target is defined in the biblios configuration file.  Please contact your system administrator to change it's settings");
 																					// remove from Prefs hash
-																					delete Prefs.remoteILS[ records[i].data.location ];
+                                                                                    }
 																				}
 																				catch(ex) {
 																					Ext.MessageBox.alert('Error', ex.message);

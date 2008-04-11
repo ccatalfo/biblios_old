@@ -128,7 +128,30 @@ GearsORMShift.rules = [
 			DB.Macros.dropTable();
 			return true;
 		}
-	}
+	},
+    {
+        version: 4,
+        comment: 'Add allowDelete field to Search and Send Targets tables',
+        up: function() {
+            try {
+                var rs = db.execute('ALTER TABLE SearchTargets ADD COLUMN allowDelete integer');
+            }
+            catch(ex) {
+                console.info("Unable to add allowDelete fields to search table: " + ex);
+            }
+            try {
+                var rs = db.execute('ALTER TABLE SendTargets ADD COLUMN allowDelete integer');
+            }
+            catch(ex) {
+                console.info("Unable to add allowDelete fields to send table" + ex);
+            }
+            return true;
+        },
+        down: function() {
+            // no drop column cmd
+            return true;
+        }
+    }
 ];
 
 function createTestTargets() {
@@ -203,7 +226,8 @@ function init_gears() {
 					icon: new GearsORM.Fields.String(),
 					position: new GearsORM.Fields.String(),
 					type: new GearsORM.Fields.String(),
-					pluginlocation: new GearsORM.Fields.String()
+					pluginlocation: new GearsORM.Fields.String(),
+                    allowDelete: new GearsORM.Fields.Integer({defaultValue:1})
 				}
 			});
 			DB.Prefs = new GearsORM.Model({
@@ -267,7 +291,8 @@ function init_gears() {
 					password: new GearsORM.Fields.String(),
 					pluginlocation: new GearsORM.Fields.String(),
 					plugininit: new GearsORM.Fields.String(),
-					enabled: new GearsORM.Fields.Integer({defaultValue: 0})
+					enabled: new GearsORM.Fields.Integer({defaultValue: 0}),
+                    allowDelete: new GearsORM.Fields.Integer({defaultValue:1})
 				}
 			});
 			DB.Macros = new GearsORM.Model({
