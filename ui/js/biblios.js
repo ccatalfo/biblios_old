@@ -2105,11 +2105,19 @@ biblios.app = function() {
 			id: 'saveTreeEditor'
 		});
 		treeEditor.on('complete', function(editor, value, startValue) {
-					var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
-					var folder = DB.Savefiles.select('Savefiles.rowid=?', [n.attributes.id]).getOne();
-					folder.name = value;
-					folder.save();
+            var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
+            var folder = DB.Savefiles.select('Savefiles.rowid=?', [n.attributes.id]).getOne();
+            folder.name = value;
+            folder.save();
 		});
+
+        treeEditor.on('beforestartedit', function(editor, el, value) {
+            var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
+            if( n.attributes.allowRename == false || n.attributes.allowEdit == false || n.attributes.allowDelete == false) {
+                return false;
+            }
+                
+        });
 
 		treeEditor.render();
 		Ext.get('loadingtext').update('Finishing initializing');
