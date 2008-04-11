@@ -13,23 +13,6 @@ var templates = '';
 var pazpar2url = 'http://'+ location.hostname + hostPort + '/pazpar2/search.pz2';
 var kohaauthurl = 'http://'+ location.hostname+ hostPort + '/kohaauth/authorities';
 
-Ext.Ajax.request({
-    url: confPath,
-    method: 'GET',
-    callback: function( options, success, response ) {
-      configDoc = (new DOMParser()).parseFromString( response.responseText, 'text/xml');
-      marcFlavor = $("//marcflavor", configDoc).text();
-      searchScript = $("//searchscript", configDoc).text();
-      saveScript = $("//savescript", configDoc).text();
-      encoding = $("//encoding", configDoc).text();
-      //$("searching//server", configDoc).each( function() { z3950serversSearch += ' ' + $(this).text();  } );
-      z3950serversSave = $("saving//server", configDoc).text();
-      cclfile = $("//cclfile", configDoc).text();
-      marcdesc = $("//marcdesc", configDoc).text();
-      $("//plugins/plugin/file", configDoc).each( function() { plugins += ' ' + $(this).text(); } );
-      $("//templates/template/file", configDoc).each( function() { templates += ' ' + $(this).text(); } );
-    }	
-});
 
 // load xsl docs for transforming marcxml
 var marcxsl = xslTransform.loadFile(showMarcXslPath);

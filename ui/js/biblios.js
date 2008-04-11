@@ -14,16 +14,72 @@ biblios.app = function() {
     // private variables
 	Ext.get('loadingtext').update('Loading database');
 	init_gears();
+	Ext.Ajax.request({
+		url: confPath,
+		method: 'GET',
+		callback: function( options, success, response ) {
+		  configDoc = (new DOMParser()).parseFromString( response.responseText, 'text/xml');
+		  marcFlavor = $("//marcflavor", configDoc).text();
+		  searchScript = $("//searchscript", configDoc).text();
+		  saveScript = $("//savescript", configDoc).text();
+		  encoding = $("//encoding", configDoc).text();
+		  $("searching//server", configDoc).each( function() { 
+			var hostname = $(this).children('hostname').text();
+			var port = $(this).children('port').text();
+			var dbname = $(this).children('dbname').text();
+			var userid = $(this).children('userid').text();
+			var password = $(this).children('password').text();
+			var name = $(this).children('name').text();
+			var enabled = $(this).children('enabled').text();
+			var description= $(this).children('description').text();
+			// check db if already exists based on name field
+			if( t = DB.SearchTargets.select('name=?', [name]).getOne() ) {
+				t.hostname = hostname;
+				t.port = port;
+				t.dbname = dbname;
+				t.userid = userid;
+				t.password = password;
+				t.name = name;
+				t.enabled = enabled;
+				t.description = description;
+				t.syntax = 'marcxml';
+				t.save();
+			}
+			else {
+				var t = new DB.SearchTargets({
+					hostname: hostname,
+					port: port,
+					dbname: dbname,
+					userid: userid,
+					password: password,
+					name: name,
+					enabled: enabled,
+					description: description,
+					syntax: 'marcxml'
+				}).save();
+			}
+		var paz = initializePazPar2(pazpar2url, {
+			initCallback: function(data) {
+				paz.sessionID = this.sessionID;
+				// set pazpar2 search results grid url
+				setPazPar2Targets();
+			}
+			});
+		  } );
+		  z3950serversSave = $("saving//server", configDoc).each( function() {
+
+			setILSTargets();
+		  });
+		  cclfile = $("//cclfile", configDoc).text();
+		  marcdesc = $("//marcdesc", configDoc).text();
+		  $("//plugins/plugin/file", configDoc).each( function() { plugins += ' ' + $(this).text(); } );
+		  $("//templates/template/file", configDoc).each( function() { templates += ' ' + $(this).text(); } );
+		}	
+	});
+
 	var viewport; 
 	var viewState = '';
 	Ext.get('loadingtext').update('Setting up search session');
-	var paz = initializePazPar2(pazpar2url, {
-		initCallback: function(data) {
-			paz.sessionID = this.sessionID;
-			// set pazpar2 search results grid url
-			setPazPar2Targets();
-		}
-		});
 	// save file vars
 	var currSaveFile, currSaveFileName;
 	var savefiles = {}; // hash mapping save file id -> names
@@ -120,7 +176,6 @@ biblios.app = function() {
         init: function() {
 			Ext.QuickTips.init();
 			Ext.get('loadingtext').update('Setting up send targets');
-			setILSTargets();
             this.viewport = new Ext.Panel({
 				layout: 'border',
 				renderTo: 'biblios',

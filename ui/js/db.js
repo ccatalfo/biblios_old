@@ -162,21 +162,6 @@ function createTestTargets() {
 		position: 'primary',
 		type: 'zed'
 	}).save();
-	var Koha= new DB.SearchTargets({
-		hostname: 'arwen.metavore.com',
-		port: '9820',
-		dbname: 'biblios',
-		userid: '',
-		password: '',
-		name: "Koha",
-		enabled: 1,
-		rank: 1,
-		description: "Koha",
-		syntax: null,
-		icon: null,
-		position: 'primary',
-		type: 'zed'
-	}).save();
 }
 
 function removeTestTargets() {
