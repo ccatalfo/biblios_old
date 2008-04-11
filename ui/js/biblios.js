@@ -138,6 +138,7 @@ biblios.app = function() {
 		Ext.getCmp('resourcesPanel').expand();
 		openState = 'searchgrid';
 		displayHelpMsg(UI.messages.help.en.searchview);
+        Ext.getCmp('FoldersTreePanel').getSelectionModel().clearSelections();
 	}
 
 	displaySaveFile : function displaySaveFile(id) {
@@ -159,6 +160,8 @@ biblios.app = function() {
 		Ext.getCmp('helpPanel').collapse();
 		Ext.getCmp('resourcesPanel').collapse();
 		displayHelpMsg(UI.messages.help.en.recordview);
+        Ext.getCmp('FoldersTreePanel').getSelectionModel().clearSelections();
+        Ext.getCmp('TargetsTreePanel').getSelectionModel().clearSelections();
 	}
 
 	displaySaveView: function displaySaveView() {
@@ -166,6 +169,7 @@ biblios.app = function() {
 		Ext.getCmp('resourcesPanel').expand();
 		openState = 'savegrid';
 		displayHelpMsg(UI.messages.help.en.saveview);
+        Ext.getCmp('TargetsTreePanel').getSelectionModel().clearSelections();
 	}
 	
 	showStatusMsg : function showStatusMsg(msg) {
