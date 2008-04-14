@@ -18,7 +18,6 @@ biblios.app = function() {
 
 	var viewport; 
 	var viewState = '';
-	Ext.get('loadingtext').update('Setting up search session');
 	// save file vars
 	var currSaveFile, currSaveFileName;
 	var savefiles = {}; // hash mapping save file id -> names
@@ -76,11 +75,9 @@ Ext.Ajax.request({
 					syntax: 'marcxml'
 				}).save();
 			}
-		biblios.app.paz = initializePazPar2(pazpar2url, {
+		initializePazPar2(pazpar2url, {
 			initCallback: function(data) {
-				paz.sessionID = this.sessionID;
-				// set pazpar2 search results grid url
-				setPazPar2Targets();
+				biblios.app.paz.sessionID = this.sessionID;
 			}
 			});
 		  } );
@@ -123,7 +120,6 @@ Ext.Ajax.request({
                         allowModify: allowModify
 					}).save();
 				}
-			setILSTargets();
 		  });
 		  $("//plugins/plugin/file", configDoc).each( function() { plugins += ' ' + $(this).text(); } );
 		  $("//templates/template/file", configDoc).each( function() { templates += ' ' + $(this).text(); } );
@@ -220,7 +216,6 @@ Ext.Ajax.request({
 
         init: function() {
 			Ext.QuickTips.init();
-			Ext.get('loadingtext').update('Setting up send targets');
             this.viewport = new Ext.Panel({
 				layout: 'border',
 				renderTo: 'biblios',
@@ -302,7 +297,7 @@ Ext.Ajax.request({
 															baseParams: {
 																disableCaching: false
 															},
-															proxy: new Ext.data.HttpProxy({url: pazpar2url+'?session='+paz.sessionID+'&command=show'}),
+															proxy: new Ext.data.HttpProxy({url: pazpar2url+'?session='+biblios.app.paz.sessionID+'&command=show'}),
 															reader: 
 																new Ext.ux.NestedXmlReader({
 																	totalRecords: 'merged',
@@ -1225,7 +1220,7 @@ Ext.Ajax.request({
 														leaf: false,
 														lines: false,
 														applyLoader: false,
-														loader: new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+paz.sessionID+'&command=termlist&name=author,subject,date'}),
+														loader: new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+biblios.app.paz.sessionID+'&command=termlist&name=author,subject,date'}),
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Facets'
 														}),
@@ -2164,6 +2159,10 @@ Ext.Ajax.request({
 		});
 
 		Ext.getCmp('tabpanel').activate(0);
+        Ext.get('loadingtext').update('Setting up send targets');
+        setILSTargets();
+        Ext.get('loadingtext').update('Setting up search session');
+        setPazPar2Targets();
         } // end of init method
     }; // end of public biblios.app space
 }(); // end of app

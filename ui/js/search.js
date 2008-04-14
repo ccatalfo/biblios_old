@@ -49,7 +49,7 @@ function doLocalFolderSearch() {
 
 function initializePazPar2(pazpar2url, options) {
 if(!options) { options = {}; }
-paz = new pz2({ 
+biblios.app.paz = new pz2({ 
 					"errorhandler": pazPar2Error,
 					"oninit": options.initCallback || function() {},
 					"onping": options.pingCallback || function(){},
@@ -93,7 +93,6 @@ paz = new pz2({
 				});
 	// HACK: set paz.termKeys manually or else pz2.js doesn't seem to accept date in termlist
 	paz.termKeys = 'subject,author,date,publication-name';
-	return paz;
 }
 
 function setPazPar2Targets() {
