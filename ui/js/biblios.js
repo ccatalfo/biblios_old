@@ -1550,11 +1550,6 @@ Ext.Ajax.request({
 										region: 'center',
 										items: [
 											{
-												title: 'Setup',
-												border: 'layout',
-												html: '<input type="submit" value="Create Test Search Targets" onclick="createTestTargets(); setPazPar2Targets();"><input type="submit" value="Remove Test Search Targets" onclick="removeTestTargets(); setPazPar2Targets();"><input type="submit" value="Enable test Koha Plugin" onclick="setupKohaPlugin();">'
-											}, // setup tab
-											{
 												title: 'Macros',
 												layout: 'border',
 												listeners: {
