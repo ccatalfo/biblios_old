@@ -35,6 +35,11 @@ koha.prototype = {
                     msg: 'No username or password!'
                 }
             }
+            if( url == '' || !url ) {
+                throw {
+                    msg: 'No url!'
+                }
+            }
 			if ( embeddedUrl + '/' == this.url ) {
 				this.embedded = true;
 			}
