@@ -27,7 +27,7 @@ biblios.app = function() {
     var paz = {};
 	
 	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
-Ext.Ajax.request({
+    Ext.Ajax.request({
 		url: confPath,
 		method: 'GET',
 		callback: function( options, success, response ) {
@@ -75,13 +75,6 @@ Ext.Ajax.request({
 					syntax: 'marcxml'
 				}).save();
 			}
-		initializePazPar2(pazpar2url, {
-			initCallback: function(data) {
-				biblios.app.paz.sessionID = this.sessionID;
-                Ext.get('loadingtext').update('Setting up search targets');
-                setPazPar2Targets();
-			}
-			});
 		  } );
 		  z3950serversSave = $("saving//server", configDoc).each( function() {
 				var name = $(this).children('name').text();
@@ -125,12 +118,29 @@ Ext.Ajax.request({
                         embedded: embedded || 0
 					}).save();
 				}
-                Ext.get('loadingtext').update('Setting up send targets');
-                setILSTargets();
 		  });
 		  $("//plugins/plugin/file", configDoc).each( function() { plugins += ' ' + $(this).text(); } );
 		  $("//templates/template/file", configDoc).each( function() { templates += ' ' + $(this).text(); } );
-		}	
+        if( Ext.get('loadingtext') ) {
+            Ext.get('loadingtext').update('Setting up search session');
+        }
+		initializePazPar2(pazpar2url, {
+			initCallback: function() {
+                if( this.initStatusOK == true ) {
+                    biblios.app.paz.sessionID = this.sessionID;
+                    Ext.get('loadingtext').update('Setting up search targets');
+                    setPazPar2Targets();
+                }
+                else {
+                    Ext.get('loadingtext').update('Error initializing search session');
+                }
+			}
+        });
+        if( Ext.get('loadingtext') ) {
+            Ext.get('loadingtext').update('Setting up send targets');
+        }
+        setILSTargets();
+		} // end config ajax callback	
 	});
 
     // private functions
