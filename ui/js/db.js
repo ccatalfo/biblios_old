@@ -174,6 +174,23 @@ GearsORMShift.rules = [
             // no drop column cmd
             return true;
         }
+    },
+    {
+        version: 6,
+        comment: 'Add embedded field to SendTargets table',
+        up: function() {
+            try {
+                var rs = db.execute('ALTER TABLE SendTargets ADD COLUMN embedded integer');
+            }
+            catch(ex) {
+                console.info('Unable to add embedded column to SendTargets table: ' + ex);
+            }
+            return true;
+        },
+        down: function() {
+            // no drop column cmd
+            return true;
+        }
     }
 ];
 
@@ -317,7 +334,8 @@ function init_gears() {
 					plugininit: new GearsORM.Fields.String(),
 					enabled: new GearsORM.Fields.Integer({defaultValue: 0}),
                     allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
-                    allowModify: new GearsORM.Fields.Integer({defaultValue:1})
+                    allowModify: new GearsORM.Fields.Integer({defaultValue:1}),
+                    embedded: new GearsORM.Fields.Integer({defaultValue:1})
 				}
 			});
 			DB.Macros = new GearsORM.Model({
