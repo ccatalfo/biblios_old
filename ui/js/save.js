@@ -90,7 +90,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 				biblios.app.selectedRecords.savefileid = savefileid;
 				biblios.app.selectedRecords.loading = true;
 				showStatusMsg('Saving selected records');
-				var records = getSelectedSearchGridRecords( function() {
+				getSelectedSearchGridRecords( function() {
 					var records = biblios.app.selectedRecords.records;
 					biblios.app.selectedRecords.numToGet = records.length;
 					for( var i = 0; i < records.length; i++) {
@@ -329,21 +329,23 @@ function getSendFileMenuItems(recordSource) {
 				biblios.app.send.numToSend--;
 				if( biblios.app.send.numToSend == 0) {
 					biblios.app.send.records.length = 0;
-					clearStatusMsg();
+					setTimeout( function() {clearStatusMsg();}, 2000)
 				}
 			};
-			biblios.app.send.records = getSelectedSearchGridRecords();
-			biblios.app.send.numToSend = biblios.app.send.records.length;
-			for(var i= 0; i < biblios.app.send.records.length; i++) {
-				var id= biblios.app.send.records[i].id;
-				var loc= biblios.app.send.records[i].loc;
-				var offset= biblios.app.send.records[i].offset;
-				var title= biblios.app.send.records[i].title;
-				showStatusMsg('Sending ' + title + ' to ' + btn.id);
-				getRemoteRecord(id, loc, offset, function(data) { 
-					Prefs.remoteILS[btn.id].instance.save(data);
-				});
-			}
+			getSelectedSearchGridRecords( function() { 
+                biblios.app.send.numToSend = biblios.app.selectedRecords.records.length;
+                var records = biblios.app.selectedRecords.records;
+                for(var i= 0; i < records.length; i++) {
+                    var id= records[i].id;
+                    var loc= records[i].loc;
+                    var offset= records[i].offset;
+                    var title= records[i].title;
+                    showStatusMsg('Sending ' + title + ' to ' + btn.id);
+                    getRemoteRecord(id, loc, offset, function(data) { 
+                        Prefs.remoteILS[btn.id].instance.save(data);
+                    });
+                }
+            });
 		}
 	}
 	else if (recordSource == 'savegrid') {
