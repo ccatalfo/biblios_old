@@ -20,6 +20,10 @@ open(OUT, ">$outfile") or die "can't open $outfile for writing $!";
 my $cssfixes = slurp($fixesfile);
 
 while(<IN>) {
+	if( $_ =~ /(<!-- extraheadincludes -->)/ ) {
+		print "Updating <head> for extra includes: $headincludes\n";
+		$_ =~ s/$1/$headincludes/;
+	}
 	if( $_ =~ /.*src="(.*)".*/ ) {
 		print 'Updating ' . $_ . 'to ' . $prefix.$1 . "\n";
 		my $newdir = $prefix . $1;
@@ -56,10 +60,6 @@ while(<IN>) {
 	if( $_ =~ /var biblioslogo/ ) {
 		print 'Updating ' . $_ . 'to ' . '/intranet-tmpl/prog/img/koha-logo-medium.gif' . "\n";
 		$_ = "var biblioslogo = '/intranet-tmpl/prog/img/koha-logo-medium.gif';\n";
-	}
-	if( $_ =~ /(<!-- extraheadincludes -->)/ ) {
-		print "Updating <head> for extra includes: $headincludes\n";
-		$_ =~ s/$1/$headincludes/;
 	}
 	if( $_ =~ /(<div id='branding-area'>)/ ) {
 		print "Updating <div id='branding-area'> to $headerhtml\n";
