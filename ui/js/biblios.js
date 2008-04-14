@@ -2064,24 +2064,24 @@ Ext.Ajax.request({
 																			var initcall = record.data.plugininit;
                                                                             try {
 																			var instance = eval( initcall );
+                                                                                try {
+                                                                                    instance.init( record.data.url, record.data.name, record.data.user, record.data.password);
+                                                                                    instance.initHandler = function(sessionStatus) {
+                                                                                        if( sessionStatus != 'ok' ) {
+                                                                                            Ext.MessageBox.alert('Connection error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
+                                                                                        }
+                                                                                        else {
+                                                                                            Ext.MessageBox.alert('Connection successful', 'Authentication to Koha server at ' + this.url + ' was successful.  Response: ' + sessionStatus + '.');
+
+                                                                                        }
+                                                                                    };
+                                                                                }
+                                                                                catch(ex) {
+                                                                                    Ext.MessageBox.alert('Error', ex);
+                                                                                }
                                                                             }
                                                                             catch(ex) {
                                                                                 Ext.MessageBox.alert('Error', ex.msg);
-                                                                            }
-                                                                            try {
-                                                                                instance.init( record.data.url, record.data.name, record.data.user, record.data.password);
-                                                                                instance.initHandler = function(sessionStatus) {
-                                                                                    if( sessionStatus != 'ok' ) {
-                                                                                        Ext.MessageBox.alert('Connection error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
-                                                                                    }
-                                                                                    else {
-                                                                                        Ext.MessageBox.alert('Connection successful', 'Authentication to Koha server at ' + this.url + ' was successful.  Response: ' + sessionStatus + '.');
-
-                                                                                    }
-                                                                                };
-                                                                            }
-                                                                            catch(ex) {
-                                                                                Ext.MessageBox.alert('Error', ex);
                                                                             }
 																		}
 																	}
