@@ -123,40 +123,6 @@ UI.messages = {
 	}
 };
 
-function createDatabaseOptions() {
-	var dbform = new Ext.form.Form();
-	dbform.addButton('Reset Database', function(btn) {
-		GearsORMShift.migrateTo(0);
-		GearsORMShift.migrateTo( GearsORMShift.latestVersion() );
-		setPazPar2Targets(paz);
-		updateSearchTargetFolders();
-		Ext.MessageBox.alert('Preferences', 'Database reset');
-	});
-	dbform.addButton('Add Test Targets', function(btn) {
-		createTestTargets();
-		setPazPar2Targets(paz);
-		updateSearchTargetFolders();
-		Ext.MessageBox.alert('Preferences', 'Test targets added');
-	});
-	dbform.addButton('Remove Test Targets', function(btn) {
-		removeTestTargets();
-		setPazPar2Targets(paz);
-		removeTargetFolder(1);
-		removeTargetFolder(2);
-		removeTargetFolder(3);
-		removeTargetFolder(4);
-		removeTargetFolder(5);
-		Ext.MessageBox.alert('Preferences', 'Test targets removed');
-	});
-	dbform.addButton('Add Test Koha Plugin', function(btn) {
-		setupKohaPlugin();
-		setILSTargets();
-		updateSendMenu();
-		Ext.MessageBox.alert('Preferences', 'Test Koha plugin loaded');
-	});
-	dbform.render('dbform');
-}
-
 /*
    Function: openRecord
 
@@ -619,7 +585,7 @@ function filterSearchResultsByServer() {
   });
 	// rerun search using updated targets
 	disableFacets();
-	paz.search( paz.currQuery );
+	biblios.app.paz.search( biblios.app.paz.currQuery );
 }
 
 function getLocalXml(id) {

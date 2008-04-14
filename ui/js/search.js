@@ -48,6 +48,7 @@ function doLocalFolderSearch() {
 }
 
 function initializePazPar2(pazpar2url, options) {
+Ext.get('loadingtext').update('Setting up search session');
 if(!options) { options = {}; }
 biblios.app.paz = new pz2({ 
 					"errorhandler": pazPar2Error,

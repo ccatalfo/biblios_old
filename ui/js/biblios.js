@@ -78,6 +78,7 @@ Ext.Ajax.request({
 		initializePazPar2(pazpar2url, {
 			initCallback: function(data) {
 				biblios.app.paz.sessionID = this.sessionID;
+                Ext.get('loadingtext').update('Setting up search targets');
                 setPazPar2Targets();
 			}
 			});
@@ -103,8 +104,8 @@ Ext.Ajax.request({
 					t.pluginlocation = pluginlocation;
 					t.plugininit = plugininit;
 					t.enabled = enabled;
-                    t.allowDelete = allowDelete;
-                    t.allowModify = allowModify;
+                    t.allowDelete = allowDelete || 1;
+                    t.allowModify = allowModify || 1;
 					t.save();
 				}
 				else {
@@ -117,10 +118,12 @@ Ext.Ajax.request({
 						pluginlocation: pluginlocation,
 						plugininit: plugininit,
 						enabled: enabled,
-                        allowDelete: allowDelete,
-                        allowModify: allowModify
+                        allowDelete: allowDelete || 1,
+                        allowModify: allowModify || 1
 					}).save();
 				}
+                Ext.get('loadingtext').update('Setting up send targets');
+                setILSTargets();
 		  });
 		  $("//plugins/plugin/file", configDoc).each( function() { plugins += ' ' + $(this).text(); } );
 		  $("//templates/template/file", configDoc).each( function() { templates += ' ' + $(this).text(); } );
@@ -2155,10 +2158,6 @@ Ext.Ajax.request({
 		});
 
 		Ext.getCmp('tabpanel').activate(0);
-        Ext.get('loadingtext').update('Setting up send targets');
-        setILSTargets();
-        Ext.get('loadingtext').update('Setting up search session');
-        setPazPar2Targets();
         } // end of init method
     }; // end of public biblios.app space
 }(); // end of app
