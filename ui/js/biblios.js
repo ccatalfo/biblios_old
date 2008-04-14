@@ -94,6 +94,7 @@ Ext.Ajax.request({
 				var enabled = $(this).children('enabled').text();
                 var allowDelete= $(this).children('allowDelete').text();
                 var allowModify= $(this).children('allowModify').text();
+                var embedded = $(this).children('embedded').text();
 				// check db for sendtarget based on name field
 				if( t = DB.SendTargets.select('name=?', [name]).getOne() ) {
 					t.name = name;
@@ -106,6 +107,7 @@ Ext.Ajax.request({
 					t.enabled = enabled;
                     t.allowDelete = allowDelete || 1;
                     t.allowModify = allowModify || 1;
+                    t.embedded = embedded || 0;
 					t.save();
 				}
 				else {
@@ -119,7 +121,8 @@ Ext.Ajax.request({
 						plugininit: plugininit,
 						enabled: enabled,
                         allowDelete: allowDelete || 1,
-                        allowModify: allowModify || 1
+                        allowModify: allowModify || 1,
+                        embedded: embedded || 0
 					}).save();
 				}
                 Ext.get('loadingtext').update('Setting up send targets');

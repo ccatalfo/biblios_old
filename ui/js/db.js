@@ -335,7 +335,7 @@ function init_gears() {
 					enabled: new GearsORM.Fields.Integer({defaultValue: 0}),
                     allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
                     allowModify: new GearsORM.Fields.Integer({defaultValue:1}),
-                    embedded: new GearsORM.Fields.Integer({defaultValue:1})
+                    embedded: new GearsORM.Fields.Integer({defaultValue:0})
 				}
 			});
 			DB.Macros = new GearsORM.Model({
