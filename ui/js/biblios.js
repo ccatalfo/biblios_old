@@ -78,6 +78,7 @@ Ext.Ajax.request({
 		initializePazPar2(pazpar2url, {
 			initCallback: function(data) {
 				biblios.app.paz.sessionID = this.sessionID;
+                setPazPar2Targets();
 			}
 			});
 		  } );

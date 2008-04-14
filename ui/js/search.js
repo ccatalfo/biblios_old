@@ -92,7 +92,7 @@ biblios.app.paz = new pz2({
 					"clear": 1
 				});
 	// HACK: set paz.termKeys manually or else pz2.js doesn't seem to accept date in termlist
-	paz.termKeys = 'subject,author,date,publication-name';
+	biblios.app.paz.termKeys = 'subject,author,date,publication-name';
 }
 
 function setPazPar2Targets() {
@@ -100,11 +100,11 @@ function setPazPar2Targets() {
 	$.each( targets, function(i, n){
 		if( targets[i].enabled == 1 ) {
 			var db = n.hostname+":"+n.port+"/"+n.dbname;
-			$.get(  paz.pz2String +
+			$.get(  biblios.app.paz.pz2String +
 					'?' +
 					'command=settings'+
 					'&' +
-					'session='+paz.sessionID +
+					'session='+biblios.app.paz.sessionID +
 					'&' +
 					'pz:name['+db+']='+ n.name +
 					'&' +
@@ -135,11 +135,11 @@ function setPazPar2Targets() {
 		}
 		else if( targets[i].enabled == 0) {
 			var db = n.hostname+":"+n.port+"/"+n.dbname;
-			$.get(  paz.pz2String +
+			$.get(  biblios.app.paz.pz2String +
 					'?' +
 					'command=settings'+
 					'&' +
-					'session='+paz.sessionID +
+					'session='+biblios.app.paz.sessionID +
 					'&' +
 					'pz:name['+db+']='+ n.name +
 					'&' +
@@ -150,24 +150,24 @@ function setPazPar2Targets() {
 }
 
 function changePazPar2TargetStatus(o) {
-		$.get( paz.pz2String + "?command=settings&session="+paz.sessionID+"&pz:allow["+o.db+"]="+o.allow );
+		$.get( biblios.app.paz.pz2String + "?command=settings&session="+biblios.app.paz.sessionID+"&pz:allow["+o.db+"]="+o.allow );
 }
 
 function resetPazPar2(options) {
 	if(debug){ console.info('resetting pazpar2'); }
-	paz = initializePazPar2(pazpar2url, {
+	initializePazPar2(pazpar2url, {
 			initCallback: function() {
 				if(debug) { console.info('pazpar2 initCallback: resetting sessionID for searching and setting Z targets'); }
 				if(this.initStatusOK == true) {
 					// reset search grid's url for new session id
-					Ext.getCmp('searchgrid').store.proxy.conn.url = paz.pz2String + "?command=show&session=" + paz.sessionID;
+					Ext.getCmp('searchgrid').store.proxy.conn.url = biblios.app.paz.pz2String + "?command=show&session=" + biblios.app.paz.sessionID;
 					// reset facets tree loader for new session id
-					Ext.getCmp('facetsTreePanel').loader.dataUrl = pazpar2url + '?session='+paz.sessionID+'&command=termlist&name=author,subject,date';
-					setPazPar2Targets(paz);
+					Ext.getCmp('facetsTreePanel').loader.dataUrl = pazpar2url + '?session='+biblios.app.paz.sessionID+'&command=termlist&name=author,subject,date';
+					setPazPar2Targets(biblios.app.paz);
 					if(options) {
 						if(debug) { console.info("re-running search with pazpar2"); }
-						paz.search( options.currQuery );
-						paz.show(options.currStart, options.currNum);
+						biblios.app.paz.search( options.currQuery );
+						biblios.app.paz.show(options.currStart, options.currNum);
 						getPazRecord(options.currRecId, options.currRecOffset, 
 							function(data) {
 								var xml = xslTransform.serialize(data); 
@@ -188,17 +188,15 @@ function resetPazPar2(options) {
 }
 
 function pazPar2Error(data) {
-		if(debug){ console.info('pazpar2 error: ' + data.code);}
 		if( data.code == 'HTTP' ) {
 			Ext.MessageBox.alert('Initialization error', 'Pazpar2 search server is unavailble. Please check your configuration and try again');
 		}
 		// if session does not exist  or record is missing
 		if( data.code == '1' || data.code == '7') {
-			if(debug) { console.info("pazpar2 error: session does not exist or record is missing"); }
-			var currQuery = paz.currQuery;
-			var currStart = paz.currentStart;
-			var currNum = paz.currNum;
-			var currRecId = paz.currRecId;
+			var currQuery = biblios.app.paz.currQuery;
+			var currStart = biblios.app.paz.currentStart;
+			var currNum = biblios.app.paz.currNum;
+			var currRecId = biblios.app.paz.currRecId;
 			resetPazPar2({currQuery: currQuery, currStart: currStart, currNum: currNum, currRecId: currRecId});
 		}
 }
@@ -225,8 +223,8 @@ function doPazPar2Search() {
 	// save this query
 	biblios.app.currQuery = searchquery;
 	// reset search ds's proxy url to get rid of old sort params
-	Ext.getCmp('searchgrid').store.proxy.conn.url = paz.pz2String + '?command=show&session=' + paz.sessionID;
-    paz.search( searchquery );
+	Ext.getCmp('searchgrid').store.proxy.conn.url = biblios.app.paz.pz2String + '?command=show&session=' + biblios.app.paz.sessionID;
+    biblios.app.paz.search( searchquery );
     biblios.app.displaySearchView();
 }
 
@@ -272,7 +270,7 @@ function getPazRecord(recId, offset, callback, callbackParamObject) {
 		 	$.ajax({
 				url: pazpar2url,
 				data: {
-					session: paz.sessionID,
+					session: biblios.app.paz.sessionID,
 					command: 'record',
 					id: recId,
 					offset: offset
@@ -337,8 +335,8 @@ function limitSearch() {
 	for( name in UI.searchLimits ) {
 		query += ' and ' + term2searchterm(UI.searchLimits[name]) + '="' + name + '"';
 	}
-	paz.search(query);
-	paz.show();
+	biblios.app.paz.search(query);
+	biblios.app.paz.show();
 	biblios.app.displaySearchView();
 }
 
