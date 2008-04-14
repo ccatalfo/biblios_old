@@ -333,23 +333,3 @@ function init_gears() {
 			});
 			GearsORMShift.init( DB.Info_Schema, true );
 }
-
-
-
-
-// test prefs for koha integration
-function setupKohaPlugin() {
-	var koha = new DB.SendTargets({
-		name: 'Koha',
-		location: 'Koha',
-		url: 'http://eowyn.metavore.com'+hostPort+'/kohastaffdemo/',
-		user: 'kohaadmin',
-		password: 'katikoan',
-		pluginlocation: libPath + 'plugins/koha.js',
-		plugininit: 'new koha()',
-		enabled: 1
-	}).save();
-	setILSTargets();
-	updateSendMenu();
-}
-

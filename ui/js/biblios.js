@@ -2062,22 +2062,32 @@ biblios.app = function() {
 																				return false;
 																			}
 																			var record = sel[0];
-																			if( record.data.url == '' || record.data.pluginlocation == '' || record.data.plugininit == '' ) {
-																				Ext.MessageBox.alert('Error', 'Please enter at least url, plugin location and plugin init to test this connection');
+																			if( record.data.user == '' || record.data.password == '' || record.data.url == '' || record.data.pluginlocation == '' || record.data.plugininit == '' ) {
+																				Ext.MessageBox.alert('Error', 'Please enter user, password, url, plugin location and plugin init to test this connection.');
 																				return false;
 																			}
 																			var initcall = record.data.plugininit;
+                                                                            try {
 																			var instance = eval( initcall );
-																			instance.init( record.data.url, record.data.user, record.data.password);
-																			instance.initHandler = function(sessionStatus) {
-																				if( sessionStatus != 'ok' ) {
-																					Ext.MessageBox.alert('Connection error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
-																				}
-																				else {
-																					Ext.MessageBox.alert('Connection successful', 'Authentication to Koha server at ' + this.url + ' was successful.  Response: ' + sessionStatus + '.');
+                                                                            }
+                                                                            catch(ex) {
+                                                                                Ext.MessageBox.alert('Error', ex.msg);
+                                                                            }
+                                                                            try {
+                                                                                instance.init( record.data.url, record.data.name, record.data.user, record.data.password);
+                                                                                instance.initHandler = function(sessionStatus) {
+                                                                                    if( sessionStatus != 'ok' ) {
+                                                                                        Ext.MessageBox.alert('Connection error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
+                                                                                    }
+                                                                                    else {
+                                                                                        Ext.MessageBox.alert('Connection successful', 'Authentication to Koha server at ' + this.url + ' was successful.  Response: ' + sessionStatus + '.');
 
-																				}
-																			};
+                                                                                    }
+                                                                                };
+                                                                            }
+                                                                            catch(ex) {
+                                                                                Ext.MessageBox.alert('Error', ex);
+                                                                            }
 																		}
 																	}
 																] // send target grid toolbar

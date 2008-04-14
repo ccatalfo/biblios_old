@@ -30,6 +30,11 @@ koha.prototype = {
 			this.name = name;
 			this.user = user;
 			this.password = password;
+            if( user == '' || !user || password == '' || !password) {
+                throw {
+                    msg: 'No username or password!'
+                }
+            }
 			if ( embeddedUrl + '/' == this.url ) {
 				this.embedded = true;
 			}
