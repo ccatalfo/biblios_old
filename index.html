@@ -18,12 +18,11 @@
 <div id="loading">
 
 	<div class="loading-ind">
-		<img src="ui/images/biblios-logo.gif"><p id='loadingtext'>Loading...</p>
+		<img src="ui/images/biblios-logo.gif"><p id='loadingtext'>Loading javascript files...</p>
 	</div>
 
 </div>
 <!-- firebug lite -->
-
     <script type="text/javascript" src="lib/firebug/firebug.js"></script>
 <!-- cookie utility funcs -->
     <script type="text/javascript" src="lib/cookieHelpers.js"></script>
@@ -83,6 +82,7 @@ var marc21controlfieldsPath = libPath + 'tools/marc21controlfields.xml';
 var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
 </script>
 <!-- biblios -->
+    <script type="text/javascript">Ext.get('loadingtext').update('Loading Biblios files');</script>
     <script type="text/javascript" src="plugins/koha.js"></script>
     <script type="text/javascript" src="ui/js/db.js"></script>
     <script type="text/javascript" src="ui/js/marceditor.js"></script>
@@ -125,6 +125,7 @@ var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
 		var debug = 0;
         Ext.onReady(function() {
 			Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs2/resources/images/default/s.gif';
+            Ext.get('loadingtext').update('Initializing Biblios');
 			biblios.app.init();
 			Ext.fly('loading').remove();
 			// placeholder
