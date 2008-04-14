@@ -23,7 +23,6 @@ function setILSTargets() {
 				Prefs.remoteILS[ils.name].pw = ils.password;
 				Prefs.remoteILS[ils.name].url = ils.url;
 				var initcall = ils.plugininit;
-                Prefs.remoteILS[ils.name].instance = {};
 				// initialize and authorize for this ils instance
                 // try to instantiate plugin
 				try {
@@ -63,19 +62,22 @@ function setILSTargets() {
                             }
                         }
                     }
+                    // try initing plugin
+                    try {
+                        Prefs.remoteILS[ils.name].instance.init(ils.url, ils.name, ils.user, ils.password);
+                    } // try clause for xmlhttp req
+                    catch( ex ) {
+                        if( ex == 'Permission denied to call method XMLHttpRequest.open' ) {
+                            Ext.MessageBox.alert('Error', "Error trying to set remote ILS target.<br/>The ILS target's url must be set in Apache's configuration file so that Biblios can request a remote ILS koha instance.  It is currently set to "+ils.url+ " which prevents Biblios from sending and receiving data.  Please check with your system administrator to fix the problem.");
+                        }
+                        else {
+                            Ext.MessageBox.alert('Error', ex);
+                        }
+                    } // catch xmlhttp req exception
                 } // try insantiating plugin and setting up handlers
                 catch(ex) {
                     Ext.MessageBox.alert('Error initializing remote ILS plugin ' + ils.name, ex.msg);
                 }
-                // try initing plugin
-                try {
-					Prefs.remoteILS[ils.name].instance.init(ils.url, ils.name, ils.user, ils.password);
-				} // try clause for xmlhttp req
-				catch( ex ) {
-					if( ex == 'Permission denied to call method XMLHttpRequest.open' ) {
-						Ext.MessageBox.alert('Error', "Error trying to set remote ILS target.<br/>The ILS target's url must be set in Apache's configuration file so that Biblios can request a remote ILS koha instance.  It is currently set to "+ils.url+ " which prevents Biblios from sending and receiving data.  Please check with your system administrator to fix the problem.");
-					}
-				} // catch xmlhttp req exception
 		}; // if this sendtarget is enabled
 	});
 }

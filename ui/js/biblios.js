@@ -14,7 +14,21 @@ biblios.app = function() {
     // private variables
 	Ext.get('loadingtext').update('Loading database');
 	init_gears();
-	Ext.Ajax.request({
+	;
+
+	var viewport; 
+	var viewState = '';
+	Ext.get('loadingtext').update('Setting up search session');
+	// save file vars
+	var currSaveFile, currSaveFileName;
+	var savefiles = {}; // hash mapping save file id -> names
+	// editor
+	var editor = {};
+	editor.record = {};
+    var paz = {};
+	
+	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
+Ext.Ajax.request({
 		url: confPath,
 		method: 'GET',
 		callback: function( options, success, response ) {
@@ -62,7 +76,7 @@ biblios.app = function() {
 					syntax: 'marcxml'
 				}).save();
 			}
-		var paz = initializePazPar2(pazpar2url, {
+		biblios.app.paz = initializePazPar2(pazpar2url, {
 			initCallback: function(data) {
 				paz.sessionID = this.sessionID;
 				// set pazpar2 search results grid url
@@ -72,7 +86,7 @@ biblios.app = function() {
 		  } );
 		  z3950serversSave = $("saving//server", configDoc).each( function() {
 				var name = $(this).children('name').text();
-				var location = $(this).children('location').text();
+				var loc= $(this).children('location').text();
 				var url = $(this).children('url').text();
 				var user = $(this).children('user').text();
 				var password = $(this).children('password').text();
@@ -84,7 +98,7 @@ biblios.app = function() {
 				// check db for sendtarget based on name field
 				if( t = DB.SendTargets.select('name=?', [name]).getOne() ) {
 					t.name = name;
-					t.location = location;
+					t.location = loc;
 					t.url = url;
 					t.user = user;
 					t.password = password;
@@ -98,7 +112,7 @@ biblios.app = function() {
 				else {
 					t = new DB.SendTargets({
 						name: name,
-						location: location,
+						location: loc,
 						url: url,
 						user: user,
 						password: password,
@@ -111,24 +125,10 @@ biblios.app = function() {
 				}
 			setILSTargets();
 		  });
-		  cclfile = $("//cclfile", configDoc).text();
-		  marcdesc = $("//marcdesc", configDoc).text();
 		  $("//plugins/plugin/file", configDoc).each( function() { plugins += ' ' + $(this).text(); } );
 		  $("//templates/template/file", configDoc).each( function() { templates += ' ' + $(this).text(); } );
 		}	
 	});
-
-	var viewport; 
-	var viewState = '';
-	Ext.get('loadingtext').update('Setting up search session');
-	// save file vars
-	var currSaveFile, currSaveFileName;
-	var savefiles = {}; // hash mapping save file id -> names
-	// editor
-	var editor = {};
-	editor.record = {};
-	
-	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
 
     // private functions
 	displaySearchView : function displaySearchView() {
