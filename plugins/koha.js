@@ -25,11 +25,12 @@ var koha = function() {
 };
 
 koha.prototype = {	
-		init: function(url, name, user, password) {
+		init: function(url, name, user, password, embedded) {
 			this.url = url;
 			this.name = name;
 			this.user = user;
 			this.password = password;
+            this.embedded = embedded;
             if( user == '' || !user || password == '' || !password) {
                 throw {
                     msg: 'No username or password!'
@@ -40,12 +41,6 @@ koha.prototype = {
                     msg: 'No url!'
                 }
             }
-			if ( embeddedUrl + '/' == this.url ) {
-				this.embedded = true;
-			}
-			else {
-				this.embedded = false;
-			}
 			this.auth();
 		}, // end init
 
@@ -64,9 +59,15 @@ koha.prototype = {
 						beforeSend: function(req) {
 						},
 						complete: function(req, textStatus) {
-							this.that.cgisessid = req.getResponseHeader('Set-Cookie').substr(10, 32);
-							createCookie('CGISESSID', embeddedSESSID);
-							this.that.bibprofile();
+                            var cookie = req.getResponseHeader('Set-Cookie');
+                            if( cookie ) {
+                                this.that.cgisessid = cookie.substr(10, 32);
+                                createCookie('CGISESSID', embeddedSESSID);
+                                this.that.bibprofile();
+                            }
+                            else {
+                                this.that.initHandler('Cookie malfunction');
+                            }
 						}
 				});
 			}
@@ -88,8 +89,14 @@ koha.prototype = {
 						},
 						complete: function(req, textStatus) {
 							eraseCookie('CGISESSID');
-							this.that.cgisessid = req.getResponseHeader('Set-Cookie').substr(10, 32);
-							this.that.bibprofile();
+                            var cookie = req.getResponseHeader('Set-Cookie');
+                            if( cookie ) {
+                                this.that.cgisessid = req.getResponseHeader('Set-Cookie').substr(10, 32);
+                                this.that.bibprofile();
+                            }
+                            else {
+                                this.that.initHandler('Cookie malfunction');
+                            }
 						}
 				});
 			}

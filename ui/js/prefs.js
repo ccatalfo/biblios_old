@@ -22,6 +22,7 @@ function setILSTargets() {
 				Prefs.remoteILS[ils.name].user = ils.user;
 				Prefs.remoteILS[ils.name].pw = ils.password;
 				Prefs.remoteILS[ils.name].url = ils.url;
+                Prefs.remoteILS[ils.name].embedded = ils.embedded;
 				var initcall = ils.plugininit;
 				// initialize and authorize for this ils instance
                 // try to instantiate plugin
@@ -64,7 +65,7 @@ function setILSTargets() {
                     }
                     // try initing plugin
                     try {
-                        Prefs.remoteILS[ils.name].instance.init(ils.url, ils.name, ils.user, ils.password);
+                        Prefs.remoteILS[ils.name].instance.init(ils.url, ils.name, ils.user, ils.password, ils.embedded);
                     } // try clause for xmlhttp req
                     catch( ex ) {
                         if( ex == 'Permission denied to call method XMLHttpRequest.open' ) {
