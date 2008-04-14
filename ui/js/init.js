@@ -23,7 +23,6 @@ var marc21langdefs = xslTransform.loadFile(marc21langdefsPath);
 var marc21ctrydefs = xslTransform.loadFile(marc21ctrydefsPath);
 var marc21varfields = xslTransform.loadFile(marc21varfieldsPath);
 var marc21controlfields = xslTransform.loadFile(marc21controlfieldsPath);
-var marc21ffhelp = xslTransform.loadFile(marc21ffhelpPath);
 
 var recordNum = 0; // number of individual records found and saved to db
 var newRecordNum = 0; // number of individual records found and saved to db
