@@ -20,8 +20,6 @@ biblios.app = function() {
 		callback: function( options, success, response ) {
 		  configDoc = (new DOMParser()).parseFromString( response.responseText, 'text/xml');
 		  marcFlavor = $("//marcflavor", configDoc).text();
-		  searchScript = $("//searchscript", configDoc).text();
-		  saveScript = $("//savescript", configDoc).text();
 		  encoding = $("//encoding", configDoc).text();
 		  $("searching//server", configDoc).each( function() { 
 			var hostname = $(this).children('hostname').text();
