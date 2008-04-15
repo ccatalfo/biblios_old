@@ -160,6 +160,11 @@ koha.prototype = {
 		save: function(xmldoc) {
 			eraseCookie('CGISESSID');
 			// if we have a bib number, replace. Otherwise, new bib
+            if( this.recidXpath == '' || this.recidXpath === undefined) {
+                throw {
+                    msg: 'Unable to retrieve record id (xpath not set).  Please check your Koha connection.'
+                }
+            }
 			var recid = $(this.recidXpath, xmldoc).text();
 			var savepath = '';
 			if(recid != '') {

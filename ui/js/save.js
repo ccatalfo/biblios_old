@@ -135,7 +135,12 @@ function doSaveRemote(loc, xmldoc, editorid) {
 			UI.editor.progress.hide();
 		}
 	};
-	Prefs.remoteILS[loc].instance.save(xmldoc);
+    try {
+        Prefs.remoteILS[loc].instance.save(xmldoc);
+    }
+    catch(ex) {
+        Ext.MessageBox.alert('Error', ex.msg);
+    }
 	UI.editor.progress.updateProgress(.5, 'Sending to remote server');
 	UI.editor[editorid].savedRemote[loc] = true;
 }
