@@ -479,19 +479,47 @@ function MarcEditor(ffeditor, vareditor) {
 			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+ind2+'">';
 			
 			var id = tagnum+'-'+i;
+            var sftemplate = new Ext.DomHelper.createTemplate({
+                tag: 'span',
+                cls: '{sfclass}',
+                id: '{sfid}',
+                children: [
+                {
+                    tag: 'input',
+                    maxlength: '2',
+                    onblur: 'onBlur(this)',
+                    onfocus: 'onFocus(this)',
+                    type: 'text',
+                    cls: 'subfield-delimiter',
+                    value: '&#8225;{sfcode}'
+                },
+                {
+                    tag: 'input',
+                    size: '{size}',
+                    onblur: 'onBlur(this)',
+                    onfocus: 'onFocus(this)',
+                    cls: 'subfield-text',
+                    value: '{sfval}'
+                }
+                ]
+            }).compile();
 			html += '<span class="subfields" id="'+id+'">';
 			var subfields = new Array();
 			$('subfield', this).each(function(j) {
 				var sfval = $(this).text();
-				var size = sfval.length;
+                // replace any quotes contained in text so it doesn't mess up html
+                var sfid = 'dsubfields'+tagnum+sfcode+'-'+i;
+				var sfsize = sfval.length;
 				var sfcode = $(this).attr('code');
+                var sfclass = 'subfield ' + sfcode;
 				subfields.push( new Subfield(sfcode, sfval) );
-				var sfid = 'dsubfields'+tagnum+sfcode+'-'+i;
-				html += '<span class="subfield '+sfcode+'" id="'+sfid+'">';
-				html += '<input maxlength="2" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="subfield-delimiter" value="&#8225;'+sfcode+' ">';
-				html += '<input size=\''+size+'\' onblur=\'onBlur(this)\' onfocus=\'onFocus(this)\' type=\'text\' class=\'subfield-text\' value=\''+sfval+'\'>';
-				// close subfield span
-				html += '</span>';
+                html += sftemplate.applyTemplate({
+                    sfclass: sfclass,
+                    sfid: sfid,
+                    sfcode: sfcode,
+                    size: sfsize,
+                    sfval: sfval
+                })
 			});
 				// close subfields span
 			html + '</span>';
