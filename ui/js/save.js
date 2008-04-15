@@ -329,13 +329,19 @@ function getSendFileMenuItems(recordSource) {
 			biblios.app.send.numToSend = 0;
 			biblios.app.send.records.length = 0;
 			Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
-				var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
-				showStatusMsg('Saved ' + title + ' to ' + btn.id);
-				biblios.app.send.numToSend--;
-				if( biblios.app.send.numToSend == 0) {
-					biblios.app.send.records.length = 0;
-					setTimeout( function() {clearStatusMsg();}, 2000)
-				}
+                if( status == 'success' ) {
+                    var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
+                    showStatusMsg('Saved ' + title + ' to ' + btn.id);
+                    biblios.app.send.numToSend--;
+                    if( biblios.app.send.numToSend == 0) {
+                        biblios.app.send.records.length = 0;
+                        setTimeout( function() {clearStatusMsg();}, 2000)
+                    }
+                }
+                else {
+                    showStatusMsg('Saving failed ' + status);
+                    setTimeout( function() {clearStatusMsg();}, 2000)
+                }
 			};
 			getSelectedSearchGridRecords( function() { 
                 biblios.app.send.numToSend = biblios.app.selectedRecords.records.length;
@@ -356,13 +362,19 @@ function getSendFileMenuItems(recordSource) {
 	else if (recordSource == 'savegrid') {
 		handler = function(btn) {
 			Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
-				var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
-				showStatusMsg('Saved ' + title + ' to ' + btn.id);
-				biblios.app.send.numToSend--;
-				if( biblios.app.send.numToSend == 0) {
-					biblios.app.send.records.length = 0;
-					clearStatusMsg();
-				}
+                if( status == 'success') {
+                    var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
+                    showStatusMsg('Saved ' + title + ' to ' + btn.id);
+                    biblios.app.send.numToSend--;
+                    if( biblios.app.send.numToSend == 0) {
+                        biblios.app.send.records.length = 0;
+                        clearStatusMsg();
+                    }
+                }
+                else {
+                    showStatusMsg('Saving failed: ' + status);
+                    setTimeout( function() {clearStatusMsg();}, 2000)
+                }
 			};
 			biblios.app.send.numToSend = 0;
 			biblios.app.send.records.length = 0;

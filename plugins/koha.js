@@ -198,6 +198,10 @@ koha.prototype = {
 					}
 					this.that.saveHandler( marcxml , status);
 				},
+                error: function(req, textStatus, errorThrown) {
+                    this.that.saveStatus = 'failed';
+                    this.that.saveHandler( req, textStatus);
+                },
 				beforeSend: function(req) {
 					req.setRequestHeader('Cookie', 'CGISESSID=' + this.that.cgisessid);
 				},
