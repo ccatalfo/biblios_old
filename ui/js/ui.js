@@ -676,10 +676,18 @@ function getMacroMenuItems(recordSource) {
 				try {
 					eval( macro.code );
 					dbrecord.xml = record.XMLString();
-                    dbrecord.title = record.field('245').subfield('a').getValue();
-                    dbrecord.author = record.field('245').subfield('c').getValue();
-                    dbrecord.publisher = record.field('260').subfield('b').getValue();
-                    dbrecord.date = record.field('260').subfield('c').getValue();
+                    if( record.field('245') && record.field('245').subfield('a')) {
+                        dbrecord.title = record.field('245').subfield('a').getValue();
+                    }
+                    if( record.field('245') && record.field('245').subfield('c')) {
+                        dbrecord.author = record.field('245').subfield('c').getValue();
+                    }
+                    if( record.field('260') && record.field('260').subfield('b')) {
+                        dbrecord.publisher = record.field('260').subfield('b').getValue();
+                    }
+                    if( record.field('260') && record.field('260').subfield('c')) {
+                        dbrecord.date = record.field('260').subfield('c').getValue();
+                    }
                     dbrecord.date_modified = new Date().toString();
 					dbrecord.save();
 				}

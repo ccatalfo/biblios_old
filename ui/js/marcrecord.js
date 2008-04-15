@@ -171,12 +171,13 @@ function Field(tagnumber, indicator1, indicator2, subfields) {
 		for(var i = 0; i<subfields.length; i++) {
 			if( subfields[i].code == code ) {
 				sf = subfields[i];
+                if( !Ext.isEmpty(val) ) {
+                    sf.value = val;
+                }
+                return sf;
 			}
 		}
-		if( !Ext.isEmpty(val) ) {
-			sf.value = val;
-		}
-		return sf;
+        return false;
 	};
 
 	this._XML = function() {
