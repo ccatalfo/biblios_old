@@ -428,6 +428,26 @@ function getNewRecordMenu() {
 								srchResults = (new DOMParser()).parseFromString(xml, "text/xml");
 								var record = srchResults.getElementsByTagName('record')[0];
 								var xml = (new XMLSerializer().serializeToString(record));
+                                var rdb = new DB.Records({
+                                    title: '',
+                                    author: '',
+                                    location: '',
+                                    publisher: '',
+                                    medium: '',
+                                    date: '',
+                                    status: 'new',
+                                    date_added: new Date().toString(),
+                                    date_modified: new Date().toString(),
+                                    SearchTargets_id: null,
+                                    Savefiles_id: 3, // Drafts
+                                    xmlformat: 'marcxml',
+                                    marcflavour: 'marc21',
+                                    template: null,
+                                    marcformat: null
+                                }).save();
+                                UI.editor.editorone.id = db.lastInsertRowId;
+                                UI.editor.editorone.savefileid = 3;
+                                UI.editor.editorone.location = '';
 								openRecord(xml, 'editorone');
 						} // ajax callback
 				}); // ajax request
