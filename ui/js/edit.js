@@ -390,6 +390,12 @@ function onFocus(elem) {
 	UI.editor.lastFocusedEl = elem;
 	UI.editor.lastEditorId = editorid;
 	UI.editor[editorid].lastFocusedEl = elem;
+    // apply Ext TextField so it will grow as we type
+    var tf = new Ext.form.TextField({
+        applyTo: $(UI.editor.lastFocusedEl).get(0).id,
+        grow: true
+    });
+    tf.render();
 	showTagHelp(elem);
 }
 
@@ -894,7 +900,6 @@ function setupFFEditorCtryCombo(editorid) {
 	});
 	cb.render();
 }
-
 
 
 
