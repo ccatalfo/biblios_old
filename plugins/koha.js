@@ -64,12 +64,19 @@ koha.prototype = {
 						success: function(xml, status) {
 							var sessionStatus = $('status', xml).text();
 							this.that.sessionStatus = sessionStatus;
+                            if( sessionStatus == 'ok') {
+                                this.that.bibprofile();
+                            }
 							this.that.initHandler(sessionStatus);
 						},
+                        error: function(req, textStatus, errorThrown) {
+							var sessionStatus = $('status', req.responseXML).text();
+							this.that.sessionStatus = sessionStatus;
+							this.that.initHandler(sessionStatus);
+                        },
 						beforeSend: function(req) {
 						},
 						complete: function(req, textStatus) {
-                            this.that.bibprofile();
 						}
 				});
 			}
@@ -87,6 +94,11 @@ koha.prototype = {
 							this.that.sessionStatus = sessionStatus;
 							this.that.initHandler(sessionStatus);
 						},
+                        error: function(req, textStatus, errorThrown) {
+							var sessionStatus = $('status', req.responseXML).text();
+							this.that.sessionStatus = sessionStatus;
+							this.that.initHandler(sessionStatus);
+                        },
 						beforeSend: function(req) {
 						},
 						complete: function(req, textStatus) {
@@ -130,7 +142,11 @@ koha.prototype = {
 				complete: function(req, textStatus) {
 					eraseCookie('CGISESSID');
 					createCookie('CGISESSID', embeddedSESSID);
-				}
+				},
+                error: function(req, textStatus, errorThrown) {
+					var bibprofileStatus = $('auth_status', req.responseXML).text();
+					this.that.bibprofileHandler( xml , bibprofileStatus);
+                }
 			});
 		},
 
@@ -200,7 +216,7 @@ koha.prototype = {
 				},
                 error: function(req, textStatus, errorThrown) {
                     this.that.saveStatus = 'failed';
-                    this.that.saveHandler( req, textStatus);
+                    this.that.saveHandler( req.responseXML, textStatus);
                 },
 				beforeSend: function(req) {
 					req.setRequestHeader('Cookie', 'CGISESSID=' + this.that.cgisessid);

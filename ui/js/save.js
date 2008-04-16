@@ -329,7 +329,7 @@ function getSendFileMenuItems(recordSource) {
 			biblios.app.send.numToSend = 0;
 			biblios.app.send.records.length = 0;
 			Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
-                if( status == 'success' ) {
+                if( status == 'ok' ) {
                     var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
                     showStatusMsg('Saved ' + title + ' to ' + btn.id);
                     biblios.app.send.numToSend--;

@@ -72,7 +72,7 @@ function setILSTargets() {
                             Ext.MessageBox.alert('Error', "Error trying to set remote ILS target.<br/>The ILS target's url must be set in Apache's configuration file so that Biblios can request a remote ILS koha instance.  It is currently set to "+ils.url+ " which prevents Biblios from sending and receiving data.  Please check with your system administrator to fix the problem.");
                         }
                         else {
-                            Ext.MessageBox.alert('Error', ex);
+                            Ext.MessageBox.alert('Error', ex.msg);
                         }
                     } // catch xmlhttp req exception
                 } // try insantiating plugin and setting up handlers
