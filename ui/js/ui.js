@@ -151,7 +151,7 @@ function openRecord(xml, editorelem) {
 	var vared = $('#'+editorelem).find(".vareditor");
 	$(vared).empty();
 
-	UI.editor[editorelem].record = new MarcEditor();
+	UI.editor[editorelem].record = new MarcEditor(ffed, vared, editorelem);
 	var xmldoc;
 	if( Ext.isIE ) {
 		xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
@@ -170,7 +170,7 @@ function openRecord(xml, editorelem) {
 	UI.editor[editorelem].vared = vared;
 
 	UI.editor.progress.updateProgress(.9, 'Setting up editor hot keys');
-	setupEditorHotkeys(editorelem);
+	//setupEditorHotkeys(editorelem);
 	UI.editor.progress.updateProgress(.9, 'Setting up authority control');
 	setupMarc21AuthorityLiveSearches(editorelem);
 

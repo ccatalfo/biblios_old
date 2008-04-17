@@ -386,16 +386,29 @@ function create_static_editor(ffed, vared, editorid) {
 
 function onFocus(elem) {
 	$(elem).addClass('focused');
+    // is this element an input or a textarea?
+    var nodeName = $(elem).get(0).nodeName;
 	var editorid = $(elem).parents('.marceditor').get(0).id;
 	UI.editor.lastFocusedEl = elem;
 	UI.editor.lastEditorId = editorid;
 	UI.editor[editorid].lastFocusedEl = elem;
     // apply Ext TextField so it will grow as we type
-    var tf = new Ext.form.TextField({
-        applyTo: $(UI.editor.lastFocusedEl).get(0).id,
-        grow: true
-    });
-    tf.render();
+    if( nodeName == 'INPUT' ) {
+        var tf = new Ext.form.TextField({
+            applyTo: $(elem).get(0).id,
+            grow: true
+        });
+        tf.render();
+    }
+    else {
+        var id = $(elem).get(0).id;
+        var val = $(elem).val();
+        var tf = new Ext.form.TextArea({
+            applyTo: id,
+            grow: true
+        });
+        tf.render();
+    }
 	showTagHelp(elem);
 }
 

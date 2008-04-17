@@ -56,11 +56,12 @@ function createFixedFieldCell(string, elem, offset, tag) {
 	return html;
 } // createFixedFieldCell
 
-function MarcEditor(ffeditor, vareditor) {
+function MarcEditor(ffeditor, vareditor, editorid) {
 	// private
 	var that = this;
 	var ffed = ffeditor;
 	var vared = vareditor;
+    var editorid = editorid;
 	var htmled = '';	
 	var lastFocusedEl;
 	var currFocusedEl;
@@ -503,6 +504,31 @@ function MarcEditor(ffeditor, vareditor) {
                 }
                 ]
             }).compile();
+             var sftemplateTextarea = new Ext.DomHelper.createTemplate({
+                tag: 'span',
+                cls: '{sfclass}',
+                id: '{sfid}',
+                children: [
+                {
+                    tag: 'input',
+                    maxlength: '2',
+                    onblur: 'onBlur(this)',
+                    onfocus: 'onFocus(this)',
+                    type: 'text',
+                    cls: 'subfield-delimiter',
+                    value: '&#8225;{sfcode}'
+                },
+                {
+                    tag: 'textarea',
+                    cols: '{cols}',
+                    style: {width: '{width}'}, // this isn't being set properly by extjs
+                    onblur: 'onBlur(this)',
+                    onfocus: 'onFocus(this)',
+                    cls: 'subfield-text',
+                    html: '{sfval}',
+                }
+                ]
+            }).compile();
 			html += '<span class="subfields" id="'+id+'">';
 			var subfields = new Array();
 			$('subfield', this).each(function(j) {
@@ -513,15 +539,27 @@ function MarcEditor(ffeditor, vareditor) {
 				var sfcode = $(this).attr('code');
                 var sfclass = 'subfield ' + sfcode;
 				subfields.push( new Subfield(sfcode, sfval) );
-                html += sftemplate.applyTemplate({
-                    sfclass: sfclass,
-                    sfid: sfid,
-                    sfcode: sfcode,
-                    size: sfsize,
-                    sfval: sfval
-                })
-			});
-				// close subfields span
+                if( sfsize > 100 ) {
+                    html += sftemplateTextarea.applyTemplate({
+                        sfclass: sfclass,
+                        sfid: sfid,
+                        sfcode: sfcode,
+                        cols: '100',
+                        width: Ext.get(editorid).getWidth(),
+                        sfval: sfval
+                    });
+                }
+                else {
+                    html += sftemplate.applyTemplate({
+                        sfclass: sfclass,
+                        sfid: sfid,
+                        sfcode: sfcode,
+                        size: sfsize,
+                        sfval: sfval
+                    });
+                }
+            });
+            // close subfields span
 			html + '</span>';
 			html += '</div>'; // close datafield div	
 			fields.push( new Field(tagnum, ind1, ind2, subfields) );
