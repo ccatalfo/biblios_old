@@ -491,7 +491,7 @@ function MarcEditor(ffeditor, vareditor, editorid) {
                     onblur: 'onBlur(this)',
                     onfocus: 'onFocus(this)',
                     type: 'text',
-                    cls: 'subfield-delimiter',
+                    cls: 'subfield-delimiter {sfcode}',
                     value: '&#8225;{sfcode}',
                     id: '{delimid}'
                 },
@@ -500,7 +500,7 @@ function MarcEditor(ffeditor, vareditor, editorid) {
                     size: '{size}',
                     onblur: 'onBlur(this)',
                     onfocus: 'onFocus(this)',
-                    cls: 'subfield-text',
+                    cls: 'subfield-text {sfcode}',
                     value: '{sfval}',
                     id: '{textid}'
                 }
@@ -517,7 +517,7 @@ function MarcEditor(ffeditor, vareditor, editorid) {
                     onblur: 'onBlur(this)',
                     onfocus: 'onFocus(this)',
                     type: 'text',
-                    cls: 'subfield-delimiter',
+                    cls: 'subfield-delimiter {sfcode}',
                     value: '&#8225;{sfcode}',
                     id: '{delimid}'
                 },
@@ -528,7 +528,7 @@ function MarcEditor(ffeditor, vareditor, editorid) {
                     onblur: 'onBlur(this)',
                     onfocus: 'onFocus(this)',
                     html: '{sfval}',
-                    cls: 'subfield-text',
+                    cls: 'subfield-text {sfcode}',
                     id: '{textid}'
                 }
                 ]
