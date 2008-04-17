@@ -170,7 +170,7 @@ function openRecord(xml, editorelem) {
 	UI.editor[editorelem].vared = vared;
 
 	UI.editor.progress.updateProgress(.9, 'Setting up editor hot keys');
-	//setupEditorHotkeys(editorelem);
+    setupEditorHotkeys(editorelem);
 	UI.editor.progress.updateProgress(.9, 'Setting up authority control');
 	setupMarc21AuthorityLiveSearches(editorelem);
 
