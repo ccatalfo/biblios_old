@@ -1,6 +1,4 @@
 var UI = {};
-UI.search = {};
-UI.search.remoteILS = {};
 UI.searchpreview = {};
 UI.searchpreview.id = '';
 UI.searchpreview.xml = '';
@@ -37,6 +35,10 @@ UI.editor.editortwo.comboboxes = new Array();
 UI.search = {};
 UI.search.currQuery = '';
 UI.search.limitby = {};
+UI.search.currentSort = {
+    field: '',
+    dir: 0
+};
 // save state
 UI.save = {};
 UI.save.savefile = {};

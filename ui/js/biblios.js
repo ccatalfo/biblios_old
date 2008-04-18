@@ -27,7 +27,6 @@ biblios.app = function() {
 	var editor = {};
 	editor.record = {};
     var paz = {};
-	
 	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
     if( Ext.get('loadingtext') ) {
         Ext.get('loadingtext').update('Reading biblios configuration file');
@@ -333,8 +332,8 @@ biblios.app = function() {
 																	{name: 'title', mapping: 'md-title'},
 																	{name: 'title-remainder', mapping: 'md-title-remainder'},
 																	{name: 'author', mapping:'md-author'},
-																	{name: 'title-responsibility', mapping:'md-title-responsibility'},
-																	{name: 'publication', mapping:'md-publication-name'},
+																	{name: 'title-responsibility', mapping:'md-author'},
+																	{name: 'publisher', mapping:'md-publication-name'},
 																	{name: 'date', mapping: 'md-date'},
 																	{name: 'medium', mapping:'md-medium'},
 																	{name: 'location', mapping: function(rec) {
@@ -369,7 +368,7 @@ biblios.app = function() {
 																	} // locationinfo mapping
 																	]) // search grid record
 																),//search grid reader
-																	remoteSort: false
+                                                                remoteSort: true
 														})), // data store search grid aka ds
 														sm: new Ext.grid.RowSelectionModel({
 															listeners: {
@@ -406,11 +405,11 @@ biblios.app = function() {
 																}
 															})),
 															{header: "Medium", width: 50, dataIndex: 'medium'},
-															{header: "Title", width: 280, dataIndex: 'title'},
-															{header: "Author", width: 170, dataIndex: 'title-responsibility'},
-															{header: "Publisher", width: 120, dataIndex: 'publication'},
-															{header: "Date", width: 40, dataIndex: 'date'},
-															{header: "Location", width: 110, dataIndex: 'location',
+															{header: "Title", sortable: true, width: 280, dataIndex: 'title'},
+															{header: "Author", sortable: true, width: 170, dataIndex: 'author'},
+															{header: "Publisher", sortable: true, width: 120, dataIndex: 'publisher'},
+															{header: "Date", sortable: true, width: 40, dataIndex: 'date'},
+															{header: "Location", sortable: true, width: 110, dataIndex: 'location',
 																renderer: function(data, meta, record, row, col, store) {
 																			if( record.data.location.length == 1 ) {
 																				return record.data.location[0].name;
@@ -423,6 +422,29 @@ biblios.app = function() {
 														]), // column model for search grid
 														plugins: expander, // search grid plugins
 														listeners: {
+                                                            headerclick: function(grid, colIndex, event) {
+                                                                var colName = Ext.getCmp('searchgrid').getColumnModel().getColumnById(colIndex).dataIndex;
+                                                                var reqName = '';
+                                                                var dir = UI.search.currentSort.dir ? 0 : 1; 
+                                                                switch(colName) {
+                                                                    case 'title':
+                                                                        reqName = 'title';
+                                                                        break;
+                                                                    case 'author':
+                                                                        reqName = 'author';
+                                                                        break;
+                                                                    case 'publisher':
+                                                                        reqName = 'publication-name';
+                                                                        break;
+                                                                    case 'date':
+                                                                        reqName = 'date';
+                                                                        break;
+                                                                }
+                                                                UI.search.currentSort.field = reqName;
+                                                                UI.search.currentSort.dir = dir;
+                                                                Ext.getCmp('searchgrid').store.load({params:{ start: biblios.app.paz.currentStart, num: 20, sort: reqName + ':' + dir}});
+                                                                return false;
+                                                            }, // headerclick handler
 															rowdblclick: function(grid, rowindex, e) {
 																var id = grid.getSelections()[0].id;
 																UI.editor['editorone'].id = id;
@@ -1246,7 +1268,7 @@ biblios.app = function() {
 														leaf: false,
 														lines: false,
 														applyLoader: false,
-														loader: new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+biblios.app.paz.sessionID+'&command=termlist&name=author,subject,date'}),
+														loader: new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+biblios.app.paz.sessionID+'&command=termlist&name=author,publication-name,subject,date'}),
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Facets'
 														}),
