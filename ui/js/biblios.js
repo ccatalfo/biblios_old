@@ -12,7 +12,9 @@ Ext.namespace('biblios');
 // create application
 biblios.app = function() {
     // private variables
-	Ext.get('loadingtext').update('Loading database');
+    if( Ext.get('loadingtext') ) {
+        Ext.get('loadingtext').update('Loading database');
+    }
 	init_gears();
 	;
 
@@ -27,7 +29,9 @@ biblios.app = function() {
     var paz = {};
 	
 	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
-    Ext.get('loadingtext').update('Reading biblios configuration file');
+    if( Ext.get('loadingtext') ) {
+        Ext.get('loadingtext').update('Reading biblios configuration file');
+    }
     Ext.Ajax.request({
 		url: confPath,
 		method: 'GET',
@@ -129,11 +133,15 @@ biblios.app = function() {
 			initCallback: function() {
                 if( this.initStatusOK == true ) {
                     biblios.app.paz.sessionID = this.sessionID;
-                    Ext.get('loadingtext').update('Setting up search targets');
+                    if( Ext.get('loadingtext') ){
+                        Ext.get('loadingtext').update('Setting up search targets');
+                    }
                     setPazPar2Targets();
                 }
                 else {
-                    Ext.get('loadingtext').update('Error initializing search session');
+                    if( Ext.get('loadingtext') ) {
+                        Ext.get('loadingtext').update('Error initializing search session');
+                    }
                 }
 			}
         });
@@ -2104,7 +2112,8 @@ biblios.app = function() {
 													} // send targets tab center region
 											}, // send targets tab
 											{
-												title: 'Keyboard Shortcuts'
+												title: 'Keyboard Shortcuts',
+                                                html: 'Coming soon.'
 											}
 										] // options inner tab panel
 									}) // Options tabpanel constructor
@@ -2140,7 +2149,9 @@ biblios.app = function() {
         });
 
 		treeEditor.render();
-		Ext.get('loadingtext').update('Finishing initializing');
+        if( Ext.get('loadingtext') ) {
+            Ext.get('loadingtext').update('Finishing initializing');
+        }
 		//	alert('Application successfully initialized');
 		var loading = Ext.get('loading');
 
