@@ -385,17 +385,36 @@ function create_static_editor(ffed, vared, editorid) {
 }
 
 function onFocus(elem) {
+    console.info(elem);
 	$(elem).addClass('focused');
+    // is this element an input or a textarea?
+    var nodeName = $(elem).get(0).nodeName;
 	var editorid = $(elem).parents('.marceditor').get(0).id;
+    var elemid = $(elem).get(0).id;
+    console.info(elemid);
 	UI.editor.lastFocusedEl = elem;
 	UI.editor.lastEditorId = editorid;
 	UI.editor[editorid].lastFocusedEl = elem;
     // apply Ext TextField so it will grow as we type
-    var tf = new Ext.form.TextField({
-        applyTo: $(UI.editor.lastFocusedEl).get(0).id,
-        grow: true
-    });
-    tf.render();
+    if( nodeName == 'INPUT' ) {
+        var tf = new Ext.form.TextField({
+            applyTo: elemid,
+            grow: true
+        });
+    }
+    else {
+        var val = $(elem).val();
+        var tf = new Ext.form.TextArea({
+            applyTo: elemid,
+            grow: true
+        });
+    }
+    try {
+        tf.render();
+    }
+    catch(ex) {
+        console.info(ex);
+    }
 	showTagHelp(elem);
 }
 
@@ -807,25 +826,25 @@ function setupMarc21AuthorityLiveSearches(editorid) {
 			]
 	);
 	// personal names
-	Ext.select('div[id^=100] .a .subfield-text, div[id^=700] .a .subfield-text, div[id^=600] .a .subfield-text, div[id^=800] .a .subfield-text').each( function(item) {
+	Ext.select('div[id^=100] .a.subfield-text, div[id^=700] .a.subfield-text, div[id^=600] .a.subfield-text, div[id^=800] .a.subfield-text').each( function(item) {
 		createAuthComboBox(editorid,  $(item.dom), pnameXmlReader, 'pname', 'bath.personalName', 'marcxml' );
 		return true;
 	});
 	
-	Ext.select('div[id^=110] .a .subfield-text, div[id^=710] .a .subfield-text, div[id^=610] .a .subfield-text, div[id^=810] .a .subfield-text').each( function(item) {
+	Ext.select('div[id^=110] .a.subfield-text, div[id^=710] .a.subfield-text, div[id^=610] .a.subfield-text, div[id^=810] .a.subfield-text').each( function(item) {
 		createAuthComboBox(editorid,  $(item.dom), corpnameXmlReader, 'corpname', 'bath.corporateName', 'marcxml' );
 		return true;
 	});
-	Ext.select('div[id^=111] .a .subfield-text, div[id^=711] .a .subfield-text, div[id^=611] .a .subfield-text, div[id^=811] .a .subfield-text').each( function(item) {
+	Ext.select('div[id^=111] .a.subfield-text, div[id^=711] .a.subfield-text, div[id^=611] .a.subfield-text, div[id^=811] .a.subfield-text').each( function(item) {
 		createAuthComboBox(editorid,  $(item.dom), confnameXmlReader, 'confname', 'bath.conferenceName', 'marcxml' );
 		return true;
 	});
-	Ext.select('div[id^=240] .a .subfield-text, div[id^=130] .a .subfield-text, div[id^=740] .a .subfield-text, div[id^=630] .a .subfield-text').each( function(item) {
+	Ext.select('div[id^=240] .a.subfield-text, div[id^=130] .a.subfield-text, div[id^=740] .a.subfield-text, div[id^=630] .a.subfield-text').each( function(item) {
 		createAuthComboBox(editorid,  $(item.dom), uniformtitleXmlReader, 'title', 'bath.uniformTitle', 'marcxml' );
 		return true;
 	});
 	// subject headings
-	Ext.select('div[id^=650] .a .subfield-text').each( function(item) {
+	Ext.select('div[id^=650] .a.subfield-text').each( function(item) {
 		createAuthComboBox(editorid,  $(item.dom), topicalTermXmlReader, 'topicalterm', 'bath.topicalSubject', 'marcxml' );
 		return true;
 	});

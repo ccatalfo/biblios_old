@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<record>
+<record>
   <leader>01039cjm a22002653a 4500</leader>
   <controlfield tag="001"></controlfield>
   <controlfield tag="005"></controlfield>
@@ -44,4 +44,3 @@
     <subfield code="a"></subfield>
   </datafield>
 </record>
-</collection>

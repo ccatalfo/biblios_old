@@ -97,3 +97,7 @@ input.controlfield, input.subfield-text, input.subfield-delimiter, input.indicat
 li.recordtoolbar {
 	list-style-type: none;
 }
+
+textarea.subfield-text {
+    border: none;
+}

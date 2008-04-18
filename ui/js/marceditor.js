@@ -56,11 +56,12 @@ function createFixedFieldCell(string, elem, offset, tag) {
 	return html;
 } // createFixedFieldCell
 
-function MarcEditor(ffeditor, vareditor) {
+function MarcEditor(ffeditor, vareditor, editorid) {
 	// private
 	var that = this;
 	var ffed = ffeditor;
 	var vared = vareditor;
+    var editorid = editorid;
 	var htmled = '';	
 	var lastFocusedEl;
 	var currFocusedEl;
@@ -79,7 +80,7 @@ function MarcEditor(ffeditor, vareditor) {
 		// make sure we start w/ empty arrays
 		fields.length = 0;
 		fieldlist.length = 0;
-		var editorfields = $('.tag', vared);
+		var editorfields = $('.tag', UI.editor[editorid].vared);
 		for( var i = 0; i < editorfields.length; i++) {
 				var newfield = createField( $(editorfields).eq(i) );
 				fields.push(newfield);
@@ -90,16 +91,16 @@ function MarcEditor(ffeditor, vareditor) {
 	
 	function createField(elem) {
 		var newfield;
-		var tagnumber = $(elem).children('.tagnumber', vared).eq(0).val();
+		var tagnumber = $(elem).children('.tagnumber', UI.editor[editorid].vared).eq(0).val();
 		var id = $(elem).get(0).id;
-		var ind1 = $(elem).children('.indicator', vared).eq(0).val();
-		var ind2 = $(elem).children('.indicator', vared).eq(1).val();
+		var ind1 = $(elem).children('.indicator', UI.editor[editorid].vared).eq(0).val();
+		var ind2 = $(elem).children('.indicator', UI.editor[editorid].vared).eq(1).val();
 		if( tagnumber < '010' ) {
-			var value = $(elem).children('.controlfield', vared).val();	
+			var value = $(elem).children('.controlfield', UI.editor[editorid].vared).val();	
 			newfield = new Field(tagnumber, ind1, ind2, [{code: '', value: value}]);
 		}
 		else {
-			var editorsubfields = $('[@id='+id+']', vared).children('.subfields').children('.subfield');
+			var editorsubfields = $('[@id='+id+']', UI.editor[editorid].vared).children('.subfields').children('.subfield');
 			var subfields = new Array();
 			for(var j = 0; j < editorsubfields.length; j++) {
 				var code = editorsubfields.eq(j).find('.subfield-delimiter').val().substr(1, 1);
@@ -159,38 +160,38 @@ function MarcEditor(ffeditor, vareditor) {
 	};
 
 	this._setValue = function(tag, subfield, value) {
-		$('[@id^='+tag+'] .'+subfield+' .subfield-text', vared).val(value);
+		$('[@id^='+tag+'] .'+subfield+' .subfield-text', UI.editor[editorid].vared).val(value);
 		update();
 	};
 
 	this._getValue = function(tag, subfield) {
 		if( subfield != null ) {
-			return $('[@id^='+tag+'] .'+subfield+' .subfield-text', vared).val();
+			return $('[@id^='+tag+'] .'+subfield+' .subfield-text', UI.editor[editorid].vared).val();
 		}
 		else {
-			return $('[@id^='+tag+']').children('.controlfield', vared).val();
+			return $('[@id^='+tag+']').children('.controlfield', UI.editor[editorid].vared).val();
 		}
 	};
 
 	this._rawFields = function() {
-		return $('.tag', vared);
+		return $('.tag', UI.editor[editorid].vared);
 	};
 
 	this._rawField = function(tagnumber, i) {
 		if( !Ext.isEmpty(i) ) {
-			return $('.tag', vared).filter('[@id*='+tagnumber+']').eq(i);
+			return $('.tag', UI.editor[editorid].vared).filter('[@id*='+tagnumber+']').eq(i);
 		}
 		else {
-			return $('.tag', vared).filter('[@id*='+tagnumber+']');
+			return $('.tag', UI.editor[editorid].vared).filter('[@id*='+tagnumber+']');
 		}
 	};
 
 	this._rawSubfields = function(tagnumber, i) {
 		if( !Ext.isEmpty(i) ) {
-			return $('.tag', vared).filter('[@id*='+tagnumber+']').eq(i).children('.subfields').children('.subfield');
+			return $('.tag', UI.editor[editorid].vared).filter('[@id*='+tagnumber+']').eq(i).children('.subfields').children('.subfield');
 		}
 		else {
-			return $('.tag', vared).filter('[@id*='+tagnumber+']').children('.subfields').children('.subfield');
+			return $('.tag', UI.editor[editorid].vared).filter('[@id*='+tagnumber+']').children('.subfields').children('.subfield');
 		}
 	};
 
@@ -210,7 +211,7 @@ function MarcEditor(ffeditor, vareditor) {
 			if(debug) { console.info("Adding tag with tagnumber: " + tagnumber);  }
 
 			// insert the new field in numerical order among the existing tags
-			var tags = $(".tag",vared  );
+			var tags = $(".tag",UI.editor[editorid].vared  );
 			var tagToInsertAfter; // the tag just before where we'll insert the new tag
 			var highestSuffix = 1; // highest number appended to tag id's with this tag number.  Add 1 to it to get suffix for new tag
 			var newSuffix = tags.length +1;
@@ -238,7 +239,7 @@ function MarcEditor(ffeditor, vareditor) {
 				}
 			} // insert datafield
 			// insert out new tag after the tag we just found
-			$(tagToInsertAfter, vared).after(newtag);
+			$(tagToInsertAfter, UI.editor[editorid].vared).after(newtag);
 			update();
 			// set the focus to this new tag
 			//$( newId ).get(0).focus();
@@ -278,7 +279,7 @@ function MarcEditor(ffeditor, vareditor) {
 		var id = $(elem).get(0).id;
 		var tagnumber = id.substr(0,3);
 		// find all tags with this tagnumber
-		var tags = $("div[@id^="+tagnumber+"]", vared);
+		var tags = $("div[@id^="+tagnumber+"]", UI.editor[editorid].vared);
 		for( var i = 0; i < tags.length; i++ ) {
 			if( tags.get(i).id == id ) {
 				return i;
@@ -288,8 +289,8 @@ function MarcEditor(ffeditor, vareditor) {
 
 	this._addSubfield = function(editorid, tag, index, subfield, value) {
 		// get last subfield in this tag
-		var numsf = $('div[@id^='+tag+']', vared).eq(index).find('.subfield-text').length;
-		var lastsf = $('div[@id^='+tag+']', vared).eq(index).find('.subfield-text').eq(numsf-1);
+		var numsf = $('div[@id^='+tag+']', UI.editor[editorid].vared).eq(index).find('.subfield-text').length;
+		var lastsf = $('div[@id^='+tag+']', UI.editor[editorid].vared).eq(index).find('.subfield-text').eq(numsf-1);
 		var lastFocused = UI.editor[editorid].lastFocusedEl;
 		// if we're adding tag w/ tagnumber via macro
 		if( tag ) {
@@ -341,16 +342,16 @@ function MarcEditor(ffeditor, vareditor) {
 	};
 
 	this._deleteSubfields = function(tag) {
-		$('[@id^='+tag+']', vared).children('.subfields').find('.subfield').remove();
+		$('[@id^='+tag+']', UI.editor[editorid].vared).children('.subfields').find('.subfield').remove();
 		update();
 	};
 
 	this._focusTag = function(tag) {
-		$('[@id^='+tag+']', vared).children('.tagnumber').focus();
+		$('[@id^='+tag+']', UI.editor[editorid].vared).children('.tagnumber').focus();
 	};
 
 	this._focusSubfield = function(tag, subfield) {
-		$('[@id^='+tag+']', vared).children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').focus();
+		$('[@id^='+tag+']', UI.editor[editorid].vared).children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').focus();
 	};
 	
 	this._XML = function() {
@@ -481,7 +482,7 @@ function MarcEditor(ffeditor, vareditor) {
 			var id = tagnum+'-'+i;
             var sftemplate = new Ext.DomHelper.createTemplate({
                 tag: 'span',
-                cls: '{sfclass}',
+                cls: 'subfield',
                 id: '{sfid}',
                 children: [
                 {
@@ -490,16 +491,45 @@ function MarcEditor(ffeditor, vareditor) {
                     onblur: 'onBlur(this)',
                     onfocus: 'onFocus(this)',
                     type: 'text',
-                    cls: 'subfield-delimiter',
-                    value: '&#8225;{sfcode}'
+                    cls: 'subfield-delimiter {sfcode}',
+                    value: '&#8225;{sfcode}',
+                    id: '{delimid}'
                 },
                 {
                     tag: 'input',
                     size: '{size}',
                     onblur: 'onBlur(this)',
                     onfocus: 'onFocus(this)',
-                    cls: 'subfield-text',
-                    value: '{sfval}'
+                    cls: 'subfield-text {sfcode}',
+                    value: '{sfval}',
+                    id: '{textid}'
+                }
+                ]
+            }).compile();
+             var sftemplateTextarea = new Ext.DomHelper.createTemplate({
+                tag: 'span',
+                cls: 'subfield',
+                id: '{sfid}',
+                children: [
+                {
+                    tag: 'input',
+                    maxlength: '2',
+                    onblur: 'onBlur(this)',
+                    onfocus: 'onFocus(this)',
+                    type: 'text',
+                    cls: 'subfield-delimiter {sfcode}',
+                    value: '&#8225;{sfcode}',
+                    id: '{delimid}'
+                },
+                {
+                    tag: 'textarea',
+                    cols: '{cols}',
+                    style: {width: '{width}'}, // this isn't being set properly by extjs
+                    onblur: 'onBlur(this)',
+                    onfocus: 'onFocus(this)',
+                    html: '{sfval}',
+                    cls: 'subfield-text {sfcode}',
+                    id: '{textid}'
                 }
                 ]
             }).compile();
@@ -508,20 +538,36 @@ function MarcEditor(ffeditor, vareditor) {
 			$('subfield', this).each(function(j) {
 				var sfval = $(this).text();
                 // replace any quotes contained in text so it doesn't mess up html
-                var sfid = 'dsubfields'+tagnum+sfcode+'-'+i;
 				var sfsize = sfval.length;
 				var sfcode = $(this).attr('code');
                 var sfclass = 'subfield ' + sfcode;
+                var sfid = 'dsubfields'+sfcode+'-'+Ext.id();
 				subfields.push( new Subfield(sfcode, sfval) );
-                html += sftemplate.applyTemplate({
-                    sfclass: sfclass,
-                    sfid: sfid,
-                    sfcode: sfcode,
-                    size: sfsize,
-                    sfval: sfval
-                })
-			});
-				// close subfields span
+                if( sfsize > 100 ) {
+                    html += sftemplateTextarea.applyTemplate({
+                        sfclass: sfclass,
+                        sfid: sfid,
+                        sfcode: sfcode,
+                        cols: '100',
+                        width: Ext.get(editorid).getWidth(),
+                        sfval: sfval,
+                        delimid: Ext.id(),
+                        textid: Ext.id()
+                    });
+                }
+                else {
+                    html += sftemplate.applyTemplate({
+                        sfclass: sfclass,
+                        sfid: sfid,
+                        sfcode: sfcode,
+                        size: sfsize,
+                        sfval: sfval,
+                        delimid: Ext.id(),
+                        textid: Ext.id()
+                    });
+                }
+            });
+            // close subfields span
 			html + '</span>';
 			html += '</div>'; // close datafield div	
 			fields.push( new Field(tagnum, ind1, ind2, subfields) );
