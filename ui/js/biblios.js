@@ -205,7 +205,7 @@ biblios.app = function() {
 		send: {
 			numToSend: 0,
 			sendSource: '',
-			records: new Array(),
+			records: new Array()
 		},
 		download: {
 			numToExport : 0,
@@ -453,7 +453,7 @@ biblios.app = function() {
 																beforerender: function(tbar) {
 																	var msg = 'Select: <span class="gridselector" onclick="selectAll()">All</span>,<span class="gridselector" onclick="selectNone()">None</span>';
 																	tbar.autoCreate.html = '<table cellspacing="0"><tr></tr><tr id="';
-																	tbar.autoCreate.html += 'searchgridtbarinfo',
+																	tbar.autoCreate.html += 'searchgridtbarinfo';
 																	tbar.autoCreate.html += '">';
 																	tbar.autoCreate.html += '<td colspan="18">' + msg + '</td>';
 																	tbar.autoCreate.html += '</tr>';
@@ -1027,7 +1027,7 @@ biblios.app = function() {
 																	beforerender: function(tbar) {
 																		var msg = 'Select: <span class="gridselector" onclick="selectAll()">All</span>,<span class="gridselector" onclick="selectNone()">None</span>';
 																		tbar.autoCreate.html = '<table cellspacing="0"><tr></tr><tr id="';
-																		tbar.autoCreate.html += 'savegridtbarinfo',
+																		tbar.autoCreate.html += 'savegridtbarinfo';
 																		tbar.autoCreate.html += '">';
 																		tbar.autoCreate.html += '<td colspan="18">' + msg + '</td>';
 																		tbar.autoCreate.html += '</tr>';
@@ -1543,7 +1543,7 @@ biblios.app = function() {
 																}
 															} // save folder tree context menu
 														}
-													}), // resources treepanel with treeeditor applied
+													}) // resources treepanel with treeeditor applied
 												] // tree panel items
 											} // center region of sidebar
 										] // resources panel items
@@ -1630,7 +1630,7 @@ biblios.app = function() {
 															{
 																header: 'Name',
 																dataIndex: 'name',
-																editor: new Ext.form.TextField(),
+																editor: new Ext.form.TextField()
 															},
 															{
 																header: 'Code',
@@ -1642,13 +1642,13 @@ biblios.app = function() {
 																header: 'Hotkey',
 																dataIndex: 'hotkey',
 																hidden: true,
-																editor: new Ext.form.TextField(),
+																editor: new Ext.form.TextField()
 															},
 															{
 																header: 'File',
 																dataIndex: 'file',
 																hidden: true,
-																editor: new Ext.form.TextField(),
+																editor: new Ext.form.TextField()
 															},
 															{
 																header: 'Enabled',
