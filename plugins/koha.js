@@ -145,7 +145,7 @@ koha.prototype = {
 				},
                 error: function(req, textStatus, errorThrown) {
 					var bibprofileStatus = $('auth_status', req.responseXML).text();
-					this.that.bibprofileHandler( xml , bibprofileStatus);
+					this.that.bibprofileHandler( req.responseXML , bibprofileStatus);
                 }
 			});
 		},
