@@ -2,7 +2,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 		var recoffset = offset || 0;
 		if( !savefileid ) {
 			if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" );}
-				savefileid = 2; // Drafts
+				savefileid = 3; // Drafts
 		}
 		var savefilename = getSaveFileNameFromId(savefileid);
 		showStatusMsg('Saving to '+ savefilename);
@@ -24,8 +24,28 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 				if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
 				var data = Ext.getCmp('searchgrid').getSelections()[0].data;
 				var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+                var searchtargetname = data.location[0].name;
+                var searchtargetsid = DB.SearchTargets.select('name=?', [searchtargetname]).getOne().rowid;
 				progress.updateProgress(.6, 'Retrieving record from server');
-				recid = addRecordFromSearch(id, 0, editorid, data, savefileid, xml);
+                var record = new DB.Records({
+                    title: UI.editor[editorid].record.getValue('245', 'a') || '',
+                    author: UI.editor[editorid].record.getValue('100', 'a') || '',
+                    location: data.location[0].name || '',
+                    publisher:UI.editor[editorid].record.getValue('260', 'b') || '',
+                    medium: data.medium || '',
+                    date:UI.editor[editorid].record.getValue('260', 'c') || '',
+                    status: 'new',
+                    xml: xml,
+                    date_added: new Date().toString(),
+                    date_modified: new Date().toString(),
+                    SearchTargets_id: searchtargetsid,
+                    Savefiles_id: savefileid,
+                    xmlformat: 'marcxml',
+                    marcflavour: 'marc21',
+                    template: null,
+                    marcformat: null
+                }).save();
+
 				if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
 			}
 			else { // recid isn't empty so we've already saved this record, just update it
@@ -155,7 +175,7 @@ function addRecordFromSearch(id, offset, editorid, data, savefileid, newxml) {
 		// o is a json literal containing the record id, grid data and savefileid for this record
 		if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + params.title);}
 		try {
-			var target = DB.SearchTargets.select('name=?', [params.recData.location]).getOne();
+			var target = DB.SearchTargets.select('name=?', [params.recData.location.name]).getOne();
 			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [params.savefileid]).getOne();
 			var record = new DB.Records({
 				title: UI.editor[editorid]? UI.editor[editorid].record.getValue('245', 'a') : params.recData.title || '',
