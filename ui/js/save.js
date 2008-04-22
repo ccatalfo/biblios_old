@@ -70,6 +70,8 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 						Ext.MessageBox.alert('Database error',ex.message);
 				}
 			}
+            showStatusMsg("Record(s) saved to "+savefilename);
+            clearStatusMsg();
 			progress.hide();
 			Ext.get('fixedfields_editor').unmask();
 			Ext.get('varfields_editor').unmask();
@@ -123,8 +125,6 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 				});
 			}
 		}
-		showStatusMsg("Record(s) saved to "+savefilename);
-		clearStatusMsg();
 		return true;
 	}
 

@@ -569,7 +569,9 @@ function showStatusMsg(msg) {
 
 function clearStatusMsg() {
 	//Ext.get('status-msg').slideOut();
-	Ext.get('status-msg').update('');
+    setTimeout(function() {
+        Ext.get('status-msg').update('');
+    }, 1000);
 }
 
 /* Function: filterSearchResultsByServer
