@@ -1394,6 +1394,7 @@ biblios.app = function() {
 																var droppedsavefileid = e.target.attributes.savefileid;
 																if( e.data.selections) {
 																	doSaveLocal(droppedsavefileid, '', 0, true);
+                                                                    Ext.getCmp('savegrid').store.reload();
 																}
 																// we have a record from a location in search grid
 																else {
