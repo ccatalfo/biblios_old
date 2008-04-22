@@ -108,6 +108,8 @@ function setPazPar2Targets() {
 					'&' +
 					'pz:name['+db+']='+ n.name +
 					'&' +
+                    'pz:authentication['+db+']='+n.userid+'/'+n.password +
+                    '&'+
 					'pz:requestsyntax['+db+']='+'marc21'+
 					'&' +
 					'pz:elements['+db+']='+'F'+
