@@ -26,7 +26,10 @@ biblios.app = function() {
 	// editor
 	var editor = {};
 	editor.record = {};
-    var paz = {};
+    var paz = {
+        sessionID : '',
+        sessionStatus : 'uninitialized'
+    };
 	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
     if( Ext.get('loadingtext') ) {
         Ext.get('loadingtext').update('Reading biblios configuration file');
@@ -132,6 +135,14 @@ biblios.app = function() {
 			initCallback: function() {
                 if( this.initStatusOK == true ) {
                     biblios.app.paz.sessionID = this.sessionID;
+                    // set searchgrid's data url for pazpar2 show
+                    if( Ext.getCmp('searchgrid') && Ext.getCmp('searchgrid').store ) {
+                        Ext.getCmp('searchgrid').store.proxy.conn.url = new Ext.data.HttpProxy({url: pazpar2url+'?session='+biblios.app.paz.sessionID+'&command=show'});
+                    }
+                    // set facets data url for pazpar termlist
+                    if( Ext.getCmp('facetsTreePanel') && Ext.getCmp('facetsTreePanel').loader ) {
+                        Ext.getCmp('facetsTreePanel').loader = new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+biblios.app.paz.sessionID+'&command=termlist&name=author,publication-name,subject,date'});
+                    }
                     if( Ext.get('loadingtext') ){
                         Ext.get('loadingtext').update('Setting up search targets');
                     }
