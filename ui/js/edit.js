@@ -385,13 +385,13 @@ function create_static_editor(ffed, vared, editorid) {
 }
 
 function onFocus(elem) {
-    console.info(elem);
+    //console.info(elem);
 	$(elem).addClass('focused');
     // is this element an input or a textarea?
     var nodeName = $(elem).get(0).nodeName;
 	var editorid = $(elem).parents('.marceditor').get(0).id;
     var elemid = $(elem).get(0).id;
-    console.info(elemid);
+    //console.info(elemid);
 	UI.editor.lastFocusedEl = elem;
 	UI.editor.lastEditorId = editorid;
 	UI.editor[editorid].lastFocusedEl = elem;
