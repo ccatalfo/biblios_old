@@ -26,10 +26,6 @@ biblios.app = function() {
 	// editor
 	var editor = {};
 	editor.record = {};
-    var paz = {
-        sessionID : '',
-        sessionStatus : 'uninitialized'
-    };
 	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
     if( Ext.get('loadingtext') ) {
         Ext.get('loadingtext').update('Reading biblios configuration file');
@@ -213,6 +209,10 @@ biblios.app = function() {
 		currQuery : this.currQuery,
 		savefiles : this.savefiles,
         uploadDialog : null,
+        paz : {
+            sessionID : '',
+            sessionStatus : 'uninitialized'
+        },
 		send: {
 			numToSend: 0,
 			sendSource: '',
