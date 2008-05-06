@@ -762,13 +762,13 @@ function doUploadMarc(dialog, filename, resp_data) {
             var title = $('datafield[@tag=245] subfield[@code=a]', this).text();
             showStatusMsg('Uploaded ' + title + ' to Drafts');
             clearStatusMsg();
+            Ext.MessageBox.alert('Upload complete', 'Uploading is completed.  Files have been added to Drafts folder with status \'uploaded\'');
         });
     });
 }
 
 function uploadComplete(dialog) {
     dialog.hide();
-    Ext.MessageBox.alert('Upload complete', 'Uploading is completed.  Files have been added to Drafts folder with status \'uploaded\'');
 }
 
 function uploadFailed(dialog, filename) {
