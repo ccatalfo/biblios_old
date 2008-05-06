@@ -738,6 +738,13 @@ function showUploadDialog() {
 }
 function doUploadMarc(dialog, filename, resp_data) {
     console.info(resp_data);
+    $.get(cgiDir+'download.pl?filename='+resp_data.filepath, function(data) {
+        console.info(data);
+        $('record', data).each( function(i) {
+            var title = $('datafield[tag=245]', this).text();
+
+        });
+    });
 }
 
 function uploadComplete(dialog) {
