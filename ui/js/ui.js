@@ -723,6 +723,7 @@ function showUploadDialog() {
  if (!biblios.app.uploadDialog) {
       biblios.app.uploadDialog = new Ext.ux.UploadDialog.Dialog({
         url: '/cgi-bin/uploadMarc.pl',
+        permitted_extensions: ['xml', 'mrc'],
         reset_on_hide: false,
         allow_close_on_upload: true,
         upload_autostart: true,
@@ -758,6 +759,9 @@ function doUploadMarc(dialog, filename, resp_data) {
                 template : null,
                 marcformat : null
             }).save();
+            var title = $('datafield[@tag=245] subfield[@code=a]', this).text();
+            showStatusMsg('Uploaded ' + title + ' to Drafts');
+            clearStatusMsg();
         });
     });
 }
