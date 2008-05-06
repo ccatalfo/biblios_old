@@ -741,8 +741,23 @@ function doUploadMarc(dialog, filename, resp_data) {
     $.get(cgiDir+'download.pl?filename='+resp_data.filepath, function(data) {
         console.info(data);
         $('record', data).each( function(i) {
-            var title = $('datafield[tag=245]', this).text();
-
+            var record = new DB.Records({
+                xml : '<record>' + $(this).html() + '</record>',
+                title : $('datafield[@tag=245] subfield[@code=a]', this).text(),
+                author : $('datafield[@tag=245] subfield[@code=c]', this).text(),
+                publisher : $('datafield[@tag=260] subfield[@code=b]', this).text(),
+                date : $('datafield[@tag=260] subfield[@code=c]', this).text(),
+                date_added : new Date().toString(),
+                date_modified : new Date().toString(),
+                status : 'uploaded',
+                medium : '',
+                SearchTargets_id : '',
+                Savefiles_id : 3,
+                xmlformat : 'marcxml',
+                marcflavour : 'marc21',
+                template : null,
+                marcformat : null
+            }).save();
         });
     });
 }
