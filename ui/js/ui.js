@@ -726,14 +726,14 @@ function showUploadDialog() {
         reset_on_hide: false,
         allow_close_on_upload: true,
         upload_autostart: true,
-        post_var_name: 'upload'
+        post_var_name: 'file'
       });
       
       biblios.app.uploadDialog.on('uploadsuccess', doUploadMarc);
       biblios.app.uploadDialog.on('uploadcomplete', uploadComplete);
       biblios.app.uploadDialog.on('uploadfailed', uploadFailed);
-      biblios.app.uploadDialog.show();
     }
+    biblios.app.uploadDialog.show();
 }
 function doUploadMarc(dialog, filename, resp_data) {
 }
