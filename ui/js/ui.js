@@ -363,46 +363,6 @@ function handleDownload(format, encoding, xml) {
         );
 }
 
-/*
-   Function: doUploadMarc
-
-   Prompt the user for a marc file to upload, process it to retrieve records within (in perl script), then return those marcxml records to the web application for display in a grid.
-
-   Parameters:
-
-   None.
-
-   Returns:
-
-   None.
-
-   Note:
-
-   *Not yet functional*
-
-*/
-function doUploadMarc() {
-        var uploadDlg = new Ext.BasicDialog("upload-dlg", {
-        height: 300,
-        width: 500,
-        modal: true   
-        });
-        uploadDlg.addKeyListener(26, uploadDlg.hide, uploadDlg);
-        uploadDlg.addKeyListener(13, uploadDlg.hide, uploadDlg);
-        uploadDlg.addButton('Cancel', uploadDlg.hide, uploadDlg);
-        uploadDlg.body.dom.innerHTML = "<div id='uploadFormDiv'/>";
-        $("#uploadFormDiv").append("<form id='uploadForm' target='upload_frame' method='POST' action="+cgiDir+"'uploadMarc.pl' enctype='multipart/form-data'>Choose a file to upload:<input type='file' id='fileToUpload' name='fileToUpload'/></form>");
-        // add iframe to set as post target
-        $("<iframe id='upload_frame' src='blank.html' style='display: none;' name='upload_frame'/>").appendTo("body");
-        // add iframe target to upload form
-        uploadDlg.addButton("Upload", function(){ 
-                // post to the upload perl script w/ iframe as target
-                 // submit the form!
-                $("#uploadForm").submit();
-                }, 
-        uploadDlg);
-        uploadDlg.show();
-}
 
 function getRecordTemplates() {
     var list = new Array();
@@ -759,3 +719,29 @@ function runMacro() {
 
 }
 
+function showUploadDialog() {
+ if (!biblios.app.uploadDialog) {
+      biblios.app.uploadDialog = new Ext.ux.UploadDialog.Dialog({
+        url: '/cgi-bin/uploadMarc.pl',
+        reset_on_hide: false,
+        allow_close_on_upload: true,
+        upload_autostart: true,
+        post_var_name: 'upload'
+      });
+      
+      biblios.app.uploadDialog.on('uploadsuccess', doUploadMarc);
+      biblios.app.uploadDialog.on('uploadcomplete', uploadComplete);
+      biblios.app.uploadDialog.on('uploadfailed', uploadFailed);
+      biblios.app.uploadDialog.show();
+    }
+}
+function doUploadMarc(dialog, filename, resp_data) {
+}
+
+function uploadComplete(dialog) {
+    dialog.hide();
+}
+
+function uploadFailed(dialog, filename) {
+    Ext.MessageBox.alert('Upload error', filename + ' failed to upload');
+}

@@ -212,6 +212,7 @@ biblios.app = function() {
 		viewport : this.viewport,
 		currQuery : this.currQuery,
 		savefiles : this.savefiles,
+        uploadDialog : null,
 		send: {
 			numToSend: 0,
 			sendSource: '',
@@ -1149,6 +1150,14 @@ biblios.app = function() {
 																			}
 																		}
 																	},
+                                                                    {
+                                                                        id: 'savegridUploadsBtn',
+                                                                        cls: 'x-btn-text-icon bmenu',
+                                                                        icon: libPath + 'ui/images/document-save.png',
+                                                                        text: 'Upload',
+                                                                        tooltip: {text: 'Upload marc21 or marcxml files'},
+                                                                        handler: showUploadDialog
+                                                                    }, // uploads button
 																	{
 																		id: 'savegridToolsBtn',
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
