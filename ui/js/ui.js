@@ -738,9 +738,9 @@ function showUploadDialog() {
     biblios.app.uploadDialog.show();
 }
 function doUploadMarc(dialog, filename, resp_data) {
-    console.info(resp_data);
+    //console.info(resp_data);
     $.get(cgiDir+'download.pl?filename='+resp_data.filepath, function(data) {
-        console.info(data);
+        //console.info(data);
         $('record', data).each( function(i) {
             var record = new DB.Records({
                 xml : '<record>' + $(this).html() + '</record>',
@@ -768,6 +768,7 @@ function doUploadMarc(dialog, filename, resp_data) {
 
 function uploadComplete(dialog) {
     dialog.hide();
+    Ext.MessageBox.alert('Upload complete', 'Uploading is completed.  Files have been added to Drafts folder with status \'uploaded\'');
 }
 
 function uploadFailed(dialog, filename) {
@@ -775,5 +776,6 @@ function uploadFailed(dialog, filename) {
 }
 
 function uploadError(dialog, filename, data) {
-    console.info(data);
+    //console.info(data);
+    Ext.MessageBox.alert('Upload error', filename + ' failed to upload');
 }
