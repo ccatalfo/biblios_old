@@ -732,10 +732,12 @@ function showUploadDialog() {
       biblios.app.uploadDialog.on('uploadsuccess', doUploadMarc);
       biblios.app.uploadDialog.on('uploadcomplete', uploadComplete);
       biblios.app.uploadDialog.on('uploadfailed', uploadFailed);
+      biblios.app.uploadDialog.on('uploaderror', uploadError);
     }
     biblios.app.uploadDialog.show();
 }
 function doUploadMarc(dialog, filename, resp_data) {
+    console.info(resp_data);
 }
 
 function uploadComplete(dialog) {
@@ -744,4 +746,8 @@ function uploadComplete(dialog) {
 
 function uploadFailed(dialog, filename) {
     Ext.MessageBox.alert('Upload error', filename + ' failed to upload');
+}
+
+function uploadError(dialog, filename, data) {
+    console.info(data);
 }
