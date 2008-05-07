@@ -635,7 +635,13 @@ biblios.app = function() {
 														split: true,
 														height: 300,
 														html: '<div id="marceditorone"><div class="ffeditor"></div><div class="vareditor"></div></div>',
-														tbar: (editorToolbar = [
+														tbar: (editorToolbar = new Ext.Toolbar ({
+                                                            listeners: {
+                                                                beforerender: function(tbar) {
+                                                                        tbar.autoCreate.html = '<table cellspacing="0"><tr></tr></table>';
+                                                                }
+                                                            },
+                                                            items: [
 															{
 																cls: 'x-btn-text-icon',
 																icon: libPath + 'ui/images/edit-copy.png',
@@ -772,7 +778,8 @@ biblios.app = function() {
 																	clearStatusMsg();
 																}
 															}
-														]) // editorone toolbar
+														] 
+                                                        }))// editorone toolbar
 													},
 													// editor two
 													{
@@ -1703,7 +1710,9 @@ biblios.app = function() {
 																editor: new Ext.form.Checkbox()
 															}
 														]),
-														tbar: [
+														tbar: new Ext.Toolbar({
+                                                            id: 'macrosgridtbar',
+                                                            items: [
 															{
 																text: 'Add Macro',
 																handler: function() {
@@ -1732,7 +1741,13 @@ biblios.app = function() {
 																	Ext.getCmp('macrosgrid').store.reload();
 																}
 															}
-														] // macros grid toolbar
+                                                            ], // macros grid toolbar
+                                                            listeners: {
+                                                                beforerender: function(tbar) {
+                                                                        tbar.autoCreate.html = '<table cellspacing="0"><tr></tr></table>';
+                                                                }
+                                                            }
+                                                        }) // macros grid tbar
 													}) // macros gridpanel
 												] // macros grid items
 											}, // macros
@@ -1878,7 +1893,8 @@ biblios.app = function() {
 																		editor: new Ext.grid.GridEditor(new Ext.form.Checkbox())
 																	}
 																]),
-																tbar: [
+																tbar: new Ext.Toolbar({
+                                                                    items: [
 																	{
 																		text: 'Add Search Target',
 																		handler: function() {
@@ -1931,7 +1947,13 @@ biblios.app = function() {
 																			Ext.getCmp('searchtargetsgrid').store.reload();
 																		}
 																	}
-																]
+																],
+                                                                listeners: {
+                                                                    beforerender: function(tbar) {
+                                                                            tbar.autoCreate.html = '<table cellspacing="0"><tr></tr></table>';
+                                                                    }
+                                                                }
+                                                                }) // toolbar
 															}) // search targets grid
 
 														] // center search target tab region
@@ -2079,7 +2101,8 @@ biblios.app = function() {
 																		editor: new Ext.form.Checkbox()
 																	}
 																]), // send target column model
-																tbar: [
+																tbar:  new Ext.Toolbar({
+                                                                    items: [
 																	{
 																		text: 'Add Send Target',
 																		handler: function() {
@@ -2170,7 +2193,13 @@ biblios.app = function() {
                                                                             }
 																		}
 																	}
-																] // send target grid toolbar
+																], 
+                                                                listeners: {
+                                                                    beforerender: function(tbar) {
+                                                                            tbar.autoCreate.html = '<table cellspacing="0"><tr></tr></table>';
+                                                                    }
+                                                                }
+                                                                }) // toolbar
 															}) // sendtarget editorgridpanel constructor
 														] // send targets tab items
 													} // send targets tab center region
