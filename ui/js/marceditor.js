@@ -107,8 +107,8 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 				var value = editorsubfields.eq(j).find('.subfield-text').val();
 				var newsf = new Subfield(code, value);
 				subfields.push(newsf);
-				newfield = new Field(tagnumber, ind1, ind2, subfields);
 			}
+            newfield = new Field(tagnumber, ind1, ind2, subfields);
 		}
 		return newfield;
 	}
@@ -286,31 +286,29 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 
 	this._addSubfield = function(tag, index, subfield, value) {
 		// get last subfield in this tag
-		var numsf = $('div[@id^='+tag+']', UI.editor[editorid].vared).eq(index).find('.subfield-text').length;
-		var lastsf = $('div[@id^='+tag+']', UI.editor[editorid].vared).eq(index).find('.subfield-text').eq(numsf-1);
+        var tagToAddTo = '';
+        var indexOfTag = index ? index : 0;
+        if( tag ) {
+            tagToAddTo = tag; 
+        }
+        else {
+            tagToAddTo = $(UI.editor[editorid].lastFocusedEl).parents('.tag').children('.tagnumber').val();
+        }
+		var numsf = $('div[@id^='+tagToAddTo+']', UI.editor[editorid].vared).eq(indexOfTag).find('.subfield-text').length;
+		var lastsf = $('div[@id^='+tagToAddTo+']', UI.editor[editorid].vared).eq(indexOfTag).find('.subfield-text').eq(numsf-1);
 		var lastFocused = UI.editor[editorid].lastFocusedEl;
-		// if we're adding tag w/ tagnumber via macro
-		if( tag ) {
-			var afterEl = lastsf;	
-			 // get a new random id for the new elements
-			 var newid="newsubfield-" + Math.floor(Math.random()*100);    
-			$(afterEl).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text'></span>");
-			// now set its delimiter to the passed in subfield code
-			var oldval = $(lastsf).parents('.subfield').next().children('.subfield-delimiter').val();
-			$(lastsf).parents('.subfield').next().children('.subfield-delimiter').val(oldval+subfield);
-			if(value) {
-				// set its value to pass in param
-				$(lastsf).parents('.subfield').next().children('.subfield-text').val(value);
-			}
-			// focus the new subfield-text
-			$(lastsf).parents('.subfield').next().children('.subfield-text').focus();
-		}
-		// if we're just adding a sf w/ kb or toolbar tn
-		else {
-			var afterEl = lastFocused;	
-			var newid="newsubfield-" + Math.floor(Math.random()*100);    
-			$(afterEl).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text'></span>");
-		}
+        var newid = Ext.id();
+        var elToAddAfter = '';
+        var newval = value ? value : '';
+        // if there are no subfields in this tag
+        if( numsf == 0 ) {
+            $('div[@id^='+tagToAddTo+']', UI.editor[editorid].vared).eq(indexOfTag).find('.subfields').append('<span style="display:none"></span>');
+            elToAddAfter = $('div[@id^='+tagToAddTo+']', UI.editor[editorid].vared).eq(indexOfTag).find('.subfields').children('span');
+        }
+        else {
+            elToAddAfter = $(lastsf).parents('.subfield');
+        }
+        $(elToAddAfter).after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text' value=\""+newval+"\"></span>");
 	};
 
 	this._deleteSubfield = function(editorid, tag, index, subfield) {
