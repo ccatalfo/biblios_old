@@ -771,28 +771,6 @@ biblios.app = function() {
 																	clear_editor(btn.editorid);
 																	clearStatusMsg();
 																}
-															},
-															{
-																cls: 'x-btn-text-icon', // icon and text class
-																icon: libPath + 'ui/images/edit-copy.png',
-																text: 'Merge',
-																handler: doMerge,
-																disabled: true
-															},
-															{
-																cls: 'x-btn-text-icon', // icon and text class
-																icon: libPath + 'ui/images/edit-copy.png',
-																text: 'Validate',
-																editorid: 'editorone',
-																handler: doValidate,
-																disabled: true
-															},
-															{
-																cls: 'x-btn-text-icon', // icon and text class
-																icon: libPath + 'ui/images/preferences-system.png',
-																text: 'Options',
-																handler: doRecordOptions,
-																disabled: true
 															}
 														]) // editorone toolbar
 													},
