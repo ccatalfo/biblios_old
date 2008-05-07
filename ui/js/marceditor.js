@@ -212,14 +212,11 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 
 			// insert the new field in numerical order among the existing tags
 			var tags = $(".tag",UI.editor[editorid].vared  );
-			var tagToInsertAfter; // the tag just before where we'll insert the new tag
+			var tagToInsertAfter = UI.editor[editorid].lastFocusedEl; // the tag just before where we'll insert the new tag
 			var highestSuffix = 1; // highest number appended to tag id's with this tag number.  Add 1 to it to get suffix for new tag
 			var newSuffix = tags.length +1;
 			for( var i = 0; i<tags.length; i++) {
 				var id = $(tags[i]).attr('id').substr(0,3);
-				if( id < tagnumber) {
-					tagToInsertAfter = tags[i];
-				}
 			}
 			var newId = tagnumber + "-" + newSuffix;
 			  var newtag = '<div class="tag" id="'+newId+'">';
