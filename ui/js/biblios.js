@@ -1624,6 +1624,7 @@ biblios.app = function() {
 												listeners: {
 													activate: function(tab) {
 														Ext.getCmp('macrosgrid').store.load({db: db, selectSql: biblios.app.db.selectSqlMacros});
+														biblios.app.viewport.doLayout();
 													}
 												}, // macros tab listeners
 												items: [
