@@ -648,7 +648,7 @@ biblios.app = function() {
 																id: 'editortasks',
 																editorid: 'editorone',
 																text: 'Tools',
-																tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-k<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
+																tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-r<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
 																menu: {
 																	id: 'editortasksmenu',
 																	items: [
@@ -668,7 +668,7 @@ biblios.app = function() {
 																		{
 																			id: 'addField',
 																			editorid: 'editorone',
-																			text: 'Add Field',
+																			text: 'Add Field Ctrl-n',
 																			handler: function(btn) {
 																				UI.editor.editorone.record.addField();
 																			}
@@ -676,7 +676,7 @@ biblios.app = function() {
 																		{
 																			id: 'removeField',
 																			editorid: 'editorone',
-																			text: 'Remove Field',
+																			text: 'Remove Field Ctrl-r',
 																			handler: function(btn) {
 																				UI.editor[btn.editorid].record.deleteField('editorone');
 																			}
@@ -684,7 +684,7 @@ biblios.app = function() {
 																		{
 																			id: 'addSubfield',
 																			editorid: 'editorone',
-																			text: 'Add Subfield',
+																			text: 'Add Subfield Ctrl-m',
 																			handler: function(btn) {
 																				UI.editor[btn.editorid].record.addSubfield();
 																			}
@@ -692,7 +692,7 @@ biblios.app = function() {
 																		{	
 																			id: 'removeSubfield',
 																			editorid: 'editorone',
-																			text: 'Remove subfield',
+																			text: 'Remove subfield Ctrl-d',
 																			handler: function(btn) {
 																				UI.editor[btn.editorid].record.deleteSubfield(btn.editorid);
 																			}
@@ -820,7 +820,7 @@ biblios.app = function() {
 																		{
 																			id: 'addField',
 																			editorid: 'editortwo',
-																			text: 'Add Field',
+																			text: 'Add Field Ctrl-n',
 																			handler: function(btn) {
 																				UI.editor.editorone.record.addField();
 																				UI.editor[btn.editorid].record.update();
@@ -829,7 +829,7 @@ biblios.app = function() {
 																		{
 																			id: 'removeField',
 																			editorid: 'editortwo',
-																			text: 'Remove Field',
+																			text: 'Remove Field Ctrl-r',
 																			handler: function(btn) {
 																				UI.editor[btn.editorid].record.deleteField('editorone');
 																				UI.editor[btn.editorid].record.update();
@@ -838,7 +838,7 @@ biblios.app = function() {
 																		{
 																			id: 'addSubfield',
 																			editorid: 'editortwo',
-																			text: 'Add Subfield',
+																			text: 'Add Subfield Ctrl-m',
 																			handler: function(btn) {
 																				UI.editor[btn.editorid].record.addSubfield();
 																			}
@@ -846,7 +846,7 @@ biblios.app = function() {
 																		{	
 																			id: 'removeSubfield',
 																			editorid: 'editortwo',
-																			text: 'Remove subfield',
+																			text: 'Remove subfield Ctrl-d',
 																			handler: function(btn) {
 																				UI.editor[btn.editorid].record.deleteSubfield(btn.editorid);
 																				UI.editor[btn.editorid].record.update();
