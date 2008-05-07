@@ -925,20 +925,6 @@ biblios.app = function() {
 																	clear_editor('editortwo');
 																	clearStatusMsg();
 																}
-															},
-															{
-																cls: 'x-btn-text-icon', // icon and text class
-																icon: libPath + 'ui/images/edit-copy.png',
-																text: 'Merge',
-																handler: doMerge,
-																disabled: true
-															},
-															{
-																cls: 'x-btn-text-icon', // icon and text class
-																icon: libPath + 'ui/images/preferences-system.png',
-																text: 'Options',
-																handler: doRecordOptions,
-																disabled: true
 															}
 														] // editortwo toolbar
 													} // editor south
@@ -1564,7 +1550,46 @@ biblios.app = function() {
 																}
 															} // save folder tree context menu
 														}
-													}) // resources treepanel with treeeditor applied
+													}), // resources treepanel with treeeditor applied
+                                                new Ext.tree.TreePanel({
+                                                    id: 'editorsTreePanel',
+                                                    leaf: false,
+                                                    rootVisible: true,
+                                                    listeners: {
+                                                        click: function(node, e) {
+                                                            biblios.app.displayRecordView();
+                                                        }
+                                                    },
+                                                    root: new Ext.tree.AsyncTreeNode({
+                                                        text: 'Editors',
+                                                        leaf: false,
+                                                        loader: new Ext.tree.TreeLoader({}),
+                                                        children: [
+                                                            {
+                                                                text: 'Editor one',
+                                                                id: 'editorOneNode',
+                                                                listeners: {
+                                                                    click: function(node, e) {
+                                                                        biblios.app.displayRecordView();
+                                                                        Ext.getCmp('editortwo').collapse();
+                                                                        Ext.getCmp('editorone').expand();
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                text: 'Editor two',
+                                                                id: 'editorTwoNode',
+                                                                listeners: {
+                                                                    click: function(node, e) {
+                                                                        biblios.app.displayRecordView();
+                                                                        Ext.getCmp('editorone').collapse();
+                                                                        Ext.getCmp('editortwo').expand();
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    }) // editors tree root
+                                                }) // editors tree panel
 												] // tree panel items
 											} // center region of sidebar
 										] // resources panel items
