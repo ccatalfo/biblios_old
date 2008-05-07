@@ -2057,12 +2057,14 @@ biblios.app = function() {
 																	{
 																		header: 'Plugin Location',
 																		dataIndex: 'pluginlocation',
-																		editor: new Ext.form.TextField()
+																		editor: new Ext.form.TextField(),
+                                                                        hidden: true
 																	},
 																	{
 																		header: 'Plugin Init',
 																		dataIndex: 'plugininit',
-																		editor: new Ext.form.TextField()
+																		editor: new Ext.form.TextField(),
+                                                                        hidden: true
 																	},
 																	{
 																		header: 'Enabled', 
