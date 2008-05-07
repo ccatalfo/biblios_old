@@ -680,7 +680,7 @@ biblios.app = function() {
 																			editorid: 'editorone',
 																			text: 'Add Subfield',
 																			handler: function(btn) {
-																				UI.editor[btn.editorid].record.addSubfield(btn.editorid);
+																				UI.editor[btn.editorid].record.addSubfield();
 																			}
 																		},
 																		{	
@@ -855,7 +855,7 @@ biblios.app = function() {
 																			editorid: 'editortwo',
 																			text: 'Add Subfield',
 																			handler: function(btn) {
-																				UI.editor[btn.editorid].record.addSubfield(btn.editorid);
+																				UI.editor[btn.editorid].record.addSubfield();
 																			}
 																		},
 																		{	

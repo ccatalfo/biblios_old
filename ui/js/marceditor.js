@@ -212,7 +212,7 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 
 			// insert the new field in numerical order among the existing tags
 			var tags = $(".tag",UI.editor[editorid].vared  );
-			var tagToInsertAfter = UI.editor[editorid].lastFocusedEl; // the tag just before where we'll insert the new tag
+			var tagToInsertAfter = $(UI.editor[editorid].lastFocusedEl).parents('.tag'); // the tag just before where we'll insert the new tag
 			var highestSuffix = 1; // highest number appended to tag id's with this tag number.  Add 1 to it to get suffix for new tag
 			var newSuffix = tags.length +1;
 			for( var i = 0; i<tags.length; i++) {
@@ -284,7 +284,7 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 		}
 	};
 
-	this._addSubfield = function(editorid, tag, index, subfield, value) {
+	this._addSubfield = function(tag, index, subfield, value) {
 		// get last subfield in this tag
 		var numsf = $('div[@id^='+tag+']', UI.editor[editorid].vared).eq(index).find('.subfield-text').length;
 		var lastsf = $('div[@id^='+tag+']', UI.editor[editorid].vared).eq(index).find('.subfield-text').eq(numsf-1);
@@ -311,7 +311,6 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 			var newid="newsubfield-" + Math.floor(Math.random()*100);    
 			$(afterEl).parents('.subfield').after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text'></span>");
 		}
-		update();
 	};
 
 	this._deleteSubfield = function(editorid, tag, index, subfield) {
@@ -601,8 +600,8 @@ MarcEditor.prototype.deleteSubfields = function(tag) {
 	this._deleteSubfields(tag);
 };
 
-MarcEditor.prototype.addSubfield = function(editorid, tag, index, subfield, value) {
-	this._addSubfield(editorid, tag, index, subfield, value);
+MarcEditor.prototype.addSubfield = function(tag, index, subfield, value) {
+	this._addSubfield(tag, index, subfield, value);
 };
 
 MarcEditor.prototype.focusTag = function(tag) {
