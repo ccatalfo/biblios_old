@@ -61,7 +61,7 @@ Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site aja
    
 </IfModule>
 
-6. Edit the conf/biblios-dist.conf file to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios-dist.conf file for the syntax.  
+6. Edit the conf/biblios-dist.conf file to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios-dist.conf file for the syntax.  Note that in order to retrieve records directly from Koha, as well as to enable extra functionality for Koha-retrieved records (e.g. disabling Koha-specific tags and validating certain required tags), your Koha installation's Search Target name must match your Koha installation's Send Target name.  
 
 7. Rename the biblios-dist.conf file to biblios.conf.
 
