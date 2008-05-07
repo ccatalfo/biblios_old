@@ -530,6 +530,13 @@ function onBlur(elem) {
 	UI.editor.lastEditorId = editorid;
 	UI.editor.lastFocusedEl = elem;
 	UI.editor[editorid].lastFocusedEl = elem;
+    var val = $(elem).val();
+    // if we're in a subfield delimiter, make sure the doubledagger stays put as first char
+    if( $(elem).hasClass('subfield-delimiter') ) {
+        if( val.charAt(0) != '‡' ) {
+            $(elem).val('‡'+val);
+        }
+    }
 }
 
 function onFixedFieldEditorBlur(elem) {
