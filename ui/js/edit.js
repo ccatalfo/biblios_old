@@ -661,7 +661,7 @@ function setupEditorHotkeys(editorelem) {
 	});
 }
 
-function createAuthComboBox(editorid, tagelem, xmlReader, displayField, queryIndex, recordSchema) {
+function createAuthComboBox(editorid, tagelem, xmlReader, displaytpl, displayField, queryIndex, recordSchema) {
 	var subfield_text = $(tagelem);
 	if( subfield_text.length == 0 ) {
 		return;
@@ -698,6 +698,7 @@ function createAuthComboBox(editorid, tagelem, xmlReader, displayField, queryInd
 		selectOnFocus: true,
 		hideTrigger: true,
 		displayField: displayField,
+        tpl: displaytpl,
 		loadingText: 'Searching...',
 		cls: 'authority-field',
 		lazyRender: false,
@@ -827,33 +828,40 @@ function setupMarc21AuthorityLiveSearches(editorid) {
 	);
 	// personal names
 	Ext.select('div[id^=100] .a.subfield-text, div[id^=700] .a.subfield-text, div[id^=600] .a.subfield-text, div[id^=800] .a.subfield-text').each( function(item) {
-		createAuthComboBox(editorid,  $(item.dom), pnameXmlReader, 'pname', 'bath.personalName', 'marcxml' );
+        var tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item">{pname} {dates} {relator}</div></tpl>');
+		createAuthComboBox(editorid,  $(item.dom), pnameXmlReader, tpl, 'pname', 'bath.personalName', 'marcxml' );
 		return true;
 	});
 	
 	Ext.select('div[id^=110] .a.subfield-text, div[id^=710] .a.subfield-text, div[id^=610] .a.subfield-text, div[id^=810] .a.subfield-text').each( function(item) {
-		createAuthComboBox(editorid,  $(item.dom), corpnameXmlReader, 'corpname', 'bath.corporateName', 'marcxml' );
+        var tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item">{corpname} /div></tpl>');
+		createAuthComboBox(editorid,  $(item.dom), corpnameXmlReader, tpl, 'corpname', 'bath.corporateName', 'marcxml' );
 		return true;
 	});
 	Ext.select('div[id^=111] .a.subfield-text, div[id^=711] .a.subfield-text, div[id^=611] .a.subfield-text, div[id^=811] .a.subfield-text').each( function(item) {
-		createAuthComboBox(editorid,  $(item.dom), confnameXmlReader, 'confname', 'bath.conferenceName', 'marcxml' );
+        var tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item">{confname} /div></tpl>');
+		createAuthComboBox(editorid,  $(item.dom), confnameXmlReader, tpl, 'confname', 'bath.conferenceName', 'marcxml' );
 		return true;
 	});
 	Ext.select('div[id^=240] .a.subfield-text, div[id^=130] .a.subfield-text, div[id^=740] .a.subfield-text, div[id^=630] .a.subfield-text').each( function(item) {
-		createAuthComboBox(editorid,  $(item.dom), uniformtitleXmlReader, 'title', 'bath.uniformTitle', 'marcxml' );
+        var tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item">{title} /div></tpl>');
+		createAuthComboBox(editorid,  $(item.dom), uniformtitleXmlReader, tpl, 'title', 'bath.uniformTitle', 'marcxml' );
 		return true;
 	});
 	// subject headings
 	Ext.select('div[id^=650] .a.subfield-text').each( function(item) {
-		createAuthComboBox(editorid,  $(item.dom), topicalTermXmlReader, 'topicalterm', 'bath.topicalSubject', 'marcxml' );
+        var tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item">{topicalterm} /div></tpl>');
+		createAuthComboBox(editorid,  $(item.dom), topicalTermXmlReader, tpl, 'topicalterm', 'bath.topicalSubject', 'marcxml' );
 		return true;
 	});
 	Ext.select('div[id^=651] .a .subfield-text').each( function(item) {
-		createAuthComboBox(editorid,  $(item.dom), geoTermXmlReader, 'geoterm', 'bath.geographicName', 'marcxml' );
+        var tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item">{geoterm} /div></tpl>');
+		createAuthComboBox(editorid,  $(item.dom), geoTermXmlReader, tpl, 'geoterm', 'bath.geographicName', 'marcxml' );
 		return true;
 	});
 	Ext.select('div[id^=655] .a .subfield-text').each( function(item) {
-		createAuthComboBox(editorid,  $(item.dom), genreTermXmlReader, 'genreterm', 'bath.genreForm', 'marcxml' );
+        var tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item">{genreterm} /div></tpl>');
+		createAuthComboBox(editorid,  $(item.dom), genreTermXmlReader, tpl, 'genreterm', 'bath.genreForm', 'marcxml' );
 		return true;
 	});
 }
