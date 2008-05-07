@@ -1862,7 +1862,8 @@ biblios.app = function() {
 																	{
 																		header: 'Syntax',
 																		dataIndex: 'syntax',
-																		editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+																		editor: new Ext.grid.GridEditor(new Ext.form.TextField()),
+                                                                        hidden: true
 																	},
 																	{
 																		header: 'Enabled', 
