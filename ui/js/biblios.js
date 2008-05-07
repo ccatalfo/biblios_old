@@ -1850,7 +1850,14 @@ biblios.app = function() {
 																	{
 																		header: 'Password', 
 																		dataIndex: 'password', 
-																		editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+																		editor: new Ext.grid.GridEditor(new Ext.form.TextField({inputType:'password'})),
+                                                                        renderer: function(value) {
+                                                                            var pw = '';
+                                                                            for( var i = 0; i < value.length; i++) {
+                                                                                pw += '*';
+                                                                            }
+                                                                            return pw;
+                                                                        }
 																	},
 																	{
 																		header: 'Syntax',
@@ -2037,7 +2044,14 @@ biblios.app = function() {
 																	{
 																		header: 'Password', 
 																		dataIndex: 'password', 
-																		editor: new Ext.form.TextField()
+																		editor: new Ext.form.TextField({inputType:'password'}),
+                                                                        renderer: function(value) {
+                                                                            var pw = '';
+                                                                            for( var i = 0; i < value.length; i++) {
+                                                                                pw += '*';
+                                                                            }
+                                                                            return pw;
+                                                                        }
 																	},
 																	{
 																		header: 'Plugin Location',
