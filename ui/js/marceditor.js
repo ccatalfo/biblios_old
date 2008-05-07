@@ -195,16 +195,16 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 		}
 	};
 
-	this._addField = function(editorid, tagnumber, ind1, ind2, subfields) {
+	this._addField = function(tagnumber, ind1, ind2, subfields) {
 		if( tagnumber ) {
-			doAddField(editorid, tagnumber, ind1, ind2, subfields);
+			doAddField(tagnumber, ind1, ind2, subfields);
 		}
 		else {
 			Ext.MessageBox.prompt('Add tag', 'Choose a tag number', function(btn, tagnumber) {
-				doAddField(editorid, tagnumber);
+				doAddField(tagnumber);
 			});
 		}
-		function doAddField(editorid, tagnumber, ind1, ind2, subfields) {
+		function doAddField(tagnumber, ind1, ind2, subfields) {
 			var firstind = ind1 || ' ';
 			var secondind = ind2 || ' ';
 			var sf = subfields || [ {'delimiter': 'a', 'text': ''} ];
@@ -616,8 +616,8 @@ MarcEditor.prototype.focusSubfield = function(tag, subfield) {
 	this._focusSubfield(tag, subfield);
 };
 
-MarcEditor.prototype.addField = function(editorid, tag, ind1, ind2, subfields) {
-	this._addField(editorid, tag, ind1, ind2, subfields);
+MarcEditor.prototype.addField = function(tag, ind1, ind2, subfields) {
+	this._addField(tag, ind1, ind2, subfields);
 };
 
 MarcEditor.prototype.deleteField = function(editorid, tagnumber, i) {
