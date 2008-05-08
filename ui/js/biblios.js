@@ -1579,7 +1579,7 @@ biblios.app = function() {
                                                                     click: function(node, e) {
                                                                         biblios.app.displayRecordView();
                                                                         Ext.getCmp('editortwo').collapse();
-                                                                        Ext.getCmp('editorone').expand();
+                                                                        //Ext.getCmp('editorone').expand();
                                                                     }
                                                                 }
                                                             },
@@ -1589,7 +1589,7 @@ biblios.app = function() {
                                                                 listeners: {
                                                                     click: function(node, e) {
                                                                         biblios.app.displayRecordView();
-                                                                        Ext.getCmp('editorone').collapse();
+                                                                        //Ext.getCmp('editorone').collapse();
                                                                         Ext.getCmp('editortwo').expand();
                                                                     }
                                                                 }
