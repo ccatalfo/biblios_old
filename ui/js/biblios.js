@@ -765,7 +765,7 @@ biblios.app = function() {
 																id: 'editorOneCancelMenu',
 																editorid: 'editorone',
 																text: 'Cancel',
-																tooltip: {text: 'Cancel editing of this record'},
+																tooltip: {text: 'Cancel editing of this record (losing all changes since saving)'},
 																handler: function(btn) {
 																	showStatusMsg('Cancelling record...');
 																	if( UI.lastWindowOpen  == 'savegrid' ) {
@@ -920,7 +920,7 @@ biblios.app = function() {
 																id: 'editorTwoCancelMenu',
 																editorid: 'editortwo',
 																text: 'Cancel',
-																tooltip: {text: 'Cancel editing of this record'},
+																tooltip: {text: 'Cancel editing of this record (losing all changes since saving)'},
 																handler: function() {
 																	showStatusMsg('Cancelling record...');
 																	if( UI.lastWindowOpen  == 'savegrid' ) {
