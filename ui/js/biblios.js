@@ -1271,6 +1271,8 @@ biblios.app = function() {
 																else if( checked == false ) {
 																	delete UI.searchLimits[node.id];
 																}
+                                                                // reload so user can't click second facet until new ones are loaded
+                                                                Ext.getCmp('facetsTreePanel').root.reload();
 																limitSearch();
 															} // facets panel check change listener
 
