@@ -759,6 +759,23 @@ biblios.app = function() {
 																	items: getExportMenuItems('editorone')
 																}
 															},
+                                                            {
+                                                                cls: 'x-btn-text-icon',
+                                                                icon: libPath + 'ui/images/process-stop.png',
+                                                                id: 'editorOneRevertBtn',
+                                                                editorid: 'editorone',
+                                                                text: 'Revert',
+                                                                tooltip: {text: 'Revert record to last saved state'},
+                                                                handler: function(btn) {
+                                                                    var progress = Ext.MessageBox.progress('Reverting record to last saved state', '');
+                                                                    var id = UI.editor[ btn.editorid].id;
+                                                                    var xml = getLocalXml(id);
+                                                                    openRecord( xml, btn.editorid );
+                                                                    progress.updateProgress(1, 'Revert complete');
+                                                                    showStatusMsg('Record reverted');
+                                                                    clearStatusMsg();
+                                                                }
+                                                            },
 															{
 																cls: 'x-btn-text-icon', // icon and text class
 																icon: libPath + 'ui/images/process-stop.png',
@@ -914,6 +931,23 @@ biblios.app = function() {
 																	items: getExportMenuItems('editortwo')
 																}
 															},
+                                                            {
+                                                                cls: 'x-btn-text-icon',
+                                                                icon: libPath + 'ui/images/process-stop.png',
+                                                                id: 'editorTwoRevertBtn',
+                                                                editorid: 'editortwo',
+                                                                text: 'Revert',
+                                                                tooltip: {text: 'Revert record to last saved state'},
+                                                                handler: function(btn) {
+                                                                    var progress = Ext.MessageBox.progress('Reverting record to last saved state', '');
+                                                                    var id = UI.editor[ btn.editorid].id;
+                                                                    var xml = getLocalXml(id);
+                                                                    openRecord( xml, btn.editorid );
+                                                                    progress.updateProgress(1, 'Revert complete');
+                                                                    showStatusMsg('Record reverted');
+                                                                    clearStatusMsg();
+                                                                }
+                                                            },
 															{
 																cls: 'x-btn-text-icon', // icon and text class
 																icon: libPath + 'ui/images/process-stop.png',
