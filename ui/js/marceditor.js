@@ -385,7 +385,7 @@ function create_static_editor(ffed, vared, editorid) {
 }
 
 function onFocus(elem) {
-    console.info(elem);
+    //console.info(elem);
 	$(elem).addClass('focused');
     // is this element an input or a textarea?
     var nodeName = $(elem).get(0).nodeName;
@@ -965,62 +965,6 @@ function checkEditorLimits(elem) {
 
 // Object -> marc editor wrapper
 
-function createFixedFieldCell(string, elem, offset, tag) {
-	var name = $(elem).attr('name');
-	var position = $(elem).attr('position') - offset;
-	var length = $(elem).attr('length');
-	var inputtype = $(elem).attr('inputtype');
-	var hidden = $(elem).attr('hidden');
-	var html = '';
-	html += '<td';
-	if( inputtype == 'hidden' || inputtype == 'blank' ) {
-		html += ' style="display:none;"';
-	}
-	html += '>';
-	html += name;
-	html += '</td>';
-	html += '<td';
-	if( inputtype == 'hidden' || inputtype == 'blank' ) {
-		html += ' style="display:none;"';
-	}
-	html += '>';
-	var value = string.substr(position, length);	
-	// fix ctry codes which can be 2 chars instead of 3
-	if( name == 'Ctry' ) {
-		if (value.substr(2,1) == ' ' ) {
-			value = value.substr(0,2);
-		}
-	}
-	if( inputtype == 'textbox' ) {
-		html += '<input id="'+name+'" type="text" onclick="showTagHelp(this)" onblur="onFixedFieldEditorBlur(this)" maxlength="'+value.length+'" size="'+value.length+'" class="fixedfield '+tag+'" value="'+value+'">';
-	}
-	else if(inputtype == 'blank' ) {
-		value = '';
-		for( var k = 0; k < length; k++) {
-			value += ' ';
-		}
-		html += '<input id="'+name+'" size="'+length+'" maxlength="'+length+'" onclick="showTagHelp(this)" style="display: none;" class="fixedfield '+tag+'" type="text" value="'+value+'">';
-	}
-	else if(inputtype == 'hidden') {
-		html += '<input id="'+name+'" size="'+length+'" maxlength="'+length+'" class="fixedfield '+tag+'" style="display: none;" type="text" value="'+value+'">';
-	}
-	else if (inputtype == 'menulist' || inputtype == 'menubox') {
-		html += '<select name="'+name+'" onclick="showTagHelp(this)" class="fixedfield '+tag+'" onblur="onFixedFieldEditorBlur(this)" id="'+name+'" >';
-		$('option', elem).each( function(j) {
-			if( $(this).text() == value ) {
-				html += '<option selected value="'+$(this).text()+'">';
-
-			}
-			else {
-				html += '<option value="'+$(this).text()+'">';
-			}
-			html += $(this).text()+'</option>';
-		});
-		html += '</select>';
-	}
-	html += '</td>';
-	return html;
-} // createFixedFieldCell
 
 function MarcEditor(ffeditor, vareditor, editorid) {
 	// private
@@ -1041,7 +985,64 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 			fieldlist.push( fields[i].tagnumber() );
 		}
 	}
-    
+
+    function createFixedFieldCell(string, elem, offset, tag) {
+        var name = $(elem).attr('name');
+        var position = $(elem).attr('position') - offset;
+        var length = $(elem).attr('length');
+        var inputtype = $(elem).attr('inputtype');
+        var hidden = $(elem).attr('hidden');
+        var html = '';
+        html += '<td';
+        if( inputtype == 'hidden' || inputtype == 'blank' ) {
+            html += ' style="display:none;"';
+        }
+        html += '>';
+        html += name;
+        html += '</td>';
+        html += '<td';
+        if( inputtype == 'hidden' || inputtype == 'blank' ) {
+            html += ' style="display:none;"';
+        }
+        html += '>';
+        var value = string.substr(position, length);	
+        // fix ctry codes which can be 2 chars instead of 3
+        if( name == 'Ctry' ) {
+            if (value.substr(2,1) == ' ' ) {
+                value = value.substr(0,2);
+            }
+        }
+        if( inputtype == 'textbox' ) {
+            html += '<input id="'+name+'" type="text" onclick="showTagHelp(this)" onblur="onFixedFieldEditorBlur(this)" maxlength="'+value.length+'" size="'+value.length+'" class="fixedfield '+tag+'" value="'+value+'">';
+        }
+        else if(inputtype == 'blank' ) {
+            value = '';
+            for( var k = 0; k < length; k++) {
+                value += ' ';
+            }
+            html += '<input id="'+name+'" size="'+length+'" maxlength="'+length+'" onclick="showTagHelp(this)" style="display: none;" class="fixedfield '+tag+'" type="text" value="'+value+'">';
+        }
+        else if(inputtype == 'hidden') {
+            html += '<input id="'+name+'" size="'+length+'" maxlength="'+length+'" class="fixedfield '+tag+'" style="display: none;" type="text" value="'+value+'">';
+        }
+        else if (inputtype == 'menulist' || inputtype == 'menubox') {
+            html += '<select name="'+name+'" onclick="showTagHelp(this)" class="fixedfield '+tag+'" onblur="onFixedFieldEditorBlur(this)" id="'+name+'" >';
+            $('option', elem).each( function(j) {
+                if( $(this).text() == value ) {
+                    html += '<option selected value="'+$(this).text()+'">';
+
+                }
+                else {
+                    html += '<option value="'+$(this).text()+'">';
+                }
+                html += $(this).text()+'</option>';
+            });
+            html += '</select>';
+        }
+        html += '</td>';
+        return html;
+    } // createFixedFieldCell
+
     function generateVariableFieldsEditor(marcXmlDoc) {
         var html = '';
         var leader = $('leader', marcXmlDoc).text();
