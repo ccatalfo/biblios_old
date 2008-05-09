@@ -743,7 +743,7 @@ function doUploadMarc(dialog, filename, resp_data) {
         //console.info(data);
         $('record', data).each( function(i) {
             var record = new DB.Records({
-                xml : '<record>' + $(this).html() + '</record>',
+                xml : '<record xmlns="http://www.loc.gov/MARC21/slim">' + $(this).html() + '</record>',
                 title : $('datafield[@tag=245] subfield[@code=a]', this).text(),
                 author : $('datafield[@tag=245] subfield[@code=c]', this).text(),
                 publisher : $('datafield[@tag=260] subfield[@code=b]', this).text(),
