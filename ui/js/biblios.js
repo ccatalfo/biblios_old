@@ -1321,7 +1321,7 @@ biblios.app = function() {
 														ddGroup: 'RecordDrop',
 														lines: false,
 														root: new Ext.tree.AsyncTreeNode({
-															text: 'Save Folders',
+															text: 'Folders',
 															leaf: false,
 															animate: true,
 															listeners: {
