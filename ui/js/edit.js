@@ -12,21 +12,20 @@
    None.
 
 */
-function openRecord(xml, editorelem) {
-	UI.editor.progress = Ext.MessageBox.progress('Loading record', '');
+function openRecord(xml, editorid) {
 	// we need to display record view first since editors are lazily rendered
 	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
 	biblios.app.displayRecordView();
-	if( editorelem == 'editortwo') {
+	if( editorid == 'editortwo') {
 		Ext.getCmp('editortwo').expand();
 	}
-	var ffed =	$('#'+editorelem).find(".ffeditor");
+	var ffed =	$('#'+editorid).find(".ffeditor");
 	$(ffed).empty();
-	var vared = $('#'+editorelem).find(".vareditor");
+	var vared = $('#'+editorid).find(".vareditor");
 	$(vared).empty();
 
-	UI.editor[editorelem].record = new MarcEditor(ffed, vared, editorelem);
+	UI.editor[editorid].record = new MarcEditor(ffed, vared, editorid);
 	var xmldoc;
 	if( Ext.isIE ) {
 		xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
@@ -36,35 +35,19 @@ function openRecord(xml, editorelem) {
 	else {
 		xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
 	}
-	html = UI.editor[editorelem].record.loadXml( xmldoc );
-	Ext.get('marc'+editorelem).update(html);
-	var ffed =	$('#'+editorelem).find(".ffeditor");
-	var vared = $('#'+editorelem).find(".vareditor");
+	html = UI.editor[editorid].record.loadXml( xmldoc );
+	Ext.get('marc'+editorid).update(html);
 
-	UI.editor[editorelem].ffed = ffed;
-	UI.editor[editorelem].vared = vared;
+	var ffed =	$('#'+editorid).find(".ffeditor");
+	var vared = $('#'+editorid).find(".vareditor");
+	UI.editor[editorid].ffed = ffed;
+	UI.editor[editorid].vared = vared;
 
-	UI.editor.progress.updateProgress(.9, 'Setting up editor hot keys');
-    setupEditorHotkeys(editorelem);
-	UI.editor.progress.updateProgress(.9, 'Setting up authority control');
-	setupMarc21AuthorityLiveSearches(editorelem);
-
-	// setup comboboxes for ctry and lang fixed fields
-	//setupFFEditorLangCombo(editorelem);
-	//setupFFEditorCtryCombo(editorelem);
+    UI.editor[editorid].record.postProcess();
 
 	// setup remote ils-controlled fields
-	if( Prefs.remoteILS[ UI.editor[editorelem].location ] ) {
-		setupReservedTags( UI.editor[editorelem].location, editorelem);
-		setupSpecialEntries( UI.editor[editorelem].location, editorelem);
+	if( Prefs.remoteILS[ UI.editor[editorid].location ] ) {
+        UI.editor[editorid].record.processForLocation();
 	}
-	// show fixed field editor, hide ldr and 008 divs
-	$(ffed).show();
-	// hide fixed field controlfields
-	$('#'+editorelem).find("#000, #008, #006, #007").css('display', 'none');
-	UI.editor.lastFocusedEl = $('#'+editorelem).find('#000').get(0);
-	UI.editor[editorelem].lastFocusedEl = $('#'+editorelem).find('#000').get(0);
-	UI.editor.progress.updateProgress(1, 'MarcEditor loaded');
-	UI.editor.progress.hide();
 	clearStatusMsg();
 }
