@@ -205,58 +205,6 @@ function get007FromEditor() {
 }
 
 
-/*
-
-*/
-function updateFFEditor(editorid, ff_ed, var_ed) {
-	if(debug) { console.info("updating fixed field editor from leader and 008 tags"); }
-    var oDomDoc = Sarissa.getDomDocument();
-    var leaderval = $('#'+editorid).find("#000", var_ed).children('.controlfield').val();
-	if( leaderval.length != 24 ) {
-		throw {
-			error: "InvalidLeader",
-			msg: "Invalid length of Leader"
-		};
-	}
-    var tag008val = $('#'+editorid).find("#008", var_ed).children('.controlfield').val();
-	if( tag008val.length != 40 ) {
-		throw {
-			error: "Invalid008",
-			msg: "Invalid length of 008"
-		};
-	}
-    if(debug) {
-        console.info('Transferring leader value to fixed field editor from leader tag: ' + leaderval);
-        console.info('Transferring 008 value to fixed field editor from 008 tag: ' + tag008val);
-    }
-    var newff = '<collection xmlns="http://www.loc.gov/MARC21/slim">';
-    //"<?xml version='1.0' encoding='UTF-8'?>";
-    newff += "<record><leader>";
-    newff += leaderval;
-    newff += "</leader>";
-    newff += "<controlfield tag='008'>";
-    newff += tag008val;
-    newff += "</controlfield>";
-	if( $('#'+editorid).find("#006", var_ed).length > 0 ) {
-		var tag006val = $('#'+editorid).find("#006", var_ed).children('.controlfield').val();
-		newff += "<controlfield tag='006'>" + tag006val + "</controlfield>";
-	}
-	if( $('#'+editorid).find("#007", var_ed).length > 0 ) {
-		var tag007val = $('#'+editorid).find("#007", var_ed).children('.controlfield').val();
-		newff += "<controlfield tag='007'>" + tag007val + "</controlfield>";
-	}
-    newff += "</record>";
-    newff += "</collection>";
-	var xmldoc = xslTransform.loadString(newff);
-	//FIXME make this an jquery.xslTransform call
-    $('#'+editorid).find(".ffeditor").empty();
-	var temprec = new MarcEditor();
-	var htmled = temprec.loadXml( xmldoc );
-    $('#'+editorid).find(".ffeditor").html(htmled);
-	// setup ff editor's comboboxes
-	setupFFEditorCtryCombo(editorid);
-	setupFFEditorLangCombo(editorid);
-}
 
 
 
@@ -342,32 +290,6 @@ function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
 }
 
 
-function toggleFixedFieldDisplay(btn, toggled) {
-	var editorid = btn.editorid;
-	var ff_ed = $('#'+editorid).find(".ffeditor");
-	var var_ed = $('#'+editorid).find(".vareditor");
-	if( btn.pressed == false ) {
-		// hide fixed field editor
-		$('#'+editorid).find(".ffeditor").hide();
-        // transfer values from fixed field editor into tags
-        transferFF_EdToTags(ff_ed, var_ed, editorid);
-		// show leader and 008
-		$('#'+editorid).find("#000", UI.editor[editorid].vared).show();
-		$('#'+editorid).find("#008", UI.editor[editorid].vared).show();
-		$('#'+editorid).find("#006", UI.editor[editorid].vared).show();
-		$('#'+editorid).find("#007", UI.editor[editorid].vared).show();
-	}
-	else {
-        updateFFEditor(editorid, ff_ed, var_ed);
-		$('#'+editorid).find(".ffeditor").show();
-		// hide leader and fixed fields
-		$('#'+editorid).find("#000", UI.editor[editorid].vared).hide();
-		$('#'+editorid).find("#008", UI.editor[editorid].vared).hide();
-		$('#'+editorid).find("#006", UI.editor[editorid].vared).hide();
-		$('#'+editorid).find("#007", UI.editor[editorid].vared).hide();
-	}
-
-}
 
 function onFocus(elem) {
     //console.info(elem);
@@ -574,11 +496,10 @@ function checkEditorLimits(elem) {
 // Object -> marc editor wrapper
 
 
-function MarcEditor(ffeditor, vareditor, editorid) {
+function MarcEditor(editorelem, editorid) {
 	// private
 	var that = this;
-	var ffed = ffeditor;
-	var vared = vareditor;
+    var editorelem = editorelem;
     var editorid = editorid;
 	var htmled = '';	
 	var lastFocusedEl;
@@ -588,6 +509,60 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 	var marcrecord = null;
 
 	// private methods
+
+
+/*
+
+*/
+function updateFFEditor() {
+	if(debug) { console.info("updating fixed field editor from leader and 008 tags"); }
+    var oDomDoc = Sarissa.getDomDocument();
+    var leaderval = $('#'+editorid).find("#000", editorelem).children('.controlfield').val();
+	if( leaderval.length != 24 ) {
+		throw {
+			error: "InvalidLeader",
+			msg: "Invalid length of Leader"
+		};
+	}
+    var tag008val = $('#'+editorid).find("#008", editorelem).children('.controlfield').val();
+	if( tag008val.length != 40 ) {
+		throw {
+			error: "Invalid008",
+			msg: "Invalid length of 008"
+		};
+	}
+    if(debug) {
+        console.info('Transferring leader value to fixed field editor from leader tag: ' + leaderval);
+        console.info('Transferring 008 value to fixed field editor from 008 tag: ' + tag008val);
+    }
+    var newff = '<collection xmlns="http://www.loc.gov/MARC21/slim">';
+    //"<?xml version='1.0' encoding='UTF-8'?>";
+    newff += "<record><leader>";
+    newff += leaderval;
+    newff += "</leader>";
+    newff += "<controlfield tag='008'>";
+    newff += tag008val;
+    newff += "</controlfield>";
+	if( $('#'+editorid).find("#006", editorelem).length > 0 ) {
+		var tag006val = $('#'+editorid).find("#006", editorelem).children('.controlfield').val();
+		newff += "<controlfield tag='006'>" + tag006val + "</controlfield>";
+	}
+	if( $('#'+editorid).find("#007", editorelem).length > 0 ) {
+		var tag007val = $('#'+editorid).find("#007", editorelem).children('.controlfield').val();
+		newff += "<controlfield tag='007'>" + tag007val + "</controlfield>";
+	}
+    newff += "</record>";
+    newff += "</collection>";
+	var xmldoc = xslTransform.loadString(newff);
+	//FIXME make this an jquery.xslTransform call
+    $('#'+editorid).find(".ffeditor").empty();
+	var temprec = new MarcEditor();
+	var htmled = temprec.loadXml( xmldoc );
+    $('#'+editorid).find(".ffeditor").html(htmled);
+	// setup ff editor's comboboxes
+	setupFFEditorCtryCombo();
+	setupFFEditorLangCombo();
+}
 function setupSpecialEntries(loc) {
 	var specialentries = Prefs.remoteILS[loc].instance.special_entries;
 	for( var i = 0; i < specialentries.length; i++) {
@@ -644,9 +619,9 @@ function setupReservedTags(loc) {
 	for( var i = 0; i< reservedtags.length; i++) {
 		var tagnumber = $(reservedtags).eq(i).text();
 		// set readonly for tagnumber and indicators
-		$('.tag[@id^='+tagnumber+']', vared).children('input').attr('readonly', 'readonly').addClass('reserved_tag');
+		$('.tag[@id^='+tagnumber+']', editorelem).children('input').attr('readonly', 'readonly').addClass('reserved_tag');
 		// set readonly for subfields
-		$('.tag[@id^='+tagnumber+']', vared).children('.subfields').children('.subfield').children('input').attr('readonly', 'readonly').addClass('reserved_tag');
+		$('.tag[@id^='+tagnumber+']', editorelem).children('.subfields').children('.subfield').children('input').attr('readonly', 'readonly').addClass('reserved_tag');
 	}	
 }
 
@@ -1169,7 +1144,7 @@ function setupFFEditorCtryCombo() {
 		// make sure we start w/ empty arrays
 		fields.length = 0;
 		fieldlist.length = 0;
-		var editorfields = $('.tag', UI.editor[editorid].vared);
+		var editorfields = $('.tag', editorelem);
 		for( var i = 0; i < editorfields.length; i++) {
 				var newfield = createField( $(editorfields).eq(i) );
 				fields.push(newfield);
@@ -1180,16 +1155,16 @@ function setupFFEditorCtryCombo() {
 	
 	function createField(elem) {
 		var newfield;
-		var tagnumber = $(elem).children('.tagnumber', UI.editor[editorid].vared).eq(0).val();
+		var tagnumber = $(elem).children('.tagnumber', UI.editor[editorid].editorelem).eq(0).val();
 		var id = $(elem).get(0).id;
-		var ind1 = $(elem).children('.indicator', UI.editor[editorid].vared).eq(0).val();
-		var ind2 = $(elem).children('.indicator', UI.editor[editorid].vared).eq(1).val();
+		var ind1 = $(elem).children('.indicator', UI.editor[editorid].editorelem).eq(0).val();
+		var ind2 = $(elem).children('.indicator', UI.editor[editorid].editorelem).eq(1).val();
 		if( tagnumber < '010' ) {
-			var value = $(elem).children('.controlfield', UI.editor[editorid].vared).val();	
+			var value = $(elem).children('.controlfield', UI.editor[editorid].editorelem).val();	
 			newfield = new Field(tagnumber, ind1, ind2, [{code: '', value: value}]);
 		}
 		else {
-			var editorsubfields = $('[@id='+id+']', UI.editor[editorid].vared).children('.subfields').children('.subfield');
+			var editorsubfields = $('[@id='+id+']', UI.editor[editorid].editorelem).children('.subfields').children('.subfield');
 			var subfields = new Array();
 			for(var j = 0; j < editorsubfields.length; j++) {
 				var code = editorsubfields.eq(j).find('.subfield-delimiter').val().substr(1, 1);
@@ -1224,7 +1199,30 @@ function setupFFEditorCtryCombo() {
 			}
 		}
 	};
-
+    this._toggleFixedFieldDisplay = function toggleFixedFieldDisplay(btn, toggled) {
+	var ff_ed = $('#'+editorid).find(".ffeditor");
+	var var_ed = $('#'+editorid).find(".vareditor");
+	if( btn.pressed == false ) {
+		// hide fixed field editor
+		$('#'+editorid).find(".ffeditor").hide();
+        // transfer values from fixed field editor into tags
+        transferFF_EdToTags(ff_ed, var_ed, editorid);
+		// show leader and 008
+		$('#'+editorid).find("#000", UI.editor[editorid].vared).show();
+		$('#'+editorid).find("#008", UI.editor[editorid].vared).show();
+		$('#'+editorid).find("#006", UI.editor[editorid].vared).show();
+		$('#'+editorid).find("#007", UI.editor[editorid].vared).show();
+	}
+	else {
+        updateFFEditor();
+		$('#'+editorid).find(".ffeditor").show();
+		// hide leader and fixed fields
+		$('#'+editorid).find("#000", UI.editor[editorid].vared).hide();
+		$('#'+editorid).find("#008", UI.editor[editorid].vared).hide();
+		$('#'+editorid).find("#006", UI.editor[editorid].vared).hide();
+		$('#'+editorid).find("#007", UI.editor[editorid].vared).hide();
+	}
+}
 	// privileged
 	this._hasField = function(tagnumber) {
 		if( fieldlist.indexOf(tagnumber) >= 0 ) {
@@ -1249,38 +1247,38 @@ function setupFFEditorCtryCombo() {
 	};
 
 	this._setValue = function(tag, subfield, value) {
-		$('[@id^='+tag+'] .'+subfield+' .subfield-text', UI.editor[editorid].vared).val(value);
+		$('[@id^='+tag+'] .'+subfield+' .subfield-text', editorelem).val(value);
 		update();
 	};
 
 	this._getValue = function(tag, subfield) {
 		if( subfield != null ) {
-			return $('[@id^='+tag+'] .'+subfield+'.subfield-text', UI.editor[editorid].vared).val();
+			return $('[@id^='+tag+'] .'+subfield+'.subfield-text', editorelem).val();
 		}
 		else {
-			return $('[@id^='+tag+']').children('.controlfield', UI.editor[editorid].vared).val();
+			return $('[@id^='+tag+']').children('.controlfield', editorelem).val();
 		}
 	};
 
 	this._rawFields = function() {
-		return $('.tag', UI.editor[editorid].vared);
+		return $('.tag', editorelem);
 	};
 
 	this._rawField = function(tagnumber, i) {
 		if( !Ext.isEmpty(i) ) {
-			return $('.tag', UI.editor[editorid].vared).filter('[@id*='+tagnumber+']').eq(i);
+			return $('.tag', editorelem).filter('[@id*='+tagnumber+']').eq(i);
 		}
 		else {
-			return $('.tag', UI.editor[editorid].vared).filter('[@id*='+tagnumber+']');
+			return $('.tag', editorelem).filter('[@id*='+tagnumber+']');
 		}
 	};
 
 	this._rawSubfields = function(tagnumber, i) {
 		if( !Ext.isEmpty(i) ) {
-			return $('.tag', UI.editor[editorid].vared).filter('[@id*='+tagnumber+']').eq(i).children('.subfields').children('.subfield');
+			return $('.tag', editorelem).filter('[@id*='+tagnumber+']').eq(i).children('.subfields').children('.subfield');
 		}
 		else {
-			return $('.tag', UI.editor[editorid].vared).filter('[@id*='+tagnumber+']').children('.subfields').children('.subfield');
+			return $('.tag', editorelem).filter('[@id*='+tagnumber+']').children('.subfields').children('.subfield');
 		}
 	};
 
@@ -1300,7 +1298,7 @@ function setupFFEditorCtryCombo() {
 			if(debug) { console.info("Adding tag with tagnumber: " + tagnumber);  }
 
 			// insert the new field in numerical order among the existing tags
-			var tags = $(".tag",UI.editor[editorid].vared  );
+			var tags = $(".tag",editorelem  );
 			var tagToInsertAfter = $(UI.editor[editorid].lastFocusedEl).parents('.tag'); // the tag just before where we'll insert the new tag
 			var highestSuffix = 1; // highest number appended to tag id's with this tag number.  Add 1 to it to get suffix for new tag
 			var newSuffix = tags.length +1;
@@ -1325,7 +1323,7 @@ function setupFFEditorCtryCombo() {
 				}
 			} // insert datafield
 			// insert out new tag after the tag we just found
-			$(tagToInsertAfter, UI.editor[editorid].vared).after(newtag);
+			$(tagToInsertAfter, editorelem).after(newtag);
 			update();
 			// set the focus to this new tag
 			//$( newId ).get(0).focus();
@@ -1365,7 +1363,7 @@ function setupFFEditorCtryCombo() {
 		var id = $(elem).get(0).id;
 		var tagnumber = id.substr(0,3);
 		// find all tags with this tagnumber
-		var tags = $("div[@id^="+tagnumber+"]", UI.editor[editorid].vared);
+		var tags = $("div[@id^="+tagnumber+"]", editorelem);
 		for( var i = 0; i < tags.length; i++ ) {
 			if( tags.get(i).id == id ) {
 				return i;
@@ -1383,16 +1381,16 @@ function setupFFEditorCtryCombo() {
         else {
             tagToAddTo = $(UI.editor[editorid].lastFocusedEl).parents('.tag').children('.tagnumber').val();
         }
-		var numsf = $('div[@id^='+tagToAddTo+']', UI.editor[editorid].vared).eq(indexOfTag).find('.subfield-text').length;
-		var lastsf = $('div[@id^='+tagToAddTo+']', UI.editor[editorid].vared).eq(indexOfTag).find('.subfield-text').eq(numsf-1);
+		var numsf = $('div[@id^='+tagToAddTo+']', editorelem).eq(indexOfTag).find('.subfield-text').length;
+		var lastsf = $('div[@id^='+tagToAddTo+']',editorelem ).eq(indexOfTag).find('.subfield-text').eq(numsf-1);
 		var lastFocused = UI.editor[editorid].lastFocusedEl;
         var newid = Ext.id();
         var elToAddAfter = '';
         var newval = value ? value : '';
         // if there are no subfields in this tag
         if( numsf == 0 ) {
-            $('div[@id^='+tagToAddTo+']', UI.editor[editorid].vared).eq(indexOfTag).find('.subfields').append('<span style="display:none"></span>');
-            elToAddAfter = $('div[@id^='+tagToAddTo+']', UI.editor[editorid].vared).eq(indexOfTag).find('.subfields').children('span');
+            $('div[@id^='+tagToAddTo+']', editorelem).eq(indexOfTag).find('.subfields').append('<span style="display:none"></span>');
+            elToAddAfter = $('div[@id^='+tagToAddTo+']', editorelem).eq(indexOfTag).find('.subfields').children('span');
         }
         else {
             elToAddAfter = $(lastFocused).parents('.subfield');
@@ -1425,16 +1423,16 @@ function setupFFEditorCtryCombo() {
 	};
 
 	this._deleteSubfields = function(tag) {
-		$('[@id^='+tag+']', UI.editor[editorid].vared).children('.subfields').find('.subfield').remove();
+		$('[@id^='+tag+']', editorelem).children('.subfields').find('.subfield').remove();
 		update();
 	};
 
 	this._focusTag = function(tag) {
-		$('[@id^='+tag+']', UI.editor[editorid].vared).children('.tagnumber').focus();
+		$('[@id^='+tag+']', editorelem).children('.tagnumber').focus();
 	};
 
 	this._focusSubfield = function(tag, subfield) {
-		$('[@id^='+tag+']', UI.editor[editorid].vared).children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').focus();
+		$('[@id^='+tag+']', editorelem).children('.subfields').children('[@id*='+subfield+']').children('.subfield-text').focus();
 	};
 	
 	this._XML = function() {
@@ -1548,7 +1546,7 @@ function setupFFEditorCtryCombo() {
         setupFFEditorLangCombo();
         setupFFEditorCtryCombo();
         // show fixed field editor, hide ldr and 008 divs
-        $(ffed).show();
+        $('#'+editorid).find('.ffeditor').show();
         // hide fixed field controlfields
         $('#'+editorid).find("#000, #008, #006, #007").css('display', 'none');
         UI.editor.lastFocusedEl = $('#'+editorid).find('#000').get(0);
@@ -1566,6 +1564,9 @@ function setupFFEditorCtryCombo() {
 
 }
 // Public methods 
+MarcEditor.prototype.toggleFixedFieldDisplay = function(btn, toggled) {
+    return this._toggleFixedFieldDisplay(btn, toggled);
+}
 MarcEditor.prototype.getValue = function(tag, subfield) {
 	return this._getValue(tag, subfield);
 };

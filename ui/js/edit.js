@@ -25,7 +25,7 @@ function openRecord(xml, editorid) {
 	var vared = $('#'+editorid).find(".vareditor");
 	$(vared).empty();
 
-	UI.editor[editorid].record = new MarcEditor(ffed, vared, editorid);
+	UI.editor[editorid].record = new MarcEditor($('#'+editorid), editorid);
 	var xmldoc;
 	if( Ext.isIE ) {
 		xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
@@ -47,7 +47,7 @@ function openRecord(xml, editorid) {
 
 	// setup remote ils-controlled fields
 	if( Prefs.remoteILS[ UI.editor[editorid].location ] ) {
-        UI.editor[editorid].record.processForLocation();
+        UI.editor[editorid].record.processForLocation(UI.editor[editorid].location);
 	}
 	clearStatusMsg();
 }

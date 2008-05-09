@@ -576,7 +576,7 @@ biblios.app = function() {
 																			listeners: {
 																				click: function(btn, pressed) {
 																					btn.pressed = btn.pressed ? false : true;
-																					toggleFixedFieldDisplay(btn, pressed);
+																					UI.editor[btn.editorid].record.toggleFixedFieldDisplay(btn, pressed);
 																				}
 																			}
 																		},
@@ -774,7 +774,7 @@ biblios.app = function() {
 																			pressed: true,
 																			listeners: {
 																				toggle: function(btn, pressed) {
-																					toggleFixedFieldDisplay(btn, pressed);
+																					UI.editor[btn.editorid].record.toggleFixedFieldDisplay(btn, pressed);
 																				}
 																			}
 																		},
