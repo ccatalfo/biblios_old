@@ -1557,6 +1557,28 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 		return html;
 	};
 
+    this._postProcess = function() {
+        //UI.editor.progress.updateProgress(.9, 'Setting up editor hot keys');
+        setupEditorHotkeys(editorelem);
+        //UI.editor.progress.updateProgress(.9, 'Setting up authority control');
+        setupMarc21AuthorityLiveSearches(editorelem);
+
+        // setup comboboxes for ctry and lang fixed fields
+        setupFFEditorLangCombo(editorelem);
+        setupFFEditorCtryCombo(editorelem);
+        // show fixed field editor, hide ldr and 008 divs
+        $(ffed).show();
+        // hide fixed field controlfields
+        $('#'+editorelem).find("#000, #008, #006, #007").css('display', 'none');
+        UI.editor.lastFocusedEl = $('#'+editorelem).find('#000').get(0);
+        UI.editor[editorelem].lastFocusedEl = $('#'+editorelem).find('#000').get(0);
+    };
+
+    this._processForLocation = function(loc) {
+		setupReservedTags( loc, editorelem);
+		setupSpecialEntries( loc, editorelem);
+    }
+
 	this._getEditorHtml = function() {
 		return htmled;
 	};
@@ -1659,3 +1681,9 @@ MarcEditor.prototype.getEditorHtml = function() {
 	return this._getEditorHtml();
 };
 
+MarcEditor.prototype.postProcess = function() {
+    return this._postProcess();
+}
+MarcEditor.prototype.processForLocation = function(loc) {
+    return this._postProcess(loc);
+}
