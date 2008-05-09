@@ -7,6 +7,7 @@ UI.savepreview = {};
 UI.savepreview.id = '';
 UI.savepreview.xml = '';
 UI.editor = {};
+UI.editor.editors = {};
 UI.editor.lastElemHelpShown = '';
 UI.editor.id = '';
 UI.editor.lastEditorId = '';

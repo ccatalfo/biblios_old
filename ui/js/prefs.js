@@ -84,6 +84,20 @@ function setupConfig( configDoc ) {
                 }).save();
             }
           });
+          $("editors//editor", configDoc).each( function() {
+            var syntax = $(this).children('syntax').text();
+            var name = $(this).children('name').text();
+            if( e = DB.Editors.select('name=?', [name]).getOne() ) {
+                e.syntax = syntax;
+                e.save();
+            }
+            else {
+                var e = new DB.Editors({
+                    name: name,
+                    syntax: syntax
+                }).save();
+            }
+          });
 		  z3950serversSave = $("saving//server", configDoc).each( function() {
 				var name = $(this).children('name').text();
                 var id = $(this).children('id').text();

@@ -9,6 +9,7 @@ DB.RemoteILS = {};
 DB.Macros = {};
 DB.SendTargets = {};
 DB.Plugins = {};
+DB.Editors = {};
 var db = {};
 
 /*
@@ -210,7 +211,24 @@ GearsORMShift.rules = [
             DB.Plugins.dropTable();
             return true;
         }
-    } // rule 7
+    }, // rule 7
+    {
+        version: 8,
+        comment: 'Create Editors table',
+        up: function() {
+            try {
+                DB.Editors.createTable();
+            }
+            catch(ex) {
+                return false;
+            }
+            return true;
+        },
+        down: function() {
+            DB.Editors.dropTable();
+            return true;
+        }
+    }
 ];
 
 function createTestTargets() {
@@ -378,6 +396,14 @@ function init_gears() {
                     enabled: new GearsORM.Fields.Integer({defaultValue:0}),
                     allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
                     allowModify: new GearsORM.Fields.Integer({defaultValue:1})
+                }
+            });
+            DB.Editors = new GearsORM.Model({
+                name: 'Editors',
+                fields:
+                {
+                    name: new GearsORM.Fields.String(),
+                    syntax: new GearsORM.Fields.String()
                 }
             });
 			GearsORMShift.init( DB.Info_Schema, true );
