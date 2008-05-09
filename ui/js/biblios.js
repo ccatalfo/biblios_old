@@ -345,10 +345,11 @@ biblios.app = function() {
 																var id = grid.getSelections()[0].id;
 																UI.editor['editorone'].id = id;
 																var loc = grid.getSelections()[0].data.location[0].name;
+                                                                var xmlformat = grid.getSelections()[0].data.xmlformat;
 																UI.editor['editorone'].location = loc;
 																getRemoteRecord(id, loc, 0, function(data) {
                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-                                                                    openRecord( xslTransform.serialize(data), 'editorone' ); 
+                                                                    openRecord( xslTransform.serialize(data), 'editorone', 'marcxml' ); 
                                                                 }
 														);
 
@@ -358,10 +359,11 @@ biblios.app = function() {
 																var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																UI.editor['editorone'].id = id;
 																var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[0].name;
+                                                                var xmlformat = grid.getSelections()[0].data.xmlformat;
 																UI.editor['editorone'].location = loc;
 																  getRemoteRecord(id, loc, 0, function(data) { 
                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-                                                                    openRecord( xslTransform.serialize( data), 'editorone' ); 
+                                                                    openRecord( xslTransform.serialize( data), 'editorone' , 'marcxml'); 
                                                                     });
 																}	
 															} // on ENTER keypress
@@ -411,10 +413,11 @@ biblios.app = function() {
 																				UI.editor[editorid].id = '';
 																				var id = selections[0].id;
 																				var loc = selections[0].data.location[0].name;
+                                                                                var xmlformat = selections[0].data.xmlformat;
 																				UI.editor[editorid].location = loc;
 																				getRemoteRecord(id, loc, 0, function(data) { 
                                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-																					openRecord( xslTransform.serialize(data), editorid ); 
+																					openRecord( xslTransform.serialize(data), editorid, 'marcxml' ); 
 																				});
 
 																			}
@@ -448,7 +451,7 @@ biblios.app = function() {
 																				UI.editor[editorid].location = loc;
 																				getRemoteRecord(id, loc, offset, function(data) { 
                                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-																					openRecord( xslTransform.serialize(data), editorid ); 
+																					openRecord( xslTransform.serialize(data), editorid, 'marcxml' ); 
 																				});
 																			} // for each checked record
 																			Ext.getCmp('searchgrid').el.unmask();
@@ -714,7 +717,7 @@ biblios.app = function() {
                                                                     var progress = Ext.MessageBox.progress('Reverting record to last saved state', '');
                                                                     var id = UI.editor[ btn.editorid].id;
                                                                     var xml = getLocalXml(id);
-                                                                    openRecord( xml, btn.editorid );
+                                                                    openRecord( xml, btn.editorid, 'marcxml' );
                                                                     progress.updateProgress(1, 'Revert complete');
                                                                     showStatusMsg('Record reverted');
                                                                     clearStatusMsg();
@@ -915,7 +918,7 @@ biblios.app = function() {
                                                                     var progress = Ext.MessageBox.progress('Reverting record to last saved state', '');
                                                                     var id = UI.editor[ btn.editorid].id;
                                                                     var xml = getLocalXml(id);
-                                                                    openRecord( xml, btn.editorid );
+                                                                    openRecord( xml, btn.editorid, 'marcxml' );
                                                                     progress.updateProgress(1, 'Revert complete');
                                                                     showStatusMsg('Record reverted');
                                                                     clearStatusMsg();
@@ -1012,19 +1015,21 @@ biblios.app = function() {
 															listeners: {
 																rowdblclick: function(grid, rowIndex, e) {
 																	var id = grid.store.data.get(rowIndex).data.Id;
+																	var xmlformat = grid.store.data.get(rowIndex).data.xmlformat;
 																	showStatusMsg('Opening record...');
 																	var xml = getLocalXml(id);
 																	UI.editor.id = id;
-																	openRecord( xml, 'editorone');
+																	openRecord( xml, 'editorone', xmlformat);
 																},// save grid row dbl click handler
 																keypress: function(e) {
 																	if( e.getKey() == Ext.EventObject.ENTER ) {
 																		showStatusMsg('Opening record...');
 																		var sel = Ext.getCmp('savegrid').getSelectionModel().getSelected();
 																		var id = sel.data.Id;
+                                                                        var xmlformat = sel.data.xmlformat;
 																		UI.editor['editorone'].id = id;
 																		var xml = getLocalXml(id);
-																		openRecord( xml, 'editorone' );
+																		openRecord( xml, 'editorone', xmlformat );
 																	} // ENTER
 																} // savegrid keypress
 															}, // save grid listeners
@@ -1071,11 +1076,12 @@ biblios.app = function() {
 																			if( checked.length == 0 && selections.length == 1) {
 																				editorid = 'editorone';
 																				var id = selections[0].data.Id;
+                                                                                var xmlformat = selections[0].data.xmlformat;
 																				UI.editor[editorid].id = id;
 																				Ext.getCmp('savegrid').el.mask('Loading record');
 																				showStatusMsg('Opening record...');
 																				var xml = getLocalXml(id);
-																				openRecord( xml, editorid);
+																				openRecord( xml, editorid, xmlformat);
 																				Ext.getCmp('savegrid').el.unmask();
 
 																			}
@@ -1095,7 +1101,7 @@ biblios.app = function() {
 																					Ext.getCmp('savegrid').el.mask('Loading record');
 																					showStatusMsg('Opening record...');
 																					var xml = getLocalXml(id);
-																					openRecord( xml, editorid);
+																					openRecord( xml, editorid, 'marcxml');
 																					Ext.getCmp('savegrid').el.unmask();
 																				}
 																			} // 1 or 2 checkboxes are checked in save grid

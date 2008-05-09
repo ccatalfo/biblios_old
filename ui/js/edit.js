@@ -12,7 +12,7 @@
    None.
 
 */
-function openRecord(xml, editorid) {
+function openRecord(xml, editorid, syntax) {
 	// we need to display record view first since editors are lazily rendered
 	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
@@ -24,8 +24,16 @@ function openRecord(xml, editorid) {
 	$(ffed).empty();
 	var vared = $('#'+editorid).find(".vareditor");
 	$(vared).empty();
-
-	UI.editor[editorid].record = new MarcEditor($('#'+editorid), editorid);
+    var editorelem = $('#'+editorid);
+    var editor = DB.Editors.select('syntax=?', [syntax]).getOne();
+    var editor_plugin = DB.Plugins.select('name=?', [editor.name]).getOne();
+    var editor_init = editor_plugin.initcall;
+    try {
+        UI.editor[editorid].record = eval( editor_init );
+    }
+    catch(ex) {
+        Ext.MessageBox.alert('Editor error', 'Unable to create editor. Please check your configuration');
+    }
 	var xmldoc;
 	if( Ext.isIE ) {
 		xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
