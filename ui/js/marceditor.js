@@ -653,8 +653,7 @@ function setupEditorHotkeys() {
 	
 	// add a new field
 	$.hotkeys.add('Ctrl+n', function(e) {
-		var editorid = UI.editor.lastEditorId;
-		UI.editor[editorid].record.addField(editorid);
+		UI.editor[editorid].record.addField();
 	});
 
 	// remove a subfield
