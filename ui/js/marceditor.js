@@ -964,6 +964,7 @@ function checkEditorLimits(elem) {
 
 
 // Object -> marc editor wrapper
+
 function createFixedFieldCell(string, elem, offset, tag) {
 	var name = $(elem).attr('name');
 	var position = $(elem).attr('position') - offset;
@@ -1040,6 +1041,147 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 			fieldlist.push( fields[i].tagnumber() );
 		}
 	}
+    
+    function generateVariableFieldsEditor(marcXmlDoc) {
+        var html = '';
+        var leader = $('leader', marcXmlDoc).text();
+        html += '<div class="tag controlfield 000" id="000"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="000"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="#"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="#"><input class="controlfield" type="text" size="24" maxlength="24" value="'+leader+'"></div>';
+        fields.push( new Field('000', '', '', [{code: '', value: leader}]) );
+
+        $('controlfield', marcXmlDoc).each( function(i) {
+            val = $(this).text();
+            size = val.length;
+            tagnum = $(this).attr('tag');
+            html += '<div id="'+tagnum+'" class="tag controlfield ';
+            html += tagnum;
+            html += '"';
+            html += '>';
+            html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tagnum+'">';
+            html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+'#'+'">';
+            html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+'#'+'">';
+            html += '<input onblur="onBlur(this)" onfocus="onFocus(this)" ';
+            html += 'type="text" '; 
+            html += 'value="'+val+'" ';
+            html += 'class="controlfield ';
+            html += tagnum;
+            html += '"';
+            html += ' size="'+size+'"';
+            html += '>';
+            html += '</div>';
+            fields.push( new Field(tagnum, '', '', [{code: '', value: val}]) );
+        });	
+        //UI.editor.progress.updateProgress(.6, 'Controlfields editor created');
+
+        $('datafield', marcXmlDoc).each(function(i) {
+            var value = $(this).text();
+            var tagnum = $(this).attr('tag');
+            var ind1 = $(this).attr('ind1') || ' ';
+            var ind2 = $(this).attr('ind2') || ' ';
+            var id = tagnum+'-'+i;
+            html += '<div class=" tag datafield ';
+            html += tagnum;
+            html += '" ';
+            html += 'id="'+id+'"';
+            html += '>';
+            html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tagnum+'">';
+            html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+ind1+'">';
+            html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+ind2+'">';
+            
+            var id = tagnum+'-'+i;
+            var sftemplate = new Ext.DomHelper.createTemplate({
+                tag: 'span',
+                cls: 'subfield',
+                id: '{sfid}',
+                children: [
+                {
+                    tag: 'input',
+                    maxlength: '2',
+                    onblur: 'onBlur(this)',
+                    onfocus: 'onFocus(this)',
+                    type: 'text',
+                    cls: 'subfield-delimiter {sfcode}',
+                    value: '&#8225;{sfcode}',
+                    id: '{delimid}'
+                },
+                {
+                    tag: 'input',
+                    size: '{size}',
+                    onblur: 'onBlur(this)',
+                    onfocus: 'onFocus(this)',
+                    cls: 'subfield-text {sfcode}',
+                    value: '{sfval}',
+                    id: '{textid}'
+                }
+                ]
+            }).compile();
+             var sftemplateTextarea = new Ext.DomHelper.createTemplate({
+                tag: 'span',
+                cls: 'subfield',
+                id: '{sfid}',
+                children: [
+                {
+                    tag: 'input',
+                    maxlength: '2',
+                    onblur: 'onBlur(this)',
+                    onfocus: 'onFocus(this)',
+                    type: 'text',
+                    cls: 'subfield-delimiter {sfcode}',
+                    value: '&#8225;{sfcode}',
+                    id: '{delimid}'
+                },
+                {
+                    tag: 'textarea',
+                    cols: '{cols}',
+                    style: {width: '{width}'}, // this isn't being set properly by extjs
+                    onblur: 'onBlur(this)',
+                    onfocus: 'onFocus(this)',
+                    html: '{sfval}',
+                    cls: 'subfield-text {sfcode}',
+                    id: '{textid}'
+                }
+                ]
+            }).compile();
+            html += '<span class="subfields" id="'+id+'">';
+            var subfields = new Array();
+            $('subfield', this).each(function(j) {
+                var sfval = $(this).text();
+                // replace any quotes contained in text so it doesn't mess up html
+                var sfsize = sfval.length;
+                var sfcode = $(this).attr('code');
+                var sfclass = 'subfield ' + sfcode;
+                var sfid = 'dsubfields'+sfcode+'-'+Ext.id();
+                subfields.push( new Subfield(sfcode, sfval) );
+                if( sfsize > 100 ) {
+                    html += sftemplateTextarea.applyTemplate({
+                        sfclass: sfclass,
+                        sfid: sfid,
+                        sfcode: sfcode,
+                        cols: '100',
+                        width: Ext.get(editorid).getWidth(),
+                        sfval: sfval,
+                        delimid: Ext.id(),
+                        textid: Ext.id()
+                    });
+                }
+                else {
+                    html += sftemplate.applyTemplate({
+                        sfclass: sfclass,
+                        sfid: sfid,
+                        sfcode: sfcode,
+                        size: sfsize,
+                        sfval: sfval,
+                        delimid: Ext.id(),
+                        textid: Ext.id()
+                    });
+                }
+            });
+            // close subfields span
+            html + '</span>';
+            html += '</div>'; // close datafield div	
+            fields.push( new Field(tagnum, ind1, ind2, subfields) );
+        });
+        return html;
+    }// generateVariableFieldsEditor
 
 	function createFields() {
 		// make sure we start w/ empty arrays
@@ -1395,142 +1537,15 @@ function MarcEditor(ffeditor, vareditor, editorid) {
 		html += '</div>'; // close ff_editor
 		html += '<div class="vareditor">';
 		html += '<div id="varfields_editor">';
-		var leader = $('leader', marcXmlDoc).text();
-		html += '<div class="tag controlfield 000" id="000"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="000"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="#"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="#"><input class="controlfield" type="text" size="24" maxlength="24" value="'+leader+'"></div>';
-		fields.push( new Field('000', '', '', [{code: '', value: leader}]) );
-
-		$('controlfield', marcXmlDoc).each( function(i) {
-			val = $(this).text();
-			size = val.length;
-			tagnum = $(this).attr('tag');
-			html += '<div id="'+tagnum+'" class="tag controlfield ';
-			html += tagnum;
-			html += '"';
-			html += '>';
-			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tagnum+'">';
-			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+'#'+'">';
-			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+'#'+'">';
-			html += '<input onblur="onBlur(this)" onfocus="onFocus(this)" ';
-			html += 'type="text" '; 
-			html += 'value="'+val+'" ';
-			html += 'class="controlfield ';
-			html += tagnum;
-			html += '"';
-			html += ' size="'+size+'"';
-			html += '>';
-			html += '</div>';
-			fields.push( new Field(tagnum, '', '', [{code: '', value: val}]) );
-		});	
-		//UI.editor.progress.updateProgress(.6, 'Controlfields editor created');
-
-		$('datafield', marcXmlDoc).each(function(i) {
-			var value = $(this).text();
-			var tagnum = $(this).attr('tag');
-			var ind1 = $(this).attr('ind1') || ' ';
-			var ind2 = $(this).attr('ind2') || ' ';
-			var id = tagnum+'-'+i;
-			html += '<div class=" tag datafield ';
-			html += tagnum;
-			html += '" ';
-			html += 'id="'+id+'"';
-			html += '>';
-			html += '<input maxlength="3" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="'+tagnum+'">';
-			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+ind1+'">';
-			html += '<input maxlength="1" onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="'+ind2+'">';
-			
-			var id = tagnum+'-'+i;
-            var sftemplate = new Ext.DomHelper.createTemplate({
-                tag: 'span',
-                cls: 'subfield',
-                id: '{sfid}',
-                children: [
-                {
-                    tag: 'input',
-                    maxlength: '2',
-                    onblur: 'onBlur(this)',
-                    onfocus: 'onFocus(this)',
-                    type: 'text',
-                    cls: 'subfield-delimiter {sfcode}',
-                    value: '&#8225;{sfcode}',
-                    id: '{delimid}'
-                },
-                {
-                    tag: 'input',
-                    size: '{size}',
-                    onblur: 'onBlur(this)',
-                    onfocus: 'onFocus(this)',
-                    cls: 'subfield-text {sfcode}',
-                    value: '{sfval}',
-                    id: '{textid}'
-                }
-                ]
-            }).compile();
-             var sftemplateTextarea = new Ext.DomHelper.createTemplate({
-                tag: 'span',
-                cls: 'subfield',
-                id: '{sfid}',
-                children: [
-                {
-                    tag: 'input',
-                    maxlength: '2',
-                    onblur: 'onBlur(this)',
-                    onfocus: 'onFocus(this)',
-                    type: 'text',
-                    cls: 'subfield-delimiter {sfcode}',
-                    value: '&#8225;{sfcode}',
-                    id: '{delimid}'
-                },
-                {
-                    tag: 'textarea',
-                    cols: '{cols}',
-                    style: {width: '{width}'}, // this isn't being set properly by extjs
-                    onblur: 'onBlur(this)',
-                    onfocus: 'onFocus(this)',
-                    html: '{sfval}',
-                    cls: 'subfield-text {sfcode}',
-                    id: '{textid}'
-                }
-                ]
-            }).compile();
-			html += '<span class="subfields" id="'+id+'">';
-			var subfields = new Array();
-			$('subfield', this).each(function(j) {
-				var sfval = $(this).text();
-                // replace any quotes contained in text so it doesn't mess up html
-				var sfsize = sfval.length;
-				var sfcode = $(this).attr('code');
-                var sfclass = 'subfield ' + sfcode;
-                var sfid = 'dsubfields'+sfcode+'-'+Ext.id();
-				subfields.push( new Subfield(sfcode, sfval) );
-                if( sfsize > 100 ) {
-                    html += sftemplateTextarea.applyTemplate({
-                        sfclass: sfclass,
-                        sfid: sfid,
-                        sfcode: sfcode,
-                        cols: '100',
-                        width: Ext.get(editorid).getWidth(),
-                        sfval: sfval,
-                        delimid: Ext.id(),
-                        textid: Ext.id()
-                    });
-                }
-                else {
-                    html += sftemplate.applyTemplate({
-                        sfclass: sfclass,
-                        sfid: sfid,
-                        sfcode: sfcode,
-                        size: sfsize,
-                        sfval: sfval,
-                        delimid: Ext.id(),
-                        textid: Ext.id()
-                    });
-                }
-            });
-            // close subfields span
-			html + '</span>';
-			html += '</div>'; // close datafield div	
-			fields.push( new Field(tagnum, ind1, ind2, subfields) );
-		});
+        try {
+            var processor = new XSLTProcessor();
+            processor.importStylesheet(varfxsl);
+            var editorxml = processor.transformToDocument(xmldoc);
+            html += xslTransform.serialize(editorxml);
+        }
+        catch(ex) {
+            html += generateVariableFieldsEditor(marcXmlDoc);
+        }
 		//UI.editor.progress.updateProgress(.7, 'Datafields editor created');
 		html += '</div>'; // end vareditor div
 		html += '</div>'; // varfields_editor div
