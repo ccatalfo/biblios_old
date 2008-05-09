@@ -59,6 +59,31 @@ function setupConfig( configDoc ) {
 				}).save();
 			}
 		  } );
+          $("plugins//plugin", configDoc).each( function() {
+            var name = $(this).children('name').text();
+            var file = $(this).children('file').text();
+            var type = $(this).children('type').text();
+            var enabled = $(this).children('enabled').text();
+			var allowDelete= $(this).children('allowDelete').text();
+			var allowModify= $(this).children('allowModify').text();
+            if( p = DB.Plugins.select('name=?', [name]).getOne() ) {
+                p.file = file;
+                p.type = type;
+                p.enabled = enabled;
+                p.allowDelete = allowDelete;
+                p.allowModify = allowModify;
+                p.save();
+            }
+            else {
+                var p = new DB.Plugins({
+                    name : name,
+                    file : file,
+                    enabled : enabled,
+                    allowDelete : allowDelete,
+                    allowModify : allowModify
+                }).save();
+            }
+          });
 		  z3950serversSave = $("saving//server", configDoc).each( function() {
 				var name = $(this).children('name').text();
                 var id = $(this).children('id').text();

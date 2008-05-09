@@ -375,7 +375,9 @@ function init_gears() {
                     name: new GearsORM.Fields.String(),
                     file: new GearsORM.Fields.String(),
                     type: new GearsORM.Fields.String(),
-                    enabled: new GearsORM.Fields.Integer({defaultValue:0})
+                    enabled: new GearsORM.Fields.Integer({defaultValue:0}),
+                    allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
+                    allowModify: new GearsORM.Fields.Integer({defaultValue:1})
                 }
             });
 			GearsORMShift.init( DB.Info_Schema, true );
