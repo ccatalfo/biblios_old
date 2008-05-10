@@ -244,7 +244,7 @@ function doPazPar2Search() {
     biblios.app.displaySearchView();
 }
 
-function getRemoteRecord(id, loc, offset, callback) {
+function getRemoteRecord(id, loc, offset, callback, callbackparamobject) {
 		// if this location is in our Prefs.remoteILS hash, retrieve it specially
 		if( Prefs.remoteILS[loc] ) {
 			// the recid we'll request
@@ -269,7 +269,7 @@ function getRemoteRecord(id, loc, offset, callback) {
 			Prefs.remoteILS[loc].instance.retrieve(recid);
 		}
 		else {
-			var xml = getPazRecord(id, offset, callback);
+			var xml = getPazRecord(id, offset, callback, callbackparamobject);
 		}
 }
 

@@ -345,11 +345,11 @@ biblios.app = function() {
 																var id = grid.getSelections()[0].id;
 																UI.editor['editorone'].id = id;
 																var loc = grid.getSelections()[0].data.location[0].name;
-                                                                var xmlformat = grid.getSelections()[0].data.xmlformat;
+                                                                var xmlformat = 'marcxml';
 																UI.editor['editorone'].location = loc;
 																getRemoteRecord(id, loc, 0, function(data) {
                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-                                                                    openRecord( xslTransform.serialize(data), 'editorone', 'marcxml' ); 
+                                                                    openRecord( xslTransform.serialize(data), 'editorone', xmlformat:xmlformat ); 
                                                                 }
 														);
 
@@ -359,11 +359,11 @@ biblios.app = function() {
 																var id = Ext.getCmp('searchgrid').getSelections()[0].id;
 																UI.editor['editorone'].id = id;
 																var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[0].name;
-                                                                var xmlformat = grid.getSelections()[0].data.xmlformat;
+                                                                var xmlformat = 'marcxml';
 																UI.editor['editorone'].location = loc;
 																  getRemoteRecord(id, loc, 0, function(data) { 
                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-                                                                    openRecord( xslTransform.serialize( data), 'editorone' , 'marcxml'); 
+                                                                    openRecord( xslTransform.serialize( data), 'editorone' , xmlformat:xmlformat); 
                                                                     });
 																}	
 															} // on ENTER keypress
@@ -413,11 +413,11 @@ biblios.app = function() {
 																				UI.editor[editorid].id = '';
 																				var id = selections[0].id;
 																				var loc = selections[0].data.location[0].name;
-                                                                                var xmlformat = selections[0].data.xmlformat;
+                                                                                var xmlformat = 'marcxml';
 																				UI.editor[editorid].location = loc;
 																				getRemoteRecord(id, loc, 0, function(data) { 
                                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-																					openRecord( xslTransform.serialize(data), editorid, 'marcxml' ); 
+																					openRecord( xslTransform.serialize(data), editorid, xmlformat:xmlformat ); 
 																				});
 
 																			}
@@ -437,6 +437,7 @@ biblios.app = function() {
 																				}
 																				var id = checked[i].id.substr(6);
 																				var offset = checked[i].id.substr(5,1);
+                                                                                var xmlformat = 'marcxml';
 																				UI.editor[editorid].id = '';
 																				// get location info
 																				var loc = ''
@@ -451,7 +452,7 @@ biblios.app = function() {
 																				UI.editor[editorid].location = loc;
 																				getRemoteRecord(id, loc, offset, function(data) { 
                                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-																					openRecord( xslTransform.serialize(data), editorid, 'marcxml' ); 
+																					openRecord( xslTransform.serialize(data), editorid, xmlformat:xmlformat ); 
 																				});
 																			} // for each checked record
 																			Ext.getCmp('searchgrid').el.unmask();
