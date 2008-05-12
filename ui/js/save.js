@@ -79,23 +79,41 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 		} // save record from marc editor
 		// if we're picking from the savefile grid 
 		else if( openState == 'savegrid' ) {
-			var grid = Ext.getCmp( 'savegrid' );
-			var ds = grid.store;
-			var sel = grid.getSelectionModel().getSelections();
-			// update the record(s) based on current selection
-			for( var i = 0; i < sel.length; i++) {
-				var id = sel[i].data.Id;
-				try {
-					var record = DB.Records.select('Records.rowid=?',[id]).getOne();
-					record.status = 'edited';
-					record.date_modified = new Date().toString();
-					record.Savefiles_id = savefileid;
-					record.save();
-					if(debug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
+			if( dropped == true) {
+				var grid = Ext.getCmp( 'savegrid' );
+				var ds = grid.store;
+				var sel = grid.getSelectionModel().getSelections();
+				// update the record(s) based on current selection
+				for( var i = 0; i < sel.length; i++) {
+					var id = sel[i].data.Id;
+					try {
+						var record = DB.Records.select('Records.rowid=?',[id]).getOne();
+						record.status = 'edited';
+						record.date_modified = new Date().toString();
+						record.Savefiles_id = savefileid;
+						record.save();
+						if(debug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
+					}
+					catch(ex) {
+						Ext.MessageBox.alert("Database error", ex.message);
+					}
 				}
-				catch(ex) {
-					Ext.MessageBox.alert("Database error", ex.message);
+			}
+			else {
+				var records = getSelectedSaveGridRecords();
+				for( var i = 0 ; i < records.length; i++) {
+					var id = parseInt(records[i].rowid);
+					try {
+						var r = DB.Records.select('Records.rowid=?', [id]).getOne();
+						r.Savefiles_id = savefileid;
+						r.save();
+					}
+					catch(ex) {
+						showStatusMsg('Unable to move record ' + records[i].title);
+					}
 				}
+				// reload savegrid store to moved records don't appear in currently open folder
+				Ext.getCmp('savegrid').store.reload();
 			}
 		}
 		// if we're picking from the search grid
@@ -238,6 +256,7 @@ function updateSaveMenu() {
 	Ext.menu.MenuMgr.get('editorOneSaveMenu').removeAll();
 	Ext.menu.MenuMgr.get('editorTwoSaveMenu').removeAll();
 	Ext.menu.MenuMgr.get('searchgridSaveMenu').removeAll();
+	Ext.menu.MenuMgr.get('savegridSaveMenu').removeAll();
 	var savefiles = getSaveFileMenuItems('editorone');
 	for( sf in savefiles ) {
 		Ext.menu.MenuMgr.get('editorOneSaveMenu').add( savefiles[sf] );
@@ -249,6 +268,10 @@ function updateSaveMenu() {
 	var savefiles = getSaveFileMenuItems('searchgrid');
 	for( sf in savefiles) {
 		Ext.menu.MenuMgr.get('searchgridSaveMenu').add( savefiles[sf] );
+	}
+	var savefiles = getSaveFileMenuItems('savegrid');
+	for( sf in savefiles) {
+		Ext.menu.MenuMgr.get('savegridSaveMenu').add( savefiles[sf] );
 	}
 }
 

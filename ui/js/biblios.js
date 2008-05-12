@@ -1155,6 +1155,31 @@ biblios.app = function() {
 																			}
 																		}
 																	},
+																	{
+																		id: 'savegridTrashBtn',
+																		cls: 'x-btn-icon',
+																		icon: libPath + 'ui/images/user-trash.png',
+																		tooltip: {text: 'Move selected records to trash'},
+																		handler: function() {
+																			doSaveLocal(1, 'savegrid');
+																		}
+																	},
+																	{
+																		id: 'savegridMoveBtn',
+																		cls: 'x-btn-text-icon bmenu',
+																		icon: libPath + 'ui/images/document-save.png',
+																		text: 'Move',
+																		tooltip: {text: 'Move selected records to another folder'},
+																		menu: {
+																			id: 'savegridSaveMenu',
+																			items: getSaveFileMenuItems('savegrid'),
+																			listeners: {
+																				beforeshow: function(menu, menuItem, e) {
+																					updateSaveMenu();
+																				}
+																			}
+																		}
+																	},
                                                                     {
                                                                         id: 'savegridUploadsBtn',
                                                                         cls: 'x-btn-text-icon bmenu',
@@ -1445,6 +1470,7 @@ biblios.app = function() {
 																				text: 'Empty trash',
 																				handler: function() {
 																					DB.Records.remove('Savefiles_id=1');
+																					Ext.getCmp('savegrid').store.reload();
 																				}
 																			}
 																		]
