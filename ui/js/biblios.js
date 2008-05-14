@@ -1324,6 +1324,8 @@ biblios.app = function() {
 															text: 'Folders',
 															leaf: false,
 															animate: true,
+															allowAdd: true,
+															parentid: null,
 															listeners: {
 																click: function(node, e) {
 																	biblios.app.displaySaveView();
