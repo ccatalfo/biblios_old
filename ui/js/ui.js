@@ -719,23 +719,22 @@ function runMacro() {
 
 }
 
-function showUploadDialog() {
- if (!biblios.app.uploadDialog) {
-      biblios.app.uploadDialog = new Ext.ux.UploadDialog.Dialog({
+function showUploadDialog(format) {
+      var uploadDialog = new Ext.ux.UploadDialog.Dialog({
         url: cgiDir+'uploadMarc.pl',
-        permitted_extensions: ['xml', 'mrc'],
+        base_params: {format: format},
+        //permitted_extensions: ['xml', 'mrc'],
         reset_on_hide: false,
         allow_close_on_upload: true,
         upload_autostart: true,
         post_var_name: 'file'
       });
       
-      biblios.app.uploadDialog.on('uploadsuccess', doUploadMarc);
-      biblios.app.uploadDialog.on('uploadcomplete', uploadComplete);
-      biblios.app.uploadDialog.on('uploadfailed', uploadFailed);
-      biblios.app.uploadDialog.on('uploaderror', uploadError);
-    }
-    biblios.app.uploadDialog.show();
+      uploadDialog.on('uploadsuccess', doUploadMarc);
+      uploadDialog.on('uploadcomplete', uploadComplete);
+      uploadDialog.on('uploadfailed', uploadFailed);
+      uploadDialog.on('uploaderror', uploadError);
+      uploadDialog.show();
 }
 function doUploadMarc(dialog, filename, resp_data) {
     //console.info(resp_data);

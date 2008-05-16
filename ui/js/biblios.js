@@ -208,7 +208,6 @@ biblios.app = function() {
 		viewport : this.viewport,
 		currQuery : this.currQuery,
 		savefiles : this.savefiles,
-        uploadDialog : null,
         paz : {
             sessionID : '',
             sessionStatus : 'uninitialized'
@@ -1161,8 +1160,23 @@ biblios.app = function() {
                                                                         icon: libPath + 'ui/images/document-save.png',
                                                                         text: 'Upload',
                                                                         tooltip: {text: 'Upload marc21 or marcxml files'},
-                                                                        handler: showUploadDialog
-                                                                    }, // uploads button
+                                                                        menu: [
+                                                                            {
+                                                                                id: 'marc21uploadBtn',
+                                                                                text: 'MARC21',
+                                                                                handler: function() {
+                                                                                    showUploadDialog('marc21')
+                                                                                }
+                                                                            },
+                                                                            {
+                                                                                id: 'marcxmluploadBtn',
+                                                                                text: 'MARCXML',
+                                                                                handler: function() {
+                                                                                    showUploadDialog('marcxml')
+                                                                                }
+                                                                            }
+                                                                        ]
+                                                                    }, // uploads menu
 																	{
 																		id: 'savegridToolsBtn',
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
