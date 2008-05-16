@@ -762,6 +762,7 @@ function doUploadMarc(dialog, filename, resp_data) {
             showStatusMsg('Uploaded ' + title + ' to Drafts');
             clearStatusMsg();
             Ext.MessageBox.alert('Upload complete', 'Uploading is completed.  Files have been added to Drafts folder with status \'uploaded\'');
+            Ext.getCmp('savegrid').store.reload();
         });
     });
 }
