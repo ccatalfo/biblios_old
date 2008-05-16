@@ -1325,7 +1325,8 @@ biblios.app = function() {
 															leaf: false,
 															animate: true,
 															allowAdd: true,
-															parentid: null,
+															savefileid: 'null',
+															parentid: 'null',
 															listeners: {
 																click: function(node, e) {
 																	biblios.app.displaySaveView();
