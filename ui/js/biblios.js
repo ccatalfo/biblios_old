@@ -785,6 +785,35 @@ biblios.app = function() {
 															},
                                                             {
                                                                 cls: 'x-btn-text-icon',
+                                                                icon: libPath + 'ui/images/document-save-as.png',
+                                                                text: 'Duplicate',
+                                                                tooltip: {text: 'Duplicate this record to Drafts folder'},
+                                                                editorid: 'editorone',
+                                                                handler: function(btn) {
+                                                                    // get record from db for this record
+                                                                    var r = DB.Records.select('Records.rowid=?', [ UI.editor[btn.editorid].id ]).getOne();
+                                                                    var newrec = new DB.Records({
+                                                                        xml : r.xml,
+                                                                        title : r.title,
+                                                                        author : r.author,
+                                                                        publisher : r.publisher,
+                                                                        date : r.date,
+                                                                        date_added : new Date().toString(),
+                                                                        date_modified : new Date().toString(),
+                                                                        status : 'duplicate',
+                                                                        medium : r.medium,
+                                                                        SearchTargets_id : r.SearchTargets_id,
+                                                                        Savefiles_id : r.Savefiles_id,
+                                                                        xmlformat : r.xmlformat,
+                                                                        marcflavour : r.marcflavour,
+                                                                        template : r.template,
+                                                                        marcformat : r.marcformat
+                                                                    }).save();
+                                                                    showStatusMsg('Record duplicated');
+                                                                }
+                                                            },
+                                                            {
+                                                                cls: 'x-btn-text-icon',
                                                                 icon: libPath + 'ui/images/process-stop.png',
                                                                 id: 'editorOneRevertBtn',
                                                                 editorid: 'editorone',
@@ -955,6 +984,35 @@ biblios.app = function() {
 																	items: getExportMenuItems('editortwo')
 																}
 															},
+                                                            {
+                                                                cls: 'x-btn-text-icon',
+                                                                icon: libPath + 'ui/images/document-save-as.png',
+                                                                text: 'Duplicate',
+                                                                tooltip: {text: 'Duplicate this record to Drafts folder'},
+                                                                editorid: 'editortwo',
+                                                                handler: function(btn) {
+                                                                    // get record from db for this record
+                                                                    var r = DB.Records.select('Records.rowid=?', [ UI.editor[btn.editorid].id ]).getOne();
+                                                                    var newrec = new DB.Records({
+                                                                        xml : r.xml,
+                                                                        title : r.title,
+                                                                        author : r.author,
+                                                                        publisher : r.publisher,
+                                                                        date : r.date,
+                                                                        date_added : new Date().toString(),
+                                                                        date_modified : new Date().toString(),
+                                                                        status : 'duplicate',
+                                                                        medium : r.medium,
+                                                                        SearchTargets_id : r.SearchTargets_id,
+                                                                        Savefiles_id : r.Savefiles_id,
+                                                                        xmlformat : r.xmlformat,
+                                                                        marcflavour : r.marcflavour,
+                                                                        template : r.template,
+                                                                        marcformat : r.marcformat
+                                                                    }).save();
+                                                                    showStatusMsg('Record duplicated');
+                                                                }
+                                                            },
                                                             {
                                                                 cls: 'x-btn-text-icon',
                                                                 icon: libPath + 'ui/images/process-stop.png',
@@ -1265,6 +1323,7 @@ biblios.app = function() {
                                                                                             template : r.template,
                                                                                             marcformat : r.marcformat
                                                                                         }).save();
+                                                                                        showStatusMsg('Record duplicated');
                                                                                         Ext.getCmp('savegrid').store.reload();
                                                                                     }
                                                                                 },
