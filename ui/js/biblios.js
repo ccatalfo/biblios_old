@@ -39,6 +39,7 @@ biblios.app = function() {
 		  encoding = $("//encoding", configDoc).text();
 		  $("searching//server", configDoc).each( function() { 
 			var hostname = $(this).children('hostname').text();
+            var id = $(this).children('id').text();
 			var port = $(this).children('port').text();
 			var dbname = $(this).children('dbname').text();
 			var userid = $(this).children('userid').text();
@@ -49,7 +50,7 @@ biblios.app = function() {
 			var allowDelete= $(this).children('allowDelete').text();
 			var allowModify= $(this).children('allowModify').text();
 			// check db if already exists based on name field
-			if( t = DB.SearchTargets.select('name=?', [name]).getOne() ) {
+			if( t = DB.SearchTargets.select('SearchTargets.rowid=?', [id]).getOne() ) {
 				t.hostname = hostname;
 				t.port = port;
 				t.dbname = dbname;
@@ -81,6 +82,7 @@ biblios.app = function() {
 		  } );
 		  z3950serversSave = $("saving//server", configDoc).each( function() {
 				var name = $(this).children('name').text();
+                var id = $(this).children('id').text();
 				var loc= $(this).children('location').text();
 				var url = $(this).children('url').text();
 				var user = $(this).children('user').text();
@@ -92,7 +94,7 @@ biblios.app = function() {
                 var allowModify= $(this).children('allowModify').text();
                 var embedded = $(this).children('embedded').text();
 				// check db for sendtarget based on name field
-				if( t = DB.SendTargets.select('name=?', [name]).getOne() ) {
+				if( t = DB.SendTargets.select('SendTargets.rowid=?', [id]).getOne() ) {
 					t.name = name;
 					t.location = loc;
 					t.url = url;
@@ -1954,7 +1956,7 @@ biblios.app = function() {
 																			// insert new target into db so we get it's id
 																			var rs;
 																			try {
-																				rs = db.execute('insert into SearchTargets (name) values ("")');
+																				rs = db.execute('insert into SearchTargets (name, allowDelete, allowModify) values ("", 1, 1)');
 																				rs.close();
 																			}
 																			catch(ex) {
@@ -1969,7 +1971,9 @@ biblios.app = function() {
 																				description: '',
 																				userid: '',
 																				password: '',
-																				enabled: 0
+																				enabled: 0,
+                                                                                allowModify: 1,
+                                                                                allowDelete: 1
 																			});
 																			var grid = Ext.getCmp('searchtargetsgrid');
 																			grid.stopEditing();
@@ -2162,7 +2166,7 @@ biblios.app = function() {
 																			// insert new target into db so we get it's id
 																			var rs;
 																			try {
-																				rs = db.execute('insert into SendTargets (name) values ("")');
+																				rs = db.execute('insert into SendTargets (name, allowModify, allowDelete) values ("", 1, 1)');
 																				rs.close();
 																			}
 																			catch(ex) {
