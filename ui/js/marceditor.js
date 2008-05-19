@@ -306,7 +306,7 @@ function MarcEditor(ffeditor, vareditor, editorid) {
             elToAddAfter = $('div[@id^='+tagToAddTo+']', UI.editor[editorid].vared).eq(indexOfTag).find('.subfields').children('span');
         }
         else {
-            elToAddAfter = $(lastsf).parents('.subfield');
+            elToAddAfter = $(lastFocused).parents('.subfield');
         }
         $(elToAddAfter).after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text' value=\""+newval+"\"></span>");
 	};

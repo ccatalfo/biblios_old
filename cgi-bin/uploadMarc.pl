@@ -17,13 +17,14 @@ my $response = {};
 my $records = '';
 
 my $filepath = $cgi->param('file');
+my $format = $cgi->param('format');
 my $fh = $cgi->upload("file");
 my ($filename, $directories, $suffix) = fileparse($filepath, , qr/\.[^.]*/);
 #warn "uploadMarc.pl got filename: " . $filename . " with suffix: " . $suffix;
-
+#warn "uploadMarc.pl got format: $format";
 print $cgi->header( -type => 'text/html' );
 
-if( $suffix eq '.mrc' ) {
+if( $format eq 'marc21' ) {
     my $batch = MARC::Batch->new('USMARC', $fh) or warn "can't open $filename in marc::batch";
     $records .= MARC::File::XML::header();
     #warn MARC::File::XML::header();
@@ -34,7 +35,7 @@ if( $suffix eq '.mrc' ) {
     $records .= MARC::File::XML::footer();
     }
 }
-elsif ( $suffix eq '.xml' ) {
+elsif ( $format eq 'marcxml') {
     $records = slurp($fh) or die "can't open $filename for reading";
 }
 #warn MARC::File::XML::footer();
