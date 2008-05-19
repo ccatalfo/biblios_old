@@ -228,7 +228,24 @@ GearsORMShift.rules = [
             DB.Editors.dropTable();
             return true;
         }
-    }
+    }, //rule 8
+    {
+        version: 9,
+        comment: 'Add plugin col to sendtargets table.',
+        up: function() {
+            try {
+                db.execute('alter table SendTargets add column plugin string');
+            }
+            catch(ex) {
+                console.info('Unable to add plugin column to sendtargets table');
+            }
+            return true;
+        },
+        down: function() {
+            // no drop col command in sqlite
+            return true;
+        }
+    } // rule 9
 ];
 
 function createTestTargets() {
@@ -367,8 +384,7 @@ function init_gears() {
 					url: new GearsORM.Fields.String(),
 					user: new GearsORM.Fields.String(),
 					password: new GearsORM.Fields.String(),
-					pluginlocation: new GearsORM.Fields.String(),
-					plugininit: new GearsORM.Fields.String(),
+					plugin: new GearsORM.Fields.String(),
 					enabled: new GearsORM.Fields.Integer({defaultValue: 0}),
                     allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
                     allowModify: new GearsORM.Fields.Integer({defaultValue:1}),

@@ -207,7 +207,9 @@ function setILSTargets() {
 				Prefs.remoteILS[ils.name].pw = ils.password;
 				Prefs.remoteILS[ils.name].url = ils.url;
                 Prefs.remoteILS[ils.name].embedded = ils.embedded;
-				var initcall = ils.plugininit;
+                Prefs.remoteILS[ils.name].plugin = ils.plugin;
+                var plugin = DB.Plugins.select('name=?', [ils.plugin]).getOne();
+				var initcall = plugin.initcall;
 				// initialize and authorize for this ils instance
                 // try to instantiate plugin
 				try {
