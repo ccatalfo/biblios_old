@@ -1188,22 +1188,6 @@ biblios.app = function() {
 																			doSaveLocal(1, 'savegrid');
 																		}
 																	},
-																	{
-																		id: 'savegridMoveBtn',
-																		cls: 'x-btn-text-icon bmenu',
-																		icon: libPath + 'ui/images/document-save.png',
-																		text: 'Move',
-																		tooltip: {text: 'Move selected records to another folder'},
-																		menu: {
-																			id: 'savegridSaveMenu',
-																			items: getSaveFileMenuItems('savegrid'),
-																			listeners: {
-																				beforeshow: function(menu, menuItem, e) {
-																					updateSaveMenu();
-																				}
-																			}
-																		}
-																	},
                                                                     {
                                                                         id: 'savegridUploadsBtn',
                                                                         cls: 'x-btn-text-icon bmenu',
@@ -1236,6 +1220,22 @@ biblios.app = function() {
 																		tooltip: {text: 'Tools'},
 																		menu: {
 																			items: [
+                                                                                {
+                                                                                    id: 'savegridMoveBtn',
+                                                                                    cls: 'x-btn-text-icon bmenu',
+                                                                                    icon: libPath + 'ui/images/document-save.png',
+                                                                                    text: 'Move',
+                                                                                    tooltip: {text: 'Move selected records to another folder'},
+                                                                                    menu: {
+                                                                                        id: 'savegridSaveMenu',
+                                                                                        items: getSaveFileMenuItems('savegrid'),
+                                                                                        listeners: {
+                                                                                            beforeshow: function(menu, menuItem, e) {
+                                                                                                updateSaveMenu();
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                },
 																				{
 																					id: 'savegridMacrosBtn',
 																					cls: 'x-btn-text-icon bmenu',
