@@ -1298,6 +1298,7 @@ biblios.app = function() {
                                                                                     id: 'savegridDuplicateBtn',
                                                                                     cls: 'x-btn-text-icon',
                                                                                     text: 'Duplicate',
+                                                                                    icon: libPath + 'ui/images/document-save-as.png',
                                                                                     handler: function(btn) {
                                                                                         var records = getSelectedSaveGridRecords();
                                                                                         if( records.length > 1 ) {
