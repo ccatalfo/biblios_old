@@ -1236,6 +1236,38 @@ biblios.app = function() {
                                                                                         }
                                                                                     }
                                                                                 },
+                                                                                {
+                                                                                    id: 'savegridDuplicateBtn',
+                                                                                    cls: 'x-btn-text-icon',
+                                                                                    text: 'Duplicate',
+                                                                                    handler: function(btn) {
+                                                                                        var records = getSelectedSaveGridRecords();
+                                                                                        if( records.length > 1 ) {
+                                                                                            Ext.MessageBox.alert('Error', 'Please select 1 record to duplicate');
+                                                                                            return false;
+                                                                                        }
+                                                                                        var r = DB.Records.select('Records.rowid=?',[records[0].rowid]).getOne();
+                                                                                        // add new record to db with this rec's data
+                                                                                        var newrec = new DB.Records({
+                                                                                            xml : r.xml,
+                                                                                            title : r.title,
+                                                                                            author : r.author,
+                                                                                            publisher : r.publisher,
+                                                                                            date : r.date,
+                                                                                            date_added : new Date().toString(),
+                                                                                            date_modified : new Date().toString(),
+                                                                                            status : 'duplicate',
+                                                                                            medium : r.medium,
+                                                                                            SearchTargets_id : r.SearchTargets_id,
+                                                                                            Savefiles_id : r.Savefiles_id,
+                                                                                            xmlformat : r.xmlformat,
+                                                                                            marcflavour : r.marcflavour,
+                                                                                            template : r.template,
+                                                                                            marcformat : r.marcformat
+                                                                                        }).save();
+                                                                                        Ext.getCmp('savegrid').store.reload();
+                                                                                    }
+                                                                                },
 																				{
 																					id: 'savegridMacrosBtn',
 																					cls: 'x-btn-text-icon bmenu',
