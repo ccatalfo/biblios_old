@@ -100,7 +100,7 @@ function setPazPar2Targets() {
 	$.each( targets, function(i, n){
 		if( targets[i].enabled == 1 ) {
 			var db = n.hostname+":"+n.port+"/"+n.dbname;
-			$.get(  biblios.app.paz.pz2String +
+            var url = biblios.app.paz.pz2String +
 					'?' +
 					'command=settings'+
 					'&' +
@@ -108,8 +108,6 @@ function setPazPar2Targets() {
 					'&' +
 					'pz:name['+db+']='+ n.name +
 					'&' +
-                    'pz:authentication['+db+']='+n.userid+'/'+n.password +
-                    '&'+
 					'pz:requestsyntax['+db+']='+'marc21'+
 					'&' +
 					'pz:elements['+db+']='+'F'+
@@ -132,8 +130,14 @@ function setPazPar2Targets() {
 					'&' +
 					'pz:cclmap:date['+db+']='+'u=30 r=r'+
 					'&' +
-					'pz:cclmap:pub['+db+']='+'u=1018 s=al'
-			);
+					'pz:cclmap:pub['+db+']='+'u=1018 s=al';
+            if( n.userid != '') {
+                url += '&' + 'pz:authentication['+db+']='+n.userid+'/'+n.password; 
+            }
+            if( biblios.app.pazpar2debug == 1 ) {
+                url += '&' + 'pz:apdulog['+db+']=1';
+            }
+			$.get(url);
 		}
 		else if( targets[i].enabled == 0) {
 			var db = n.hostname+":"+n.port+"/"+n.dbname;

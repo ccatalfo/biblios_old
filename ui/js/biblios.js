@@ -214,6 +214,7 @@ biblios.app = function() {
             sessionID : '',
             sessionStatus : 'uninitialized'
         },
+        pazpar2debug : 0,
 		send: {
 			numToSend: 0,
 			sendSource: '',
