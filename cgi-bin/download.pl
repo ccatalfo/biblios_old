@@ -13,6 +13,9 @@ if( $filename =~ /mrc/ ) {
 elsif( $filename =~ /xml/ ) {
   print $cgi->header( -type => 'application/octet-stream', -attachment=>'marc.xml');
 }
+elsif( $filename =~ /js/ ) {
+  print $cgi->header( -type => 'application/octet-stream', -attachment=>'bibliosdb.js');
+}
     
 warn "opening $dir$filename to send to browser as download";
 open FILE, $dir.$filename or die "can't open $dir$filename for reading";

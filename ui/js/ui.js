@@ -352,7 +352,7 @@ function handleDownload(format, encoding, xml) {
           function(data) {
             //if(debug){ alert(data);}
             //$("<iframe id='dl' src="+cgiDir+"'download.pl?filename="+data+"'/>").appendTo("#downloads");
-            //$("#dl").remove();
+            //$("#dl").remove()
 			var MIF = new Ext.ux.ManagedIFrame({ autoCreate:{src:cgiDir+'download.pl?filename='+data,height:350,width:'100%'}
 
                      ,loadMask :false 
@@ -797,8 +797,44 @@ function resetDB() {
 }
 
 function exportDB() {
-
+    var dbexport = {
+        version : GearsORMShift.latestVersion(),
+        records : new Array(),
+        savefiles : new Array(),
+        searchtargets : new Array(), 
+        sendtargets : new Array(), 
+        macros : new Array()
+    };
+    // for each rec in db, set it's rowid to '' so that gearsorm doesn't try to update rec w/ that rowid and instead inserts a new row in table
+    DB.Records.select().each( function(s) {
+        s.rowid = '';
+        dbexport.records.push(s);
+    });
+    DB.Savefiles.select().each( function(s) {
+        s.rowid = '';
+        dbexport.savefiles.push(s);
+    });
+    DB.SearchTargets.select().each( function(s) {
+        s.rowid = '';
+        dbexport.searchtargets.push(s);
+    });
+    DB.SendTargets.select().each( function(s) {
+        s.rowid = '';
+        dbexport.sendtargets.push(s);
+    });
+    DB.Macros.select().each( function(s) {
+        s.rowid = '';
+        dbexport.macros.push(s);
+    });
+    var dbasstring = $.toJSON(dbexport);
+    $.post(
+        cgiDir + 'exportdb.pl',
+        { db: dbasstring},
+        function(data) {
+			var MIF = new Ext.ux.ManagedIFrame({ autoCreate:{src:cgiDir+'download.pl?filename='+data,height:350,width:'100%'},loadMask :false});
+        });
 }
+
 
 function importDB() {
 
