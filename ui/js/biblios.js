@@ -1846,13 +1846,14 @@ biblios.app = function() {
                                                             {
                                                                 text: 'Export DB',
                                                                 handler: function(btn) {
-                                                                    exportDB();
+                                                                    var db = exportDB();
+                                                                    doExportDB(db);
                                                                 }
                                                             },
                                                             {
                                                                 text: 'Import DB',
                                                                 handler: function(btn) {
-                                                                    importDB();
+                                                                    showImportDBDialog();
                                                                 }
                                                             }
                                                         ],

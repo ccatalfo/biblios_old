@@ -797,6 +797,19 @@ function resetDB() {
     });
 }
 
+function importDB(data) {
+    try {
+        DB.Records.load( data.records, true );
+        DB.SearchTargets.load( data.searchtargets, true );
+        DB.SendTargets.load( data.sendtargets, true );
+        DB.Macros.load( data.macros, true );
+        DB.Savefiles.load( data.savefiles, true );
+    }
+    catch(ex) {
+        throw(ex);
+    }
+}
+
 function exportDB() {
     var dbexport = {
         version : GearsORMShift.latestVersion(),
@@ -811,15 +824,17 @@ function exportDB() {
         s.rowid = '';
         dbexport.records.push(s);
     });
-    DB.Savefiles.select().each( function(s) {
+    // only select Savefiles with rowid>3 so we don't export and duplicate Trash, Complete, and Drafts folders
+    DB.Savefiles.select('Savefiles.rowid>3').each( function(s) {
         s.rowid = '';
         dbexport.savefiles.push(s);
     });
-    DB.SearchTargets.select().each( function(s) {
+    // export only search, send targets with allowModify=1 so we don't duplicate entries defined in biblios.conf
+    DB.SearchTargets.select('allowModify=1').each( function(s) {
         s.rowid = '';
         dbexport.searchtargets.push(s);
     });
-    DB.SendTargets.select().each( function(s) {
+    DB.SendTargets.select('allowModify=1').each( function(s) {
         s.rowid = '';
         dbexport.sendtargets.push(s);
     });
@@ -827,7 +842,11 @@ function exportDB() {
         s.rowid = '';
         dbexport.macros.push(s);
     });
-    var dbasstring = $.toJSON(dbexport);
+    return dbexport;
+}
+
+function doExportDB(db) {
+    var dbasstring = $.toJSON(db);
     $.post(
         cgiDir + 'exportdb.pl',
         { db: dbasstring},
@@ -837,7 +856,7 @@ function exportDB() {
 }
 
 
-function importDB() {
+function showImportDBDialog() {
     var uploadDialog = new Ext.ux.UploadDialog.Dialog({
         url: cgiDir+'uploaddb.pl',
         reset_on_hide: false,
@@ -857,11 +876,7 @@ function doUploadDB(dialog, filename, resp_data) {
     //console.info(resp_data);
     $.getJSON(cgiDir+'download.pl?filename='+ resp_data.filepath, function(data) { 
         try {
-            DB.Records.load( data.records, true );
-            DB.SearchTargets.load( data.searchtargets, true );
-            DB.SendTargets.load( data.sendtargets, true );
-            DB.Macros.load( data.macros, true );
-            DB.Savefiles.load( data.savefiles, true );
+            importDB(data);
             Ext.MessageBox.alert('Import', 'Database import complete');
         }
         catch(ex) {
@@ -869,3 +884,4 @@ function doUploadDB(dialog, filename, resp_data) {
         }
     });
 }
+
