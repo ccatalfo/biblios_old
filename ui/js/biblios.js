@@ -285,7 +285,7 @@ biblios.app = function() {
 								region: 'west',
 								border: false,
 								width: 170,
-								html: {tag: 'img', id: 'logo', src: biblioslogo}
+								html: {tag: 'img', id: 'biblioslogo', src: biblioslogo}
 							},
 							{
 								region: 'east',
