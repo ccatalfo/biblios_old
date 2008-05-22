@@ -2452,7 +2452,11 @@ biblios.app = function() {
 								] // options tab items
 							} // options tab config
 						] // center items of tabpanel
-					}) // tabpanel constructor
+					}),
+                    {
+                        region: 'south',
+                        id: 'bibliosfooter'
+                    }// tabpanel constructor
 				] // viewport items
 			}); // viewport constructor
 			
