@@ -1825,6 +1825,45 @@ biblios.app = function() {
 									new Ext.TabPanel({
 										region: 'center',
 										items: [
+                                            {
+                                                title: 'Database',
+                                                layout: 'border',
+                                                listeners: {
+                                                    activate: function(tab) {
+														biblios.app.viewport.doLayout();
+                                                    }
+                                                }, // db tab listeners
+                                                items: [
+                                                    new Ext.Toolbar({
+                                                        region: 'center',
+                                                        items: [
+                                                            {
+                                                                text: 'Reset DB',
+                                                                handler: function(btn) {
+                                                                    resetDB();
+                                                                }
+                                                            },
+                                                            {
+                                                                text: 'Export DB',
+                                                                handler: function(btn) {
+                                                                    exportDB();
+                                                                }
+                                                            },
+                                                            {
+                                                                text: 'Import DB',
+                                                                handler: function(btn) {
+                                                                    importDB();
+                                                                }
+                                                            }
+                                                        ],
+                                                        listeners: {
+                                                            beforerender: function(tbar) {
+                                                                    tbar.autoCreate.html = '<table cellspacing="0"><tr></tr></table>';
+                                                            }
+                                                        } // db tbar listeners
+                                                    })
+                                                ]
+                                            }, // db tab
 											{
 												title: 'Macros',
 												layout: 'border',

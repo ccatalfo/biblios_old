@@ -779,3 +779,27 @@ function uploadError(dialog, filename, data) {
     //console.info(data);
     Ext.MessageBox.alert('Upload error', filename + ' failed to upload');
 }
+
+function resetDB() {
+    Ext.MessageBox.confirm('Reset Database', 'Reset database, removing all records and user-defined send targets, search targets, macros, and savefiles?', function(btn) {
+        try {
+            DB.SendTargets.select('allowDelete=1').each( function(s) { s.remove() }); 
+            DB.SearchTargets.select('allowDelete=1').each( function(s) { s.remove() }); 
+            DB.Savefiles.select('allowDelete=1').each( function(s) { s.remove() }); 
+            DB.Records.remove();
+            DB.Macros.remove();
+            Ext.MessageBox.alert('Reset Database', 'Database has been reset');
+        }
+        catch(ex) {
+            Ext.MessageBox.alert('Reset Database', 'There was an error in reseting the database.  Please report this error to your system administrator: ' + ex);
+        }
+    });
+}
+
+function exportDB() {
+
+}
+
+function importDB() {
+
+}
