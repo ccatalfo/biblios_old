@@ -736,6 +736,7 @@ function showUploadDialog(format) {
       uploadDialog.on('uploaderror', uploadError);
       uploadDialog.show();
 }
+
 function doUploadMarc(dialog, filename, resp_data) {
     //console.info(resp_data);
     $.get(cgiDir+'download.pl?filename='+resp_data.filepath, function(data) {
@@ -837,5 +838,34 @@ function exportDB() {
 
 
 function importDB() {
+    var uploadDialog = new Ext.ux.UploadDialog.Dialog({
+        url: cgiDir+'uploaddb.pl',
+        reset_on_hide: false,
+        allow_close_on_upload: true,
+        upload_autostart: true,
+        post_var_name: 'file'
+    });
 
+    uploadDialog.on('uploadsuccess', doUploadDB);
+    uploadDialog.on('uploadcomplete', uploadComplete);
+    uploadDialog.on('uploadfailed', uploadFailed);
+    uploadDialog.on('uploaderror', uploadError);
+    uploadDialog.show();
+}
+
+function doUploadDB(dialog, filename, resp_data) {
+    //console.info(resp_data);
+    $.getJSON(cgiDir+'download.pl?filename='+ resp_data.filepath, function(data) { 
+        try {
+            DB.Records.load( data.records, true );
+            DB.SearchTargets.load( data.searchtargets, true );
+            DB.SendTargets.load( data.sendtargets, true );
+            DB.Macros.load( data.macros, true );
+            DB.Savefiles.load( data.savefiles, true );
+            Ext.MessageBox.alert('Import', 'Database import complete');
+        }
+        catch(ex) {
+            Ext.MessageBox.alert('Error', 'Error importing db ' + ex);
+        }
+    });
 }
