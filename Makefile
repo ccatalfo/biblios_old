@@ -43,7 +43,7 @@ koha-install: index-koha.html
 	cp index-koha.html $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/modules/cataloguing/biblios.tmpl
 	cp integration/koha/biblios.pl $(KOHADIR)/cataloguing/
 	mkdir -p $(KOHADIR)/plugins/biblios
-	cp cgi-bin/downloadMarc.pl cgi-bin/download.pl cgi-bin/vendorSearch cgi-bin/uploadMarc.pl $(KOHADIR)/plugins/biblios/
+	cp cgi-bin/exportdb.pl cgi-bin/downloadMarc.pl cgi-bin/download.pl cgi-bin/vendorSearch cgi-bin/uploadMarc.pl $(KOHADIR)/plugins/biblios/
 	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
 	cp -r lib tools templates ui conf plugins $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/
 
