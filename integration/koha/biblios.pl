@@ -35,7 +35,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { parameters => 1, editcatalogue => 1 },
+        flagsrequired   => { editcatalogue => 1 },
     }
 );
 my $biblionumber = $query->param('biblionumber');
