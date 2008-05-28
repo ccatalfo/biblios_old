@@ -1,0 +1,4 @@
+pre_process = conf/build.conf
+src = src
+dest = build 
+ignore swp$
