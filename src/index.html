@@ -2,7 +2,7 @@
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<!-- extraheadincludes -->
+    [% headIncludes %]
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="[% libPath %]lib/extjs2/resources/css/ext-all.css">
 	<!-- our own style sheets -->
@@ -95,7 +95,7 @@ var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
     <script type="text/javascript" src="[% uiPath %]ui/js/save.js"></script>
     <script type="text/javascript" src="[% uiPath %]ui/js/ui.js"></script>
     <script type="text/javascript" src="[% uiPath %]ui/js/edit.js"></script>
-<div id='branding-area'></div>
+<div id='branding-area'>[% headerhtml %]</div>
 <div id='biblios'>
 <div id='downloads'></div>
 <div id='searchform'>
@@ -132,6 +132,6 @@ var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
 			// placeholder
 		}, biblios.app);
     </script>
-    <div id="bibliosfooter"></div>
+    <div id="bibliosfooter">[% footerhtml %]</div>
 </body>
 </html>
