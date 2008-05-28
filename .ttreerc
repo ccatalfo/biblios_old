@@ -1,5 +1,5 @@
-pre_process = conf/build.conf
 src = src
 dest = build 
 lib = conf
+pre_process = build.conf
 ignore swp$
