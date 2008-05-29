@@ -3,7 +3,7 @@ JSMIN=perl tools/js-minify.pl
 CSSMIN=perl tools/css-minify.pl
 CAT=cat
 SRCS=ui
-ALLSRC=$(SRCS) index.html Makefile INSTALL INSTALL.koha lib cgi-bin conf templates plugins integration docs tools test
+ALLSRC=$(SRCS) src/index.html Makefile INSTALL INSTALL.koha lib cgi-bin conf templates plugins integration docs tools test
 VERSION=0.9
 PROGNAME=biblios-$(VERSION)
 
