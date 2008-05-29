@@ -36,11 +36,11 @@ tags: $(SRCS)
 debug: index.html
 	cp index.html index-debug.html
 
-koha: index-debug.html
-	perl integration/updateForEmbedding.pl index-debug.html index-koha.html "/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/" "/cgi-bin/koha/plugins/biblios/" "$(KOHASTAFFPORT)" "<!-- TMPL_INCLUDE NAME=\"doc-head-open.inc\" --><!-- TMPL_INCLUDE NAME=\"doc-head-close.inc\" --><link rel=\"stylesheet\" type=\"text/css\" href=\"ui/css/reset.css\">" "<!-- TMPL_INCLUDE NAME=\"header.inc\" -->" integration/koha/fixes.js $(DEBUG) $(KOHAURL)
+koha: src/index.html
+	ttree -a -f .ttreerc-koha
 
-koha-install: index-koha.html
-	cp index-koha.html $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/modules/cataloguing/biblios.tmpl
+koha-install: build/index.html
+	cp build/index.html $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/modules/cataloguing/biblios.tmpl
 	cp integration/koha/biblios.pl $(KOHADIR)/cataloguing/
 	mkdir -p $(KOHADIR)/plugins/biblios
 	cp cgi-bin/uploaddb.pl cgi-bin/exportdb.pl cgi-bin/downloadMarc.pl cgi-bin/download.pl cgi-bin/vendorSearch cgi-bin/uploadMarc.pl $(KOHADIR)/plugins/biblios/

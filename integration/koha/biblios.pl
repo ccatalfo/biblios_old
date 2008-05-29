@@ -39,6 +39,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 my $biblionumber = $query->param('biblionumber');
+ my $sessionID = $query->cookie("CGISESSID");
 $template->param( biblionumber => $biblionumber );
+$template->param( loggedinuser => $loggedinuser );
+$template->param( sessionID => $sessionID );
 
 output_html_with_http_headers $query, $cookie, $template->output;
