@@ -29,6 +29,7 @@
 <!-- extjs -->
     <script type="text/javascript" src="[% libPath %]lib/extjs2/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="[% libPath %]lib/extjs2/ext-all.js"></script>
+    [% IF debug %]
 	<script type="text/javascript" src="[% libPath %]lib/extjs/PagingMemoryProxy.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs/GoogleGearsProxy.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.NestedXmlReader.js"></script>
@@ -37,6 +38,9 @@
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.UploadDialog.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/RowExpander.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/miframe.js"></script>
+    [% ELSE %]
+	<script type="text/javascript" src="[% libPath %]lib/extjs2/ext_ux_libs-min.js"></script>
+    [% END %]
 <!-- gears -->
 	<script type="text/javascript" src="[% libPath %]lib/google_gears/gears_init.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/google_gears/GearsORM_all.js"></script>
@@ -52,11 +56,19 @@
 <!-- pazpar2 -->
 <script type="text/javascript" src="[% libPath %]lib/pz2.js"></script>
 <!-- jquery -->
+    [% IF debug %]
+	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery-1.2.2.js"></script>
+    [% ELSE %]
 	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery-1.2.2.min.js"></script>
+    [% END %]
+    [% IF debug %]
 	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery.hotkeys.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery.xpath.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery.cookie.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/jquery/json.js"></script>
+    [% ELSE %]
+	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery_plugins-min.js"></script>
+    [% END %]
 
 <!-- sarissa  -->
 	<script type="text/javascript" src="[% libPath %]lib/sarissa/sarissa.js"></script>
@@ -85,6 +97,7 @@ var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
 </script>
 <!-- biblios -->
     <script type="text/javascript">Ext.get('loadingtext').update('Loading Biblios files');</script>
+    [% IF debug %]
     <script type="text/javascript" src="[% uiPath %]plugins/koha.js"></script>
     <script type="text/javascript" src="[% uiPath %]ui/js/db.js"></script>
     <script type="text/javascript" src="[% uiPath %]ui/js/marceditor.js"></script>
@@ -96,6 +109,10 @@ var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
     <script type="text/javascript" src="[% uiPath %]ui/js/save.js"></script>
     <script type="text/javascript" src="[% uiPath %]ui/js/ui.js"></script>
     <script type="text/javascript" src="[% uiPath %]ui/js/edit.js"></script>
+    [% ELSE %]
+    <script type="text/javascript" src="[% uiPath %]ui/js/biblios_min.js"></script>
+    [% END %]
+
 <div id='branding-area'>[% headerhtml %]</div>
 <div id='biblios'>
 <div id='downloads'></div>
