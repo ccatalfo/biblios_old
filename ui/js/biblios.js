@@ -572,7 +572,16 @@ biblios.app = function() {
 															    menu: 
                                                                     {
                                                                         id: 'editoroneEditMenu',
-                                                                        items: MarcEditor.getToolsMenu()
+                                                                        items: [],
+                                                                        listeners: {
+                                                                            beforeshow: function(menu, menuItem, e) {
+                                                                                menu.removeAll();
+                                                                                var items = UI.editor.editorone.record.getToolsMenu();
+                                                                                for( i in items) {
+                                                                                    menu.add( items[i] );
+                                                                                }
+                                                                            }
+                                                                        }
                                                                     } // editorone tools menu 
                                                             }, // editorone tools btn
                                                             {
@@ -726,7 +735,16 @@ biblios.app = function() {
 															    menu: 
                                                                     {
                                                                         id: 'editortwoEditMenu',
-                                                                        items: MarcEditor.getToolsMenu()
+                                                                        items: [],
+                                                                        listeners: {
+                                                                            beforeshow: function(menu, menuItem, e) {
+                                                                                menu.removeAll();
+                                                                                var items = UI.editor.editortwo.record.getToolsMenu();
+                                                                                for( i in items) {
+                                                                                    menu.add( items[i] );
+                                                                                }
+                                                                            }
+                                                                        }
                                                                     } // editortwo tools menu 
                                                             }, // editortwo tools btn
                                                             {

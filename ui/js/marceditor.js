@@ -1669,7 +1669,7 @@ MarcEditor.prototype.processForLocation = function(loc) {
     return this._processForLocation(loc);
 }
 
-MarcEditor.getToolsMenu = function getToolsMenu() {
+MarcEditor.prototype.getToolsMenu = function getToolsMenu() {
     return [
             {
                 id: 'toggleFixedFieldGrid',
