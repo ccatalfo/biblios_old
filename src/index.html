@@ -36,7 +36,9 @@
 
 </div>
 <!-- firebug lite -->
+    [% IF debug %]
     <script type="text/javascript" src="[% libPath %]lib/firebug/firebug.js"></script>
+    [% END %]
 <!-- cookie utility funcs -->
     <script type="text/javascript" src="[% libPath %]lib/cookieHelpers.js"></script>
 <!-- extjs -->
