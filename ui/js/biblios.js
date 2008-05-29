@@ -565,79 +565,35 @@ biblios.app = function() {
 															{
 																cls: 'x-btn-text-icon',
 																icon: libPath + 'ui/images/edit-copy.png',
-																id: 'editortasks',
+																id: 'editoroneEditBtn',
 																editorid: 'editorone',
-																text: 'Tools',
+																text: 'Edit',
 																tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-r<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
-																menu: {
-																	id: 'editortasksmenu',
-																	items: [
-																		{
-																			id: 'toggleFixedFieldGrid',
-																			editorid: 'editorone',
-																			text: 'Toggle Fixed Field Editor',
-																			enableToggle: true,
-																			pressed: true,
-																			listeners: {
-																				click: function(btn, pressed) {
-																					btn.pressed = btn.pressed ? false : true;
-																					UI.editor[btn.editorid].record.toggleFixedFieldDisplay(btn, pressed);
-																				}
-																			}
-																		},
-																		{
-																			id: 'addField',
-																			editorid: 'editorone',
-																			text: 'Add Field Ctrl-n',
-																			handler: function(btn) {
-																				UI.editor.editorone.record.addField();
-																			}
-																		},
-																		{
-																			id: 'removeField',
-																			editorid: 'editorone',
-																			text: 'Remove Field Ctrl-r',
-																			handler: function(btn) {
-																				UI.editor[btn.editorid].record.deleteField('editorone');
-																			}
-																		},
-																		{
-																			id: 'addSubfield',
-																			editorid: 'editorone',
-																			text: 'Add Subfield Ctrl-m',
-																			handler: function(btn) {
-																				UI.editor[btn.editorid].record.addSubfield();
-																			}
-																		},
-																		{	
-																			id: 'removeSubfield',
-																			editorid: 'editorone',
-																			text: 'Remove subfield Ctrl-d',
-																			handler: function(btn) {
-																				UI.editor[btn.editorid].record.deleteSubfield(btn.editorid);
-																			}
-																		},
-																		{
-																			id: 'editorOneMacrosBtn',
-																			cls: 'x-btn-text-icon bmenu',
-																			text: 'Macros',
-																			menu : {
-																				id: 'editorOnemacrosmenu',
-																				items: getMacroMenuItems('editorone'),
-																				listeners: {
-																					beforeshow: function(menu, menuItem, e) {
-																						menu.removeAll();
-																						var items = getMacroMenuItems('editorone');
-																						for( i in items) {
-																							menu.add( items[i] );
-																						}
-																					}
-																				}
-																			}
-																		}
-																	]
-																}
-															},
+															    menu: 
+                                                                    {
+                                                                        id: 'editoroneEditMenu',
+                                                                        items: MarcEditor.getToolsMenu()
+                                                                    } // editorone tools menu 
+                                                            }, // editorone tools btn
+                                                            {
+                                                                id: 'editorOneMacrosBtn',
+                                                                cls: 'x-btn-text-icon bmenu',
+                                                                icon: libPath + 'ui/images/edit-copy.png',
+                                                                text: 'Macros',
+                                                                menu : {
+                                                                    id: 'editorOnemacrosmenu',
+                                                                    items: getMacroMenuItems('editorone'),
+                                                                    listeners: {
+                                                                        beforeshow: function(menu, menuItem, e) {
+                                                                            menu.removeAll();
+                                                                            var items = getMacroMenuItems('editorone');
+                                                                            for( i in items) {
+                                                                                menu.add( items[i] );
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
 															{
 																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/document-save.png',

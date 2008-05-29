@@ -1668,3 +1668,54 @@ MarcEditor.prototype.postProcess = function() {
 MarcEditor.prototype.processForLocation = function(loc) {
     return this._processForLocation(loc);
 }
+
+MarcEditor.getToolsMenu = function getToolsMenu() {
+    return [
+            {
+                id: 'toggleFixedFieldGrid',
+                editorid: 'editorone',
+                text: 'Toggle Fixed Field Editor',
+                enableToggle: true,
+                pressed: true,
+                listeners: {
+                    click: function(btn, pressed) {
+                        btn.pressed = btn.pressed ? false : true;
+                        UI.editor[btn.editorid].record.toggleFixedFieldDisplay(btn, pressed);
+                    }
+                }
+            },
+            {
+                id: 'addField',
+                editorid: 'editorone',
+                text: 'Add Field Ctrl-n',
+                handler: function(btn) {
+                    UI.editor.editorone.record.addField();
+                }
+            },
+            {
+                id: 'removeField',
+                editorid: 'editorone',
+                text: 'Remove Field Ctrl-r',
+                handler: function(btn) {
+                    UI.editor[btn.editorid].record.deleteField('editorone');
+                }
+            },
+            {
+                id: 'addSubfield',
+                editorid: 'editorone',
+                text: 'Add Subfield Ctrl-m',
+                handler: function(btn) {
+                    UI.editor[btn.editorid].record.addSubfield();
+                }
+            },
+            {	
+                id: 'removeSubfield',
+                editorid: 'editorone',
+                text: 'Remove subfield Ctrl-d',
+                handler: function(btn) {
+                    UI.editor[btn.editorid].record.deleteSubfield(btn.editorid);
+                }
+            }
+    ];
+} // getToolsMenu
+
