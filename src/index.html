@@ -4,10 +4,23 @@
 <head>
     [% headIncludes %]
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    [% IF debug %]
     <link rel="stylesheet" type="text/css" href="[% libPath %]lib/extjs2/resources/css/ext-all.css">
+    [% ELSE %]
+    <link rel="stylesheet" type="text/css" href="[% libPath %]lib/extjs2/resources/css/ext-all-min.css">
+    [% END %]
 	<!-- our own style sheets -->
+    [% IF debug %]
 	<link type="text/css" rel="stylesheet" href="[% uiPath %]ui/css/styles.css" />
+    [% ELSE %]
+	<link type="text/css" rel="stylesheet" href="[% uiPath %]ui/css/styles-min.css" />
+    [% END %]
+    [% IF debug %]
 	<link type="text/css" rel="stylesheet" href="[% uiPath %]ui/css/editor-styles.css" />
+    [% ELSE %]
+	<link type="text/css" rel="stylesheet" href="[% uiPath %]ui/css/editor-styles-min.css" />
+    [% END %]
+    
     <title>Biblios</title>
 </head>
 <body>
