@@ -716,86 +716,39 @@ biblios.app = function() {
 														width: 500,
 														html: '<div id="marceditortwo"><div class="ffeditor"></div><div class="vareditor"></div></div>',
 														tbar: [
-															{
+                                                            {
 																cls: 'x-btn-text-icon',
 																icon: libPath + 'ui/images/edit-copy.png',
-																id: 'editortasks-two',
+																id: 'editortwoEditBtn',
 																editorid: 'editortwo',
-																text: 'Tools',
-																tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-k<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
-																menu: {
-																	id: 'editortasksmenu',
-																	items: [
-																		{
-																			id: 'toggleFixedFieldGrid',
-																			editorid: 'editortwo',
-																			text: 'Toggle Fixed Field Editor',
-																			tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-k<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
-																			enableToggle: true,
-																			pressed: true,
-																			listeners: {
-																				toggle: function(btn, pressed) {
-																					UI.editor[btn.editorid].record.toggleFixedFieldDisplay(btn, pressed);
-																				}
-																			}
-																		},
-																		{
-																			id: 'addField',
-																			editorid: 'editortwo',
-																			text: 'Add Field Ctrl-n',
-																			handler: function(btn) {
-																				UI.editor.editorone.record.addField();
-																				UI.editor[btn.editorid].record.update();
-																			}
-																		},
-																		{
-																			id: 'removeField',
-																			editorid: 'editortwo',
-																			text: 'Remove Field Ctrl-r',
-																			handler: function(btn) {
-																				UI.editor[btn.editorid].record.deleteField('editorone');
-																				UI.editor[btn.editorid].record.update();
-																			}
-																		},
-																		{
-																			id: 'addSubfield',
-																			editorid: 'editortwo',
-																			text: 'Add Subfield Ctrl-m',
-																			handler: function(btn) {
-																				UI.editor[btn.editorid].record.addSubfield();
-																			}
-																		},
-																		{	
-																			id: 'removeSubfield',
-																			editorid: 'editortwo',
-																			text: 'Remove subfield Ctrl-d',
-																			handler: function(btn) {
-																				UI.editor[btn.editorid].record.deleteSubfield(btn.editorid);
-																				UI.editor[btn.editorid].record.update();
-																			}
-																		},
-																		{
-																			id: 'editorTwoMacrosBtn',
-																			cls: 'x-btn-text-icon bmenu',
-																			text: 'Macros',
-																			menu : {
-																				id: 'editorTwomacrosmenu',
-																				items: getMacroMenuItems('editortwo'),
-																				listeners: {
-																					beforeshow: function(menu, menuItem, e) {
-																						menu.removeAll();
-																						var items = getMacroMenuItems('editorone');
-																						for( i in items) {
-																							menu.add( items[i] );
-																						}
-																					}
-																				}
-																			}
-																		}
-																	]
-																}
-															},
-															{
+																text: 'Edit',
+																tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-r<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
+															    menu: 
+                                                                    {
+                                                                        id: 'editortwoEditMenu',
+                                                                        items: MarcEditor.getToolsMenu()
+                                                                    } // editortwo tools menu 
+                                                            }, // editortwo tools btn
+                                                            {
+                                                                id: 'editorTwoMacrosBtn',
+                                                                cls: 'x-btn-text-icon bmenu',
+                                                                icon: libPath + 'ui/images/edit-copy.png',
+                                                                text: 'Macros',
+                                                                menu : {
+                                                                    id: 'editorTwomacrosmenu',
+                                                                    items: getMacroMenuItems('editortwo'),
+                                                                    listeners: {
+                                                                        beforeshow: function(menu, menuItem, e) {
+                                                                            menu.removeAll();
+                                                                            var items = getMacroMenuItems('editorone');
+                                                                            for( i in items) {
+                                                                                menu.add( items[i] );
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
 																cls: 'x-btn-text-icon bmenu', // icon and text class
 																icon: libPath + 'ui/images/document-save.png',
 																text: 'Save',
