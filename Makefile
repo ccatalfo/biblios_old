@@ -62,7 +62,7 @@ clean:
 	@echo
 	@echo "Removing generated index.html"
 	@echo
-	-rm -f build/index.html
+	-rm -f index.html
 
 tags: $(SRCS)
 	$(CTAGS) ui/js/biblios.js ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js
