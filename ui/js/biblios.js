@@ -114,6 +114,7 @@ biblios.app = function() {
 			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets',
 			selectSqlMacros: 'select Macros.rowid as rowid, name, code, hotkey, file, enabled from Macros',
             handle: db
+            selectSqlPlugins: 'select Plugins.rowid as rowid, name, file, type, initcall, enabled from Plugins'
 		},
 		
         // public methods
@@ -1913,7 +1914,73 @@ biblios.app = function() {
 											}, // macros
 											{
 												title: 'Plugins',
-												html: 'Coming soon'
+                                                layout: 'border',
+                                                listeners: {
+                                                    activate: function(tab) {
+                                                        Ext.getCmp('pluginsgrid').store.load({db: db, selectSql: biblios.app.db.selectSqlPlugins});
+                                                        biblios.app.viewport.doLayout();
+                                                    }
+                                                },
+                                                items: 
+                                                    {
+                                                        region: 'center',
+                                                        height: 600,
+                                                        id: 'pluginsgridpanel',
+                                                        items: [
+                                                            new Ext.grid.GridPanel({
+                                                                id: 'pluginsgrid',
+                                                                height: 600,
+                                                                ds: new Ext.data.Store({
+                                                                    proxy: new Ext.data.GoogleGearsProxy(new Array()),
+                                                                    reader: new Ext.data.ArrayReader({
+                                                                        record: 'name'
+                                                                    }, Plugin),
+                                                                    remoteSort: false,
+                                                                    listeners: {
+
+                                                                    } // plugins ds listeners
+                                                                }), // plugins ds
+                                                                listeners: {
+
+                                                                }, // plugins grid listeners
+                                                                sm: new Ext.grid.RowSelectionModel({
+
+                                                                }),
+                                                                cm: new Ext.grid.ColumnModel([
+                                                                    {
+                                                                        header: 'Name',
+                                                                        dataIndex: 'name',
+                                                                        editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+                                                                    },
+                                                                    {
+                                                                        header: 'File',
+                                                                        dataIndex: 'file',
+                                                                        hidden: true,
+                                                                        editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+                                                                    },
+                                                                    {
+                                                                        header: 'Type',
+                                                                        dataIndex: 'type',
+                                                                        editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+                                                                    },
+                                                                    {
+                                                                        header: 'Initcall',
+                                                                        dataIndex: 'initcall',
+                                                                        editor: new Ext.grid.GridEditor(new Ext.form.TextField()),
+                                                                        hidden: true
+                                                                    },
+                                                                    {
+                                                                        header: 'Enabled',
+                                                                        dataIndex: 'enabled',
+                                                                        renderer: function formatBoolean(value) {
+                                                                            return value ? 'Yes' : 'No';
+                                                                        },
+                                                                        editor: new Ext.grid.GridEditor(new Ext.form.Checkbox())
+                                                                    }
+                                                                ])
+                                                            }), // plugins editor grid panel
+                                                        ] // pluginsgridpanel items
+                                                    } // plugins tab items
 											},
 											{
 												title: 'Search Targets',

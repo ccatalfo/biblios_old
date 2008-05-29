@@ -62,6 +62,14 @@ var Macro = Ext.data.Record.create([
 	{name: 'file'},
 	{name: 'enabled'}
 ]);
+var Plugin = new Ext.data.Record.create([
+    {name: 'rowid'},
+    {name: 'name'},
+    {name: 'file'},
+    {name: 'type'},
+    {name: 'initcall'},
+    {name: 'enabled'}
+]);
 var searches = new Array(); // Array of pazpar2 searches
 var searchLimits = {};
 var currQuery;
