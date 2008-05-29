@@ -24,9 +24,7 @@ build: $(SRCS)
 	@echo
 	$(CAT) plugins/koha.js ui/js/db.js ui/js/marceditor.js ui/js/marcrecord.js ui/js/init.js ui/js/prefs.js ui/js/search.js ui/js/biblios.js ui/js/save.js ui/js/ui.js ui/js/edit.js > ui/js/biblios_all.js
 	$(JSMIN) ui/js/biblios_all.js ui/js/biblios_min.js
-	@echo
 	@echo "Building javascript libraries"	
-	@echo
 	$(CAT) lib/extjs/PagingMemoryProxy.js lib/extjs/GoogleGearsProxy.js lib/extjs2/Ext.ux.NestedXmlReader.js lib/extjs2/Ext.ux.GearsTreeLoader.js lib/extjs2/Ext.ux.FacetsTreeLoader.js lib/extjs2/Ext.ux.UploadDialog.js lib/extjs2/RowExpander.js lib/extjs2/miframe.js > lib/extjs2/ext_ux_libs.js
 	$(JSMIN) lib/extjs2/ext_ux_libs.js lib/extjs2/ext_ux_libs-min.js
 	$(CAT) lib/jquery/jquery.hotkeys.js lib/jquery/jquery.xpath.js lib/jquery/jquery.cookie.js lib/jquery/json.js > lib/jquery/jquery_plugins.js
@@ -38,6 +36,7 @@ build: $(SRCS)
 	$(CSSMIN) ui/css/styles.css ui/css/styles-min.css
 	$(CSSMIN) ui/css/editor-styles.css ui/css/editor-styles-min.css
 	$(CSSMIN) ui/css/preview-styles.css ui/css/preview-styles-min.css
+	ttree -a -f .ttreerc-standalone
 
 dist: $(ALLSRC)
 	@echo "Creating .zip and .tar.zip distributions"
@@ -60,15 +59,17 @@ clean:
 	@echo
 	-rm -f ui/js/biblios_all.js 
 	-rm -f ui/js/biblios_min.js
-	@echo
 	@echo "Removing generated index.html"
 	@echo
-	-rm -f index.html
+	-rm -f build/index.html
 
 tags: $(SRCS)
 	$(CTAGS) ui/js/biblios.js ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js
 
-koha: build
+debug: src/index.html
+	ttree -a -f .ttreerc-debug
+
+koha: src/index.html
 	ttree -a -f .ttreerc-koha
 
 koha-install: build/index.html
