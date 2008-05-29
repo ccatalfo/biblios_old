@@ -72,8 +72,6 @@ koha: build
 	ttree -a -f .ttreerc-koha
 
 koha-install: build/index.html
-	@echo "Installing Biblios into Koha src directory"
-	@echo
 	cp build/index.html $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/modules/cataloguing/biblios.tmpl
 	cp integration/koha/biblios.pl $(KOHADIR)/cataloguing/
 	mkdir -p $(KOHADIR)/plugins/biblios
