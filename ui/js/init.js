@@ -10,8 +10,8 @@ var z3950serversSave = '';
 var cclfile = '';
 var plugins = '';
 var templates = '';
-var pazpar2url = 'http://'+ location.hostname + hostPort + '/pazpar2/search.pz2';
-var kohaauthurl = 'http://'+ location.hostname+ hostPort + '/kohaauth/authorities';
+var pazpar2url = 'http://'+ location.hostname + ':' + hostPort + '/pazpar2/search.pz2';
+var kohaauthurl = 'http://'+ location.hostname+ ':' + hostPort + '/kohaauth/authorities';
 
 
 // load xsl docs for transforming marcxml
