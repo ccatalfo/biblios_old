@@ -209,7 +209,9 @@ function previewRemoteRecord(id, offset) {
 			}
 			else {
 				var xml = xslTransform.serialize(data); 
-				recordCache[o.id] = xml; 
+                if( offset == 0 ) {
+                    recordCache[o.id] = xml; 
+                }
 				Ext.getCmp('searchpreview').el.mask();
 				$('#searchprevrecord').getTransform(marcxsl, xml);
 				Ext.getCmp('searchpreview').el.unmask();

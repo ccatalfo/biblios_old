@@ -264,7 +264,7 @@ function getRemoteRecord(id, loc, offset, callback) {
 }
 
 function getPazRecord(recId, offset, callback, callbackParamObject) {
-	if( recordCache[recId] ) {
+	if( recordCache[recId] && offset == 0) {
 		if(debug) { console.info('retreiving record from cache');}
 		// call the callback with record from record cache
 		callback.call(this, recordCache[recId], callbackParamObject);

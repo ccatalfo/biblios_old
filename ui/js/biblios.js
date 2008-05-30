@@ -557,7 +557,7 @@ biblios.app = function() {
 																					loc = Ext.getCmp('searchgrid').store.getById(id).data.location[0].name;
 																				}
 																				UI.editor[editorid].location = loc;
-																				getRemoteRecord(id, loc, 0, function(data) { 
+																				getRemoteRecord(id, loc, offset, function(data) { 
 																					openRecord( xslTransform.serialize(data), editorid ); 
 																				});
 																			} // for each checked record
