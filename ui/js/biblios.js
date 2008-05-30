@@ -1400,6 +1400,16 @@ biblios.app = function() {
 																selectSql: 'select SearchTargets.rowid, name, hostname, port, dbname, enabled, description, userid  from SearchTargets', 
 																applyLoader: false,
 																baseAttrs: {
+                                                                    listeners: {
+                                                                        click: function(node, e) {
+                                                                            var pazid = node.attributes.hostname;
+                                                                            if( node.attributes.port != '') {
+                                                                                pazid += ':' + node.attributes.port;
+                                                                            }
+                                                                            pazid += '/' + node.attributes.dbname;
+                                                                            biblios.app.paz.search( biblios.app.paz.currQuery, biblios.app.paz.currentNum, biblios.app.paz.currentSort, 'pz:id='+pazid);
+                                                                        }
+                                                                    },
 																	allowDrag: false,
 																	allowDrop: false,
 																	allowAdd: false,
