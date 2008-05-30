@@ -66,7 +66,7 @@ biblios.app.paz = new pz2({
 							}
 						}
 					},
-					"termlist": "subject,author,date,publication-name",
+					"termlist": "xtargets,subject,author,date,publication-name",
 					"onterm": function(data) { 
 						if( data.activeclients == 0 ) {
 							Ext.getCmp('facetsTreePanel').root.reload();
@@ -96,7 +96,7 @@ biblios.app.paz = new pz2({
 					"clear": 1
 				});
 	// HACK: set paz.termKeys manually or else pz2.js doesn't seem to accept date in termlist
-	biblios.app.paz.termKeys = 'subject,author,date,publication-name';
+	biblios.app.paz.termKeys = 'xtargets,subject,author,date,publication-name';
 }
 
 function setPazPar2Targets() {
