@@ -79,7 +79,11 @@ biblios.app.paz = new pz2({
 							var nodes = Ext.getCmp('TargetsTreePanel').root.childNodes;
 							for( var i = 0; i < data.length; i++) {
 								for( var j = 0; j < nodes.length; j++ ) {
-									var id = nodes[j].attributes.hostname + ':' + nodes[j].attributes.port + '/' + nodes[j].attributes.dbname;
+									var id = nodes[j].attributes.hostname;
+                                    if( nodes[j].attributes.port != '') {
+                                        id += ':' + nodes[j].attributes.port;
+                                    }
+                                    id += '/' + nodes[j].attributes.dbname;
 									if( id == data[i].id ) {
 										if( nodes[j] ) {
 											nodes[j].setText( nodes[j].attributes.servername + ' (' + data[i].hits + ')' );
@@ -99,7 +103,11 @@ function setPazPar2Targets() {
 	var targets = getTargets();
 	$.each( targets, function(i, n){
 		if( targets[i].enabled == 1 ) {
-			var db = n.hostname+":"+n.port+"/"+n.dbname;
+			var db = n.hostname;
+            if( n.port != '') {
+                db += ":"+n.port
+            }
+            db += "/"+n.dbname;
             var url = biblios.app.paz.pz2String +
 					'?' +
 					'command=settings'+

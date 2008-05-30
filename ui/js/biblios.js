@@ -2138,7 +2138,7 @@ biblios.app = function() {
 																			// insert new target into db so we get it's id
 																			var rs;
 																			try {
-																				rs = db.execute('insert into SearchTargets (name, allowDelete, allowModify) values ("", 1, 1)');
+																				rs = db.execute('insert into SearchTargets (name, allowDelete, allowModify, description, hostname, dbname, port, userid, password) values ("", 1, 1,"","","","", "", "")');
 																				rs.close();
 																			}
 																			catch(ex) {
