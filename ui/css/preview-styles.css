@@ -1,0 +1,12 @@
+#searchprevrecord .tagnumber, #saveprevrecord .tagnumber {
+    color: green;
+}
+#searchprevrecord tr, #saveprevrecord tr {
+    height: 25px;
+}
+
+#searchprevrecord .subfield, #saveprevrecord .subfield {
+    margin-right: 5px;
+}
+
+
