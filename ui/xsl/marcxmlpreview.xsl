@@ -39,8 +39,22 @@
 				<xsl:value-of select="@tag"/>
 			</th>
 			<td>
-				<xsl:value-of select="@ind1"/>
-				<xsl:value-of select="@ind2"/>
+                <xsl:choose>
+                    <xsl:when test="@ind1 = ' '">
+                        <xsl:text>#</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@ind1"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="@ind2 = ' '">
+                        <xsl:text>#</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@ind2"/>
+                    </xsl:otherwise>
+                </xsl:choose>
 				<xsl:apply-templates select="marc:subfield"/>
 			</td>
 		</tr>
