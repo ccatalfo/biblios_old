@@ -11,11 +11,11 @@
 	<xsl:template match="marc:record">
 		<table>
 			<tr>
-				<th NOWRAP="TRUE" ALIGN="RIGHT" VALIGN="TOP">
+				<th class='tagnumber'>
 					000
 				</th>
 				<td>
-					<xsl:value-of select="marc:leader"/>
+					<span class='subfield'><xsl:value-of select="marc:leader"/></span>
 				</td>
 			</tr>
 			<xsl:apply-templates select="marc:datafield|marc:controlfield"/>
@@ -24,49 +24,48 @@
 	
 	<xsl:template match="marc:controlfield">
 		<tr>
-			<th NOWRAP="TRUE" ALIGN="RIGHT" VALIGN="TOP">
-				<xsl:value-of select="@tag"/>
+			<th>
+				<span class='tagnumber'><xsl:value-of select="@tag"/></span>
 			</th>
 			<td>
-				<xsl:value-of select="."/>
+				<span class='subfield'><xsl:value-of select="."/></span>
 			</td>
 		</tr>
 	</xsl:template>
 	
 	<xsl:template match="marc:datafield">
 		<tr>
-			<th NOWRAP="TRUE" ALIGN="RIGHT" VALIGN="TOP">
-				<xsl:value-of select="@tag"/>
+			<th>
+				<span class='tagnumber'><xsl:value-of select="@tag"/></span>
 			</th>
 			<td>
-                <xsl:choose>
-                    <xsl:when test="@ind1 = ' '">
-                        <xsl:text>#</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="@ind1"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <xsl:choose>
-                    <xsl:when test="@ind2 = ' '">
-                        <xsl:text>#</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="@ind2"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <span class='indicator'>
+                    <xsl:choose>
+                        <xsl:when test="@ind1 = ' '">
+                            <xsl:text>#</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="@ind1"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </span>
+                <span class='indicator'>
+                    <xsl:choose>
+                        <xsl:when test="@ind2 = ' '">
+                            <xsl:text>#</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="@ind2"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </span>
 				<xsl:apply-templates select="marc:subfield"/>
 			</td>
 		</tr>
 	</xsl:template>
 	
 	<xsl:template match="marc:subfield">
-		<strong>|<xsl:value-of select="@code"/></strong> <xsl:value-of select="."/>
+		<span class='subfield'><span class='subfield-delimiter'>|<xsl:value-of select="@code"/></span> <span class='subfield-text'><xsl:value-of select="."/></span></span>
 	</xsl:template>
 
 </xsl:stylesheet>
-<!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
-<metaInformation>
-<scenarios ><scenario default="no" name="Ray Charles" userelativepaths="yes" externalpreview="no" url="..\xml\MARC21slim\raycharles.xml" htmlbaseurl="" outputurl="" processortype="internal" commandline="" additionalpath="" additionalclasspath="" postprocessortype="none" postprocesscommandline="" postprocessadditionalpath="" postprocessgeneratedext=""/><scenario default="yes" name="s7" userelativepaths="yes" externalpreview="no" url="..\ifla\sally7.xml" htmlbaseurl="" outputurl="" processortype="internal" commandline="" additionalpath="" additionalclasspath="" postprocessortype="none" postprocesscommandline="" postprocessadditionalpath="" postprocessgeneratedext=""/></scenarios><MapperInfo srcSchemaPath="" srcSchemaRoot="" srcSchemaPathIsRelative="yes" srcSchemaInterpretAsXML="no" destSchemaPath="" destSchemaRoot="" destSchemaPathIsRelative="yes" destSchemaInterpretAsXML="no"/>
-</metaInformation>
--->
