@@ -784,21 +784,18 @@ function uploadError(dialog, filename, data) {
 }
 
 function resetDB() {
-    Ext.MessageBox.confirm('Reset Database', 'Reset database, removing all records, send targets, search targets, macros, and user-created savefiles?  To access targets defined in Biblios\' configuration file, you will need to refresh your browser.', function(btn) {
-        try {
-            DB.SendTargets.select().each( function(s) { s.remove() }); 
-            DB.SearchTargets.select().each( function(s) { s.remove() }); 
-            DB.Savefiles.select('Savefiles.rowid>3').each( function(s) { s.remove() }); 
-            DB.Records.remove();
-            DB.Macros.remove();
-            Ext.getCmp('TargetsTreePanel').root.reload();
-            Ext.getCmp('FoldersTreePanel').root.reload();
-            Ext.MessageBox.alert('Reset Database', 'Database has been reset');
-        }
-        catch(ex) {
-            Ext.MessageBox.alert('Reset Database', 'There was an error in reseting the database.  Please report this error to your system administrator: ' + ex);
-        }
-    });
+    try {
+        DB.SendTargets.select().each( function(s) { s.remove() }); 
+        DB.SearchTargets.select().each( function(s) { s.remove() }); 
+        DB.Savefiles.select('Savefiles.rowid>3').each( function(s) { s.remove() }); 
+        DB.Records.remove();
+        DB.Macros.remove();
+        Ext.getCmp('TargetsTreePanel').root.reload();
+        Ext.getCmp('FoldersTreePanel').root.reload();
+    }
+    catch(ex) {
+        throw ex;
+    }
 }
 
 function importDB(data) {
