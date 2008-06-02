@@ -4,7 +4,10 @@ MarcViewer = function(editorelem, editorid) {
 
 }
 MarcViewer.prototype.loadXml = function( marcXmlDoc ) {
-    return xslTransform.serialize( marcXmlDoc );
+    var processor = new XSLTProcessor();
+    processor.importStylesheet( marcxsl );
+    var editorDoc = processor.transformToDocument( marcXmlDoc );
+    return (new XMLSerializer().serializeToString( editorDoc ));
 }
 
 MarcViewer.prototype.postProcess = function( ) {
