@@ -384,110 +384,112 @@ function getSelectedSaveGridRecords() {
 	return records;
 }
 
+function sendSelectedFromSearchGrid(locsendto) {
+    biblios.app.send.numToSend = 0;
+    biblios.app.send.records.length = 0;
+    Prefs.remoteILS[locsendto].instance.saveHandler = function(xmldoc, status) {
+        biblios.app.fireEvent('sendrecordcomplete', locsendto, xmldoc, status);
+        if( status == 'ok' ) {
+            var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
+            showStatusMsg('Saved ' + title + ' to ' + locsendto);
+            biblios.app.send.numToSend--;
+            if( biblios.app.send.numToSend == 0) {
+                biblios.app.send.records.length = 0;
+                setTimeout( function() {clearStatusMsg();}, 2000)
+            }
+        }
+        else {
+            showStatusMsg('Saving failed ' + status);
+            setTimeout( function() {clearStatusMsg();}, 2000)
+        }
+    };
+    getSelectedSearchGridRecords( function() { 
+        biblios.app.send.numToSend = biblios.app.selectedRecords.records.length;
+        var records = biblios.app.selectedRecords.records;
+        for(var i= 0; i < records.length; i++) {
+            var id= records[i].id;
+            var loc= records[i].loc;
+            var offset= records[i].offset;
+            var title= records[i].title;
+            getRemoteRecord(id, loc, offset, function(data) { 
+                if( !biblios.app.fireEvent('beforesendrecord', loc, data, '') ) {
+                    return false;
+                }
+                showStatusMsg('Sending ' + title + ' to ' + locsendto);
+                Prefs.remoteILS[locsendto].instance.save(data);
+            });
+        }
+    });
+}
+
+function sendSelectedFromSaveGrid(locsendto) {
+    Prefs.remoteILS[locsendto].instance.saveHandler = function(xmldoc, status) {
+        if( !biblios.app.fireEvent('sendrecordcomplete', locsendto, xmldoc, status) ) {
+            return false;
+        }
+        if( status == 'success') {
+            var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
+            showStatusMsg('Saved ' + title + ' to ' + locsendto);
+            biblios.app.send.numToSend--;
+            if( biblios.app.send.numToSend == 0) {
+                biblios.app.send.records.length = 0;
+                clearStatusMsg();
+            }
+        }
+        else {
+            showStatusMsg('Saving failed: ' + status);
+            setTimeout( function() {clearStatusMsg();}, 2000)
+        }
+    };
+    biblios.app.send.numToSend = 0;
+    biblios.app.send.records.length = 0;
+    biblios.app.send.records = getSelectedSaveGridRecords();
+    for( var i = 0; i < biblios.app.send.records.length; i++) {
+            var xml = biblios.app.send.records[i].xmldoc;
+            var xmldoc = '';
+            if( Ext.isIE ) {
+                xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
+                xmldoc.async = false; 
+                xmldoc.loadXML(xml);
+            }
+            else {
+                xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
+            }
+            if( !biblios.app.fireEvent('beforesendrecord', locsendto, xmldoc, '') ) {
+                return false;
+            }
+            showStatusMsg('Sending ' + biblios.app.send.records[i].title + ' to ' + locsendto);
+            Prefs.remoteILS[locsendto].instance.save(xmldoc);
+    }
+}
+
+function sendFromEditor(locsendto, editorid) {
+    if( validateRemote(editorid, locsendto) ) {
+        if( !biblios.app.fireEvent('beforesendrecord', '', UI.editor[editorid].record.XML(), locsendto)){
+            return false;
+        }
+        doSaveRemote(locsendto, UI.editor[editorid].record.XML(), editorid);
+    }
+}
+
 function getSendFileMenuItems(recordSource) {
 	var list = new Array();
 	var sendtargets = DB.SendTargets.select('enabled=1').toArray();
 	var handler;
 	if( recordSource == 'searchgrid') {
 		handler = function(btn) {
-			biblios.app.send.numToSend = 0;
-			biblios.app.send.records.length = 0;
-			Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
-                biblios.app.fireEvent('sendrecordcomplete', btn.id, xmldoc, status);
-                if( status == 'ok' ) {
-                    var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
-                    showStatusMsg('Saved ' + title + ' to ' + btn.id);
-                    biblios.app.send.numToSend--;
-                    if( biblios.app.send.numToSend == 0) {
-                        biblios.app.send.records.length = 0;
-                        setTimeout( function() {clearStatusMsg();}, 2000)
-                    }
-                }
-                else {
-                    showStatusMsg('Saving failed ' + status);
-                    setTimeout( function() {clearStatusMsg();}, 2000)
-                }
-			};
-			getSelectedSearchGridRecords( function() { 
-                biblios.app.send.numToSend = biblios.app.selectedRecords.records.length;
-                var records = biblios.app.selectedRecords.records;
-                for(var i= 0; i < records.length; i++) {
-                    var id= records[i].id;
-                    var loc= records[i].loc;
-                    var offset= records[i].offset;
-                    var title= records[i].title;
-                    getRemoteRecord(id, loc, offset, function(data) { 
-                        if( !biblios.app.fireEvent('beforesendrecord', loc, data, '') ) {
-                            return false;
-                        }
-                        showStatusMsg('Sending ' + title + ' to ' + btn.id);
-                        Prefs.remoteILS[btn.id].instance.save(data);
-                    });
-                }
-            });
+		    sendSelectedFromSearchGrid(btn.id);	
 		}
 	}
 	else if (recordSource == 'savegrid') {
 		handler = function(btn) {
-			Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
-                if( !biblios.app.fireEvent('sendrecordcomplete', btn.id, xmldoc, status) ) {
-                    return false;
-                }
-                if( status == 'success') {
-                    var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
-                    showStatusMsg('Saved ' + title + ' to ' + btn.id);
-                    biblios.app.send.numToSend--;
-                    if( biblios.app.send.numToSend == 0) {
-                        biblios.app.send.records.length = 0;
-                        clearStatusMsg();
-                    }
-                }
-                else {
-                    showStatusMsg('Saving failed: ' + status);
-                    setTimeout( function() {clearStatusMsg();}, 2000)
-                }
-			};
-			biblios.app.send.numToSend = 0;
-			biblios.app.send.records.length = 0;
-			biblios.app.send.records = getSelectedSaveGridRecords();
-			for( var i = 0; i < biblios.app.send.records.length; i++) {
-					var xml = biblios.app.send.records[i].xmldoc;
-					var xmldoc = '';
-					if( Ext.isIE ) {
-						xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
-						xmldoc.async = false; 
-						xmldoc.loadXML(xml);
-					}
-					else {
-						xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
-					}
-                    if( !biblios.app.fireEvent('beforesendrecord', btn.id, xmldoc, '') ) {
-                        return false;
-                    }
-					showStatusMsg('Sending ' + biblios.app.send.records[i].title + ' to ' + btn.id);
-					Prefs.remoteILS[btn.id].instance.save(xmldoc);
-			}
+            sendSelectedFromSaveGrid(btn.id);
 		}
 	}
 	// if we're in a marceditor
 	else {
 		handler = function(btn) {
-			// if this record has already been saved to this location
-			if( UI.editor[btn.recordSource].savedRemote[btn.id] == true ) {
-				if( validateRemote(btn.recordSource, btn.id) ) {
-                    if( !biblios.app.fireEvent('beforesendrecord', '', UI.editor[btn.recordSource].record.XML(), btn.id)){
-                        return false;
-                    }
-					doSaveRemote(btn.id, UI.editor[btn.recordSource].record.XML(), btn.recordSource);
-				}
-			}
-			// if the record has not already been saved remotely
-			else {
-                    if( !biblios.app.fireEvent('beforesendrecord', '', UI.editor[btn.recordSource].record.XML(), btn.id)){
-                        return false;
-                    }
-					doSaveRemote(btn.id, UI.editor[recordSource].record.XML(), btn.recordSource);
-			}
+            sendFromEditor(btn.id, btn.recordSource);
 		}
 	}
 	for( var i = 0; i < sendtargets.length; i++) {
