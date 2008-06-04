@@ -1,4 +1,7 @@
 function doSaveLocal(savefileid, editorid, offset, dropped ) {
+    if( !biblios.app.fireEvent('beforesaverecord', savefileid, editorid, offset, dropped) ) {
+        return false;
+    }
 		var recoffset = offset || 0;
 		if( !savefileid ) {
 			if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" );}
@@ -47,6 +50,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
                 }).save();
 
 				if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
+                biblios.app.fireEvent('saverecordcomplete', savefileid, record.xml);
 			}
 			else { // recid isn't empty so we've already saved this record, just update it
 				try {
@@ -66,6 +70,8 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 						console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
 				}
 					progress.updateProgress(1, 'Saving record to local database');
+                    biblios.app.fireEvent('saverecordcomplete', savefileid, record.xml);
+                    
 				} catch(ex) {
 						Ext.MessageBox.alert('Database error',ex.message);
 				}
@@ -107,6 +113,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 						var r = DB.Records.select('Records.rowid=?', [id]).getOne();
 						r.Savefiles_id = savefileid;
 						r.save();
+                        biblios.app.fireEvent('saverecordcomplete', savefileid, r.xml);
 					}
 					catch(ex) {
 						showStatusMsg('Unable to move record ' + records[i].title);
@@ -147,6 +154,9 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 	}
 
 function doSaveRemote(loc, xmldoc, editorid) {
+    if( !biblios.app.fireEvent('beforesendrecord', loc, xmldoc, editorid) ) {
+        return false;
+    }
 	/*Ext.get('ffeditor').mask();
 	Ext.get('vareditor').mask();*/
 	// make sure we have up to date record
@@ -161,8 +171,12 @@ function doSaveRemote(loc, xmldoc, editorid) {
 		if( status == 'failed' ) {
 			UI.editor.progress.hide();
 			Ext.MessageBox.alert('Remote Send Target failure', "Remote send target couldn't save record");
+            biblios.app.fireEvent('sendrecordcomplete', loc, xmldoc, status);
 		} 
 		else {
+            if( !biblios.app.fireEvent('sendrecordcomplete', loc, xmldoc, status)) {
+                return false;
+            }
 			var xml = xslTransform.serialize(xmldoc);
 			UI.editor.progress.updateProgress(.7, 'Retrieved remote record');
 			openRecord(xml, editorid);
@@ -189,6 +203,7 @@ function addRecordFromSearch(id, offset, editorid, data, savefileid, newxml) {
 		offset,
 		// this function gets called when pazpar2 returns the xml for record with this id
 		function(data, params) {
+        biblios.app.fireEvent('remoterecordretrieve', data);
 		// data param is this record's xml as returned by pazpar2
 		// o is a json literal containing the record id, grid data and savefileid for this record
 		if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + params.title);}
@@ -213,6 +228,7 @@ function addRecordFromSearch(id, offset, editorid, data, savefileid, newxml) {
 				template: null,
 				marcformat: null
 			}).save();
+            biblios.app.fireEvent('saverecordcomplete', savefile.rowid, record.xml);
 			if (biblios.app.selectedRecords.loading = true) {
 				showStatusMsg('Saved ' + params.recData.title);
 				biblios.app.selectedRecords.numToGet--;
@@ -372,6 +388,7 @@ function getSendFileMenuItems(recordSource) {
 			biblios.app.send.numToSend = 0;
 			biblios.app.send.records.length = 0;
 			Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
+                biblios.app.fireEvent('sendrecordcomplete', btn.id, xmldoc, status);
                 if( status == 'ok' ) {
                     var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
                     showStatusMsg('Saved ' + title + ' to ' + btn.id);
@@ -394,8 +411,11 @@ function getSendFileMenuItems(recordSource) {
                     var loc= records[i].loc;
                     var offset= records[i].offset;
                     var title= records[i].title;
-                    showStatusMsg('Sending ' + title + ' to ' + btn.id);
                     getRemoteRecord(id, loc, offset, function(data) { 
+                        if( !biblios.app.fireEvent('beforesendrecord', loc, data, '') ) {
+                            return false;
+                        }
+                        showStatusMsg('Sending ' + title + ' to ' + btn.id);
                         Prefs.remoteILS[btn.id].instance.save(data);
                     });
                 }
@@ -405,6 +425,9 @@ function getSendFileMenuItems(recordSource) {
 	else if (recordSource == 'savegrid') {
 		handler = function(btn) {
 			Prefs.remoteILS[btn.id].instance.saveHandler = function(xmldoc, status) {
+                if( !biblios.app.fireEvent('sendrecordcomplete', btn.id, xmldoc, status) ) {
+                    return false;
+                }
                 if( status == 'success') {
                     var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
                     showStatusMsg('Saved ' + title + ' to ' + btn.id);
@@ -423,7 +446,6 @@ function getSendFileMenuItems(recordSource) {
 			biblios.app.send.records.length = 0;
 			biblios.app.send.records = getSelectedSaveGridRecords();
 			for( var i = 0; i < biblios.app.send.records.length; i++) {
-					showStatusMsg('Sending ' + biblios.app.send.records[i].title + ' to ' + btn.id);
 					var xml = biblios.app.send.records[i].xmldoc;
 					var xmldoc = '';
 					if( Ext.isIE ) {
@@ -434,6 +456,10 @@ function getSendFileMenuItems(recordSource) {
 					else {
 						xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
 					}
+                    if( !biblios.app.fireEvent('beforesendrecord', btn.id, xmldoc, '') ) {
+                        return false;
+                    }
+					showStatusMsg('Sending ' + biblios.app.send.records[i].title + ' to ' + btn.id);
 					Prefs.remoteILS[btn.id].instance.save(xmldoc);
 			}
 		}
@@ -444,11 +470,17 @@ function getSendFileMenuItems(recordSource) {
 			// if this record has already been saved to this location
 			if( UI.editor[btn.recordSource].savedRemote[btn.id] == true ) {
 				if( validateRemote(btn.recordSource, btn.id) ) {
+                    if( !biblios.app.fireEvent('beforesendrecord', '', UI.editor[btn.recordSource].record.XML(), btn.id)){
+                        return false;
+                    }
 					doSaveRemote(btn.id, UI.editor[btn.recordSource].record.XML(), btn.recordSource);
 				}
 			}
 			// if the record has not already been saved remotely
 			else {
+                    if( !biblios.app.fireEvent('beforesendrecord', '', UI.editor[btn.recordSource].record.XML(), btn.id)){
+                        return false;
+                    }
 					doSaveRemote(btn.id, UI.editor[recordSource].record.XML(), btn.recordSource);
 			}
 		}

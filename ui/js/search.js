@@ -64,6 +64,8 @@ biblios.app.paz = new pz2({
 							if( openState == 'searchgrid' ) {
 								selectNone();
 							}
+                            // fire searchcomplete event
+                            biblios.app.fireEvent('searchcomplete');
 						}
 					},
 					"termlist": "xtargets,subject,author,date,publication-name",

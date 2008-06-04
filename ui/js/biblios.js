@@ -76,8 +76,12 @@ biblios.app = function() {
 
 	}
 
+    function runSearch(searchWhere, searchType, searchQuery) {
+        doSearch(searchWhere, searchType, searchQuery);
+    }
+
     // public space
-    return {
+    return Ext.apply(new Ext.util.Observable(), {
         // public properties, e.g. strings to translate
 		viewport : this.viewport,
 		currQuery : this.currQuery,
@@ -112,6 +116,11 @@ biblios.app = function() {
 		},
 		
         // public methods
+        search : function(searchWhere, searchType, searchQuery) {
+            if( this.fireEvent('beforesearch') ) {
+                runSearch(searchWhere, searchType, searchQuery);
+            }
+        },
 		displaySearchView : function() {
 			displaySearchView();
 		},
@@ -336,7 +345,10 @@ biblios.app = function() {
 																UI.editor['editorone'].id = id;
 																var loc = grid.getSelections()[0].data.location[0].name;
 																UI.editor['editorone'].location = loc;
-																getRemoteRecord(id, loc, 0, function(data) { openRecord( xslTransform.serialize(data), 'editorone' ); }
+																getRemoteRecord(id, loc, 0, function(data) {
+                                                                    biblios.app.fireEvent('remoterecordretrieve', data);
+                                                                    openRecord( xslTransform.serialize(data), 'editorone' ); 
+                                                                }
 														);
 
 															},
@@ -346,7 +358,10 @@ biblios.app = function() {
 																UI.editor['editorone'].id = id;
 																var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[0].name;
 																UI.editor['editorone'].location = loc;
-																  getRemoteRecord(id, loc, 0, function(data) { openRecord( xslTransform.serialize( data), 'editorone' ); });
+																  getRemoteRecord(id, loc, 0, function(data) { 
+                                                                    biblios.app.fireEvent('remoterecordretrieve', data);
+                                                                    openRecord( xslTransform.serialize( data), 'editorone' ); 
+                                                                    });
 																}	
 															} // on ENTER keypress
 														}, // search grid listeners
@@ -397,6 +412,7 @@ biblios.app = function() {
 																				var loc = selections[0].data.location[0].name;
 																				UI.editor[editorid].location = loc;
 																				getRemoteRecord(id, loc, 0, function(data) { 
+                                                                                    biblios.app.fireEvent('remoterecordretrieve', data);
 																					openRecord( xslTransform.serialize(data), editorid ); 
 																				});
 
@@ -430,6 +446,7 @@ biblios.app = function() {
 																				}
 																				UI.editor[editorid].location = loc;
 																				getRemoteRecord(id, loc, offset, function(data) { 
+                                                                                    biblios.app.fireEvent('remoterecordretrieve', data);
 																					openRecord( xslTransform.serialize(data), editorid ); 
 																				});
 																			} // for each checked record
@@ -2417,6 +2434,55 @@ biblios.app = function() {
 
 		Ext.getCmp('tabpanel').activate(0);
         } // end of init method
-    }; // end of public biblios.app space
+    }); // end of public biblios.app space
 }(); // end of app
+
+// define events for biblios.app
+biblios.app.addEvents({
+    'beforesearch' : true,
+    'searchcomplete' : true,
+    /*
+        remoterecordretrieve
+        params: xml document of retrieved record
+    */
+    'remoterecordretrieve' : true,
+    /*
+        beforeeditrecord
+        params: xml string of record to edit, editor id where record is to be opened
+    */
+    'beforeeditrecord' : true,
+    /*
+        beforesaverecord
+        params: 
+            savefileid: savefile where record is to be saved
+            editorid: editor id where record is being saved from
+            offset: offset used for record retrieval from pazpar2 (optional)
+            dropped: boolean, true if record has been dropped from a grid
+    */
+    'beforesaverecord' : true,
+    /*
+        saverecordcomplete
+        params: 
+            savefileid: id of save file where record was saved
+            xml: xml string of record saved
+    */
+    'saverecordcomplete' : true,
+    /*
+        beforesendrecord
+        params: 
+            loc: location record is being saved to
+            xmldoc: xml document of record being saved
+            editorid: id of editor record is being saved from
+    */
+    'beforesendrecord' : true,
+    /*
+        sendrecordcomplete
+        params: 
+            loc: location where record was (attempted to be) saved
+            xmldoc: xml document of record as returned from remote server
+            status: status of request to server
+    */
+    'sendrecordcomplete' : true
+});
+
  
