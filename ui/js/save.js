@@ -292,18 +292,23 @@ function updateSaveMenu() {
 }
 
 
-function updateSendMenu() {
-	// remove old send menu items
-	Ext.menu.MenuMgr.get('editorOneSendMenu').removeAll();
-	var sendfiles = getSendFileMenuItems('editorone');
-	for( sf in sendfiles ) {
-		Ext.menu.MenuMgr.get('editorOneSendMenu').add( sendfiles[sf] );
-	}
-	Ext.menu.MenuMgr.get('editorTwoSendMenu').removeAll();
-	var sendfiles = getSendFileMenuItems('editortwo');
-	for( sf in sendfiles ) {
-		Ext.menu.MenuMgr.get('editorTwoSendMenu').add( sendfiles[sf] );
-	}
+
+function updateSaveMenu(menu, component) {
+    menu.removeAll();
+    var items = getSaveFileMenuItems(component);
+    for( i in items ) {
+        menu.add( items[i]);
+    }
+    biblios.app.fireEvent('updatesavemenu', menu);
+}
+
+function updateSendMenu(menu, component) {
+    menu.removeAll();
+    var items = getSendFileMenuItems(component);
+    for( i in items ) {
+        menu.add( items[i]);
+    }
+    biblios.app.fireEvent('updatesendmenu', menu);
 }
 
 function getSelectedSearchGridRecords(callback) {

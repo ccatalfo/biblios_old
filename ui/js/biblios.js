@@ -475,7 +475,7 @@ biblios.app = function() {
 																			items: getSendFileMenuItems('searchgrid'),
 																			listeners: {
 																				beforeshow: function(menu, menuItem, e) {
-																					updateSendMenu();
+																					updateSendMenu(menu, 'searchgrid');
 																				}
 																			}
 																		}
@@ -492,7 +492,7 @@ biblios.app = function() {
 																			items: getSaveFileMenuItems('searchgrid'),
 																			listeners: {
 																				beforeshow: function(menu, menuItem, e) {
-																					updateSaveMenu();
+																					updateSaveMenu(menu, 'searchgrid');
 																				}
 																			}
 																		}
@@ -642,7 +642,7 @@ biblios.app = function() {
 																	items: getSaveFileMenuItems('editorone'),
 																	listeners: {
 																		beforeshow: function(menu, menuItem, e) {
-																			updateSaveMenu();
+																			updateSaveMenu(menu, 'editorone');
 																		}
 																	}
 																}
@@ -658,7 +658,7 @@ biblios.app = function() {
 																	items: getSendFileMenuItems('editorone'),
 																	listeners: {
 																		beforeshow: function(menu, menuItem, e) {
-																			updateSendMenu();
+																			updateSendMenu(menu, 'editorone');
 																		}
 																	}
 																}
@@ -843,7 +843,7 @@ biblios.app = function() {
 																	items: getSaveFileMenuItems('editortwo'),
 																	listeners: {
 																		beforeshow: function(menu, menuItem, e) {
-																			updateSaveMenu();
+																			updateSaveMenu(menu, 'editortwo');
 																		}
 																	}
 																}
@@ -859,7 +859,7 @@ biblios.app = function() {
 																	items: getSendFileMenuItems('editortwo'),
 																	listeners: {
 																		beforeshow: function(menu, menuItem, e) {
-																			updateSendMenu();
+																			updateSendMenu(menu, 'editortwo');
 																		}
 																	}
 																}
@@ -1119,10 +1119,11 @@ biblios.app = function() {
 																		text: 'Send',
 																		tooltip: {text: 'Send record to remote ILS'},
 																		menu: {
+                                                                            id: 'savegridSendMenu',
 																			items: getSendFileMenuItems('savegrid'),
 																			listeners: {
 																				beforeshow: function(menu, menuItem, e) {
-																					updateSendMenu();
+                                                                                    updateSendMenu(menu, 'savegrid');
 																				}
 																			}
 																		}
@@ -1179,7 +1180,7 @@ biblios.app = function() {
                                                                                         items: getSaveFileMenuItems('savegrid'),
                                                                                         listeners: {
                                                                                             beforeshow: function(menu, menuItem, e) {
-                                                                                                updateSaveMenu();
+                                                                                                updateSaveMenu(menu, 'savegrid');
                                                                                             }
                                                                                         }
                                                                                     }
@@ -2482,7 +2483,19 @@ biblios.app.addEvents({
             xmldoc: xml document of record as returned from remote server
             status: status of request to server
     */
-    'sendrecordcomplete' : true
+    'sendrecordcomplete' : true,
+    /*
+        updatesendmenu
+        params:
+            menu: Ext menu component being updated
+    */
+    'updatesendmenu': true,
+    /*
+        updatesavemenu
+        params:
+            menu: Ext menu component being updated
+    */
+    'updatesavemenu': true
 });
 
  
