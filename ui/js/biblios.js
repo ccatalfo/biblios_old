@@ -112,7 +112,8 @@ biblios.app = function() {
 		db : {
 			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets',
 			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets',
-			selectSqlMacros: 'select Macros.rowid as rowid, name, code, hotkey, file, enabled from Macros'
+			selectSqlMacros: 'select Macros.rowid as rowid, name, code, hotkey, file, enabled from Macros',
+            handle: db
 		},
 		
         // public methods
