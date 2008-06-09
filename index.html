@@ -1,14 +1,21 @@
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<!-- extraheadincludes -->
+    
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" type="text/css" href="lib/extjs2/resources/css/ext-all.css">
+    
+    <link rel="stylesheet" type="text/css" href="lib/extjs2/resources/css/ext-all-min.css">
+    
 	<!-- our own style sheets -->
-	<link type="text/css" rel="stylesheet" href="ui/css/styles.css" />
-	<link type="text/css" rel="stylesheet" href="ui/css/preview-styles.css" />
-	<link type="text/css" rel="stylesheet" href="ui/css/editor-styles.css" />
+    
+	<link type="text/css" rel="stylesheet" href="ui/css/styles-min.css" />
+    
+    
+	<link type="text/css" rel="stylesheet" href="ui/css/editor-styles-min.css" />
+    
+    
     <title>Biblios</title>
 </head>
 <body>
@@ -24,20 +31,15 @@
 
 </div>
 <!-- firebug lite -->
-    <script type="text/javascript" src="lib/firebug/firebug.js"></script>
+    
 <!-- cookie utility funcs -->
     <script type="text/javascript" src="lib/cookieHelpers.js"></script>
 <!-- extjs -->
     <script type="text/javascript" src="lib/extjs2/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="lib/extjs2/ext-all.js"></script>
-	<script type="text/javascript" src="lib/extjs/PagingMemoryProxy.js"></script>
-	<script type="text/javascript" src="lib/extjs/GoogleGearsProxy.js"></script>
-	<script type="text/javascript" src="lib/extjs2/Ext.ux.NestedXmlReader.js"></script>
-	<script type="text/javascript" src="lib/extjs2/Ext.ux.GearsTreeLoader.js"></script>
-	<script type="text/javascript" src="lib/extjs2/Ext.ux.FacetsTreeLoader.js"></script>
-	<script type="text/javascript" src="lib/extjs2/Ext.ux.UploadDialog.js"></script>
-	<script type="text/javascript" src="lib/extjs2/RowExpander.js"></script>
-	<script type="text/javascript" src="lib/extjs2/miframe.js"></script>
+    
+	<script type="text/javascript" src="lib/extjs2/ext_ux_libs-min.js"></script>
+    
 <!-- gears -->
 	<script type="text/javascript" src="lib/google_gears/gears_init.js"></script>
 	<script type="text/javascript" src="lib/google_gears/GearsORM_all.js"></script>
@@ -53,11 +55,12 @@
 <!-- pazpar2 -->
 <script type="text/javascript" src="lib/pz2.js"></script>
 <!-- jquery -->
+    
 	<script type="text/javascript" src="lib/jquery/jquery-1.2.2.min.js"></script>
-	<script type="text/javascript" src="lib/jquery/jquery.hotkeys.js"></script>
-	<script type="text/javascript" src="lib/jquery/jquery.xpath.js"></script>
-	<script type="text/javascript" src="lib/jquery/jquery.cookie.js"></script>
-	<script type="text/javascript" src="lib/jquery/json.js"></script>
+    
+    
+	<script type="text/javascript" src="lib/jquery/jquery_plugins-min.js"></script>
+    
 
 <!-- sarissa  -->
 	<script type="text/javascript" src="lib/sarissa/sarissa.js"></script>
@@ -69,10 +72,11 @@ var libPath = '';
 var hostPort = '';
 var cgiDir = '/cgi-bin/';
 var embeddedUrl = '';
+var userid = '';
 var embeddedSESSID = '';
 var openOnLoadRecId = '';
 // reference local blank image
-var showMarcXslPath = libPath + "ui/xsl/marcxmlpreview.xsl";
+var showMarcXslPath = libPath + "ui/xsl/MARC21slim2HTML.xsl";
 var fixedFieldXslPath = libPath + "ui/xsl/fixedfields_editor.xsl";
 var varFieldsXslPath = libPath + "ui/xsl/varfields_inputboxes.xsl";
 var marc21varfieldsPath = libPath + 'tools/marc21varfields.xml';
@@ -85,17 +89,10 @@ var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
 </script>
 <!-- biblios -->
     <script type="text/javascript">Ext.get('loadingtext').update('Loading Biblios files');</script>
-    <script type="text/javascript" src="plugins/koha.js"></script>
-    <script type="text/javascript" src="ui/js/db.js"></script>
-    <script type="text/javascript" src="ui/js/marceditor.js"></script>
-    <script type="text/javascript" src="ui/js/marcrecord.js"></script>
-    <script type="text/javascript" src="ui/js/init.js"></script>
-    <script type="text/javascript" src="ui/js/prefs.js"></script>
-    <script type="text/javascript" src="ui/js/search.js"></script>
-    <script type="text/javascript" src="ui/js/biblios.js"></script>
-    <script type="text/javascript" src="ui/js/save.js"></script>
-    <script type="text/javascript" src="ui/js/ui.js"></script>
-    <script type="text/javascript" src="ui/js/edit.js"></script>
+    
+    <script type="text/javascript" src="ui/js/biblios_min.js"></script>
+    
+
 <div id='branding-area'></div>
 <div id='biblios'>
 <div id='downloads'></div>
@@ -124,7 +121,7 @@ var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
     <!-- A Localization Script File comes here -->
     <script type="text/javascript">
 		var bibliosdebug = 0;
-		var debug = 0;
+		var debug = '0';
         Ext.onReady(function() {
 			Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs2/resources/images/default/s.gif';
             Ext.get('loadingtext').update('Initializing Biblios');
