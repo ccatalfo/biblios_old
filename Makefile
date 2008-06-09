@@ -37,6 +37,7 @@ build: $(SRCS)
 	$(CSSMIN) lib/extjs2/resources/css/ext-all.css lib/extjs2/resources/css/ext-all-min.css	
 	$(CSSMIN) ui/css/styles.css ui/css/styles-min.css
 	$(CSSMIN) ui/css/editor-styles.css ui/css/editor-styles-min.css
+	$(CSSMIN) ui/css/preview-styles.css ui/css/preview-styles-min.css
 
 dist: $(ALLSRC)
 	@echo "Creating .zip and .tar.zip distributions"

@@ -17,8 +17,10 @@
     [% END %]
     [% IF debug %]
 	<link type="text/css" rel="stylesheet" href="[% uiPath %]ui/css/editor-styles.css" />
+	<link type="text/css" rel="stylesheet" href="[% uiPath %]ui/css/preview-styles.css" />
     [% ELSE %]
 	<link type="text/css" rel="stylesheet" href="[% uiPath %]ui/css/editor-styles-min.css" />
+	<link type="text/css" rel="stylesheet" href="[% uiPath %]ui/css/preview-styles-min.css" />
     [% END %]
     
     <title>Biblios</title>
@@ -99,7 +101,7 @@ var userid = '[% userid %]';
 var embeddedSESSID = '[% SESSID %]';
 var openOnLoadRecId = '[% openOnLoadRecId %]';
 // reference local blank image
-var showMarcXslPath = libPath + "ui/xsl/MARC21slim2HTML.xsl";
+var showMarcXslPath = libPath + "ui/xsl/marcxmlpreview.xsl";
 var fixedFieldXslPath = libPath + "ui/xsl/fixedfields_editor.xsl";
 var varFieldsXslPath = libPath + "ui/xsl/varfields_inputboxes.xsl";
 var marc21varfieldsPath = libPath + 'tools/marc21varfields.xml';
