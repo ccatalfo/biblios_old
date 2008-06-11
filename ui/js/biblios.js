@@ -119,9 +119,9 @@ biblios.app = function() {
 		},
 		
         // public methods
-        search : function(searchWhere, searchType, searchQuery) {
-            if( this.fireEvent('beforesearch') ) {
-                runSearch(searchWhere, searchType, searchQuery);
+        search : function(searchWhere, searchQuery) {
+            if( this.fireEvent('beforesearch', searchWhere, searchQuery) ) {
+                runSearch(searchWhere, searchQuery);
             }
         },
 		displaySearchView : function() {
@@ -2475,6 +2475,12 @@ biblios.app = function() {
 
 // define events for biblios.app
 biblios.app.addEvents({
+    /*
+        beforesearch
+        params:
+            searchWhere: array of target(s) being searched
+            searchQuery: search query being sent to targets
+    */
     'beforesearch' : true,
     'searchcomplete' : true,
     /*

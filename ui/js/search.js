@@ -238,10 +238,12 @@ function doPazPar2Search() {
 	}
 	// save this query
 	biblios.app.currQuery = searchquery;
-	// reset search ds's proxy url to get rid of old sort params
-	Ext.getCmp('searchgrid').store.proxy.conn.url = biblios.app.paz.pz2String + '?command=show&session=' + biblios.app.paz.sessionID;
-    biblios.app.paz.search( searchquery );
-    biblios.app.displaySearchView();
+    if( biblios.app.fireEvent('beforesearch', getTargets(), searchquery) ) {
+        // reset search ds's proxy url to get rid of old sort params
+        Ext.getCmp('searchgrid').store.proxy.conn.url = biblios.app.paz.pz2String + '?command=show&session=' + biblios.app.paz.sessionID;
+        biblios.app.paz.search( searchquery );
+        biblios.app.displaySearchView();
+    }
 }
 
 function getRemoteRecord(id, loc, offset, callback, callbackparamobject) {
