@@ -168,7 +168,7 @@ function getRemoteBibProfiles() {
 
 function loadPlugins() {
     DB.Plugins.select('enabled=1').each( function(plugin) {
-        $.getScript( plugin.file, function() {
+        $.getScript( libPath + plugin.file, function() {
 
         });
     });

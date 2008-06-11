@@ -1,5 +1,5 @@
 // load in MarcRecord from plugins
-$.getScript('plugins/marcrecord.js');
+$.getScript(libPath + 'plugins/marcrecord.js');
 
 /*
     Function: getLeaderFromEditor
