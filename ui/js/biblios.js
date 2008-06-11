@@ -2536,7 +2536,13 @@ biblios.app.addEvents({
         params:
             menu: Ext menu component being updated
     */
-    'updatesavemenu': true
+    'updatesavemenu': true,
+    /*
+        beforerecordexport
+        params:
+            record: xml string of record being exported
+    */
+    'beforerecordexport':true
 });
 
  

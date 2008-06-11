@@ -202,7 +202,9 @@ function doDownloadRecords(format, editorid) {
 			// transform edited record back into marcxml
 			xml = UI.editor[editorid].record.XMLString();
 			var encoding = 'utf-8';
-			handleDownload(format, encoding, xml);
+            if( biblios.app.fireEvent('beforerecordexport', xml) ) {
+                handleDownload(format, encoding, xml);
+            }
 	}
 	// if we're exporting from a grid
 	else {
@@ -210,8 +212,11 @@ function doDownloadRecords(format, editorid) {
 			biblios.app.download.records = getSelectedSaveGridRecords();
 			biblios.app.download.numToExport = biblios.app.download.records.length;
 			for( var i = 0; i < biblios.app.download.records.length; i++) {
-				biblios.app.download.recordsString += biblios.app.download.records[i].xmldoc;
-				biblios.app.download.recordsString += recsep;
+                var record = biblios.app.download.records[i].xmldoc;
+                if( biblios.app.fireEvent('beforerecordexport', record) ) {
+                    biblios.app.download.recordsString += record;
+                    biblios.app.download.recordsString += recsep;
+                }
 			}
 			var encoding = 'utf-8';
 			handleDownload(format, encoding, biblios.app.download.recordsString);
@@ -225,10 +230,12 @@ function doDownloadRecords(format, editorid) {
 					var id = records[i].id
 					getPazRecord(id, 0, function(data, o) {
 						xml = xslTransform.serialize(data);
-						biblios.app.download.recordsString += xml;
-						biblios.app.download.recordsString += recsep;
-						biblios.app.download.numToExport--;
-						var encoding = 'utf-8';
+                        if( biblios.app.fireEvent('beforerecordexport', xml)) {
+                            biblios.app.download.recordsString += xml;
+                            biblios.app.download.recordsString += recsep;
+                        }
+                        var encoding = 'utf-8';
+                        biblios.app.download.numToExport--;
 						if( biblios.app.download.numToExport == 0 ) {
 							handleDownload(format, encoding, biblios.app.download.recordsString);
 						}
