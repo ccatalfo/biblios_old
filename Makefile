@@ -2,7 +2,7 @@ CTAGS=ctags
 JSMIN=perl tools/js-minify.pl 
 CSSMIN=perl tools/css-minify.pl
 CAT=cat
-SRCS=ui src/index.html
+SRCS=ui/js/biblios_min.js src/index.html
 ALLSRC=$(SRCS) Makefile INSTALL INSTALL.koha lib cgi-bin conf templates plugins integration docs tools test
 VERSION=0.9
 PROGNAME=biblios-$(VERSION)
@@ -65,9 +65,6 @@ clean:
 
 tags: $(SRCS)
 	$(CTAGS) ui/js/biblios.js ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js
-
-debug: src/index.html
-	ttree -a -f .ttreerc-debug
 
 koha: src/index.html
 	ttree -a -f .ttreerc-koha
