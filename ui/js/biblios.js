@@ -686,6 +686,7 @@ biblios.app = function() {
                                                                     var xml = getLocalXml(id);
                                                                     openRecord( xml, btn.editorid, 'marcxml' );
                                                                     progress.updateProgress(1, 'Revert complete');
+                                                                    progress.hide();
                                                                     showStatusMsg('Record reverted');
                                                                     clearStatusMsg();
                                                                 }
