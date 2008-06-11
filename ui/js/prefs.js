@@ -64,12 +64,14 @@ function setupConfig( configDoc ) {
             var file = $(this).children('file').text();
             var type = $(this).children('type').text();
             var enabled = $(this).children('enabled').text();
+            var initcall = $(this).children('initcall').text();
 			var allowDelete= $(this).children('allowDelete').text();
 			var allowModify= $(this).children('allowModify').text();
             if( p = DB.Plugins.select('name=?', [name]).getOne() ) {
                 p.file = file;
                 p.type = type;
                 p.enabled = enabled;
+                p.initcall = initcall;
                 p.allowDelete = allowDelete;
                 p.allowModify = allowModify;
                 p.save();
@@ -80,6 +82,7 @@ function setupConfig( configDoc ) {
                     file : file,
                     type: type,
                     enabled : enabled,
+                    initcall : initcall,
                     allowDelete : allowDelete,
                     allowModify : allowModify
                 }).save();
