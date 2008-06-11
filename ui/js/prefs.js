@@ -78,6 +78,7 @@ function setupConfig( configDoc ) {
                 var p = new DB.Plugins({
                     name : name,
                     file : file,
+                    type: type,
                     enabled : enabled,
                     allowDelete : allowDelete,
                     allowModify : allowModify
