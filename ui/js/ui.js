@@ -20,7 +20,7 @@ UI.editor.editorone.vared = '';
 UI.editor.editorone.location = '';
 UI.editor.editorone.savedRemote  = {};
 UI.editor.editorone.savefileid  = '';
-UI.editor.editorone.record = new MarcEditor('', '');
+UI.editor.editorone.record = '';
 UI.editor.editorone.comboboxes = new Array();
 // marc editor two metadata
 UI.editor.editortwo = {};
@@ -30,7 +30,7 @@ UI.editor.editortwo.vared = '';
 UI.editor.editortwo.location = '';
 UI.editor.editortwo.savedRemote  = {};
 UI.editor.editortwo.savefileid  = '';
-UI.editor.editortwo.record = new MarcEditor('', '');
+UI.editor.editortwo.record = '';
 UI.editor.editortwo.comboboxes = new Array();
 // search state
 UI.search = {};
@@ -816,3 +816,20 @@ function doUploadDB(dialog, filename, resp_data) {
     });
 }
 
+/*
+Function: displayHelpMsg
+
+  Display a message in the help panel.
+
+Parameters:
+  
+  msg: String containingin the message to display.
+
+Returns:
+
+  None.
+
+*/
+function displayHelpMsg(msg) {
+	Ext.getCmp('helpIframe').el.update(msg);
+}

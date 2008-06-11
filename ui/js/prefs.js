@@ -147,37 +147,7 @@ function setupConfig( configDoc ) {
 		  });
 		  $("//plugins/plugin/file", configDoc).each( function() { plugins += ' ' + $(this).text(); } );
 		  $("//templates/template/file", configDoc).each( function() { templates += ' ' + $(this).text(); } );
-        if( Ext.get('loadingtext') ) {
-            Ext.get('loadingtext').update('Setting up search session');
-        }
-		initializePazPar2(pazpar2url, {
-			initCallback: function() {
-                if( this.initStatusOK == true ) {
-                    biblios.app.paz.sessionID = this.sessionID;
-                    // set searchgrid's data url for pazpar2 show
-                    if( Ext.getCmp('searchgrid') && Ext.getCmp('searchgrid').store ) {
-                        Ext.getCmp('searchgrid').store.proxy.conn.url = new Ext.data.HttpProxy({url: pazpar2url+'?session='+biblios.app.paz.sessionID+'&command=show'});
-                    }
-                    // set facets data url for pazpar termlist
-                    if( Ext.getCmp('facetsTreePanel') && Ext.getCmp('facetsTreePanel').loader ) {
-                        Ext.getCmp('facetsTreePanel').loader = new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+biblios.app.paz.sessionID+'&command=termlist&name=author,publication-name,subject,date'});
-                    }
-                    if( Ext.get('loadingtext') ){
-                        Ext.get('loadingtext').update('Setting up search targets');
-                    }
-                    setPazPar2Targets();
-                }
-                else {
-                    if( Ext.get('loadingtext') ) {
-                        Ext.get('loadingtext').update('Error initializing search session');
-                    }
-                }
-			}
-        });
-        if( Ext.get('loadingtext') ) {
-            Ext.get('loadingtext').update('Setting up send targets');
-        }
-        setILSTargets();
+        
 
         if( Ext.getCmp('FoldersTreePanel') && Ext.getCmp('TargetsTreePanel') ) {
             Ext.getCmp('TargetsTreePanel').root.reload();
@@ -194,6 +164,14 @@ function getRemoteBibProfiles() {
 	for ( ils in Prefs.remoteILS ) {
 		Prefs.remoteILS[ ils ].instance.bibprofile();
 	}
+}
+
+function loadPlugins() {
+    DB.Plugins.select('enabled=1').each( function(plugin) {
+        $.getScript( plugin.file, function() {
+
+        });
+    });
 }
 
 function setILSTargets() {

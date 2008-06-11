@@ -1,3 +1,6 @@
+// load in MarcRecord from plugins
+$.getScript('plugins/marcrecord.js');
+
 /*
     Function: getLeaderFromEditor
 
@@ -217,23 +220,6 @@ function doMerge() {
 }
 
 
-/*
-Function: displayHelpMsg
-
-  Display a message in the help panel.
-
-Parameters:
-  
-  msg: String containingin the message to display.
-
-Returns:
-
-  None.
-
-*/
-function displayHelpMsg(msg) {
-	Ext.getCmp('helpIframe').el.update(msg);
-}
 
 
 /*

@@ -2,7 +2,7 @@ CTAGS=ctags
 JSMIN=perl tools/js-minify.pl 
 CSSMIN=perl tools/css-minify.pl
 CAT=cat
-SRCS=src/index.html ui/js/biblios.js ui/js/search.js ui/js/save.js ui/js/prefs.js ui/js/db.js ui/js/init.js ui/js/marcrecord.js ui/js/marcrecord.js ui/js/ui.js
+SRCS=src/index.html ui/js/biblios.js ui/js/search.js ui/js/save.js ui/js/prefs.js ui/js/db.js ui/js/init.js ui/js/ui.js
 ALLSRC=$(SRCS) Makefile INSTALL INSTALL.koha lib cgi-bin conf templates plugins integration docs tools test
 VERSION=0.9
 PROGNAME=biblios-$(VERSION)
@@ -22,7 +22,7 @@ debug:
 build: $(SRCS)
 	@echo "Building Biblios source..."
 	@echo
-	$(CAT) plugins/koha.js ui/js/db.js ui/js/marceditor.js ui/js/marcrecord.js ui/js/init.js ui/js/prefs.js ui/js/search.js ui/js/biblios.js ui/js/save.js ui/js/ui.js ui/js/edit.js > ui/js/biblios_all.js
+	$(CAT) ui/js/db.js ui/js/init.js ui/js/prefs.js ui/js/search.js ui/js/biblios.js ui/js/save.js ui/js/ui.js ui/js/edit.js > ui/js/biblios_all.js
 	$(JSMIN) ui/js/biblios_all.js ui/js/biblios_min.js
 	@echo "Building javascript libraries"	
 	$(CAT) lib/extjs/PagingMemoryProxy.js lib/extjs/GoogleGearsProxy.js lib/extjs2/Ext.ux.NestedXmlReader.js lib/extjs2/Ext.ux.GearsTreeLoader.js lib/extjs2/Ext.ux.FacetsTreeLoader.js lib/extjs2/Ext.ux.UploadDialog.js lib/extjs2/RowExpander.js lib/extjs2/miframe.js > lib/extjs2/ext_ux_libs.js
@@ -64,7 +64,7 @@ clean:
 	-rm -f build/index.html
 
 tags: $(SRCS)
-	$(CTAGS) ui/js/biblios.js ui/js/marcrecord.js ui/js/marceditor.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js plugins/koha.js ui/js/init.js ui/js/prefs.js
+	$(CTAGS) ui/js/biblios.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js ui/js/init.js ui/js/prefs.js
 
 koha: src/index.html
 	ttree -a -f .ttreerc-koha

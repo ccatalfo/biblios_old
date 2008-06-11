@@ -30,8 +30,9 @@ biblios.app = function() {
     if( Ext.get('loadingtext') ) {
         Ext.get('loadingtext').update('Reading biblios configuration file');
     }
-    
     loadConfig(confPath);
+    Ext.get('loadingtext').update('Loading plugins...');
+    loadPlugins();
     // private functions
 	displaySearchView : function displaySearchView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(0);
@@ -2403,6 +2404,37 @@ biblios.app = function() {
         });
 
 		treeEditor.render();
+        if( Ext.get('loadingtext') ) {
+            Ext.get('loadingtext').update('Setting up send targets');
+        }
+        setILSTargets.defer(2000);
+        if( Ext.get('loadingtext') ) {
+            Ext.get('loadingtext').update('Setting up search session');
+        }
+        initializePazPar2(pazpar2url, {
+            initCallback: function() {
+                if( this.initStatusOK == true ) {
+                    biblios.app.paz.sessionID = this.sessionID;
+                    // set searchgrid's data url for pazpar2 show
+                    if( Ext.getCmp('searchgrid') && Ext.getCmp('searchgrid').store ) {
+                        Ext.getCmp('searchgrid').store.proxy.conn.url = new Ext.data.HttpProxy({url: pazpar2url+'?session='+biblios.app.paz.sessionID+'&command=show'});
+                    }
+                    // set facets data url for pazpar termlist
+                    if( Ext.getCmp('facetsTreePanel') && Ext.getCmp('facetsTreePanel').loader ) {
+                        Ext.getCmp('facetsTreePanel').loader = new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+biblios.app.paz.sessionID+'&command=termlist&name=author,publication-name,subject,date'});
+                    }
+                    if( Ext.get('loadingtext') ){
+                        Ext.get('loadingtext').update('Setting up search targets');
+                    }
+                    setPazPar2Targets.defer(2000);
+                }
+                else {
+                    if( Ext.get('loadingtext') ) {
+                        Ext.get('loadingtext').update('Error initializing search session');
+                    }
+                }
+            }
+        });
         if( Ext.get('loadingtext') ) {
             Ext.get('loadingtext').update('Finishing initializing');
         }
