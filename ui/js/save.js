@@ -15,8 +15,6 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 			// make sure we have up to date record
 			transferFF_EdToTags(UI.editor[editorid].ffed, UI.editor[editorid].vared, editorid);
 			UI.editor[editorid].record.update();
-			Ext.get('fixedfields_editor').mask();
-			Ext.get('varfields_editor').mask();
 			var progress = Ext.MessageBox.progress('Saving record');
 			// transform edited record back into marcxml
 			xml = UI.editor[editorid].record.XMLString();
@@ -79,8 +77,6 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
             showStatusMsg("Record(s) saved to "+savefilename);
             clearStatusMsg();
 			progress.hide();
-			Ext.get('fixedfields_editor').unmask();
-			Ext.get('varfields_editor').unmask();
 			return true;
 		} // save record from marc editor
 		// if we're picking from the savefile grid 
