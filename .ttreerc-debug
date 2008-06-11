@@ -1,5 +1,6 @@
 lib = conf
 src = src
 dest = ./ 
+debug = 1
 ignore swp$
 pre_process = build-debug.conf

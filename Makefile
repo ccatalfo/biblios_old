@@ -13,7 +13,7 @@ all: build
 	@echo
 	ttree -a -f .ttreerc-standalone
 
-debug: build
+debug: 
 	@echo
 	@echo "Building debug version of Biblios index.html"
 	@echo
