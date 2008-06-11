@@ -175,7 +175,7 @@ function doSaveRemote(loc, xmldoc, editorid) {
             }
 			var xml = xslTransform.serialize(xmldoc);
 			UI.editor.progress.updateProgress(.7, 'Retrieved remote record');
-			openRecord(xml, editorid);
+			openRecord(xml, editorid, 'marcxml');
 			/*Ext.get('ffeditor').unmask();
 			Ext.get('vareditor').unmask();*/
 			UI.editor.progress.hide();

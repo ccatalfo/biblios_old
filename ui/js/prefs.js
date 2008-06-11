@@ -242,7 +242,7 @@ function setILSTargets() {
                                     UI.editor['editorone'].id = '';
                                     UI.editor.progress.updateProgress(.4, 'Retrieving record from Koha');
                                     getRemoteRecord( openOnLoadRecId, this.name, 0, function(data) {
-                                        openRecord( xslTransform.serialize(data), 'editorone');
+                                        openRecord( xslTransform.serialize(data), 'editorone', 'marcxml');
                                         UI.editor.progress.updateProgress(.8, 'Loading into Marc editor');
                                     });
                                     // make sure we don't try to open this again if we reset this send target
