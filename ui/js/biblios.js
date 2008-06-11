@@ -113,7 +113,7 @@ biblios.app = function() {
 			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets',
 			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets',
 			selectSqlMacros: 'select Macros.rowid as rowid, name, code, hotkey, file, enabled from Macros',
-            handle: db
+            handle: db,
             selectSqlPlugins: 'select Plugins.rowid as rowid, name, file, type, initcall, enabled from Plugins'
 		},
 		
@@ -350,7 +350,7 @@ biblios.app = function() {
 																UI.editor['editorone'].location = loc;
 																getRemoteRecord(id, loc, 0, function(data) {
                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-                                                                    openRecord( xslTransform.serialize(data), 'editorone', xmlformat:xmlformat ); 
+                                                                    openRecord( xslTransform.serialize(data), 'editorone', xmlformat ); 
                                                                 }
 														);
 
@@ -364,7 +364,7 @@ biblios.app = function() {
 																UI.editor['editorone'].location = loc;
 																  getRemoteRecord(id, loc, 0, function(data) { 
                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-                                                                    openRecord( xslTransform.serialize( data), 'editorone' , xmlformat:xmlformat); 
+                                                                    openRecord( xslTransform.serialize( data), 'editorone' , xmlformat); 
                                                                     });
 																}	
 															} // on ENTER keypress
@@ -418,7 +418,7 @@ biblios.app = function() {
 																				UI.editor[editorid].location = loc;
 																				getRemoteRecord(id, loc, 0, function(data) { 
                                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-																					openRecord( xslTransform.serialize(data), editorid, xmlformat:xmlformat ); 
+																					openRecord( xslTransform.serialize(data), editorid, xmlformat ); 
 																				});
 
 																			}
@@ -453,7 +453,7 @@ biblios.app = function() {
 																				UI.editor[editorid].location = loc;
 																				getRemoteRecord(id, loc, offset, function(data) { 
                                                                                     biblios.app.fireEvent('remoterecordretrieve', data);
-																					openRecord( xslTransform.serialize(data), editorid, xmlformat:xmlformat ); 
+																					openRecord( xslTransform.serialize(data), editorid, xmlformat ); 
 																				});
 																			} // for each checked record
 																			Ext.getCmp('searchgrid').el.unmask();
