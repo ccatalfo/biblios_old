@@ -111,8 +111,7 @@ function setupConfig( configDoc ) {
 				var url = $(this).children('url').text();
 				var user = $(this).children('user').text();
 				var password = $(this).children('password').text();
-				var pluginlocation = $(this).children('pluginlocation').text();
-				var plugininit = $(this).children('plugininit').text();
+				var plugin= $(this).children('plugin').text();
 				var enabled = $(this).children('enabled').text();
                 var allowDelete= $(this).children('allowDelete').text();
                 var allowModify= $(this).children('allowModify').text();
@@ -124,8 +123,7 @@ function setupConfig( configDoc ) {
 					t.url = url;
 					t.user = user;
 					t.password = password;
-					t.pluginlocation = pluginlocation;
-					t.plugininit = plugininit;
+					t.plugin= plugin;
 					t.enabled = enabled;
                     t.allowDelete = allowDelete || 1;
                     t.allowModify = allowModify || 1;
@@ -139,8 +137,7 @@ function setupConfig( configDoc ) {
 						url: url,
 						user: user,
 						password: password,
-						pluginlocation: pluginlocation,
-						plugininit: plugininit,
+						plugin: plugin,
 						enabled: enabled,
                         allowDelete: allowDelete || 1,
                         allowModify: allowModify || 1,
