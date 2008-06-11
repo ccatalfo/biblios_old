@@ -150,9 +150,6 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 	}
 
 function doSaveRemote(loc, xmldoc, editorid) {
-    if( !biblios.app.fireEvent('beforesendrecord', loc, xmldoc, editorid) ) {
-        return false;
-    }
 	/*Ext.get('ffeditor').mask();
 	Ext.get('vareditor').mask();*/
 	// make sure we have up to date record
@@ -181,6 +178,10 @@ function doSaveRemote(loc, xmldoc, editorid) {
 			UI.editor.progress.hide();
 		}
 	};
+    var xml = UI.editor[editorid].record.XMLString();
+    if( !biblios.app.fireEvent('beforesendrecord', loc, xml, editorid) ) {
+        return false;
+    }
     try {
         Prefs.remoteILS[loc].instance.save(xmldoc);
     }
@@ -406,7 +407,7 @@ function sendSelectedFromSearchGrid(locsendto) {
             var offset= records[i].offset;
             var title= records[i].title;
             getRemoteRecord(id, loc, offset, function(data) { 
-                if( !biblios.app.fireEvent('beforesendrecord', loc, data, '') ) {
+                if( !biblios.app.fireEvent('beforesendrecord', loc, xslTransform.serialize(data), '') ) {
                     return false;
                 }
                 showStatusMsg('Sending ' + title + ' to ' + locsendto);
@@ -449,7 +450,7 @@ function sendSelectedFromSaveGrid(locsendto) {
             else {
                 xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
             }
-            if( !biblios.app.fireEvent('beforesendrecord', locsendto, xmldoc, '') ) {
+            if( !biblios.app.fireEvent('beforesendrecord', locsendto, xml, '') ) {
                 return false;
             }
             showStatusMsg('Sending ' + biblios.app.send.records[i].title + ' to ' + locsendto);
