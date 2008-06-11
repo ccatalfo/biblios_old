@@ -88,6 +88,8 @@ function setupConfig( configDoc ) {
                 }).save();
             }
           });
+          // clear old editor data from gears db so we can reload from config
+          DB.Editors.remove();
           $("editors//editor", configDoc).each( function() {
             var syntax = $(this).children('syntax').text();
             var name = $(this).children('name').text();
