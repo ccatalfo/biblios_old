@@ -477,7 +477,7 @@ biblios.app = function() {
 																		id: 'searchgridSendBtn',
 																		disabled: true,
 																		text: 'Send',
-																		tooltip: {text: 'Send record to remote ILS'},
+																		tooltip: {text: 'Send record to remote target'},
 																		menu: {
 																			items: getSendFileMenuItems('searchgrid'),
 																			listeners: {
