@@ -2361,11 +2361,7 @@ biblios.app = function() {
 															}) // sendtarget editorgridpanel constructor
 														] // send targets tab items
 													} // send targets tab center region
-											}, // send targets tab
-											{
-												title: 'Keyboard Shortcuts',
-                                                html: 'Coming soon.'
-											}
+											} // send targets tab
 										] // options inner tab panel
 									}) // Options tabpanel constructor
 								] // options tab items
