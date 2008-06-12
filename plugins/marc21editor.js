@@ -1505,7 +1505,7 @@ function setupFFEditorCtryCombo() {
         try {
             var processor = new XSLTProcessor();
             processor.importStylesheet(varfxsl);
-            var editorxml = processor.transformToDocument(xmldoc);
+            var editorxml = processor.transformToDocument(marcXmlDoc);
             html += xslTransform.serialize(editorxml);
         }
         catch(ex) {
