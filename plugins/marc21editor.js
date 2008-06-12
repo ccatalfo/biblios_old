@@ -416,6 +416,9 @@ function showTagHelp(elem) {
 	Ext.get('helpIframe').unmask();
 }
 
+function addInputOutlines() {
+    $('.subfield-text,.subfield-delimiter,.indicator,.tagnumber').attr('class', 'editor-border');
+}
 function onBlur(elem) {
 	$(elem).removeClass('focused');
 	var editorid = $(elem).parents('.marceditor').get(0).id;

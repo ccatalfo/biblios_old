@@ -75,6 +75,10 @@ input.controlfield, input.subfield-text, input.subfield-delimiter, input.indicat
 	display: inline;
 }
 
+.editor-border {
+    border: 1px solid;
+}
+
 .reserved_tag {
 	background-color: gray;
 }
