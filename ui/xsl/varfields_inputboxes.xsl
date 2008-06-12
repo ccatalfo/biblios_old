@@ -146,7 +146,7 @@
     <xsl:template match="marc:subfield">
 		<xsl:param name="id"/>
 			<span class="subfield {@code}">
-				<xsl:attribute name="id"><xsl:value-of select="$id"/></xsl:attribute>
+				<xsl:attribute name="id"><xsl:value-of select="$id"/>-<xsl:value-of select="@code"/></xsl:attribute>
 				<input class="subfield-delimiter">
 					<xsl:attribute name='size'>2</xsl:attribute>
 					<xsl:attribute name='maxlength'>2</xsl:attribute>
@@ -156,7 +156,7 @@
 					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 					<xsl:attribute name="id">
-						<xsl:value-of select="$id"/>delimiter
+						<xsl:value-of select="$id"/>delimiter-<xsl:value-of select="@code"/>
 					</xsl:attribute>
 				</input>
 
@@ -171,7 +171,8 @@
 					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 					<xsl:attribute name="id">
-						<xsl:value-of select="$id"/>text
+						<xsl:value-of select="$id"/>text-<xsl:value-of select="@code"/>
+
 					</xsl:attribute>
 				</input>
 			</span>
