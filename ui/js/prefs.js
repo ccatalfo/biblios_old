@@ -28,8 +28,8 @@ function setupConfig( configDoc ) {
 			var description= $(this).children('description').text();
 			var allowDelete= $(this).children('allowDelete').text();
 			var allowModify= $(this).children('allowModify').text();
-			// check db if already exists based on name field
-			if( t = DB.SearchTargets.select('SearchTargets.rowid=?', [id]).getOne() ) {
+			// check db if already exists based on hostname, port and db fields
+			if( t = DB.SearchTargets.select('SearchTargets.hostname = ? and SearchTargets.port = ? and SearchTargets.dbname = ?', [hostname, port, dbname]).getOne() ) {
 				t.hostname = hostname;
 				t.port = port;
 				t.dbname = dbname;
@@ -116,8 +116,8 @@ function setupConfig( configDoc ) {
                 var allowDelete= $(this).children('allowDelete').text();
                 var allowModify= $(this).children('allowModify').text();
                 var embedded = $(this).children('embedded').text();
-				// check db for sendtarget based on name field
-				if( t = DB.SendTargets.select('SendTargets.rowid=?', [id]).getOne() ) {
+				// check db for sendtarget based on url field
+				if( t = DB.SendTargets.select('SendTargets.url=?', [url]).getOne() ) {
 					t.name = name;
 					t.location = loc;
 					t.url = url;
