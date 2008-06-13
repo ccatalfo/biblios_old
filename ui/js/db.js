@@ -442,3 +442,15 @@ function init_gears() {
             });
 			GearsORMShift.init( DB.Info_Schema, true );
 }
+
+function getPref(prefName) {
+    var pref = DB.Prefs.select('name=?',[prefName]).getOne();
+    var value = pref.value;
+    return value;
+}
+
+function setPref(prefName, value) {
+    var pref = DB.Prefs.select('name=?',[prefName]).getOne();
+    pref.value = value;
+    pref.save();
+}
