@@ -156,7 +156,7 @@
 					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 					<xsl:attribute name="id">
-						<xsl:value-of select="$id"/>delimiter-<xsl:value-of select="@code"/>
+						<xsl:value-of select="$id"/>delimiter-<xsl:value-of select="@code"/>-<xsl:value-of select="position()"/>
 					</xsl:attribute>
 				</input>
 
@@ -171,7 +171,8 @@
 					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 					<xsl:attribute name="id">
-						<xsl:value-of select="$id"/>text-<xsl:value-of select="@code"/>
+						<xsl:value-of select="$id"/>text-<xsl:value-of select="@code"/>-<xsl:value-of select="position()"/>
+
 
 					</xsl:attribute>
 				</input>
