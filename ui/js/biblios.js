@@ -2361,7 +2361,34 @@ biblios.app = function() {
 															}) // sendtarget editorgridpanel constructor
 														] // send targets tab items
 													} // send targets tab center region
-											} // send targets tab
+											}, // send targets tab
+                                            {
+                                                title: 'Preferences',
+                                                layout: 'border',
+                                                listeners: {
+                                                    activate: function() {
+														biblios.app.viewport.doLayout();
+                                                    }
+                                                },// pref tab list
+                                                items: [
+                                                    new Ext.Panel({
+                                                        region: 'center',
+                                                        items: [
+                                                            new Ext.form.Checkbox({
+                                                                id: 'editorOutlineCheckBox',
+                                                                autoCreate: true,
+                                                                boxLabel: 'Show borders around editor fields',
+                                                                checked: true,
+                                                                listeners: {
+                                                                    check: function(checkbox, checked) {
+
+                                                                    }
+                                                                } // preferences editor outline checkbox listeners
+                                                            }) // preferences editor outline checkbox
+                                                        ] // preferences panel items
+                                                    }) // preferences panel
+                                                ] // preferences tab items
+                                            } // preferences tab
 										] // options inner tab panel
 									}) // Options tabpanel constructor
 								] // options tab items
