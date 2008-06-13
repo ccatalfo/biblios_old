@@ -1505,15 +1505,7 @@ function setupFFEditorCtryCombo() {
 		html += '</div>'; // close ff_editor
 		html += '<div class="vareditor">';
 		html += '<div id="varfields_editor">';
-        try {
-            var processor = new XSLTProcessor();
-            processor.importStylesheet(varfxsl);
-            var editorxml = processor.transformToDocument(marcXmlDoc);
-            html += xslTransform.serialize(editorxml);
-        }
-        catch(ex) {
-            html += generateVariableFieldsEditor(marcXmlDoc);
-        }
+        html += generateVariableFieldsEditor(marcXmlDoc);
 		//UI.editor.progress.updateProgress(.7, 'Datafields editor created');
 		html += '</div>'; // end vareditor div
 		html += '</div>'; // varfields_editor div
