@@ -2381,7 +2381,12 @@ biblios.app = function() {
                                                                 checked: true,
                                                                 listeners: {
                                                                     check: function(checkbox, checked) {
-
+                                                                        if(checked) {
+                                                                            setPref('ShowFieldBordersInEditor', 1);
+                                                                        }
+                                                                        else {
+                                                                            setPref('ShowFieldBordersInEditor', 0);
+                                                                        }
                                                                     }
                                                                 } // preferences editor outline checkbox listeners
                                                             }) // preferences editor outline checkbox
