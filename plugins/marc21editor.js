@@ -417,7 +417,7 @@ function showTagHelp(elem) {
 }
 
 function addInputOutlines() {
-    $('.subfield-text,.subfield-delimiter,.indicator,.tagnumber').attr('class', 'editor-border');
+    $('.subfield-text,.controlfield').css('border', '1px solid');
 }
 function onBlur(elem) {
 	$(elem).removeClass('focused');
@@ -1533,6 +1533,11 @@ function setupFFEditorCtryCombo() {
         // setup comboboxes for ctry and lang fixed fields
         setupFFEditorLangCombo();
         setupFFEditorCtryCombo();
+        // set up editor based on any preferences
+        if( getPref('ShowFieldBordersInEditor') == "1") {
+            addInputOutlines(); 
+        }
+            
         // show fixed field editor, hide ldr and 008 divs
         $('#'+editorid).find('.ffeditor').show();
         // hide fixed field controlfields
