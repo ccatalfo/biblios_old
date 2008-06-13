@@ -239,7 +239,7 @@ function doMerge() {
 function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
     try {
         var leaderval = getLeaderFromEditor(ff_ed);
-        $('#'+editorid).find("#000", var_ed).children('.controlfield').val(leaderval);
+        $('#'+editorid).find("#000", var_ed).children('.controlfield-text').val(leaderval);
         if(debug){console.info('Transferring leader value from fixed field editor into leader tag: ' + leaderval);}
     }
     catch(ex) {
@@ -247,7 +247,7 @@ function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
     }
     try {
         var tag008val = get008FromEditor(ff_ed);
-        $('#'+editorid).find("#008", var_ed).children('.controlfield').val(tag008val);
+        $('#'+editorid).find("#008", var_ed).children('.controlfield-text').val(tag008val);
         if(debug){console.info('Transferring 008 value from fixed field editor into 008 tag: ' + tag008val);}
     }
     catch(ex) {
@@ -256,7 +256,7 @@ function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
 	if( $('#'+editorid).find('#006').length > 0 ) {
         try {
             var tag006val = get006FromEditor(ff_ed);
-            $('#'+editorid).find("#006", var_ed).children('.controlfield').val(tag006val);
+            $('#'+editorid).find("#006", var_ed).children('.controlfield-text').val(tag006val);
             if(debug){console.info('Transferring 006 value from fixed field editor into 006 tag: ' + tag006val);}
         }
         catch(ex) {
@@ -266,7 +266,7 @@ function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
 	if( $('#'+editorid).find('#007').length > 0 ) {
         try {
             var tag007val = get007FromEditor(ff_ed);
-            $('#'+editorid).find("#007", var_ed).children('.controlfield').val(tag007val);
+            $('#'+editorid).find("#007", var_ed).children('.controlfield-text').val(tag007val);
             if(debug){console.info('Transferring 007 value from fixed field editor into 007 tag: ' + tag007val);}
         }
         catch(ex) {
@@ -417,7 +417,7 @@ function showTagHelp(elem) {
 }
 
 function addInputOutlines() {
-    $('.subfield-text,.controlfield').css('border', '1px solid');
+    $('.subfield-text,.controlfield-text').css('border', '1px solid');
 }
 function onBlur(elem) {
 	$(elem).removeClass('focused');
@@ -506,14 +506,14 @@ function MarcEditor(editorelem, editorid) {
 function updateFFEditor() {
 	if(debug) { console.info("updating fixed field editor from leader and 008 tags"); }
     var oDomDoc = Sarissa.getDomDocument();
-    var leaderval = $('#'+editorid).find("#000", editorelem).children('.controlfield').val();
+    var leaderval = $('#'+editorid).find("#000", editorelem).children('.controlfield-text').val();
 	if( leaderval.length != 24 ) {
 		throw {
 			error: "InvalidLeader",
 			msg: "Invalid length of Leader"
 		};
 	}
-    var tag008val = $('#'+editorid).find("#008", editorelem).children('.controlfield').val();
+    var tag008val = $('#'+editorid).find("#008", editorelem).children('.controlfield-text').val();
 	if( tag008val.length != 40 ) {
 		throw {
 			error: "Invalid008",
@@ -533,11 +533,11 @@ function updateFFEditor() {
     newff += tag008val;
     newff += "</controlfield>";
 	if( $('#'+editorid).find("#006", editorelem).length > 0 ) {
-		var tag006val = $('#'+editorid).find("#006", editorelem).children('.controlfield').val();
+		var tag006val = $('#'+editorid).find("#006", editorelem).children('.controlfield-text').val();
 		newff += "<controlfield tag='006'>" + tag006val + "</controlfield>";
 	}
 	if( $('#'+editorid).find("#007", editorelem).length > 0 ) {
-		var tag007val = $('#'+editorid).find("#007", editorelem).children('.controlfield').val();
+		var tag007val = $('#'+editorid).find("#007", editorelem).children('.controlfield-text').val();
 		newff += "<controlfield tag='007'>" + tag007val + "</controlfield>";
 	}
     newff += "</record>";
@@ -990,7 +990,7 @@ function setupFFEditorCtryCombo() {
     function generateVariableFieldsEditor(marcXmlDoc) {
         var html = '';
         var leader = $('leader', marcXmlDoc).text();
-        html += '<div class="tag controlfield 000" id="000"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="000"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="#"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="#"><input class="controlfield" type="text" size="24" maxlength="24" value="'+leader+'"></div>';
+        html += '<div class="tag controlfield 000" id="000"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="tagnumber" value="000"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="#"><input onblur="onBlur(this)" onfocus="onFocus(this)" type="text" class="indicator" value="#"><input class="controlfield-text" type="text" size="24" maxlength="24" value="'+leader+'"></div>';
         fields.push( new Field('000', '', '', [{code: '', value: leader}]) );
 
         $('controlfield', marcXmlDoc).each( function(i) {
@@ -1007,7 +1007,7 @@ function setupFFEditorCtryCombo() {
             html += '<input onblur="onBlur(this)" onfocus="onFocus(this)" ';
             html += 'type="text" '; 
             html += 'value="'+val+'" ';
-            html += 'class="controlfield ';
+            html += 'class="controlfield-text ';
             html += tagnum;
             html += '"';
             html += ' size="'+size+'"';
@@ -1148,7 +1148,7 @@ function setupFFEditorCtryCombo() {
 		var ind1 = $(elem).children('.indicator', UI.editor[editorid].editorelem).eq(0).val();
 		var ind2 = $(elem).children('.indicator', UI.editor[editorid].editorelem).eq(1).val();
 		if( tagnumber < '010' ) {
-			var value = $(elem).children('.controlfield', UI.editor[editorid].editorelem).val();	
+			var value = $(elem).children('.controlfield-text', UI.editor[editorid].editorelem).val();	
 			newfield = new Field(tagnumber, ind1, ind2, [{code: '', value: value}]);
 		}
 		else {
@@ -1244,7 +1244,7 @@ function setupFFEditorCtryCombo() {
 			return $('[@id^='+tag+'] .'+subfield+'.subfield-text', editorelem).val();
 		}
 		else {
-			return $('[@id^='+tag+']').children('.controlfield', editorelem).val();
+			return $('[@id^='+tag+']').children('.controlfield-text', editorelem).val();
 		}
 	};
 
@@ -1299,7 +1299,7 @@ function setupFFEditorCtryCombo() {
 			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+'"/>';
 			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+'"/>';
 			if( tagnumber < '010' ) {
-				newtag += '<input type="text" onblue="onBlur(this)" onfocus="onFocus(this)" class="controlfield '+tagnumber+'" value="">';
+				newtag += '<input type="text" onblue="onBlur(this)" onfocus="onFocus(this)" class="controlfield-text '+tagnumber+'" value="">';
 			} // insert controlfield
 			else {
 			  newtag += '<span class="subfields" id="dsubfields'+newId+'">';

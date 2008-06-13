@@ -6,7 +6,7 @@
 	padding: 3px;
 }
 
-input.controlfield, input.subfield-text, input.subfield-delimiter, input.indicator, input.tagnumber {
+input.controlfield-text, input.subfield-text, input.subfield-delimiter, input.indicator, input.tagnumber {
 	border: 1px solid #fff;
 }
 .focused.tagnumber {
