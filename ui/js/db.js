@@ -245,7 +245,24 @@ GearsORMShift.rules = [
             // no drop col command in sqlite
             return true;
         }
-    } // rule 9
+    },// rule 9
+    {
+        version: 10,
+        comment: 'Add default preference for displaying editor with borders around fields',
+        up: function() {
+            p = new DB.Prefs({
+                name: 'ShowFieldBordersInEditor',
+                value: 1,
+                type: 'Boolean',
+                option: ''
+            }).save();
+            return true;
+        },
+        down: function() {
+            DB.Prefs.select('name=?', ['ShowFieldBordersInEditor']).getOne().remove();
+            return true;
+        }
+    }// rule 10
 ];
 
 function createTestTargets() {
