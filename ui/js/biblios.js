@@ -32,7 +32,6 @@ biblios.app = function() {
     }
     loadConfig(confPath);
     Ext.get('loadingtext').update('Loading plugins...');
-    loadPlugins();
     // private functions
 	displaySearchView : function displaySearchView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(0);
