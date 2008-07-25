@@ -2462,38 +2462,6 @@ biblios.app = function() {
                 }
             }
         });
-        if( Ext.get('loadingtext') ) {
-            Ext.get('loadingtext').update('Finishing initializing');
-        }
-		//	alert('Application successfully initialized');
-		var loading = Ext.get('loading');
-
-		var mask = Ext.get('loading-mask');
-
-		mask.setOpacity(.8);
-
-		mask.shift({
-
-			xy:loading.getXY(),
-
-			width:loading.getWidth(),
-
-			height:loading.getHeight(),
-
-			remove:true,
-
-			duration:1,
-
-			opacity:.3,
-
-			easing:'bounceOut',
-
-			callback : function(){
-
-				loading.fadeOut({duration:.2,remove:true});
-
-			}
-		});
 
 		Ext.getCmp('tabpanel').activate(0);
         } // end of init method

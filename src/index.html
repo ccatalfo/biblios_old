@@ -161,6 +161,7 @@ var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
             Ext.get('loadingtext').update('Initializing Biblios');
 			biblios.app.init();
             loadPlugins();
+            completeInit();
 			Ext.fly('loading').remove();
 			// placeholder
 		}, biblios.app);
