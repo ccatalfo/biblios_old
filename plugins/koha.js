@@ -27,6 +27,10 @@ var koha = function() {
 koha.prototype = {	
 		init: function(url, name, user, password, embedded) {
 			this.url = url;
+            // add trailing slash if missing
+            if( this.url[ this.url.length-1] != '/') {
+                this.url += '/';
+            }
 			this.name = name;
 			this.user = user;
 			this.password = password;
