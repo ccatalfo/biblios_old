@@ -422,7 +422,7 @@ function sendSelectedFromSaveGrid(locsendto) {
         if( !biblios.app.fireEvent('sendrecordcomplete', locsendto, xmldoc, status) ) {
             return false;
         }
-        if( status == 'success') {
+        if( status == 'ok') {
             var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
             showStatusMsg('Saved ' + title + ' to ' + locsendto);
             biblios.app.send.numToSend--;
