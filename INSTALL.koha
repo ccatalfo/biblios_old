@@ -4,7 +4,7 @@ Dependencies:
 Apache2 with http_proxy
 Perl
 Perl modules:
-	CGI, CGI::Carp, MARC::Record, MARC::File::XML, File::Temp, JSON, Javascript::Minifier, CSS::Minifier, Template
+	CGI, CGI::Carp, MARC::Record, MARC::File::XML, File::Temp, File::BaseName, JSON, Term::Clui, Template, File::Slurp
 Pazpar2 
 Google Gears plugin for your web browser (Internet Explorer 6/7 or FireFox), available here: http://gears.google.com/.
 
