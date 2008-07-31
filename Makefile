@@ -25,7 +25,7 @@ build: $(SRCS)
 	$(CAT) ui/js/db.js ui/js/init.js ui/js/prefs.js ui/js/search.js ui/js/biblios.js ui/js/save.js ui/js/ui.js ui/js/edit.js > ui/js/biblios_all.js
 	$(JSMIN) ui/js/biblios_all.js ui/js/biblios_min.js
 	@echo "Building javascript libraries"	
-	$(CAT) lib/extjs/PagingMemoryProxy.js lib/extjs/GoogleGearsProxy.js lib/extjs2/Ext.ux.NestedXmlReader.js lib/extjs2/Ext.ux.GearsTreeLoader.js lib/extjs2/Ext.ux.FacetsTreeLoader.js lib/extjs2/Ext.ux.UploadDialog.js lib/extjs2/RowExpander.js lib/extjs2/miframe.js > lib/extjs2/ext_ux_libs.js
+	$(CAT) lib/extjs2/PagingMemoryProxy.js lib/extjs2/GoogleGearsProxy.js lib/extjs2/Ext.ux.NestedXmlReader.js lib/extjs2/Ext.ux.GearsTreeLoader.js lib/extjs2/Ext.ux.FacetsTreeLoader.js lib/extjs2/Ext.ux.UploadDialog.js lib/extjs2/RowExpander.js lib/extjs2/miframe.js > lib/extjs2/ext_ux_libs.js
 	$(JSMIN) lib/extjs2/ext_ux_libs.js lib/extjs2/ext_ux_libs-min.js
 	$(CAT) lib/jquery/jquery.hotkeys.js lib/jquery/jquery.xpath.js lib/jquery/jquery.cookie.js lib/jquery/json.js > lib/jquery/jquery_plugins.js
 	$(JSMIN) lib/jquery/jquery_plugins.js lib/jquery/jquery_plugins-min.js
