@@ -26,10 +26,9 @@ OR
  
 	cd biblios-0.9
 
-3. Generate packed and debug versions of biblios files
+3. Generate packed version of biblios files
 
 	make all 
-	make debug 
 
 4. Enable apache2's http_proxy module:
 
