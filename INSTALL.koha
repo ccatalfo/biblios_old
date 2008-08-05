@@ -73,17 +73,11 @@ pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/bibli
 
 10. Run the following command to modify biblios' index.html file to work within your koha installation:
 
-	make koha KOHALANGTHEME=<your koha installations lang and theme path e.g. /prog/en> KOHASTAFFPORT=<the port your koha staff intranet is running on e.g. 8080> KOHAURL=<your koha staff intranet's base url e.g. http://eowyn.metavore.com:8001> DEBUG=0
+integration/koha/install-koha.pl
 
-	Example: make koha KOHALANGTHEME=/prog/en KOHASTAFFPORT=8001 KOHAURL=http://takeyourchoice.net:8001 DEBUG=0
+This will prompt you to provide koha installation parameters and then copy the Biblios source files to appropriate paths in your koha installation.
 
-11. Copy biblios' files to the appropriate paths in koha with the following command:
-
-	make koha-install KOHADIR=<your koha base dir, e.g. /home/src/kohaclone> KOHALANGTHEME=<your koha installations lang and theme path e.g. /prog/en> 
-
-	Example: make koha-install KOHALANGTHEME=/prog/en KOHADIR=/home/src/kohaclone
-
-12. You should now be able to access biblios from within your koha staff intranet via the following url:
+11. You should now be able to access biblios from within your koha staff intranet via the following url:
 
 	http://<your koha intranet url>/cgi-bin/koha/cataloguing/biblios.pl
 	Example: http://eowyn.metavore.com:8001/cgi-bin/koha/cataloguing/biblios.pl
