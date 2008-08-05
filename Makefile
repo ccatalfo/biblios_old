@@ -19,7 +19,7 @@ debug:
 	@echo
 	ttree -a -f .ttreerc-debug
 
-build: $(SRCS)
+build: 
 	@echo "Building Biblios source..."
 	@echo
 	$(CAT) ui/js/db.js ui/js/init.js ui/js/prefs.js ui/js/search.js ui/js/biblios.js ui/js/save.js ui/js/ui.js ui/js/edit.js > ui/js/biblios_all.js
@@ -38,11 +38,11 @@ build: $(SRCS)
 	$(CSSMIN) ui/css/preview-styles.css ui/css/preview-styles-min.css
 	ttree -a -f .ttreerc-standalone
 
-dist: $(ALLSRC)
+dist: 
 	@echo "Creating .zip and .tar.zip distributions"
 	@echo
 	mkdir -p $(PROGNAME)
-	cp -r INSTALL INSTALL.koha Makefile index.html ui lib cgi-bin conf templates plugins integration docs tools test uploads $(PROGNAME)
+	cp -r .ttreerc .ttreerc-standalone .ttreerc-debug .ttreerc-koha src INSTALL INSTALL.koha Makefile ui lib cgi-bin conf/ templates plugins integration docs tools test uploads $(PROGNAME)
 	tar -cvf $(PROGNAME).tar $(PROGNAME)
 	gzip $(PROGNAME).tar
 	zip -r $(PROGNAME).zip $(PROGNAME)
@@ -63,7 +63,7 @@ clean:
 	@echo
 	-rm -f build/index.html
 
-tags: $(SRCS)
+tags: 
 	$(CTAGS) ui/js/biblios.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js ui/js/init.js ui/js/prefs.js
 
 koha: src/index.html
