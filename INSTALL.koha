@@ -26,9 +26,9 @@ OR
  
 	cd biblios-0.9
 
-3. Generate packed version of biblios files
+3. Build Biblios javascript and css files for deployment.
 
-	make all 
+	make 
 
 4. Enable apache2's http_proxy module:
 
@@ -70,14 +70,16 @@ Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site aja
  
 pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
 
-10. Run the following command to modify biblios' index.html file to work within your koha installation:
+10. Run the following command to build biblios' index.html file to work within your koha installation and install Biblios files.  This will prompt you to provide koha installation parameters and then copy the Biblios source files to appropriate paths in your koha installation.
 
 integration/koha/install-koha.pl
-
-This will prompt you to provide koha installation parameters and then copy the Biblios source files to appropriate paths in your koha installation.
 
 11. You should now be able to access biblios from within your koha staff intranet via the following url:
 
 	http://<your koha intranet url>/cgi-bin/koha/cataloguing/biblios.pl
 	Example: http://eowyn.metavore.com:8001/cgi-bin/koha/cataloguing/biblios.pl
+
+You may wish you add a link to the above Biblios url in your header.inc Koha template file, located at 
+
+koha-tmpl/intranet-tmpl/<langtheme>/includes/header.inc
 

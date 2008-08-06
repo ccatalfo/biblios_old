@@ -28,8 +28,7 @@ OR
 
 3. Generate packed and debug versions of biblios files
 
-	make all 
-	make debug 
+	make 
 
 4. Enable apache2's proxy_http module:
 
@@ -52,7 +51,7 @@ OR
        ProxyPass /pazpar2/search.pz2 http://localhost:9004/search.pz2
 
        # proxy for sru authority server (required for authority-controlled fiels dropdowns to work)
-       ProxyPass /kohaauth/ <your koha sru auth server e.g. http://eowyn.metavore.com:9999/>
+       #ProxyPass /kohaauth/ <your koha sru auth server e.g. http://eowyn.metavore.com:9999/>
    
 </IfModule>
 
@@ -66,10 +65,8 @@ OR
  
 	pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
 
-10. Install biblios and cgi scripts into appropriate paths for your web server:
-	Example: 
-		cp -r ../biblios-0.9 /var/www/biblios
-		cp cgi-bin/* /usr/lib/cgi-bin/
-		rm -rf /var/www/biblios/cgi-bin
+10. Install biblios and cgi scripts into appropriate paths for your web server using the included install.pl script.  You will be prompted for the location of your webserver's htdocs directory and cgi-bin directory:
+
+./install.pl
 
 11. Point your browser to the appropriate path and catalog away...
