@@ -110,7 +110,7 @@ biblios.app = function() {
 			numToGet: 0
 		},
 		db : {
-			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets',
+			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled from SendTargets',
 			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets',
 			selectSqlMacros: 'select Macros.rowid as rowid, name, code, hotkey, file, enabled from Macros',
             handle: db,
@@ -2319,7 +2319,7 @@ biblios.app = function() {
 																				Ext.MessageBox.alert('Error', 'Please enter user, password, url, plugin location and plugin init to test this connection.');
 																				return false;
 																			}
-                                                                            var plugin = DB.Plugins.select('name=?', [record.data..plugin]).getOne();
+                                                                            var plugin = DB.Plugins.select('name=?', [record.data.plugin]).getOne();
                                                                             var initcall = plugin.initcall;
                                                                             try {
 																			var instance = eval( initcall );
