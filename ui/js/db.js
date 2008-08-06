@@ -140,13 +140,13 @@ GearsORMShift.rules = [
                 var rs = db.execute('ALTER TABLE SearchTargets ADD COLUMN allowDelete integer');
             }
             catch(ex) {
-                console.info("Unable to add allowDelete fields to search table: " + ex);
+                if(debug){console.info("Unable to add allowDelete fields to search table: " + ex);}
             }
             try {
                 var rs = db.execute('ALTER TABLE SendTargets ADD COLUMN allowDelete integer');
             }
             catch(ex) {
-                console.info("Unable to add allowDelete fields to send table" + ex);
+                if(debug){console.info("Unable to add allowDelete fields to send table" + ex);}
             }
             return true;
         },
@@ -163,13 +163,13 @@ GearsORMShift.rules = [
                 var rs = db.execute('ALTER TABLE SearchTargets ADD COLUMN allowModify integer');
             }
             catch(ex) {
-                console.info("Unable to add allowModify fields to search table: " + ex);
+                if(debug){console.info("Unable to add allowModify fields to search table: " + ex);}
             }
             try {
                 var rs = db.execute('ALTER TABLE SendTargets ADD COLUMN allowModify integer');
             }
             catch(ex) {
-                console.info("Unable to add allowModify fields to send table" + ex);
+                if(debug){console.info("Unable to add allowModify fields to send table" + ex);}
             }
             return true;
         },
@@ -186,7 +186,7 @@ GearsORMShift.rules = [
                 var rs = db.execute('ALTER TABLE SendTargets ADD COLUMN embedded integer');
             }
             catch(ex) {
-                console.info('Unable to add embedded column to SendTargets table: ' + ex);
+                if(debug){console.info('Unable to add embedded column to SendTargets table: ' + ex);}
             }
             return true;
         },
@@ -237,7 +237,7 @@ GearsORMShift.rules = [
                 db.execute('alter table SendTargets add column plugin string');
             }
             catch(ex) {
-                console.info('Unable to add plugin column to sendtargets table');
+                if(debug){console.info('Unable to add plugin column to sendtargets table');}
             }
             return true;
         },
