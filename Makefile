@@ -16,26 +16,39 @@ debug:
 	ttree -a -f .ttreerc-debug
 
 build: $(SRCS)
+	mkdir -p build/lib
+	mkdir -p build/css
 	@echo "Building Biblios source..."
 	@echo
-	$(CAT) ui/js/db.js ui/js/init.js ui/js/prefs.js ui/js/search.js ui/js/biblios.js ui/js/save.js ui/js/ui.js ui/js/edit.js > ui/js/biblios_all.js
-	$(JSMIN) ui/js/biblios_all.js ui/js/biblios_min.js
+	$(CAT) ui/js/db.js ui/js/init.js ui/js/prefs.js ui/js/search.js ui/js/biblios.js ui/js/save.js ui/js/ui.js ui/js/edit.js > build/lib/biblios_all.js
+	$(JSMIN) build/lib/biblios_all.js build/lib/biblios_min.js
+	@echo
 	@echo "Building javascript libraries"	
-	$(CAT) lib/extjs2/PagingMemoryProxy.js lib/extjs2/GoogleGearsProxy.js lib/extjs2/Ext.ux.NestedXmlReader.js lib/extjs2/Ext.ux.GearsTreeLoader.js lib/extjs2/Ext.ux.FacetsTreeLoader.js lib/extjs2/Ext.ux.UploadDialog.js lib/extjs2/RowExpander.js lib/extjs2/miframe.js > lib/extjs2/ext_ux_libs.js
-	$(JSMIN) lib/extjs2/ext_ux_libs.js lib/extjs2/ext_ux_libs-min.js
-	$(CAT) lib/jquery/jquery.hotkeys.js lib/jquery/jquery.xpath.js lib/jquery/jquery.cookie.js lib/jquery/json.js > lib/jquery/jquery_plugins.js
-	$(JSMIN) lib/jquery/jquery_plugins.js lib/jquery/jquery_plugins-min.js
+	@echo
+	$(CAT) lib/extjs2/PagingMemoryProxy.js lib/extjs2/GoogleGearsProxy.js lib/extjs2/Ext.ux.NestedXmlReader.js lib/extjs2/Ext.ux.GearsTreeLoader.js lib/extjs2/Ext.ux.FacetsTreeLoader.js lib/extjs2/Ext.ux.UploadDialog.js lib/extjs2/RowExpander.js lib/extjs2/miframe.js > build/lib/ext_ux_libs.js
+	$(JSMIN) build/lib/ext_ux_libs.js build/lib/ext_ux_libs-min.js
+	$(CAT) lib/jquery/jquery.hotkeys.js lib/jquery/jquery.xpath.js lib/jquery/jquery.cookie.js lib/jquery/json.js > build/lib/jquery_plugins.js
+	$(JSMIN) build/lib/jquery_plugins.js build/lib/jquery_plugins-min.js
+	@echo
+	@echo "Concatenating all js files"
+	@echo
+	$(CAT) lib/cookieHelpers.js lib/extjs2/adapter/ext/ext-base.js lib/extjs2/ext-all.js build/lib/ext_ux_libs-min.js lib/google_gears/gears_init.js lib/google_gears/GearsORM_all.js lib/google_gears/GearsORMShift.js lib/pz2.js lib/jquery/jquery-1.2.2.min.js build/lib/jquery_plugins-min.js lib/sarissa/sarissa.js lib/jquery/jquery.xslTransform.packed.js lib/sarissa/sarissa_ieemu_xpath.js build/lib/biblios_min.js > build/lib.js
 	@echo
 	@echo "Compressing css files"
 	@echo
-	$(CSSMIN) lib/extjs2/resources/css/ext-all.css lib/extjs2/resources/css/ext-all-min.css	
-	$(CSSMIN) ui/css/styles.css ui/css/styles-min.css
-	$(CSSMIN) ui/css/editor-styles.css ui/css/editor-styles-min.css
-	$(CSSMIN) ui/css/preview-styles.css ui/css/preview-styles-min.css
+	$(CSSMIN) ui/css/styles.css build/css/styles-min.css
+	$(CSSMIN) ui/css/editor-styles.css build/css/editor-styles-min.css
+	$(CSSMIN) ui/css/preview-styles.css build/css/preview-styles-min.css
+	@echo
+	@echo "Concatenating css files"
+	@echo
+	$(CAT) build/css/styles-min.css build/css/editor-styles-min.css build/css/preview-styles-min.css > build/styles.css
 
 install: build
 	cp build/index.html $(HTMLDIR)/index.html
-	cp -r lib ui tools templates conf plugins $(HTMLDIR)
+	cp build/lib.js $(HTMLDIR)/lib.js
+	cp build/styles.css $(HTMLDIR)/styles.css
+	cp -r ui tools templates conf plugins $(HTMLDIR)
 	cp cgi-bin/* $(CGIDIR)
 
 dist: build
@@ -58,12 +71,12 @@ distclean:
 clean: 
 	@echo "Removing concatenated and packed biblios files"
 	@echo
-	-rm -f ui/js/biblios_all.js 
-	-rm -f ui/js/biblios_min.js
+	-rm -f build/*
+	-rm -rf build/lib
+	-rm -rf build/css
 	@echo "Removing generated index.html"
 	@echo
 	-rm -f build/index.html
-	-rm -f index.html
 
 tags: 
 	$(CTAGS) ui/js/biblios.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js ui/js/init.js ui/js/prefs.js
@@ -75,7 +88,8 @@ koha-install: build/index.html
 	mkdir -p $(KOHADIR)/plugins/biblios
 	cp cgi-bin/uploaddb.pl cgi-bin/exportdb.pl cgi-bin/downloadMarc.pl cgi-bin/download.pl cgi-bin/uploadMarc.pl $(KOHADIR)/plugins/biblios/
 	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
-	cp -r lib tools templates ui conf plugins $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/
+	cp build/lib.js $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/
+	cp build/styles.css $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/
 
 koha-uninstall:
 	@echo Uninstalling biblios files from koha path $(KOHADIR)

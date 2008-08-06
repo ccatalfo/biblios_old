@@ -23,7 +23,7 @@ print "Building Biblios for installation into $htmldir\n and cgi-bin path $cgidi
 my $vars = {
   buildtime => $buildtime,
 };
-$tt->process('./src/index.html', $vars, 'index.html')
+$tt->process('./src/index.html', $vars, 'build/index.html')
   || die $tt->error(), "\n";
 
 print "Installing Biblios\n";
