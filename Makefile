@@ -46,6 +46,7 @@ dist:
 	tar -cvf $(PROGNAME).tar $(PROGNAME)
 	gzip $(PROGNAME).tar
 	zip -r $(PROGNAME).zip $(PROGNAME)
+	rm -rf $(PROGNAME)
 
 distclean:
 	@echo "Removing distributions"
