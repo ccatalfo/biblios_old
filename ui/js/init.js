@@ -50,8 +50,7 @@ var SendTarget = Ext.data.Record.create([
 	{name: 'url', type: 'string'},
 	{name: 'user', type: 'string'},
 	{name: 'password', type: 'string'},
-	{name: 'pluginlocation', type: 'string'},
-	{name: 'plugininit', type: 'string'},
+	{name: 'plugin', type: 'string'},
 	{name: 'enabled', type: 'bool'}
 ]);
 var Macro = Ext.data.Record.create([

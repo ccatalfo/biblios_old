@@ -2160,7 +2160,7 @@ biblios.app = function() {
                                                                         }
 																		if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
 																			try {
-																				var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, pluginlocation = ?, plugininit= ?, enabled = ? where rowid = ?', [record.data.name, record.data.location, record.data.user, record.data.password, record.data.pluginlocation, record.data.plugininit, record.data.enabled, record.data.rowid]);
+																				var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, plugin= ?, enabled = ? where rowid = ?', [record.data.name, record.data.location, record.data.user, record.data.password, record.data.plugin, record.data.enabled, record.data.rowid]);
 																				rs.close();
 																			}
 																			catch(ex) {
@@ -2196,7 +2196,7 @@ biblios.app = function() {
 																		catch(ex) {
 																			Ext.MessageBox.alert('Error', ex.message);
 																		}
-																		e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, pluginlocation, plugininit, enabled from SendTargets'});
+																		e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled from SendTargets'});
 																		setILSTargets();
 																	} // afteredit handler
 																},
@@ -2238,14 +2238,8 @@ biblios.app = function() {
                                                                         }
 																	},
 																	{
-																		header: 'Plugin Location',
-																		dataIndex: 'pluginlocation',
-																		editor: new Ext.form.TextField(),
-                                                                        hidden: true
-																	},
-																	{
-																		header: 'Plugin Init',
-																		dataIndex: 'plugininit',
+																		header: 'Plugin',
+																		dataIndex: 'plugin',
 																		editor: new Ext.form.TextField(),
                                                                         hidden: true
 																	},
@@ -2279,8 +2273,7 @@ biblios.app = function() {
 																				url: '',
 																				user: '',
 																				password: '',
-																				pluginlocation: 'plugins/koha.js',
-																				plugininit: 'new koha()',
+																				plugin: 'Save To Koha',
 																				enabled: 0
 																			});
 																			var sendtargetgrid = Ext.ComponentMgr.get('sendtargetsgrid');
@@ -2322,11 +2315,12 @@ biblios.app = function() {
 																				return false;
 																			}
 																			var record = sel[0];
-																			if( record.data.user == '' || record.data.password == '' || record.data.url == '' || record.data.pluginlocation == '' || record.data.plugininit == '' ) {
+																			if( record.data.user == '' || record.data.password == '' || record.data.url == '' || record.data.plugin== '' ) {
 																				Ext.MessageBox.alert('Error', 'Please enter user, password, url, plugin location and plugin init to test this connection.');
 																				return false;
 																			}
-																			var initcall = record.data.plugininit;
+                                                                            var plugin = DB.Plugins.select('name=?', [record.data..plugin]).getOne();
+                                                                            var initcall = plugin.initcall;
                                                                             try {
 																			var instance = eval( initcall );
                                                                                 try {
