@@ -1,10 +1,30 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-
+use Template;
 use Term::Clui;
+use Date::Format;
 
-my $sruauthurl = ask("What is the url for your sru authorities server?");
-my $kohaapiurl = ask("What is the url for your koha staff intranet page (used for retrieving and saving records from koha)?");
+my @lt = localtime();
+my $buildtime = asctime(@lt);
+# remove newlines
+$buildtime =~ s/\n//;
 
-my $sedstatus = `sed -e s'|/kohaauth/|/kohaauth/ $sruauthurl|' -e s'|/kohaapi\|/kohaapi/ $kohaapiurl|' < conf/biblios-httpd.conf.dist > conf/biblios-http.conf`;
+my $cgidir = ask("What is the path of your webserver's cgi-bin directory where Biblios will install its server side scripts?");
+
+my $htmldir = ask("What is the path of the directory where Biblios should places its index.html and associated javascript files?");
+
+my $tt = Template->new({
+  PRE_PROCESS => 'conf/build-standalone.conf',
+  RELATIVE => 1,
+}) || die "$Template::ERROR\n";
+
+print "Building Biblios for installation into $htmldir\n and cgi-bin path $cgidir\n";
+my $vars = {
+  buildtime => $buildtime,
+};
+$tt->process('./src/index.html', $vars, 'index.html')
+  || die $tt->error(), "\n";
+
+print "Installing Biblios\n";
+my $status = `make install HTMLDIR=$htmldir CGIDIR=$cgidir`;

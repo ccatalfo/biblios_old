@@ -2,7 +2,13 @@
 use strict;
 use warnings;
 use Template;
+use Date::Format;
 use Term::Clui;
+
+my @lt = localtime();
+my $buildtime = asctime(@lt);
+# remove newlines
+$buildtime =~ s/\n//;
 
 my $kohadir = ask("What is the base directory of your koha install?");
 my $langtheme = ask("What is the language/theme path for koha (e.g.) /prog/en", "/prog/en");
@@ -19,7 +25,8 @@ print "Building Biblios for installation into Koha\n";
 my $vars = {
   hostPort => $kohastaffport,
   kohaurl => $kohaurl,
-  embeddedUrl => $kohaurl . ":" . $kohastaffport . "/"
+  embeddedUrl => $kohaurl . ":" . $kohastaffport . "/",
+  buildtime => $buildtime,
 };
 $tt->process('./src/index.html', $vars, './build/index.html')
   || die $tt->error(), "\n";

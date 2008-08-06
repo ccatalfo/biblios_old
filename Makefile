@@ -8,10 +8,6 @@ VERSION=0.9
 PROGNAME=biblios-$(VERSION)
 
 all: build
-	@echo
-	@echo "Building Biblios index.html"
-	@echo
-	ttree -a -f .ttreerc-standalone
 
 debug: 
 	@echo
@@ -19,7 +15,7 @@ debug:
 	@echo
 	ttree -a -f .ttreerc-debug
 
-build: 
+build: $(SRCS)
 	@echo "Building Biblios source..."
 	@echo
 	$(CAT) ui/js/db.js ui/js/init.js ui/js/prefs.js ui/js/search.js ui/js/biblios.js ui/js/save.js ui/js/ui.js ui/js/edit.js > ui/js/biblios_all.js
@@ -36,9 +32,13 @@ build:
 	$(CSSMIN) ui/css/styles.css ui/css/styles-min.css
 	$(CSSMIN) ui/css/editor-styles.css ui/css/editor-styles-min.css
 	$(CSSMIN) ui/css/preview-styles.css ui/css/preview-styles-min.css
-	ttree -a -f .ttreerc-standalone
 
-dist: 
+install: build
+	cp build/index.html $(HTMLDIR)/index.html
+	cp -r lib ui tools templates conf plugins $(HTMLDIR)
+	cp cgi-bin/* $(CGIDIR)
+
+dist: build
 	@echo "Creating .zip and .tar.zip distributions"
 	@echo
 	mkdir -p $(PROGNAME)
@@ -63,12 +63,10 @@ clean:
 	@echo "Removing generated index.html"
 	@echo
 	-rm -f build/index.html
+	-rm -f index.html
 
 tags: 
 	$(CTAGS) ui/js/biblios.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js ui/js/init.js ui/js/prefs.js
-
-koha: src/index.html
-	ttree -a -f .ttreerc-koha
 
 koha-install: build/index.html
 	cp build/index.html $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/index.html
