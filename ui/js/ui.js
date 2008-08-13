@@ -312,6 +312,14 @@ function getRecordTemplates() {
 	return list;
 }
 
+function updateNewRecordMenu(menu) {
+    menu.removeAll();
+    var items = getNewRecordMenu();
+    for( var i = 0; i < items.length; i++) {
+        menu.add(items[i]);
+    }
+}
+
 function getNewRecordMenu() {
 	var list = new Array();
 	var templates = getRecordTemplates();

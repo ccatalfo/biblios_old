@@ -397,7 +397,12 @@ biblios.app = function() {
 																	text: 'New',
 																	menu: {
 																		id: 'newRecordMenu',
-																		items: getNewRecordMenu()
+																		items: getNewRecordMenu(),
+                                                                        listeners: {
+                                                                            beforeshow: function(menu, menuItem, e) {
+                                                                                updateNewRecordMenu(menu);
+                                                                            }
+                                                                        }
 																	}
 																},
 																{
@@ -990,7 +995,12 @@ biblios.app = function() {
 																	text: 'New',
 																	menu: {
 																		id: 'newRecordMenuSaveGrid',
-																		items: getNewRecordMenu()
+																		items: getNewRecordMenu(),
+                                                                        listeners: {
+                                                                            beforeshow: function(menu, menuItem, e) {
+                                                                                updateNewRecordMenu(menu);
+                                                                            }
+                                                                        }
 																	}
 																},
 																{
