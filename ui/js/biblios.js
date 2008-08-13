@@ -530,7 +530,7 @@ biblios.app = function() {
                                                                                 }
                                                                             }
                                                                         ]
-                                                                    }, // uploads menu
+                                                                    } // uploads menu
 																] // grid toolbar items
 														}) // search grid paging toolbar
 													}), // search results grid panel
@@ -1918,7 +1918,7 @@ biblios.app = function() {
                                                                         editor: new Ext.grid.GridEditor(new Ext.form.Checkbox())
                                                                     }
                                                                 ])
-                                                            }), // plugins editor grid panel
+                                                            }) // plugins editor grid panel
                                                         ] // pluginsgridpanel items
                                                     } // plugins tab items
 											},
