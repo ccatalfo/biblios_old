@@ -676,7 +676,7 @@ biblios.app = function() {
                                                                         template : r.template,
                                                                         marcformat : r.marcformat
                                                                     }).save();
-                                                                    showStatusMsg('Record duplicated');
+                                                                    Ext.MessageBox.alert('Record duplication', 'Record was duplicated to Drafts folder');
                                                                 }
                                                             },
                                                             {
@@ -841,7 +841,7 @@ biblios.app = function() {
                                                                         template : r.template,
                                                                         marcformat : r.marcformat
                                                                     }).save();
-                                                                    showStatusMsg('Record duplicated');
+                                                                    Ext.MessageBox.alert('Record duplication', 'Record was duplicated to Drafts folder');
                                                                 }
                                                             },
                                                             {
