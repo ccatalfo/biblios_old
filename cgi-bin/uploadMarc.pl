@@ -27,13 +27,12 @@ print $cgi->header( -type => 'text/html' );
 if( $format eq 'marc21' ) {
     my $batch = MARC::Batch->new('USMARC', $fh) or warn "can't open $filename in marc::batch";
     $records .= MARC::File::XML::header();
-    #warn MARC::File::XML::header();
     while(my $record = $batch->next() ){
       #warn "got record with title: " . $record->title();
       $records .= MARC::File::XML::record($record);
       #warn "xml: " . MARC::File::XML::record($record);
-    $records .= MARC::File::XML::footer();
     }
+    $records .= MARC::File::XML::footer();
 }
 elsif ( $format eq 'marcxml') {
     $records = slurp($fh) or die "can't open $filename for reading";
