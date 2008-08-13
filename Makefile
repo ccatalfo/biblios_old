@@ -55,6 +55,12 @@ install:
 	cp -r ui tools templates conf plugins $(HTMLDIR)
 	cp cgi-bin/* $(CGIDIR)
 
+install-debug: 
+	cp build/index.html $(HTMLDIR)/index.html
+	cp -r lib $(HTMLDIR)/
+	cp -r ui tools templates conf plugins $(HTMLDIR)/
+	cp -r cgi-bin/* $(CGIDIR)
+	
 dist: build
 	@echo "Creating .zip and .tar.zip distributions"
 	@echo
