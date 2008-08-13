@@ -446,7 +446,7 @@ function doDeleteFromSaveFile(sel) {
             db.execute("update Records set savefile = null where id = ?", [id]);
           }
           catch(ex) {
-            console.error('db error: ' + ex.message);
+            if(debug){console.error('db error: ' + ex.message);}
           }
       }
     showStatusMsg("Deleted "+ sel.length + " record(s).");

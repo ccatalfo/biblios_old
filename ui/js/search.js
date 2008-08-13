@@ -309,7 +309,7 @@ function getPazRecord(recId, offset, callback, callbackParamObject) {
 						var code = $('error', req.responseXML).attr('code');
 						var msg = $('error', req.responseXML).attr('msg');
 						var httpstatus = req.status;
-						if(bibliosdebug) {
+						if(debug) {
 							console.info('pazpar2 error on record retrieval.  HTTP resp: '+ httpstatus + '. Code: ' + code + '. Msg: ' + msg + '.');
 							console.info('Resetting pazpar2');
 						}
