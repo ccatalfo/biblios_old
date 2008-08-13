@@ -3,14 +3,16 @@ var Prefs = {};
 Prefs.remoteILS = {};
 
 function loadConfig(confPath) {
-Ext.Ajax.request({
-		url: confPath,
-		method: 'GET',
-		callback: function( options, success, response ) {
-            configDoc = (new DOMParser()).parseFromString( response.responseText, 'text/xml');
-            setupConfig( configDoc );
-        } // end config ajax callback	
-	});
+    $.ajax({
+        url: confPath,
+        dataType: 'xml',
+        error: function(req, textStatus, errorThrow) {
+            biblios.app.initerrors.push({title: 'Biblios Configuration Error', msg: 'Unable to load biblios.conf configuration file'});
+        },
+        success: function(data, textStatus) {
+            setupConfig(data);
+        }
+    });
 }
 
 function setupConfig( configDoc ) {
@@ -197,13 +199,13 @@ function setILSTargets() {
 					Prefs.remoteILS[ils.name].instance = eval( initcall );
 					Prefs.remoteILS[ils.name].instance.initHandler = function(sessionStatus) {
 						if( sessionStatus != 'ok' ) {
-							Ext.MessageBox.alert('Plugin error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
+							biblios.app.initerrors.push({title: 'Plugin error', msg: 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.'});
 						}
                     }
                     // setup handlers for plugin
                     Prefs.remoteILS[ils.name].instance.bibprofileHandler = function(xml, bibprofileStatus) {
                         if( bibprofileStatus != 'ok' ) {
-                            Ext.MessageBox.alert('Plugin error', 'Retrieval of bibliographic format information from Koha server at ' + this.url + ' failed.  Response: ' + bibprofileStatus + '.  Disabling this plugin.');
+                            biblios.app.initerrors.push({title: 'Plugin error', msg: 'Retrieval of bibliographic format information from Koha server at ' + this.url + ' failed.  Response: ' + bibprofileStatus + '.  Disabling this plugin.'});
                             // disable this send target for saving since we have no bib profile for it
                             var sendtarget = DB.SendTargets.select('url=?', [ this.url ] ).getOne();
                             delete Prefs.remoteILS[ sendtarget.name ];
@@ -236,15 +238,15 @@ function setILSTargets() {
                     } // try clause for xmlhttp req
                     catch( ex ) {
                         if( ex == 'Permission denied to call method XMLHttpRequest.open' ) {
-                            Ext.MessageBox.alert('Error', "Error trying to set remote ILS target.<br/>The ILS target's url must be set in Apache's configuration file so that Biblios can request a remote ILS koha instance.  It is currently set to "+ils.url+ " which prevents Biblios from sending and receiving data.  Please check with your system administrator to fix the problem.");
+                            biblios.app.initerrors.push({title: 'Error', msg: "Error trying to set remote ILS target.<br/>The ILS target's url must be set in Apache's configuration file so that Biblios can request a remote ILS koha instance.  It is currently set to "+ils.url+ " which prevents Biblios from sending and receiving data.  Please check with your system administrator to fix the problem."});
                         }
                         else {
-                            Ext.MessageBox.alert('Error', ex.msg);
+                            biblios.app.initerrors.push({title: 'Error', msg: ex.msg});
                         }
                     } // catch xmlhttp req exception
                 } // try insantiating plugin and setting up handlers
                 catch(ex) {
-                    Ext.MessageBox.alert('Error initializing remote ILS plugin ' + ils.name, ex.msg);
+                    biblios.app.initerrors.push({title: 'Error initializing remote ILS plugin ' + ils.name, msg: ex.msg});
                 }
 		}; // if this sendtarget is enabled
 	});

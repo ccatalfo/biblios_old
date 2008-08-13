@@ -86,6 +86,7 @@ biblios.app = function() {
 		viewport : this.viewport,
 		currQuery : this.currQuery,
 		savefiles : this.savefiles,
+        initerrors: new Array(),
         paz : {
             sessionID : '',
             sessionStatus : 'uninitialized'

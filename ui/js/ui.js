@@ -876,3 +876,15 @@ function completeInit() {
         }
     });
 }
+
+function displayInitErrors() {
+    // display alert with biblios.app.initerrors
+    if( biblios.app.initerrors.length > 0 ) {
+        var errors = '<table><tr><th>Error</th><th>Message</th></tr>';
+        for( var i = 0; i < biblios.app.initerrors.length; i++) {
+            errors += '<tr><td>' + biblios.app.initerrors[i].title + '</td><td>' + biblios.app.initerrors[i].msg + '</td></tr>';
+        }
+        errors += '</table>';
+        Ext.MessageBox.alert('Biblios loading errors', errors);
+    }
+}
