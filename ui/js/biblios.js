@@ -1698,7 +1698,7 @@ biblios.app = function() {
                                                                             Ext.MessageBox.alert('Reset Database', 'There was an error in reseting the database.  Please report this error to your system administrator: ' + ex);
                                                                         }
                                                                     });
-                                                                },
+                                                                }
                                                             },
                                                             {
                                                                 text: 'Reload Biblios configuration',
