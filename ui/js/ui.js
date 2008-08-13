@@ -747,6 +747,10 @@ function importDB(data) {
     try {
         DB.Records.load( data.records, true );
         DB.SearchTargets.load( data.searchtargets, true );
+        // reload pazpar2 targets
+        resetPazPar2();
+        // reload target folders in sidebar
+        Ext.getCmp('TargetsTreePanel').root.reload();
         DB.SendTargets.load( data.sendtargets, true );
         DB.Macros.load( data.macros, true );
         DB.Savefiles.load( data.savefiles, true );
