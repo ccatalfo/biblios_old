@@ -1,5 +1,16 @@
 // load in MarcRecord from plugins
 $.getScript(libPath + 'plugins/marcrecord.js');
+// load in marc21 config files (xml data)
+
+// load xsl docs for transforming marcxml
+var marcxsl = xslTransform.loadFile(showMarcXslPath);
+//var ffxsl = xslTransform.loadFile(fixedFieldXslPath);
+var varfxsl = xslTransform.loadFile(varFieldsXslPath);
+var marc21defs = xslTransform.loadFile(marc21defsPath);
+var marc21langdefs = xslTransform.loadFile(marc21langdefsPath);
+var marc21ctrydefs = xslTransform.loadFile(marc21ctrydefsPath);
+var marc21varfields = xslTransform.loadFile(marc21varfieldsPath);
+var marc21controlfields = xslTransform.loadFile(marc21controlfieldsPath);
 
 /*
     Function: getLeaderFromEditor
