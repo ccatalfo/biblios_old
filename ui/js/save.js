@@ -46,9 +46,12 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
                     template: null,
                     marcformat: null
                 }).save();
-
+                UI.editor[editorid].id = db.lastInsertRowId;
 				if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
                 biblios.app.fireEvent('saverecordcomplete', savefileid, record.xml);
+                // enable Revert, Duplicate buttons now that record is saved
+                Ext.getCmp(editorid + 'DuplicateBtn').enable();
+                Ext.getCmp(editorid + 'RevertBtn').enable();
 			}
 			else { // recid isn't empty so we've already saved this record, just update it
 				try {

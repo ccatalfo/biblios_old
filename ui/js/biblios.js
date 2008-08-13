@@ -655,6 +655,7 @@ biblios.app = function() {
                                                                 text: 'Duplicate',
                                                                 tooltip: {text: 'Duplicate this record to Drafts folder'},
                                                                 editorid: 'editorone',
+                                                                id: 'editoroneDuplicateBtn',
                                                                 handler: function(btn) {
                                                                     // get record from db for this record
                                                                     var r = DB.Records.select('Records.rowid=?', [ UI.editor[btn.editorid].id ]).getOne();
@@ -681,7 +682,7 @@ biblios.app = function() {
                                                             {
                                                                 cls: 'x-btn-text-icon',
                                                                 icon: libPath + 'ui/images/process-stop.png',
-                                                                id: 'editorOneRevertBtn',
+                                                                id: 'editoroneRevertBtn',
                                                                 editorid: 'editorone',
                                                                 text: 'Revert',
                                                                 tooltip: {text: 'Revert record to last saved state'},
@@ -819,6 +820,7 @@ biblios.app = function() {
                                                                 text: 'Duplicate',
                                                                 tooltip: {text: 'Duplicate this record to Drafts folder'},
                                                                 editorid: 'editortwo',
+                                                                id: 'editortwoDuplicateBtn',
                                                                 handler: function(btn) {
                                                                     // get record from db for this record
                                                                     var r = DB.Records.select('Records.rowid=?', [ UI.editor[btn.editorid].id ]).getOne();
@@ -845,7 +847,7 @@ biblios.app = function() {
                                                             {
                                                                 cls: 'x-btn-text-icon',
                                                                 icon: libPath + 'ui/images/process-stop.png',
-                                                                id: 'editorTwoRevertBtn',
+                                                                id: 'editortwoRevertBtn',
                                                                 editorid: 'editortwo',
                                                                 text: 'Revert',
                                                                 tooltip: {text: 'Revert record to last saved state'},

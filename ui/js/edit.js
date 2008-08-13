@@ -57,5 +57,10 @@ function openRecord(xml, editorid, syntax) {
 	if( Prefs.remoteILS[ UI.editor[editorid].location ] ) {
         UI.editor[editorid].record.processForLocation(UI.editor[editorid].location);
 	}
+    // disable Revert, Duplicate buttons if record is coming from search results 
+    if( UI.editor[editorid].id == '') {
+        Ext.getCmp(editorid + 'DuplicateBtn').disable();
+        Ext.getCmp(editorid + 'RevertBtn').disable();
+    }
 	clearStatusMsg();
 }
