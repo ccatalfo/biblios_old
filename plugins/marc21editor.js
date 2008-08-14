@@ -2,6 +2,14 @@
 $.getScript(libPath + 'plugins/marcrecord.js');
 // load in marc21 config files (xml data)
 
+var showMarcXslPath = libPath + "ui/xsl/marcxmlpreview.xsl";
+var fixedFieldXslPath = libPath + "ui/xsl/fixedfields_editor.xsl";
+var varFieldsXslPath = libPath + "ui/xsl/varfields_inputboxes.xsl";
+var marc21varfieldsPath = libPath + 'tools/marc21varfields.xml';
+var marc21defsPath = libPath + "ui/xsl/marc21.xml";
+var marc21langdefsPath = libPath + 'tools/marcdata/languages.xml';
+var marc21ctrydefsPath = libPath + 'tools/marcdata/countries.xml';
+var marc21controlfieldsPath = libPath + 'tools/marc21controlfields.xml';
 // load xsl docs for transforming marcxml
 var marcxsl = xslTransform.loadFile(showMarcXslPath);
 //var ffxsl = xslTransform.loadFile(fixedFieldXslPath);
