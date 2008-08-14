@@ -12,9 +12,9 @@
        ProxyPass /pazpar2/search.pz2 http://localhost:9004/search.pz2
 
 	   # change the following url to the url for your authorities SRU server
-       ProxyPass /kohaauth/ #url goes here
+       #ProxyPass /kohaauth/ #url goes here
 
 	   # change the following url to the url of your koha staff intranet homepage
-       ProxyPass /kohaapi/ #url goes here
+       #ProxyPass /kohaapi/ #url goes here
 
 </IfModule>
