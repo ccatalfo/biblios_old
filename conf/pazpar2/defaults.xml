@@ -23,7 +23,7 @@
   <!-- Result normalization settings -->
 
   <set name="pz:nativesyntax" value="iso2709"/>
-  <set name="pz:xslt" value="../etc/marc21.xsl"/>
+  <set name="pz:xslt" value="marc21.xsl"/>
 
   <!-- APDU log, use value="1" to enable -->
   <set name="pz:apdulog" value="0"/>
