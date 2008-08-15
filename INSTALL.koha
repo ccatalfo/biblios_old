@@ -26,16 +26,12 @@ OR
  
 	cd biblios-0.9
 
-3. Build Biblios javascript and css files for deployment.
-
-	make 
-
-4. Enable apache2's http_proxy module:
+3. Enable apache2's http_proxy module:
 
 	sudo /usr/sbin/a2enmod proxy_http
 	sudo /usr/sbin/apache2ctl force-reload
 
-5. Setup Apache2 to proxy requests from biblios to appropriate urls:
+4. Setup Apache2 to proxy requests from biblios to appropriate urls:
 Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site ajax requests.  Copy these lines into your koha intranet's virtual host section in your koha-http.conf file, adding urls appropriate to your configuration.
 
 <IfModule mod_proxy.c>
@@ -60,21 +56,26 @@ Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site aja
    
 </IfModule>
 
-6. Edit the conf/biblios-dist.conf file to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios-dist.conf file for the syntax.  Note that in order to retrieve records directly from Koha, as well as to enable extra functionality for Koha-retrieved records (e.g. disabling Koha-specific tags and validating certain required tags), your Koha installation's Search Target name must match your Koha installation's Send Target name.  
+Note that if you download pazpar2 via apt, it will probably create an apache2 conf file under /etc/apache2/conf.d/pazpar2 with a ProxyPass directive.  Make sure to either comment this out or change its path so it won't interfere with Biblios' use of the /pazpar2/search.pz2 path.
 
-7. Rename the biblios-dist.conf file to biblios.conf.
+5. Edit the conf/biblios-dist.conf file to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios-dist.conf file for the syntax.  Note that in order to retrieve records directly from Koha, as well as to enable extra functionality for Koha-retrieved records (e.g. disabling Koha-specific tags and validating certain required tags), your Koha installation's Search Target name must match your Koha installation's Send Target name.  
 
-8. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/
+6. Rename the biblios-dist.conf file to biblios.conf.
 
-9. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
+7. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/
+
+8. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
  
 pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
 
-10. Run the following command to build biblios' index.html file to work within your koha installation and install Biblios files.  This will prompt you to provide koha installation parameters and then copy the Biblios source files to appropriate paths in your koha installation.
+Note that if you download pazpar2 via apt, it will probably create an apache2 conf file under /etc/apache2/conf.d/pazpar2 with a ProxyPass directive.  Make sure to either comment this out or change its path so it won't interfere with Biblios' use of the /pazpar2/search.pz2 path.
+
+9. Run the following command to build biblios' index.html file to work within your koha installation and install Biblios files.  This will prompt you to provide koha installation parameters and then copy the Biblios source files to appropriate paths in your koha installation.
+
 
 integration/koha/install-koha.pl
 
-11. You should now be able to access biblios from within your koha staff intranet via the following url:
+10. You should now be able to access biblios from within your koha staff intranet via the following url:
 
 	http://<your koha intranet url>/cgi-bin/koha/cataloguing/biblios.pl
 	Example: http://eowyn.metavore.com:8001/cgi-bin/koha/cataloguing/biblios.pl

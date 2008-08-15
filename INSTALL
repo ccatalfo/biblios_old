@@ -14,28 +14,20 @@ Google Gears plugin for your web browser (Internet Explorer 6/7 or FireFox), ava
 
 or by downloading a prepackaged .tar.gz or .zip file:
 
-	wget http://biblios.net/sites/default/files/biblios-0.9.tar.gz
+	wget http://biblios.org/system/files//biblios-0.9.tar.gz
 	tar xzvf biblios.tar.gz
 
 OR
 
-	wget http://biblios.net/sites/default/files/biblios-0.9.zip
+	wget http://biblios.org/system/files//biblios-0.9.zip
 	unzip biblios.zip
 
-2.Go to your unpacked biblios tree
- 
-	cd biblios
-
-3. Generate packed and debug versions of biblios files
-
-	make 
-
-4. Enable apache2's proxy_http module:
+2. Enable apache2's proxy_http module:
 
 	sudo /usr/sbin/a2enmod proxy_http
 	sudo /usr/sbin/apache2ctl force-reload
 
-5. Add reverse proxies to your apache configuration file.  Substitute your own server urls where indicated in the configuration section which follows:
+3. Add reverse proxies to your apache configuration file.  Substitute your own server urls where indicated in the configuration section which follows:
 <IfModule mod_proxy.c>
        ProxyRequests Off
 
@@ -55,17 +47,19 @@ OR
    
 </IfModule>
 
-6. Edit the conf/biblios-dist.conf file to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios-dist.conf file for the syntax.  
+4. Edit the conf/biblios-dist.conf file to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios-dist.conf file for the syntax.  
 
-7. Rename the biblios-dist.conf file to biblios.conf.
+5. Rename the biblios-dist.conf file to biblios.conf.
 
-8. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/.
+6. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/.
 
-9. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
+7. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
  
 	pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
 
-10. Install biblios and cgi scripts into appropriate paths for your web server using the included install.pl script.  You will be prompted for the location of your webserver's htdocs directory and cgi-bin directory:
+Note that if you download pazpar2 via apt, it will probably create an apache2 conf file under /etc/apache2/conf.d/pazpar2 with a ProxyPass directive.  Make sure to either comment this out or change its path so it won't interfere with Biblios' use of the /pazpar2/search.pz2 path.
+
+8. Install biblios and cgi scripts into appropriate paths for your web server using the included install.pl script.  You will be prompted for the location of your webserver's htdocs directory and cgi-bin directory:
 
 ./install.pl
 
