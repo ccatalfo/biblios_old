@@ -5,11 +5,11 @@ Prefs.remoteILS = {};
 function loadConfig(confPath) {
     $.ajax({
         url: confPath,
-        dataType: 'xml',
         error: function(req, textStatus, errorThrow) {
-            biblios.app.initerrors.push({title: 'Biblios Configuration Error', msg: 'Unable to load biblios.conf configuration file'});
+            biblios.app.initerrors.push({title: 'Biblios Configuration Error', msg: 'Unable to load biblios.conf configuration file ' + textStatus});
         },
         success: function(data, textStatus) {
+            configDoc = data;
             setupConfig(data);
         }
     });

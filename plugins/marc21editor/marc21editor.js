@@ -1,15 +1,15 @@
 // load in MarcRecord from plugins
-$.getScript(libPath + 'plugins/marcrecord.js');
+$.getScript(libPath + 'plugins/marc21editor/marcrecord.js');
 // load in marc21 config files (xml data)
 
-var showMarcXslPath = libPath + "ui/xsl/marcxmlpreview.xsl";
-var fixedFieldXslPath = libPath + "ui/xsl/fixedfields_editor.xsl";
-var varFieldsXslPath = libPath + "ui/xsl/varfields_inputboxes.xsl";
-var marc21varfieldsPath = libPath + 'tools/marc21varfields.xml';
-var marc21defsPath = libPath + "ui/xsl/marc21.xml";
-var marc21langdefsPath = libPath + 'tools/marcdata/languages.xml';
-var marc21ctrydefsPath = libPath + 'tools/marcdata/countries.xml';
-var marc21controlfieldsPath = libPath + 'tools/marc21controlfields.xml';
+var showMarcXslPath = libPath + "plugins/marc21editor//marcxmlpreview.xsl";
+var fixedFieldXslPath = libPath + "plugins/marc21editor/fixedfields_editor.xsl";
+var varFieldsXslPath = libPath + "plugins/marc21editor/varfields_inputboxes.xsl";
+var marc21varfieldsPath = libPath + 'plugins/marc21editor/marc21varfields.xml';
+var marc21defsPath = libPath + "plugins/marc21editor/marc21.xml";
+var marc21langdefsPath = libPath + 'plugins/marc21editor/languages.xml';
+var marc21ctrydefsPath = libPath + 'plugins/marc21editor/countries.xml';
+var marc21controlfieldsPath = libPath + 'plugins/marc21editor/marc21controlfields.xml';
 // load xsl docs for transforming marcxml
 var marcxsl = xslTransform.loadFile(showMarcXslPath);
 //var ffxsl = xslTransform.loadFile(fixedFieldXslPath);
