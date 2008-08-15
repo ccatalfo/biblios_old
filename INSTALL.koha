@@ -51,9 +51,6 @@ Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site aja
        # proxy for sru authority server
        ProxyPass /kohaauth/ <your koha sru auth server e.g. http://eowyn.metavore.com:9999/>
 
-       #proxy for koha save/retrieve api
-       ProxyPass /kohaapi/ <your koha intranet instance e.g. http://eowyn.metavore.com:8001/>
-   
 </IfModule>
 
 Note that if you download pazpar2 via apt, it will probably create an apache2 conf file under /etc/apache2/conf.d/pazpar2 with a ProxyPass directive.  Make sure to either comment this out or change its path so it won't interfere with Biblios' use of the /pazpar2/search.pz2 path.
