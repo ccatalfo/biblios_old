@@ -4,7 +4,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
     }
 		var recoffset = offset || 0;
 		if( !savefileid ) {
-			if(debug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" );}
+			if(bibliosdebug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" );}
 				savefileid = 3; // Drafts
 		}
 		var savefilename = getSaveFileNameFromId(savefileid);
@@ -22,7 +22,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 			var recid = UI.editor[editorid].id;
 			// if we don't have a record id, add this record to the db first
 			if( recid == '' ) {
-				if(debug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
+				if(bibliosdebug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
 				var data = Ext.getCmp('searchgrid').getSelections()[0].data;
 				var id = Ext.getCmp('searchgrid').getSelections()[0].id;
                 var searchtargetname = data.location[0].name;
@@ -47,7 +47,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
                     marcformat: null
                 }).save();
                 UI.editor[editorid].id = db.lastInsertRowId;
-				if(debug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
+				if(bibliosdebug == 1 ) { console.info( "Saving record with id: " + recid + " and content: " + xml); }
                 biblios.app.fireEvent('saverecordcomplete', savefileid, record.xml);
                 // enable Revert, Duplicate buttons now that record is saved
                 Ext.getCmp(editorid + 'DuplicateBtn').enable();
@@ -67,7 +67,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 					record.status = 'edited';
 					record.date_modified = new Date();
 					record.save();
-					if(debug) { 
+					if(bibliosdebug) { 
 						console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
 				}
 					progress.updateProgress(1, 'Saving record to local database');
@@ -97,7 +97,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 						record.date_modified = new Date().toString();
 						record.Savefiles_id = savefileid;
 						record.save();
-						if(debug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
+						if(bibliosdebug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
 					}
 					catch(ex) {
 						Ext.MessageBox.alert("Database error", ex.message);
@@ -161,7 +161,7 @@ function doSaveRemote(loc, xmldoc, editorid) {
 	xmldoc = UI.editor[editorid].record.XML();
 	UI.editor[editorid].location = loc;
 	UI.editor.progress = Ext.MessageBox.progress('Saving record to remote server', '');
-	if(debug) { console.info('Saving open record to ' + loc); }
+	if(bibliosdebug) { console.info('Saving open record to ' + loc); }
 	// set UI.editor.location to point to this record so we get special entries etc.
 	Prefs.remoteILS[loc].instance.saveHandler = function(xmldoc, status) {
 		if( status == 'failed' ) {
@@ -204,7 +204,7 @@ function addRecordFromSearch(id, offset, editorid, data, savefileid, newxml) {
         biblios.app.fireEvent('remoterecordretrieve', data);
 		// data param is this record's xml as returned by pazpar2
 		// o is a json literal containing the record id, grid data and savefileid for this record
-		if(debug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + params.title);}
+		if(bibliosdebug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + params.title);}
 		try {
 			var target = DB.SearchTargets.select('name=?', [params.recData.location.name]).getOne();
 			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [params.savefileid]).getOne();

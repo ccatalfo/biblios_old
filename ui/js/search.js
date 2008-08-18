@@ -170,10 +170,10 @@ function changePazPar2TargetStatus(o) {
 }
 
 function resetPazPar2(options) {
-	if(debug){ console.info('resetting pazpar2'); }
+	if(bibliosdebug){ console.info('resetting pazpar2'); }
 	initializePazPar2(pazpar2url, {
 			initCallback: function() {
-				if(debug) { console.info('pazpar2 initCallback: resetting sessionID for searching and setting Z targets'); }
+				if(bibliosdebug) { console.info('pazpar2 initCallback: resetting sessionID for searching and setting Z targets'); }
 				if(this.initStatusOK == true) {
 					// reset search grid's url for new session id
 					Ext.getCmp('searchgrid').store.proxy.conn.url = biblios.app.paz.pz2String + "?command=show&session=" + biblios.app.paz.sessionID;
@@ -181,7 +181,7 @@ function resetPazPar2(options) {
 					Ext.getCmp('facetsTreePanel').loader.dataUrl = pazpar2url + '?session='+biblios.app.paz.sessionID+'&command=termlist&name=author,subject,date';
 					setPazPar2Targets(biblios.app.paz);
 					if(options) {
-						if(debug) { console.info("re-running search with pazpar2"); }
+						if(bibliosdebug) { console.info("re-running search with pazpar2"); }
 						biblios.app.paz.search( options.currQuery );
 						biblios.app.paz.show(options.currStart, options.currNum);
 						getPazRecord(options.currRecId, options.currRecOffset, 
@@ -277,13 +277,13 @@ function getRemoteRecord(id, loc, offset, callback, callbackparamobject) {
 
 function getPazRecord(recId, offset, callback, callbackParamObject) {
 	if( recordCache[recId] && offset == 0) {
-		if(debug) { console.info('retreiving record from cache');}
+		if(bibliosdebug) { console.info('retreiving record from cache');}
 		// call the callback with record from record cache
 		callback.call(this, recordCache[recId], callbackParamObject);
 	}
 	// if the record isn't in the cache, ask pazpar2 for it with the supplied callback for record retrieval
 	else {
-		if(debug) { console.info('retreiving record from pazpar2');}
+		if(bibliosdebug) { console.info('retreiving record from pazpar2');}
         try {
 		 	$.ajax({
 				url: pazpar2url,
@@ -309,7 +309,7 @@ function getPazRecord(recId, offset, callback, callbackParamObject) {
 						var code = $('error', req.responseXML).attr('code');
 						var msg = $('error', req.responseXML).attr('msg');
 						var httpstatus = req.status;
-						if(debug) {
+						if(bibliosdebug) {
 							console.info('pazpar2 error on record retrieval.  HTTP resp: '+ httpstatus + '. Code: ' + code + '. Msg: ' + msg + '.');
 							console.info('Resetting pazpar2');
 						}

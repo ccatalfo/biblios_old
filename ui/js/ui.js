@@ -289,7 +289,7 @@ function handleDownload(format, encoding, xml) {
         cgiDir + "downloadMarc.pl", 
         {format: format, encoding: encoding, xml: xml}, 
           function(data) {
-            //if(debug){ alert(data);}
+            //if(bibliosdebug){ alert(data);}
             //$("<iframe id='dl' src="+cgiDir+"'download.pl?filename="+data+"'/>").appendTo("#downloads");
             //$("#dl").remove()
 			var MIF = new Ext.ux.ManagedIFrame({ autoCreate:{src:cgiDir+'download.pl?filename='+data,height:350,width:'100%'}
@@ -390,12 +390,12 @@ function doCreateNewRecord() {
 			   srchResults = (new DOMParser()).parseFromString(xml, "text/xml");
 				var currRecord = srchResults.getElementsByTagName('record')[0];
 				var recordAsString = (new XMLSerializer().serializeToString(currRecord));
-				if(debug){ console.info('newrecord: got xml: ' + recordAsString);}
+				if(bibliosdebug){ console.info('newrecord: got xml: ' + recordAsString);}
 				try {
 				db.execute('insert into Records (id, xml, status, date_added, date_modified, server, savefile) values (null, ?, ?, date("now", "localtime"), date("now", "localtime"), ?, null)', [recordAsString, '', 'none']);
-				if(debug == 1 ) {
+				if(bibliosdebug == 1 ) {
 					var title = $('[@tag="245"]/subfield[@code="a"]', srchResults).text();
-					if(debug){console.info('inserting record with title: ' + title);}
+					if(bibliosdebug){console.info('inserting record with title: ' + title);}
 				}
 				} catch(ex) {
 				Ext.Msg.alert('Error', 'db error: ' + ex.message);
@@ -446,7 +446,7 @@ function doDeleteFromSaveFile(sel) {
             db.execute("update Records set savefile = null where id = ?", [id]);
           }
           catch(ex) {
-            if(debug){console.error('db error: ' + ex.message);}
+            if(bibliosdebug){console.error('db error: ' + ex.message);}
           }
       }
     showStatusMsg("Deleted "+ sel.length + " record(s).");
