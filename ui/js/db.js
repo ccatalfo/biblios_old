@@ -11,6 +11,7 @@ DB.SendTargets = {};
 DB.Plugins = {};
 DB.Editors = {};
 var db = {};
+var dbdebug=0;
 
 /*
    Function: init_gears
@@ -140,13 +141,13 @@ GearsORMShift.rules = [
                 var rs = db.execute('ALTER TABLE SearchTargets ADD COLUMN allowDelete integer');
             }
             catch(ex) {
-                if(bibliosdebug){console.info("Unable to add allowDelete fields to search table: " + ex);}
+                if(dbdebug){console.info("Unable to add allowDelete fields to search table: " + ex);}
             }
             try {
                 var rs = db.execute('ALTER TABLE SendTargets ADD COLUMN allowDelete integer');
             }
             catch(ex) {
-                if(bibliosdebug){console.info("Unable to add allowDelete fields to send table" + ex);}
+                if(dbdebug){console.info("Unable to add allowDelete fields to send table" + ex);}
             }
             return true;
         },
@@ -163,13 +164,13 @@ GearsORMShift.rules = [
                 var rs = db.execute('ALTER TABLE SearchTargets ADD COLUMN allowModify integer');
             }
             catch(ex) {
-                if(bibliosdebug){console.info("Unable to add allowModify fields to search table: " + ex);}
+                if(dbdebug){console.info("Unable to add allowModify fields to search table: " + ex);}
             }
             try {
                 var rs = db.execute('ALTER TABLE SendTargets ADD COLUMN allowModify integer');
             }
             catch(ex) {
-                if(bibliosdebug){console.info("Unable to add allowModify fields to send table" + ex);}
+                if(dbdebug){console.info("Unable to add allowModify fields to send table" + ex);}
             }
             return true;
         },
@@ -186,7 +187,7 @@ GearsORMShift.rules = [
                 var rs = db.execute('ALTER TABLE SendTargets ADD COLUMN embedded integer');
             }
             catch(ex) {
-                if(bibliosdebug){console.info('Unable to add embedded column to SendTargets table: ' + ex);}
+                if(dbdebug){console.info('Unable to add embedded column to SendTargets table: ' + ex);}
             }
             return true;
         },
@@ -237,7 +238,7 @@ GearsORMShift.rules = [
                 db.execute('alter table SendTargets add column plugin string');
             }
             catch(ex) {
-                if(bibliosdebug){console.info('Unable to add plugin column to sendtargets table');}
+                if(dbdebug){console.info('Unable to add plugin column to sendtargets table');}
             }
             return true;
         },
