@@ -139,7 +139,7 @@ biblios.app = function() {
 
         init: function() {
 			Ext.QuickTips.init();
-            this.viewport = new Ext.Panel({
+            this.viewport = new Ext.Viewport({
 				layout: 'border',
 				renderTo: 'biblios',
 				height: 600,
