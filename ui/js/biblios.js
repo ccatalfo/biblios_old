@@ -31,6 +31,7 @@ biblios.app = function() {
         Ext.get('loadingtext').update('Reading biblios configuration file');
     }
     loadConfig(confPath);
+	initPazPar2(pazpar2url);
     Ext.get('loadingtext').update('Loading plugins...');
     // private functions
 	displaySearchView : function displaySearchView() {
@@ -89,7 +90,21 @@ biblios.app = function() {
         initerrors: new Array(),
         paz : {
             sessionID : '',
-            sessionStatus : 'uninitialized'
+            query : '',
+            settings : { 
+
+            },
+            record : {
+
+            },
+            records : {
+
+
+            },
+            start : 0,
+            num: 15,
+            filter: '',
+            sort: 'relevance'
         },
         pazpar2debug : 0,
 		send: {
@@ -139,6 +154,14 @@ biblios.app = function() {
 
         init: function() {
 			Ext.QuickTips.init();
+			this.facetsTreeLoader = new Ext.ux.FacetsTreeLoader({dataUrl: pazcgiurl});
+            this.facetsTreeLoader.on('beforeload', function(treeloader, node) {
+                treeloader.baseParams.action = 'termlist';
+                treeloader.baseParams.name = 'author,publication-name,subject,date';
+            });
+            this.facetsTreeLoader.on('load', function(treeloader, node, response) {
+                
+            });
             this.viewport = new Ext.Viewport({
 				layout: 'border',
 				renderTo: 'biblios',
@@ -218,9 +241,10 @@ biblios.app = function() {
 														id: 'searchgrid',
 														store : (ds = new Ext.data.Store({
 															baseParams: {
-																disableCaching: false
+																disableCaching: false,
+																action: 'show'
 															},
-															proxy: new Ext.data.HttpProxy({url: pazpar2url+'?session='+biblios.app.paz.sessionID+'&command=show'}),
+															proxy: new Ext.data.HttpProxy({url: pazcgiurl}),
 															reader: 
 																new Ext.ux.NestedXmlReader({
 																	totalRecords: 'merged',
@@ -266,7 +290,31 @@ biblios.app = function() {
 																	} // locationinfo mapping
 																	]) // search grid record
 																),//search grid reader
-                                                                remoteSort: true
+                                                                remoteSort: true,
+																listeners: {
+                                                                    beforeload: function(store, options) {
+																		
+                                                                    },
+                                                                    load: function(store, records, options) {
+                                                                        var xml = store.reader.xmlData;
+                                                                        var activeclients = $('activeclients', xml).text();
+                                                                        if( activeclients == '0' ) {
+                                                                            clearStatusMsg();
+																			Ext.getCmp('searchgrid').getGridEl().unmask()
+																			Ext.getCmp('facetsTreePanel').root.reload();
+																			
+																			refreshTargetHits();
+                                                                        }
+                                                                        else {
+																			refreshTargetHits();
+                                                                            // reload after 2s
+                                                                            setTimeout( function() {
+                                                                                store.reload();
+                                                                            }, 2000);
+																			return false;
+                                                                        }
+                                                                    }
+                                                                } // searchgrid listeners
 														})), // data store search grid aka ds
 														sm: new Ext.grid.RowSelectionModel({
 															listeners: {
@@ -277,7 +325,7 @@ biblios.app = function() {
 																	Ext.getCmp('searchgridSaveBtn').enable();
 																	var id = record.id;
 																	if( record.data.count > 1 ) {
-																		//Ext.get('searchprevrecord').update("<p>This record is available at more than one location. <br/> Please click the plus icon to the left of this record to view locations from which the record can be previewed.<br/>  Click on a location's name to view that location's version of the record.</p>");
+																		Ext.get('searchprevrecord').update("<p>This record is available at more than one location. <br/> Please click the plus icon to the left of this record to view locations from which the record can be previewed.<br/>  Click on a location's name to view that location's version of the record.</p>");
 																	}
 																	else {
 																		// remove any classes from selected locations
@@ -1292,6 +1340,11 @@ biblios.app = function() {
 																processData: function(data) {  
 																	var json = '[';
 																	for( var i = 0; i< data.length; i++) {
+																		var pazid = data[i][2];
+                                                                        if( data[i][3] != '') {
+                                                                            pazid += ':' + data[i][3];
+                                                                        }
+                                                                        pazid += '/' + data[i][4];
 																		if(i>0) {
 																			json += ',';
 																		}
@@ -1303,7 +1356,7 @@ biblios.app = function() {
 																		json += '"id":"'+data[i][0]+'",';
 																		json += '"hostname":"'+data[i][2]+'",';
 																		json += '"port":"'+data[i][3]+'",';
-																		json += '"dbname":"'+data[i][4]+'"';
+																		json += '"pazid":"'+ pazid + '"';
 																		json += '}';
 																	}
 																	json += ']';
@@ -1318,7 +1371,7 @@ biblios.app = function() {
 														leaf: false,
 														lines: false,
 														applyLoader: false,
-														loader: new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+biblios.app.paz.sessionID+'&command=termlist&name=author,publication-name,subject,date'}),
+														loader: this.facetsTreeLoader,
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Facets'
 														}),
@@ -2106,7 +2159,7 @@ biblios.app = function() {
 																			// insert new target into db so we get it's id
 																			var rs;
 																			try {
-																				rs = db.execute('insert into SearchTargets (name, allowDelete, allowModify, description, hostname, dbname, port, userid, password) values ("", 1, 1,"","","","", "", "")');
+																				rs = db.execute('insert into SearchTargets (name, allowDelete, allowModify, description, hostname, dbname, port, userid, password, pazpar2settings) values ("", 1, 1,"","","","", "", "", "")');
 																				rs.close();
 																			}
 																			catch(ex) {
@@ -2482,30 +2535,7 @@ biblios.app = function() {
         if( Ext.get('loadingtext') ) {
             Ext.get('loadingtext').update('Setting up search session');
         }
-        initializePazPar2(pazpar2url, {
-            initCallback: function() {
-                if( this.initStatusOK == true ) {
-                    biblios.app.paz.sessionID = this.sessionID;
-                    // set searchgrid's data url for pazpar2 show
-                    if( Ext.getCmp('searchgrid') && Ext.getCmp('searchgrid').store ) {
-                        Ext.getCmp('searchgrid').store.proxy.conn.url = new Ext.data.HttpProxy({url: pazpar2url+'?session='+biblios.app.paz.sessionID+'&command=show'});
-                    }
-                    // set facets data url for pazpar termlist
-                    if( Ext.getCmp('facetsTreePanel') && Ext.getCmp('facetsTreePanel').loader ) {
-                        Ext.getCmp('facetsTreePanel').loader = new Ext.ux.FacetsTreeLoader({dataUrl: pazpar2url + '?session='+biblios.app.paz.sessionID+'&command=termlist&name=author,publication-name,subject,date'});
-                    }
-                    if( Ext.get('loadingtext') ){
-                        Ext.get('loadingtext').update('Setting up search targets');
-                    }
-                    setPazPar2Targets.defer(2000);
-                }
-                else {
-                    if( Ext.get('loadingtext') ) {
-                        Ext.get('loadingtext').update('Error initializing search session');
-                    }
-                }
-            }
-        });
+        
 
 		Ext.getCmp('tabpanel').activate(0);
         } // end of init method

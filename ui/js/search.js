@@ -1,11 +1,21 @@
 function doSearch(form) {
 	showStatusMsg('Searching...');
+	clearSearchLimits();
+    var query = $("#query").val();
+    var searchtype  = $("#searchtype").val();
+    var searchquery = 'kw';
+    if(searchtype == '') {
+        searchquery = query;
+    }
+    else {
+        searchquery = searchtype + '=' + query;
+    }
 	if( $('#searchloc').val() == 'All' ) {
-		doPazPar2Search();
+		doPazPar2Search(searchquery);
 		doLocalFolderSearch();
 	}
 	else if( $('#searchloc').val() == 'SearchTargets' ) {
-		doPazPar2Search();
+		doPazPar2Search(searchquery);
 		biblios.app.displaySearchView();
 	}
 	else if( $('#searchloc').val() == 'LocalFolders') {
@@ -47,175 +57,97 @@ function doLocalFolderSearch() {
 	Ext.getCmp('savegrid').store.load({db: db, selectSql: selectSql});
 }
 
-function initializePazPar2(pazpar2url, options) {
-if(!options) { options = {}; }
-biblios.app.paz = new pz2({ 
-					"errorhandler": pazPar2Error,
-					"oninit": options.initCallback || function() {},
-					"onping": options.pingCallback || function(){},
-					"onshow": function(data){ 
-						Ext.getCmp('searchgrid').store.reload();
-						Ext.getCmp('searchgrid').el.mask('Searching...');
-						if(data.activeclients == 0 ) {
-							// remove 'Searching' status msg
-							clearStatusMsg();
-							// unmask grid
-							Ext.getCmp('searchgrid').el.unmask();
-							if( openState == 'searchgrid' ) {
-								selectNone();
-							}
-                            // fire searchcomplete event
-                            biblios.app.fireEvent('searchcomplete');
-						}
-					},
-					"termlist": "xtargets,subject,author,date,publication-name",
-					"onterm": function(data) { 
-						if( data.activeclients == 0 ) {
-							Ext.getCmp('facetsTreePanel').show();
-							Ext.getCmp('facetsTreePanel').root.reload();
-						}
-					},
-                    "showtime": 1500,            //each timer (show, stat, term, bytarget) can be specified this way
-					"termtime": 1500,
-                    "pazpar2path": pazpar2url,
-					"onbytarget": function(data) {
-							var nodes = Ext.getCmp('TargetsTreePanel').root.childNodes;
-							for( var i = 0; i < data.length; i++) {
-								for( var j = 0; j < nodes.length; j++ ) {
-									var id = nodes[j].attributes.hostname;
-                                    if( nodes[j].attributes.port != '') {
-                                        id += ':' + nodes[j].attributes.port;
-                                    }
-                                    id += '/' + nodes[j].attributes.dbname;
-									if( id == data[i].id ) {
-										if( nodes[j] ) {
-											nodes[j].setText( nodes[j].attributes.servername + ' (' + data[i].hits + ')' );
-										}
-									}
-								}
-							}
-					},
-					"usesessions" : true,
-					"clear": 1
-				});
-	// HACK: set paz.termKeys manually or else pz2.js doesn't seem to accept date in termlist
-	biblios.app.paz.termKeys = 'xtargets,subject,author,date,publication-name';
+function initPazPar2(pazurl) {
+	$.get(pazcgiurl, {action:'init', pazpar2url:pazurl}, function(data) {
+        biblios.app.paz.sessionID = data;
+        loadConfig(confPath);
+    });
+}
+function loadPazpar2Target( pazpar2settings ) {
+    $.get(pazcgiurl, {action:'settings', settings: pazpar2settings});
+}
+
+function getPazTargetName(target) {
+	var name = target.hostname;
+	if( target.port != '' ){
+		name += ':' + target.port;
+	}
+	if( target.dbname != '' ){
+		name += '/' + target.dbname;
+	}
+	return name;
+}
+function getDefaultPazSettingsJSON( target ) {
+	var db = getPazTargetName( target );
+	var settings = {};
+	settings["pz:name["+ db +"]"] = target.name;
+	settings['pz:requestsyntax['+db+']'] = 'marc21';
+	
+	settings['pz:elements['+db+']'] = 'F';
+	
+	settings['pz:nativesyntax['+db+']'] = 'iso2709';
+	
+	settings['pz:xslt['+db+']'] = 'marc21.xsl';
+	
+	settings['pz:cclmap:term=['+db+']'] = 'u=1016 t=1,r s=al';
+	
+	settings['pz:cclmap:au['+db+']']  = 'u=1004 s=al';
+	
+	settings['pz:cclmap:ti['+db+']'] = 'u=4 s=al';
+	
+	settings['pz:cclmap:su['+db+']'] = 'u=21 s=al';
+	
+	settings['pz:cclmap:isbn['+db+']'] = 'u=7';
+	
+	settings['pz:cclmap:issn['+db+']'] = 'u=8';
+	
+	settings['pz:cclmap:date['+db+']'] = 'u=30 r=r';
+	
+	settings['pz:cclmap:pub['+db+']'] = 'u=1018 s=al';
+    
+    settings['pz:cclmap:group['+db+']'] = 'u=9015 s=al';
+    
+    settings['pz:cclmap:createdby['+db+']'] = 'u=9013 s=al';
+    
+    settings['pz:cclmap:editedby['+db+']'] = 'u=9012 s=al';
+   
+    settings['pz:cclmap:lasteditedby['+db+']'] = 'u=9014 s=al';
+    if( target.userid != '') {
+        settings['pz:authentication['+db+']'] = target.userid+'/'+target.password; 
+    }
+    if( biblios.app.pazpar2debug == 1 ) {
+        settings['pz:apdulog['+db+']'] = 1;
+    }
+	return settings;
 }
 
 function setPazPar2Targets() {
 	var targets = getTargets();
-	$.each( targets, function(i, n){
-		if( targets[i].enabled == 1 ) {
-			var db = n.hostname;
-            if( n.port != '') {
-                db += ":"+n.port
-            }
-            db += "/"+n.dbname;
-            var url = biblios.app.paz.pz2String +
-					'?' +
-					'command=settings'+
-					'&' +
-					'session='+biblios.app.paz.sessionID +
-					'&' +
-					'pz:name['+db+']='+ n.name +
-					'&' +
-					'pz:requestsyntax['+db+']='+'marc21'+
-					'&' +
-					'pz:elements['+db+']='+'F'+
-					'&' +
-					'pz:nativesyntax['+db+']='+'iso2709'+
-					'&' +
-					'pz:xslt['+db+']='+'marc21.xsl'+
-					'&' +
-					'pz:cclmap:term=['+db+']='+'u=1016 t=1,r s=al'+
-					'&' +
-					'pz:cclmap:au['+db+']='+'u=1004 s=al'+
-					'&' +
-					'pz:cclmap:ti['+db+']='+'u=4 s=al'+
-					'&' +
-					'pz:cclmap:su['+db+']='+'u=21 s=al'+
-					'&' +	
-					'pz:cclmap:isbn['+db+']='+'u=7'+
-					'&' +
-					'pz:cclmap:issn['+db+']='+'u=8'+
-					'&' +
-					'pz:cclmap:date['+db+']='+'u=30 r=r'+
-					'&' +
-					'pz:cclmap:pub['+db+']='+'u=1018 s=al';
-            if( n.userid != '') {
-                url += '&' + 'pz:authentication['+db+']='+n.userid+'/'+n.password; 
-            }
-            if( biblios.app.pazpar2debug == 1 ) {
-                url += '&' + 'pz:apdulog['+db+']=1';
-            }
-			$.get(url);
+	var settings = new Array();
+	for (var i = 0; i < targets.length; i++) {
+		if (targets[i].enabled == 1) {
+			// load this target into pazpar2 as search target
+			if (targets[i].pazpar2settings != '' && targets[i].pazpar2settings != null) {
+				var s = Ext.util.JSON.decode(targets[i].pazpar2settings);
+				settings.push(s);
+			}
+			else {
+				settings.push(getDefaultPazSettingsJSON(targets[i]))
+			}
 		}
-		else if( targets[i].enabled == 0) {
-			var db = n.hostname+":"+n.port+"/"+n.dbname;
-			$.get(  biblios.app.paz.pz2String +
-					'?' +
-					'command=settings'+
-					'&' +
-					'session='+biblios.app.paz.sessionID +
-					'&' +
-					'pz:name['+db+']='+ n.name +
-					'&' +
-					'pz:allow[' + db + ']=0'
-			);
-		}
-	});
+		else if (targets[i].enabled == 0) {
+				var db = getPazTargetName( targets[i] )
+				var s = {};
+				s['pz:name[' + db + ']'] = targets[i].name;
+				s['pz:allow[' + db + ']'] = 0;
+				settings.push(s);
+			}
+	}
+	$.get(pazcgiurl, {action:'settings', settings: Ext.util.JSON.encode(settings)});
 }
 
 function changePazPar2TargetStatus(o) {
 		$.get( biblios.app.paz.pz2String + "?command=settings&session="+biblios.app.paz.sessionID+"&pz:allow["+o.db+"]="+o.allow );
-}
-
-function resetPazPar2(options) {
-	if(bibliosdebug){ console.info('resetting pazpar2'); }
-	initializePazPar2(pazpar2url, {
-			initCallback: function() {
-				if(bibliosdebug) { console.info('pazpar2 initCallback: resetting sessionID for searching and setting Z targets'); }
-				if(this.initStatusOK == true) {
-					// reset search grid's url for new session id
-					Ext.getCmp('searchgrid').store.proxy.conn.url = biblios.app.paz.pz2String + "?command=show&session=" + biblios.app.paz.sessionID;
-					// reset facets tree loader for new session id
-					Ext.getCmp('facetsTreePanel').loader.dataUrl = pazpar2url + '?session='+biblios.app.paz.sessionID+'&command=termlist&name=author,subject,date';
-					setPazPar2Targets(biblios.app.paz);
-					if(options) {
-						if(bibliosdebug) { console.info("re-running search with pazpar2"); }
-						biblios.app.paz.search( options.currQuery );
-						biblios.app.paz.show(options.currStart, options.currNum);
-						getPazRecord(options.currRecId, options.currRecOffset, 
-							function(data) {
-								var xml = xslTransform.serialize(data); 
-								recordCache[o.id] = xml; 
-								Ext.getCmp('searchpreview').el.mask();
-								$('#searchprevrecord').getTransform(marcxsl, xml);
-								Ext.getCmp('searchpreview').el.unmask();
-								clearStatusMsg();
-							}, 
-						{});
-					}
-				}
-				else {
-					Ext.MessageBox.alert('Error', 'Unable to re-initialize search session.  Please contact your system administrator to check PazPar2 search.');
-				}
-			}
-	});
-}
-
-function pazPar2Error(data) {
-		if( data.code == 'HTTP' ) {
-			Ext.MessageBox.alert('Initialization error', 'Pazpar2 search server is unavailble. Please check your configuration and try again');
-		}
-		// if session does not exist  or record is missing
-		if( data.code == '1' || data.code == '7') {
-			var currQuery = biblios.app.paz.currQuery;
-			var currStart = biblios.app.paz.currentStart;
-			var currNum = biblios.app.paz.currNum;
-			var currRecId = biblios.app.paz.currRecId;
-			resetPazPar2({currQuery: currQuery, currStart: currStart, currNum: currNum, currRecId: currRecId});
-		}
 }
 
 function clearSearchLimits() {
@@ -224,43 +156,61 @@ function clearSearchLimits() {
 	}
 }
 
-function clearSearchFilters() {
-	for( l in UI.searchFilters ) { 
-		delete UI.searchFilters[l]; 
-	}
-	Ext.getCmp('TargetsTreePanel').root.cascade( function(n) { 
-		if(n.getUI().isChecked()){ 
-			n.getUI().toggleCheck();
-		} 
-		return true;
-	})
-}
-
-function doPazPar2Search() {
-	clearSearchLimits();
-	clearSearchFilters();
-	Ext.getCmp('facetsTreePanel').hide();
+function doPazPar2Search(query) {
 	Ext.getCmp('searchgridEditBtn').disable();
 	Ext.getCmp('searchgridExportBtn').disable();
-	var query = $("#query").val();
-	var searchtype  = $("#searchtype").val();
-	var searchquery = '';
-	if( searchtype == '') {
-		searchquery = '"' + query + '"';
-	}
-	else {
-		searchquery = searchtype + '="' + query + '"';
-	}
+	Ext.getCmp('searchgrid').getGridEl().mask();
 	// save this query
-	biblios.app.currQuery = searchquery;
-    if( biblios.app.fireEvent('beforesearch', getTargets(), searchquery) ) {
-        // reset search ds's proxy url to get rid of old sort params
-        Ext.getCmp('searchgrid').store.proxy.conn.url = biblios.app.paz.pz2String + '?command=show&session=' + biblios.app.paz.sessionID;
-        biblios.app.paz.search( searchquery );
-        biblios.app.displaySearchView();
+	biblios.app.currQuery = query;
+    if( biblios.app.fireEvent('beforesearch', getTargets(), query) ) {
+        runSearch(query);
     }
 }
 
+function runSearch(query) {
+	$.get(pazcgiurl, {action:'search', query:query}, function(data) {
+			Ext.getCmp('searchgrid').store.reload();
+            Ext.getCmp('facetsTreePanel').root.reload();
+		});
+}
+function getPazRecord(recId, offset, callback, callbackParamObject) {
+	if( recordCache[recId] && offset == 0) {
+		if(debug) { console.info('retreiving record from cache');}
+		// call the callback with record from record cache
+		callback.call(this, recordCache[recId], callbackParamObject);
+	}
+	// if the record isn't in the cache, ask pazpar2 for it with the supplied callback for record retrieval
+	else {
+		if(debug) { console.info('retreiving record from pazpar2');}
+        try {
+            var recordsjson = new Array({recid:recId, offset:offset});
+		 	$.ajax({
+				url: pazcgiurl,
+				data: {
+					records: Ext.util.JSON.encode(recordsjson),
+					action: 'recid',
+				},
+				type: 'GET',
+				dataType: 'xml',
+				recId: recId,
+				offset: offset,
+				callback: callback,
+				callbackParamObject: callbackParamObject,
+				success: function(data, textStatus) {
+					var id = this.recId;
+					var callback = this.callback;
+					var callbackParamObject = this.callbackParamObject;
+					callback.call(this, data, callbackParamObject);
+				},
+				error: function(req, textStatus, errorThrown) {
+				}
+			});
+		}
+        catch(ex) {
+         	Ext.MessageBox.alert('Pazpar2 error', ex.message);
+        }
+	}
+}
 function getRemoteRecord(id, loc, offset, callback, callbackparamobject) {
 		// if this location is in our Prefs.remoteILS hash, retrieve it specially
 		if( Prefs.remoteILS[loc] ) {
@@ -290,58 +240,6 @@ function getRemoteRecord(id, loc, offset, callback, callbackparamobject) {
 		}
 }
 
-function getPazRecord(recId, offset, callback, callbackParamObject) {
-	if( recordCache[recId] && offset == 0) {
-		if(bibliosdebug) { console.info('retreiving record from cache');}
-		// call the callback with record from record cache
-		callback.call(this, recordCache[recId], callbackParamObject);
-	}
-	// if the record isn't in the cache, ask pazpar2 for it with the supplied callback for record retrieval
-	else {
-		if(bibliosdebug) { console.info('retreiving record from pazpar2');}
-        try {
-		 	$.ajax({
-				url: pazpar2url,
-				data: {
-					session: biblios.app.paz.sessionID,
-					command: 'record',
-					id: recId,
-					offset: offset
-				},
-				type: 'GET',
-				dataType: 'xml',
-				recId: recId,
-				offset: offset,
-				callback: callback,
-				callbackParamObject: callbackParamObject,
-				success: function(data, textStatus) {
-					var id = this.recId;
-					var callback = this.callback;
-					var callbackParamObject = this.callbackParamObject;
-					callback.call(this, data, callbackParamObject);
-				},
-				error: function(req, textStatus, errorThrown) {
-						var code = $('error', req.responseXML).attr('code');
-						var msg = $('error', req.responseXML).attr('msg');
-						var httpstatus = req.status;
-						if(bibliosdebug) {
-							console.info('pazpar2 error on record retrieval.  HTTP resp: '+ httpstatus + '. Code: ' + code + '. Msg: ' + msg + '.');
-							console.info('Resetting pazpar2');
-						}
-						showStatusMsg('Search error: resetting');
-						resetPazPar2({
-							currQuery: biblios.app.currQuery,
-							currRecId: this.recId,
-							currRecOffset: this.offset
-						});
-				}
-			});
-		}
-        catch(ex) {
-         	ext.MessageBox.alert('Pazpar2 error', ex.message);
-        }
-	}
-}
 
 function term2searchterm(term) {
 	switch(term) {
@@ -380,12 +278,11 @@ function filterSearch() {
 
 function limitSearch() {
 	// start w/ original query and build from there
-	var query = biblios.app.currQuery;
+	var query = $("#query").val();
 	for( name in UI.searchLimits ) {
 		query += ' and ' + term2searchterm(UI.searchLimits[name]) + '="' + name + '"';
 	}
-	biblios.app.paz.search(query);
-	biblios.app.paz.show();
+    doPazPar2Search(query);
 	biblios.app.displaySearchView();
 }
 
@@ -393,4 +290,22 @@ function handleLocationClick(recid, offset) {
 	Ext.select('.locationitem').removeClass('location-click');
 	Ext.get('loc'+offset+recid).addClass('location-click');
 	previewRemoteRecord(recid, offset);
+}
+
+function refreshTargetHits(){
+	$.getJSON(pazcgiurl, {
+		action: 'bytarget'
+	}, function(data){
+		var nodes = Ext.getCmp('TargetsTreePanel').root.childNodes;
+		for (var i = 0; i < data.targets.length; i++) {
+			for (var j = 0; j < nodes.length; j++) {
+				var pazid = nodes[j].attributes.pazid;
+				if (pazid == data.targets[i].id) {
+					if (nodes[j]) {
+						nodes[j].setText(nodes[j].attributes.servername + ' (' + data.targets[i].records + ')');
+					}
+				}
+			}
+		}
+	});
 }

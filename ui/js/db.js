@@ -263,7 +263,26 @@ GearsORMShift.rules = [
             DB.Prefs.select('name=?', ['ShowFieldBordersInEditor']).getOne().remove();
             return true;
         }
-    }// rule 10
+    },// rule 10
+    {
+		version: 11,
+		comment: 'Add pazpar2 settings col to SearchTargets',
+		up: function() {
+			try {
+				db.execute('alter table SearchTargets add column pazpar2settings string');
+			}
+			catch(ex) {
+				if (debug) {
+					console.info("Unable to add pazpar2settings col to SearchTargets table");
+				}
+			}
+			return true;
+		},
+		down: function() {
+			// no remove col in sqlite
+			return true;
+		}
+	}
 ];
 
 function createTestTargets() {
@@ -340,7 +359,8 @@ function init_gears() {
 					type: new GearsORM.Fields.String(),
 					pluginlocation: new GearsORM.Fields.String(),
                     allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
-                    allowModify: new GearsORM.Fields.Integer({defaultValue:1})
+                    allowModify: new GearsORM.Fields.Integer({defaultValue:1}),
+					pazpar2settings: new GearsORM.Fields.String()
 				}
 			});
 			DB.Prefs = new GearsORM.Model({

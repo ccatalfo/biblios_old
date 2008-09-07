@@ -140,7 +140,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 					var records = biblios.app.selectedRecords.records;
 					biblios.app.selectedRecords.numToGet = records.length;
 					for( var i = 0; i < records.length; i++) {
-						var id = records[i].id;
+						var id = records[i].recid;
 						var data = records[i].data;
 						var title = records[i].title;
 						var offset =records[i].offset;
@@ -351,7 +351,7 @@ function getSelectedSearchGridRecords(callback) {
 			else {
 				loc = Ext.getCmp('searchgrid').store.getById(id).data.location[0].name;
 			}
-			biblios.app.selectedRecords.records.push( { id: id, title: title, data: data, loc: loc, offset: offset });
+			biblios.app.selectedRecords.records.push( { recid: id, title: title, data: data, loc: loc, offset: offset });
 		}
 		biblios.app.selectedRecords.retrieved = true;
 		callback.call(this);
@@ -405,7 +405,7 @@ function sendSelectedFromSearchGrid(locsendto) {
         biblios.app.send.numToSend = biblios.app.selectedRecords.records.length;
         var records = biblios.app.selectedRecords.records;
         for(var i= 0; i < records.length; i++) {
-            var id= records[i].id;
+            var id= records[i].recid;
             var loc= records[i].loc;
             var offset= records[i].offset;
             var title= records[i].title;

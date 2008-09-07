@@ -20,6 +20,7 @@ function loadConfig(confPath) {
 function setupConfig( configDoc ) {
 		  marcFlavor = $("//marcflavor", configDoc).text();
 		  encoding = $("//encoding", configDoc).text();
+		  pazpar2url = $("//pazpar2url", configDoc).text();
 		  $("searching//server", configDoc).each( function() { 
 			var hostname = $(this).children('hostname').text();
             var id = $(this).children('id').text();
@@ -32,6 +33,7 @@ function setupConfig( configDoc ) {
 			var description= $(this).children('description').text();
 			var allowDelete= $(this).children('allowDelete').text();
 			var allowModify= $(this).children('allowModify').text();
+			var pazpar2settings= $(this).children('pazpar2settings').text();
 			// check db if already exists based on hostname, port and db fields
 			if( t = DB.SearchTargets.select('SearchTargets.hostname = ? and SearchTargets.port = ? and SearchTargets.dbname = ?', [hostname, port, dbname]).getOne() ) {
 				t.hostname = hostname;
@@ -45,6 +47,7 @@ function setupConfig( configDoc ) {
 				t.syntax = 'marcxml';
                 t.allowDelete = allowDelete;
                 t.allowModify = allowModify;
+				t.pazpar2settings = pazpar2settings;
 				t.save();
 			}
 			else {
@@ -59,10 +62,12 @@ function setupConfig( configDoc ) {
 					description: description,
                     allowDelete: allowDelete,
                     allowModify: allowModify,
+					pazpar2settings: pazpar2settings,
 					syntax: 'marcxml'
 				}).save();
 			}
 		  } );
+		  setPazPar2Targets();
           $("plugins//plugin", configDoc).each( function() {
             var name = $(this).children('name').text();
             var file = $(this).children('file').text();

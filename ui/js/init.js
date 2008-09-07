@@ -10,7 +10,8 @@ var z3950serversSave = '';
 var cclfile = '';
 var plugins = '';
 var templates = '';
-var pazpar2url = 'http://'+ location.hostname + ':' + hostPort + '/pazpar2/search.pz2';
+var pazcgiurl = cgiDir +'paz.pl';
+var pazpar2url = 'http://localhost:9004';
 var kohaauthurl = 'http://'+ location.hostname+ ':' + hostPort + '/kohaauth/authorities';
 
 
@@ -32,7 +33,8 @@ var SearchTarget = Ext.data.Record.create([
 	{name: 'userid', type: 'string'},
 	{name: 'password', type: 'string'},
 	{name: 'syntax', type: 'string'},
-	{name: 'enabled', type: 'bool'}
+	{name: 'enabled', type: 'bool'},
+    {name: 'pazpar2settings', type: 'string'}
 ]);
 var SendTarget = Ext.data.Record.create([
 	{name: 'rowid'},

@@ -128,6 +128,7 @@ UI.messages = {
 };
 
 function previewRemoteRecord(id, offset) {
+	Ext.get('searchpreview').mask();
 	getPazRecord(
 		id,
 		offset,
@@ -143,9 +144,9 @@ function previewRemoteRecord(id, offset) {
                 if( offset == 0 ) {
                     recordCache[o.id] = xml; 
                 }
-				Ext.getCmp('searchpreview').el.mask();
+				
 				$('#searchprevrecord').getTransform(marcxsl, xml);
-				Ext.getCmp('searchpreview').el.unmask();
+				Ext.get('searchpreview').unmask();
 				clearStatusMsg();
 			}
 		},
@@ -228,7 +229,7 @@ function doDownloadRecords(format, editorid) {
 				biblios.app.download.recordsString = '';
 				biblios.app.download.numToExport = biblios.app.selectedRecords.records.length;
 				for( var i = 0; i < records.length; i++) {
-					var id = records[i].id
+					var id = records[i].recid;
 					getPazRecord(id, 0, function(data, o) {
 						xml = xslTransform.serialize(data);
                         if( biblios.app.fireEvent('beforerecordexport', xml)) {
