@@ -16,7 +16,7 @@ biblios.app = function() {
         Ext.get('loadingtext').update('Loading database');
     }
 	init_gears();
-	;
+	
 
 	var viewport; 
 	var viewState = '';
@@ -261,7 +261,25 @@ biblios.app = function() {
 																	{name: 'date', mapping: 'md-date'},
 																	{name: 'medium', mapping:'md-medium'},
 																	{name: 'pzrecid', mapping:'md-pzrecid'},
-																	{name: 'fullrecord', mapping:'md-fullrecord'},
+																	{name: 'fullrecord', type:'string', mapping: function(rec){
+																		var xmlNode = Ext.DomQuery.select('md-fullrecord', rec)[0];
+																		var xmlString = '';
+																		if (typeof(xmlNode.textContent) != "undefined") {
+																			xmlString = xmlNode.textContent;
+																			if(bibliosdebug){
+																				'Getting textContent of fullrecord node';
+																			}
+																		}
+																		else {
+																			xmlString = xmlNode.firstChild.nodeValue;	
+																			if(bibliosdebug) {
+																				'Getting nodeValue of fullrecord node';
+																			}
+																		}
+																		
+																		return Ext.util.Format.htmlDecode(xmlString);
+																		//return xslTransform.loadString(xmlstring);
+																	}},
 																	{name: 'location', mapping: function(rec) {
 																		var locations = Ext.DomQuery.select('location', rec);
 																		var result = new Array();
@@ -324,10 +342,12 @@ biblios.app = function() {
 																			
 																			showStatusMsg('Previewing...');
 																			// get the marcxml for this record and send to preview()
-																			var xmlstring = record.data.fullrecord;
+																			var xmlstring = record.data.fullrecord;		
+																			if(bibliosdebug) {
+																				console.info(xmlstring);
+																			}																
 																			var xml = xslTransform.loadString(xmlstring);
-																			previewRemoteRecord(xml);
-																		
+																			previewRemoteRecord(xml);																			
 																	} // search grid row select handler
 																} // selection listeners
 															})), // search grid selecion model		

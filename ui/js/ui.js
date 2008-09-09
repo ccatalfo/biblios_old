@@ -548,9 +548,7 @@ function selectAll() {
 
 function selectNone() {
 	if(openState == 'searchgrid') {
-		$('#searchgrid :checkbox').attr('checked', '');
-		$('#searchgridtbarSelectAll').hide();
-		$('#searchgridallSelectedStatus').hide();
+		Ext.getCmp('searchgrid').getSelectionModel().clearSelections();
 		Ext.getCmp('searchgridExportBtn').disable();
 		Ext.getCmp('searchgridSendBtn').disable();
 		Ext.getCmp('searchgridSaveBtn').disable();
