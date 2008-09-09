@@ -239,7 +239,9 @@ biblios.app = function() {
 														height: 300,
 														//autoWidth: true,
 														id: 'searchgrid',
-														store : (ds = new Ext.data.Store({
+														store : (ds = new Ext.data.GroupingStore({
+															groupField:'pzrecid',
+															sortInfo:{field:'title', direction:'ASC'},
 															baseParams: {
 																disableCaching: false,
 																action: 'show'
@@ -258,6 +260,8 @@ biblios.app = function() {
 																	{name: 'publisher', mapping:'md-publication-name'},
 																	{name: 'date', mapping: 'md-date'},
 																	{name: 'medium', mapping:'md-medium'},
+																	{name: 'pzrecid', mapping:'md-pzrecid'},
+																	{name: 'fullrecord', mapping:'md-fullrecord'},
 																	{name: 'location', mapping: function(rec) {
 																		var locations = Ext.DomQuery.select('location', rec);
 																		var result = new Array();
@@ -269,25 +273,7 @@ biblios.app = function() {
 																		return result;
 																		} // location mapping function
 																	}, // end location mapping
-																	{name: 'count', mapping: 'count'},
-																	// extra data column to hold display of multiple locs
-																	{name: 'locationinfo', mapping: 
-																		function(rec) {
-																			var locations = Ext.DomQuery.select('location', rec);
-																			var html = '<ul class="locationlist">';
-																			for( var i = 0; i < locations.length; i++) {
-																				var name = Ext.DomQuery.select('@name', locations[i])[0].firstChild.nodeValue;
-																				var id = Ext.DomQuery.select('@id', locations[i])[0].firstChild.nodeValue;
-																				var recid = Ext.DomQuery.select('recid', rec)[0].textContent;
-																				html += '<li id="loc'+i+recid+'" class="locationitem" onclick="handleLocationClick(\''+recid+'\','+i+')">';
-																				html += '<input type="checkbox" class="searchgridcheckbox" id="check'+i+recid+'">';
-																				html += name+'</li>';
-																			}
-																			html += '</ul>';
-																			html += '<br/>';
-																			return html;
-																		} // locationinfo mapping function
-																	} // locationinfo mapping
+																	{name: 'count', mapping: 'count'}																
 																	]) // search grid record
 																),//search grid reader
                                                                 remoteSort: true,
@@ -302,7 +288,7 @@ biblios.app = function() {
                                                                             clearStatusMsg();
 																			Ext.getCmp('searchgrid').getGridEl().unmask()
 																			Ext.getCmp('facetsTreePanel').root.reload();
-																			
+																			Ext.getCmp('searchgridSelectAllTbar').show();
 																			refreshTargetHits();
                                                                         }
                                                                         else {
@@ -316,58 +302,72 @@ biblios.app = function() {
                                                                     }
                                                                 } // searchgrid listeners
 														})), // data store search grid aka ds
-														sm: new Ext.grid.RowSelectionModel({
-															listeners: {
-																rowselect: function(selmodel, rowindex, record) {
-																	Ext.getCmp('searchgridExportBtn').enable();
-																	Ext.getCmp('searchgridEditBtn').enable();
-																	Ext.getCmp('searchgridSendBtn').enable();
-																	Ext.getCmp('searchgridSaveBtn').enable();
-																	var id = record.id;
-																	if( record.data.count > 1 ) {
-																		Ext.get('searchprevrecord').update("<p>This record is available at more than one location. <br/> Please click the plus icon to the left of this record to view locations from which the record can be previewed.<br/>  Click on a location's name to view that location's version of the record.</p>");
-																	}
-																	else {
-																		// remove any classes from selected locations
-																		Ext.select('.locationitem').removeClass('location-click');
-																		showStatusMsg('Previewing...');
-																		// get the marcxml for this record and send to preview()
-																		previewRemoteRecord(id, 0);
-																	}
-																} // search grid row select handler
-															} // selection listeners
-														}), // search grid selecion model
-														cm : new Ext.grid.ColumnModel([
-															(expander = new Ext.grid.RowExpander({
-																remoteDataMethod: function(record, index) {
-																	$('#remData'+index).html(record.data.locationinfo);
-																	// set up drag source, click/focus css and preview for each of these items
-																	var locations = record.data.location;
-																	var recid = record.id;
-																	for( var i = 0; i < locations.length; i++) {
-																		Ext.get('loc'+i+recid).dd = new Ext.dd.DragSource('loc'+i+recid, {ddGroup: 'RecordDrop'});
-																		Ext.get('loc'+i+recid).addClassOnOver('location-over');
-																	}
-																}
-															})),
+														
+														view: new Ext.grid.GroupingView({
+						            						forceFit:true,
+															groupTextTpl:'{[values.rs[0].data.title]}',
+															header: 'title:',
+															groupRenderer: function(v, unused, r, rowIndex, colIndex, ds) {
+																return 'title:' + r.title;
+															}
+						        						   
+						      						  }),
+														sm: (sm = new Ext.grid.CheckboxSelectionModel({
+																singleSelect: false,
+																listeners: {
+																	rowselect: function(selmodel, rowindex, record) {
+																		Ext.getCmp('searchgridExportBtn').enable();
+																		Ext.getCmp('searchgridEditBtn').enable();
+																		Ext.getCmp('searchgridSendBtn').enable();
+																		Ext.getCmp('searchgridSaveBtn').enable();
+																		
+																			
+																			showStatusMsg('Previewing...');
+																			// get the marcxml for this record and send to preview()
+																			var xmlstring = record.data.fullrecord;
+																			var xml = xslTransform.loadString(xmlstring);
+																			previewRemoteRecord(xml);
+																		
+																	} // search grid row select handler
+																} // selection listeners
+															})), // search grid selecion model		
+														cm : new Ext.grid.ColumnModel([			
+															sm,																					
 															{header: "Medium", width: 50, dataIndex: 'medium'},
 															{header: "Title", sortable: true, width: 280, dataIndex: 'title'},
 															{header: "Author", sortable: true, width: 170, dataIndex: 'author'},
 															{header: "Publisher", sortable: true, width: 120, dataIndex: 'publisher'},
 															{header: "Date", sortable: true, width: 40, dataIndex: 'date'},
-															{header: "Location", sortable: true, width: 110, dataIndex: 'location',
-																renderer: function(data, meta, record, row, col, store) {
-																			if( record.data.location.length == 1 ) {
-																				return record.data.location[0].name;
-																			}
-																			else {
-																				return 'Found in ' + record.data.location.length + ' targets';
-																			}
+															{header: "Location", sortable: true, width: 110, dataIndex: 'location'
+																,renderer: function(data, meta, record, row, col, store) {
+																	return record.data.location[0].name;																		
 																} // renderer function for Location
-															} // Location column
+															}, // Location column
+															{header: "PazPar2 id", id: 'pazrecid', width: 30, hidden:true, dataIndex:'pzrecid'},
+															{header: 'Full record', id:'fullrecord', hidden:true, dataIndex:'fullrecord'}
 														]), // column model for search grid
-														plugins: expander, // search grid plugins
+														//plugins: expander, // search grid plugins
 														listeners: {
+															render: function() {
+																var selectAllTbar = new Ext.Toolbar({
+																	id: 'searchgridSelectAllTbar',
+																	hidden: true,
+																	renderTo: this.tbar,
+																	items: [
+																		{
+																			id: 'searchgridselectall',
+																			xtype: 'tbtext',
+																			text: 'Select <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().selectAll();Ext.getCmp(\'searchgridselectallfrompz2\').show();">All</a>, <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().clearSelections(); Ext.getCmp(\'searchgridselectallfrompz2\').hide();">None</a>'
+																		},
+																		{
+																			id: 'searchgridselectallfrompz2',
+																			xtype:'tbtext',
+																			text: 'Select <a href=\'#\' onclick=\'selectAll();\'>All search results</a>'
+																		}
+																	]
+																});
+																this.syncSize();
+															},
                                                             headerclick: function(grid, colIndex, event) {
                                                                 var colName = Ext.getCmp('searchgrid').getColumnModel().getColumnById(colIndex).dataIndex;
                                                                 var reqName = '';
@@ -427,14 +427,14 @@ biblios.app = function() {
 															emptyMsg: 'No records to display',
 															listeners: {
 																beforerender: function(tbar) {
-																	var msg = 'Select: <span class="gridselector" onclick="selectAll()">All</span>,<span class="gridselector" onclick="selectNone()">None</span>';
+																	/*var msg = 'Select: <span class="gridselector" onclick="selectAll()">All</span>,<span class="gridselector" onclick="selectNone()">None</span>';
 																	tbar.autoCreate.html = '<table cellspacing="0"><tr></tr><tr id="';
 																	tbar.autoCreate.html += 'searchgridtbarinfo';
 																	tbar.autoCreate.html += '">';
 																	tbar.autoCreate.html += '<td colspan="18">' + msg + '</td>';
 																	tbar.autoCreate.html += '</tr>';
 																	tbar.autoCreate.html += '<tr id="searchgridtbarSelectAll"><td colspan="18" id="selectAllInfo" class="gridselector" onclick="selectAllInObject()">Select all <span class="searchgridtotalcount">' + tbar.store.getTotalCount() + '</span> in search results.  <span id="searchgridallSelectedStatus">All <span class="searchgridtotalcount">'+ tbar.store.getTotalCount() + '</span> are selected.  <span class="gridselector" onclick="selectNone()">Clear Selection</span></span></td></tr>';
-																	tbar.autoCreate.html += '</table>';
+																	tbar.autoCreate.html += '</table>';*/
 
 																}
 															},
@@ -565,6 +565,7 @@ biblios.app = function() {
                                                                             }
                                                                         ]
                                                                     } // uploads menu
+                                                                    
 																] // grid toolbar items
 														}) // search grid paging toolbar
 													}), // search results grid panel
@@ -1013,14 +1014,14 @@ biblios.app = function() {
 																emptyMsg: 'No records to display',
 																listeners: {
 																	beforerender: function(tbar) {
-																		var msg = 'Select: <span class="gridselector" onclick="selectAll()">All</span>,<span class="gridselector" onclick="selectNone()">None</span>';
+																		/*var msg = 'Select: <span class="gridselector" onclick="selectAll()">All</span>,<span class="gridselector" onclick="selectNone()">None</span>';
 																		tbar.autoCreate.html = '<table cellspacing="0"><tr></tr><tr id="';
 																		tbar.autoCreate.html += 'savegridtbarinfo';
 																		tbar.autoCreate.html += '">';
 																		tbar.autoCreate.html += '<td colspan="18">' + msg + '</td>';
 																		tbar.autoCreate.html += '</tr>';
 																		tbar.autoCreate.html += '<tr id="savegridtbarSelectAll"><td colspan="18" class="gridselector" onclick="selectAllInObject()">Select all <span class="savegridtotalcount">' + tbar.store.getCount() + '</span> in this folder.<span id="savegridallSelectedStatus">All <span class="savegridtotalcount">'+ tbar.store.getCount() + '</span> are selected.  <span class="gridselector" onclick="selectNone()">Clear Selection</span></span></td></tr>';
-																		tbar.autoCreate.html += '</table>';
+																		tbar.autoCreate.html += '</table>';*/
 																	}
 																},
 																items: [
@@ -2060,7 +2061,7 @@ biblios.app = function() {
 																				}
 																			}
 																			Ext.getCmp('TargetsTreePanel').root.reload();
-																			resetPazPar2();
+																			
 																		} // search targets store update
 																	} // search targets grid store listeners
 																}),
@@ -2085,7 +2086,7 @@ biblios.app = function() {
 																		catch(ex) {
 																			Ext.MessageBox.alert('Error', ex.message);
 																		}
-																		resetPazPar2();
+																		
 
 																	} // after edit event on search target grid
 																}, // search target grid listeners
@@ -2205,6 +2206,12 @@ biblios.app = function() {
 																			} // process search targets records to remove
 																			//updateSearchTargets();
 																			Ext.getCmp('searchtargetsgrid').store.reload();
+																		}
+																	},
+																	{
+																		text: 'Save',
+																		handler: function() {
+																			setPazPar2Targets();
 																		}
 																	}
 																],

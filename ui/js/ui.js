@@ -127,36 +127,11 @@ UI.messages = {
 	}
 };
 
-function previewRemoteRecord(id, offset) {
+function previewRemoteRecord(xml) {
 	Ext.get('searchpreview').mask();
-	getPazRecord(
-		id,
-		offset,
-		// callback function for when pazpar2 returns record data
-		function(data, o) {  
-			if( $('error', data).length > 0 ) {
-				Ext.getCmp('searchpreview').el.mask();
-				$('#searchprevrecord').html('Error retrieving remote record.  Attempting to reset connection...');
-				resetPazPar2({currRecId: o.id, currRecOffset: o.offset});
-			}
-			else {
-				var xml = xslTransform.serialize(data); 
-                if( offset == 0 ) {
-                    recordCache[o.id] = xml; 
-                }
-				
-				$('#searchprevrecord').getTransform(marcxsl, xml);
-				Ext.get('searchpreview').unmask();
-				clearStatusMsg();
-			}
-		},
-		// json literal containing hash of desired params in callback
-		{
-			id: id,
-			offset: offset
-		}
-	);
-
+	$('#searchprevrecord').getTransform(marcxsl, xml);
+	Ext.get('searchpreview').unmask();
+	clearStatusMsg();
 }
 
 function makeSubfieldsDraggable() {
@@ -551,8 +526,8 @@ function selectAllInObject() {
 function selectAll() {
 	if(openState == 'searchgrid') {
 		$('#searchgrid :checkbox').attr('checked', 'checked');
-		$('.searchgridtotalcount').html( Ext.getCmp('searchgrid').store.getTotalCount() );
-		$('#searchgridtbarSelectAll').show();
+		var totalcount = Ext.getCmp('searchgrid').store.getTotalCount();
+		Ext.getCmp('searchgrid').store.load({params:{start:0, num: totalcount}});
 		biblios.app.selectedRecords.allSelected = false;
 		biblios.app.selectedRecords.retrieved = false;
 		biblios.app.selectedRecords.selectedSource = 'searchgrid';

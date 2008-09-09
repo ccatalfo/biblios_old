@@ -12,8 +12,12 @@
       http://www.loc.gov/marc/bibliographic/ecbdhome.html
 -->  
   <xsl:include href="pz2-ourl-marc21.xsl" />
+  <xsl:include href="xml-to-string.xsl" />
   
   <xsl:template match="/marc:record">
+  	<xsl:variable name="fullrecord">
+		<xsl:call-template name="xml-to-string"/>
+	</xsl:variable>
     <xsl:variable name="title_medium" select="marc:datafield[@tag='245']/marc:subfield[@code='h']"/>
     <xsl:variable name="journal_title" select="marc:datafield[@tag='773']/marc:subfield[@code='t']"/>
     <xsl:variable name="electronic_location_url" select="marc:datafield[@tag='856']/marc:subfield[@code='u']"/>
@@ -41,18 +45,31 @@
 	</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-
+	
     <pz:record>
       <xsl:attribute name="mergekey">
-        <xsl:text>title </xsl:text>
+          <xsl:text>controlnumber </xsl:text>
+          <xsl:value-of select="marc:controlfield[@tag='001']"/>
+	  control008 
+          <xsl:value-of select="marc:controlfield[@tag='008']"/>
+          <!--<xsl:text>title </xsl:text>
 	<xsl:value-of select="marc:datafield[@tag='245']/marc:subfield[@code='a']"/>
 	<xsl:text> author </xsl:text>
 	<xsl:value-of select="marc:datafield[@tag='100']/marc:subfield[@code='a']"/>
 	<xsl:text> medium </xsl:text>
-	<xsl:value-of select="$medium"/>
+    <xsl:value-of select="$medium"/>-->
       </xsl:attribute>
 
-      
+      <pz:metadata type="fullrecord"><xsl:value-of select="$fullrecord"/>
+  </pz:metadata>
+      <pz:metadata type="pzrecid">
+          <xsl:text>title </xsl:text>
+        <xsl:value-of select="marc:datafield[@tag='245']/marc:subfield[@code='a']"/>
+        <xsl:text> author </xsl:text>
+        <xsl:value-of select="marc:datafield[@tag='100']/marc:subfield[@code='a']"/>
+        <xsl:text> medium </xsl:text>
+        <xsl:value-of select="$medium"/>
+    </pz:metadata>
       <xsl:for-each select="marc:controlfield[@tag='001']">
         <pz:metadata type="id">
           <xsl:value-of select="."/>
