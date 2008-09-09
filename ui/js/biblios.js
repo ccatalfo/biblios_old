@@ -392,29 +392,30 @@ biblios.app = function() {
                                                                 return false;
                                                             }, // headerclick handler
 															rowdblclick: function(grid, rowindex, e) {
-																var id = grid.getSelections()[0].id;
+																var record = grid.getSelections()[0];
+																var id = record.id;
 																UI.editor['editorone'].id = id;
-																var loc = grid.getSelections()[0].data.location[0].name;
+																var loc = record.data.location[0].name;
                                                                 var xmlformat = 'marcxml';
 																UI.editor['editorone'].location = loc;
-																getRemoteRecord(id, loc, 0, function(data) {
-                                                                    biblios.app.fireEvent('remoterecordretrieve', data);
-                                                                    openRecord( xslTransform.serialize(data), 'editorone', xmlformat ); 
-                                                                }
-														);
+																
+                                                                    biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
+                                                                    openRecord( record.data.fullrecord, 'editorone', xmlformat ); 
+                                                                
+													
 
 															},
 															keypress: function(e) {
 															  if( e.getKey() == Ext.EventObject.ENTER ) {
-																var id = Ext.getCmp('searchgrid').getSelections()[0].id;
-																UI.editor['editorone'].id = id;
-																var loc = Ext.getCmp('searchgrid').getSelections()[0].data.location[0].name;
+																var record = Ext.getCmp('searchgrid').getSelections()[0];
+																UI.editor['editorone'].id = record.id;
+																var loc = record.data.location[0].name;
                                                                 var xmlformat = 'marcxml';
 																UI.editor['editorone'].location = loc;
-																  getRemoteRecord(id, loc, 0, function(data) { 
-                                                                    biblios.app.fireEvent('remoterecordretrieve', data);
-                                                                    openRecord( xslTransform.serialize( data), 'editorone' , xmlformat); 
-                                                                    });
+																  
+                                                                biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
+                                                                openRecord( record.data.fullrecord, 'editorone' , xmlformat); 
+                                                                    
 																}	
 															} // on ENTER keypress
 														}, // search grid listeners
@@ -427,14 +428,7 @@ biblios.app = function() {
 															emptyMsg: 'No records to display',
 															listeners: {
 																beforerender: function(tbar) {
-																	/*var msg = 'Select: <span class="gridselector" onclick="selectAll()">All</span>,<span class="gridselector" onclick="selectNone()">None</span>';
-																	tbar.autoCreate.html = '<table cellspacing="0"><tr></tr><tr id="';
-																	tbar.autoCreate.html += 'searchgridtbarinfo';
-																	tbar.autoCreate.html += '">';
-																	tbar.autoCreate.html += '<td colspan="18">' + msg + '</td>';
-																	tbar.autoCreate.html += '</tr>';
-																	tbar.autoCreate.html += '<tr id="searchgridtbarSelectAll"><td colspan="18" id="selectAllInfo" class="gridselector" onclick="selectAllInObject()">Select all <span class="searchgridtotalcount">' + tbar.store.getTotalCount() + '</span> in search results.  <span id="searchgridallSelectedStatus">All <span class="searchgridtotalcount">'+ tbar.store.getTotalCount() + '</span> are selected.  <span class="gridselector" onclick="selectNone()">Clear Selection</span></span></td></tr>';
-																	tbar.autoCreate.html += '</table>';*/
+																	
 
 																}
 															},
@@ -446,28 +440,16 @@ biblios.app = function() {
 																		disabled: true,
 																		text: 'Edit',
 																		handler: function() {
-																			var checked = $(':checked.searchgridcheckbox');
+																			
 																			var selections = Ext.getCmp('searchgrid').getSelections();
-																			if( checked.length == 0 && selections.length == 1) {
-																				var editorid = 'editorone';
-																				UI.editor[editorid].id = '';
-																				var id = selections[0].id;
-																				var loc = selections[0].data.location[0].name;
-                                                                                var xmlformat = 'marcxml';
-																				UI.editor[editorid].location = loc;
-																				getRemoteRecord(id, loc, 0, function(data) { 
-                                                                                    biblios.app.fireEvent('remoterecordretrieve', data);
-																					openRecord( xslTransform.serialize(data), editorid, xmlformat ); 
-																				});
-
-																			}
-																			else if( (checked.length == 0 || checked.length > 2) && selections.length == 0) {
+																			
+																			if( selections.length > 2) {
 																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the record title, then clicking this button again.');
 																				return false;
 																			}
 																			// mask search grid 
 																			Ext.getCmp('searchgrid').el.mask('Loading record(s)');
-																			for( var i = 0; i < checked.length; i++ ) {
+																			for( var i = 0; i < selections.length; i++ ) {
 																				var editorid = '';
 																				if( i == 0 ) {
 																					editorid = 'editorone';
@@ -475,25 +457,18 @@ biblios.app = function() {
 																				else if( i == 1) {
 																					editorid = 'editortwo';
 																				}
-																				var id = checked[i].id.substr(6);
-																				var offset = checked[i].id.substr(5,1);
+																				var id = selections[i].id;
+																				
                                                                                 var xmlformat = 'marcxml';
-																				UI.editor[editorid].id = '';
+																				
 																				// get location info
 																				var loc = ''
-																				if( $(':checked').eq(0).parents('.locationitem').length > 0 ) {
-																					
-																					loc = $(checked).eq(i).parents('.locationitem').text();
-
-																				}
-																				else {
-																					loc = Ext.getCmp('searchgrid').store.getById(id).data.location[0].name;
-																				}
+																				
 																				UI.editor[editorid].location = loc;
-																				getRemoteRecord(id, loc, offset, function(data) { 
-                                                                                    biblios.app.fireEvent('remoterecordretrieve', data);
-																					openRecord( xslTransform.serialize(data), editorid, xmlformat ); 
-																				});
+																				
+                                                                                    biblios.app.fireEvent('remoterecordretrieve', selections[i].data.fullrecord);
+																					openRecord( selections[i].data.fullrecord, editorid, xmlformat ); 
+																				
 																			} // for each checked record
 																			Ext.getCmp('searchgrid').el.unmask();
 																		} // search grid Edit btn handler
