@@ -4,7 +4,7 @@ Dependencies:
 Apache2 with proxy_http module
 Perl
 Perl modules:
-	CGI, CGI::Carp, MARC::Record, MARC::File::XML, File::Temp, File::BaseName, JSON, Term::Clui, Template, File::Slurp
+	CGI, CGI::Carp, MARC::Record, MARC::File::XML, File::Temp, File::BaseName, JSON, Term::Clui, Template, File::Slurp, JavaScript::Minifier, CSS::Minifier
 Pazpar2
 Google Gears plugin for your web browser (Internet Explorer 6/7 or FireFox), available here: http://gears.google.com/.
 
@@ -14,13 +14,7 @@ Google Gears plugin for your web browser (Internet Explorer 6/7 or FireFox), ava
 
 or by downloading a prepackaged .tar.gz or .zip file:
 
-	wget http://biblios.org/system/files//biblios-0.9.tar.gz
-	tar xzvf biblios.tar.gz
-
-OR
-
-	wget http://biblios.org/system/files//biblios-0.9.zip
-	unzip biblios.zip
+	http://biblios.org/download
 
 2. Enable apache2's proxy_http module:
 
@@ -59,8 +53,14 @@ OR
 
 Note that if you download pazpar2 via apt, it will probably create an apache2 conf file under /etc/apache2/conf.d/pazpar2 with a ProxyPass directive.  Make sure to either comment this out or change its path so it won't interfere with Biblios' use of the /pazpar2/search.pz2 path.
 
-8. Install biblios and cgi scripts into appropriate paths for your web server using the included install.pl script.  You will be prompted for the location of your webserver's htdocs directory and cgi-bin directory:
+8. If you've downloaded biblios via git, you'll need to build the javascrit and css files via
+
+make -B all
+
+(note that this requires the JavaScript::Minifier and CSS::Minifier perl modules).
+
+9. Install biblios and cgi scripts into appropriate paths for your web server using the included install.pl script.  You will be prompted for the location of your webserver's htdocs directory and cgi-bin directory:
 
 ./install.pl
 
-11. Point your browser to the appropriate path and catalog away...
+10. Point your browser to the appropriate path and catalog away...

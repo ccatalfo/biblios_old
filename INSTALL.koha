@@ -4,7 +4,7 @@ Dependencies:
 Apache2 with http_proxy
 Perl
 Perl modules:
-	CGI, CGI::Carp, MARC::Record, MARC::File::XML, File::Temp, File::BaseName, JSON, Term::Clui, Template, File::Slurp
+	CGI, CGI::Carp, MARC::Record, MARC::File::XML, File::Temp, File::BaseName, JSON, Term::Clui, Template, File::Slurp, JavaScript::Minifier, CSS::Minifier
 Pazpar2 
 Google Gears plugin for your web browser (Internet Explorer 6/7 or FireFox), available here: http://gears.google.com/.
 
@@ -14,24 +14,14 @@ Google Gears plugin for your web browser (Internet Explorer 6/7 or FireFox), ava
 
 or by downloading a prepackaged .tar.gz or .zip file:
 
-	wget http://biblios.net/sites/default/files/biblios-0.9.tar.gz
-	tar xzvf biblios-0.9.tar.gz
+	http://biblios.org/download
 
-OR
-
-	wget http://biblios.net/sites/default/files/biblios-0.9.zip
-	unzip biblios-0.9.zip
-
-2.Go to your unpacked biblios tree
- 
-	cd biblios-0.9
-
-3. Enable apache2's http_proxy module:
+2. Enable apache2's http_proxy module:
 
 	sudo /usr/sbin/a2enmod proxy_http
 	sudo /usr/sbin/apache2ctl force-reload
 
-4. Setup Apache2 to proxy requests from biblios to appropriate urls:
+3. Setup Apache2 to proxy requests from biblios to appropriate urls:
 Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site ajax requests.  Copy these lines into your koha intranet's virtual host section in your koha-http.conf file, adding urls appropriate to your configuration.
 
 <IfModule mod_proxy.c>
@@ -55,20 +45,24 @@ Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site aja
 
 Note that if you download pazpar2 via apt, it will probably create an apache2 conf file under /etc/apache2/conf.d/pazpar2 with a ProxyPass directive.  Make sure to either comment this out or change its path so it won't interfere with Biblios' use of the /pazpar2/search.pz2 path.
 
-5. Edit the conf/biblios-dist.conf file to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios-dist.conf file for the syntax.  Note that in order to retrieve records directly from Koha, as well as to enable extra functionality for Koha-retrieved records (e.g. disabling Koha-specific tags and validating certain required tags), your Koha installation's Search Target name must match your Koha installation's Send Target name.  
+4. Edit the conf/biblios-dist.conf file to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios-dist.conf file for the syntax.  Note that in order to retrieve records directly from Koha, as well as to enable extra functionality for Koha-retrieved records (e.g. disabling Koha-specific tags and validating certain required tags), your Koha installation's Search Target name must match your Koha installation's Send Target name.  
 
-6. Rename the biblios-dist.conf file to biblios.conf.
+5. Rename the biblios-dist.conf file to biblios.conf.
 
-7. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/
+6. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/
 
-8. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
+7. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
  
 pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
 
 Note that if you download pazpar2 via apt, it will probably create an apache2 conf file under /etc/apache2/conf.d/pazpar2 with a ProxyPass directive.  Make sure to either comment this out or change its path so it won't interfere with Biblios' use of the /pazpar2/search.pz2 path.
 
-9. Run the following command to build biblios' index.html file to work within your koha installation and install Biblios files.  This will prompt you to provide koha installation parameters and then copy the Biblios source files to appropriate paths in your koha installation.
 
+8. If you've downloaded biblios via git, you'll need to build the javascrit and css files via
+
+make -B all
+
+9. Run the following command to build biblios' index.html file to work within your koha installation and install Biblios files.  This will prompt you to provide koha installation parameters and then copy the Biblios source files to appropriate paths in your koha installation.
 
 integration/koha/install-koha.pl
 
