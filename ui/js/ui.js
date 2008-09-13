@@ -693,30 +693,31 @@ function doUploadMarc(dialog, filename, resp_data) {
     //console.info(resp_data);
     $.get(cgiDir+'download.pl?filename='+resp_data.filepath, function(data) {
         //console.info(data);
-        $('record', data).each( function(i) {
-            var record = new DB.Records({
-                xml : '<record xmlns="http://www.loc.gov/MARC21/slim">' + $(this).html() + '</record>',
-                title : $('datafield[@tag=245] subfield[@code=a]', this).text(),
-                author : $('datafield[@tag=245] subfield[@code=c]', this).text(),
-                publisher : $('datafield[@tag=260] subfield[@code=b]', this).text(),
-                date : $('datafield[@tag=260] subfield[@code=c]', this).text(),
-                date_added : new Date().toString(),
-                date_modified : new Date().toString(),
-                status : 'uploaded',
-                medium : '',
-                SearchTargets_id : '',
-                Savefiles_id : 3,
-                xmlformat : 'marcxml',
-                marcflavour : 'marc21',
-                template : null,
-                marcformat : null
-            }).save();
-            var title = $('datafield[@tag=245] subfield[@code=a]', this).text();
-            showStatusMsg('Uploaded ' + title + ' to Drafts');
-            clearStatusMsg();
+        for (var i = 0; i < $('record', data).length; i++) {
+			var record = new DB.Records({
+				xml: '<record xmlns="http://www.loc.gov/MARC21/slim">' + $('record', data).html() + '</record>',
+				title: $('datafield[@tag=245] subfield[@code=a]', data).text(),
+				author: $('datafield[@tag=245] subfield[@code=c]', data).text(),
+				publisher: $('datafield[@tag=260] subfield[@code=b]', data).text(),
+				date: $('datafield[@tag=260] subfield[@code=c]', data).text(),
+				date_added: new Date().toString(),
+				date_modified: new Date().toString(),
+				status: 'uploaded',
+				medium: '',
+				SearchTargets_id: '',
+				Savefiles_id: 3,
+				xmlformat: 'marcxml',
+				marcflavour: 'marc21',
+				template: null,
+				marcformat: null
+			}).save();
+			var title = $('datafield[@tag=245] subfield[@code=a]', data).text();
+			showStatusMsg('Uploaded ' + title + ' to Drafts');
+			clearStatusMsg();
+		}
             Ext.MessageBox.alert('Upload complete', 'Uploading is completed.  Files have been added to Drafts folder with status \'uploaded\'');
-            Ext.getCmp('savegrid').store.reload();
-        });
+            biblios.app.displaySaveFile(3);
+			Ext.getCmp('savegrid').store.reload();
     });
 }
 

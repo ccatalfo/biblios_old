@@ -1057,6 +1057,15 @@ biblios.app = function() {
 																			doSaveLocal(1, 'savegrid');
 																		}
 																	},
+																	{
+																		id: 'savegridEmptyTrash',
+																		cls: 'x-btn-text-icon bmenu',
+																		text: 'Empty Trash',
+																		handler: function() {
+																			DB.Records.remove('Savefiles_id=1');
+																			Ext.getCmp('savegrid').store.reload();
+																		}
+																	},
                                                                     {
                                                                         id: 'savegridUploadsBtn',
                                                                         cls: 'x-btn-text-icon bmenu',
@@ -1349,6 +1358,7 @@ biblios.app = function() {
 																	Ext.getCmp('savegridEditBtn').disable();
 																	Ext.getCmp('savegridExportBtn').disable();
 																	Ext.getCmp('savegridSendBtn').disable();
+																	
 																}
 															}, // save folder listeners
 															loader: new Ext.ux.GearsTreeLoader({
@@ -1390,6 +1400,14 @@ biblios.app = function() {
 																			UI.currSaveFile = node.attributes.id;
 																			UI.currSaveFileName = node.text;
 																			biblios.app.displaySaveFile( node.attributes.id );
+																			if(node.text == 'Trash') {
+																				Ext.getCmp('savegridEmptyTrash').show();
+																				Ext.getCmp('savegridTrashBtn').hide();
+																			}
+																			else {
+																				Ext.getCmp('savegridEmptyTrash').hide();
+																				Ext.getCmp('savegridTrashBtn').show();
+																			}
 																			biblios.app.displaySaveView();
 																		}
 																	}, // save folder listeners
@@ -1426,6 +1444,8 @@ biblios.app = function() {
 																				json += '"allowDrag":"'+data[i][7]+'",';
 																				json += '"allowDrop":"'+data[i][8]+'",';
 																				json += '"allowRename":"'+data[i][9]+'",';
+																				json += '"expandable":false,';
+																				json += '"expanded":true,';
 																				json += '"ddGroup":"'+data[i][10]+'"';
 																				json += '}';
 																			}
