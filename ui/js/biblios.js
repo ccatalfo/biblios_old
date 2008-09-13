@@ -1359,6 +1359,8 @@ biblios.app = function() {
 																		json += '"allowAdd":"'+data[i][6]+'",';
 																		json += '"allowDrag":"'+data[i][7]+'",';
 																		json += '"allowDrop":"'+data[i][8]+'",';
+																		json += '"expandable":false,';
+																		json += '"expanded":true,';
 																		json += '"ddGroup":"'+data[i][9]+'"';
 																		json += '}';
 																	}
