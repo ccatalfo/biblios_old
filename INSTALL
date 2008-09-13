@@ -41,26 +41,24 @@ or by downloading a prepackaged .tar.gz or .zip file:
    
 </IfModule>
 
-4. Edit the conf/biblios-dist.conf file to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios-dist.conf file for the syntax.  
+4. Copy the conf/biblios.xml.sample file to conf/biblios.xml.  Edit conf/biblios.xml to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios.xml.sample file for the syntax.  
 
-5. Rename the biblios-dist.conf file to biblios.conf.
+5. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/.
 
-6. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/.
-
-7. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
+6. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
  
 	pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
 
 Note that if you download pazpar2 via apt, it will probably create an apache2 conf file under /etc/apache2/conf.d/pazpar2 with a ProxyPass directive.  Make sure to either comment this out or change its path so it won't interfere with Biblios' use of the /pazpar2/search.pz2 path.
 
-8. If you've downloaded biblios via git, you'll need to build the javascrit and css files via
+7. If you've downloaded biblios via git, you'll need to build the javascrit and css files via
 
 make -B all
 
 (note that this requires the JavaScript::Minifier and CSS::Minifier perl modules).
 
-9. Install biblios and cgi scripts into appropriate paths for your web server using the included install.pl script.  You will be prompted for the location of your webserver's htdocs directory and cgi-bin directory:
+8. Install biblios and cgi scripts into appropriate paths for your web server using the included install.pl script.  You will be prompted for the location of your webserver's htdocs directory and cgi-bin directory:
 
 ./install.pl
 
-10. Point your browser to the appropriate path and catalog away...
+9. Point your browser to the appropriate path and catalog away...

@@ -5,7 +5,8 @@ Prefs.remoteILS = {};
 function loadConfig(confPath) {
     $.ajax({
         url: confPath,
-        cache: false, // cache buster
+		cache:false,
+		dataType: 'xml',
         error: function(req, textStatus, errorThrow) {
             biblios.app.initerrors.push({title: 'Biblios Configuration Error', msg: 'Unable to load biblios.conf configuration file ' + textStatus});
         },
