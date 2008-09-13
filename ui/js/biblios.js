@@ -1222,13 +1222,26 @@ biblios.app = function() {
 																applyLoader: false,
 																baseAttrs: {
                                                                     listeners: {
-                                                                        click: function(node, e) {
+                                                                        checkchange: function(node, checked) {
+																			
                                                                             var pazid = node.attributes.hostname;
                                                                             if( node.attributes.port != '') {
                                                                                 pazid += ':' + node.attributes.port;
                                                                             }
-                                                                            pazid += '/' + node.attributes.dbname;
-                                                                            biblios.app.paz.search( biblios.app.paz.currQuery, biblios.app.paz.currentNum, biblios.app.paz.currentSort, 'pz:id='+pazid);
+																			if( node.attributes.dbname != '') {
+																				pazid += '/' + node.attributes.dbname;	
+																			}
+                                                                            
+																			if(checked) {
+																				UI.searchFilters[pazid] = pazid;
+																				
+																			}
+                                                                            else {
+																				
+																				delete UI.searchFilters[pazid];
+																													
+																			}
+																			filterSearch();
                                                                         }
                                                                     },
 																	allowDrag: false,
@@ -1261,6 +1274,7 @@ biblios.app = function() {
 																		}
 																		json += '{';
 																		json += '"leaf": false,';
+																		json += '"checked":false,';
 																		json += '"servername":"'+data[i][1]+'",';
 																		json += '"text":"'+data[i][1]+'",';
 																		json += '"id":"'+data[i][0]+'",';

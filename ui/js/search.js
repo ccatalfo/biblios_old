@@ -223,8 +223,21 @@ function clearSearchLimits() {
 	}
 }
 
+function clearSearchFilters() {
+	for( l in UI.searchFilters ) { 
+		delete UI.searchFilters[l]; 
+	}
+	Ext.getCmp('TargetsTreePanel').root.cascade( function(n) { 
+		if(n.getUI().isChecked()){ 
+			n.getUI().toggleCheck();
+		} 
+		return true;
+	})
+}
+
 function doPazPar2Search() {
 	clearSearchLimits();
+	clearSearchFilters();
 	Ext.getCmp('searchgridEditBtn').disable();
 	Ext.getCmp('searchgridExportBtn').disable();
 	var query = $("#query").val();
@@ -347,6 +360,22 @@ function term2searchterm(term) {
 			break;
 	}
 }
+function filterSearch() {
+	var filter = 'pz:id=';
+	var i = 0;
+	for( f in UI.searchFilters ) {
+		if(i > 0) {filter += '|';}
+		filter += f;
+		i++;
+	}
+	if(filter == '') {
+		biblios.app.paz.search( biblios.app.paz.currQuery, biblios.app.paz.currentNum, biblios.app.paz.currentSort);
+	}
+	else {
+		biblios.app.paz.search( biblios.app.paz.currQuery, biblios.app.paz.currentNum, biblios.app.paz.currentSort, filter);																				
+	}
+}
+
 function limitSearch() {
 	// start w/ original query and build from there
 	var query = biblios.app.currQuery;
