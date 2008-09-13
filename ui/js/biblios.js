@@ -1216,6 +1216,19 @@ biblios.app = function() {
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Search Targets',
 															id: 'targetsTreeRoot',
+															listeners: {
+																load: function(tree) {										
+																tree.appendChild( new Ext.tree.TreeNode({
+																	text: 'Edit Search Targets',
+																	listeners: {
+																		click: function(n) {
+																			Ext.getCmp('optionstab').show();
+																			Ext.getCmp('searchtargetstab').show();
+																		}
+																	}
+																}));
+															}
+															},
 															loader: new Ext.ux.GearsTreeLoader({
 																db: db, 
 																selectSql: 'select SearchTargets.rowid, name, hostname, port, dbname, enabled, description, userid  from SearchTargets', 
@@ -1243,6 +1256,7 @@ biblios.app = function() {
 																			}
 																			filterSearch();
                                                                         }
+																		
                                                                     },
 																	allowDrag: false,
 																	allowDrop: false,
@@ -1922,6 +1936,7 @@ biblios.app = function() {
 											},
 											{
 												title: 'Search Targets',
+												id: 'searchtargetstab',
 												layout: 'border',
 												listeners: {
 													activate: function(tab) {
