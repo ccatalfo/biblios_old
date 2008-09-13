@@ -864,7 +864,10 @@ function completeInit() {
     }
     //	alert('Application successfully initialized');
     var loading = Ext.get('loading');
-
+	
+	// hide facets tree panel when no search present
+	Ext.getCmp('facetsTreePanel').hide();
+	
     var mask = Ext.get('loading-mask');
     mask.setOpacity(.8);
 

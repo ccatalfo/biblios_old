@@ -71,6 +71,7 @@ biblios.app.paz = new pz2({
 					"termlist": "xtargets,subject,author,date,publication-name",
 					"onterm": function(data) { 
 						if( data.activeclients == 0 ) {
+							Ext.getCmp('facetsTreePanel').show();
 							Ext.getCmp('facetsTreePanel').root.reload();
 						}
 					},
@@ -238,6 +239,7 @@ function clearSearchFilters() {
 function doPazPar2Search() {
 	clearSearchLimits();
 	clearSearchFilters();
+	Ext.getCmp('facetsTreePanel').hide();
 	Ext.getCmp('searchgridEditBtn').disable();
 	Ext.getCmp('searchgridExportBtn').disable();
 	var query = $("#query").val();
