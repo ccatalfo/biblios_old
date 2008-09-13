@@ -320,47 +320,51 @@ function updateNewRecordMenu(menu) {
     }
 }
 
+
 function getNewRecordMenu() {
 	var list = new Array();
 	var templates = getRecordTemplates();
 	for( var i = 0; i < templates.length; i++) {
 		o = {
 			text: templates[i].name,
+			leaf: true,
 			file: templates[i].file,
 			id: templates[i].name,
-			handler: function(btn) {
-				Ext.Ajax.request({
-							url: libPath + btn.file,
-							method: 'GET',
-							callback: function(options, isSuccess, resp) { 
-								var xml = resp.responseText; 
-								srchResults = (new DOMParser()).parseFromString(xml, "text/xml");
-								var record = srchResults.getElementsByTagName('record')[0];
-								var xml = (new XMLSerializer().serializeToString(record));
-                                var rdb = new DB.Records({
-                                    title: '',
-                                    author: '',
-                                    location: '',
-                                    publisher: '',
-                                    medium: '',
-                                    date: '',
-                                    status: 'new',
-                                    date_added: new Date().toString(),
-                                    date_modified: new Date().toString(),
-                                    SearchTargets_id: null,
-                                    Savefiles_id: 3, // Drafts
-                                    xmlformat: 'marcxml',
-                                    marcflavour: 'marc21',
-                                    template: null,
-                                    marcformat: null
-                                }).save();
-                                UI.editor.editorone.id = db.lastInsertRowId;
-                                UI.editor.editorone.savefileid = 3;
-                                UI.editor.editorone.location = '';
-								openRecord(xml, 'editorone', 'marcxml');
-						} // ajax callback
-				}); // ajax request
-			} // do new record handler
+			listeners: {
+				click:	function(node, e) {
+					Ext.Ajax.request({
+								url: libPath + node.attributes.file,
+								method: 'GET',
+								callback: function(options, isSuccess, resp) { 
+									var xml = resp.responseText; 
+									srchResults = (new DOMParser()).parseFromString(xml, "text/xml");
+									var record = srchResults.getElementsByTagName('record')[0];
+									var xml = (new XMLSerializer().serializeToString(record));
+									var rdb = new DB.Records({
+										title: '',
+										author: '',
+										location: '',
+										publisher: '',
+										medium: '',
+										date: '',
+										status: 'new',
+										date_added: new Date().toString(),
+										date_modified: new Date().toString(),
+										SearchTargets_id: null,
+										Savefiles_id: 3, // Drafts
+										xmlformat: 'marcxml',
+										marcflavour: 'marc21',
+										template: null,
+										marcformat: null
+									}).save();
+									UI.editor.editorone.id = db.lastInsertRowId;
+									UI.editor.editorone.savefileid = 3;
+									UI.editor.editorone.location = '';
+									openRecord(xml, 'editorone', 'marcxml');
+							} // ajax callback
+					}); // ajax request
+				} // do new record handler
+			} // listeners
 		}; // new record menu item
 		list.push(o);
 	}

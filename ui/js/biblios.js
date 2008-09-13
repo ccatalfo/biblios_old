@@ -391,22 +391,7 @@ biblios.app = function() {
 																}
 															},
 															items: [
-																{
-																	id: 'newrecordbutton-search',
-																	icon: libPath + 'ui/images/document-new.png',
-																	cls: 'x-btn-text-icon bmenu',
-																	text: 'New',
-																	menu: {
-																		id: 'newRecordMenu',
-																		items: getNewRecordMenu(),
-                                                                        listeners: {
-                                                                            beforeshow: function(menu, menuItem, e) {
-                                                                                updateNewRecordMenu(menu);
-                                                                            }
-                                                                        }
-																	}
-																},
-																{
+																																{
 																		cls: 'x-btn-text-icon',
 																		icon: libPath + 'ui/images/document-open.png',
 																		id: 'searchgridEditBtn',
@@ -992,21 +977,6 @@ biblios.app = function() {
 																},
 																items: [
 																{
-																	id: 'newrecordbutton-save',
-																	icon: libPath + 'ui/images/document-new.png',
-																	cls: 'x-btn-text-icon bmenu',
-																	text: 'New',
-																	menu: {
-																		id: 'newRecordMenuSaveGrid',
-																		items: getNewRecordMenu(),
-                                                                        listeners: {
-                                                                            beforeshow: function(menu, menuItem, e) {
-                                                                                updateNewRecordMenu(menu);
-                                                                            }
-                                                                        }
-																	}
-																},
-																{
 																		cls: 'x-btn-text-icon',
 																		icon: libPath + 'ui/images/document-open.png',
 																		text: 'Edit',
@@ -1222,6 +1192,17 @@ biblios.app = function() {
 												region: 'center',
 												items: 
 												[
+													new Ext.tree.TreePanel({
+														id: 'createRecordPanel',
+														leaf: false,
+														root: new Ext.tree.AsyncTreeNode({
+															text: 'Create Record',	
+														    loader: new Ext.tree.TreeLoader({}),
+															children: getNewRecordMenu()
+
+														})
+
+													}),
 													new Ext.tree.TreePanel({
 														id: 'TargetsTreePanel',
 														animate: true,
