@@ -1628,11 +1628,14 @@ biblios.app = function() {
                                                     root: new Ext.tree.AsyncTreeNode({
                                                         text: 'Editors',
                                                         leaf: false,
+														qtip: 'Click here to view available editor screens',
                                                         loader: new Ext.tree.TreeLoader({}),
                                                         children: [
                                                             {
-                                                                text: 'Editor one',
+                                                                text: 'View Editor one',
+																leaf: true,
                                                                 id: 'editorOneNode',
+																qtip: 'Click here to view Editor One',
                                                                 listeners: {
                                                                     click: function(node, e) {
                                                                         biblios.app.displayRecordView();
@@ -1642,8 +1645,10 @@ biblios.app = function() {
                                                                 }
                                                             },
                                                             {
-                                                                text: 'Editor two',
+                                                                text: 'View Editor two',
                                                                 id: 'editorTwoNode',
+																qtip: 'Click here to view Editor Two',
+																leaf: true,
                                                                 listeners: {
                                                                     click: function(node, e) {
                                                                         biblios.app.displayRecordView();
