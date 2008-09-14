@@ -129,8 +129,8 @@ koha-install:
 koha-uninstall:
 	@echo Uninstalling biblios files from koha path $(KOHADIR)
 	@echo
-	-rm -f $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/modules/cataloguing/biblios.tmpl
-	-rm -f $(KOHADIR)/cataloguing/biblios.pl
-	-rm -f $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/includes/doc-head-close-biblios.inc
-	rm -rf $(KOHADIR)/plugins/biblios
-	rm -rf $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
+	-rm -f $(KOHADIR)/modules/cataloguing/biblios.tmpl
+	-rm -f $(KOHACGIDIR)/cataloguing/biblios.pl
+	-rm -f $(KOHADIR)/includes/doc-head-close-biblios.inc
+	rm -rf $(KOHACGIDIR)/plugins/biblios
+	rm -rf $(KOHADIR)/lib/biblios

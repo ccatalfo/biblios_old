@@ -10,8 +10,8 @@ my $buildtime = asctime(@lt);
 # remove newlines
 $buildtime =~ s/\n//;
 
-my $kohadir = ask("What is the base directory of your koha install?");
-my $langtheme = ask("What is the language/theme path for koha (e.g.) /prog/en", "/prog/en");
+my $kohadir = ask("What is the intranet directory of your koha install (examples: for a standard koha installation: /usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en or for a dev koha installation: /kohaclone/koha-tmpl/intranet-tmpl/prog/en/?");
+my $kohacgidir = ask("What is the intranet cgi directory of your koha install (examples: for a standard koha installation: /usr/share/koha/intranet/cgi-bin or for a dev koha installation: /kohaclone ?");
 my $kohastaffport = ask("What port is your koha staff intranet running on?", "80");
 my $kohaurl = ask("What is the url of your staff intranet (without port and without trailing slash)?", "");
 
@@ -33,5 +33,5 @@ $tt->process('./src/index.html', $vars, './build/index.html')
 
 #my $buildstatus = `make koha`;
 
-print "Installing biblios into $kohadir \nwith language/theme path $langtheme \nsetting up biblios to use port $kohastaffport for koha's intranet site\n";
-my $status = `make koha-install KOHADIR=$kohadir KOHALANGTHEME=$langtheme KOHASTAFFPORT=$kohastaffport`
+print "Installing biblios into $kohadir \nsetting up biblios to use port $kohastaffport for koha's intranet site\n";
+my $status = `make koha-install KOHADIR=$kohadir KOHACGIDIR=$kohacgidir KOHASTAFFPORT=$kohastaffport`
