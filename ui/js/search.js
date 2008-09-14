@@ -66,7 +66,7 @@ function initPazPar2(pazurl) {
     });
 }
 function loadPazpar2Target( pazpar2settings ) {
-    $.get(pazcgiurl, {action:'settings', settings: pazpar2settings});
+    $.post(pazcgiurl, {action:'settings', settings: pazpar2settings});
 }
 
 function getPazTargetName(target) {
@@ -145,7 +145,7 @@ function setPazPar2Targets() {
 				settings.push(s);
 			}
 	}
-	$.get(pazcgiurl, {action:'settings', settings: Ext.util.JSON.encode(settings)});
+	$.post(pazcgiurl, {action:'settings', settings: Ext.util.JSON.encode(settings)});
 }
 
 function changePazPar2TargetStatus(o) {
