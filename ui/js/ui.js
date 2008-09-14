@@ -201,19 +201,13 @@ function doDownloadRecords(format, editorid) {
 		if( openState == 'searchgrid') {
 			var records = Ext.getCmp('searchgrid').getSelections();
 			for( var i = 0; i < records.length; i++) {
-				var id = records[i].id;
-				
-					xml = xslTransform.serialize(data);
-                    if( biblios.app.fireEvent('beforerecordexport', xml)) {
-                        biblios.app.download.recordsString += xml;
+                    if( biblios.app.fireEvent('beforerecordexport', records[i].data.fullrecord)) {
+                        biblios.app.download.recordsString += records[i].data.fullrecord;
                         biblios.app.download.recordsString += recsep;
                     }
-                    var encoding = 'utf-8';
-                    
-					handleDownload(format, encoding, biblios.app.download.recordsString);
-					
+                    var encoding = 'utf-8';				
 			}
-		
+				handleDownload(format, encoding, biblios.app.download.recordsString);
 		}
     } // if we have a grid open 
 }
