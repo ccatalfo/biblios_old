@@ -529,6 +529,7 @@ function selectAll() {
 function selectNone() {
 	if(openState == 'searchgrid') {
 		Ext.getCmp('searchgrid').getSelectionModel().clearSelections();
+		Ext.getCmp('searchgridSelectAllTbar').items.items[1].show()
 		Ext.getCmp('searchgridExportBtn').disable();
 		Ext.getCmp('searchgridSendBtn').disable();
 		Ext.getCmp('searchgridSaveBtn').disable();
@@ -536,9 +537,7 @@ function selectNone() {
 		biblios.app.selectedRecords.retrieved = false;
 	}
 	else if( openState == 'savegrid') {
-		$('#savegrid :checkbox').attr('checked', '');
-		$('#savegridtbarSelectAll').hide();
-		$('#savegridallSelectedStatus').hide();
+		Ext.getCmp('savegridSelectAllTbar').items.items[1].hide();
 		Ext.getCmp('savegridExportBtn').disable();
 		Ext.getCmp('savegridSendBtn').disable();
 		biblios.app.selectedRecords.allSelected = false;

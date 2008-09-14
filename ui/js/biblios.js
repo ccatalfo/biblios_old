@@ -51,6 +51,7 @@ biblios.app = function() {
 		}
 		Ext.getCmp('savegrid').store.load({db: db, selectSql: savefileSelectSql + ' where Savefiles_id = '+id});
 		biblios.app.displaySaveView();
+		selectNone();
 		openState = 'savegrid';
 		displayHelpMsg(UI.messages.help.en.saveview);
 	}
@@ -384,7 +385,7 @@ biblios.app = function() {
 																		{
 																			id: 'searchgridselectall',
 																			xtype: 'tbtext',
-																			text: 'Select <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().checkAllInStore();Ext.getCmp(\'searchgridselectallfrompz2\').show();">All</a>, <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().clearChecked(); Ext.getCmp(\'searchgridselectallfrompz2\').hide();">None</a>'
+																			text: 'Select <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().checkAllInStore();Ext.getCmp(\'searchgridSelectAllTbar\').items.items[1].hide()">All</a>, <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().clearChecked(); Ext.getCmp(\'searchgridselectallfrompz2\').hide();">None</a>'
 																		},
 																		{
 																			id: 'searchgridselectallfrompz2',
@@ -997,10 +998,11 @@ biblios.app = function() {
 																				{
 																					id: 'savegridselectall',
 																					xtype: 'tbtext',
-																					text: 'Select <a href="#" onclick="Ext.getCmp(\'savegrid\').getSelectionModel().checkAllInStore();Ext.getCmp(\'savegridselectallfrompz2\').show();">All</a>, <a href="#" onclick="Ext.getCmp(\'savegrid\').getSelectionModel().clearChecked(); Ext.getCmp(\'savegridselectallstore\').hide();">None</a>'
+																					text: 'Select <a href="#" onclick="Ext.getCmp(\'savegrid\').getSelectionModel().checkAllInStore();Ext.getCmp(\'savegridSelectAllTbar\').items.items[1].show();">All</a>, <a href="#" onclick="Ext.getCmp(\'savegrid\').getSelectionModel().clearChecked();Ext.getCmp(\'savegridSelectAllTbar\').items.items[1].hide();">None</a>'
 																				},
 																				{
 																					id: 'savegridselectallstore',
+																					hidden: true,
 																					xtype:'tbtext',
 																					text: '<a href=\'#\' onclick=\'selectAll();\'>Select All in Folder</a>'
 																				}
