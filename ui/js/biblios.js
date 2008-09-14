@@ -276,9 +276,11 @@ biblios.app = function() {
 																				'Getting nodeValue of fullrecord node';
 																			}
 																		}
-																		
-																		return Ext.util.Format.htmlDecode(xmlString);
-																		//return xslTransform.loadString(xmlstring);
+																		var xml_decoded = Ext.util.Format.htmlDecode(xmlString);
+																		var xml_escaped = xml_decoded.replace(/%26/g, '&amp;');
+																		xml_escaped = xml_escaped.replace(/%3C/g, '&lt;');
+																		xml_escaped = xml_escaped.replace(/%3E/g, '&gt;');
+																		return xml_escaped;
 																	}},
 																	{name: 'location', mapping: function(rec) {
 																		var locations = Ext.DomQuery.select('location', rec);

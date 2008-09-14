@@ -40,9 +40,10 @@ Redistribution and use in source and binary forms, with or without modification,
     </xsl:apply-templates>
   </xsl:template>
 
-  <!--<xsl:template match="/" name="xml-to-string-root-rule">
+<!--
+  <xsl:template match="/" name="xml-to-string-root-rule">
     <xsl:call-template name="xml-to-string"/>
-  </xsl:template>-->
+  </xsl:template>
 
   <xsl:template match="/" mode="xml-to-string">
     <xsl:param name="depth"/>
@@ -50,7 +51,7 @@ Redistribution and use in source and binary forms, with or without modification,
       <xsl:with-param name="depth" select="$depth"/>
     </xsl:apply-templates>
   </xsl:template>
-
+-->
   <xsl:template match="*" mode="xml-to-string">
     <xsl:param name="depth"/>
     <xsl:variable name="element" select="."/>
@@ -248,18 +249,25 @@ Redistribution and use in source and binary forms, with or without modification,
       <xsl:call-template name="replace-string">
         <xsl:with-param name="text" select="$text"/>
         <xsl:with-param name="replace" select="'&amp;'"/>
-        <xsl:with-param name="with" select="'&amp;amp;'"/>
+        <xsl:with-param name="with" select="'%26'"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="ltEscaped">
       <xsl:call-template name="replace-string">
         <xsl:with-param name="text" select="$ampEscaped"/>
         <xsl:with-param name="replace" select="'&lt;'"/>
-        <xsl:with-param name="with" select="'&amp;lt;'"/>
+        <xsl:with-param name="with" select="'%3C'"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="gtEscaped">
+      <xsl:call-template name="replace-string">
+        <xsl:with-param name="text" select="$ltEscaped"/>
+        <xsl:with-param name="replace" select="'&gt;'"/>
+        <xsl:with-param name="with" select="'%3E'"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:call-template name="replace-string">
-      <xsl:with-param name="text" select="$ltEscaped"/>
+      <xsl:with-param name="text" select="$gtEscaped"/>
       <xsl:with-param name="replace" select="']]>'"/>
       <xsl:with-param name="with" select="']]&amp;gt;'"/>
     </xsl:call-template>
