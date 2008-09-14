@@ -1002,7 +1002,7 @@ biblios.app = function() {
 																				{
 																					id: 'savegridselectallstore',
 																					xtype:'tbtext',
-																					text: 'Select <a href=\'#\' onclick=\'selectAll();\'>All search results</a>'
+																					text: '<a href=\'#\' onclick=\'selectAll();\'>Select All in Folder</a>'
 																				}
 																			]
 																		});

@@ -520,11 +520,7 @@ function selectAll() {
 		Ext.getCmp('searchgridSaveBtn').enable();
 	}
 	else if( openState == 'savegrid') {
-		$('#savegrid :checkbox').attr('checked', 'checked');
-		$('.savegridtotalcount').html( Ext.getCmp('savegrid').store.getCount() );
-		$('#savegridtbarSelectAll').show();
-		biblios.app.selectedRecords.allSelected = false;
-		biblios.app.selectedRecords.selectedSource = 'savegrid';
+		Ext.getCmp('savegrid').getSelectionModel().checkAllInStore();
 		Ext.getCmp('savegridExportBtn').enable();
 		Ext.getCmp('savegridSendBtn').enable();
 	}
