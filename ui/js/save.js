@@ -125,7 +125,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 		// if we're picking from the search grid
 		else if( openState == 'searchgrid' ) {
 			
-				var records = Ext.getCmp('searchgrid').getSelections();
+				var records = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
 				
 				
 				showStatusMsg('Saving selected records');
@@ -280,16 +280,15 @@ function updateSendMenu(menu, component) {
     biblios.app.fireEvent('updatesendmenu', menu);
 }
 
-function selectAllSearchResults(records, options, params) {
-	var totalcount = Ext.getCmp('searchgrid').store.getTotalCount();
-	Ext.getCmp('searchgrid').getSelectionModel().selectRange(0, totalcount);
-	Ext.getCmp('searchgrid').store.un('load', selectAllSearchResults);
+function checkAllSearchResults(records, options, params) {
+	Ext.getCmp('searchgrid').getSelectionModel().checkAllInStore();
+	Ext.getCmp('searchgrid').store.un('load', checkAllSearchResults);
 	Ext.getCmp('searchgrid').getGridEl().unmask();
 }
 
 function loadAllSearchResults() {
 	var totalcount = Ext.getCmp('searchgrid').store.getTotalCount();
-	Ext.getCmp('searchgrid').store.on('load', selectAllSearchResults);
+	Ext.getCmp('searchgrid').store.on('load', checkAllSearchResults);
 	Ext.getCmp('searchgrid').getGridEl().mask();
 	Ext.getCmp('searchgrid').store.load({params:{start:0, num:totalcount}});
 }
@@ -337,7 +336,7 @@ function sendSelectedFromSearchGrid(locsendto) {
             setTimeout( function() {clearStatusMsg();}, 2000)
         }
     };
-   	var records = Ext.getCmp('searchgrid').getSelections();
+   	var records = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
     for(var i= 0; i < records.length; i++) {
         var id= records[i].id;
         var loc= records[i].data.location;

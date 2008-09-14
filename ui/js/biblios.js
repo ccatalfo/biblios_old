@@ -261,6 +261,7 @@ biblios.app = function() {
 																	{name: 'date', mapping: 'md-date'},
 																	{name: 'medium', mapping:'md-medium'},
 																	{name: 'pzrecid', mapping:'md-pzrecid'},
+																	{name: 'checked' },
 																	{name: 'fullrecord', type:'string', mapping: function(rec){
 																		var xmlNode = Ext.DomQuery.select('md-fullrecord', rec)[0];
 																		var xmlString = '';
@@ -333,8 +334,11 @@ biblios.app = function() {
 															}
 						        						   
 						      						  }),
-														sm: (sm = new Ext.grid.CheckboxSelectionModel({
-																singleSelect: false,
+														sm: (sm = new Ext.grid.SmartCheckboxSelectionModel({
+																//singleSelect: false,
+																alwaysSelectOnCheck: true,
+																email: true,
+																dataIndex: 'checked',
 																listeners: {
 																	rowselect: function(selmodel, rowindex, record) {
 																		Ext.getCmp('searchgridExportBtn').enable();
@@ -380,7 +384,7 @@ biblios.app = function() {
 																		{
 																			id: 'searchgridselectall',
 																			xtype: 'tbtext',
-																			text: 'Select <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().selectAll();Ext.getCmp(\'searchgridselectallfrompz2\').show();">All</a>, <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().clearSelections(); Ext.getCmp(\'searchgridselectallfrompz2\').hide();">None</a>'
+																			text: 'Select <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().checkAllInStore();Ext.getCmp(\'searchgridselectallfrompz2\').show();">All</a>, <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().clearChecked(); Ext.getCmp(\'searchgridselectallfrompz2\').hide();">None</a>'
 																		},
 																		{
 																			id: 'searchgridselectallfrompz2',

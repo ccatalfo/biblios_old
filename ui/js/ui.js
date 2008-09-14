@@ -199,7 +199,7 @@ function doDownloadRecords(format, editorid) {
 			handleDownload(format, encoding, biblios.app.download.recordsString);
 		}
 		if( openState == 'searchgrid') {
-			var records = Ext.getCmp('searchgrid').getSelections();
+			var records = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
 			for( var i = 0; i < records.length; i++) {
                     if( biblios.app.fireEvent('beforerecordexport', records[i].data.fullrecord)) {
                         biblios.app.download.recordsString += records[i].data.fullrecord;
