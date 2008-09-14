@@ -186,10 +186,9 @@ function doDownloadRecords(format, editorid) {
 	// if we're exporting from a grid
 	else {
         if( openState == 'savegrid' ) {
-			biblios.app.download.records = getSelectedSaveGridRecords();
-			biblios.app.download.numToExport = biblios.app.download.records.length;
-			for( var i = 0; i < biblios.app.download.records.length; i++) {
-                var record = biblios.app.download.records[i].xmldoc;
+			records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
+			for( var i = 0; i < records.length; i++) {
+                var record = records[i].data.xml;
                 if( biblios.app.fireEvent('beforerecordexport', record) ) {
                     biblios.app.download.recordsString += record;
                     biblios.app.download.recordsString += recsep;
@@ -207,7 +206,7 @@ function doDownloadRecords(format, editorid) {
                     }
                     var encoding = 'utf-8';				
 			}
-				handleDownload(format, encoding, biblios.app.download.recordsString);
+			handleDownload(format, encoding, biblios.app.download.recordsString);
 		}
     } // if we have a grid open 
 }
@@ -559,7 +558,7 @@ function getMacroMenuItems(recordSource) {
 	}
 	else if( recordSource == 'savegrid' ) {
 		handler = function(btn) {
-			var records = getSelectedSaveGridRecords();
+			var records = Ext.getCmp('savegrid').getSelectionModel.getChecked();
 			for( var i = 0; i < records.length; i++) {
 				var xmldoc = xslTransform.loadString( records[i].xmldoc  );
 				var dbrecord = DB.Records.select('Records.rowid=?', [ records[i].rowid ]).getOne();

@@ -23,8 +23,8 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 			// if we don't have a record id, add this record to the db first
 			if( recid == '' ) {
 				if(bibliosdebug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
-				var data = Ext.getCmp('searchgrid').getSelections()[0].data;
-				var id = Ext.getCmp('searchgrid').getSelections()[0].id;
+				var data = Ext.getCmp('searchgrid').getSelectionModel().getChecked()[0].data;
+				var id = Ext.getCmp('searchgrid').getSelectionModel().getChecked()[0].id;
                 var searchtargetname = data.location[0].name;
                 var searchtargetsid = DB.SearchTargets.select('name=?', [searchtargetname]).getOne().rowid;
 				progress.updateProgress(.6, 'Retrieving record from server');
@@ -87,7 +87,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 			if( dropped == true) {
 				var grid = Ext.getCmp( 'savegrid' );
 				var ds = grid.store;
-				var sel = grid.getSelectionModel().getSelections();
+				var sel = grid.getSelectionModel().getChecked();
 				// update the record(s) based on current selection
 				for( var i = 0; i < sel.length; i++) {
 					var id = sel[i].data.Id;
@@ -105,9 +105,9 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 				}
 			}
 			else {
-				var records = getSelectedSaveGridRecords();
+				var records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
 				for( var i = 0 ; i < records.length; i++) {
-					var id = parseInt(records[i].rowid);
+					var id = parseInt(records[i].data.Id);
 					try {
 						var r = DB.Records.select('Records.rowid=?', [id]).getOne();
 						r.Savefiles_id = savefileid;
@@ -293,29 +293,6 @@ function loadAllSearchResults() {
 	Ext.getCmp('searchgrid').store.load({params:{start:0, num:totalcount}});
 }
 
-function getSelectedSaveGridRecords() {
-	var records = new Array();
-	if( biblios.app.selectedRecords.allSelected == true ) {
-					Ext.getCmp('savegrid').store.each( function(record) {
-						var id = record.data.Id;
-						var title = record.data.Title;
-						var xmldoc = getLocalXml(id);
-						records.push( {id: id, title: title, xmldoc: xmldoc });
-					});
-				}
-	else {
-		var checked = $(':checked.savegridcheckbox');
-		biblios.app.send.numToSend = checked.length;
-		for( var i = 0; i < checked.length; i++) {
-			var rowid = $(checked).get(i).id;
-			var id = Ext.getCmp('savegrid').store.find('Id', rowid);
-			var title = Ext.getCmp('savegrid').store.getAt(id).data.Title;
-			var xmldoc = getLocalXml(rowid);
-			records.push( {rowid: rowid, id: id, title: title, xmldoc: xmldoc });
-		}
-	}
-	return records;
-}
 
 function sendSelectedFromSearchGrid(locsendto) {
     biblios.app.send.numToSend = 0;
@@ -372,11 +349,9 @@ function sendSelectedFromSaveGrid(locsendto) {
             setTimeout( function() {clearStatusMsg();}, 2000)
         }
     };
-    biblios.app.send.numToSend = 0;
-    biblios.app.send.records.length = 0;
-    biblios.app.send.records = getSelectedSaveGridRecords();
-    for( var i = 0; i < biblios.app.send.records.length; i++) {
-            var xml = biblios.app.send.records[i].xmldoc;
+    var records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
+    for( var i = 0; i < records.length; i++) {
+            var xml = records[i].xmldoc;
             var xmldoc = '';
             if( Ext.isIE ) {
                 xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
@@ -389,7 +364,7 @@ function sendSelectedFromSaveGrid(locsendto) {
             if( !biblios.app.fireEvent('beforesendrecord', locsendto, xml, '') ) {
                 return false;
             }
-            showStatusMsg('Sending ' + biblios.app.send.records[i].title + ' to ' + locsendto);
+            showStatusMsg('Sending ' + records[i].data.title + ' to ' + locsendto);
             Prefs.remoteILS[locsendto].instance.save(xmldoc);
     }
 }

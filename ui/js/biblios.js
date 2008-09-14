@@ -954,7 +954,11 @@ biblios.app = function() {
 																	   {name: 'SearchTargets_id'}
 																  ])
 															})), // save grid store aka ds
-															sm: new Ext.grid.RowSelectionModel({
+															sm: (sm = new Ext.grid.SmartCheckboxSelectionModel({
+																//singleSelect: false,
+																alwaysSelectOnCheck: true,
+																email: true,
+																dataIndex: 'checked',
 																listeners: {
 																	rowselect: function(selmodel, rowindex, record) {
 																		showStatusMsg('Previewing...');
@@ -966,17 +970,14 @@ biblios.app = function() {
 																		Ext.getCmp('savepreview').el.mask();
 																		$('#saveprevrecord').getTransform(marcxsl, xml);
 																		Ext.getCmp('savepreview').el.unmask();
+																		Ext.getCmp('savegridSelectAllTbar').show();
 																		clearStatusMsg();
 																	}
 																} // selection listeners
-															}), // save grid selecion model
+															})), // save grid selecion model
 															cm: new Ext.grid.ColumnModel([
-																{header: '', width: 20, 
-																	renderer: function(data, meta, record, row, col, store) {
-																	var recid = record.data.Id;
-																	return '<input id="'+recid+'" class="savegridcheckbox" type="checkbox">';
-																	} // renderer
-																}, // checkbox 
+																sm, // checkbox for smartcheckbox selectiomodel
+																
 																{header: "Medium", dataIndex: 'Medium', sortable: true},
 																{header: "Title", width: 200, dataIndex: 'Title', sortable: true},
 																{header: "Author", width: 160, dataIndex: 'Author', sortable: true},
@@ -987,6 +988,27 @@ biblios.app = function() {
 																{header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true}
 															]),
 															listeners: {
+																render: function() {
+																	var selectAllTbar = new Ext.Toolbar({
+																			id: 'savegridSelectAllTbar',
+																			hidden: true,
+																			renderTo: this.tbar,
+																			items: [
+																				{
+																					id: 'savegridselectall',
+																					xtype: 'tbtext',
+																					text: 'Select <a href="#" onclick="Ext.getCmp(\'savegrid\').getSelectionModel().checkAllInStore();Ext.getCmp(\'savegridselectallfrompz2\').show();">All</a>, <a href="#" onclick="Ext.getCmp(\'savegrid\').getSelectionModel().clearChecked(); Ext.getCmp(\'savegridselectallstore\').hide();">None</a>'
+																				},
+																				{
+																					id: 'savegridselectallstore',
+																					xtype:'tbtext',
+																					text: 'Select <a href=\'#\' onclick=\'selectAll();\'>All search results</a>'
+																				}
+																			]
+																		});
+																	this.syncSize();
+																},
+																	
 																rowdblclick: function(grid, rowIndex, e) {
 																	var id = grid.store.data.get(rowIndex).data.Id;
 																	var xmlformat = grid.store.data.get(rowIndex).data.xmlformat;
@@ -1015,15 +1037,8 @@ biblios.app = function() {
 																displayMsg: 'Displaying records {0} - {1} of {2}',
 																emptyMsg: 'No records to display',
 																listeners: {
-																	beforerender: function(tbar) {
-																		/*var msg = 'Select: <span class="gridselector" onclick="selectAll()">All</span>,<span class="gridselector" onclick="selectNone()">None</span>';
-																		tbar.autoCreate.html = '<table cellspacing="0"><tr></tr><tr id="';
-																		tbar.autoCreate.html += 'savegridtbarinfo';
-																		tbar.autoCreate.html += '">';
-																		tbar.autoCreate.html += '<td colspan="18">' + msg + '</td>';
-																		tbar.autoCreate.html += '</tr>';
-																		tbar.autoCreate.html += '<tr id="savegridtbarSelectAll"><td colspan="18" class="gridselector" onclick="selectAllInObject()">Select all <span class="savegridtotalcount">' + tbar.store.getCount() + '</span> in this folder.<span id="savegridallSelectedStatus">All <span class="savegridtotalcount">'+ tbar.store.getCount() + '</span> are selected.  <span class="gridselector" onclick="selectNone()">Clear Selection</span></span></td></tr>';
-																		tbar.autoCreate.html += '</table>';*/
+																	render: function(){
+																	
 																	}
 																},
 																items: [
@@ -1171,7 +1186,7 @@ biblios.app = function() {
                                                                                     text: 'Duplicate',
                                                                                     icon: libPath + 'ui/images/document-save-as.png',
                                                                                     handler: function(btn) {
-                                                                                        var records = getSelectedSaveGridRecords();
+                                                                                        var records = Ext.getCmp('savegrid').getSelectionModel.getChecked();
                                                                                         if( records.length > 1 ) {
                                                                                             Ext.MessageBox.alert('Error', 'Please select 1 record to duplicate');
                                                                                             return false;
