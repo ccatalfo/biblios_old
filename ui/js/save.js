@@ -124,31 +124,22 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 		}
 		// if we're picking from the search grid
 		else if( openState == 'searchgrid' ) {
-			if( dropped == true ) {
-				var sel = Ext.getCmp('searchgrid').getSelections();
-				for( var i = 0; i < sel.length; i++) {
-					var id = sel[i].id;
-					var data = sel[i].data;
-					addRecordFromSearch(id, recoffset, editorid, data, savefileid);		
-				}
-			}
-			else {
-				biblios.app.selectedRecords.savefileid = savefileid;
-				biblios.app.selectedRecords.loading = true;
+			
+				var records = Ext.getCmp('searchgrid').getSelections();
+				
+				
 				showStatusMsg('Saving selected records');
-				getSelectedSearchGridRecords( function() {
-					var records = biblios.app.selectedRecords.records;
-					biblios.app.selectedRecords.numToGet = records.length;
+				
+					
 					for( var i = 0; i < records.length; i++) {
-						var id = records[i].recid;
-						var data = records[i].data;
-						var title = records[i].title;
-						var offset =records[i].offset;
-						addRecordFromSearch(id, offset, editorid, data, savefileid);
+						
+						addRecordFromSearch(records[i], savefileid, editorid);
 					}
-				});
-			}
+				
 		}
+		showStatusMsg('Records saved');
+		Ext.getCmp('savegrid').el.unmask();
+		setTimeout( function(){ clearStatusMsg() }, 2000);
 		return true;
 	}
 
@@ -196,27 +187,24 @@ function doSaveRemote(loc, xmldoc, editorid) {
 }
 
 
-function addRecordFromSearch(id, offset, editorid, data, savefileid, newxml) {
-	var xml = getPazRecord(id, 
-		offset,
-		// this function gets called when pazpar2 returns the xml for record with this id
-		function(data, params) {
-        biblios.app.fireEvent('remoterecordretrieve', data);
+function addRecordFromSearch(srchRecord, savefileid, editorid) {
+	
+        biblios.app.fireEvent('remoterecordretrieve', srchRecord.data.fullrecord);
 		// data param is this record's xml as returned by pazpar2
 		// o is a json literal containing the record id, grid data and savefileid for this record
-		if(bibliosdebug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + params.title);}
+		if(bibliosdebug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + srchRecord.data.title);}
 		try {
-			var target = DB.SearchTargets.select('name=?', [params.recData.location.name]).getOne();
-			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [params.savefileid]).getOne();
+			var target = DB.SearchTargets.select('name=?', [srchRecord.data.location[0].name]).getOne();
+			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [savefileid]).getOne();
 			var record = new DB.Records({
-				title: UI.editor[editorid]? UI.editor[editorid].record.getValue('245', 'a') : params.recData.title || '',
-				author: UI.editor[editorid]? UI.editor[editorid].record.getValue('100', 'a'):  params.recData.author || '',
-				location: params.recData.location[0].name || '',
-				publisher:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'b'): params.recData.publication || '',
-				medium: params.recData.medium || '',
-				date:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'c'): params.recData.date|| '',
+				title: UI.editor[editorid]? UI.editor[editorid].record.getValue('245', 'a') : srchRecord.data.title || '',
+				author: UI.editor[editorid]? UI.editor[editorid].record.getValue('100', 'a'):  srchRecord.data.author || '',
+				location: srchRecord.data.location[0].name || '',
+				publisher:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'b'): srchRecord.data.publication || '',
+				medium: srchRecord.data.medium || '',
+				date:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'c'): srchRecord.data.date|| '',
 				status: 'new',
-				xml: params.newxml || xslTransform.serialize(data) || '<record></record>',
+				xml: srchRecord.data.fullrecord,
 				date_added: new Date().toString(),
 				date_modified: new Date().toString(),
 				SearchTargets_id: target.rowid,
@@ -228,28 +216,11 @@ function addRecordFromSearch(id, offset, editorid, data, savefileid, newxml) {
 			}).save();
             biblios.app.fireEvent('saverecordcomplete', savefile.rowid, record.xml);
 			if (biblios.app.selectedRecords.loading = true) {
-				showStatusMsg('Saved ' + params.recData.title);
-				biblios.app.selectedRecords.numToGet--;
-				if( biblios.app.selectedRecords.numToGet == 0 ) {
-					showStatusMsg('Records saved');
-					biblios.app.selectedRecords.loading = false;
-					biblios.app.selectedRecords.savefileid = '';
-					Ext.getCmp('savegrid').el.unmask();
-					setTimeout( function(){ clearStatusMsg() }, 2000);
-				}
+				showStatusMsg('Saved ' + srchRecord.data.title);
 			}
 		} catch(ex) {
 			Ext.MessageBox.alert('Database Error', ex.message);
 		}
-	},
-	// send these params along with preceding callback function so we can update the correct record in db by id
-	{
-		id: id,
-		savefileid: savefileid,
-		recData: data,
-		newxml: newxml
-	} 
-	);
 	return db.lastInsertRowId;
 }
 
@@ -309,53 +280,18 @@ function updateSendMenu(menu, component) {
     biblios.app.fireEvent('updatesendmenu', menu);
 }
 
-function getSelectedSearchGridRecords(callback) {
-	showStatusMsg('Retrieving remote records...');
-	biblios.app.selectedRecords.loading = true;
-	biblios.app.selectedRecords.records = new Array;
-	if( biblios.app.selectedRecords.allSelected == true ) {
-		var totalcount = Ext.getCmp('searchgrid').store.getTotalCount();
-		biblios.app.selectedRecords.numToGet = totalcount;
-		Ext.getCmp('searchgrid').store.on('load', function(store, records, option) {
-			if( biblios.app.selectedRecords.loading == true ) {
-				for( var i = 0 ;i <records.length; i++) {
-					var id = records[i].id;
-					var title = records[i].data.title;
-					var loc = records[i].data.location[0].id;
-					var offset = 0;
-					var data = records[i].data;
-					biblios.app.selectedRecords.records.push( { id: id, title: title, data: data, loc: loc, offset: offset });
-				}
-				callback.call(this);
-			}
-			biblios.app.selectedRecords.retrieved = true;
-			biblios.app.selectedRecords.loading = false;
-			selectAll();
-		});
-		Ext.getCmp('searchgrid').store.load({params:{start:0, num:totalcount}});
-	}
-	else {
-		var checked = $(':checked.searchgridcheckbox');
-		biblios.app.selectedRecords.numToGet = checked.length;
-		for( var i = 0; i < checked.length; i++) {
-			var id = checked[i].id.substr(6);
-			var title = Ext.getCmp('searchgrid').store.getById(id).data.title;
-			var data = Ext.getCmp('searchgrid').store.getById(id).data;
-			var offset = checked[i].id.substr(5,1);
-			var loc = ''
-			if( $(':checked').eq(0).parents('.locationitem').length > 0 ) {
-				
-				loc = $(checked).eq(i).parents('.locationitem').text();
+function selectAllSearchResults(records, options, params) {
+	var totalcount = Ext.getCmp('searchgrid').store.getTotalCount();
+	Ext.getCmp('searchgrid').getSelectionModel().selectRange(0, totalcount);
+	Ext.getCmp('searchgrid').store.un('load', selectAllSearchResults);
+	Ext.getCmp('searchgrid').getGridEl().unmask();
+}
 
-			}
-			else {
-				loc = Ext.getCmp('searchgrid').store.getById(id).data.location[0].name;
-			}
-			biblios.app.selectedRecords.records.push( { recid: id, title: title, data: data, loc: loc, offset: offset });
-		}
-		biblios.app.selectedRecords.retrieved = true;
-		callback.call(this);
-	}
+function loadAllSearchResults() {
+	var totalcount = Ext.getCmp('searchgrid').store.getTotalCount();
+	Ext.getCmp('searchgrid').store.on('load', selectAllSearchResults);
+	Ext.getCmp('searchgrid').getGridEl().mask();
+	Ext.getCmp('searchgrid').store.load({params:{start:0, num:totalcount}});
 }
 
 function getSelectedSaveGridRecords() {
@@ -401,23 +337,21 @@ function sendSelectedFromSearchGrid(locsendto) {
             setTimeout( function() {clearStatusMsg();}, 2000)
         }
     };
-    getSelectedSearchGridRecords( function() { 
-        biblios.app.send.numToSend = biblios.app.selectedRecords.records.length;
-        var records = biblios.app.selectedRecords.records;
-        for(var i= 0; i < records.length; i++) {
-            var id= records[i].recid;
-            var loc= records[i].loc;
-            var offset= records[i].offset;
-            var title= records[i].title;
-            getRemoteRecord(id, loc, offset, function(data) { 
-                if( !biblios.app.fireEvent('beforesendrecord', loc, xslTransform.serialize(data), '') ) {
-                    return false;
-                }
-                showStatusMsg('Sending ' + title + ' to ' + locsendto);
-                Prefs.remoteILS[locsendto].instance.save(data);
-            });
+   	var records = Ext.getCmp('searchgrid').getSelections();
+    for(var i= 0; i < records.length; i++) {
+        var id= records[i].id;
+        var loc= records[i].data.location;
+        
+        var title= records[i].data.title;
+		var xml = records[i].data.fullrecord;
+        
+            if( !biblios.app.fireEvent('beforesendrecord', loc, xml, '') ) {
+                return false;
+            }
+            showStatusMsg('Sending ' + title + ' to ' + locsendto);
+            Prefs.remoteILS[locsendto].instance.save(xml);
+       
         }
-    });
 }
 
 function sendSelectedFromSaveGrid(locsendto) {
@@ -551,8 +485,7 @@ function validateRemote(editorid, loc) {
 }
 
 function doValidate(btn) {
-	var editorid = btn.editorid;
-	xml = UI.editor[editorid].record.XMLString();
+       var editorid = btn.editorid;
+       xml = UI.editor[editorid].record.XMLString();
 
 }
-

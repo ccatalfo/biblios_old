@@ -281,6 +281,7 @@ biblios.app = function() {
 																		xml_escaped = xml_escaped.replace(/%3C/g, '&lt;');
 																		xml_escaped = xml_escaped.replace(/%3E/g, '&gt;');
 																		return xml_escaped;
+
 																	}},
 																	{name: 'location', mapping: function(rec) {
 																		var locations = Ext.DomQuery.select('location', rec);

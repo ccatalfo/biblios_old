@@ -199,27 +199,21 @@ function doDownloadRecords(format, editorid) {
 			handleDownload(format, encoding, biblios.app.download.recordsString);
 		}
 		if( openState == 'searchgrid') {
-			getSelectedSearchGridRecords(function() {
-				var records = biblios.app.selectedRecords.records;
-				biblios.app.download.recordsString = '';
-				biblios.app.download.numToExport = biblios.app.selectedRecords.records.length;
-				for( var i = 0; i < records.length; i++) {
-					var id = records[i].recid;
-					getPazRecord(id, 0, function(data, o) {
-						xml = xslTransform.serialize(data);
-                        if( biblios.app.fireEvent('beforerecordexport', xml)) {
-                            biblios.app.download.recordsString += xml;
-                            biblios.app.download.recordsString += recsep;
-                        }
-                        var encoding = 'utf-8';
-                        biblios.app.download.numToExport--;
-						if( biblios.app.download.numToExport == 0 ) {
-							handleDownload(format, encoding, biblios.app.download.recordsString);
-						}
-					}, 
-					{});
-				}
-			});
+			var records = Ext.getCmp('searchgrid').getSelections();
+			for( var i = 0; i < records.length; i++) {
+				var id = records[i].id;
+				
+					xml = xslTransform.serialize(data);
+                    if( biblios.app.fireEvent('beforerecordexport', xml)) {
+                        biblios.app.download.recordsString += xml;
+                        biblios.app.download.recordsString += recsep;
+                    }
+                    var encoding = 'utf-8';
+                    
+					handleDownload(format, encoding, biblios.app.download.recordsString);
+					
+			}
+		
 		}
     } // if we have a grid open 
 }
@@ -525,12 +519,9 @@ function selectAllInObject() {
 
 function selectAll() {
 	if(openState == 'searchgrid') {
-		$('#searchgrid :checkbox').attr('checked', 'checked');
-		var totalcount = Ext.getCmp('searchgrid').store.getTotalCount();
-		Ext.getCmp('searchgrid').store.load({params:{start:0, num: totalcount}});
-		biblios.app.selectedRecords.allSelected = false;
-		biblios.app.selectedRecords.retrieved = false;
-		biblios.app.selectedRecords.selectedSource = 'searchgrid';
+
+		loadAllSearchResults();
+
 		Ext.getCmp('searchgridExportBtn').enable();
 		Ext.getCmp('searchgridSendBtn').enable();
 		Ext.getCmp('searchgridSaveBtn').enable();
