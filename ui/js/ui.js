@@ -492,34 +492,9 @@ function getLocalXml(id) {
 	return xml;
 }
 
-function selectAllInObject() {
-	if(openState == 'searchgrid') {
-		biblios.app.selectedRecords.allSelected = true;
-		biblios.app.selectedRecords.selectedSource = 'searchgrid';
-		$('.searchgridtotalcount').html( Ext.getCmp('searchgrid').store.getTotalCount() );
-		$('#searchgridallSelectedStatus').show();
-	}
-	else if (openState == 'savegrid') {
-		var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
-		var savefileid = n.attributes.savefileid;
-		biblios.app.selectedRecords.allSelected = true;
-		biblios.app.selectedRecords.selectedSource = 'savegrid';
-		biblios.app.selectedRecords.savefileid = savefileid;
-		$('.savegridtotalcount').html( Ext.getCmp('savegrid').store.getTotalCount() );
-		$('#savegridallSelectedStatus').show();
-	}
-}
 
 function selectAll() {
-	if(openState == 'searchgrid') {
-
-		loadAllSearchResults();
-
-		Ext.getCmp('searchgridExportBtn').enable();
-		Ext.getCmp('searchgridSendBtn').enable();
-		Ext.getCmp('searchgridSaveBtn').enable();
-	}
-	else if( openState == 'savegrid') {
+	if( openState == 'savegrid') {
 		Ext.getCmp('savegrid').getSelectionModel().checkAllInStore();
 		Ext.getCmp('savegridExportBtn').enable();
 		Ext.getCmp('savegridSendBtn').enable();
@@ -527,16 +502,7 @@ function selectAll() {
 }
 
 function selectNone() {
-	if(openState == 'searchgrid') {
-		Ext.getCmp('searchgrid').getSelectionModel().clearSelections();
-		Ext.getCmp('searchgridSelectAllTbar').items.items[1].show()
-		Ext.getCmp('searchgridExportBtn').disable();
-		Ext.getCmp('searchgridSendBtn').disable();
-		Ext.getCmp('searchgridSaveBtn').disable();
-		biblios.app.selectedRecords.allSelected = false;
-		biblios.app.selectedRecords.retrieved = false;
-	}
-	else if( openState == 'savegrid') {
+	if( openState == 'savegrid') {
 		Ext.getCmp('savegridSelectAllTbar').items.items[1].hide();
 		Ext.getCmp('savegridExportBtn').disable();
 		Ext.getCmp('savegridSendBtn').disable();

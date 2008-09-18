@@ -284,6 +284,7 @@ function checkAllSearchResults(records, options, params) {
 	Ext.getCmp('searchgrid').getSelectionModel().checkAllInStore();
 	Ext.getCmp('searchgrid').store.un('load', checkAllSearchResults);
 	Ext.getCmp('searchgrid').getGridEl().unmask();
+    Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'All ' + Ext.getCmp('searchgrid').store.getTotalCount() + ' records in this search are selected.  <a href="#" onclick="Ext.getCmp(\'searchgrid\').selectNone()">Clear selection</a>';
 }
 
 function loadAllSearchResults() {

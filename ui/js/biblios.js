@@ -313,6 +313,7 @@ biblios.app = function() {
 																			Ext.getCmp('facetsTreePanel').root.reload();
 																			Ext.getCmp('searchgridSelectAllTbar').show();
 																			refreshTargetHits();
+																			selectNone();
                                                                         }
                                                                         else {
 																			refreshTargetHits();
@@ -375,6 +376,24 @@ biblios.app = function() {
 															{header: 'Full record', id:'fullrecord', hidden:true, dataIndex:'fullrecord'}
 														]), // column model for search grid
 														//plugins: expander, // search grid plugins
+                                                        selectAll: function() {
+                                                            this.getSelectionModel().checkAllInStore();
+                                                            Ext.getCmp('searchgridSelectAllInStoreTbar').show();
+                                                            Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').selectAllInSearch()">Select all ' + this.store.getTotalCount() + ' records in this search</a>';
+                                                            Ext.getCmp('searchgridExportBtn').enable();
+                                                            Ext.getCmp('searchgridSendBtn').enable();
+                                                            Ext.getCmp('searchgridSaveBtn').enable();
+                                                        },
+                                                        selectAllInSearch: function() {
+                                                            loadAllSearchResults();
+                                                        },
+                                                        selectNone: function() {
+                                                            this.getSelectionModel().clearChecked();
+                                                            Ext.getCmp('searchgridSelectAllInStoreTbar').hide();
+                                                            Ext.getCmp('searchgridExportBtn').disable();
+                                                            Ext.getCmp('searchgridSendBtn').disable();
+                                                            Ext.getCmp('searchgridSaveBtn').disable();
+                                                        },
 														listeners: {
 															render: function() {
 																var selectAllTbar = new Ext.Toolbar({
@@ -385,17 +404,26 @@ biblios.app = function() {
 																		{
 																			id: 'searchgridselectall',
 																			xtype: 'tbtext',
-																			text: 'Select <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().checkAllInStore();Ext.getCmp(\'searchgridSelectAllTbar\').items.items[1].hide()">All</a>, <a href="#" onclick="Ext.getCmp(\'searchgrid\').getSelectionModel().clearChecked(); Ext.getCmp(\'searchgridselectallfrompz2\').hide();">None</a>'
-																		},
+																			text: 'Select <a href="#" onclick="Ext.getCmp(\'searchgrid\').selectAll()">All</a>,' + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').selectNone()">None</a>'
+																		}
+																		
+																	]
+																});
+																var selectAllInStore = new Ext.Toolbar({
+																	id: 'searchgridSelectAllInStoreTbar',
+																	hidden: true,
+																	renderTo: this.tbar,
+																	items: [
 																		{
 																			id: 'searchgridselectallfrompz2',
 																			xtype:'tbtext',
-																			text: 'Select <a href=\'#\' onclick=\'selectAll();\'>All search results</a>'
+																			text: "You have selected all" + Ext.getCmp('searchgrid').getSelectionModel().getChecked() + " records in this folder."
 																		}
 																	]
 																});
 																this.syncSize();
 															},
+															
                                                             headerclick: function(grid, colIndex, event) {
                                                                 var colName = Ext.getCmp('searchgrid').getColumnModel().getColumnById(colIndex).dataIndex;
                                                                 var reqName = '';
