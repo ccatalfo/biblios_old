@@ -492,24 +492,6 @@ function getLocalXml(id) {
 	return xml;
 }
 
-
-function selectAll() {
-	if( openState == 'savegrid') {
-		Ext.getCmp('savegrid').getSelectionModel().checkAllInStore();
-		Ext.getCmp('savegridExportBtn').enable();
-		Ext.getCmp('savegridSendBtn').enable();
-	}
-}
-
-function selectNone() {
-	if( openState == 'savegrid') {
-		Ext.getCmp('savegridSelectAllTbar').items.items[1].hide();
-		Ext.getCmp('savegridExportBtn').disable();
-		Ext.getCmp('savegridSendBtn').disable();
-		biblios.app.selectedRecords.allSelected = false;
-	}
-}
-
 function getMacroMenuItems(recordSource) {
 	var handler = function(btn) {};
 	if( recordSource == 'searchgrid') {

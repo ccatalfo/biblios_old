@@ -51,7 +51,7 @@ biblios.app = function() {
 		}
 		Ext.getCmp('savegrid').store.load({db: db, selectSql: savefileSelectSql + ' where Savefiles_id = '+id});
 		biblios.app.displaySaveView();
-		selectNone();
+		Ext.getCmp('savegrid').selectNone();
 		openState = 'savegrid';
 		displayHelpMsg(UI.messages.help.en.saveview);
 	}
@@ -313,7 +313,7 @@ biblios.app = function() {
 																			Ext.getCmp('facetsTreePanel').root.reload();
 																			Ext.getCmp('searchgridSelectAllTbar').show();
 																			refreshTargetHits();
-																			selectNone();
+																			//this.selectNone();
                                                                         }
                                                                         else {
 																			refreshTargetHits();
@@ -376,19 +376,31 @@ biblios.app = function() {
 															{header: 'Full record', id:'fullrecord', hidden:true, dataIndex:'fullrecord'}
 														]), // column model for search grid
 														//plugins: expander, // search grid plugins
+                                                        isAllSearchSelected: false,
+                                                        checkAllSearchResults: function() {
+                                                            Ext.getCmp('searchgrid').getSelectionModel().checkAllInStore();
+                                                            Ext.getCmp('searchgrid').store.un('load', Ext.getCmp('searchgrid').checkAllSearchResults);
+                                                            Ext.getCmp('searchgrid').getGridEl().unmask();
+                                                            Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'All ' + Ext.getCmp('searchgrid').store.getTotalCount() + ' records in this search are selected.  <a href="#" onclick="Ext.getCmp(\'searchgrid\').selectNone()">Clear selection</a>';
+                                                            Ext.getCmp('searchgrid').isAllSearchSelected = true;
+                                                        },
+                                                        loadAllSearchResults: function() {
+                                                            var totalcount = this.store.getTotalCount();
+                                                            this.store.on('load', this.checkAllSearchResults);
+                                                            this.getGridEl().mask();
+                                                            this.store.load({params:{start:0, num:totalcount}});
+                                                        },
                                                         selectAll: function() {
                                                             this.getSelectionModel().checkAllInStore();
                                                             Ext.getCmp('searchgridSelectAllInStoreTbar').show();
-                                                            Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').selectAllInSearch()">Select all ' + this.store.getTotalCount() + ' records in this search</a>';
+                                                            Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').loadAllSearchResults()">Select all ' + this.store.getTotalCount() + ' records in this search</a>';
                                                             Ext.getCmp('searchgridExportBtn').enable();
                                                             Ext.getCmp('searchgridSendBtn').enable();
                                                             Ext.getCmp('searchgridSaveBtn').enable();
                                                         },
-                                                        selectAllInSearch: function() {
-                                                            loadAllSearchResults();
-                                                        },
                                                         selectNone: function() {
                                                             this.getSelectionModel().clearChecked();
+                                                            this.isAllSearchSelected = false;
                                                             Ext.getCmp('searchgridSelectAllInStoreTbar').hide();
                                                             Ext.getCmp('searchgridExportBtn').disable();
                                                             Ext.getCmp('searchgridSendBtn').disable();
@@ -1016,6 +1028,19 @@ biblios.app = function() {
 																{header: "Date Added", width: 120, dataIndex: 'Date Added', sortable: true},
 																{header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true}
 															]),
+                                                            selectAll: function() {
+                                                                this.getSelectionModel().checkAllInStore();
+                                                                Ext.getCmp('searchgridSelectAllInStoreTbar').show();
+                                                                Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').selectAllInSearch()">Select all ' + this.store.getTotalCount() + ' records in this search</a>';
+                                                                Ext.getCmp('savegridExportBtn').enable();
+                                                                Ext.getCmp('savegridSendBtn').enable();
+                                                            },
+                                                            selectNone: function() {
+                                                                Ext.getCmp('savegridSelectAllTbar').items.items[1].hide();
+                                                                Ext.getCmp('savegridExportBtn').disable();
+                                                                Ext.getCmp('savegridSendBtn').disable();
+                                                                biblios.app.selectedRecords.allSelected = false;
+                                                            },
 															listeners: {
 																render: function() {
 																	var selectAllTbar = new Ext.Toolbar({
@@ -1026,7 +1051,7 @@ biblios.app = function() {
 																				{
 																					id: 'savegridselectall',
 																					xtype: 'tbtext',
-																					text: 'Select <a href="#" onclick="Ext.getCmp(\'savegrid\').getSelectionModel().checkAllInStore();Ext.getCmp(\'savegridSelectAllTbar\').items.items[1].show();">All</a>, <a href="#" onclick="Ext.getCmp(\'savegrid\').getSelectionModel().clearChecked();Ext.getCmp(\'savegridSelectAllTbar\').items.items[1].hide();">None</a>'
+																					text: 'Select <a href="#" onclick="Ext.getCmp(\'savegrid\').selectAll()">All</a>, <a href="#" onclick="Ext.getCmp(\'savegrid\').selectNone()">None</a>'
 																				},
 																				{
 																					id: 'savegridselectallstore',
@@ -1036,6 +1061,18 @@ biblios.app = function() {
 																				}
 																			]
 																		});
+                                                                        var selectAllInStore = new Ext.Toolbar({
+                                                                            id: 'savegridSelectAllInStoreTbar',
+                                                                            hidden: true,
+                                                                            renderTo: this.tbar,
+                                                                            items: [
+                                                                                {
+                                                                                    id: 'savegridselectallstore',
+                                                                                    xtype: 'tbtext',
+                                                                                    text: "You have selected all records in this folder"
+                                                                                }
+                                                                            ]
+                                                                        });
 																	this.syncSize();
 																},
 																	
