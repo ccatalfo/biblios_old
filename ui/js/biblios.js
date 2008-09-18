@@ -49,7 +49,7 @@ biblios.app = function() {
 		else {
 			Ext.getCmp('savegrid').el.unmask();
 		}
-		Ext.getCmp('savegrid').store.load({db: db, selectSql: savefileSelectSql + ' where Savefiles_id = '+id});
+		Ext.getCmp('savegrid').store.load({db: db, selectSql: savefileSelectSql + ' where Savefiles_id = '+id, params:{start:0,limit:15}});
 		biblios.app.displaySaveView();
 		Ext.getCmp('savegrid').selectNone();
 		openState = 'savegrid';
@@ -1028,18 +1028,23 @@ biblios.app = function() {
 																{header: "Date Added", width: 120, dataIndex: 'Date Added', sortable: true},
 																{header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true}
 															]),
+                                                            selectAllInStore: function() {
+                                                                var totalcount = this.store.getTotalCount();
+                                                                this.store.on('load', function(){this.getSelectionModel().checkAllInStore()}, this);
+                                                                this.store.load({params:{start:0, limit:totalcount}});
+                                                            },
                                                             selectAll: function() {
                                                                 this.getSelectionModel().checkAllInStore();
-                                                                Ext.getCmp('searchgridSelectAllInStoreTbar').show();
-                                                                Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').selectAllInSearch()">Select all ' + this.store.getTotalCount() + ' records in this search</a>';
+                                                                Ext.getCmp('savegridSelectAllInStoreTbar').show();
+                                                                Ext.getCmp('savegridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'savegrid\').selectAllInStore()">Select all ' + this.store.getTotalCount() + ' records in this folder</a>';
                                                                 Ext.getCmp('savegridExportBtn').enable();
                                                                 Ext.getCmp('savegridSendBtn').enable();
                                                             },
                                                             selectNone: function() {
-                                                                Ext.getCmp('savegridSelectAllTbar').items.items[1].hide();
+                                                                this.getSelectionModel().clearChecked();
+                                                                Ext.getCmp('savegridSelectAllInStoreTbar').hide();
                                                                 Ext.getCmp('savegridExportBtn').disable();
                                                                 Ext.getCmp('savegridSendBtn').disable();
-                                                                biblios.app.selectedRecords.allSelected = false;
                                                             },
 															listeners: {
 																render: function() {
@@ -1052,12 +1057,6 @@ biblios.app = function() {
 																					id: 'savegridselectall',
 																					xtype: 'tbtext',
 																					text: 'Select <a href="#" onclick="Ext.getCmp(\'savegrid\').selectAll()">All</a>, <a href="#" onclick="Ext.getCmp(\'savegrid\').selectNone()">None</a>'
-																				},
-																				{
-																					id: 'savegridselectallstore',
-																					hidden: true,
-																					xtype:'tbtext',
-																					text: '<a href=\'#\' onclick=\'selectAll();\'>Select All in Folder</a>'
 																				}
 																			]
 																		});
