@@ -1124,43 +1124,17 @@ biblios.app = function() {
 																		id: 'savegridEditBtn',
 																		disabled: true,
 																		handler: function() {
-																			var checked = $(':checked.savegridcheckbox');
-																			var selections = Ext.getCmp('savegrid').getSelections();
-																			var editorid = '';
-																			if( checked.length == 0 && selections.length == 1) {
-																				editorid = 'editorone';
-																				var id = selections[0].data.Id;
-                                                                                var xmlformat = selections[0].data.xmlformat;
-																				UI.editor[editorid].id = id;
-																				Ext.getCmp('savegrid').el.mask('Loading record');
-																				showStatusMsg('Opening record...');
-																				var xml = getLocalXml(id);
-																				openRecord( xml, xmlformat);
-																				Ext.getCmp('savegrid').el.unmask();
-
-																			}
-																			else if( (checked.length == 0 || checked.length > 2) && selections.length == 0) {
-																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the title, then click this button again.');
-																			}
-																			else {
-																				for( var i = 0; i < checked.length; i++) {
-																					if( i == 0 ) {
-																						editorid = 'editorone';
-																					}
-																					else if( i == 1 ) {
-																						editorid = 'editortwo';
-																					}
-																					var id = $(checked).get(i).id;
-																					UI.editor[editorid].id = id;
-																					Ext.getCmp('savegrid').el.mask('Loading record');
-																					showStatusMsg('Opening record...');
-																					var xml = getLocalXml(id);
-																					openRecord( xml,  'marcxml');
-																					Ext.getCmp('savegrid').el.unmask();
-																				}
-																			} // 1 or 2 checkboxes are checked in save grid
-																		}
-																	},
+																			var checked = Ext.getCmp('savegrid').getSelectionModel().getChecked();
+                                                                            for( var i = 0; i < checked.length; i++) {
+                                                                                var id = checked[i].data.Id;
+                                                                                Ext.getCmp('savegrid').el.mask('Loading record');
+                                                                                showStatusMsg('Opening record...');
+                                                                                var xml = getLocalXml(id);
+                                                                                openRecord( xml,  'marcxml');
+                                                                                Ext.getCmp('savegrid').el.unmask();
+                                                                            }
+                                                                        }
+                                                                    },
 																	{   
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
 																		icon: libPath + 'ui/images/network-receive.png',

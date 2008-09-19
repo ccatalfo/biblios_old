@@ -13,26 +13,6 @@ UI.editor.lastElemHelpShown = '';
 UI.editor.id = '';
 UI.editor.lastEditorId = '';
 UI.editor.lastFocusedEl = '';
-// marc editor one metadata
-UI.editor.editorone = {};
-UI.editor.editorone.id = '';
-UI.editor.editorone.ffed = '';
-UI.editor.editorone.vared = '';
-UI.editor.editorone.location = '';
-UI.editor.editorone.savedRemote  = {};
-UI.editor.editorone.savefileid  = '';
-UI.editor.editorone.record = '';
-UI.editor.editorone.comboboxes = new Array();
-// marc editor two metadata
-UI.editor.editortwo = {};
-UI.editor.editortwo.id = '';
-UI.editor.editortwo.ffed = '';
-UI.editor.editortwo.vared = '';
-UI.editor.editortwo.location = '';
-UI.editor.editortwo.savedRemote  = {};
-UI.editor.editortwo.savefileid  = '';
-UI.editor.editortwo.record = '';
-UI.editor.editortwo.comboboxes = new Array();
 // search state
 UI.search = {};
 UI.search.currQuery = '';
