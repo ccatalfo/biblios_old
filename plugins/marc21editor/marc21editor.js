@@ -508,6 +508,7 @@ function MarcEditor(editorid) {
 	// private
 	var that = this;
     var editorid = editorid;
+    this.editorid = editorid;
     var editorelem = Ext.get(editorid);
 	var htmled = '';	
 	var lastFocusedEl;
@@ -1456,6 +1457,7 @@ function setupFFEditorCtryCombo() {
 
 	this._loadXml = function(marcXmlDoc) {
 		var html = '';
+        html += '<div class="marceditor"';
 		html += '<div class="ffeditor">';
 		html += '<div id="fixedfields_editor">';
 		html += '<table id="fixed_field_grid">';
@@ -1528,6 +1530,7 @@ function setupFFEditorCtryCombo() {
 		//UI.editor.progress.updateProgress(.7, 'Datafields editor created');
 		html += '</div>'; // end vareditor div
 		html += '</div>'; // varfields_editor div
+        html += '</div>'; // marceditor div
 		marcrecord = new MarcRecord(fields);
 		createFieldList();
 		//UI.editor.progress.updateProgress(.8, 'MarcEditor created');
@@ -1682,7 +1685,7 @@ MarcEditor.prototype.getToolsMenu = function getToolsMenu() {
     return [
             {
                 id: 'toggleFixedFieldGrid',
-                editorid: 'editorone',
+                editorid: this.editorid,
                 text: 'Toggle Fixed Field Editor',
                 enableToggle: true,
                 pressed: true,
@@ -1695,23 +1698,23 @@ MarcEditor.prototype.getToolsMenu = function getToolsMenu() {
             },
             {
                 id: 'addField',
-                editorid: 'editorone',
+                editorid: this.editorid,
                 text: 'Add Field Ctrl-n',
                 handler: function(btn) {
-                    UI.editor.editorone.record.addField();
+                    UI.editor[this.editorid].record.addField();
                 }
             },
             {
                 id: 'removeField',
-                editorid: 'editorone',
+                editorid: this.editorid,
                 text: 'Remove Field Ctrl-r',
                 handler: function(btn) {
-                    UI.editor[btn.editorid].record.deleteField('editorone');
+                    UI.editor[btn.editorid].record.deleteField(btn.editorid);
                 }
             },
             {
                 id: 'addSubfield',
-                editorid: 'editorone',
+                editorid: this.editorid,
                 text: 'Add Subfield Ctrl-m',
                 handler: function(btn) {
                     UI.editor[btn.editorid].record.addSubfield();
@@ -1719,7 +1722,7 @@ MarcEditor.prototype.getToolsMenu = function getToolsMenu() {
             },
             {	
                 id: 'removeSubfield',
-                editorid: 'editorone',
+                editorid: this.editorid,
                 text: 'Remove subfield Ctrl-d',
                 handler: function(btn) {
                     UI.editor[btn.editorid].record.deleteSubfield(btn.editorid);
@@ -1732,26 +1735,24 @@ MarcEditor.prototype.getToolBar = function() {
 
     return new Ext.Toolbar ({
         listeners: {
-            beforerender: function(tbar) {
-                    tbar.autoCreate.html = '<table cellspacing="0"><tr></tr></table>';
-            }
         },
         items: [
         {
             cls: 'x-btn-text-icon',
             icon: libPath + 'ui/images/edit-copy.png',
-            id: 'editoroneEditBtn',
+            id: this.editorid+'EditBtn',
             editorid: this.editorid,
             text: 'Edit',
             tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-r<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
             menu: 
                 {
-                    id: 'editoroneEditMenu',
+                    id: this.editorid+'EditMenu',
+                    editorid: this.editorid,
                     items: [],
                     listeners: {
                         beforeshow: function(menu, menuItem, e) {
                             menu.removeAll();
-                            var items = UI.editor.editorone.record.getToolsMenu();
+                            var items = UI.editor[this.editorid].record.getToolsMenu();
                             for( i in items) {
                                 menu.add( items[i] );
                             }
@@ -1765,12 +1766,12 @@ MarcEditor.prototype.getToolBar = function() {
             icon: libPath + 'ui/images/edit-copy.png',
             text: 'Macros',
             menu : {
-                id: 'editorOnemacrosmenu',
-                items: getMacroMenuItems('editorone'),
+                id: this.editorid+'Onemacrosmenu',
+                items: getMacroMenuItems(this.editorid),
                 listeners: {
                     beforeshow: function(menu, menuItem, e) {
                         menu.removeAll();
-                        var items = getMacroMenuItems('editorone');
+                        var items = getMacroMenuItems(this.editorid);
                         for( i in items) {
                             menu.add( items[i] );
                         }
@@ -1784,11 +1785,11 @@ MarcEditor.prototype.getToolBar = function() {
             text: 'Save',
             tooltip: {title: 'Save', text: 'Ctrl-s'},
             menu: {
-                id: 'editorOneSaveMenu',
-                items: getSaveFileMenuItems('editorone'),
+                id: this.editorid+'OneSaveMenu',
+                items: getSaveFileMenuItems(this.editorid),
                 listeners: {
                     beforeshow: function(menu, menuItem, e) {
-                        updateSaveMenu(menu, 'editorone');
+                        updateSaveMenu(menu, this.editorid);
                     }
                 }
             }
