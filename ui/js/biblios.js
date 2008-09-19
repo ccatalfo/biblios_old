@@ -470,7 +470,7 @@ biblios.app = function() {
 																UI.editor['editorone'].location = loc;
 																
                                                                     biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
-                                                                    openRecord( record.data.fullrecord, 'editorone', xmlformat ); 
+                                                                    openRecord( record.data.fullrecord,  xmlformat ); 
                                                                 
 													
 
@@ -484,7 +484,7 @@ biblios.app = function() {
 																UI.editor['editorone'].location = loc;
 																  
                                                                 biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
-                                                                openRecord( record.data.fullrecord, 'editorone' , xmlformat); 
+                                                                openRecord( record.data.fullrecord,  xmlformat); 
                                                                     
 																}	
 															} // on ENTER keypress
@@ -537,7 +537,7 @@ biblios.app = function() {
 																				UI.editor[editorid].location = loc;
 																				
                                                                                     biblios.app.fireEvent('remoterecordretrieve', selections[i].data.fullrecord);
-																					openRecord( selections[i].data.fullrecord, editorid, xmlformat ); 
+																					openRecord( selections[i].data.fullrecord, xmlformat ); 
 																				
 																			} // for each checked record
 																			Ext.getCmp('searchgrid').el.unmask();
@@ -631,7 +631,14 @@ biblios.app = function() {
 												id: 'editorpanel',
 												layout: 'border',
 												items: [
-													{
+                                                    new Ext.TabPanel({
+                                                        region: 'center',
+                                                        id: 'editorTabPanel',
+                                                        defaults: {autoScroll:true},
+                                                        resizeTabs: true,
+                                                        enableTabScroll:true,
+                                                    })
+													/*{
 														region: 'center',
 														id: 'editorone',
 														title: 'Editor 1',
@@ -770,7 +777,7 @@ biblios.app = function() {
                                                                     var progress = Ext.MessageBox.progress('Reverting record to last saved state', '');
                                                                     var id = UI.editor[ btn.editorid].id;
                                                                     var xml = getLocalXml(id);
-                                                                    openRecord( xml, btn.editorid, 'marcxml' );
+                                                                    openRecord( xml, ' marcxml' );
                                                                     progress.updateProgress(1, 'Revert complete');
                                                                     progress.hide();
                                                                     showStatusMsg('Record reverted');
@@ -935,7 +942,7 @@ biblios.app = function() {
                                                                     var progress = Ext.MessageBox.progress('Reverting record to last saved state', '');
                                                                     var id = UI.editor[ btn.editorid].id;
                                                                     var xml = getLocalXml(id);
-                                                                    openRecord( xml, btn.editorid, 'marcxml' );
+                                                                    openRecord( xml, 'marcxml' );
                                                                     progress.updateProgress(1, 'Revert complete');
                                                                     showStatusMsg('Record reverted');
                                                                     clearStatusMsg();
@@ -961,7 +968,7 @@ biblios.app = function() {
 																}
 															}
 														] // editortwo toolbar
-													} // editor south
+													} // editor south*/
 												] // editor items
 											}, // editor region
 											{
@@ -1083,7 +1090,7 @@ biblios.app = function() {
 																	showStatusMsg('Opening record...');
 																	var xml = getLocalXml(id);
 																	UI.editor.id = id;
-																	openRecord( xml, 'editorone', xmlformat);
+																	openRecord( xml,  xmlformat);
 																},// save grid row dbl click handler
 																keypress: function(e) {
 																	if( e.getKey() == Ext.EventObject.ENTER ) {
@@ -1093,7 +1100,7 @@ biblios.app = function() {
                                                                         var xmlformat = sel.data.xmlformat;
 																		UI.editor['editorone'].id = id;
 																		var xml = getLocalXml(id);
-																		openRecord( xml, 'editorone', xmlformat );
+																		openRecord( xml, xmlformat );
 																	} // ENTER
 																} // savegrid keypress
 															}, // save grid listeners
@@ -1128,7 +1135,7 @@ biblios.app = function() {
 																				Ext.getCmp('savegrid').el.mask('Loading record');
 																				showStatusMsg('Opening record...');
 																				var xml = getLocalXml(id);
-																				openRecord( xml, editorid, xmlformat);
+																				openRecord( xml, xmlformat);
 																				Ext.getCmp('savegrid').el.unmask();
 
 																			}
@@ -1148,7 +1155,7 @@ biblios.app = function() {
 																					Ext.getCmp('savegrid').el.mask('Loading record');
 																					showStatusMsg('Opening record...');
 																					var xml = getLocalXml(id);
-																					openRecord( xml, editorid, 'marcxml');
+																					openRecord( xml,  'marcxml');
 																					Ext.getCmp('savegrid').el.unmask();
 																				}
 																			} // 1 or 2 checkboxes are checked in save grid

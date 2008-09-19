@@ -259,7 +259,7 @@ function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
     try {
         var leaderval = getLeaderFromEditor(ff_ed);
         $('#'+editorid).find("#000", var_ed).children('.controlfield-text').val(leaderval);
-        if(debug){console.info('Transferring leader value from fixed field editor into leader tag: ' + leaderval);}
+        if(bibliosdebug){console.info('Transferring leader value from fixed field editor into leader tag: ' + leaderval);}
     }
     catch(ex) {
         Ext.MessageBox.alert('Error', ex.message);
@@ -267,7 +267,7 @@ function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
     try {
         var tag008val = get008FromEditor(ff_ed);
         $('#'+editorid).find("#008", var_ed).children('.controlfield-text').val(tag008val);
-        if(debug){console.info('Transferring 008 value from fixed field editor into 008 tag: ' + tag008val);}
+        if(bibliosdebug){console.info('Transferring 008 value from fixed field editor into 008 tag: ' + tag008val);}
     }
     catch(ex) {
         Ext.MessageBox.alert('Error', ex.message);
@@ -276,7 +276,7 @@ function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
         try {
             var tag006val = get006FromEditor(ff_ed);
             $('#'+editorid).find("#006", var_ed).children('.controlfield-text').val(tag006val);
-            if(debug){console.info('Transferring 006 value from fixed field editor into 006 tag: ' + tag006val);}
+            if(bibliosdebug){console.info('Transferring 006 value from fixed field editor into 006 tag: ' + tag006val);}
         }
         catch(ex) {
             Ext.MessageBox.alert('Error', ex.message);
@@ -286,7 +286,7 @@ function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
         try {
             var tag007val = get007FromEditor(ff_ed);
             $('#'+editorid).find("#007", var_ed).children('.controlfield-text').val(tag007val);
-            if(debug){console.info('Transferring 007 value from fixed field editor into 007 tag: ' + tag007val);}
+            if(bibliosdebug){console.info('Transferring 007 value from fixed field editor into 007 tag: ' + tag007val);}
         }
         catch(ex) {
             Ext.MessageBox.alert('Error', ex.message);
@@ -504,11 +504,11 @@ function checkEditorLimits(elem) {
 // Object -> marc editor wrapper
 
 
-function MarcEditor(editorelem, editorid) {
+function MarcEditor(editorid) {
 	// private
 	var that = this;
-    var editorelem = editorelem;
     var editorid = editorid;
+    var editorelem = Ext.get(editorid);
 	var htmled = '';	
 	var lastFocusedEl;
 	var currFocusedEl;
@@ -523,7 +523,7 @@ function MarcEditor(editorelem, editorid) {
 
 */
 function updateFFEditor() {
-	if(debug) { console.info("updating fixed field editor from leader and 008 tags"); }
+	if(bibliosdebug) { console.info("updating fixed field editor from leader and 008 tags"); }
     var oDomDoc = Sarissa.getDomDocument();
     var leaderval = $('#'+editorid).find("#000", editorelem).children('.controlfield-text').val();
 	if( leaderval.length != 24 ) {
@@ -539,7 +539,7 @@ function updateFFEditor() {
 			msg: "Invalid length of 008"
 		};
 	}
-    if(debug) {
+    if(bibliosdebug) {
         console.info('Transferring leader value to fixed field editor from leader tag: ' + leaderval);
         console.info('Transferring 008 value to fixed field editor from 008 tag: ' + tag008val);
     }
@@ -597,7 +597,7 @@ function setupSpecialEntries(loc) {
 			// store valid values in store
 			storevalues.push([code, desc]);
 		}
-		if(debug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry');}
+		if(bibliosdebug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry');}
 		var store = new Ext.data.SimpleStore({
 			fields: ['code', 'desc'],
 			data: storevalues
@@ -617,7 +617,7 @@ function setupSpecialEntries(loc) {
 			applyTo: $(elemToReplace).get(0)
 		});
 		Ext.ComponentMgr.register(combo);
-		if(debug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry');}
+		if(bibliosdebug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry');}
 		
 	}
 }
@@ -690,7 +690,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 	if( subfield_text.length == 0 ) {
 		return;
 	}
-	if(debug) {console.info('applying combobox to '+ $(subfield_text).val() ); }
+	if(bibliosdebug) {console.info('applying combobox to '+ $(subfield_text).val() ); }
 	var ds = new Ext.data.Store({
 		proxy: new Ext.data.HttpProxy(
 			{
@@ -1302,7 +1302,7 @@ function setupFFEditorCtryCombo() {
 			var firstind = ind1 || ' ';
 			var secondind = ind2 || ' ';
 			var sf = subfields || [ {'delimiter': 'a', 'text': ''} ];
-			if(debug) { console.info("Adding tag with tagnumber: " + tagnumber);  }
+			if(bibliosdebug) { console.info("Adding tag with tagnumber: " + tagnumber);  }
 
 			// insert the new field in numerical order among the existing tags
 			var tags = $(".tag",editorelem  );
@@ -1338,7 +1338,7 @@ function setupFFEditorCtryCombo() {
 	};
 
 	this._deleteField = function(editorid, tagnumber, i) {
-		//if(debug) { console.info('removing tag: ' + $(UI.editor.lastFocusedEl).parents('.tag').get(0).id)}
+		//if(bibliosdebug) { console.info('removing tag: ' + $(UI.editor.lastFocusedEl).parents('.tag').get(0).id)}
 		if( tagnumber ) {
 			// remove  the ith tagnumber if we were passed an i
 			if( !Ext.isEmpty(i) ) {
@@ -1406,7 +1406,7 @@ function setupFFEditorCtryCombo() {
 	};
 
 	this._deleteSubfield = function(editorid, tag, index, subfield) {
-		if(debug) { console.info('removing subfield with text: ' + $(UI.editor.lastFocusedEl).val());}
+		if(bibliosdebug) { console.info('removing subfield with text: ' + $(UI.editor.lastFocusedEl).val());}
 		var next = $(UI.editor[editorid].lastFocusedEl).parents('.subfield').next().children('.subfield-delimiter');
 		var prev = $(UI.editor[editorid].lastFocusedEl).parents('.subfield').prev().children('.subfield-delimiter');
 		var ind2 = $(UI.editor[editorid].lastFocusedEl).parents('.tag').children('.indicator').eq(1);

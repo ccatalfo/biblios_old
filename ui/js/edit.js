@@ -12,19 +12,27 @@
    None.
 
 */
-function openRecord(xml, editorid, syntax) {
+function openRecord(xml, syntax) {
 	// we need to display record view first since editors are lazily rendered
 	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
 	biblios.app.displayRecordView();
-	if( editorid == 'editortwo') {
-		Ext.getCmp('editortwo').expand();
-	}
-	var ffed =	$('#'+editorid).find(".ffeditor");
-	$(ffed).empty();
-	var vared = $('#'+editorid).find(".vareditor");
-	$(vared).empty();
-    var editorelem = $('#'+editorid);
+    var editorid = Ext.id();
+    Ext.getCmp('editorTabPanel').add({ 
+        title: 'test', 
+        closable:true, 
+        html:{ tag: 'div', id: editorid }
+    }).show()
+    UI.editor[editorid] = {
+        id: '',
+        ffed: '',
+        vared : '',
+        savedRemote : {},
+        savefileid: '',
+        record : '',
+        comboboxes : new Array()
+    };
+
     var editor = DB.Editors.select('syntax=?', [syntax]).getOne();
     var editor_plugin = DB.Plugins.select('name=?', [editor.name]).getOne();
     var editor_init = editor_plugin.initcall;
@@ -44,12 +52,7 @@ function openRecord(xml, editorid, syntax) {
 		xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
 	}
 	html = UI.editor[editorid].record.loadXml( xmldoc );
-	Ext.get('marc'+editorid).update(html);
-
-	var ffed =	$('#'+editorid).find(".ffeditor");
-	var vared = $('#'+editorid).find(".vareditor");
-	UI.editor[editorid].ffed = ffed;
-	UI.editor[editorid].vared = vared;
+    Ext.get(editorid).update(html);
 
     UI.editor[editorid].record.postProcess();
 
@@ -58,9 +61,10 @@ function openRecord(xml, editorid, syntax) {
         UI.editor[editorid].record.processForLocation(UI.editor[editorid].location);
 	}
     // disable Revert, Duplicate buttons if record is coming from search results 
+    /*
     if( UI.editor[editorid].id == '') {
         Ext.getCmp(editorid + 'DuplicateBtn').disable();
         Ext.getCmp(editorid + 'RevertBtn').disable();
-    }
+    }*/
 	clearStatusMsg();
 }
