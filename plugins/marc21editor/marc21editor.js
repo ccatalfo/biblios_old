@@ -1457,7 +1457,6 @@ function setupFFEditorCtryCombo() {
 
 	this._loadXml = function(marcXmlDoc) {
 		var html = '';
-        html += '<div class="marceditor"';
 		html += '<div class="ffeditor">';
 		html += '<div id="fixedfields_editor">';
 		html += '<table id="fixed_field_grid">';
@@ -1684,7 +1683,7 @@ MarcEditor.prototype.processForLocation = function(loc) {
 MarcEditor.prototype.getToolsMenu = function getToolsMenu() {
     return [
             {
-                id: 'toggleFixedFieldGrid',
+                id: this.editorid+'toggleFixedFieldGrid',
                 editorid: this.editorid,
                 text: 'Toggle Fixed Field Editor',
                 enableToggle: true,
@@ -1701,7 +1700,7 @@ MarcEditor.prototype.getToolsMenu = function getToolsMenu() {
                 editorid: this.editorid,
                 text: 'Add Field Ctrl-n',
                 handler: function(btn) {
-                    UI.editor[this.editorid].record.addField();
+                    UI.editor[btn.editorid].record.addField();
                 }
             },
             {
@@ -1758,15 +1757,15 @@ MarcEditor.prototype.getToolBar = function() {
                             }
                         }
                     }
-                } // editorone tools menu 
-        }, // editorone tools btn
+                } 
+        }, 
         {
             id: 'editorOneMacrosBtn',
             cls: 'x-btn-text-icon bmenu',
             icon: libPath + 'ui/images/edit-copy.png',
             text: 'Macros',
             menu : {
-                id: this.editorid+'Onemacrosmenu',
+                id: this.editorid+'macrosmenu',
                 items: getMacroMenuItems(this.editorid),
                 listeners: {
                     beforeshow: function(menu, menuItem, e) {

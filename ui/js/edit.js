@@ -21,7 +21,7 @@ function openRecord(xml, syntax) {
     Ext.getCmp('editorTabPanel').add({ 
         title: 'test', 
         closable:true, 
-        html:{ tag: 'div', id: editorid },
+        html:{ tag: 'div', id: editorid, class: 'marceditor' },
     }).show()
     UI.editor[editorid] = {
         id: '',
