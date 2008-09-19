@@ -1382,7 +1382,7 @@ biblios.app = function() {
                                                                             if( node.attributes.port != '') {
                                                                                 pazid += ':' + node.attributes.port;
                                                                             }
-																			if( node.attributes.dbname != '') {
+																			if( node.attributes.dbname != undefined ) {
 																				pazid += '/' + node.attributes.dbname;	
 																			}
                                                                             

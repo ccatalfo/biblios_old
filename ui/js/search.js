@@ -169,11 +169,17 @@ function doPazPar2Search(query) {
     }
 }
 
-function runSearch(query) {
-	$.get(pazcgiurl, {action:'search', query:query}, function(data) {
-			Ext.getCmp('searchgrid').store.reload();
-            Ext.getCmp('facetsTreePanel').root.reload();
-		});
+function runSearch(query, filter) {
+    if(filter) {
+        $.get(pazcgiurl, {action:'search', query:query, filter:filter}, function(data) {
+                Ext.getCmp('searchgrid').store.reload();
+        });
+    }
+    else {
+        $.get(pazcgiurl, {action:'search', query:query}, function(data) {
+                Ext.getCmp('searchgrid').store.reload();
+        });
+    }
 }
 function getPazRecord(recId, offset, callback, callbackParamObject) {
 	if( recordCache[recId] && offset == 0) {
@@ -263,18 +269,19 @@ function term2searchterm(term) {
 	}
 }
 function filterSearch() {
-	var filter = 'pz:id=';
 	var i = 0;
+    var filter = '';
 	for( f in UI.searchFilters ) {
+        if(i == 0) { filter = 'pz:id=';}
 		if(i > 0) {filter += '|';}
 		filter += f;
 		i++;
 	}
 	if(filter == '') {
-		biblios.app.paz.search( biblios.app.paz.currQuery, biblios.app.paz.currentNum, biblios.app.paz.currentSort);
+        runSearch(biblios.app.currQuery);
 	}
 	else {
-		biblios.app.paz.search( biblios.app.paz.currQuery, biblios.app.paz.currentNum, biblios.app.paz.currentSort, filter);																				
+        runSearch(biblios.app.currQuery, filter);
 	}
 }
 
