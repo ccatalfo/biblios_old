@@ -470,7 +470,7 @@ biblios.app = function() {
 																UI.editor['editorone'].location = loc;
 																
                                                                     biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
-                                                                    openRecord( record.data.fullrecord,  xmlformat ); 
+                                                                    openRecord( record.data.fullrecord,  '', xmlformat ); 
                                                                 
 													
 
@@ -484,7 +484,7 @@ biblios.app = function() {
 																UI.editor['editorone'].location = loc;
 																  
                                                                 biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
-                                                                openRecord( record.data.fullrecord,  xmlformat); 
+                                                                openRecord( record.data.fullrecord,  '', xmlformat); 
                                                                     
 																}	
 															} // on ENTER keypress
@@ -537,7 +537,7 @@ biblios.app = function() {
 																				UI.editor[editorid].location = loc;
 																				
                                                                                     biblios.app.fireEvent('remoterecordretrieve', selections[i].data.fullrecord);
-																					openRecord( selections[i].data.fullrecord, xmlformat ); 
+																					openRecord( selections[i].data.fullrecord, '', xmlformat ); 
 																				
 																			} // for each checked record
 																			Ext.getCmp('searchgrid').el.unmask();
@@ -638,338 +638,7 @@ biblios.app = function() {
                                                         resizeTabs: true,
                                                         enableTabScroll:true,
                                                     })
-													/*{
-														region: 'center',
-														id: 'editorone',
-														title: 'Editor 1',
-														cls: 'marceditor',
-														autoScroll: true,
-														split: true,
-														height: 300,
-														html: '<div id="marceditorone"><div class="ffeditor"></div><div class="vareditor"></div></div>',
-														tbar: (editorToolbar = new Ext.Toolbar ({
-                                                            listeners: {
-                                                                beforerender: function(tbar) {
-                                                                        tbar.autoCreate.html = '<table cellspacing="0"><tr></tr></table>';
-                                                                }
-                                                            },
-                                                            items: [
-															{
-																cls: 'x-btn-text-icon',
-																icon: libPath + 'ui/images/edit-copy.png',
-																id: 'editoroneEditBtn',
-																editorid: 'editorone',
-																text: 'Edit',
-																tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-r<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
-															    menu: 
-                                                                    {
-                                                                        id: 'editoroneEditMenu',
-                                                                        items: [],
-                                                                        listeners: {
-                                                                            beforeshow: function(menu, menuItem, e) {
-                                                                                menu.removeAll();
-                                                                                var items = UI.editor.editorone.record.getToolsMenu();
-                                                                                for( i in items) {
-                                                                                    menu.add( items[i] );
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    } // editorone tools menu 
-                                                            }, // editorone tools btn
-                                                            {
-                                                                id: 'editorOneMacrosBtn',
-                                                                cls: 'x-btn-text-icon bmenu',
-                                                                icon: libPath + 'ui/images/edit-copy.png',
-                                                                text: 'Macros',
-                                                                menu : {
-                                                                    id: 'editorOnemacrosmenu',
-                                                                    items: getMacroMenuItems('editorone'),
-                                                                    listeners: {
-                                                                        beforeshow: function(menu, menuItem, e) {
-                                                                            menu.removeAll();
-                                                                            var items = getMacroMenuItems('editorone');
-                                                                            for( i in items) {
-                                                                                menu.add( items[i] );
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            },
-															{
-																cls: 'x-btn-text-icon bmenu', // icon and text class
-																icon: libPath + 'ui/images/document-save.png',
-																text: 'Save',
-																tooltip: {title: 'Save', text: 'Ctrl-s'},
-																menu: {
-																	id: 'editorOneSaveMenu',
-																	items: getSaveFileMenuItems('editorone'),
-																	listeners: {
-																		beforeshow: function(menu, menuItem, e) {
-																			updateSaveMenu(menu, 'editorone');
-																		}
-																	}
-																}
-															},
-															{
-																cls: 'x-btn-text-icon bmenu', // icon and text class
-																icon: libPath + 'ui/images/document-save.png',
-																text: 'Send',
-																tooltip: {text: 'Send record to remote ILS'},
-																menu: {
-																	id: 'editorOneSendMenu',
-																	editorid: 'editorone',
-																	items: getSendFileMenuItems('editorone'),
-																	listeners: {
-																		beforeshow: function(menu, menuItem, e) {
-																			updateSendMenu(menu, 'editorone');
-																		}
-																	}
-																}
-															},
-															{   
-																cls: 'x-btn-text-icon bmenu', // icon and text class
-																icon: libPath + 'ui/images/network-receive.png',
-																text: 'Export',
-																tooltip: {text: 'Export record to marc21 or marcxml'},
-																menu: {
-																	id: 'editorOneExportMenu',
-																	items: getExportMenuItems('editorone')
-																}
-															},
-                                                            {
-                                                                cls: 'x-btn-text-icon',
-                                                                icon: libPath + 'ui/images/document-save-as.png',
-                                                                text: 'Duplicate',
-                                                                tooltip: {text: 'Duplicate this record to Drafts folder'},
-                                                                editorid: 'editorone',
-                                                                id: 'editoroneDuplicateBtn',
-                                                                handler: function(btn) {
-                                                                    // get record from db for this record
-                                                                    var r = DB.Records.select('Records.rowid=?', [ UI.editor[btn.editorid].id ]).getOne();
-                                                                    var newrec = new DB.Records({
-                                                                        xml : r.xml,
-                                                                        title : r.title,
-                                                                        author : r.author,
-                                                                        publisher : r.publisher,
-                                                                        date : r.date,
-                                                                        date_added : new Date().toString(),
-                                                                        date_modified : new Date().toString(),
-                                                                        status : 'duplicate',
-                                                                        medium : r.medium,
-                                                                        SearchTargets_id : r.SearchTargets_id,
-                                                                        Savefiles_id : r.Savefiles_id,
-                                                                        xmlformat : r.xmlformat,
-                                                                        marcflavour : r.marcflavour,
-                                                                        template : r.template,
-                                                                        marcformat : r.marcformat
-                                                                    }).save();
-                                                                    Ext.MessageBox.alert('Record duplication', 'Record was duplicated to Drafts folder');
-                                                                }
-                                                            },
-                                                            {
-                                                                cls: 'x-btn-text-icon',
-                                                                icon: libPath + 'ui/images/process-stop.png',
-                                                                id: 'editoroneRevertBtn',
-                                                                editorid: 'editorone',
-                                                                text: 'Revert',
-                                                                tooltip: {text: 'Revert record to last saved state'},
-                                                                handler: function(btn) {
-                                                                    var progress = Ext.MessageBox.progress('Reverting record to last saved state', '');
-                                                                    var id = UI.editor[ btn.editorid].id;
-                                                                    var xml = getLocalXml(id);
-                                                                    openRecord( xml, ' marcxml' );
-                                                                    progress.updateProgress(1, 'Revert complete');
-                                                                    progress.hide();
-                                                                    showStatusMsg('Record reverted');
-                                                                    clearStatusMsg();
-                                                                }
-                                                            },
-															{
-																cls: 'x-btn-text-icon', // icon and text class
-																icon: libPath + 'ui/images/process-stop.png',
-																id: 'editorOneCancelMenu',
-																editorid: 'editorone',
-																text: 'Cancel',
-																tooltip: {text: 'Cancel editing of this record (losing all changes since saving)'},
-																handler: function(btn) {
-																	showStatusMsg('Cancelling record...');
-																	if( UI.lastWindowOpen  == 'savegrid' ) {
-																		biblios.app.displaySaveView();
-																	}
-																	else if( UI.lastWindowOpen  == 'searchgrid' ) {
-																		biblios.app.displaySearchView();
-																	}
-																	clear_editor(btn.editorid);
-																	clearStatusMsg();
-																}
-															}
-														] 
-                                                        }))// editorone toolbar
-													},
-													// editor two
-													{
-														region: 'east',
-														id: 'editortwo',
-														cls: 'marceditor',
-														autoScroll: true,
-														split: true,
-														collapsible: true,
-														collapsed: true,
-														title: 'Editor 2',
-														width: 500,
-														html: '<div id="marceditortwo"><div class="ffeditor"></div><div class="vareditor"></div></div>',
-														tbar: [
-                                                            {
-																cls: 'x-btn-text-icon',
-																icon: libPath + 'ui/images/edit-copy.png',
-																id: 'editortwoEditBtn',
-																editorid: 'editortwo',
-																text: 'Edit',
-																tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-r<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
-															    menu: 
-                                                                    {
-                                                                        id: 'editortwoEditMenu',
-                                                                        items: [],
-                                                                        listeners: {
-                                                                            beforeshow: function(menu, menuItem, e) {
-                                                                                menu.removeAll();
-                                                                                var items = UI.editor.editortwo.record.getToolsMenu();
-                                                                                for( i in items) {
-                                                                                    menu.add( items[i] );
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    } // editortwo tools menu 
-                                                            }, // editortwo tools btn
-                                                            {
-                                                                id: 'editorTwoMacrosBtn',
-                                                                cls: 'x-btn-text-icon bmenu',
-                                                                icon: libPath + 'ui/images/edit-copy.png',
-                                                                text: 'Macros',
-                                                                menu : {
-                                                                    id: 'editorTwomacrosmenu',
-                                                                    items: getMacroMenuItems('editortwo'),
-                                                                    listeners: {
-                                                                        beforeshow: function(menu, menuItem, e) {
-                                                                            menu.removeAll();
-                                                                            var items = getMacroMenuItems('editorone');
-                                                                            for( i in items) {
-                                                                                menu.add( items[i] );
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            },
-                                                            {
-																cls: 'x-btn-text-icon bmenu', // icon and text class
-																icon: libPath + 'ui/images/document-save.png',
-																text: 'Save',
-																tooltip: {title: 'Save', text: 'Ctrl-s'},
-																menu: {
-																	id: 'editorTwoSaveMenu',
-																	items: getSaveFileMenuItems('editortwo'),
-																	listeners: {
-																		beforeshow: function(menu, menuItem, e) {
-																			updateSaveMenu(menu, 'editortwo');
-																		}
-																	}
-																}
-															},
-															{
-																cls: 'x-btn-text-icon bmenu', // icon and text class
-																icon: libPath + 'ui/images/document-save.png',
-																text: 'Send',
-																tooltip: {title: 'Save', text: 'Ctrl-s'},
-																menu: {
-																	id: 'editorTwoSendMenu',
-																	editorid: 'editortwo',
-																	items: getSendFileMenuItems('editortwo'),
-																	listeners: {
-																		beforeshow: function(menu, menuItem, e) {
-																			updateSendMenu(menu, 'editortwo');
-																		}
-																	}
-																}
-															},
-															{   
-																cls: 'x-btn-text-icon bmenu', // icon and text class
-																icon: libPath + 'ui/images/network-receive.png',
-																text: 'Export',
-																tooltip: {text: 'Export record to marc21 or marcxml'},
-																menu: {
-																	id: 'editorTwoExportMenu',
-																	items: getExportMenuItems('editortwo')
-																}
-															},
-                                                            {
-                                                                cls: 'x-btn-text-icon',
-                                                                icon: libPath + 'ui/images/document-save-as.png',
-                                                                text: 'Duplicate',
-                                                                tooltip: {text: 'Duplicate this record to Drafts folder'},
-                                                                editorid: 'editortwo',
-                                                                id: 'editortwoDuplicateBtn',
-                                                                handler: function(btn) {
-                                                                    // get record from db for this record
-                                                                    var r = DB.Records.select('Records.rowid=?', [ UI.editor[btn.editorid].id ]).getOne();
-                                                                    var newrec = new DB.Records({
-                                                                        xml : r.xml,
-                                                                        title : r.title,
-                                                                        author : r.author,
-                                                                        publisher : r.publisher,
-                                                                        date : r.date,
-                                                                        date_added : new Date().toString(),
-                                                                        date_modified : new Date().toString(),
-                                                                        status : 'duplicate',
-                                                                        medium : r.medium,
-                                                                        SearchTargets_id : r.SearchTargets_id,
-                                                                        Savefiles_id : r.Savefiles_id,
-                                                                        xmlformat : r.xmlformat,
-                                                                        marcflavour : r.marcflavour,
-                                                                        template : r.template,
-                                                                        marcformat : r.marcformat
-                                                                    }).save();
-                                                                    Ext.MessageBox.alert('Record duplication', 'Record was duplicated to Drafts folder');
-                                                                }
-                                                            },
-                                                            {
-                                                                cls: 'x-btn-text-icon',
-                                                                icon: libPath + 'ui/images/process-stop.png',
-                                                                id: 'editortwoRevertBtn',
-                                                                editorid: 'editortwo',
-                                                                text: 'Revert',
-                                                                tooltip: {text: 'Revert record to last saved state'},
-                                                                handler: function(btn) {
-                                                                    var progress = Ext.MessageBox.progress('Reverting record to last saved state', '');
-                                                                    var id = UI.editor[ btn.editorid].id;
-                                                                    var xml = getLocalXml(id);
-                                                                    openRecord( xml, 'marcxml' );
-                                                                    progress.updateProgress(1, 'Revert complete');
-                                                                    showStatusMsg('Record reverted');
-                                                                    clearStatusMsg();
-                                                                }
-                                                            },
-															{
-																cls: 'x-btn-text-icon', // icon and text class
-																icon: libPath + 'ui/images/process-stop.png',
-																id: 'editorTwoCancelMenu',
-																editorid: 'editortwo',
-																text: 'Cancel',
-																tooltip: {text: 'Cancel editing of this record (losing all changes since saving)'},
-																handler: function() {
-																	showStatusMsg('Cancelling record...');
-																	if( UI.lastWindowOpen  == 'savegrid' ) {
-																		biblios.app.displaySaveView();
-																	}
-																	else if( UI.lastWindowOpen  == 'searchgrid' ) {
-																		biblios.app.displaySearchView();
-																	}
-																	clear_editor('editortwo');
-																	clearStatusMsg();
-																}
-															}
-														] // editortwo toolbar
-													} // editor south*/
-												] // editor items
+                                                ] // editor items
 											}, // editor region
 											{
 												region: 'center',
@@ -1090,7 +759,7 @@ biblios.app = function() {
 																	showStatusMsg('Opening record...');
 																	var xml = getLocalXml(id);
 																	UI.editor.id = id;
-																	openRecord( xml,  xmlformat);
+																	openRecord( xml,  id, xmlformat);
 																},// save grid row dbl click handler
 																keypress: function(e) {
 																	if( e.getKey() == Ext.EventObject.ENTER ) {
@@ -1100,7 +769,7 @@ biblios.app = function() {
                                                                         var xmlformat = sel.data.xmlformat;
 																		UI.editor['editorone'].id = id;
 																		var xml = getLocalXml(id);
-																		openRecord( xml, xmlformat );
+																		openRecord( xml, id, xmlformat );
 																	} // ENTER
 																} // savegrid keypress
 															}, // save grid listeners
@@ -1130,7 +799,7 @@ biblios.app = function() {
                                                                                 Ext.getCmp('savegrid').el.mask('Loading record');
                                                                                 showStatusMsg('Opening record...');
                                                                                 var xml = getLocalXml(id);
-                                                                                openRecord( xml,  'marcxml');
+                                                                                openRecord( xml,  id, 'marcxml');
                                                                                 Ext.getCmp('savegrid').el.unmask();
                                                                             }
                                                                         }

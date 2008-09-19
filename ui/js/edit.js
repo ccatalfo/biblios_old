@@ -12,7 +12,7 @@
    None.
 
 */
-function openRecord(xml, syntax) {
+function openRecord(xml, recid, syntax) {
 	// we need to display record view first since editors are lazily rendered
 	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
@@ -24,7 +24,7 @@ function openRecord(xml, syntax) {
         html:{ tag: 'div', id: editorid, class: 'marceditor' },
     }).show()
     UI.editor[editorid] = {
-        id: '',
+        id: recid,
         ffed: '',
         vared : '',
         savedRemote : {},

@@ -1860,7 +1860,7 @@ MarcEditor.prototype.getToolBar = function() {
                 var progress = Ext.MessageBox.progress('Reverting record to last saved state', '');
                 var id = UI.editor[ btn.editorid].id;
                 var xml = getLocalXml(id);
-                openRecord( xml, ' marcxml' );
+                openRecord( xml, id, 'marcxml' );
                 progress.updateProgress(1, 'Revert complete');
                 progress.hide();
                 showStatusMsg('Record reverted');
