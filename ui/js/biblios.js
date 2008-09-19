@@ -239,6 +239,7 @@ biblios.app = function() {
 														region: 'center',
 														height: 300,
 														//autoWidth: true,
+                                                        loadMask: true,
 														id: 'searchgrid',
 														store : (ds = new Ext.data.GroupingStore({
 															groupField:'pzrecid',
@@ -313,6 +314,7 @@ biblios.app = function() {
 																			Ext.getCmp('facetsTreePanel').root.reload();
 																			Ext.getCmp('searchgridSelectAllTbar').show();
 																			refreshTargetHits();
+                                                                            Ext.getCmp('facetsTreePanel').show();
 																			//this.selectNone();
                                                                         }
                                                                         else {

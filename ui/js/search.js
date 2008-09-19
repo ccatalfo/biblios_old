@@ -173,11 +173,13 @@ function runSearch(query, filter) {
     if(filter) {
         $.get(pazcgiurl, {action:'search', query:query, filter:filter}, function(data) {
                 Ext.getCmp('searchgrid').store.reload();
+                //Ext.getCmp('facetsTreePanel').root.reload();
         });
     }
     else {
         $.get(pazcgiurl, {action:'search', query:query}, function(data) {
                 Ext.getCmp('searchgrid').store.reload();
+                //Ext.getCmp('facetsTreePanel').root.reload();
         });
     }
 }
