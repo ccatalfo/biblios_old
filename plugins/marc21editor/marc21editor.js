@@ -509,7 +509,7 @@ function MarcEditor(editorid) {
 	var that = this;
     var editorid = editorid;
     this.editorid = editorid;
-    var editorelem = Ext.get(editorid);
+    var editorelem = $('#'+editorid);
 	var htmled = '';	
 	var lastFocusedEl;
 	var currFocusedEl;
