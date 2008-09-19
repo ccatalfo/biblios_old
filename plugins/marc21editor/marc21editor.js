@@ -301,7 +301,7 @@ function onFocus(elem) {
 	$(elem).addClass('focused');
     // is this element an input or a textarea?
     var nodeName = $(elem).get(0).nodeName;
-	var editorid = $(elem).parents('.marceditor').get(0).id;
+	var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
     var elemid = $(elem).get(0).id;
     //console.info(elemid);
 	UI.editor.lastFocusedEl = elem;
@@ -440,7 +440,7 @@ function addInputOutlines() {
 }
 function onBlur(elem) {
 	$(elem).removeClass('focused');
-	var editorid = $(elem).parents('.marceditor').get(0).id;
+	var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
 	//UI.editor[editorid].record.update(elem);
 	UI.editor.lastEditorId = editorid;
 	UI.editor.lastFocusedEl = elem;
@@ -449,7 +449,7 @@ function onBlur(elem) {
 
 function onFixedFieldEditorBlur(elem) {
 /*
-	var editorid = $(elem).parents('.marceditor').get(0).id;
+	var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
 	transferFF_EdToTags(UI.editor[editorid].ffed, UI.editor[editorid].vared, editorid);
 	UI.editor[editorid].record.update($('#000').find('.controlfield'));
 	UI.editor[editorid].record.update($('#008').find('.controlfield'));
@@ -678,7 +678,7 @@ function setupEditorHotkeys() {
 
 	// save record
 	$.hotkeys.add('Ctrl+s', function(e) {
-		var editorid = UI.editor.lastEditorId;
+		var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
 		if( editorid == '' || editorid == null) {
 			Ext.MessageBox.alert('Error', 'Please click in the editor you wish to save before using the save hotkey');	
 		}
@@ -1560,6 +1560,7 @@ function setupFFEditorCtryCombo() {
         UI.editor[editorid].lastFocusedEl = $('#'+editorid).find('#000').get(0);
         Ext.getCmp('editorTabPanel').getActiveTab().add( this.getToolBar() );
         Ext.getCmp('editorTabPanel').getActiveTab().doLayout();
+        Ext.getCmp('editorTabPanel').getActiveTab().editorid = editorid;
         Ext.get(editorid).unmask();
     };
 
@@ -1786,9 +1787,10 @@ MarcEditor.prototype.getToolBar = function() {
             menu: {
                 id: this.editorid+'OneSaveMenu',
                 items: getSaveFileMenuItems(this.editorid),
+                editorid: this.editorid,
                 listeners: {
                     beforeshow: function(menu, menuItem, e) {
-                        updateSaveMenu(menu, this.editorid);
+                        updateSaveMenu(menu, menu.editorid);
                     }
                 }
             }
