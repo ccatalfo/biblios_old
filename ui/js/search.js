@@ -270,6 +270,8 @@ function term2searchterm(term) {
 	}
 }
 function filterSearch() {
+    // hide select all in search results tbar
+    Ext.getCmp('searchgridSelectAllInStoreTbar').hide();
 	var i = 0;
     var filter = '';
 	for( f in UI.searchFilters ) {
@@ -287,6 +289,8 @@ function filterSearch() {
 }
 
 function limitSearch() {
+    // hide select all in search results tbar
+    Ext.getCmp('searchgridSelectAllInStoreTbar').hide();
 	// start w/ original query and build from there
 	var query = $("#query").val();
 	for( name in UI.searchLimits ) {
