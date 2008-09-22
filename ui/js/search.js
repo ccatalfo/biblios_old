@@ -1,8 +1,7 @@
 function doSearch(form) {
 	showStatusMsg('Searching...');
 	clearSearchLimits();
-	//Ext.getCmp('searchgridSelectAllTbar').hide();
-	//Ext.getCmp('searchgridselectallfrompz2').hide();
+    Ext.getCmp('searchgridSelectAllInStoreTbar').hide();
     var query = $("#query").val();
     var searchtype  = $("#searchtype").val();
     var searchquery = 'kw';
