@@ -464,24 +464,16 @@ biblios.app = function() {
 															rowdblclick: function(grid, rowindex, e) {
 																var record = grid.getSelections()[0];
 																var id = record.id;
-																UI.editor['editorone'].id = id;
 																var loc = record.data.location[0].name;
                                                                 var xmlformat = 'marcxml';
-																UI.editor['editorone'].location = loc;
-																
-                                                                    biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
-                                                                    openRecord( record.data.fullrecord,  '', xmlformat ); 
-                                                                
-													
-
+                                                                biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
+                                                                openRecord( record.data.fullrecord,  '', xmlformat ); 
 															},
 															keypress: function(e) {
 															  if( e.getKey() == Ext.EventObject.ENTER ) {
 																var record = Ext.getCmp('searchgrid').getSelections()[0];
-																UI.editor['editorone'].id = record.id;
 																var loc = record.data.location[0].name;
                                                                 var xmlformat = 'marcxml';
-																UI.editor['editorone'].location = loc;
 																  
                                                                 biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
                                                                 openRecord( record.data.fullrecord,  '', xmlformat); 
@@ -751,7 +743,6 @@ biblios.app = function() {
 																		var sel = Ext.getCmp('savegrid').getSelectionModel().getSelected();
 																		var id = sel.data.Id;
                                                                         var xmlformat = sel.data.xmlformat;
-																		UI.editor['editorone'].id = id;
 																		var xml = getLocalXml(id);
 																		openRecord( xml, id, xmlformat );
 																	} // ENTER
@@ -1433,7 +1424,6 @@ biblios.app = function() {
                                                                     click: function(node, e) {
                                                                         biblios.app.displayRecordView();
                                                                         Ext.getCmp('editortwo').collapse();
-                                                                        //Ext.getCmp('editorone').expand();
                                                                     }
                                                                 }
                                                             },
@@ -1445,8 +1435,6 @@ biblios.app = function() {
                                                                 listeners: {
                                                                     click: function(node, e) {
                                                                         biblios.app.displayRecordView();
-                                                                        //Ext.getCmp('editorone').collapse();
-                                                                        Ext.getCmp('editortwo').expand();
                                                                     }
                                                                 }
                                                             }
