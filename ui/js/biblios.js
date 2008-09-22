@@ -348,6 +348,7 @@ biblios.app = function() {
 																alwaysSelectOnCheck: true,
 																email: true,
 																dataIndex: 'checked',
+                                                                header: '',
 																listeners: {
 																	rowselect: function(selmodel, rowindex, record) {
 																		Ext.getCmp('searchgridExportBtn').enable();
@@ -660,6 +661,7 @@ biblios.app = function() {
 																alwaysSelectOnCheck: true,
 																email: true,
 																dataIndex: 'checked',
+                                                                header: '',
 																listeners: {
 																	rowselect: function(selmodel, rowindex, record) {
 																		showStatusMsg('Previewing...');
