@@ -19,7 +19,7 @@ function openRecord(xml, recid, syntax) {
 	biblios.app.displayRecordView();
     var editorid = Ext.id();
     Ext.getCmp('editorTabPanel').add({ 
-        title: 'test', 
+        title: '', 
         closable:true, 
         html:{ tag: 'div', id: editorid, class: 'marceditor' },
     }).show()
@@ -54,6 +54,7 @@ function openRecord(xml, recid, syntax) {
 	}
 	html = UI.editor[editorid].record.loadXml( xmldoc );
     Ext.get(editorid).update(html);
+    Ext.getCmp('editorTabPanel').getActiveTab().setTitle( UI.editor[editorid].record.getControlNumber() );
     UI.editor[editorid].record.postProcess();
 
 	// setup remote ils-controlled fields

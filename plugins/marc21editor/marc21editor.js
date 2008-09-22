@@ -1697,6 +1697,9 @@ MarcEditor.prototype.getPublisher = function() {
     return this.getValue('260', 'b');
 }
 
+MarcEditor.prototype.getControlNumber = function() {
+    return this.getValue('001');
+}
 MarcEditor.prototype.getToolsMenu = function getToolsMenu() {
     return [
             {
