@@ -30,7 +30,8 @@ function openRecord(xml, recid, syntax) {
         savedRemote : {},
         savefileid: '',
         record : '',
-        comboboxes : new Array()
+        comboboxes : new Array(),
+        location: ''
     };
 
     var editor = DB.Editors.select('syntax=?', [syntax]).getOne();

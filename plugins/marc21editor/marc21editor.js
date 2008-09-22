@@ -1681,6 +1681,22 @@ MarcEditor.prototype.processForLocation = function(loc) {
     return this._processForLocation(loc);
 }
 
+MarcEditor.prototype.getTitle = function() {
+    return this.getValue('245', 'a');
+}
+
+MarcEditor.prototype.getAuthor = function() {
+    return this.getValue('100', 'a');
+}
+
+MarcEditor.prototype.getDate = function() {
+    return this.getValue('260', 'c');
+}
+
+MarcEditor.prototype.getPublisher = function() {
+    return this.getValue('260', 'b');
+}
+
 MarcEditor.prototype.getToolsMenu = function getToolsMenu() {
     return [
             {

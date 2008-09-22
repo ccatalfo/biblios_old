@@ -57,10 +57,10 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 				try {
 					var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
 					if( record.marcflavour == 'marc21' ) {
-						record.title = UI.editor[editorid].record.getValue('245', 'a');
-						record.author = UI.editor[editorid].record.getValue('100', 'a');
-						record.publisher = UI.editor[editorid].record.getValue('260', 'b');
-						record.dateofpub = UI.editor[editorid].record.getValue('260', 'c');
+						record.title = UI.editor[editorid].record.getTitle();
+						record.author = UI.editor[editorid].record.getAuthor();
+						record.publisher = UI.editor[editorid].record.getPublisher();
+						record.dateofpub = UI.editor[editorid].record.getDate();
 					}
 					record.xml = xml;
 					record.Savefiles_id = savefileid;
