@@ -43,6 +43,7 @@ biblios.app = function() {
 	}
 
 	displaySaveFile : function displaySaveFile(id) {
+        Ext.getCmp('savegridSelectAllTbar').hide();
 		if( (biblios.app.selectedRecords.savefileid == id) && (biblios.app.selectedRecords.loading == true) ) {
 			Ext.getCmp('savegrid').el.mask('Loading remote records...');
 		}
@@ -50,6 +51,10 @@ biblios.app = function() {
 			Ext.getCmp('savegrid').el.unmask();
 		}
 		Ext.getCmp('savegrid').store.load({db: db, selectSql: savefileSelectSql + ' where Savefiles_id = '+id, params:{start:0,limit:15}});
+        if( Ext.getCmp('savegrid').store.getCount() > 0 ) {
+            Ext.getCmp('savegridSelectAllTbar').show();
+        }
+
 		biblios.app.displaySaveView();
 		Ext.getCmp('savegrid').selectNone();
 		openState = 'savegrid';
@@ -665,7 +670,6 @@ biblios.app = function() {
 																		Ext.getCmp('savepreview').el.mask();
 																		$('#saveprevrecord').getTransform(marcxsl, xml);
 																		Ext.getCmp('savepreview').el.unmask();
-																		Ext.getCmp('savegridSelectAllTbar').show();
 																		clearStatusMsg();
 																	}
 																} // selection listeners
