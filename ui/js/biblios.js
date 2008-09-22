@@ -74,6 +74,7 @@ biblios.app = function() {
 	displaySaveView: function displaySaveView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(2);
 		Ext.getCmp('resourcesPanel').expand();
+        Ext.get('saveprevrecord').update('');
 		openState = 'savegrid';
 		displayHelpMsg(UI.messages.help.en.saveview);
         Ext.getCmp('TargetsTreePanel').getSelectionModel().clearSelections();

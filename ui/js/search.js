@@ -1,6 +1,7 @@
 function doSearch(form) {
 	showStatusMsg('Searching...');
 	clearSearchLimits();
+    Ext.get('searchprevrecord').update('');
     Ext.getCmp('searchgridSelectAllInStoreTbar').hide();
     var query = $("#query").val();
     var searchtype  = $("#searchtype").val();
