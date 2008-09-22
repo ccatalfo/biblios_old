@@ -690,10 +690,15 @@ biblios.app = function() {
 																{header: "Date Added", width: 120, dataIndex: 'Date Added', sortable: true},
 																{header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true},
 															]),
+                                                            checkAllOnLoad: function() {
+                                                                this.getSelectionModel().checkAllInStore();
+                                                                this.store.un('load', Ext.getCmp('savegrid').checkAllOnLoad);
+                                                            },
                                                             selectAllInStore: function() {
                                                                 var totalcount = this.store.getTotalCount();
-                                                                this.store.on('load', function(){this.getSelectionModel().checkAllInStore()}, this);
+                                                                this.store.on('load', this.checkAllOnLoad, this);
                                                                 this.store.load({params:{start:0, limit:totalcount}});
+                                                                Ext.getCmp('savegridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'All ' + this.store.getCount() + ' records in this folder are selected.'  + '<a href="#" onclick="Ext.getCmp(\'savegrid\').selectNone()">Clear selection</a>';
                                                             },
                                                             selectAll: function() {
                                                                 this.getSelectionModel().checkAllInStore();
