@@ -672,15 +672,16 @@ biblios.app = function() {
 															})), // save grid selecion model
 															cm: new Ext.grid.ColumnModel([
 																sm, // checkbox for smartcheckbox selectiomodel
+                                                                {header: 'Id', dataIndex:'Id', hidden:true},
 																
-																{header: "Medium", dataIndex: 'Medium', sortable: true},
+																{header: "Medium", dataIndex: 'Medium', width: 50, sortable: true},
 																{header: "Title", width: 200, dataIndex: 'Title', sortable: true},
 																{header: "Author", width: 160, dataIndex: 'Author', sortable: true},
 																{header: "Publisher", width: 130, dataIndex: 'Publisher', sortable: true},
 																{header: "DateOfPub", width: 80, dataIndex: 'DateOfPub', sortable: true},
 																{header: "Status", width: 100, dataIndex: 'Status', sortable: true},
 																{header: "Date Added", width: 120, dataIndex: 'Date Added', sortable: true},
-																{header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true}
+																{header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true},
 															]),
                                                             selectAllInStore: function() {
                                                                 var totalcount = this.store.getTotalCount();
