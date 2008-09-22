@@ -1458,8 +1458,8 @@ function setupFFEditorCtryCombo() {
 	this._loadXml = function(marcXmlDoc) {
 		var html = '';
 		html += '<div class="ffeditor">';
-		html += '<div id="fixedfields_editor">';
-		html += '<table id="fixed_field_grid">';
+		html += '<div class="fixedfields_editor">';
+		html += '<table class="fixed_field_grid">';
 		// leader
 		var string = $('leader', marcXmlDoc).text();
 		html += '<tr>';
@@ -1524,7 +1524,7 @@ function setupFFEditorCtryCombo() {
 		html += '</div>'; // close fixedfields_editor
 		html += '</div>'; // close ff_editor
 		html += '<div class="vareditor">';
-		html += '<div id="varfields_editor">';
+		html += '<div class="varfields_editor">';
         html += generateVariableFieldsEditor(marcXmlDoc);
 		//UI.editor.progress.updateProgress(.7, 'Datafields editor created');
 		html += '</div>'; // end vareditor div
