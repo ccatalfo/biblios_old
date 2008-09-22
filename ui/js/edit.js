@@ -54,7 +54,7 @@ function openRecord(xml, recid, syntax) {
 	}
 	html = UI.editor[editorid].record.loadXml( xmldoc );
     Ext.get(editorid).update(html);
-    Ext.getCmp('editorTabPanel').getActiveTab().setTitle( UI.editor[editorid].record.getControlNumber() );
+    Ext.getCmp('editorTabPanel').getActiveTab().setTitle( UI.editor[editorid].record.getTitle() );
     UI.editor[editorid].record.postProcess();
 
 	// setup remote ils-controlled fields
