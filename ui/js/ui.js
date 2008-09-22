@@ -301,10 +301,7 @@ function getNewRecordMenu() {
 										template: null,
 										marcformat: null
 									}).save();
-									UI.editor.editorone.id = db.lastInsertRowId;
-									UI.editor.editorone.savefileid = 3;
-									UI.editor.editorone.location = '';
-									openRecord(xml, 'editorone', 'marcxml');
+									openRecord(xml, id, 'marcxml');
 							} // ajax callback
 					}); // ajax request
 				} // do new record handler
