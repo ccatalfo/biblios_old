@@ -738,23 +738,22 @@ biblios.app = function() {
 																	
 																rowdblclick: function(grid, rowIndex, e) {
 																	var id = grid.store.data.get(rowIndex).data.Id;
-																	var xmlformat = grid.store.data.get(rowIndex).data.xmlformat;
-																	showStatusMsg('Opening record...');
-																	var xml = getLocalXml(id);
-																	UI.editor.id = id;
-																	openRecord( xml,  id, xmlformat);
+                                                                    grid.editRecord(id);
 																},// save grid row dbl click handler
 																keypress: function(e) {
 																	if( e.getKey() == Ext.EventObject.ENTER ) {
-																		showStatusMsg('Opening record...');
-																		var sel = Ext.getCmp('savegrid').getSelectionModel().getSelected();
-																		var id = sel.data.Id;
-                                                                        var xmlformat = sel.data.xmlformat;
-																		var xml = getLocalXml(id);
-																		openRecord( xml, id, xmlformat );
+																		var id = Ext.getCmp('savegrid').getSelectionModel().getSelected()[0].data.Id;
+                                                                        Ext.getCmp('savegrid').editRecord(id);
 																	} // ENTER
 																} // savegrid keypress
 															}, // save grid listeners
+                                                            editRecord: function(id) {
+                                                                Ext.getCmp('savegrid').el.mask('Loading record');
+                                                                showStatusMsg('Opening record...');
+                                                                var xml = getLocalXml(id);
+                                                                openRecord( xml,  id, 'marcxml');
+                                                                Ext.getCmp('savegrid').el.unmask();
+                                                            },
 															tbar: new Ext.PagingToolbar({
 																id: 'savegridtbar',
 																pageSize: 15,
@@ -775,14 +774,18 @@ biblios.app = function() {
 																		id: 'savegridEditBtn',
 																		disabled: true,
 																		handler: function() {
+                                                                            var savegrid = Ext.getCmp('savegrid');
 																			var checked = Ext.getCmp('savegrid').getSelectionModel().getChecked();
-                                                                            for( var i = 0; i < checked.length; i++) {
-                                                                                var id = checked[i].data.Id;
-                                                                                Ext.getCmp('savegrid').el.mask('Loading record');
-                                                                                showStatusMsg('Opening record...');
-                                                                                var xml = getLocalXml(id);
-                                                                                openRecord( xml,  id, 'marcxml');
-                                                                                Ext.getCmp('savegrid').el.unmask();
+																			var selections = Ext.getCmp('savegrid').getSelectionModel().getSelections();
+                                                                            if( checked.length > 0 ) {
+                                                                                for( var i = 0; i < checked.length; i++) {
+                                                                                    savegrid.editRecord( checked[i].data.Id );
+                                                                                }
+                                                                            }
+                                                                            else {
+                                                                                for( var j = 0; j < selections.length; j++) {
+                                                                                    savegrid.editRecord( selections[j].data.Id );
+                                                                                }
                                                                             }
                                                                         }
                                                                     },
