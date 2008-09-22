@@ -87,7 +87,7 @@
             <name>MARC21Editor</name>
             <type>editor</type>
             <file>plugins/marc21editor/marc21editor.js</file>
-            <initcall>new MarcEditor(editorelem, editorid)</initcall>
+            <initcall>new MarcEditor(editorid)</initcall>
             <enabled>1</enabled>
             <allowDelete>0</allowDelete>
             <allowModify>0</allowModify>
