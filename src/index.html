@@ -52,6 +52,7 @@
     <script type="text/javascript" src="[% libPath %]lib/extjs2/ext-all.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/PagingMemoryProxy.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/GoogleGearsProxy.js"></script>
+	<script type="text/javascript" src="[% uiPath %]lib/extjs2/Ext.grid.SmartCheckboxSelectionModel.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.NestedXmlReader.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.GearsTreeLoader.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.FacetsTreeLoader.js"></script>
@@ -85,7 +86,6 @@
     [% ELSE %]
     <script type="text/javascript" src="[% uiPath %]lib.js"></script>
     [% END %]
-	<script type="text/javascript" src="[% uiPath %]lib/extjs2/Ext.grid.SmartCheckboxSelectionModel.js"></script>
 <script>
 	Ext.get('loadingtext').update('Checking for Google Gears');
   if (!window.google || !google.gears) {
