@@ -406,6 +406,7 @@ biblios.app = function() {
                                                             Ext.getCmp('searchgridSaveBtn').enable();
                                                         },
                                                         selectNone: function() {
+                                                            this.getSelectionModel().clearSelections();
                                                             this.getSelectionModel().clearChecked();
                                                             this.isAllSearchSelected = false;
                                                             Ext.getCmp('searchgridSelectAllInStoreTbar').hide();
@@ -700,6 +701,7 @@ biblios.app = function() {
                                                                 Ext.getCmp('savegridSendBtn').enable();
                                                             },
                                                             selectNone: function() {
+                                                                this.getSelectionModel().clearSelections();
                                                                 this.getSelectionModel().clearChecked();
                                                                 Ext.getCmp('savegridSelectAllInStoreTbar').hide();
                                                                 Ext.getCmp('savegridExportBtn').disable();
