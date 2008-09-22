@@ -953,6 +953,7 @@ biblios.app = function() {
 										collapsed: false,
 										width: 200,
 										maxSize: 200,
+                                        height: 500,
 										title: 'Resources',
 										layout: 'border',
 										id: 'resourcesPanel',
@@ -963,6 +964,7 @@ biblios.app = function() {
 												[
 													new Ext.tree.TreePanel({
 														id: 'createRecordPanel',
+                                                        autoScroll: true,
 														leaf: false,
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Create Record',	
@@ -975,6 +977,7 @@ biblios.app = function() {
 													new Ext.tree.TreePanel({
 														id: 'TargetsTreePanel',
 														animate: true,
+                                                        autoScroll: true,
 														leaf: false,
 														lines: false,
 														listeners: {
@@ -1080,6 +1083,7 @@ biblios.app = function() {
 													new Ext.tree.TreePanel({
 														id: 'facetsTreePanel',
 														animate: true,
+                                                        autoScroll: true,
 														leaf: false,
 														lines: false,
 														applyLoader: false,
@@ -1105,6 +1109,7 @@ biblios.app = function() {
 													new Ext.tree.TreePanel({
 														id: 'FoldersTreePanel',
 														leaf: false,
+                                                        autoScroll: true,
 														animate: true,
 														expanded: true,
 														enableDD: true,
