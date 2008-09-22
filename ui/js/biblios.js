@@ -511,33 +511,17 @@ biblios.app = function() {
 																		text: 'Edit',
 																		handler: function() {
 																			
-																			var selections = Ext.getCmp('searchgrid').getSelections();
+																			var checked = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
 																			
-																			if( selections.length > 2) {
-																				Ext.MessageBox.alert('Error', 'Please select 1 or 2 records to edit by checking the checkbox next to the record title, then clicking this button again.');
-																				return false;
-																			}
 																			// mask search grid 
 																			Ext.getCmp('searchgrid').el.mask('Loading record(s)');
-																			for( var i = 0; i < selections.length; i++ ) {
-																				var editorid = '';
-																				if( i == 0 ) {
-																					editorid = 'editorone';
-																				}
-																				else if( i == 1) {
-																					editorid = 'editortwo';
-																				}
-																				var id = selections[i].id;
-																				
+																			for( var i = 0; i < checked.length; i++ ) {
+																			    var xml = checked[i].data.fullrecord;	
                                                                                 var xmlformat = 'marcxml';
-																				
-																				// get location info
-																				var loc = ''
-																				
-																				UI.editor[editorid].location = loc;
-																				
-                                                                                    biblios.app.fireEvent('remoterecordretrieve', selections[i].data.fullrecord);
-																					openRecord( selections[i].data.fullrecord, '', xmlformat ); 
+                                                                                var loc = checked[i].data.location;
+																			    var id = checked[i].id;	
+                                                                                biblios.app.fireEvent('remoterecordretrieve', checked[i].data.fullrecord);
+                                                                                openRecord( xml, '', xmlformat ); 
 																				
 																			} // for each checked record
 																			Ext.getCmp('searchgrid').el.unmask();
