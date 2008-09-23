@@ -52,12 +52,12 @@
     <script type="text/javascript" src="[% libPath %]lib/extjs2/ext-all.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/PagingMemoryProxy.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/GoogleGearsProxy.js"></script>
-	<script type="text/javascript" src="[% uiPath %]lib/extjs2/Ext.grid.SmartCheckboxSelectionModel.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.NestedXmlReader.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.GearsTreeLoader.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.FacetsTreeLoader.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.UploadDialog.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/RowExpander.js"></script>
+    <script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.grid.SmartCheckboxSelectionModel.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/miframe.js"></script>
     <!-- gears -->
 	<script type="text/javascript" src="[% libPath %]lib/google_gears/gears_init.js"></script>
@@ -89,8 +89,8 @@
 <script>
 	Ext.get('loadingtext').update('Checking for Google Gears');
   if (!window.google || !google.gears) {
-	Ext.get('loadingtext').update('Unable to load Google Gears. Please visit the following url to install: http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application');
-	location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
+	Ext.get('loadingtext').update('<p>Unable to load Google Gears.</p><p>Please visit the following url to install:</p><p><a target="_blank" href="http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application">Install Google Gears</a></p>');
+	//location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
                     "&return="+location.href;
   }
 </script>
