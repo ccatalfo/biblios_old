@@ -908,32 +908,32 @@ biblios.app = function() {
                                                                                     text: 'Duplicate',
                                                                                     icon: libPath + 'ui/images/document-save-as.png',
                                                                                     handler: function(btn) {
-                                                                                        var records = Ext.getCmp('savegrid').getSelectionModel.getChecked();
-                                                                                        if( records.length > 1 ) {
-                                                                                            Ext.MessageBox.alert('Error', 'Please select 1 record to duplicate');
-                                                                                            return false;
+                                                                                        var records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
+                                                                                        for( var i = 0; i < records.length; i++) {
+                                                                                            var r = DB.Records.select('Records.rowid=?',[records[i].data.Id]).getOne();
+                                                                                            // add new record to db with this rec's data
+                                                                                            var newrec = new DB.Records({
+                                                                                                xml : r.xml,
+                                                                                                title : r.title || '',
+                                                                                                author : r.author || '',
+                                                                                                publisher : r.publisher || '',
+                                                                                                date : r.date || '',
+                                                                                                date_added : new Date().toString(),
+                                                                                                date_modified : new Date().toString(),
+                                                                                                status : 'duplicate',
+                                                                                                medium : r.medium || '',
+                                                                                                SearchTargets_id : r.SearchTargets_id,
+                                                                                                Savefiles_id : r.Savefiles_id,
+                                                                                                xmlformat : r.xmlformat || '',
+                                                                                                marcflavour : r.marcflavour || '',
+                                                                                                template : r.template || '',
+                                                                                                marcformat : r.marcformat || ''
+                                                                                            }).save();
                                                                                         }
-                                                                                        var r = DB.Records.select('Records.rowid=?',[records[0].rowid]).getOne();
-                                                                                        // add new record to db with this rec's data
-                                                                                        var newrec = new DB.Records({
-                                                                                            xml : r.xml,
-                                                                                            title : r.title,
-                                                                                            author : r.author,
-                                                                                            publisher : r.publisher,
-                                                                                            date : r.date,
-                                                                                            date_added : new Date().toString(),
-                                                                                            date_modified : new Date().toString(),
-                                                                                            status : 'duplicate',
-                                                                                            medium : r.medium,
-                                                                                            SearchTargets_id : r.SearchTargets_id,
-                                                                                            Savefiles_id : r.Savefiles_id,
-                                                                                            xmlformat : r.xmlformat,
-                                                                                            marcflavour : r.marcflavour,
-                                                                                            template : r.template,
-                                                                                            marcformat : r.marcformat
-                                                                                        }).save();
-                                                                                        showStatusMsg('Record duplicated');
+                                                                                        showStatusMsg(records.length + ' records duplicated.');
                                                                                         Ext.getCmp('savegrid').store.reload();
+                                                                                        biblios.app.displaySaveFile( UI.currSaveFile);
+                                                                                        return true;
                                                                                     }
                                                                                 },
 																				{
