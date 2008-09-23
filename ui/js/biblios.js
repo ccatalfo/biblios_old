@@ -841,6 +841,7 @@ biblios.app = function() {
 																		tooltip: {text: 'Move selected records to trash'},
 																		handler: function() {
 																			doSaveLocal(1, 'savegrid');
+                                                                            biblios.app.displaySaveFile( UI.currSaveFile );
 																		}
 																	},
 																	{
@@ -850,6 +851,7 @@ biblios.app = function() {
 																		handler: function() {
 																			DB.Records.remove('Savefiles_id=1');
 																			Ext.getCmp('savegrid').store.reload();
+                                                                            biblios.app.displaySaveFile( UI.currSaveFile );
 																		}
 																	},
                                                                     {
