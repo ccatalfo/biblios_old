@@ -406,6 +406,7 @@ biblios.app = function() {
                                                             Ext.getCmp('searchgridExportBtn').enable();
                                                             Ext.getCmp('searchgridSendBtn').enable();
                                                             Ext.getCmp('searchgridSaveBtn').enable();
+                                                            Ext.getCmp('searchgridEditBtn').enable();
                                                         },
                                                         selectNone: function() {
                                                             this.getSelectionModel().clearSelections();
@@ -415,6 +416,7 @@ biblios.app = function() {
                                                             Ext.getCmp('searchgridExportBtn').disable();
                                                             Ext.getCmp('searchgridSendBtn').disable();
                                                             Ext.getCmp('searchgridSaveBtn').disable();
+                                                            Ext.getCmp('searchgridEditBtn').disable();
                                                         },
 														listeners: {
 															render: function() {
@@ -716,6 +718,7 @@ biblios.app = function() {
                                                                 Ext.getCmp('savegridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'savegrid\').selectAllInStore()">Select all ' + this.store.getTotalCount() + ' records in this folder</a>';
                                                                 Ext.getCmp('savegridExportBtn').enable();
                                                                 Ext.getCmp('savegridSendBtn').enable();
+                                                                Ext.getCmp('savegridEditBtn').enable();
                                                             },
                                                             selectNone: function() {
                                                                 this.getSelectionModel().clearSelections();
@@ -723,6 +726,7 @@ biblios.app = function() {
                                                                 Ext.getCmp('savegridSelectAllInStoreTbar').hide();
                                                                 Ext.getCmp('savegridExportBtn').disable();
                                                                 Ext.getCmp('savegridSendBtn').disable();
+                                                                Ext.getCmp('savegridEditBtn').disable();
                                                             },
 															listeners: {
 																render: function() {
