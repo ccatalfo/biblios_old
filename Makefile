@@ -25,7 +25,7 @@ build: $(SRCS)
 	@echo
 	@echo "Building javascript libraries"	
 	@echo
-	$(CAT) lib/extjs2/Ext.grid.SmartCheckboxSelectionModel.js lib/extjs2/PagingMemoryProxy.js lib/extjs2/GoogleGearsProxy.js lib/extjs2/Ext.ux.NestedXmlReader.js lib/extjs2/Ext.ux.GearsTreeLoader.js lib/extjs2/Ext.ux.FacetsTreeLoader.js lib/extjs2/Ext.ux.UploadDialog.js lib/extjs2/RowExpander.js lib/extjs2/miframe.js > build/lib/ext_ux_libs.js
+	$(CAT) lib/extjs2/Ext.grid.SmartCheckboxSelectionModel.js lib/extjs2/PagingMemoryProxy.js lib/extjs2/GoogleGearsProxy.js lib/extjs2/Ext.ux.NestedXmlReader.js lib/extjs2/Ext.ux.GearsTreeLoader.js lib/extjs2/Ext.ux.FacetsTreeLoader.js lib/extjs2/Ext.ux.UploadDialog.js lib/extjs2/RowExpander.js lib/extjs2/miframe.js lib/extjs2/GridViewOverride.js > build/lib/ext_ux_libs.js
 	$(JSMIN) build/lib/ext_ux_libs.js build/lib/ext_ux_libs-min.js
 	$(CAT) lib/jquery/jquery.hotkeys.js lib/jquery/jquery.xpath.js lib/jquery/jquery.cookie.js lib/jquery/json.js > build/lib/jquery_plugins.js
 	$(JSMIN) build/lib/jquery_plugins.js build/lib/jquery_plugins-min.js
