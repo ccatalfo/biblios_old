@@ -621,6 +621,15 @@ biblios.app = function() {
                                                         defaults: {autoScroll:true},
                                                         resizeTabs: true,
                                                         enableTabScroll:true,
+                                                        listeners: {
+                                                            remove: function(tabpanel, tab) {
+                                                                if(bibliosdebug) {
+                                                                    console.info('closing tab and freeing UI.editor' + tab.title);
+                                                                }
+                                                                delete UI.editor[ tab.editorid ];
+                                                            }
+
+                                                        }
                                                     })
                                                 ] // editor items
 											}, // editor region

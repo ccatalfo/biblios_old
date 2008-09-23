@@ -22,6 +22,8 @@ function openRecord(xml, recid, syntax) {
         title: '', 
         closable:true, 
         html:{ tag: 'div', id: editorid, class: 'marceditor' },
+        listeners: {
+        }
     }).show()
     UI.editor[editorid] = {
         id: recid,
