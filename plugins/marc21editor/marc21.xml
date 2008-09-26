@@ -1804,4 +1804,21 @@
 	</mattype>
 </mattypes>
 
+<categoryname007>
+    <cat type="a">Map</cat>
+    <cat type="c">Electronic Resource</cat>
+    <cat type="d">Globe</cat>
+    <cat type="f">Tactile Material</cat>
+    <cat type="g">Projected Graphic</cat>
+    <cat type="h">Microform</cat>
+    <cat type="k">Nonprojected Graphic</cat>
+    <cat type="m">Motion Picture</cat>
+    <cat type="o">Kit</cat>
+    <cat type="q">Notated Music</cat>
+    <cat type="r">Remote-Sensing Image</cat>
+    <cat type="s">Sound Recording</cat>
+    <cat type="t">Text</cat>
+    <cat type="v">Videorecording</cat>
+    <cat type="z">Unspecified</cat>
+</categoryname007>
 </marc21defs>

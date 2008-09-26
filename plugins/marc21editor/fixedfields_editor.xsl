@@ -13,7 +13,10 @@
 	<xsl:template match="marc:record">
 		<xsl:variable name='leader' select="marc:leader"/>
 		<xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
+		
 		<xsl:variable name="rectype" select="substring($leader, $marc21defs//value[@name='Type']/@position+1, $marc21defs//value[@name='Type']/@length)"/>
+
+        
 		<table id="fixed_field_grid" class="fixed_field">
 			<tr>
                       <td style='display:none;'>
@@ -210,53 +213,30 @@
 	</xsl:template>
 	<!-- 007s -->
 	<xsl:template name="tag007">
+            <xsl:variable name="tag007"><xsl:value-of select="."/></xsl:variable>
 			<xsl:variable name="cat" select="substring(.,1, 1)"/>
-			<tr>
-			<!-- map -->
-			<xsl:if test="$cat = 'a'">
-			</xsl:if>
-			<!-- electronic -->
-			<xsl:if test="$cat = 'c'">
-			</xsl:if>
-			<!-- globe-->
-			<xsl:if test="$cat = 'd'">
-			</xsl:if>
-			<!-- tactile-->
-			<xsl:if test="$cat = 'f'">
-			</xsl:if>
-			<!-- projected graphic-->
-			<xsl:if test="$cat = 'g'">
-			</xsl:if>
-			<!-- microform-->
-			<xsl:if test="$cat = 'h'">
-			</xsl:if>
-			<!-- non projected graphic-->
-			<xsl:if test="$cat = 'k'">
-			</xsl:if>
-			<!-- motion picture-->
-			<xsl:if test="$cat = 'm'">
-			</xsl:if>
-			<!-- kit-->
-			<xsl:if test="$cat = 'o'">
-			</xsl:if>
-			<!-- notated music-->
-			<xsl:if test="$cat = 'q'">
-			</xsl:if>
-			<!-- remote sensing image-->
-			<xsl:if test="$cat = 'r'">
-			</xsl:if>
-			<!-- sound recording -->
-			<xsl:if test="$cat = 's'">
-			</xsl:if>
-			<!-- text -->
-			<xsl:if test="$cat = 't'">
-			</xsl:if>
-			<!-- vidoerecording -->
-			<xsl:if test="$cat = 'v'">
-			</xsl:if>
-			<!-- unspecified -->
-			<xsl:if test="$cat = 'z'">
-			</xsl:if>
+            <xsl:variable name="mattype" select="$marc21defs//categoryname007/cat[@type=$cat]"/>
+			<tr id="007">
+            <xsl:for-each select="$marc21defs//field[@tag='007'][@mattype=$mattype]">
+                <xsl:for-each select="value">
+                <td>
+                    <xsl:choose>
+                        <xsl:when test="@inputtype='menubox'">
+                            <xsl:call-template name="fixed-field-select">
+                                <xsl:with-param name="name"><xsl:value-of select="@name"/></xsl:with-param>
+                                <xsl:with-param name="position"><xsl:value-of select="@position"/></xsl:with-param>
+                                <xsl:with-param name="length"><xsl:value-of select="@length"/></xsl:with-param>
+                                <xsl:with-param name="tag"><xsl:value-of select="$tag007"/></xsl:with-param>
+                                <xsl:with-param name="offset">0</xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:when>
+                        <xsl:otherwise>
+
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </td>
+                </xsl:for-each>
+            </xsl:for-each>
 			</tr>
 	</xsl:template>
 	
@@ -264,9 +244,9 @@
 		<xsl:param name="name"/>
 		<xsl:param name="tag"/>
 		<xsl:param name="offset">0</xsl:param>
-		<xsl:variable name="position" select="$marc21defs//value[@name=$name]/@position"/>
-		<xsl:variable name="length" select="$marc21defs//value[@name=$name]/@length"/>
-		<xsl:variable name="value" select="substring($tag, $position+1-$offset, $length)"/>
+		<xsl:param name="position"><xsl:value-of select="$marc21defs//value[@name=$name]/@position"/></xsl:param>
+		<xsl:param name="length"><xsl:value-of select="$marc21defs//value[@name=$name]/@length"/></xsl:param>
+		<xsl:param name="value"><xsl:value-of select="substring($tag, $position+1-$offset, $length)"/></xsl:param>
 		<!--<p>param name is <xsl:value-of select="$name"/></p>
 		<p>Leader value is <xsl:value-of select="$value"/></p>-->
 		<td><xsl:value-of select="$name"/></td>
@@ -317,4 +297,49 @@
 			</input>
 		</td>
 	</xsl:template>
+
+    <xsl:template name="leader">
+    <xsl:variable name='leader' select="marc:leader"/>
+    <xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
+    <xsl:variable name="rectype" select="substring($leader, $marc21defs//value[@name='Type']/@position+1, $marc21defs//value[@name='Type']/@length)"/>
+                      <td style='display:none;'>
+							<xsl:call-template name="fixed-field-text">
+								<xsl:with-param name="name" select="'RLen'" />
+								<xsl:with-param name="tag" select="$leader" />
+							</xsl:call-template>
+						</td>
+
+						<td style='display:none;'>
+							<xsl:call-template name="fixed-field-text">
+								<xsl:with-param name="name" select="'Base'" />
+								<xsl:with-param name="tag" select="$leader" />
+							</xsl:call-template>
+						</td>
+
+							<xsl:call-template name="fixed-field-select">
+								<xsl:with-param name="name" select="'RStat'" />
+								<xsl:with-param name="tag" select="$leader" />
+							</xsl:call-template>
+
+
+							<xsl:call-template name="fixed-field-select">
+								<xsl:with-param name="name" select="'Type'" />
+								<xsl:with-param name="tag" select="$leader" />
+							</xsl:call-template>
+							<xsl:call-template name="fixed-field-select">
+								<xsl:with-param name="name" select="'BLvl'" />
+								<xsl:with-param name="tag" select="$leader" />
+							</xsl:call-template>
+							<xsl:call-template name="fixed-field-select">
+								<xsl:with-param name="name" select="'Desc'" />
+								<xsl:with-param name="tag" select="$leader" />
+							</xsl:call-template>
+							<xsl:call-template name="fixed-field-select">
+								<xsl:with-param name="name" select="'ELvl'" />
+								<xsl:with-param name="tag" select="$leader" />
+							</xsl:call-template>
+							<xsl:call-template name="fixed-field-select">
+								<xsl:with-param name="name" select="'Enc'" />
+				</xsl:call-template>
+			</xsl:template>
 </xsl:stylesheet>

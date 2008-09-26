@@ -1462,7 +1462,7 @@ function setupFFEditorCtryCombo() {
             callback: callback,
             editorid: editorid,
             dataType: 'html',
-            data: {xml: xslTransform.serialize(marcXmlDoc), stylesheet: 'varfields_editor.xsl', xslpath:'/home/fuzzy/src/biblios/ui/xsl/'}, 
+            data: {xml: xslTransform.serialize(marcXmlDoc), stylesheet: 'marc21editor.xsl', xslpath:'/home/fuzzy/src/biblios/plugins/marc21editor/'}, 
             success: function(html) {
                 this.callback.call(this, html, this.editorid); 
             },

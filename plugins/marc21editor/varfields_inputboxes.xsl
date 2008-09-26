@@ -10,7 +10,7 @@
         </div>
 	</xsl:template>
 	
-	<xsl:template match="marc:record">
+	<xsl:template name="varfields_editor">
 		    <xsl:apply-templates select="marc:leader">
 			</xsl:apply-templates>
 		    <xsl:apply-templates select="marc:controlfield">
