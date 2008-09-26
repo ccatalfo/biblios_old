@@ -70,6 +70,7 @@
 						<xsl:with-param name="rectype">All</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
 						<xsl:with-param name='tag' select="marc:controlfield[@tag='008']"/>
+                        <xsl:with-param name='tagnumber'>008</xsl:with-param>
 					</xsl:call-template>
 			</tr>
 			<tr> <!-- material-specific row of fixed field input elements -->
@@ -79,6 +80,7 @@
 						<xsl:with-param name="rectype">Books</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
 						<xsl:with-param name='tag' select="$tag008"/>
+                        <xsl:with-param name='tagnumber'>008</xsl:with-param>
 					</xsl:call-template>
 			</xsl:if>
 
@@ -88,6 +90,7 @@
 					<xsl:with-param name="rectype">ComputerFile</xsl:with-param>
 					<xsl:with-param name="offset">0</xsl:with-param>
 					<xsl:with-param name='tag' select="$tag008"/>
+                    <xsl:with-param name='tagnumber'>008</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
 						
@@ -97,6 +100,7 @@
 						<xsl:with-param name="rectype">Maps</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
 						<xsl:with-param name='tag' select="$tag008"/>
+						<xsl:with-param name='tagnumber'>008</xsl:with-param>
 					</xsl:call-template>
 			</xsl:if>
 
@@ -106,6 +110,7 @@
 						<xsl:with-param name="rectype">Music</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
 						<xsl:with-param name='tag' select="$tag008"/>
+						<xsl:with-param name='tagnumber'>008</xsl:with-param>
 					</xsl:call-template>
 			</xsl:if>
 			<!-- 008 fixed fields for visual materials -->
@@ -114,6 +119,7 @@
 						<xsl:with-param name="rectype">Visual</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
 						<xsl:with-param name='tag' select="$tag008"/>
+						<xsl:with-param name='tagnumber'>008</xsl:with-param>
 					</xsl:call-template>
 			</xsl:if>
 			<!-- 008 fixed fields for mixed materials -->
@@ -122,6 +128,7 @@
 						<xsl:with-param name="rectype">Mixed</xsl:with-param>
 						<xsl:with-param name="offset">0</xsl:with-param>
 						<xsl:with-param name='tag' select="$tag008"/>
+						<xsl:with-param name='tagnumber'>008</xsl:with-param>
 					</xsl:call-template>
 			</xsl:if>
 			</tr>  <!-- end of material specific row -->
@@ -141,6 +148,7 @@
 		<xsl:param name="rectype">All</xsl:param>
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="tag"></xsl:param>
+		<xsl:param name="tagnumber"></xsl:param>
 			<xsl:for-each select="$marc21defs//mattypes/mattype[@value=$rectype]/position">
 				<xsl:variable name="name" select="string(.)"/>
 				<xsl:variable name="inputtype" select="$marc21defs//value[@name=$name]/@inputtype"/>
@@ -157,6 +165,7 @@
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="." />
 								<xsl:with-param name="tag"><xsl:value-of select="$tag"/></xsl:with-param>
+                                <xsl:with-param name='tagnumber' select="$tagnumber"/>
 								<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
 							</xsl:call-template>
 						</xsl:otherwise>
@@ -172,6 +181,7 @@
 					<xsl:with-param name="rectype">Books</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
 					<xsl:with-param name='tag' select="."/>
+					<xsl:with-param name='tagnumber'>006</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$form = 'e' or $form = 'f'">
@@ -179,6 +189,7 @@
 					<xsl:with-param name="rectype">Maps</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
 					<xsl:with-param name='tag' select="."/>
+					<xsl:with-param name='tagnumber'>006</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$form = 'c' or $form = 'd' or $form = 'j' or $form = 'i'">
@@ -186,6 +197,7 @@
 					<xsl:with-param name="rectype">Music</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
 					<xsl:with-param name='tag' select="."/>
+					<xsl:with-param name='tagnumber'>006</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$form = 'g' or $form = 'k' or $form = 'o' or $form = 'r'">
@@ -193,6 +205,7 @@
 						<xsl:with-param name="rectype">Visual</xsl:with-param>
 						<xsl:with-param name="offset">17</xsl:with-param>
 						<xsl:with-param name='tag' select="."/>
+                        <xsl:with-param name='tagnumber'>006</xsl:with-param>
 					</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$form = 'm'">
@@ -200,6 +213,7 @@
 					<xsl:with-param name="rectype">ComputerFile</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
 					<xsl:with-param name='tag' select="."/>
+                    <xsl:with-param name='tagnumber'>006</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$form = 'p'">
@@ -207,6 +221,7 @@
 						<xsl:with-param name="rectype">Mixed</xsl:with-param>
 						<xsl:with-param name="offset">17</xsl:with-param>
 						<xsl:with-param name='tag' select="."/>
+                        <xsl:with-param name='tagnumber'>006</xsl:with-param>
 					</xsl:call-template>
 			</xsl:if>
 			</tr>
@@ -226,6 +241,7 @@
                                 <xsl:with-param name="position"><xsl:value-of select="@position"/></xsl:with-param>
                                 <xsl:with-param name="length"><xsl:value-of select="@length"/></xsl:with-param>
                                 <xsl:with-param name="tag"><xsl:value-of select="$tag007"/></xsl:with-param>
+                                <xsl:with-param name="tagnumber">007</xsl:with-param>
                                 <xsl:with-param name="offset">0</xsl:with-param>
                             </xsl:call-template>
                         </xsl:when>
@@ -247,6 +263,7 @@
 	<xsl:template name="fixed-field-select">
 		<xsl:param name="name"/>
 		<xsl:param name="tag"/>
+		<xsl:param name="tagnumber"/>
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="position"><xsl:value-of select="$marc21defs//value[@name=$name]/@position"/></xsl:param>
 		<xsl:param name="length"><xsl:value-of select="$marc21defs//value[@name=$name]/@length"/></xsl:param>
@@ -256,7 +273,7 @@
 		<td><xsl:value-of select="$name"/></td>
 		<td>
 			<xsl:if test='$debug=1'><span style='color:red'><xsl:value-of select="$name"/>=<xsl:value-of select="$value"/></span><br/></xsl:if>
-			<select class="fixedfield {$tag}">
+			<select class="fixedfield {$tagnumber}">
 				<xsl:attribute name="name"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:attribute name='onblur'>onFixedFieldEditorBlur(this)</xsl:attribute>
 				<xsl:attribute name='onclick'>showTagHelp(this)</xsl:attribute>
