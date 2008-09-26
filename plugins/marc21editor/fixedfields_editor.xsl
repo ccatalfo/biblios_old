@@ -337,49 +337,59 @@
 								<xsl:with-param name="name" select="'RLen'" />
 								<xsl:with-param name="tag" select="$leader" />
 								<xsl:with-param name="hidden" select="1" />
-								<xsl:with-param name="tagnumber" select="000" />
+								<xsl:with-param name="tagnumber" select="'000'" />
 							</xsl:call-template>
 
 							<xsl:call-template name="fixed-field-text">
 								<xsl:with-param name="name" select="'Base'" />
 								<xsl:with-param name="hidden" select="1" />
 								<xsl:with-param name="tag" select="$leader" />
+								<xsl:with-param name="tagnumber" select="'000'" />
 							</xsl:call-template>
 
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'RStat'" />
 								<xsl:with-param name="tag" select="$leader" />
+								<xsl:with-param name="tagnumber" select="'000'" />
 							</xsl:call-template>
 
 
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'Type'" />
 								<xsl:with-param name="tag" select="$leader" />
+								<xsl:with-param name="tagnumber" select="'000'" />
 							</xsl:call-template>
+
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'BLvl'" />
 								<xsl:with-param name="tag" select="$leader" />
+								<xsl:with-param name="tagnumber" select="'000'" />
 							</xsl:call-template>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'Desc'" />
 								<xsl:with-param name="tag" select="$leader" />
+								<xsl:with-param name="tagnumber" select="'000'" />
 							</xsl:call-template>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'Multipart'" />
 								<xsl:with-param name="tag" select="$leader" />
+								<xsl:with-param name="tagnumber" select="'000'" />
 							</xsl:call-template>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'ELvl'" />
 								<xsl:with-param name="tag" select="$leader" />
+								<xsl:with-param name="tagnumber" select="'000'" />
 							</xsl:call-template>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'Enc'" />
 								<xsl:with-param name="tag" select="$leader" />
+								<xsl:with-param name="tagnumber" select="'000'" />
                             </xsl:call-template>
 
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'Ctrl'" />
 								<xsl:with-param name="tag" select="$leader" />
+								<xsl:with-param name="tagnumber" select="'000'" />
 							</xsl:call-template>
 			</xsl:template>
 </xsl:stylesheet>

@@ -55,7 +55,8 @@ function getLeaderFromEditor(ff_ed) {
 		throw {
 			error: "InvalidLeader",
 			msg: "Invalid length of Leader",
-            length: leaderval.length
+            length: leaderval.length,
+            leaderval: leaderval
 		};
 	}
     return leaderval;
@@ -1566,6 +1567,7 @@ function setupFFEditorCtryCombo() {
     }
 
     this._postProcessJs = function() {
+        update();
         Ext.get(editorid).mask();
         //UI.editor.progress.updateProgress(.9, 'Setting up editor hot keys');
         setupEditorHotkeys();
@@ -1584,8 +1586,8 @@ function setupFFEditorCtryCombo() {
         $('#'+editorid).find('.ffeditor').show();
         // hide fixed field controlfields
         $('#'+editorid).find("#000, #008, #006, #007").css('display', 'none');
-        UI.editor.lastFocusedEl = $('#'+editorid).find('#000').get(0);
-        UI.editor[editorid].lastFocusedEl = $('#'+editorid).find('#000').get(0);
+        UI.editor.lastFocusedEl = $('#'+editorid).find('#001').get(0);
+        UI.editor[editorid].lastFocusedEl = $('#'+editorid).find('#001').get(0);
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( this.getToolBar() );
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).doLayout();
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).editorid = editorid;

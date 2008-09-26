@@ -22,7 +22,7 @@
 	</xsl:template>
 
 	<xsl:template match="marc:leader">
-        <div class="tag" id="000">
+        <div class="tag controlfield 000" id="000">
 			  <input size='3' class='tagnumber' id='000'>
 					<xsl:attribute name='value'>000</xsl:attribute>
 			  </input>
@@ -35,7 +35,7 @@
 						 <xsl:attribute name="id">cind2<xsl:value-of select="@tag"/>-<xsl:number value="position()"/></xsl:attribute>
 					<xsl:attribute name='value'>#</xsl:attribute>
 				</input>
-				<input size='24' class='controlfield' id='csubfields{@tag}'>
+				<input size='24' maxlength="24" class='controlfield-text' id='csubfields{@tag}'>
 					<xsl:attribute name='value'>
 						<xsl:value-of select="."/>
 					</xsl:attribute>
