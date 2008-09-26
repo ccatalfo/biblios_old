@@ -45,26 +45,28 @@
 	</xsl:template>
 	
 	<xsl:template match="marc:controlfield">
-        <div class="tag" id="{@tag}">
-			  <input size='3' class='tagnumber' id='c{@tag}'>
+        <div class="tag controlfield {@tag}" id="{@tag}">
+			  <input type="text" maxlength="3" size='3' class='tagnumber' id='c{@tag}'>
 					<xsl:attribute name='value'>	
 						<xsl:value-of select="@tag"/>
 					</xsl:attribute>
+                    <xsl:attribute name="onBlur">onBlur(this)</xsl:attribute>
+                    <xsl:attribute name="onFocus">onFocus(this)</xsl:attribute>
 				</input>
 
-			  <input size='2' class="indicator">
-						 <xsl:attribute name="id">cind1<xsl:value-of select="@tag"/>-<xsl:number value="position()"/></xsl:attribute>
+			  <input size='2' maxlength="2" class="indicator">
+                    <xsl:attribute name="id">cind1<xsl:value-of select="@tag"/>-<xsl:number value="position()"/></xsl:attribute>
 					<xsl:attribute name='value'>#</xsl:attribute>
 					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 				</input>
-			  <input size='2' class="indicator">
+			  <input size='2' maxlength="2" class="indicator">
 						 <xsl:attribute name="id">cind2<xsl:value-of select="@tag"/>-<xsl:number value="position()"/></xsl:attribute>
 					<xsl:attribute name='value'>#</xsl:attribute>
 					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 				</input>
-				<input class='controlfield' id='csubfields{@tag}'>
+				<input type="text" class='controlfield-text' id='csubfields{@tag}'>
 					<xsl:attribute name='size'>
 						<xsl:value-of select="string-length(.)"/>
 					</xsl:attribute>
@@ -74,15 +76,14 @@
 					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 				</input>
-        </div>
-    
+        </div> 
 	</xsl:template>
 
 	<xsl:template match="marc:datafield">
-        <div class="tag">
+        <div class="tag datafield {@tag}">
             <!-- provide an id based on tag number, but append a number to duplicate tags don't have duplicate id's -->
             <xsl:attribute name="id">
-					<xsl:value-of select="@tag"/>-<xsl:number value="position()"/>
+					<xsl:value-of select="@tag"/>-<xsl:number value="position()"/><xsl:value-of select="generate-id(.)"/>
 				</xsl:attribute>
 
 			  <input maxlength='3' class='tagnumber' id='d{@tag}'>
@@ -147,7 +148,7 @@
 		<xsl:param name="id"/>
 			<span class="subfield {@code}">
 				<xsl:attribute name="id"><xsl:value-of select="$id"/>-<xsl:value-of select="@code"/></xsl:attribute>
-				<input class="subfield-delimiter">
+				<input class="subfield-delimiter {@code}">
 					<xsl:attribute name='size'>2</xsl:attribute>
 					<xsl:attribute name='maxlength'>2</xsl:attribute>
 					<xsl:attribute name='value'>
@@ -160,7 +161,7 @@
 					</xsl:attribute>
 				</input>
 
-				<input class="subfield-text">
+				<input class="subfield-text {@code}">
 					<xsl:attribute name='size'>
 						<xsl:value-of select="string-length(.)"/>
 					</xsl:attribute>
@@ -172,8 +173,6 @@
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 					<xsl:attribute name="id">
 						<xsl:value-of select="$id"/>text-<xsl:value-of select="@code"/>-<xsl:value-of select="position()"/>
-
-
 					</xsl:attribute>
 				</input>
 			</span>
