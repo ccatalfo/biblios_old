@@ -127,10 +127,10 @@ function get008FromEditor(ff_ed) {
 					}
 				}
 				else if( type == 'Lang' || type == 'Ctry' ) {
-					value = Ext.getCmp(type).getValue();
+					value = Ext.getCmp(type).getValue() || '';
 				}
 				else {
-					value = $('#'+type).val();
+					value = $('#'+type).val() || '';
 				}
                 if(bibliosdebug) {
                     console.debug('get008fromEditor: type: ' + type + ' value: \"' + value + '\"' + ' length: ' + value.length);

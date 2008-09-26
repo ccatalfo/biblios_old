@@ -162,6 +162,19 @@
 							</xsl:call-template>
 
 						</xsl:when>
+						<xsl:when test="$inputtype = 'hidden'">	
+							<xsl:call-template name="fixed-field-text">
+								<xsl:with-param name="name" select="." />
+								<xsl:with-param name="tagnumber" select="$tagnumber" />
+								<xsl:with-param name="tag"><xsl:value-of select="$tag"/></xsl:with-param>
+								<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
+                                <xsl:with-param name="hidden" select="1"/>
+							</xsl:call-template>
+
+						</xsl:when>
+                        <xsl:when test="$inputtype = 'blank'">
+
+                        </xsl:when>
 						<xsl:otherwise>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="." />
