@@ -340,8 +340,11 @@ biblios.app = function() {
 															groupTextTpl:'{[values.rs[0].data.title]}',
 															header: 'title:',
 															groupRenderer: function(v, unused, r, rowIndex, colIndex, ds) {
-																return 'title:' + r.title;
-															}
+																return v;
+															},
+                                                            getRowClass: function(rec, index, rowParams, ds) {
+                                                                return '';
+                                                            }
 						        						   
 						      						  }),
 														sm: (sm = new Ext.grid.SmartCheckboxSelectionModel({
