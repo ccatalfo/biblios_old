@@ -364,6 +364,11 @@
 							</xsl:call-template>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'Enc'" />
-				</xsl:call-template>
+                            </xsl:call-template>
+
+							<xsl:call-template name="fixed-field-select">
+								<xsl:with-param name="name" select="'Ctrl'" />
+								<xsl:with-param name="tag" select="$leader" />
+							</xsl:call-template>
 			</xsl:template>
 </xsl:stylesheet>
