@@ -1585,9 +1585,9 @@ function setupFFEditorCtryCombo() {
         $('#'+editorid).find("#000, #008, #006, #007").css('display', 'none');
         UI.editor.lastFocusedEl = $('#'+editorid).find('#000').get(0);
         UI.editor[editorid].lastFocusedEl = $('#'+editorid).find('#000').get(0);
-        Ext.getCmp('editorTabPanel').getActiveTab().add( this.getToolBar() );
-        Ext.getCmp('editorTabPanel').getActiveTab().doLayout();
-        Ext.getCmp('editorTabPanel').getActiveTab().editorid = editorid;
+        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( this.getToolBar() );
+        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).doLayout();
+        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).editorid = editorid;
         Ext.get(editorid).unmask();
     };
 
