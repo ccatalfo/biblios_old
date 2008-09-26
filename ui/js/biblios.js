@@ -626,6 +626,7 @@ biblios.app = function() {
                                                         defaults: {autoScroll:true},
                                                         resizeTabs: true,
                                                         enableTabScroll:true,
+                                                        plugins: new Ext.ux.TabCloseMenu(),
                                                         listeners: {
                                                             remove: function(tabpanel, tab) {
                                                                 if(bibliosdebug) {
