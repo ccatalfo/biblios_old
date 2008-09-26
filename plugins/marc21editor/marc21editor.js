@@ -1458,7 +1458,7 @@ function setupFFEditorCtryCombo() {
     this._loadXmlXSL = function(marcXmlDoc, callback) {
         $.ajax({
             url: cgiDir + 'xsltransform.pl', 
-            method: 'post',
+            type: 'POST',
             callback: callback,
             editorid: editorid,
             dataType: 'html',
@@ -1467,7 +1467,9 @@ function setupFFEditorCtryCombo() {
                 this.callback.call(this, html, this.editorid); 
             },
             error: function(req, textStatus, errorThrown) {
-                alert(errorThrown);
+                if(bibliosdebug){
+                    console.debug(req + ' ' + textStatus + ' ' + errorThrown);
+                }
             }
         });
     };
