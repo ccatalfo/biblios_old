@@ -54,7 +54,8 @@ function getLeaderFromEditor(ff_ed) {
 	if( leaderval.length != 24 ) {
 		throw {
 			error: "InvalidLeader",
-			msg: "Invalid length of Leader"
+			msg: "Invalid length of Leader",
+            length: leaderval.length
 		};
 	}
     return leaderval;

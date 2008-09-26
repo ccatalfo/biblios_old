@@ -323,7 +323,7 @@
 	</xsl:template>
 
     <xsl:template name="leader">
-    <xsl:variable name='leader' select="marc:leader"/>
+    <xsl:variable name='leader'><xsl:value-of select="."/></xsl:variable>
     <xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
     <xsl:variable name="rectype" select="substring($leader, $marc21defs//value[@name='Type']/@position+1, $marc21defs//value[@name='Type']/@length)"/>
                       <td style='display:none;'>
