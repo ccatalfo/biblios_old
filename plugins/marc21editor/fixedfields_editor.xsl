@@ -219,7 +219,6 @@
 			<tr id="007">
             <xsl:for-each select="$marc21defs//field[@tag='007'][@mattype=$mattype]">
                 <xsl:for-each select="value">
-                <td>
                     <xsl:choose>
                         <xsl:when test="@inputtype='menubox'">
                             <xsl:call-template name="fixed-field-select">
@@ -231,10 +230,15 @@
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
-
+                            <xsl:call-template name="fixed-field-text">
+                                <xsl:with-param name="name"><xsl:value-of select="@name"/></xsl:with-param>
+                                <xsl:with-param name="position"><xsl:value-of select="@position"/></xsl:with-param>
+                                <xsl:with-param name="length"><xsl:value-of select="@length"/></xsl:with-param>
+                                <xsl:with-param name="tag"><xsl:value-of select="$tag007"/></xsl:with-param>
+                                <xsl:with-param name="offset">0</xsl:with-param>
+                            </xsl:call-template>
                         </xsl:otherwise>
                     </xsl:choose>
-                </td>
                 </xsl:for-each>
             </xsl:for-each>
 			</tr>
@@ -275,9 +279,9 @@
 		<xsl:param name="tag"/>
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="hidden"/>
-		<xsl:variable name="position" select="$marc21defs//value[@name=$name]/@position+1-$offset"/>
-		<xsl:variable name="length" select="$marc21defs//value[@name=$name]/@length"/>
-		<xsl:variable name='value' select="substring($tag, $position, $length)"/>
+		<xsl:param name="position"><xsl:value-of select="$marc21defs//value[@name=$name]/@position+1-$offset"/></xsl:param>
+		<xsl:param name="length"><xsl:value-of select="$marc21defs//value[@name=$name]/@length"/></xsl:param>
+		<xsl:param name='value'><xsl:value-of select="substring($tag, $position, $length)"/></xsl:param>
 		<td>
 			<xsl:value-of select="$name"/>
 		</td>
