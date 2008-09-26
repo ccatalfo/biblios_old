@@ -1455,7 +1455,24 @@ function setupFFEditorCtryCombo() {
 		update(elem);
 	};
 
-	this._loadXml = function(marcXmlDoc, callback) {
+    this._loadXmlXSL = function(marcXmlDoc, callback) {
+        $.ajax({
+            url: cgiDir + 'xsltransform.pl', 
+            method: 'post',
+            callback: callback,
+            editorid: editorid,
+            dataType: 'html',
+            data: {xml: xslTransform.serialize(marcXmlDoc), stylesheet: 'varfields_editor.xsl', xslpath:'/home/fuzzy/src/biblios/ui/xsl/'}, 
+            success: function(html) {
+                this.callback.call(this, html, this.editorid); 
+            },
+            error: function(req, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    };
+
+	this._loadXmlJS = function(marcXmlDoc, callback) {
 		var html = '';
 		html += '<div class="ffeditor">';
 		html += '<div class="fixedfields_editor">';
@@ -1538,6 +1555,7 @@ function setupFFEditorCtryCombo() {
 	};
 
     this._postProcess = function() {
+        /*
         Ext.get(editorid).mask();
         //UI.editor.progress.updateProgress(.9, 'Setting up editor hot keys');
         setupEditorHotkeys();
@@ -1562,6 +1580,7 @@ function setupFFEditorCtryCombo() {
         Ext.getCmp('editorTabPanel').getActiveTab().doLayout();
         Ext.getCmp('editorTabPanel').getActiveTab().editorid = editorid;
         Ext.get(editorid).unmask();
+        */
     };
 
     this._processForLocation = function(loc) {
@@ -1667,7 +1686,7 @@ MarcEditor.prototype.getIndexOf = function(elem) {
 };
 
 MarcEditor.prototype.loadXml = function(xmldoc, callback) {
-	return this._loadXml(xmldoc, callback);
+	return this._loadXmlXSL(xmldoc, callback);
 };
 
 MarcEditor.prototype.getEditorHtml = function() {
