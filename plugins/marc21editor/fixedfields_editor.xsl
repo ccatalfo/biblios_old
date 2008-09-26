@@ -148,7 +148,7 @@
 		<xsl:param name="rectype">All</xsl:param>
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="tag"></xsl:param>
-		<xsl:param name="tagnumber"></xsl:param>
+		<xsl:param name="tagnumber">008</xsl:param>
 			<xsl:for-each select="$marc21defs//mattypes/mattype[@value=$rectype]/position">
 				<xsl:variable name="name" select="string(.)"/>
 				<xsl:variable name="inputtype" select="$marc21defs//value[@name=$name]/@inputtype"/>
@@ -156,6 +156,7 @@
 						<xsl:when test="$inputtype = 'textbox'">	
 							<xsl:call-template name="fixed-field-text">
 								<xsl:with-param name="name" select="." />
+								<xsl:with-param name="tagnumber" select="$tagnumber" />
 								<xsl:with-param name="tag"><xsl:value-of select="$tag"/></xsl:with-param>
 								<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
 							</xsl:call-template>
@@ -164,6 +165,7 @@
 						<xsl:otherwise>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="." />
+								<xsl:with-param name="tagnumber" select="$tagnumber" />
 								<xsl:with-param name="tag"><xsl:value-of select="$tag"/></xsl:with-param>
                                 <xsl:with-param name='tagnumber' select="$tagnumber"/>
 								<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>

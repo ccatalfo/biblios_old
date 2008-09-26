@@ -114,27 +114,35 @@ function get008FromEditor(ff_ed) {
 		var tag008val = '';
 		var rectype = $('#Type').val();
 		var mattype = get008MaterialName(rectype);
+        if(bibliosdebug) {
+            console.debug('get008FromEditor: ' + rectype + ' ' + mattype);
+        }
 			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 				var type = $(this).text();
 				var value = '';
 				if( type.substr(0, 4) == 'Undef') {
 					var length = type.substr(5,1);
 					for( var k = 0; k<length; k++) {
-						tag008val += ' ';
+						value += ' ';
 					}
 				}
-				if( type == 'Lang' || type == 'Ctry' ) {
+				else if( type == 'Lang' || type == 'Ctry' ) {
 					value = Ext.getCmp(type).getValue();
 				}
 				else {
 					value = $('#'+type).val();
 				}
+                if(bibliosdebug) {
+                    console.debug('get008fromEditor: type: ' + type + ' value: \"' + value + '\"' + ' length: ' + value.length);
+                }
 				tag008val += value;
 			});
 	if( tag008val.length != 40 ) {
 		throw {
 			error: "Invalid008",
-			msg: "Invalid length of 008"
+			msg: "Invalid length of 008",
+            tag008val: tag008val,
+            length: tag008val.length
 		};
 	}
     return tag008val;
@@ -227,10 +235,6 @@ function get007FromEditor() {
 			});
 			return tag007val;
 }
-
-
-
-
 
 function doRecordOptions() {
 
