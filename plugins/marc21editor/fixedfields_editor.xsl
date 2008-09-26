@@ -256,7 +256,7 @@
 		<td><xsl:value-of select="$name"/></td>
 		<td>
 			<xsl:if test='$debug=1'><span style='color:red'><xsl:value-of select="$name"/>=<xsl:value-of select="$value"/></span><br/></xsl:if>
-			<select>
+			<select class="fixedfield {$tag}">
 				<xsl:attribute name="name"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:attribute name='onblur'>onFixedFieldEditorBlur(this)</xsl:attribute>
 				<xsl:attribute name='onclick'>showTagHelp(this)</xsl:attribute>
@@ -287,8 +287,9 @@
 			<xsl:value-of select="$name"/>
 		</td>
 		<td>
-			<input type="text">
+			<input class="fixedfield {$tag}" type="text">
 				<xsl:attribute name="id"><xsl:value-of select="$name"/></xsl:attribute>
+				<xsl:attribute name="name"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:attribute name="size"><xsl:value-of select="$length"/></xsl:attribute>
 				<xsl:attribute name="maxlength"><xsl:value-of select="$length"/></xsl:attribute>
 				<xsl:attribute name='onblur'>onFixedFieldEditorBlur(this)</xsl:attribute>
