@@ -48,9 +48,9 @@ function getLeaderFromEditor(ff_ed) {
 	var subc = '2'; // subfield count = 2
 	var elvl = $("#ELvl", ff_ed ).val();
 	var desc = $("#Desc", ff_ed ).val();
-	var link = $("#Link", ff_ed ).val();
+	var multi = $("#Multipart", ff_ed ).val();
 	var entry = '4500'; // entry
-   	leaderval = leaderval.concat( rlen, rstat, type, blvl, ctrl, encode, indc, subc, base, elvl, desc, link, entry);	
+   	leaderval = leaderval.concat( rlen, rstat, type, blvl, ctrl, encode, indc, subc, base, elvl, desc, multi, entry);	
 	if( leaderval.length != 24 ) {
 		throw {
 			error: "InvalidLeader",

@@ -3,9 +3,11 @@
 <fields>
     <field tag="000" length="24" repeatable="false" mandatory="true" fixedfield="true">
 	<description>Leader</description>
-	<value name="Link" position="19" length="1" inputtype="menulist">
+	<value name="Multipart" position="19" length="1" inputtype="menulist">
 		<option> </option>
-		<option>r</option>
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
 	</value>
 	<value name="RLen" position="0" length="5" inputtype="hidden">
 		<description>The computer-generated, five-character numeric string that specifies the length of the entire record. The number is right justified and each unused position contains a zero.</description>

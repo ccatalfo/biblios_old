@@ -295,16 +295,23 @@
 	<xsl:template name="fixed-field-text">
 		<xsl:param name="name"/>
 		<xsl:param name="tag"/>
+		<xsl:param name="tagnumber"/>
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="hidden"/>
 		<xsl:param name="position"><xsl:value-of select="$marc21defs//value[@name=$name]/@position+1-$offset"/></xsl:param>
 		<xsl:param name="length"><xsl:value-of select="$marc21defs//value[@name=$name]/@length"/></xsl:param>
 		<xsl:param name='value'><xsl:value-of select="substring($tag, $position, $length)"/></xsl:param>
 		<td>
+				<xsl:if test="$hidden=1">
+					<xsl:attribute name="style">display:none;</xsl:attribute>
+				</xsl:if>
 			<xsl:value-of select="$name"/>
 		</td>
 		<td>
-			<input class="fixedfield {$tag}" type="text">
+            <xsl:if test="$hidden=1">
+                <xsl:attribute name="style">display:none;</xsl:attribute>
+            </xsl:if>
+			<input class="fixedfield {$tagnumber}" type="text">
 				<xsl:attribute name="id"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:attribute name="name"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:attribute name="size"><xsl:value-of select="$length"/></xsl:attribute>
@@ -315,8 +322,8 @@
 					<xsl:value-of select="$value"/>
 				</xsl:attribute>
 				<xsl:if test='$debug=1'><span style='color:red;'><xsl:value-of select="$name"/>=<xsl:value-of select="$value"/></span><br/></xsl:if>
-				<xsl:if test="$hidden='true'">
-					<xsl:attribute name="hidden">true</xsl:attribute>
+				<xsl:if test="$hidden=1">
+					<xsl:attribute name="style">display:none;</xsl:attribute>
 				</xsl:if>
 			</input>
 		</td>
@@ -324,21 +331,20 @@
 
     <xsl:template name="leader">
     <xsl:variable name='leader'><xsl:value-of select="."/></xsl:variable>
-    <xsl:variable name='tag008' select="marc:controlfield[@tag='008']"/>
+    <xsl:variable name='tag008'><xsl:value-of select="marc:controlfield[@tag='008']"/></xsl:variable> 
     <xsl:variable name="rectype" select="substring($leader, $marc21defs//value[@name='Type']/@position+1, $marc21defs//value[@name='Type']/@length)"/>
-                      <td style='display:none;'>
 							<xsl:call-template name="fixed-field-text">
 								<xsl:with-param name="name" select="'RLen'" />
 								<xsl:with-param name="tag" select="$leader" />
+								<xsl:with-param name="hidden" select="1" />
+								<xsl:with-param name="tagnumber" select="000" />
 							</xsl:call-template>
-						</td>
 
-						<td style='display:none;'>
 							<xsl:call-template name="fixed-field-text">
 								<xsl:with-param name="name" select="'Base'" />
+								<xsl:with-param name="hidden" select="1" />
 								<xsl:with-param name="tag" select="$leader" />
 							</xsl:call-template>
-						</td>
 
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'RStat'" />
@@ -359,11 +365,16 @@
 								<xsl:with-param name="tag" select="$leader" />
 							</xsl:call-template>
 							<xsl:call-template name="fixed-field-select">
+								<xsl:with-param name="name" select="'Multipart'" />
+								<xsl:with-param name="tag" select="$leader" />
+							</xsl:call-template>
+							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'ELvl'" />
 								<xsl:with-param name="tag" select="$leader" />
 							</xsl:call-template>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'Enc'" />
+								<xsl:with-param name="tag" select="$leader" />
                             </xsl:call-template>
 
 							<xsl:call-template name="fixed-field-select">
