@@ -54,7 +54,10 @@ function openRecord(xml, recid, syntax) {
 	else {
 		xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
 	}
-	html = UI.editor[editorid].record.loadXml( xmldoc );
+	UI.editor[editorid].record.loadXml( xmldoc, handle_html );
+}
+
+function handle_html(html, editorid) {
     Ext.get(editorid).update(html);
     var tabTitle = UI.editor[editorid].record.getTitle();
     if(tabTitle == '' || tabTitle == undefined) {

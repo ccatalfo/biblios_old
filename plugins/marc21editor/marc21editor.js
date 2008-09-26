@@ -1455,7 +1455,7 @@ function setupFFEditorCtryCombo() {
 		update(elem);
 	};
 
-	this._loadXml = function(marcXmlDoc) {
+	this._loadXml = function(marcXmlDoc, callback) {
 		var html = '';
 		html += '<div class="ffeditor">';
 		html += '<div class="fixedfields_editor">';
@@ -1534,7 +1534,7 @@ function setupFFEditorCtryCombo() {
 		createFieldList();
 		//UI.editor.progress.updateProgress(.8, 'MarcEditor created');
 		htmled = html;
-		return html;
+	    callback.call(this, html, editorid);
 	};
 
     this._postProcess = function() {
@@ -1666,8 +1666,8 @@ MarcEditor.prototype.getIndexOf = function(elem) {
 	return this._getIndexOf(elem);
 };
 
-MarcEditor.prototype.loadXml = function(xmldoc) {
-	return this._loadXml(xmldoc);
+MarcEditor.prototype.loadXml = function(xmldoc, callback) {
+	return this._loadXml(xmldoc, callback);
 };
 
 MarcEditor.prototype.getEditorHtml = function() {
