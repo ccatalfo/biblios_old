@@ -1556,8 +1556,15 @@ function setupFFEditorCtryCombo() {
 	    callback.call(this, html, editorid);
 	};
 
+    this._postProcessXsl = function() {
+
+    }
+    
     this._postProcess = function() {
-        /*
+        this._postProcessJs();
+    }
+
+    this._postProcessJs = function() {
         Ext.get(editorid).mask();
         //UI.editor.progress.updateProgress(.9, 'Setting up editor hot keys');
         setupEditorHotkeys();
@@ -1582,7 +1589,6 @@ function setupFFEditorCtryCombo() {
         Ext.getCmp('editorTabPanel').getActiveTab().doLayout();
         Ext.getCmp('editorTabPanel').getActiveTab().editorid = editorid;
         Ext.get(editorid).unmask();
-        */
     };
 
     this._processForLocation = function(loc) {
