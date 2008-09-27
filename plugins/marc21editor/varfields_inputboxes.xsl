@@ -5,10 +5,7 @@
     <xsl:param name="editorid"> </xsl:param>
 
 	<xsl:template match="/">
-        <div id='varfields_editor'>
-            <div id='home'> </div>
 			<xsl:apply-templates/>
-        </div>
 	</xsl:template>
 	
 	<xsl:template name="varfields_editor">
