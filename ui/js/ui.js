@@ -8,11 +8,16 @@ UI.savepreview = {};
 UI.savepreview.id = '';
 UI.savepreview.xml = '';
 UI.editor = {};
+UI.editor.loading = {
+    numToLoad: 0,
+    numLoaded: 0
+};
 UI.editor.editors = {};
 UI.editor.lastElemHelpShown = '';
 UI.editor.id = '';
 UI.editor.lastEditorId = '';
 UI.editor.lastFocusedEl = '';
+UI.editor.progress = '';
 // search state
 UI.search = {};
 UI.search.currQuery = '';
