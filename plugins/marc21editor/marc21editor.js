@@ -542,6 +542,7 @@ function MarcEditor(editorid) {
     var editorid = editorid;
     this.editorid = editorid;
     var editorelem = $('#'+editorid);
+    this.editorelem = editorelem;
     this.showffeditor = true;
 	var htmled = '';	
 	var lastFocusedEl;
@@ -1204,7 +1205,7 @@ function setupFFEditorCtryCombo() {
 			newfield = new Field(tagnumber, ind1, ind2, [{code: '', value: value}]);
 		}
 		else {
-			var editorsubfields = $('[@id='+id+']', UI.editor[editorid].editorelem).children('.subfields').children('.subfield');
+			var editorsubfields = $(elem).children('.subfields').children('.subfield');
 			var subfields = new Array();
 			for(var j = 0; j < editorsubfields.length; j++) {
 				var code = editorsubfields.eq(j).find('.subfield-delimiter').val().substr(1, 1);
@@ -1310,10 +1311,10 @@ function setupFFEditorCtryCombo() {
 
 	this._getValue = function(tag, subfield) {
 		if( subfield != null ) {
-			return $('[@id^='+tag+'] .'+subfield+'.subfield-text', editorelem).val();
+			return $('.'+tag).find('.subfield-text'+'.'+subfield).val()
 		}
 		else {
-			return $('[@id^='+tag+']').children('.controlfield-text', editorelem).val();
+			return $('.'+tag).find('.controlfield-text').val();
 		}
 	};
 
