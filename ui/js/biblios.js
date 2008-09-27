@@ -421,6 +421,14 @@ biblios.app = function() {
                                                             Ext.getCmp('searchgridSaveBtn').disable();
                                                             Ext.getCmp('searchgridEditBtn').disable();
                                                         },
+                                                        editRecord: function(rec) {
+                                                            var xml = rec.data.fullrecord;	
+                                                            var xmlformat = 'marcxml';
+                                                            var loc = rec.data.location;
+                                                            var id = rec.id;	
+                                                            biblios.app.fireEvent('remoterecordretrieve', rec.data.fullrecord);
+                                                            openRecord( xml, '', xmlformat ); 
+                                                        },
 														listeners: {
 															render: function() {
 																var selectAllTbar = new Ext.Toolbar({
@@ -515,26 +523,38 @@ biblios.app = function() {
 																		disabled: true,
 																		text: 'Edit',
 																		handler: function() {
+                                                                            var searchgrid = Ext.getCmp('searchgrid');
+																			var checked = searchgrid.getSelectionModel().getChecked();
+                                                                            var selections = searchgrid.getSelectionModel().getSelections();
 																			
-																			var checked = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
-																			
-																			// mask search grid 
-                                                                            UI.editor.loading.numToLoad = checked.length;                                                                             
+                                                                            if(checked.length>0 && checked.length<11) {
+                                                                                UI.editor.loading.numToLoad = checked.length;
+                                                                                for( var i = 0; i < checked.length; i++ ) {
+                                                                                    searchgrid.editRecord( checked[i] ); 
+                                                                                } // for each checked record
+                                                                            }
+                                                                            else if( checked.length > 10 ) {
+                                                                                Ext.Msg.alert('Editing error', 'Please select at most 10 records to open simultaneously');
+                                                                                return false;
+                                                                            }
+                                                                            else if(selections.length > 0 ) {
+                                                                                UI.editor.loading.numToLoad = selections.length;
+                                                                                for( var j = 0; j < selections.length; j++ ) {
+                                                                                    searchgrid.editRecord( selections[j] ); 
+                                                                                } // for each checked record
+                                                                            }
+                                                                            else if( checked.length == 0 && selections.length == 0){
+                                                                                Ext.Msg.alert('Editing', 'Please select a record or records to edit by clicking a row or by checking checkboxes next to records you want to edit');
+                                                                                return false;
+
+                                                                            }
                                                                             UI.editor.loading.numLoaded = 0;
-                                                                            UI.editor.progress = Ext.Msg.show({
-                                                                                progress:true,
-                                                                                progressText:'Loading records...',
-                                                                            });
                                                                                 
-																			for( var i = 0; i < checked.length; i++ ) {
-																			    var xml = checked[i].data.fullrecord;	
-                                                                                var xmlformat = 'marcxml';
-                                                                                var loc = checked[i].data.location;
-																			    var id = checked[i].id;	
-                                                                                biblios.app.fireEvent('remoterecordretrieve', checked[i].data.fullrecord);
-                                                                                openRecord( xml, '', xmlformat ); 
-																				
-																			} // for each checked record
+                                                                            UI.editor.progress = Ext.Msg.progress(
+                                                                                'Loading records',
+                                                                                'Retrieving and formatting records',
+                                                                                '0%'
+                                                                            );
 																		} // search grid Edit btn handler
 																	},
 																	{   
