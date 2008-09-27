@@ -15,7 +15,8 @@ my $parser = XML::LibXML->new();
 my $xslt = XML::LibXSLT->new();
 my $cgi = CGI->new();
 
-my $xsl_path = $cgi->param('xslpath');
+#my $xsl_path = $cgi->param('xslpath');
+my $xsl_path = $ENV{'BIBLIOS_XSL_PATH'};
 if($debug) {warn "Using $xsl_path as biblios xsl path";}
 
 my $xml = Encode::decode_utf8( $cgi->param('xml') );
