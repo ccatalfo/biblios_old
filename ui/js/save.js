@@ -29,12 +29,12 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
                 var searchtargetsid = DB.SearchTargets.select('name=?', [searchtargetname]).getOne().rowid;
 				progress.updateProgress(.6, 'Retrieving record from server');
                 var record = new DB.Records({
-                    title: UI.editor[editorid].record.getValue('245', 'a') || '',
-                    author: UI.editor[editorid].record.getValue('100', 'a') || '',
+                    title: UI.editor[editorid].record.getTitle() || '',
+                    author: UI.editor[editorid].record.getAuthor() || '',
                     location: data.location[0].name || '',
-                    publisher:UI.editor[editorid].record.getValue('260', 'b') || '',
+                    publisher:UI.editor[editorid].record.getPublisher() || '',
                     medium: data.medium || '',
-                    date:UI.editor[editorid].record.getValue('260', 'c') || '',
+                    date:UI.editor[editorid].record.getDate() || '',
                     status: 'new',
                     xml: xml,
                     date_added: new Date().toString(),
@@ -57,15 +57,15 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 				try {
 					var record = DB.Records.select('Records.rowid = ?', [recid]).getOne();
 					if( record.marcflavour == 'marc21' ) {
-						record.title = UI.editor[editorid].record.getTitle();
-						record.author = UI.editor[editorid].record.getAuthor();
-						record.publisher = UI.editor[editorid].record.getPublisher();
-						record.dateofpub = UI.editor[editorid].record.getDate();
+						record.title = UI.editor[editorid].record.getTitle() || '';
+						record.author = UI.editor[editorid].record.getAuthor() || '';
+						record.publisher = UI.editor[editorid].record.getPublisher() || '';
+						record.dateofpub = UI.editor[editorid].record.getDate() || '';
 					}
 					record.xml = xml;
 					record.Savefiles_id = savefileid;
 					record.status = 'edited';
-					record.date_modified = new Date();
+					record.date_modified = new Date().toString();
 					record.save();
 					if(bibliosdebug) { 
 						console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
@@ -197,12 +197,12 @@ function addRecordFromSearch(srchRecord, savefileid, editorid) {
 			var target = DB.SearchTargets.select('name=?', [srchRecord.data.location[0].name]).getOne();
 			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [savefileid]).getOne();
 			var record = new DB.Records({
-				title: UI.editor[editorid]? UI.editor[editorid].record.getValue('245', 'a') : srchRecord.data.title || '',
-				author: UI.editor[editorid]? UI.editor[editorid].record.getValue('100', 'a'):  srchRecord.data.author || '',
+				title: UI.editor[editorid]? UI.editor[editorid].record.getTitle() : srchRecord.data.title || '',
+				author: UI.editor[editorid]? UI.editor[editorid].record.getAuthor():  srchRecord.data.author || '',
 				location: srchRecord.data.location[0].name || '',
-				publisher:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'b'): srchRecord.data.publication || '',
+				publisher:UI.editor[editorid]?  UI.editor[editorid].record.getPublisher(): srchRecord.data.publication || '',
 				medium: srchRecord.data.medium || '',
-				date:UI.editor[editorid]?  UI.editor[editorid].record.getValue('260', 'c'): srchRecord.data.date|| '',
+				date:UI.editor[editorid]?  UI.editor[editorid].record.getDate(): srchRecord.data.date|| '',
 				status: 'new',
 				xml: srchRecord.data.fullrecord,
 				date_added: new Date().toString(),
