@@ -290,7 +290,7 @@ function doMerge() {
 function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
     try {
         var leaderval = getLeaderFromEditor(ff_ed);
-        $('#'+editorid).find("#000", var_ed).children('.controlfield-text').val(leaderval);
+        $('#'+editorid).find(".000", var_ed).children('.controlfield-text').val(leaderval);
         if(bibliosdebug){console.info('Transferring leader value from fixed field editor into leader tag: ' + leaderval);}
     }
     catch(ex) {
@@ -298,26 +298,26 @@ function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
     }
     try {
         var tag008val = get008FromEditor(ff_ed);
-        $('#'+editorid).find("#008", var_ed).children('.controlfield-text').val(tag008val);
+        $('#'+editorid).find(".008", var_ed).children('.controlfield-text').val(tag008val);
         if(bibliosdebug){console.info('Transferring 008 value from fixed field editor into 008 tag: ' + tag008val);}
     }
     catch(ex) {
         Ext.MessageBox.alert('Error', ex.message);
     }
-	if( $('#'+editorid).find('#006').length > 0 ) {
+	if( $('#'+editorid).find('.006').length > 0 ) {
         try {
             var tag006val = get006FromEditor(ff_ed);
-            $('#'+editorid).find("#006", var_ed).children('.controlfield-text').val(tag006val);
+            $('#'+editorid).find(".006", var_ed).children('.controlfield-text').val(tag006val);
             if(bibliosdebug){console.info('Transferring 006 value from fixed field editor into 006 tag: ' + tag006val);}
         }
         catch(ex) {
             Ext.MessageBox.alert('Error', ex.message);
         }
 	}
-	if( $('#'+editorid).find('#007').length > 0 ) {
+	if( $('#'+editorid).find('.007').length > 0 ) {
         try {
             var tag007val = get007FromEditor(ff_ed);
-            $('#'+editorid).find("#007", var_ed).children('.controlfield-text').val(tag007val);
+            $('#'+editorid).find(".007").children('.controlfield-text').val(tag007val);
             if(bibliosdebug){console.info('Transferring 007 value from fixed field editor into 007 tag: ' + tag007val);}
         }
         catch(ex) {
