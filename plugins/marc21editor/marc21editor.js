@@ -1463,30 +1463,13 @@ function setupFFEditorCtryCombo() {
 
 	this._deleteSubfield = function(editorid, tag, index, subfield) {
 		if(bibliosdebug) { console.info('removing subfield with text: ' + $(UI.editor.lastFocusedEl).val());}
-		var next = $(UI.editor[editorid].lastFocusedEl).parents('.subfield').next().children('.subfield-delimiter');
-		var prev = $(UI.editor[editorid].lastFocusedEl).parents('.subfield').prev().children('.subfield-delimiter');
-		var ind2 = $(UI.editor[editorid].lastFocusedEl).parents('.tag').children('.indicator').eq(1);
 		// remove current subfield
 		$(UI.editor[editorid].lastFocusedEl).parents('.subfield').remove();
-		// focus next subfield 
-		if( $(UI.editor[editorid].lastFocusedEl).parents('.subfield').next().length )  {
-			$(next).get(0).focus();	
-			UI.editor[editorid].lastFocusedEl = $(next);
-		}
-		else if( $(UI.editor.lastFocusedEl).parents('.subfield').prev().length )  {
-			$(prev).get(0).focus();
-			UI.editor[editorid].lastFocusedEl = $(prev);
-		}
-		// or indicator
-		else if( $(ind2).length) {
-			$(ind2).get(0).focus();
-			UI.editor[editorid].lastFocusedEl = $(ind2);
-		}
 		update();
 	};
 
 	this._deleteSubfields = function(tag) {
-		$('[@id^='+tag+']', editorelem).children('.subfields').find('.subfield').remove();
+		$('.'+tag, editorelem).find('.subfield').remove();
 		update();
 	};
 
