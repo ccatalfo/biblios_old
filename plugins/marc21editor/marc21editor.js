@@ -1511,7 +1511,12 @@ function setupFFEditorCtryCombo() {
             callback: callback,
             editorid: editorid,
             dataType: 'html',
-            data: {xml: xslTransform.serialize(marcXmlDoc), stylesheet: 'marc21editor.xsl', xslpath:'/home/fuzzy/src/biblios/plugins/marc21editor/'}, 
+            data: {
+                xml: xslTransform.serialize(marcXmlDoc), 
+                stylesheet: 'marc21editor.xsl', 
+                xslpath:'/home/fuzzy/src/biblios/plugins/marc21editor/', 
+                editorid: editorid
+            }, 
             success: function(html) {
                 this.callback.call(this, html, this.editorid); 
             },

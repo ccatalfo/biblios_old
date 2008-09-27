@@ -519,7 +519,13 @@ biblios.app = function() {
 																			var checked = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
 																			
 																			// mask search grid 
-																			Ext.getCmp('searchgrid').el.mask('Loading record(s)');
+                                                                            UI.editor.loading.numToLoad = checked.length;                                                                             
+                                                                            UI.editor.loading.numLoaded = 0;
+                                                                            UI.editor.progress = Ext.Msg.show({
+                                                                                progress:true,
+                                                                                progressText:'Loading records...',
+                                                                            });
+                                                                                
 																			for( var i = 0; i < checked.length; i++ ) {
 																			    var xml = checked[i].data.fullrecord;	
                                                                                 var xmlformat = 'marcxml';
@@ -529,7 +535,6 @@ biblios.app = function() {
                                                                                 openRecord( xml, '', xmlformat ); 
 																				
 																			} // for each checked record
-																			Ext.getCmp('searchgrid').el.unmask();
 																		} // search grid Edit btn handler
 																	},
 																	{   
@@ -773,11 +778,9 @@ biblios.app = function() {
 																} // savegrid keypress
 															}, // save grid listeners
                                                             editRecord: function(id) {
-                                                                Ext.getCmp('savegrid').el.mask('Loading record');
                                                                 showStatusMsg('Opening record...');
                                                                 var xml = getLocalXml(id);
                                                                 openRecord( xml,  id, 'marcxml');
-                                                                Ext.getCmp('savegrid').el.unmask();
                                                             },
 															tbar: new Ext.PagingToolbar({
 																id: 'savegridtbar',
@@ -802,6 +805,12 @@ biblios.app = function() {
                                                                             var savegrid = Ext.getCmp('savegrid');
 																			var checked = Ext.getCmp('savegrid').getSelectionModel().getChecked();
 																			var selections = Ext.getCmp('savegrid').getSelectionModel().getSelections();
+                                                                            UI.editor.loading.numToLoad = checked.length;                                                                             
+                                                                            UI.editor.loading.numLoaded = 0;
+                                                                            UI.editor.progress = Ext.Msg.show({
+                                                                                progress:true,
+                                                                                progressText:'Loading records...',
+                                                                            });
                                                                             if( checked.length > 0 ) {
                                                                                 for( var i = 0; i < checked.length; i++) {
                                                                                     savegrid.editRecord( checked[i].data.Id );

@@ -16,7 +16,6 @@ function openRecord(xml, recid, syntax) {
 	// we need to display record view first since editors are lazily rendered
 	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
-	biblios.app.displayRecordView();
     var editorid = Ext.id();
     var tabid = Ext.id();
     Ext.getCmp('editorTabPanel').add({ 
@@ -79,5 +78,19 @@ function handle_html(html, editorid) {
         Ext.getCmp(editorid + 'DuplicateBtn').disable();
         Ext.getCmp(editorid + 'RevertBtn').disable();
     }*/
+    updateEditorLoad();
 	clearStatusMsg();
+}
+
+function updateEditorLoad() {
+    UI.editor.loading.numLoaded++;
+    var ratio = UI.editor.loading.numLoaded / UI.editor.loading.numToLoad;
+    UI.editor.progress.updateProgress(ratio, Math.round(100*ratio)+'% completed');
+    if( ratio == 1 ) {
+        UI.editor.progress.updateProgress(1, 'Loading complete');
+        UI.editor.progress.hide();
+        UI.editor.loading.numToLoad = 0;
+        UI.editor.loading.numLoaded = 0;
+        biblios.app.displayRecordView();
+    }
 }
