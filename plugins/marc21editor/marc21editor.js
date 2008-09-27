@@ -1251,10 +1251,10 @@ function setupFFEditorCtryCombo() {
             // transfer values from fixed field editor into tags
             transferFF_EdToTags(ff_ed, var_ed, editorid);
             // show leader and 008
-            $('#'+editorid).find("#000", UI.editor[editorid].vared).show();
-            $('#'+editorid).find("#008", UI.editor[editorid].vared).show();
-            $('#'+editorid).find("#006", UI.editor[editorid].vared).show();
-            $('#'+editorid).find("#007", UI.editor[editorid].vared).show();
+            $('#'+editorid).find(".000", UI.editor[editorid].vared).show();
+            $('#'+editorid).find(".008", UI.editor[editorid].vared).show();
+            $('#'+editorid).find(".006", UI.editor[editorid].vared).show();
+            $('#'+editorid).find(".007", UI.editor[editorid].vared).show();
         }
         else {
             UI.editor[editorid].record.update();
@@ -1266,10 +1266,10 @@ function setupFFEditorCtryCombo() {
                 dataType: 'html',
                 data: {xml:xml, stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid},
                 success: function(html) {
-                    $('#'+editorid).find("#000", UI.editor[editorid].vared).hide();
-                    $('#'+editorid).find("#008", UI.editor[editorid].vared).hide();
-                    $('#'+editorid).find("#006", UI.editor[editorid].vared).hide();
-                    $('#'+editorid).find("#007", UI.editor[editorid].vared).hide();
+                    $('#'+editorid).find(".000", UI.editor[editorid].vared).hide();
+                    $('#'+editorid).find(".008", UI.editor[editorid].vared).hide();
+                    $('#'+editorid).find(".006", UI.editor[editorid].vared).hide();
+                    $('#'+editorid).find(".007", UI.editor[editorid].vared).hide();
                     $('#'+this.editorid).find('.ffeditor').html(html);
                     $('#'+this.editorid).find('.ffeditor').show();
                 },
@@ -1643,9 +1643,9 @@ function setupFFEditorCtryCombo() {
         // show fixed field editor, hide ldr and 008 divs
         $('#'+editorid).find('.ffeditor').show();
         // hide fixed field controlfields
-        $('#'+editorid).find("#000, #008, #006, #007").css('display', 'none');
-        UI.editor.lastFocusedEl = $('#'+editorid).find('#001').get(0);
-        UI.editor[editorid].lastFocusedEl = $('#'+editorid).find('#001').get(0);
+        $(".000, .008, .006, .007", editorelem).css('display', 'none');
+        UI.editor.lastFocusedEl = $('.001', editorelem).get(0);
+        UI.editor[editorid].lastFocusedEl = $('#'+editorid).find('.001').get(0);
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( this.getToolBar() );
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).doLayout();
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).editorid = editorid;

@@ -809,7 +809,8 @@ biblios.app = function() {
                                                                             UI.editor.loading.numLoaded = 0;
                                                                             UI.editor.progress = Ext.Msg.show({
                                                                                 progress:true,
-                                                                                progressText:'Loading records...',
+                                                                                msg: 'Loading',
+                                                                                progressText:'Initializing',
                                                                             });
                                                                             if( checked.length > 0 ) {
                                                                                 for( var i = 0; i < checked.length; i++) {
