@@ -1681,7 +1681,7 @@
 </fields>
 
 <mattypes>
-	<mattype value="All Materials">
+	<mattype value="All">
 		<!-- 00..17 -->
 		<position>DateEntered</position>
 		<position>DtSt</position>
@@ -1694,11 +1694,6 @@
 		<position>Srce</position>
 	</mattype>
 	<mattype value="Books">
-		<position>DateEntered</position>
-		<position>DtSt</position>
-		<position>Date1</position>
-		<position>Date2</position>
-		<position>Ctry</position>
 		<position>Ills</position>
 		<position>Audn</position>
 		<position>Form</position>
@@ -1710,16 +1705,8 @@
 		<position>Undef1</position>
 		<position>LitF</position>
 		<position>Bio</position>
-		<position>Lang</position>
-		<position>MRec</position>
-		<position>Srce</position>
 	</mattype>
 	<mattype value="Music">
-		<position>DateEntered</position>
-		<position>DtSt</position>
-		<position>Date1</position>
-		<position>Date2</position>
-		<position>Ctry</position>
 		<position>CompForm</position>
 		<position>Format</position>
 		<position>Parts</position>
@@ -1730,16 +1717,8 @@
 		<position>Undef1</position>
 		<position>TrArr</position>
 		<position>Undef1</position>
-		<position>Lang</position>
-		<position>MRec</position>
-		<position>Srce</position>
 	</mattype>
 	<mattype value="Maps">
-		<position>DateEntered</position>
-		<position>DtSt</position>
-		<position>Date1</position>
-		<position>Date2</position>
-		<position>Ctry</position>
 		<position>Relief</position>
 		<position>Proj</position>
 		<position>Undef1</position>
@@ -1751,16 +1730,8 @@
 		<position>Indx</position>
 		<position>Undef1</position>
 		<position>SpChar</position>
-		<position>Lang</position>
-		<position>MRec</position>
-		<position>Srce</position>
 	</mattype>
 	<mattype value="Computer Files">
-		<position>DateEntered</position>
-		<position>DtSt</position>
-		<position>Date1</position>
-		<position>Date2</position>
-		<position>Ctry</position>
 		<position>Undef4</position>
 		<position>Audn</position>
 		<position>Undef3</position>
@@ -1768,16 +1739,8 @@
 		<position>Undef1</position>
 		<position>GovPub</position>
 		<position>Undef6</position>
-		<position>Lang</position>
-		<position>MRec</position>
-		<position>Srce</position>
 	</mattype>
 	<mattype value="Visual Materials">
-		<position>DateEntered</position>
-		<position>DtSt</position>
-		<position>Date1</position>
-		<position>Date2</position>
-		<position>Ctry</position>
 		<position>RTime</position>
 		<position>Undef1</position>
 		<position>Audn</position>
@@ -1787,22 +1750,11 @@
 		<position>Undef3</position>
 		<position>VisType</position>
 		<position>Tech</position>
-		<position>Lang</position>
-		<position>MRec</position>
-		<position>Srce</position>
 	</mattype>
 	<mattype value="Mixed Materials">
-		<position>DateEntered</position>
-		<position>DtSt</position>
-		<position>Date1</position>
-		<position>Date2</position>
-		<position>Ctry</position>
 		<position>Undef5</position>
 		<position>Form</position>
 		<position>Undef11</position>
-		<position>Lang</position>
-		<position>MRec</position>
-		<position>Srce</position>
 	</mattype>
 </mattypes>
 
