@@ -1305,16 +1305,21 @@ function setupFFEditorCtryCombo() {
 	};
 
 	this._setValue = function(tag, subfield, value) {
-		$('[@id^='+tag+'] .'+subfield+' .subfield-text', editorelem).val(value);
+		if( subfield != null ) {
+			return $('.'+tag, editorelem).find('.subfield-text'+'.'+subfield).val(value)
+		}
+		else {
+			return $('.'+tag, editorelem).find('.controlfield-text').val(value);
+		}
 		update();
 	};
 
 	this._getValue = function(tag, subfield) {
 		if( subfield != null ) {
-			return $('.'+tag).find('.subfield-text'+'.'+subfield).val()
+			return $('.'+tag, editorelem).find('.subfield-text'+'.'+subfield).val()
 		}
 		else {
-			return $('.'+tag).find('.controlfield-text').val();
+			return $('.'+tag, editorelem).find('.controlfield-text').val();
 		}
 	};
 
@@ -1324,19 +1329,19 @@ function setupFFEditorCtryCombo() {
 
 	this._rawField = function(tagnumber, i) {
 		if( !Ext.isEmpty(i) ) {
-			return $('.tag', editorelem).filter('[@id*='+tagnumber+']').eq(i);
+			return $('.tag.'+tagnumber, editorelem).eq(i);
 		}
 		else {
-			return $('.tag', editorelem).filter('[@id*='+tagnumber+']');
+			return $('.tag.'+tagnumber, editorelem).eq(0);
 		}
 	};
 
 	this._rawSubfields = function(tagnumber, i) {
 		if( !Ext.isEmpty(i) ) {
-			return $('.tag', editorelem).filter('[@id*='+tagnumber+']').eq(i).children('.subfields').children('.subfield');
+			return $('.tag.'+tagnumber, editorelem).find('.subfield').get(i);
 		}
 		else {
-			return $('.tag', editorelem).filter('[@id*='+tagnumber+']').children('.subfields').children('.subfield');
+			return $('.tag.'+tagnumber, editorelem).find('.subfield').get(0);
 		}
 	};
 
