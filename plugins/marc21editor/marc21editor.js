@@ -1317,17 +1317,17 @@ function setupFFEditorCtryCombo() {
 				var id = $(tags[i]).attr('id').substr(0,3);
 			}
 			var newId = tagnumber + "-" + newSuffix;
-			  var newtag = '<div class="tag" id="'+newId+'">';
-			  newtag += '<input size="3" onblur="onBlur(this)" onfocus="onFocus(this)" class="tagnumber" id="d'+tagnumber+'" value="'+tagnumber+'" />';
-			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+'"/>';
-			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+'"/>';
+			  var newtag = '<div class="tag" id="'+newId+editorid+'">';
+			  newtag += '<input size="3" onblur="onBlur(this)" onfocus="onFocus(this)" class="tagnumber" id="d'+tagnumber+editorid+'" value="'+tagnumber+'" />';
+			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+editorid+'"/>';
+			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+editorid+'"/>';
 			if( tagnumber < '010' ) {
 				newtag += '<input type="text" onblue="onBlur(this)" onfocus="onFocus(this)" class="controlfield-text '+tagnumber+'" value="">';
 			} // insert controlfield
 			else {
 			  newtag += '<span class="subfields" id="dsubfields'+newId+'">';
 			  for( var i = 0; i< sf.length; i++) {
-				  newtag += '<span class="subfield" id="dsubfields'+tagnumber+newId+'">';
+				  newtag += '<span class="subfield" id="dsubfields'+tagnumber+newId+editorid+'">';
 				  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;'+sf[i]['delimiter']+'">';
 				  var textlength = sf[i]['text'].length;
 				  newtag += '<input id="dsubfields'+newId+i+'text" onfocus="onFocus(this)" onblur="onBlur(this)" class="subfield-text" size="'+textlength+'" value="'+sf[i]['text']+'">';
