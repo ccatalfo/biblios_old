@@ -117,6 +117,26 @@ function get008FromEditor(ff_ed) {
         if(bibliosdebug) {
             console.debug('get008FromEditor: ' + rectype + ' ' + mattype);
         }
+        $('mattypes mattype[@value=All] position', marc21defs).each( function(i) {
+				var type = $(this).text();
+				var value = '';
+				if( type.substr(0, 5) == 'Undef') {
+					var length = type.substr(5,1);
+					for( var k = 0; k<length; k++) {
+						value += ' ';
+					}
+				}
+				else if( type == 'Lang' || type == 'Ctry' ) {
+					value = Ext.getCmp(type).getValue() || '';
+				}
+				else {
+					value = $('#'+type).val() || '';
+				}
+                if(bibliosdebug) {
+                    console.debug('get008fromEditor: type: ' + type + ' value: \"' + value + '\"' + ' length: ' + value.length);
+                }
+				tag008val += value;
+			});
 			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 				var type = $(this).text();
 				var value = '';
@@ -220,19 +240,25 @@ function get007FromEditor() {
 	var tag007val = '';
 	var cat = $('#Category').val();
 	var mattype = get007MaterialName(cat);
-			$('field[@tag=007][@mattype='+mattype+']', marc21defs).each( function(i) {
-				$('value', this).each( function(j) {
-					var type = $(this).attr('name');
-					if( type == 'Undefined') {
-						var length = $(this).attr('length');
-						for( var k = 0; k<length; k++) {
-							tag007val += ' ';
-						}
-					}
-					var value = $('#'+type).val() || '';
-					tag007val += value;
-				}); // loop through positions in 007
-			});
+    if(bibliosdebug) {
+        console.debug('get007FromEditor: ' + cat + ' ' + mattype);
+    }
+    $('field[@tag=007][@mattype='+mattype+']', marc21defs).each( function(i) {
+        $('value', this).each( function(j) {
+            var type = $(this).attr('name');
+            if( type == 'Undefined') {
+                var length = $(this).attr('length');
+                for( var k = 0; k<length; k++) {
+                    tag007val += ' ';
+                }
+            }
+            var value = $('#'+type).val() || '';
+            if(bibliosdebug) {
+                console.debug('get007FromEditor: type: ' + type + ' value: ' + value);
+            }
+            tag007val += value;
+        }); // loop through positions in 007
+    });
 			return tag007val;
 }
 
