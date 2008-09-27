@@ -237,8 +237,8 @@ function get007MaterialName(cat) {
 }
 
 function get007FromEditor() {
-	var tag007val = '';
-	var cat = $('#Category').val();
+	var cat = $('#007').children('.controlfield-text').val().substr(0,1);
+	var tag007val = cat;
 	var mattype = get007MaterialName(cat);
     if(bibliosdebug) {
         console.debug('get007FromEditor: ' + cat + ' ' + mattype);

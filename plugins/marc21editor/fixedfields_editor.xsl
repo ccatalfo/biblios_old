@@ -190,12 +190,24 @@
                                 <xsl:with-param name="offset">0</xsl:with-param>
                             </xsl:call-template>
                         </xsl:when>
+                        <xsl:when test="@inputtype='hidden'">
+                            <xsl:call-template name="fixed-field-text">
+                                <xsl:with-param name="name"><xsl:value-of select="@name"/></xsl:with-param>
+                                <xsl:with-param name="position"><xsl:value-of select="@position"/></xsl:with-param>
+                                <xsl:with-param name="length"><xsl:value-of select="@length"/></xsl:with-param>
+                                <xsl:with-param name="tag"><xsl:value-of select="$tag007"/></xsl:with-param>
+                                <xsl:with-param name="tagnumber">007</xsl:with-param>
+                                <xsl:with-param name="offset">0</xsl:with-param>
+                                <xsl:with-param name="hidden">1</xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:when>
                         <xsl:otherwise>
                             <xsl:call-template name="fixed-field-text">
                                 <xsl:with-param name="name"><xsl:value-of select="@name"/></xsl:with-param>
                                 <xsl:with-param name="position"><xsl:value-of select="@position"/></xsl:with-param>
                                 <xsl:with-param name="length"><xsl:value-of select="@length"/></xsl:with-param>
                                 <xsl:with-param name="tag"><xsl:value-of select="$tag007"/></xsl:with-param>
+                                <xsl:with-param name="tagnumber">007</xsl:with-param>
                                 <xsl:with-param name="offset">0</xsl:with-param>
                             </xsl:call-template>
                         </xsl:otherwise>
