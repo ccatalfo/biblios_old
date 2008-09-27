@@ -27,9 +27,9 @@ if($debug){
 }
 
 my $source = $parser->parse_string($xml);
-my $style_doc = $parser->parse_file($xsl_path . $xsl_file) or die "Can't open stylesheet $xsl_file";
-my $stylesheet = $xslt->parse_stylesheet($style_doc) or die "Can't parse stylesheet $!";
-my $results = $stylesheet->transform($source, XML::LibXSLT::xpath_to_string(editorid => $editorid)) or die "Can't transform $!";
+my $style_doc = $parser->parse_file($xsl_path . $xsl_file) or print "Can't open stylesheet $xsl_file";
+my $stylesheet = $xslt->parse_stylesheet($style_doc) or print "Can't parse stylesheet $!";
+my $results = $stylesheet->transform($source, XML::LibXSLT::xpath_to_string(editorid => $editorid)) or print "Can't transform $!";
 
 print $cgi->header(-type=>$contenttype, -charset=>'utf-8');
 # output_as_chars should return utf-8

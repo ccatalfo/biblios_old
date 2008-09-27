@@ -542,6 +542,7 @@ function MarcEditor(editorid) {
     var editorid = editorid;
     this.editorid = editorid;
     var editorelem = $('#'+editorid);
+    this.showffeditor = true;
 	var htmled = '';	
 	var lastFocusedEl;
 	var currFocusedEl;
@@ -1239,31 +1240,48 @@ function setupFFEditorCtryCombo() {
 			}
 		}
 	};
-    this._toggleFixedFieldDisplay = function toggleFixedFieldDisplay(btn, toggled) {
-	var ff_ed = $('#'+editorid).find(".ffeditor");
-	var var_ed = $('#'+editorid).find(".vareditor");
-	if( btn.pressed == false ) {
-		// hide fixed field editor
-		$('#'+editorid).find(".ffeditor").hide();
-        // transfer values from fixed field editor into tags
-        transferFF_EdToTags(ff_ed, var_ed, editorid);
-		// show leader and 008
-		$('#'+editorid).find("#000", UI.editor[editorid].vared).show();
-		$('#'+editorid).find("#008", UI.editor[editorid].vared).show();
-		$('#'+editorid).find("#006", UI.editor[editorid].vared).show();
-		$('#'+editorid).find("#007", UI.editor[editorid].vared).show();
-	}
-	else {
-        updateFFEditor();
-		$('#'+editorid).find(".ffeditor").show();
-		// hide leader and fixed fields
-		$('#'+editorid).find("#000", UI.editor[editorid].vared).hide();
-		$('#'+editorid).find("#008", UI.editor[editorid].vared).hide();
-		$('#'+editorid).find("#006", UI.editor[editorid].vared).hide();
-		$('#'+editorid).find("#007", UI.editor[editorid].vared).hide();
-	}
-}
-	// privileged
+
+    this._toggleFixedFieldDisplay = function toggleFixedFieldDisplay() {
+        UI.editor[editorid].record.showffeditor  = UI.editor[editorid].record.showffeditor ? false : true;
+        var ff_ed = $('#'+editorid).find(".ffeditor");
+        var var_ed = $('#'+editorid).find(".vareditor");
+        if( UI.editor[editorid].record.showffeditor == false ) {
+            // hide fixed field editor
+            $('#'+editorid).find(".ffeditor").hide();
+            // transfer values from fixed field editor into tags
+            transferFF_EdToTags(ff_ed, var_ed, editorid);
+            // show leader and 008
+            $('#'+editorid).find("#000", UI.editor[editorid].vared).show();
+            $('#'+editorid).find("#008", UI.editor[editorid].vared).show();
+            $('#'+editorid).find("#006", UI.editor[editorid].vared).show();
+            $('#'+editorid).find("#007", UI.editor[editorid].vared).show();
+        }
+        else {
+            UI.editor[editorid].record.update();
+            var xml = UI.editor[editorid].record.XMLString();
+            $.ajax({
+                url: cgiDir + 'xsltransform.pl',
+                type: 'POST',
+                editorid: editorid,
+                dataType: 'html',
+                data: {xml:xml, stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid},
+                success: function(html) {
+                    $('#'+editorid).find("#000", UI.editor[editorid].vared).hide();
+                    $('#'+editorid).find("#008", UI.editor[editorid].vared).hide();
+                    $('#'+editorid).find("#006", UI.editor[editorid].vared).hide();
+                    $('#'+editorid).find("#007", UI.editor[editorid].vared).hide();
+                    $('#'+this.editorid).find('.ffeditor').html(html);
+                    $('#'+this.editorid).find('.ffeditor').show();
+                },
+                error: function(req, textStatus, errorThrown) {
+                    if(bibliosdebug){
+                        console.debug(req + ' ' + textStatus + ' ' + errorThrown);
+                    }
+                }
+            });
+        }
+    }
+
 	this._hasField = function(tagnumber) {
 		if( fieldlist.indexOf(tagnumber) >= 0 ) {
 			return true;
@@ -1635,8 +1653,8 @@ function setupFFEditorCtryCombo() {
 
 }
 // Public methods 
-MarcEditor.prototype.toggleFixedFieldDisplay = function(btn, toggled) {
-    return this._toggleFixedFieldDisplay(btn, toggled);
+MarcEditor.prototype.toggleFixedFieldDisplay = function() {
+    return this._toggleFixedFieldDisplay();
 }
 MarcEditor.prototype.getValue = function(tag, subfield) {
 	return this._getValue(tag, subfield);
@@ -1766,12 +1784,10 @@ MarcEditor.prototype.getToolsMenu = function getToolsMenu() {
                 id: this.editorid+'toggleFixedFieldGrid',
                 editorid: this.editorid,
                 text: 'Toggle Fixed Field Editor',
-                enableToggle: true,
-                pressed: true,
+                mytoggled: false,
                 listeners: {
-                    click: function(btn, pressed) {
-                        btn.pressed = btn.pressed ? false : true;
-                        UI.editor[btn.editorid].record.toggleFixedFieldDisplay(btn, pressed);
+                    click: function(btn, e) {
+                        UI.editor[btn.editorid].record.toggleFixedFieldDisplay();
                     }
                 }
             },

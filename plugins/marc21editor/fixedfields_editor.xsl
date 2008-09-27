@@ -4,6 +4,39 @@
 	<xsl:variable name='marc21defs' select="document('marc21.xml')"/>
 	<xsl:param name='debug'/>
 
+    <xsl:template match="/">
+        <xsl:variable name='leader'><xsl:value-of select="."/></xsl:variable>
+        <xsl:variable name='tag008'><xsl:value-of select="marc:controlfield[@tag='008']"/></xsl:variable> 
+        <xsl:variable name="rectype" select="substring($leader, $marc21defs//value[@name='Type']/@position+1, $marc21defs//value[@name='Type']/@length)"/>
+        <div class="ffeditor">
+            <div class="fixedfields_editor">
+                <table id="fixed_field_grid" class="fixed_field">
+                    <xsl:for-each select="//marc:leader">
+                    <tr>
+                        <xsl:call-template name="leader"/>
+                    </tr>
+                    </xsl:for-each>
+                    <xsl:for-each select="//marc:controlfield[@tag='006']">
+                        <tr>
+                        <xsl:call-template name="tag006"/>
+                        </tr>
+                    </xsl:for-each>
+                    <xsl:for-each select="//marc:controlfield[@tag='007']">
+                        <tr>
+                        <xsl:call-template name="tag007"/>
+                        </tr>
+                    </xsl:for-each>
+                    <xsl:for-each select="//marc:controlfield[@tag='008']">
+                        <xsl:call-template name="tag008">
+                            <xsl:with-param name="rectype" select="$rectype"/>
+                            <xsl:with-param name="tag" select="."></xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:for-each>
+                </table>
+            </div>
+        </div>
+    </xsl:template>
+
 	<xsl:template name="generate_for_rectype">
 		<xsl:param name="rectype">All</xsl:param>
 		<xsl:param name="offset">0</xsl:param>
