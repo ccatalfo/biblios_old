@@ -554,64 +554,12 @@ function MarcEditor(editorid) {
 	// private methods
 
 
-/*
-
-*/
-function updateFFEditor() {
-	if(bibliosdebug) { console.info("updating fixed field editor from leader and 008 tags"); }
-    var oDomDoc = Sarissa.getDomDocument();
-    var leaderval = $('#'+editorid).find("#000", editorelem).children('.controlfield-text').val();
-	if( leaderval.length != 24 ) {
-		throw {
-			error: "InvalidLeader",
-			msg: "Invalid length of Leader"
-		};
-	}
-    var tag008val = $('#'+editorid).find("#008", editorelem).children('.controlfield-text').val();
-	if( tag008val.length != 40 ) {
-		throw {
-			error: "Invalid008",
-			msg: "Invalid length of 008"
-		};
-	}
-    if(bibliosdebug) {
-        console.info('Transferring leader value to fixed field editor from leader tag: ' + leaderval);
-        console.info('Transferring 008 value to fixed field editor from 008 tag: ' + tag008val);
-    }
-    var newff = '<collection xmlns="http://www.loc.gov/MARC21/slim">';
-    //"<?xml version='1.0' encoding='UTF-8'?>";
-    newff += "<record><leader>";
-    newff += leaderval;
-    newff += "</leader>";
-    newff += "<controlfield tag='008'>";
-    newff += tag008val;
-    newff += "</controlfield>";
-	if( $('#'+editorid).find("#006", editorelem).length > 0 ) {
-		var tag006val = $('#'+editorid).find("#006", editorelem).children('.controlfield-text').val();
-		newff += "<controlfield tag='006'>" + tag006val + "</controlfield>";
-	}
-	if( $('#'+editorid).find("#007", editorelem).length > 0 ) {
-		var tag007val = $('#'+editorid).find("#007", editorelem).children('.controlfield-text').val();
-		newff += "<controlfield tag='007'>" + tag007val + "</controlfield>";
-	}
-    newff += "</record>";
-    newff += "</collection>";
-	var xmldoc = xslTransform.loadString(newff);
-	//FIXME make this an jquery.xslTransform call
-    $('#'+editorid).find(".ffeditor").empty();
-	var temprec = new MarcEditor();
-	var htmled = temprec.loadXml( xmldoc );
-    $('#'+editorid).find(".ffeditor").html(htmled);
-	// setup ff editor's comboboxes
-	setupFFEditorCtryCombo();
-	setupFFEditorLangCombo();
-}
 function setupSpecialEntries(loc) {
 	var specialentries = Prefs.remoteILS[loc].instance.special_entries;
 	for( var i = 0; i < specialentries.length; i++) {
 		var entry = specialentries.eq(i);
 		var tagnumber = $('field tag', entry).text();	
-		var subfield = $('field/ ubfield', entry).text();	
+		var subfield = $('field/subfield', entry).text();	
 		// get the element to replace w/ combobox
 		var elemToReplace = $('[@id^='+tagnumber+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
 		if(elemToReplace.length == 0) {
@@ -662,9 +610,9 @@ function setupReservedTags(loc) {
 	for( var i = 0; i< reservedtags.length; i++) {
 		var tagnumber = $(reservedtags).eq(i).text();
 		// set readonly for tagnumber and indicators
-		$('.tag[@id^='+tagnumber+']', editorelem).children('input').attr('readonly', 'readonly').addClass('reserved_tag');
+		$('.'+tagnumber, editorelem).find('input').attr('readonly', 'readonly').addClass('reserved_tag');
 		// set readonly for subfields
-		$('.tag[@id^='+tagnumber+']', editorelem).children('.subfields').children('.subfield').children('input').attr('readonly', 'readonly').addClass('reserved_tag');
+		$('.'+tagnumber, editorelem).find('.subfield').children('input').attr('readonly', 'readonly').addClass('reserved_tag');
 	}	
 }
 

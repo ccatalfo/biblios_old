@@ -48,7 +48,7 @@
 	
 	<xsl:template match="marc:controlfield">
         <div class="tag controlfield {@tag}">
-            <xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/><xsl:value-of select="$editorid"/></xsl:attribute>
+                <xsl:attribute name="id"><xsl:value-of select="@tag"/><xsl:value-of select="generate-id(.)"/><xsl:value-of select="$editorid"/></xsl:attribute>
 			  <input type="text" maxlength="3" size='3' class='tagnumber'> 
                 <xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/><xsl:value-of select="$editorid"/></xsl:attribute>
 					<xsl:attribute name='value'>	
@@ -87,7 +87,7 @@
 	<xsl:template match="marc:datafield">
         <div class="tag datafield {@tag}">
             <!-- provide an id based on tag number, but append a number to duplicate tags don't have duplicate id's -->
-                <xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/><xsl:value-of select="$editorid"/></xsl:attribute>
+                <xsl:attribute name="id"><xsl:value-of select="@tag"/><xsl:value-of select="generate-id(.)"/><xsl:value-of select="$editorid"/></xsl:attribute>
 			  <input maxlength='3' class='tagnumber' >
                     <xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/><xsl:value-of select="$editorid"/></xsl:attribute>
 					<xsl:attribute name='size'>
