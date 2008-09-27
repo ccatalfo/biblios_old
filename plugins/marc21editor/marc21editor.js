@@ -120,7 +120,7 @@ function get008FromEditor(ff_ed) {
 			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 				var type = $(this).text();
 				var value = '';
-				if( type.substr(0, 4) == 'Undef') {
+				if( type.substr(0, 5) == 'Undef') {
 					var length = type.substr(5,1);
 					for( var k = 0; k<length; k++) {
 						value += ' ';
