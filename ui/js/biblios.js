@@ -805,24 +805,34 @@ biblios.app = function() {
                                                                             var savegrid = Ext.getCmp('savegrid');
 																			var checked = Ext.getCmp('savegrid').getSelectionModel().getChecked();
 																			var selections = Ext.getCmp('savegrid').getSelectionModel().getSelections();
-                                                                            UI.editor.loading.numToLoad = checked.length;                                                                             
                                                                             UI.editor.loading.numLoaded = 0;
-                                                                            UI.editor.progress = Ext.Msg.show({
-                                                                                progress:true,
-                                                                                msg: 'Loading',
-                                                                                progressText:'Initializing',
-                                                                            });
-                                                                            if( checked.length > 0 ) {
+                                                                            if( checked.length > 0 && checked.length < 11) {
+                                                                                UI.editor.loading.numToLoad = checked.length;  
                                                                                 for( var i = 0; i < checked.length; i++) {
                                                                                     savegrid.editRecord( checked[i].data.Id );
                                                                                 }
                                                                             }
-                                                                            else {
+                                                                            else if (checked.length > 10 ) {
+                                                                                Ext.Msg.alert('Editing error', 'Please select at most 10 records to open simultaneously');
+                                                                                return false;
+                                                                            }
+                                                                            else if( selections.length > 0) {
+                                                                                UI.editor.loading.numToLoad = selections.length;
                                                                                 for( var j = 0; j < selections.length; j++) {
                                                                                     savegrid.editRecord( selections[j].data.Id );
                                                                                 }
                                                                             }
-                                                                        }
+                                                                            else if( checked.length == 0 && selections.length == 0){
+                                                                                Ext.Msg.alert('Editing', 'Please select a record or records to edit by clicking a row or by checking checkboxes next to records you want to edit');
+                                                                                return false;
+
+                                                                            }
+                                                                            UI.editor.progress = Ext.Msg.progress(
+                                                                                'Loading records',
+                                                                                'Retrieving and formatting records',
+                                                                                '0%'
+                                                                            );
+                                                                        } // save grid Edit button handler
                                                                     },
 																	{   
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
