@@ -938,7 +938,7 @@ biblios.app = function() {
                                                                                 {
                                                                                     id: 'savegridMoveBtn',
                                                                                     cls: 'x-btn-text-icon bmenu',
-                                                                                    icon: libPath + 'ui/images/document-save.png',
+                                                                                    icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/move', configDoc).text(),
                                                                                     text: 'Move',
                                                                                     tooltip: {text: 'Move selected records to another folder'},
                                                                                     menu: {
