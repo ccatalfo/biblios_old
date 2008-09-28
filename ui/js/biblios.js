@@ -1175,7 +1175,7 @@ biblios.app = function() {
 														applyLoader: false,
 														loader: this.facetsTreeLoader,
 														root: new Ext.tree.AsyncTreeNode({
-															text: 'Facets'
+															text: 'Facets',
                                                             icon: libPath + 'ui/images/resources_parents/' + $('//ui/icons/resources_panel/facets', configDoc).text(),
 														}),
 														listeners: {
