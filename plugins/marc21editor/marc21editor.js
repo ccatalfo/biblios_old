@@ -1775,7 +1775,7 @@ MarcEditor.prototype.getToolBar = function() {
         items: [
         {
             cls: 'x-btn-text-icon',
-            icon: libPath + 'ui/images/edit-copy.png',
+            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/edit', configDoc).text(),
             id: this.editorid+'EditBtn',
             editorid: this.editorid,
             text: 'Edit',
@@ -1799,7 +1799,7 @@ MarcEditor.prototype.getToolBar = function() {
         {
             id: 'editorOneMacrosBtn',
             cls: 'x-btn-text-icon bmenu',
-            icon: libPath + 'ui/images/edit-copy.png',
+            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/macros', configDoc).text(),
             text: 'Macros',
             menu : {
                 id: this.editorid+'macrosmenu',
@@ -1817,7 +1817,7 @@ MarcEditor.prototype.getToolBar = function() {
         },
         {
             cls: 'x-btn-text-icon bmenu', // icon and text class
-            icon: libPath + 'ui/images/document-save.png',
+            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/save', configDoc).text(),
             text: 'Save',
             tooltip: {title: 'Save', text: 'Ctrl-s'},
             menu: {
@@ -1833,7 +1833,7 @@ MarcEditor.prototype.getToolBar = function() {
         },
         {
             cls: 'x-btn-text-icon bmenu', // icon and text class
-            icon: libPath + 'ui/images/document-save.png',
+            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/send', configDoc).text(),
             text: 'Send',
             tooltip: {text: 'Send record to remote ILS'},
             menu: {
@@ -1849,7 +1849,7 @@ MarcEditor.prototype.getToolBar = function() {
         },
         {   
             cls: 'x-btn-text-icon bmenu', // icon and text class
-            icon: libPath + 'ui/images/network-receive.png',
+            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/export', configDoc).text(),
             text: 'Export',
             tooltip: {text: 'Export record to marc21 or marcxml'},
             menu: {
@@ -1859,7 +1859,7 @@ MarcEditor.prototype.getToolBar = function() {
         },
         {
             cls: 'x-btn-text-icon',
-            icon: libPath + 'ui/images/document-save-as.png',
+            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/duplicate', configDoc).text(),
             text: 'Duplicate',
             tooltip: {text: 'Duplicate this record to Drafts folder'},
             editorid: this.editorid,
@@ -1889,7 +1889,7 @@ MarcEditor.prototype.getToolBar = function() {
         },
         {
             cls: 'x-btn-text-icon',
-            icon: libPath + 'ui/images/process-stop.png',
+            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/revert', configDoc).text(),
             id: this.editorid+'RevertBtn',
             editorid: this.editorid,
             text: 'Revert',
@@ -1907,7 +1907,7 @@ MarcEditor.prototype.getToolBar = function() {
         },
         {
             cls: 'x-btn-text-icon', // icon and text class
-            icon: libPath + 'ui/images/process-stop.png',
+            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/cancel', configDoc).text(),
             id: this.editorid+'CancelMenu',
             editorid: this.editorid,
             text: 'Cancel',
