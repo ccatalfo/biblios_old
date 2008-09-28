@@ -69,7 +69,7 @@ dist: build
 	mkdir -p $(PROGNAME)/css
 	mkdir -p $(PROGNAME)/build
 	mkdir -p $(PROGNAME)/src
-	cp -r INSTALL INSTALL.koha Makefile cgi-bin conf templates plugins integration docs tools test uploads $(PROGNAME)
+	cp -r INSTALL INSTALL.koha Makefile cgi-bin conf templates plugins integration docs tools test $(PROGNAME)
 	mkdir -p $(PROGNAME)/lib/extjs2/resources
 	mkdir -p $(PROGNAME)/lib/extjs2/resources/images/default
 	cp -r lib/extjs2/resources/css $(PROGNAME)/lib/extjs2/resources/css
