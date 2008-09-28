@@ -282,7 +282,23 @@ GearsORMShift.rules = [
 			// no remove col in sqlite
 			return true;
 		}
-	}
+	},
+    {
+        version: 12,
+        comment: 'Change trash icon in Trash Save folder to new icon',
+        up: function() {
+            var trash = DB.Savefiles.select(1).getOne();
+            trash.icon = uiPath + 'ui/images/toolbar/trash.gif';
+            trash.save();
+            return true;
+        },
+        down: function() {
+            var trash = DB.Savefiles.select(1).getOne();
+            trash.icon = uiPath + 'ui/images/user-trash.png';
+            trash.save();
+            return true;
+        }
+    }// version: 12
 ];
 
 function createTestTargets() {
