@@ -1039,16 +1039,21 @@ biblios.app = function() {
 												items: 
 												[
 													new Ext.tree.TreePanel({
-														id: 'createRecordPanel',
+														id: 'editingTreePanel',
                                                         autoScroll: true,
 														leaf: false,
+                                                        expanded: true,
 														root: new Ext.tree.AsyncTreeNode({
-															text: 'Create Record',	
+															text: 'Editing',	
 														    loader: new Ext.tree.TreeLoader({}),
-															children: getNewRecordMenu()
-
+															children: getNewRecordMenu(),
+                                                            expanded: true,
+                                                            listeners: {
+                                                                click: function(n,e) {
+                                                                    biblios.app.displayRecordView();
+                                                                }
+                                                            } // editingTreePanel listeners
 														})
-
 													}),
 													new Ext.tree.TreePanel({
 														id: 'TargetsTreePanel',
@@ -1062,8 +1067,9 @@ biblios.app = function() {
 															}
 														}, // save folder listeners
 														root: new Ext.tree.AsyncTreeNode({
-															text: 'Search Targets',
+															text: 'Searching',
 															id: 'targetsTreeRoot',
+                                                            expanded: true,
 															listeners: {
 																load: function(tree) {										
 																tree.appendChild( new Ext.tree.TreeNode({
@@ -1198,6 +1204,7 @@ biblios.app = function() {
 															allowAdd: true,
 															savefileid: 'null',
 															parentid: 'null',
+                                                            expanded: true,
 															listeners: {
 																click: function(node, e) {
 																	biblios.app.displaySaveView();
@@ -1482,47 +1489,6 @@ biblios.app = function() {
 															} // save folder tree context menu
 														}
 													}), // resources treepanel with treeeditor applied
-                                                new Ext.tree.TreePanel({
-                                                    id: 'editorsTreePanel',
-                                                    leaf: false,
-                                                    rootVisible: true,
-                                                    listeners: {
-                                                        click: function(node, e) {
-                                                            biblios.app.displayRecordView();
-                                                        }
-                                                    },
-                                                    root: new Ext.tree.AsyncTreeNode({
-                                                        text: 'Editors',
-                                                        leaf: false,
-														qtip: 'Click here to view available editor screens',
-                                                        loader: new Ext.tree.TreeLoader({}),
-                                                        children: [
-                                                            {
-                                                                text: 'View Editor one',
-																leaf: true,
-                                                                id: 'editorOneNode',
-																qtip: 'Click here to view Editor One',
-                                                                listeners: {
-                                                                    click: function(node, e) {
-                                                                        biblios.app.displayRecordView();
-                                                                        Ext.getCmp('editortwo').collapse();
-                                                                    }
-                                                                }
-                                                            },
-                                                            {
-                                                                text: 'View Editor two',
-                                                                id: 'editorTwoNode',
-																qtip: 'Click here to view Editor Two',
-																leaf: true,
-                                                                listeners: {
-                                                                    click: function(node, e) {
-                                                                        biblios.app.displayRecordView();
-                                                                    }
-                                                                }
-                                                            }
-                                                        ]
-                                                    }) // editors tree root
-                                                }) // editors tree panel
 												] // tree panel items
 											} // center region of sidebar
 										] // resources panel items
