@@ -281,10 +281,18 @@ function getNewRecordMenu() {
 			id: templates[i].name,
 			listeners: {
 				click:	function(node, e) {
+                    UI.editor.progress = Ext.Msg.progress({
+                        title: 'Loading Record',
+                        msg: '',
+                        progressText: '0%'
+                    });
+                    UI.editor.loading.numToLoad = 1;
+                    UI.editor.loading.numLoaded = 0;
 					Ext.Ajax.request({
 								url: libPath + node.attributes.file,
 								method: 'GET',
 								callback: function(options, isSuccess, resp) { 
+                                    UI.editor.progress.updateProgress(.3, 'Loading template');
 									var xml = resp.responseText; 
 									srchResults = (new DOMParser()).parseFromString(xml, "text/xml");
 									var record = srchResults.getElementsByTagName('record')[0];
@@ -306,7 +314,7 @@ function getNewRecordMenu() {
 										template: null,
 										marcformat: null
 									}).save();
-									openRecord(xml, id, 'marcxml');
+									openRecord(xml, record.rowid, 'marcxml');
 							} // ajax callback
 					}); // ajax request
 				} // do new record handler
