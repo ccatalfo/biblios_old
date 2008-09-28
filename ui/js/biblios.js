@@ -1120,49 +1120,68 @@ biblios.app = function() {
 																	allowDrop: false,
 																	allowAdd: false,
 																	allowDelete: false,
-																	icon: 'ui/images/network-server.png',
+																	icon: uiPath + 'ui/images/network-server.png',
 																	loader: new Ext.ux.GearsTreeLoader({
 																		db: db,
 																		selectSql: 'select hostname, port, userid, dbname from SearchTargets ',
 																		whereClause: 'where SearchTargets.rowid=?',
 																		processData: function(data) {
-																			var json = '[';
+																			var json = [];
 																			for( var i = 0; i < data.length; i++) {
-																				json += '{"leaf":true, "text":"Server:'+data[i][0]+'"},';
-																				json += '{"leaf":true, "text":"Port:'+data[i][1]+'"},';
-																				json += '{"leaf":true, "text":"Database:'+data[i][3]+'"},';
-																				json += '{"leaf":true, "text":"User:'+data[i][2]+'"}';
+                                                                                var server = data[i][0];
+                                                                                var port = data[i][1];
+                                                                                var db = data[i][3];
+                                                                                var user = data[i][2];
+                                                                                var serverleaf = {
+                                                                                    leaf: true,
+                                                                                    text: 'Server: ' + server
+                                                                                };
+                                                                                var portleaf = {
+                                                                                    leaf: true,
+                                                                                    text: 'Port: ' + port
+                                                                                };
+                                                                                var dbleaf = {
+                                                                                    leaf: true,
+                                                                                    text: 'Database: ' + db
+                                                                                };
+                                                                                var userleaf = {
+                                                                                    leaf: true,
+                                                                                    text: 'User: ' + user
+                                                                                };
+                                                                                json.push( serverleaf, portleaf, dbleaf, userleaf );
 																			}
-																			json += ']';
 																			return json;
 																		} // processData for server info leaves
 																	}) // loader for server info leaves
 																}, // baseAttrs for server nodes
 																processData: function(data) {  
-																	var json = '[';
+																	var json = [];
 																	for( var i = 0; i< data.length; i++) {
 																		var pazid = data[i][2];
                                                                         if( data[i][3] != '') {
                                                                             pazid += ':' + data[i][3];
                                                                         }
-                                                                        pazid += '/' + data[i][4];
-																		if(i>0) {
-																			json += ',';
-																		}
-																		json += '{';
-																		json += '"leaf": false,';
-																		json += '"checked":false,';
-																		json += '"servername":"'+data[i][1]+'",';
-																		json += '"text":"'+data[i][1]+'",';
-																		json += '"id":"'+data[i][0]+'",';
-																		json += '"hostname":"'+data[i][2]+'",';
-																		json += '"port":"'+data[i][3]+'",';
-																		json += '"pazid":"'+ pazid + '"';
-																		json += '}';
+                                                                        if( data[i][4] != '') {
+                                                                            pazid += '/' + data[i][4];
+                                                                        }
+                                                                        var servername = data[i][1];
+                                                                        var text = data[i][1];
+                                                                        var id = data[i][0];
+                                                                        var hostname = data[i][2];
+                                                                        var port = data[i][3];
+                                                                        json.push({
+                                                                            leaf: false,
+                                                                            checked: false,
+                                                                            servername: servername,
+                                                                            text: text,
+                                                                            id: id,
+                                                                            hostname: hostname,
+                                                                            port: port,
+                                                                            pazid: pazid
+                                                                        });
 																	}
-																	json += ']';
 																	return json;
-																}
+																} // base attrs for leaf nodes
 															})
 														})
 													}), // resources treepanel with treeeditor applied
@@ -1223,32 +1242,6 @@ biblios.app = function() {
 																db: db,
 																selectSql: 'select Savefiles.rowid, name, parentid, description, icon, allowDelete, allowAdd, allowDrag, allowDrop, ddGroup from Savefiles where parentid is null',
 																applyLoader: false,
-																processData: function(data) {
-																	var json = '[';
-																	for( var i = 0; i < data.length; i++) {
-																		if( i > 0 ) {
-																			json += ',';
-																		}
-																		json += '{';
-																		json += '"id":"'+data[i][0]+'",';
-																		json += '"text":"'+data[i][1]+'",';
-																		json += '"savefileid":"'+data[i][0]+'",';
-																		json += '"parentid":"'+data[i][2]+'",';
-																		json += '"qtip":"'+data[i][3]+'",';
-																		json += '"icon":"'+data[i][4]+'",';
-																		json += '"leaf":false'+',';
-																		json += '"allowDelete":"'+data[i][5]+'",';
-																		json += '"allowAdd":"'+data[i][6]+'",';
-																		json += '"allowDrag":"'+data[i][7]+'",';
-																		json += '"allowDrop":"'+data[i][8]+'",';
-																		json += '"expandable":false,';
-																		json += '"expanded":true,';
-																		json += '"ddGroup":"'+data[i][9]+'"';
-																		json += '}';
-																	}
-																	json += ']';
-																	return json;
-																}, // processData for savefile root nodes
 																baseAttrs: {
 																	listeners: {
 																		click: function(node, e) {
@@ -1282,34 +1275,7 @@ biblios.app = function() {
 																					biblios.app.displaySaveView();
 																				}
 																			} // save folder listeners
-																		}, // inner save folder baseAttrs
-																		processData: function(data) {
-																			var json = '[';
-																			for( var i = 0; i < data.length; i++) {
-																				if( i > 0 ) {
-																					json += ',';
-																				}
-																				json += '{';
-																				json += '"id":"'+data[i][0]+'",';
-																				json += '"text":"'+data[i][1]+'",';
-																				json += '"savefileid":"'+data[i][0]+'",';
-																				json += '"parentid":"'+data[i][2]+'",';
-																				json += '"qtip":"'+data[i][3]+'",';
-																				json += '"icon":"'+data[i][4]+'",';
-																				json += '"leaf":false'+',';
-																				json += '"allowDelete":"'+data[i][5]+'",';
-																				json += '"allowAdd":"'+data[i][6]+'",';
-																				json += '"allowDrag":"'+data[i][7]+'",';
-																				json += '"allowDrop":"'+data[i][8]+'",';
-																				json += '"allowRename":"'+data[i][9]+'",';
-																				json += '"expandable":false,';
-																				json += '"expanded":true,';
-																				json += '"ddGroup":"'+data[i][10]+'"';
-																				json += '}';
-																			}
-																			json += ']';
-																			return json;
-																		} // processData for savefiles 
+																		} // inner save folder baseAttrs
 																	}) // gears loader for subsequent savefile nodes
 																	
 																} // baseAttrs for savefile children nodes
