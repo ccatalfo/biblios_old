@@ -256,7 +256,7 @@ function handleDownload(format, encoding, xml) {
 function getRecordTemplates() {
     var list = new Array();
     $("template", configDoc).each( function() {
-		var template = {name: $("name", $(this)).text(), file: $("file", $(this)).text() };
+		var template = {name: $("name", $(this)).text(), file: $("file", $(this)).text(), icon: $('icon', $(this)).text() };
 		list.push(template);
     });
 	return list;
@@ -280,6 +280,7 @@ function getNewRecordMenu() {
 			leaf: true,
 			file: templates[i].file,
 			id: templates[i].name,
+            icon: templates[i].icon,
 			listeners: {
 				click:	function(node, e) {
                     UI.editor.progress = Ext.Msg.progress({
