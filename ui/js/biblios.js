@@ -23,6 +23,7 @@ biblios.app = function() {
 	// save file vars
 	var currSaveFile, currSaveFileName;
 	var savefiles = {}; // hash mapping save file id -> names
+
 	// editor
 	var editor = {};
 	editor.record = {};
@@ -518,7 +519,7 @@ biblios.app = function() {
 															items: [
 																																{
 																		cls: 'x-btn-text-icon',
-																		icon: libPath + 'ui/images/document-open.png',
+																		icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
 																		id: 'searchgridEditBtn',
 																		disabled: true,
 																		text: 'Edit',
@@ -559,7 +560,7 @@ biblios.app = function() {
 																	},
 																	{   
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
-																		icon: libPath + 'ui/images/network-receive.png',
+																		icon:libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/export', configDoc).text(),
 																		text: 'Export',
 																		id: 'searchgridExportBtn',
 																		disabled: true,
@@ -570,7 +571,7 @@ biblios.app = function() {
 																	},
 																	{
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
-																		icon: libPath + 'ui/images/document-save.png',
+																		icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/send', configDoc).text(),
 																		id: 'searchgridSendBtn',
 																		disabled: true,
 																		text: 'Send',
@@ -817,7 +818,7 @@ biblios.app = function() {
 																items: [
 																{
 																		cls: 'x-btn-text-icon',
-																		icon: libPath + 'ui/images/document-open.png',
+																		icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
 																		text: 'Edit',
 																		id: 'savegridEditBtn',
 																		disabled: true,
@@ -856,7 +857,7 @@ biblios.app = function() {
                                                                     },
 																	{   
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
-																		icon: libPath + 'ui/images/network-receive.png',
+																		icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/export', configDoc).text(),
 																		text: 'Export',
 																		id: 'savegridExportBtn',
 																		disabled: true,
@@ -868,7 +869,7 @@ biblios.app = function() {
 																	{
 																		id: 'savegridSendBtn',
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
-																		icon: libPath + 'ui/images/document-save.png',
+																		icon:  libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/send', configDoc).text(),
 																		disabled: true,
 																		text: 'Send',
 																		tooltip: {text: 'Send record to remote ILS'},
@@ -885,7 +886,7 @@ biblios.app = function() {
 																	{
 																		id: 'savegridTrashBtn',
 																		cls: 'x-btn-icon',
-																		icon: libPath + 'ui/images/user-trash.png',
+																		icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/trash', configDoc).text(),
 																		tooltip: {text: 'Move selected records to trash'},
 																		handler: function() {
 																			doSaveLocal(1, 'savegrid');
@@ -928,7 +929,7 @@ biblios.app = function() {
 																	{
 																		id: 'savegridToolsBtn',
 																		cls: 'x-btn-text-icon bmenu', // icon and text class
-																		icon: libPath + 'ui/images/document-save.png',
+																		icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/tools', configDoc).text(),
 																		disabled: false,
 																		text: 'Tools',
 																		tooltip: {text: 'Tools'},
@@ -954,7 +955,7 @@ biblios.app = function() {
                                                                                     id: 'savegridDuplicateBtn',
                                                                                     cls: 'x-btn-text-icon',
                                                                                     text: 'Duplicate',
-                                                                                    icon: libPath + 'ui/images/document-save-as.png',
+                                                                                    icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/duplicate', configDoc).text(),
                                                                                     handler: function(btn) {
                                                                                         var records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
                                                                                         for( var i = 0; i < records.length; i++) {
@@ -988,6 +989,7 @@ biblios.app = function() {
 																					id: 'savegridMacrosBtn',
 																					cls: 'x-btn-text-icon bmenu',
 																					text: 'Macros',
+                                                                                    icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/macros', configDoc).text(),
 																					menu : {
 																						id: 'savegridmacrosmenu',
 																						items: getMacroMenuItems('savegrid'),

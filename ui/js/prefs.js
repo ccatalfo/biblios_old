@@ -157,7 +157,10 @@ function setupConfig( configDoc ) {
 		  $("//plugins/plugin/file", configDoc).each( function() { plugins += ' ' + $(this).text(); } );
 		  $("//templates/template/file", configDoc).each( function() { templates += ' ' + $(this).text(); } );
         
+        $('//icons/resources_panel', configDoc).children().each( function(i,j) {
+            UI.icons.resources.searching = $(this).children('searching').text();
 
+        });
         if( Ext.getCmp('FoldersTreePanel') && Ext.getCmp('TargetsTreePanel') ) {
             Ext.getCmp('TargetsTreePanel').root.reload();
             Ext.getCmp('FoldersTreePanel').root.reload();

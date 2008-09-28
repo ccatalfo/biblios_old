@@ -112,6 +112,7 @@ UI.messages = {
 	}
 };
 
+
 function previewRemoteRecord(xml) {
 	Ext.get('searchpreview').mask();
 	$('#searchprevrecord').getTransform(marcxsl, xml);
