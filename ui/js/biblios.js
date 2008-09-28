@@ -1073,7 +1073,7 @@ biblios.app = function() {
 															text: 'Searching',
 															id: 'targetsTreeRoot',
                                                             expanded: true,
-                                                            icon: libPath + 'ui/images/resources_parents/' + $('//ui/icons/resources_panel/searching', configDoc).text(),
+                                                            icon: uiPath + 'ui/images/resources_parents/' + $('//ui/icons/resources_panel/searching', configDoc).text(),
 															listeners: {
 																load: function(tree) {										
 																tree.appendChild( new Ext.tree.TreeNode({
@@ -1195,7 +1195,7 @@ biblios.app = function() {
 														loader: this.facetsTreeLoader,
 														root: new Ext.tree.AsyncTreeNode({
 															text: 'Facets',
-                                                            icon: libPath + 'ui/images/resources_parents/' + $('//ui/icons/resources_panel/facets', configDoc).text(),
+                                                            icon: uiPath + 'ui/images/resources_parents/' + $('//ui/icons/resources_panel/facets', configDoc).text(),
 														}),
 														listeners: {
 															checkchange: function(node, checked) {
