@@ -64,8 +64,8 @@ biblios.app = function() {
 	displayRecordView : function displayRecordView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(1);
 		openState = 'editorPanel';
-		Ext.getCmp('helpPanel').collapse();
-		Ext.getCmp('resourcesPanel').collapse();
+		//Ext.getCmp('helpPanel').collapse();
+		//Ext.getCmp('resourcesPanel').collapse();
 		displayHelpMsg(UI.messages.help.en.recordview);
         Ext.getCmp('FoldersTreePanel').getSelectionModel().clearSelections();
         Ext.getCmp('TargetsTreePanel').getSelectionModel().clearSelections();
