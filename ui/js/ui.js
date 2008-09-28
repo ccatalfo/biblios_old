@@ -280,7 +280,7 @@ function getNewRecordMenu() {
 			leaf: true,
 			file: uiPath + templates[i].file,
 			id: templates[i].name,
-            icon: templates[i].icon,
+            icon: uiPath + templates[i].icon,
 			listeners: {
 				click:	function(node, e) {
                     UI.editor.progress = Ext.Msg.progress({
