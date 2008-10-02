@@ -78,7 +78,7 @@ GearsORMShift.rules = [
 				allowDrag: 0,
 				allowDrop: 0,
 				ddGroup: null,
-				icon: libPath + 'ui/images/user-trash.png',
+				icon: uiPath + 'ui/images/toolbar/trash.gif',
 				date_added: 'datetime("now", "localtime"',
 				date_mofified: 'datetime("now", "localtime"'
 			}).save();
@@ -288,7 +288,7 @@ GearsORMShift.rules = [
         comment: 'Change trash icon in Trash Save folder to new icon',
         up: function() {
             var trash = DB.Savefiles.select(1).getOne();
-            trash.icon = uiPath + 'ui/images/toolbar/trash.gif';
+            trash.icon = 'ui/images/toolbar/trash.gif';
             trash.save();
             return true;
         },
