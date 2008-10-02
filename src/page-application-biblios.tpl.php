@@ -24,6 +24,8 @@
   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/fonts/fonts-min.css" /> 
   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/grids/grids-min.css" />
   <?php print $styles ?>
+    <link rel="stylesheet" type="text/css" href="[% libPath %]lib/extjs2/resources/css/ext-all.css">
+	<link type="text/css" rel="stylesheet" href="[% uiPath %]styles.css" />
  <style type="text/css" media="all">
 <?php if($sidebar_left){ echo "#main {margin-right:0; width: auto; margin-left:235px;}";
  } elseif($sidebar_right){ echo "#main {margin-left:0; width: auto; margin-right:235px;}";
@@ -69,7 +71,76 @@ _overflow-y: visible;
         <?php if ($tabs){ ?><div class="tabs"><?php print $tabs ?></div><?php } ?>
         <?php print $help ?>
         <?php if ($show_messages): print $messages; endif; ?>
-        <?php print $content; ?>
+<div id="loading-mask" ></div>
+
+<div id="loading">
+
+	<div class="loading-ind">
+		<img src="[% uiPath %]ui/images/biblios-logo.gif"><p id='loadingtext'>Loading...</p>
+	</div>
+
+</div>
+<!-- properties which need to be modified on a global basis -->
+<script type="text/javascript">
+    var libPath = '[% libPath %]';
+    var uiPath = '[% uiPath %]';
+    var hostPort = '';
+    var buildtime = '';
+    var version = '0.9';
+    var cgiDir = '[% cgiPath %]';
+    var confPath = libPath + "conf/biblios.xml";
+</script>
+    
+    <script type="text/javascript" src="[% libPath %]lib.js"></script>
+    
+<script>
+	Ext.get('loadingtext').update('Checking for Google Gears');
+  if (!window.google || !google.gears) {
+	Ext.get('loadingtext').update('<p>Unable to load Google Gears.</p><p>Please visit the following url to install:</p><p><a target="_blank" href="http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application">Install Google Gears</a></p>');
+	//location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
+                    "&return="+location.href;
+  }
+</script>
+
+<div id='branding-area'></div>
+<div id='biblios'>
+<div id='downloads'></div>
+<div id='searchform'>
+	 	<p class='searchtip'>Enter a search term and choose a search type</p>
+		<form onsubmit='doSearch(this); return false;'>
+			<input id='query' class='focus' type='text' size='40' name='query'/>
+			<select id='searchtype'>	
+				<option value=''>Keyword</option>
+				<option value='ti'>Title</option>
+				<option value='au'>Author</option>
+				<option value='su'>Subject</option>
+				<option value='isbn'>ISBN</option>
+				<option value='issn'>ISSN</option>
+			</select>
+			<select id='searchloc'>
+				<option value='All'>All</option>
+				<option value='SearchTargets'>Search Targets</option>
+				<option value='LocalFolders'>Local Folders</option>
+				<!--<option value='Vendors'>Vendors</option>-->
+			</select>
+			<input class='submit' type='submit' value='Search'>
+		</form>
+	  </div>
+</div>
+    <script type="text/javascript">
+		var bibliosdebug = 0;
+        Ext.onReady(function() {
+			Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs2/resources/images/default/s.gif';
+            Ext.get('loadingtext').update('Initializing Biblios');
+			biblios.app.init();
+            loadPlugins();
+            completeInit();
+            displayInitErrors();
+			Ext.fly('loading').remove();
+			// placeholder
+		}, biblios.app);
+    </script>
+    <div id="bibliosfooter"></div>
       </div>
     </div>
     <?php if ($sidebar_right): ?>

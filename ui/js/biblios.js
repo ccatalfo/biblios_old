@@ -199,8 +199,7 @@ biblios.app = function() {
 							{
 								region: 'west',
 								border: false,
-								width: 170,
-								html: {tag: 'img', id: 'biblioslogo', src: biblioslogo}
+								width: 170
 							},
 							{
 								region: 'east',
