@@ -1,0 +1,5 @@
+lib = conf
+src = src
+dest = build 
+ignore swp$
+pre_process = build-drupal.conf
