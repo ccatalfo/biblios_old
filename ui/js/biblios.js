@@ -170,7 +170,7 @@ biblios.app = function() {
             this.facetsTreeLoader.on('load', function(treeloader, node, response) {
                 
             });
-            this.viewport = new Ext.Viewport({
+            this.viewport = new Ext.Panel({
 				layout: 'border',
 				renderTo: 'biblios',
 				height: 600,
