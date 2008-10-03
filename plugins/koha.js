@@ -157,15 +157,21 @@ koha.prototype = {
 			else {
 				savepath = 'new_bib';
 			}
+            var xml = xslTransform.serialize(xmldoc);
 			$.ajax({
-				contentType: 'text/xml',
-				processData: false,
-				data: xmldoc,
-				dataType: 'xml',
-				url: cgiDir+'kohaws.pl?action=save&cookie='+this.cookie+'&kohaurl='+this.url,
+                dataType: 'xml',
+				data: {
+                    xml:xml,
+                    kohaurl:this.url, 
+                    saveurl:savepath,
+                    action:'save',
+                    cookie:this.cookie
+                },
+				url: cgiDir+'kohaws.pl',
 				type: 'POST',
 				that: this,
 				id: recid,
+                scope: this,
 				success: function(data, textStatus) {
 					// check response is ok
 					var status = $('status', data).text();

@@ -346,7 +346,7 @@ function sendSelectedFromSaveGrid(locsendto) {
     };
     var records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
     for( var i = 0; i < records.length; i++) {
-            var xml = records[i].xmldoc;
+            var xml = records[i].data.xml;
             var xmldoc = '';
             if( Ext.isIE ) {
                 xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
