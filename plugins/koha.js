@@ -60,11 +60,20 @@ koha.prototype = {
 
 		auth: function() {
             $.ajax({
-                    url: cgiDir + 'kohaws.pl' + this.url,
+                    url: cgiDir + 'kohaws.pl',
                     method: 'post',
+                    data:{ 
+                        kohaurl: this.url,
+                        userid: this.user,
+                        password: this.password,
+                        action:'auth'
+                    },
                     that: this,
-                    success: function(xml, status) {
-                        var sessionStatus = $('status', xml).text();
+                    dataType:'json',
+                    success: function(json, status) {
+                        var sessionStatus = $('status', json.resp).text();
+                        var cookie = json.cookie;
+                        this.that.cookie = cookie;
                         this.that.sessionStatus = sessionStatus;
                         if( sessionStatus == 'ok') {
                             this.that.bibprofile();
@@ -72,7 +81,7 @@ koha.prototype = {
                         this.that.initHandler(sessionStatus);
                     },
                     error: function(req, textStatus, errorThrown) {
-                        var sessionStatus = $('status', req.responseXML).text();
+                        var sessionStatus = $('status', json.resp).text();
                         this.that.sessionStatus = sessionStatus;
                         this.that.initHandler(sessionStatus);
                     },
@@ -84,11 +93,11 @@ koha.prototype = {
 		},
 
 		bibprofile: function() {
-			eraseCookie('CGISESSID');
 			$.ajax({
-				url: this.url + 'cgi-bin/koha/svc/bib_profile',
+				url: cgiDir + 'kohaws.pl',
 				method: 'get',
 				dataType: 'xml',
+                data: { action:'bibprofile', cookie:this.cookie, kohaurl:this.url},
 				that: this,
 				success: function(xml, status) {
 					this.that.bibprofilexml = xml;
@@ -104,11 +113,8 @@ koha.prototype = {
 					this.that.bibprofileHandler( xml , bibprofileStatus);
 				},
 				beforeSend: function(req) {
-					req.setRequestHeader('Cookie', 'CGISESSID=' + this.that.cgisessid);
 				},
 				complete: function(req, textStatus) {
-					eraseCookie('CGISESSID');
-					createCookie('CGISESSID', embeddedSESSID);
 				},
                 error: function(req, textStatus, errorThrown) {
 					var bibprofileStatus = $('auth_status', req.responseXML).text();
@@ -118,30 +124,25 @@ koha.prototype = {
 		},
 
 		retrieve: function(recid, callback) {
-			eraseCookie('CGISESSID');
-			//alert('retrieving record from koha!');	
 			$.ajax({
-				url: this.url + 'cgi-bin/koha/svc/bib/' + recid,
+				url: cgiDir+'kohaws.pl',
 				method: 'get',
 				that: this,
 				dataType: 'xml',
+                data:{cookie:this.cookie,action:'retrieve',recid:recid, kohaurl:this.url},
 				id: recid,
 				success: function(xml, status) {
 					this.that.recordCache[ this.id ] = xml;
 					this.that.retrieveHandler(xml);
 				},
 				beforeSend: function(req) {
-					req.setRequestHeader('Cookie', 'CGISESSID=' + this.that.cgisessid);
 				},
 				complete: function(req, textStatus) {
-					eraseCookie('CGISESSID');
-					createCookie('CGISESSID', embeddedSESSID);
 				}
 			});
 		},
 
 		save: function(xmldoc) {
-			eraseCookie('CGISESSID');
 			// if we have a bib number, replace. Otherwise, new bib
             if( this.recidXpath == '' || this.recidXpath === undefined) {
                 throw {
@@ -161,7 +162,7 @@ koha.prototype = {
 				processData: false,
 				data: xmldoc,
 				dataType: 'xml',
-				url: this.url + 'cgi-bin/koha/svc/' + savepath,
+				url: cgiDir+'kohaws.pl?action=save&cookie='+this.cookie+'&kohaurl='+this.url,
 				type: 'POST',
 				that: this,
 				id: recid,
@@ -186,11 +187,8 @@ koha.prototype = {
                     this.that.saveHandler( req.responseXML, textStatus);
                 },
 				beforeSend: function(req) {
-					req.setRequestHeader('Cookie', 'CGISESSID=' + this.that.cgisessid);
 				},
 				complete: function(req, textStatus) {
-					eraseCookie('CGISESSID');
-					createCookie('CGISESSID', embeddedSESSID);
 				}
 			});
 		}
