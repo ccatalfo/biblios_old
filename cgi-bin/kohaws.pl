@@ -5,6 +5,7 @@ use warnings;
 use LWP::UserAgent;
 use CGI;
 use CGI::Carp;
+use JSON;
 
 my $ua = LWP::UserAgent->new();
 $ua->cookie_jar({});
@@ -19,7 +20,11 @@ if( $action eq 'auth' ) {
     my $resp = $ua->post( $url, {userid=>$userid, password=>$password});
     if($resp->is_success) {
         print $cgi->header(-type=>'application/json');
-        print '"cookie":"'. $resp->header( 'Set-Cookie' ) . '"';
+        my $data = { 
+            cookie => $resp->header('Set-Cookie'),
+            resp => $resp->content,
+        };
+        print to_json($data);
     }
     else {
         print $cgi->header(-type=>'text/xml');

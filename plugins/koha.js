@@ -59,65 +59,28 @@ koha.prototype = {
 		}, // end init
 
 		auth: function() {
-			if( this.embedded ) {
-				// if CGISESSID has already been set, we've already authenticated to koha
-				$.ajax({
-						url: this.url + 'cgi-bin/koha/svc/authentication',
-						method: 'post',
-						that: this,
-						success: function(xml, status) {
-							var sessionStatus = $('status', xml).text();
-							this.that.sessionStatus = sessionStatus;
-                            if( sessionStatus == 'ok') {
-                                this.that.bibprofile();
-                            }
-							this.that.initHandler(sessionStatus);
-						},
-                        error: function(req, textStatus, errorThrown) {
-							var sessionStatus = $('status', req.responseXML).text();
-							this.that.sessionStatus = sessionStatus;
-							this.that.initHandler(sessionStatus);
-                        },
-						beforeSend: function(req) {
-						},
-						complete: function(req, textStatus) {
-						}
-				});
-			}
-			else {
-				$.ajax({
-						url: this.url + 'cgi-bin/koha/svc/authentication',
-						method: 'post',
-						data: {	
-								userid: this.user,
-								password: this.password
-						},
-						that: this,
-						success: function(xml, status) {
-							var sessionStatus = $('status', xml).text();
-							this.that.sessionStatus = sessionStatus;
-							this.that.initHandler(sessionStatus);
-						},
-                        error: function(req, textStatus, errorThrown) {
-							var sessionStatus = $('status', req.responseXML).text();
-							this.that.sessionStatus = sessionStatus;
-							this.that.initHandler(sessionStatus);
-                        },
-						beforeSend: function(req) {
-						},
-						complete: function(req, textStatus) {
-							eraseCookie('CGISESSID');
-                            var cookie = req.getResponseHeader('Set-Cookie');
-                            if( cookie ) {
-                                this.that.cgisessid = req.getResponseHeader('Set-Cookie').substr(10, 32);
-                                this.that.bibprofile();
-                            }
-                            else {
-                                this.that.initHandler('Cookie malfunction');
-                            }
-						}
-				});
-			}
+            $.ajax({
+                    url: cgiDir + 'kohaws.pl' + this.url,
+                    method: 'post',
+                    that: this,
+                    success: function(xml, status) {
+                        var sessionStatus = $('status', xml).text();
+                        this.that.sessionStatus = sessionStatus;
+                        if( sessionStatus == 'ok') {
+                            this.that.bibprofile();
+                        }
+                        this.that.initHandler(sessionStatus);
+                    },
+                    error: function(req, textStatus, errorThrown) {
+                        var sessionStatus = $('status', req.responseXML).text();
+                        this.that.sessionStatus = sessionStatus;
+                        this.that.initHandler(sessionStatus);
+                    },
+                    beforeSend: function(req) {
+                    },
+                    complete: function(req, textStatus) {
+                    }
+            });
 		},
 
 		bibprofile: function() {
