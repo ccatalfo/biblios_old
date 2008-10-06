@@ -316,7 +316,7 @@ function getNewRecordMenu() {
 										template: null,
 										marcformat: null
 									}).save();
-									openRecord(xml, record.rowid, 'marcxml');
+									openRecord(xml, rdb.rowid, 'marcxml');
 							} // ajax callback
 					}); // ajax request
 				} // do new record handler
