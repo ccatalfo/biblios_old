@@ -105,27 +105,6 @@ _overflow-y: visible;
 <div id='branding-area'></div>
 <div id='biblios'>
 <div id='downloads'></div>
-<div id='searchform'>
-	 	<p class='searchtip'>Enter a search term and choose a search type</p>
-		<form onsubmit='doSearch(this); return false;'>
-			<input id='query' class='focus' type='text' size='40' name='query'/>
-			<select id='searchtype'>	
-				<option value=''>Keyword</option>
-				<option value='ti'>Title</option>
-				<option value='au'>Author</option>
-				<option value='su'>Subject</option>
-				<option value='isbn'>ISBN</option>
-				<option value='issn'>ISSN</option>
-			</select>
-			<select id='searchloc'>
-				<option value='All'>All</option>
-				<option value='SearchTargets'>Search Targets</option>
-				<option value='LocalFolders'>Local Folders</option>
-				<!--<option value='Vendors'>Vendors</option>-->
-			</select>
-			<input class='submit' type='submit' value='Search'>
-		</form>
-	  </div>
 </div>
     <script type="text/javascript">
 		var bibliosdebug = 0;

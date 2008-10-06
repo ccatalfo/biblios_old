@@ -191,17 +191,71 @@ biblios.app = function() {
                                         id: 'brandingPanel',
                                         border: false,
                                         contentEl: 'header',
-                                        height: 50,
                                         width: '100%'
                                     },
-                                    {
-                                        region: 'center',
-                                        border: false,
-                                        id: 'searchformpanel',
-                                        height: 50,
-                                        width: '100%',
-                                        contentEl: 'searchform'
-                                    },
+                                    new Ext.FormPanel({
+                                        region:'center',
+                                        bodyStyle:'padding:0px 5px 0px 5px;',
+                                        border:false,
+                                        frame:false,
+                                        items:[{
+                                            layout:'column',
+                                            border:false,
+                                            items:[
+                                                {
+                                                    border:false,
+                                                    items:[{
+                                                        columnWidth:.5,
+                                                        layout:'form',
+                                                        border:false,
+                                                        items:[
+                                                            new Ext.form.TextField({
+                                                                name:'query',
+                                                                border:false,
+                                                                fieldLabel:'Enter a search term'
+                                                            })
+                                                        ]
+                                                    }]
+                                                },
+                                                {
+                                                    layout:'form',
+                                                    columnWidth:.25,
+                                                    border:false,
+                                                    items:[
+                                                        new Ext.form.ComboBox({
+                                                            store: new Ext.data.SimpleStore({
+                                                                fields: ['abbr', 'full'],
+                                                                data: [['','Keyword'],['ti','Title'],['au','Author'],['su','Subject'],['isbn','ISBN'],['issn','ISSN']]
+                                                            }),
+                                                            border:false,
+                                                            value:'Keyword',
+                                                            hideLabel:true,
+                                                            displayField:'full',
+                                                            typeAhead:true,
+                                                            mode:'local',
+                                                            forceSelection:true,
+                                                            triggerAction:'all',
+                                                            emptyText:'Select a type',
+                                                            selectOnFocus:true
+                                                        })
+                                                    ]
+                                                },
+                                                {
+                                                    layout:'form',
+                                                    columnWidth:.25,
+                                                    border:false,
+                                                    items:[
+                                                        new Ext.Button({
+                                                            border:false,
+                                                            hideLabel:true,
+                                                            name:'Search',
+                                                            text:'Search'
+                                                        })
+                                                    ]
+                                                }
+                                            ] // inner searchformPanel Panel's items
+                                        }] // searchformPanel items
+                                    }),
                                     {
                                         region: 'west',
                                         border: false,
@@ -2243,7 +2297,6 @@ biblios.app = function() {
                 ] // viewport items
 			}); // viewport constructor
 			
-		var form = new Ext.form.BasicForm('searchform');
 		getSaveFileNames(); // set up hash of save file id->names
 		openState = 'searchgrid';
 		treeEditor = new Ext.tree.TreeEditor( Ext.getCmp('FoldersTreePanel'), {
