@@ -198,6 +198,11 @@ biblios.app = function() {
                                         bodyStyle:'padding:0px 5px 0px 5px;',
                                         border:false,
                                         frame:false,
+                                        keys:{
+                                            key: [10,13],
+                                            fn: function() { doSearch(); }
+
+                                        },
                                         items:[{
                                             layout:'column',
                                             border:false,
@@ -222,6 +227,7 @@ biblios.app = function() {
                                                     layout:'form',
                                                     columnWidth:.15,
                                                     border:false,
+                                                    style:'padding-left:5px;padding-right:5px',
                                                     items:[
                                                         new Ext.form.ComboBox({
                                                             id:'searchtypeCombo',
