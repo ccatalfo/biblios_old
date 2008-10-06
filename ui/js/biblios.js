@@ -210,6 +210,7 @@ biblios.app = function() {
                                                         border:false,
                                                         items:[
                                                             new Ext.form.TextField({
+                                                                id:'query',
                                                                 name:'query',
                                                                 border:false,
                                                                 fieldLabel:'Enter a search term'
@@ -219,23 +220,49 @@ biblios.app = function() {
                                                 },
                                                 {
                                                     layout:'form',
-                                                    columnWidth:.25,
+                                                    columnWidth:.15,
                                                     border:false,
                                                     items:[
                                                         new Ext.form.ComboBox({
+                                                            id:'searchtypeCombo',
                                                             store: new Ext.data.SimpleStore({
                                                                 fields: ['abbr', 'full'],
                                                                 data: [['','Keyword'],['ti','Title'],['au','Author'],['su','Subject'],['isbn','ISBN'],['issn','ISSN']]
                                                             }),
                                                             border:false,
-                                                            value:'Keyword',
+                                                            value:'',
                                                             hideLabel:true,
                                                             displayField:'full',
+                                                            valueField:'abbr',
                                                             typeAhead:true,
                                                             mode:'local',
                                                             forceSelection:true,
                                                             triggerAction:'all',
                                                             emptyText:'Select a type',
+                                                            selectOnFocus:true
+                                                        })
+                                                    ]
+                                                }, 
+                                                {
+                                                    layout:'form',
+                                                    columnWidth:.10,
+                                                    border:false,
+                                                    items:[
+                                                        new Ext.form.ComboBox({
+                                                            id:'searchlocCombo',
+                                                            store: new Ext.data.SimpleStore({
+                                                                fields: ['abbr', 'full'],
+                                                                data: [['Remote','Remote'],['Local','Local'],['All','All']]
+                                                            }),
+                                                            border:false,
+                                                            value:'Remote',
+                                                            hideLabel:true,
+                                                            displayField:'full',
+                                                            valueField:'abbr',
+                                                            typeAhead:true,
+                                                            mode:'local',
+                                                            forceSelection:true,
+                                                            triggerAction:'all',
                                                             selectOnFocus:true
                                                         })
                                                     ]
@@ -248,8 +275,10 @@ biblios.app = function() {
                                                         new Ext.Button({
                                                             border:false,
                                                             hideLabel:true,
-                                                            name:'Search',
-                                                            text:'Search'
+                                                            text:'Search',
+                                                            handler: function() {
+                                                                doSearch();
+                                                            }
                                                         })
                                                     ]
                                                 }

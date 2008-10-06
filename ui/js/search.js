@@ -3,8 +3,8 @@ function doSearch(form) {
 	clearSearchLimits();
     Ext.get('searchprevrecord').update('');
     Ext.getCmp('searchgridSelectAllInStoreTbar').hide();
-    var query = $("#query").val();
-    var searchtype  = $("#searchtype").val();
+    var query = Ext.getCmp('query').getValue();
+    var searchtype  = Ext.getCmp('searchtypeCombo').getValue();
     var searchquery = 'kw';
     if(searchtype == '') {
         searchquery = query;
@@ -12,15 +12,16 @@ function doSearch(form) {
     else {
         searchquery = searchtype + '=' + query;
     }
-	if( $('#searchloc').val() == 'All' ) {
+    var searchloc = Ext.getCmp('searchlocCombo').getValue();
+	if( searchloc == 'All' ) {
 		doPazPar2Search(searchquery);
 		doLocalFolderSearch();
 	}
-	else if( $('#searchloc').val() == 'SearchTargets' ) {
+	else if( searchloc == 'Remote' ) {
 		doPazPar2Search(searchquery);
 		biblios.app.displaySearchView();
 	}
-	else if( $('#searchloc').val() == 'LocalFolders') {
+	else if( searchloc == 'Local') {
 		doLocalFolderSearch();
 		biblios.app.displaySaveView();
 	}
