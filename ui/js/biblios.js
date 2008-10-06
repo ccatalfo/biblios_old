@@ -253,6 +253,21 @@ biblios.app = function() {
                                                 }, 
                                                 {
                                                     layout:'form',
+                                                    columnWidth:.25,
+                                                    border:false,
+                                                    items:[
+                                                        new Ext.Button({
+                                                            border:false,
+                                                            hideLabel:true,
+                                                            text:'Search',
+                                                            handler: function() {
+                                                                doSearch();
+                                                            }
+                                                        })
+                                                    ]
+                                                },
+                                                {
+                                                    layout:'form',
                                                     columnWidth:.10,
                                                     border:false,
                                                     items:[
@@ -276,21 +291,6 @@ biblios.app = function() {
                                                         })
                                                     ]
                                                 },
-                                                {
-                                                    layout:'form',
-                                                    columnWidth:.25,
-                                                    border:false,
-                                                    items:[
-                                                        new Ext.Button({
-                                                            border:false,
-                                                            hideLabel:true,
-                                                            text:'Search',
-                                                            handler: function() {
-                                                                doSearch();
-                                                            }
-                                                        })
-                                                    ]
-                                                }
                                             ] // inner searchformPanel Panel's items
                                         }] // searchformPanel items
                                     }),
