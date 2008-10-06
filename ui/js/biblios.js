@@ -188,16 +188,18 @@ biblios.app = function() {
                                 items: [
                                     {
                                         region: 'north',
-                                        id: 'branding',
-                                        border: false
+                                        id: 'brandingPanel',
+                                        border: false,
+                                        contentEl: 'header',
+                                        height: 50,
+                                        width: '100%'
                                     },
                                     {
                                         region: 'center',
                                         border: false,
                                         id: 'searchformpanel',
                                         height: 50,
-                                        width: 100,
-                                        style: 'padding-left: 15px;',
+                                        width: '100%',
                                         contentEl: 'searchform'
                                     },
                                     {
