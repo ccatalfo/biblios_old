@@ -19,7 +19,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="<?php print $language ?>" xml:lang="<?php print $language ?>">
 <head>
-  <title><?php print $head_title ?></title>
+  <title>Cataloging</title>
   <?php print $head ?>
   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/fonts/fonts-min.css" /> 
   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/grids/grids-min.css" />
@@ -119,8 +119,6 @@ _overflow-y: visible;
 			// placeholder
 		}, biblios.app);
     </script>
-    <div id="bibliosfooter"></div>
-      </div>
     </div>
     <?php if ($sidebar_right): ?>
       <div id="sidebar-right" class="clearfix">
@@ -132,9 +130,5 @@ _overflow-y: visible;
   </div>
 
   <br clear="all"/>
-  <div id="footer">
-  <?php print $footer_message;?><br/>
-  <?php print $closure ?>
-  </div>
 </body>
 </html>

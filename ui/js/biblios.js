@@ -218,6 +218,7 @@ biblios.app = function() {
                                                                 id:'query',
                                                                 name:'query',
                                                                 border:false,
+                                                                labelAlign:'top',
                                                                 fieldLabel:'Enter a search term'
                                                             })
                                                         ]
@@ -2322,11 +2323,7 @@ biblios.app = function() {
                                         ] // options tab items
                                     } // options tab config
                                 ] // center items of tabpanel
-                            }),
-                            {
-                                region: 'south',
-                                id: 'bibliosfooter'
-                            }// tabpanel constructor
+                            })
                         ] // viewport items
                     }) // inner panel
                 ] // viewport items

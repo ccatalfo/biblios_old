@@ -32,7 +32,7 @@ build: $(SRCS)
 	@echo
 	@echo "Concatenating all js files"
 	@echo
-	$(CAT) lib/firebug/firebug.js lib/cookieHelpers.js lib/jquery/jquery-1.2.2.min.js build/lib/jquery_plugins-min.js lib/sarissa/sarissa.js lib/jquery/jquery.xslTransform.packed.js lib/sarissa/sarissa_ieemu_xpath.js lib/extjs2/adapter/ext/ext-base.js lib/extjs2/ext-all.js build/lib/ext_ux_libs-min.js lib/google_gears/gears_init.js lib/google_gears/GearsORM_all.js lib/google_gears/GearsORMShift.js build/lib/biblios_min.js > build/lib.js
+	$(CAT) lib/cookieHelpers.js lib/jquery/jquery-1.2.2.min.js build/lib/jquery_plugins-min.js lib/sarissa/sarissa.js lib/jquery/jquery.xslTransform.packed.js lib/sarissa/sarissa_ieemu_xpath.js lib/extjs2/adapter/ext/ext-base.js lib/extjs2/ext-all.js build/lib/ext_ux_libs-min.js lib/google_gears/gears_init.js lib/google_gears/GearsORM_all.js lib/google_gears/GearsORMShift.js build/lib/biblios_min.js > build/lib.js
 	@echo
 	@echo "Compressing css files"
 	@echo
