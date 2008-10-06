@@ -173,8 +173,9 @@ biblios.app = function() {
             this.viewport = new Ext.Panel({
 				layout: 'border',
 				renderTo: 'biblios',
-				height: 600,
+				height: 800,
 				width: '100%',
+                border: false,
                 monitorResize: true,
 				items: [
 					{
