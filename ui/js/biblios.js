@@ -245,6 +245,7 @@ biblios.app = function() {
                                                             mode:'local',
                                                             forceSelection:true,
                                                             triggerAction:'all',
+                                                            hideTrigger:true,
                                                             emptyText:'Select a type',
                                                             selectOnFocus:true
                                                         })
@@ -270,6 +271,7 @@ biblios.app = function() {
                                                             mode:'local',
                                                             forceSelection:true,
                                                             triggerAction:'all',
+                                                            hideTrigger:true,
                                                             selectOnFocus:true
                                                         })
                                                     ]
@@ -1911,10 +1913,14 @@ biblios.app = function() {
 
                                                                             } // after edit event on search target grid
                                                                         }, // search target grid listeners
-                                                                        sm: new Ext.grid.RowSelectionModel({
+                                                                        sm: (sm =new Ext.grid.SmartCheckboxSelectionModel({
+                                                                            dataIndex:'enabled',
+                                                                            alwaysSelectOnCheck: true,
+                                                                            email:true
 
-                                                                        }),
+                                                                        })),
                                                                         cm: new Ext.grid.ColumnModel([
+                                                                            sm,
                                                                             {
                                                                                 header: 'Name', 
                                                                                 dataIndex: 'name', 
@@ -1963,14 +1969,6 @@ biblios.app = function() {
                                                                                 dataIndex: 'syntax',
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField()),
                                                                                 hidden: true
-                                                                            },
-                                                                            {
-                                                                                header: 'Enabled', 
-                                                                                dataIndex: 'enabled', 
-                                                                                renderer: function formatBoolean(value) {
-                                                                                    return value ? 'Yes' : 'No';
-                                                                                },
-                                                                                editor: new Ext.grid.GridEditor(new Ext.form.Checkbox())
                                                                             }
                                                                         ]),
                                                                         tbar: new Ext.Toolbar({
@@ -2131,10 +2129,13 @@ biblios.app = function() {
                                                                                 setILSTargets();
                                                                             } // afteredit handler
                                                                         },
-                                                                        sm: new Ext.grid.RowSelectionModel({
-
-                                                                        }),
+                                                                        sm: (sm =new Ext.grid.SmartCheckboxSelectionModel({
+                                                                            dataIndex:'enabled',
+                                                                            alwaysSelectOnCheck: true,
+                                                                            email:true
+                                                                        })),
                                                                         cm: new Ext.grid.ColumnModel([
+                                                                            sm,
                                                                             {
                                                                                 header: 'Name', 
                                                                                 dataIndex: 'name', 
@@ -2173,14 +2174,6 @@ biblios.app = function() {
                                                                                 dataIndex: 'plugin',
                                                                                 editor: new Ext.form.TextField(),
                                                                                 hidden: true
-                                                                            },
-                                                                            {
-                                                                                header: 'Enabled', 
-                                                                                dataIndex: 'enabled', 
-                                                                                renderer: function (value) {
-                                                                                    return value ? 'Yes' : 'No';
-                                                                                },
-                                                                                editor: new Ext.form.Checkbox()
                                                                             }
                                                                         ]), // send target column model
                                                                         tbar:  new Ext.Toolbar({
