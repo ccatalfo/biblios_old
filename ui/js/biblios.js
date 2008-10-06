@@ -174,7 +174,8 @@ biblios.app = function() {
 				layout: 'border',
 				renderTo: 'biblios',
 				height: 600,
-				width: Ext.getBody().getComputedWidth(),
+				width: '100%',
+                monitorResize: true,
 				items: [
 					{
 						region: 'north',
