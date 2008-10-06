@@ -23,8 +23,14 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 			// if we don't have a record id, add this record to the db first
 			if( recid == '' ) {
 				if(bibliosdebug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
-				var data = Ext.getCmp('searchgrid').getSelectionModel().getChecked()[0].data;
-				var id = Ext.getCmp('searchgrid').getSelectionModel().getChecked()[0].id;
+                if( Ext.getCmp('searchgrid').getSelectionModel().getChecked().length > 0 ) {
+                    var data = Ext.getCmp('searchgrid').getSelectionModel().getChecked()[0].data;
+                    var id = Ext.getCmp('searchgrid').getSelectionModel().getChecked()[0].id;
+                }
+                else {
+                    var data = Ext.getCmp('searchgrid').getSelectionModel().getSelections()[0].data;
+                    var id = Ext.getCmp('searchgrid').getSelectionModel().getSelections()[0].id;
+                }
                 var searchtargetname = data.location[0].name;
                 var searchtargetsid = DB.SearchTargets.select('name=?', [searchtargetname]).getOne().rowid;
 				progress.updateProgress(.6, 'Retrieving record from server');
@@ -106,6 +112,9 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 			}
 			else {
 				var records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
+                if( records.length == 0) {
+                    records = Ext.getCmp('searchgrid').getSelectionModel().getSelections();
+                }
 				for( var i = 0 ; i < records.length; i++) {
 					var id = parseInt(records[i].data.Id);
 					try {
