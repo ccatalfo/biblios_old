@@ -922,77 +922,6 @@ biblios.app = function() {
                                                                                     );
                                                                                 } // save grid Edit button handler
                                                                             },
-                                                                            {   
-                                                                                cls: 'x-btn-text-icon bmenu', // icon and text class
-                                                                                icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/export', configDoc).text(),
-                                                                                text: 'Export',
-                                                                                id: 'savegridExportBtn',
-                                                                                disabled: true,
-                                                                                menu: {
-                                                                                    id: 'exportMenu',
-                                                                                    items: getExportMenuItems()
-                                                                                }
-                                                                            },
-                                                                            {
-                                                                                id: 'savegridSendBtn',
-                                                                                cls: 'x-btn-text-icon bmenu', // icon and text class
-                                                                                icon:  libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/send', configDoc).text(),
-                                                                                disabled: true,
-                                                                                text: 'Send',
-                                                                                tooltip: {text: 'Send record to remote ILS'},
-                                                                                menu: {
-                                                                                    id: 'savegridSendMenu',
-                                                                                    items: getSendFileMenuItems('savegrid'),
-                                                                                    listeners: {
-                                                                                        beforeshow: function(menu, menuItem, e) {
-                                                                                            updateSendMenu(menu, 'savegrid');
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            {
-                                                                                id: 'savegridTrashBtn',
-                                                                                cls: 'x-btn-icon',
-                                                                                icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/trash', configDoc).text(),
-                                                                                tooltip: {text: 'Move selected records to trash'},
-                                                                                handler: function() {
-                                                                                    doSaveLocal(1, 'savegrid');
-                                                                                    biblios.app.displaySaveFile( UI.currSaveFile );
-                                                                                }
-                                                                            },
-                                                                            {
-                                                                                id: 'savegridEmptyTrash',
-                                                                                cls: 'x-btn-text-icon bmenu',
-                                                                                text: 'Empty Trash',
-                                                                                handler: function() {
-                                                                                    DB.Records.remove('Savefiles_id=1');
-                                                                                    Ext.getCmp('savegrid').store.reload();
-                                                                                    biblios.app.displaySaveFile( UI.currSaveFile );
-                                                                                }
-                                                                            },
-                                                                            {
-                                                                                id: 'savegridUploadsBtn',
-                                                                                cls: 'x-btn-text-icon bmenu',
-                                                                                icon: libPath + 'ui/images/document-save.png',
-                                                                                text: 'Upload',
-                                                                                tooltip: {text: 'Upload marc21 or marcxml files'},
-                                                                                menu: [
-                                                                                    {
-                                                                                        id: 'marc21uploadBtn',
-                                                                                        text: 'MARC21',
-                                                                                        handler: function() {
-                                                                                            showUploadDialog('marc21')
-                                                                                        }
-                                                                                    },
-                                                                                    {
-                                                                                        id: 'marcxmluploadBtn',
-                                                                                        text: 'MARCXML',
-                                                                                        handler: function() {
-                                                                                            showUploadDialog('marcxml')
-                                                                                        }
-                                                                                    }
-                                                                                ]
-                                                                            }, // uploads menu
                                                                             {
                                                                                 id: 'savegridToolsBtn',
                                                                                 cls: 'x-btn-text-icon bmenu', // icon and text class
@@ -1014,6 +943,34 @@ biblios.app = function() {
                                                                                                 listeners: {
                                                                                                     beforeshow: function(menu, menuItem, e) {
                                                                                                         updateSaveMenu(menu, 'savegrid');
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        },
+                                                                                        {   
+                                                                                            cls: 'x-btn-text-icon bmenu', // icon and text class
+                                                                                            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/export', configDoc).text(),
+                                                                                            text: 'Export',
+                                                                                            id: 'savegridExportBtn',
+                                                                                            disabled: true,
+                                                                                            menu: {
+                                                                                                id: 'exportMenu',
+                                                                                                items: getExportMenuItems()
+                                                                                            }
+                                                                                        },
+                                                                                        {
+                                                                                            id: 'savegridSendBtn',
+                                                                                            cls: 'x-btn-text-icon bmenu', // icon and text class
+                                                                                            icon:  libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/send', configDoc).text(),
+                                                                                            disabled: true,
+                                                                                            text: 'Send',
+                                                                                            tooltip: {text: 'Send record to remote ILS'},
+                                                                                            menu: {
+                                                                                                id: 'savegridSendMenu',
+                                                                                                items: getSendFileMenuItems('savegrid'),
+                                                                                                listeners: {
+                                                                                                    beforeshow: function(menu, menuItem, e) {
+                                                                                                        updateSendMenu(menu, 'savegrid');
                                                                                                     }
                                                                                                 }
                                                                                             }
@@ -1071,10 +1028,53 @@ biblios.app = function() {
                                                                                                 }
                                                                                             }
                                                                                         }
-                                                                                    ]
+                                                                                    ] // save grid Tools menu items
                                                                                 }
-                                                                            }
-                                                                        ]
+                                                                            },
+                                                                            {
+                                                                                id: 'savegridTrashBtn',
+                                                                                cls: 'x-btn-icon',
+                                                                                icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/trash', configDoc).text(),
+                                                                                tooltip: {text: 'Move selected records to trash'},
+                                                                                handler: function() {
+                                                                                    doSaveLocal(1, 'savegrid');
+                                                                                    biblios.app.displaySaveFile( UI.currSaveFile );
+                                                                                }
+                                                                            },
+                                                                            {
+                                                                                id: 'savegridEmptyTrash',
+                                                                                cls: 'x-btn-text-icon bmenu',
+                                                                                text: 'Empty Trash',
+                                                                                handler: function() {
+                                                                                    DB.Records.remove('Savefiles_id=1');
+                                                                                    Ext.getCmp('savegrid').store.reload();
+                                                                                    biblios.app.displaySaveFile( UI.currSaveFile );
+                                                                                }
+                                                                            },
+                                                                            {
+                                                                                id: 'savegridUploadsBtn',
+                                                                                cls: 'x-btn-text-icon bmenu',
+                                                                                icon: libPath + 'ui/images/document-save.png',
+                                                                                text: 'Upload',
+                                                                                tooltip: {text: 'Upload marc21 or marcxml files'},
+                                                                                menu: [
+                                                                                    {
+                                                                                        id: 'marc21uploadBtn',
+                                                                                        text: 'MARC21',
+                                                                                        handler: function() {
+                                                                                            showUploadDialog('marc21')
+                                                                                        }
+                                                                                    },
+                                                                                    {
+                                                                                        id: 'marcxmluploadBtn',
+                                                                                        text: 'MARCXML',
+                                                                                        handler: function() {
+                                                                                            showUploadDialog('marcxml')
+                                                                                        }
+                                                                                    }
+                                                                                ]
+                                                                            } // uploads menu
+                                                                                                                                                    ]
                                                                     }) // save grid paging toolbar
                                                             }), // savepanel center
                                                             { 													
