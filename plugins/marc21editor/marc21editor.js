@@ -1799,7 +1799,7 @@ MarcEditor.prototype.getToolBar = function() {
         {
             id: this.editorid+'ToolsBtn',
             cls: 'x-btn-text-icon bmenu',
-            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/macros', configDoc).text(),
+            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/tools', configDoc).text(),
             text: 'Tools',
             menu : {
                 id: this.editorid+'toolsmenu',
