@@ -279,6 +279,7 @@ biblios.app = function() {
                                                             typeAhead:true,
                                                             mode:'local',
                                                             forceSelection:true,
+                                                            triggerAction:'all'
                                                         })
                                                     ]
                                                 },
