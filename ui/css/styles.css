@@ -211,3 +211,6 @@
 .hideGrouping {
     display: none;
 }
+.helpIcon {
+    background: url(ui/images/Help.gif) 0 6px no-repeat !important;
+}

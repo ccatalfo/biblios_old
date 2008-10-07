@@ -1043,8 +1043,9 @@ biblios.app = function() {
                                                                             },
                                                                             {
                                                                                 id: 'savegridEmptyTrash',
-                                                                                cls: 'x-btn-text-icon bmenu',
-                                                                                text: 'Empty Trash',
+                                                                                cls: 'x-btn-icon',
+                                                                                tooltip: {text: 'Empty the trash'},
+                                                                                icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/trash', configDoc).text(),
                                                                                 handler: function() {
                                                                                     DB.Records.remove('Savefiles_id=1');
                                                                                     Ext.getCmp('savegrid').store.reload();
@@ -1376,6 +1377,7 @@ biblios.app = function() {
                                                                                     {
                                                                                         id: 'emptyTrash',
                                                                                         text: 'Empty trash',
+                                                                                        tooltip: {text: 'Move selected records to trash'},
                                                                                         handler: function() {
                                                                                             DB.Records.remove('Savefiles_id=1');
                                                                                             Ext.getCmp('savegrid').store.reload();
