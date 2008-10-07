@@ -1778,7 +1778,7 @@ MarcEditor.prototype.getToolBar = function() {
             icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/edit', configDoc).text(),
             id: this.editorid+'EditBtn',
             editorid: this.editorid,
-            text: 'Edit',
+            text: 'Commands',
             tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-r<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
             menu: 
                 {
@@ -1797,94 +1797,105 @@ MarcEditor.prototype.getToolBar = function() {
                 } 
         }, 
         {
-            id: 'editorOneMacrosBtn',
+            id: this.editorid+'ToolsBtn',
             cls: 'x-btn-text-icon bmenu',
             icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/macros', configDoc).text(),
-            text: 'Macros',
+            text: 'Tools',
             menu : {
-                id: this.editorid+'macrosmenu',
-                items: getMacroMenuItems(this.editorid),
-                listeners: {
-                    beforeshow: function(menu, menuItem, e) {
-                        menu.removeAll();
-                        var items = getMacroMenuItems(this.editorid);
-                        for( i in items) {
-                            menu.add( items[i] );
+                id: this.editorid+'toolsmenu',
+                items: [
+                    {
+                        cls: 'x-btn-text-icon bmenu', // icon and text class
+                        icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/save', configDoc).text(),
+                        text: 'Save',
+                        tooltip: {title: 'Save', text: 'Ctrl-s'},
+                        menu: {
+                            id: this.editorid+'OneSaveMenu',
+                            items: getSaveFileMenuItems(this.editorid),
+                            editorid: this.editorid,
+                            listeners: {
+                                beforeshow: function(menu, menuItem, e) {
+                                    updateSaveMenu(menu, menu.editorid);
+                                }
+                            }
                         }
-                    }
-                }
-            }
-        },
-        {
-            cls: 'x-btn-text-icon bmenu', // icon and text class
-            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/save', configDoc).text(),
-            text: 'Save',
-            tooltip: {title: 'Save', text: 'Ctrl-s'},
-            menu: {
-                id: this.editorid+'OneSaveMenu',
-                items: getSaveFileMenuItems(this.editorid),
-                editorid: this.editorid,
-                listeners: {
-                    beforeshow: function(menu, menuItem, e) {
-                        updateSaveMenu(menu, menu.editorid);
-                    }
-                }
-            }
-        },
-        {
-            cls: 'x-btn-text-icon bmenu', // icon and text class
-            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/send', configDoc).text(),
-            text: 'Send',
-            tooltip: {text: 'Send record to remote ILS'},
-            menu: {
-                id: this.editorid+'OneSendMenu',
-                editorid: this.editorid,
-                items: getSendFileMenuItems(this.editorid),
-                listeners: {
-                    beforeshow: function(menu, menuItem, e) {
-                        updateSendMenu(menu, this.editorid);
-                    }
-                }
-            }
-        },
-        {   
-            cls: 'x-btn-text-icon bmenu', // icon and text class
-            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/export', configDoc).text(),
-            text: 'Export',
-            tooltip: {text: 'Export record to marc21 or marcxml'},
-            menu: {
-                id: this.editorid+'OneExportMenu',
-                items: getExportMenuItems(this.editorid)
-            }
-        },
-        {
-            cls: 'x-btn-text-icon',
-            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/duplicate', configDoc).text(),
-            text: 'Duplicate',
-            tooltip: {text: 'Duplicate this record to Drafts folder'},
-            editorid: this.editorid,
-            id: this.editorid+'DuplicateBtn',
-            handler: function(btn) {
-                // get record from db for this record
-                var r = DB.Records.select('Records.rowid=?', [ UI.editor[btn.editorid].id ]).getOne();
-                var newrec = new DB.Records({
-                    xml : r.xml,
-                    title : r.title,
-                    author : r.author,
-                    publisher : r.publisher,
-                    date : r.date,
-                    date_added : new Date().toString(),
-                    date_modified : new Date().toString(),
-                    status : 'duplicate',
-                    medium : r.medium,
-                    SearchTargets_id : r.SearchTargets_id,
-                    Savefiles_id : r.Savefiles_id,
-                    xmlformat : r.xmlformat,
-                    marcflavour : r.marcflavour,
-                    template : r.template,
-                    marcformat : r.marcformat
-                }).save();
-                Ext.MessageBox.alert('Record duplication', 'Record was duplicated to Drafts folder');
+                    },
+                    {   
+                        cls: 'x-btn-text-icon bmenu', // icon and text class
+                        icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/export', configDoc).text(),
+                        text: 'Export',
+                        tooltip: {text: 'Export record to marc21 or marcxml'},
+                        menu: {
+                            id: this.editorid+'OneExportMenu',
+                            items: getExportMenuItems(this.editorid)
+                        }
+                    },
+                    {
+                        cls: 'x-btn-text-icon bmenu', // icon and text class
+                        icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/send', configDoc).text(),
+                        text: 'Send',
+                        tooltip: {text: 'Send record to remote ILS'},
+                        menu: {
+                            id: this.editorid+'OneSendMenu',
+                            editorid: this.editorid,
+                            items: getSendFileMenuItems(this.editorid),
+                            listeners: {
+                                beforeshow: function(menu, menuItem, e) {
+                                    updateSendMenu(menu, this.editorid);
+                                }
+                            }
+                        }
+                    },
+                    {
+                        cls: 'x-btn-text-icon',
+                        icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/duplicate', configDoc).text(),
+                        text: 'Duplicate',
+                        tooltip: {text: 'Duplicate this record to Drafts folder'},
+                        editorid: this.editorid,
+                        id: this.editorid+'DuplicateBtn',
+                        handler: function(btn) {
+                            // get record from db for this record
+                            var r = DB.Records.select('Records.rowid=?', [ UI.editor[btn.editorid].id ]).getOne();
+                            var newrec = new DB.Records({
+                                xml : r.xml,
+                                title : r.title,
+                                author : r.author,
+                                publisher : r.publisher,
+                                date : r.date,
+                                date_added : new Date().toString(),
+                                date_modified : new Date().toString(),
+                                status : 'duplicate',
+                                medium : r.medium,
+                                SearchTargets_id : r.SearchTargets_id,
+                                Savefiles_id : r.Savefiles_id,
+                                xmlformat : r.xmlformat,
+                                marcflavour : r.marcflavour,
+                                template : r.template,
+                                marcformat : r.marcformat
+                            }).save();
+                            Ext.MessageBox.alert('Record duplication', 'Record was duplicated to Drafts folder');
+                        }
+                    },
+                    {
+                        id: 'editorOneMacrosBtn',
+                        cls: 'x-btn-text-icon bmenu',
+                        icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/macros', configDoc).text(),
+                        text: 'Macros',
+                        menu : {
+                            id: this.editorid+'macrosmenu',
+                            items: getMacroMenuItems(this.editorid),
+                            listeners: {
+                                beforeshow: function(menu, menuItem, e) {
+                                    menu.removeAll();
+                                    var items = getMacroMenuItems(this.editorid);
+                                    for( i in items) {
+                                        menu.add( items[i] );
+                                    }
+                                }
+                            }
+                        }
+                    },
+                ] //editor tools menu items
             }
         },
         {
@@ -1923,7 +1934,28 @@ MarcEditor.prototype.getToolBar = function() {
                 clear_editor(btn.editorid);
                 clearStatusMsg();
             }
-        }
+        },
+        {
+            cls: 'x-btn-text-icon', // icon and text class
+            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/trash', configDoc).text(),
+            id: this.editorid+'TrashMenu',
+            editorid: this.editorid,
+            text: 'Trash',
+            tooltip: {text: 'Move this record to trash (losing all changes since saving)'},
+            handler: function(btn) {
+                showStatusMsg('Moving record to Trash...');
+                var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
+                doSaveLocal(1, editorid);
+                biblios.app.displaySaveFile( UI.currSaveFile );
+                if( UI.lastWindowOpen  == 'savegrid' ) {
+                    biblios.app.displaySaveView();
+                }
+                else if( UI.lastWindowOpen  == 'searchgrid' ) {
+                    biblios.app.displaySearchView();
+                }
+                clearStatusMsg();
+            }
+        } // editor trash button
     ] 
     });
 }
