@@ -195,9 +195,9 @@ biblios.app = function() {
                                     },
                                     new Ext.FormPanel({
                                         region:'center',
-                                        bodyStyle:'padding:0px 5px 0px 5px;',
                                         border:false,
                                         frame:false,
+                                        width: 800,
                                         keys:{
                                             key: [10,13],
                                             fn: function() { doSearch(); }
@@ -208,27 +208,25 @@ biblios.app = function() {
                                             border:false,
                                             items:[
                                                 {
+                                                    layout:'form',
                                                     border:false,
-                                                    items:[{
-                                                        columnWidth:.5,
-                                                        layout:'form',
-                                                        border:false,
-                                                        items:[
-                                                            new Ext.form.TextField({
-                                                                id:'query',
-                                                                name:'query',
-                                                                border:false,
-                                                                labelAlign:'top',
-                                                                fieldLabel:'Enter a search term'
-                                                            })
-                                                        ]
-                                                    }]
+                                                    width: 300,
+                                                    items:[
+                                                        new Ext.form.TextField({
+                                                            id:'query',
+                                                            width: 200,
+                                                            name:'query',
+                                                            border:false,
+                                                            labelAlign:'top',
+                                                            labelWidth:100,
+                                                            fieldLabel:'Enter a search term'
+                                                        })
+                                                    ]
                                                 },
                                                 {
                                                     layout:'form',
-                                                    columnWidth:.15,
                                                     border:false,
-                                                    style:'padding-left:5px;padding-right:5px',
+                                                    width: 200,
                                                     items:[
                                                         new Ext.form.ComboBox({
                                                             id:'searchtypeCombo',
@@ -245,15 +243,11 @@ biblios.app = function() {
                                                             mode:'local',
                                                             forceSelection:true,
                                                             triggerAction:'all',
-                                                            hideTrigger:true,
-                                                            emptyText:'Select a type',
-                                                            selectOnFocus:true
                                                         })
                                                     ]
                                                 }, 
                                                 {
                                                     layout:'form',
-                                                    columnWidth:.25,
                                                     border:false,
                                                     items:[
                                                         new Ext.Button({
@@ -268,8 +262,8 @@ biblios.app = function() {
                                                 },
                                                 {
                                                     layout:'form',
-                                                    columnWidth:.10,
                                                     border:false,
+                                                    width: 200,
                                                     items:[
                                                         new Ext.form.ComboBox({
                                                             id:'searchlocCombo',
@@ -285,9 +279,6 @@ biblios.app = function() {
                                                             typeAhead:true,
                                                             mode:'local',
                                                             forceSelection:true,
-                                                            triggerAction:'all',
-                                                            hideTrigger:true,
-                                                            selectOnFocus:true
                                                         })
                                                     ]
                                                 },
