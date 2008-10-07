@@ -1100,6 +1100,7 @@ biblios.app = function() {
                                                 maxSize: 200,
                                                 height: 500,
                                                 title: 'Resources',
+                                                headerAsText:false,
                                                 layout: 'border',
                                                 id: 'resourcesPanel',
                                                 items: [
