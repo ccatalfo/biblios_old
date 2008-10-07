@@ -227,7 +227,7 @@ biblios.app = function() {
                                                                 border:false,
                                                                 enableKeyEvents:true,
                                                                 listeners: {
-                                                                    keypress: function(e) {
+                                                                    keypress: function(formfield, e) {
                                                                         if( e.getKey() == Ext.EventObject.ENTER ) {
                                                                             doSearch();
                                                                         }
