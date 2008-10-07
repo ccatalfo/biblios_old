@@ -75,7 +75,7 @@ _overflow-y: visible;
 <div id="loading">
 
 	<div class="loading-ind">
-		<img src="[% uiPath %]ui/images/biblios-logo.gif"><p id='loadingtext'>Loading...</p>
+		<img src="[% logoPath %]biblios-logo-website2.gif"><p id='loadingtext'>Loading...</p>
 	</div>
 
 </div>
