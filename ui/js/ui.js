@@ -278,7 +278,7 @@ function getNewRecordMenu() {
 		o = {
 			text: templates[i].name,
 			leaf: true,
-			file: templates[i].file,
+			file: uiPath + templates[i].file,
 			id: templates[i].name,
             icon: uiPath + templates[i].icon,
 			listeners: {
