@@ -283,11 +283,11 @@ function getNewRecordMenu() {
             icon: uiPath + templates[i].icon,
 			listeners: {
 				click:	function(node, e) {
-                    UI.editor.progress = Ext.Msg.progress({
-                        title: 'Loading Record',
-                        msg: '',
-                        progressText: '0%'
-                    });
+                    UI.editor.progress = Ext.Msg.progress(
+                        'Loading Record',
+                        '',
+                        '0%'
+                    );
                     UI.editor.loading.numToLoad = 1;
                     UI.editor.loading.numLoaded = 0;
 					Ext.Ajax.request({
