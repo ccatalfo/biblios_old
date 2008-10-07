@@ -111,6 +111,7 @@ _overflow-y: visible;
 			Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs2/resources/images/default/s.gif';
             Ext.get('loadingtext').update('Initializing Biblios');
 			biblios.app.init();
+            Ext.get('loadingtext').update('Loading plugins...');
             loadPlugins();
             completeInit();
             displayInitErrors();

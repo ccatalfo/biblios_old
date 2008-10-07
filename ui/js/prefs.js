@@ -2,17 +2,19 @@
 var Prefs = {};
 Prefs.remoteILS = {};
 
-function loadConfig(confPath) {
+function loadConfig(confPath, callback) {
     $.ajax({
         url: confPath,
 		cache:false,
 		dataType: 'xml',
+        callback: callback,
         error: function(req, textStatus, errorThrow) {
             biblios.app.initerrors.push({title: 'Biblios Configuration Error', msg: 'Unable to load biblios.conf configuration file ' + textStatus});
         },
         success: function(data, textStatus) {
             configDoc = data;
             setupConfig(data);
+            this.callback.call(this);
         }
     });
 }
@@ -168,7 +170,9 @@ function setupConfig( configDoc ) {
     }
 
 function reloadConfig() {
-    loadConfig( confPath );
+    loadConfig( confPath, function() {
+    
+    });
 }
 
 function getRemoteBibProfiles() {

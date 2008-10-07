@@ -12,11 +12,6 @@ Ext.namespace('biblios');
 // create application
 biblios.app = function() {
     // private variables
-    if( Ext.get('loadingtext') ) {
-        Ext.get('loadingtext').update('Loading database');
-    }
-	init_gears();
-	
 
 	var viewport; 
 	var viewState = '';
@@ -28,12 +23,6 @@ biblios.app = function() {
 	var editor = {};
 	editor.record = {};
 	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
-    if( Ext.get('loadingtext') ) {
-        Ext.get('loadingtext').update('Reading biblios configuration file');
-    }
-    loadConfig(confPath);
-	initPazPar2(pazpar2url);
-    Ext.get('loadingtext').update('Loading plugins...');
     // private functions
 	displaySearchView : function displaySearchView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(0);
@@ -161,6 +150,20 @@ biblios.app = function() {
 		},
 
         init: function() {
+            if( Ext.get('loadingtext') ) {
+                Ext.get('loadingtext').update('Loading database');
+            }
+            init_gears();
+            if( Ext.get('loadingtext') ) {
+                Ext.get('loadingtext').update('Loading settings');
+            }
+            loadConfig(confPath, function() {
+                biblios.app.initUI();
+                initPazPar2(pazpar2url);
+            });
+        }, 
+
+        initUI: function() {
 			Ext.QuickTips.init();
 			this.facetsTreeLoader = new Ext.ux.FacetsTreeLoader({dataUrl: pazcgiurl});
             this.facetsTreeLoader.on('beforeload', function(treeloader, node) {
