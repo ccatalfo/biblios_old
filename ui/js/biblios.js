@@ -208,7 +208,7 @@ biblios.app = function() {
                                 id: 'tabpanel',
                                 items: [
                                     {
-                                        title: 'Biblio',
+                                        title: 'Bibliographic',
                                         closable: false,
                                         autoScroll: true,
                                         layout: 'border',
