@@ -1945,7 +1945,11 @@ MarcEditor.prototype.getToolBar = function() {
             handler: function(btn) {
                 showStatusMsg('Moving record to Trash...');
                 var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
+                // save to Trash (id=1)
                 doSaveLocal(1, editorid);
+                // remove this editor tab
+                Ext.getCmp('editorTabPanel').remove( Ext.getCmp('editorTabPanel').getActiveTab() );
+                // display current savefile or search grid
                 biblios.app.displaySaveFile( UI.currSaveFile );
                 if( UI.lastWindowOpen  == 'savegrid' ) {
                     biblios.app.displaySaveView();
