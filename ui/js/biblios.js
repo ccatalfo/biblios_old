@@ -237,61 +237,70 @@ biblios.app = function() {
                                                 text: 'Enter a search term:'
                                             },
                                             new Ext.form.TextField({
-                                                                id:'query',
-                                                                width: 200,
-                                                                name:'query',
-                                                                border:false,
-                                                                enableKeyEvents:true,
-                                                                listeners: {
-                                                                    keypress: function(formfield, e) {
-                                                                        if( e.getKey() == Ext.EventObject.ENTER ) {
-                                                                            doSearch();
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }),
-                                                new Ext.form.ComboBox({
-                                                                id:'searchtypeCombo',
-                                                                store: new Ext.data.SimpleStore({
-                                                                    fields: ['abbr', 'full'],
-                                                                    data: [['','Keyword'],['ti','Title'],['au','Author'],['su','Subject'],['isbn','ISBN'],['issn','ISSN']]
-                                                                }),
-                                                                border:false,
-                                                                value:'',
-                                                                hideLabel:true,
-                                                                displayField:'full',
-                                                                valueField:'abbr',
-                                                                typeAhead:true,
-                                                                mode:'local',
-                                                                forceSelection:true,
-                                                                triggerAction:'all',
-                                                            }),
-                                                            '-',
-                                                        new Ext.Button({
-                                                                border:false,
-                                                                hideLabel:true,
-                                                                text:'Search',
-                                                                handler: function() {
-                                                                    doSearch();
-                                                                }
-                                                            }),
-                                                    '-',
-                                                    new Ext.form.ComboBox({
-                                                                id:'searchlocCombo',
-                                                                store: new Ext.data.SimpleStore({
-                                                                    fields: ['abbr', 'full'],
-                                                                    data: [['Remote','Remote'],['Local','Local'],['All','All']]
-                                                                }),
-                                                                border:false,
-                                                                value:'Remote',
-                                                                hideLabel:true,
-                                                                displayField:'full',
-                                                                valueField:'abbr',
-                                                                typeAhead:true,
-                                                                mode:'local',
-                                                                forceSelection:true,
-                                                                triggerAction:'all',
-                                                            })
+                                                id:'query',
+                                                width: 200,
+                                                name:'query',
+                                                border:false,
+                                                enableKeyEvents:true,
+                                                listeners: {
+                                                    keypress: function(formfield, e) {
+                                                        if( e.getKey() == Ext.EventObject.ENTER ) {
+                                                            doSearch();
+                                                        }
+                                                    }
+                                                }
+                                            }),
+                                            {
+                                                text: '  ',
+                                            },
+                                            new Ext.form.ComboBox({
+                                                id:'searchtypeCombo',
+                                                store: new Ext.data.SimpleStore({
+                                                    fields: ['abbr', 'full'],
+                                                    data: [['','Keyword'],['ti','Title'],['au','Author'],['su','Subject'],['isbn','ISBN'],['issn','ISSN']]
+                                                }),
+                                                border:false,
+                                                value:'',
+                                                hideLabel:true,
+                                                displayField:'full',
+                                                valueField:'abbr',
+                                                typeAhead:true,
+                                                mode:'local',
+                                                forceSelection:true,
+                                                triggerAction:'all',
+                                            }),
+                                            '-',
+                                            {
+                                                text: '  ',
+                                            },
+                                            new Ext.Button({
+                                                border:false,
+                                                hideLabel:true,
+                                                text:'Search',
+                                                handler: function() {
+                                                    doSearch();
+                                                }
+                                            }),
+                                            '-',
+                                            {
+                                                text: '  ',
+                                            },
+                                            new Ext.form.ComboBox({
+                                                id:'searchlocCombo',
+                                                store: new Ext.data.SimpleStore({
+                                                    fields: ['abbr', 'full'],
+                                                    data: [['Remote','Remote'],['Local','Local'],['All','All']]
+                                                }),
+                                                border:false,
+                                                value:'Remote',
+                                                hideLabel:true,
+                                                displayField:'full',
+                                                valueField:'abbr',
+                                                typeAhead:true,
+                                                mode:'local',
+                                                forceSelection:true,
+                                                triggerAction:'all',
+                                            })
                                         ],
                                         items: [
                                             {
