@@ -97,8 +97,13 @@
   cursor: hand;
 }
 
+#status {
+
+}
+
 #status-msg {
-	background-color: red;
+	background-color: #ffcc66;
+    font-weight:bold;
 }
 
 .yui-toolbar-subcont{

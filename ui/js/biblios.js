@@ -186,20 +186,33 @@ biblios.app = function() {
                             {
                                 region: 'north',
                                 border: false,
-                                height: 60,
                                 layout: 'border',
+                                height: 60,
                                 items: [
                                     {
-                                        region: 'center',
+                                        region: 'north',
                                         id: 'brandingPanel',
                                         border: false,
                                         contentEl: 'header',
+                                        width:'100%'
                                     },
                                     {
-                                        region: 'east',
+                                        region: 'center',
                                         border: false,
-                                        width: 60,
-                                        html: '<div id="status" ><p id="status-msg"></p></div>'
+                                        height: 40,
+                                        style:'padding-bottom: 5px; padding-top:5px',
+                                        html: {
+                                            tag:'div',
+                                            style:'float:right;',
+                                            id: 'status',
+                                            width: 30,
+                                            children: [
+                                                {
+                                                    tag:'p',
+                                                    id:'status-msg'
+                                                }
+                                            ]
+                                        }
                                     }
                                 ] // north region items
                             }, // viewport north region
