@@ -615,7 +615,7 @@ biblios.app = function() {
                                                                         }, // search grid Edit button
                                                                         {
                                                                             cls:'x-btn-text-icon',
-                                                                            icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
+                                                                            icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/tools', configDoc).text(),
                                                                             id:'searchgridToolsBtn',
                                                                             disabled:true,
                                                                             text:'Tools',
