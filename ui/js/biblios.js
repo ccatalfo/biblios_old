@@ -247,23 +247,28 @@ biblios.app = function() {
                                                         border:false,
                                                         width: 100,
                                                         items:[
-                                                            new Ext.form.ComboBox({
-                                                                id:'searchtypeCombo',
-                                                                store: new Ext.data.SimpleStore({
-                                                                    fields: ['abbr', 'full'],
-                                                                    data: [['','Keyword'],['ti','Title'],['au','Author'],['su','Subject'],['isbn','ISBN'],['issn','ISSN']]
-                                                                }),
-                                                                border:false,
-                                                                value:'',
-                                                                hideLabel:true,
-                                                                displayField:'full',
-                                                                valueField:'abbr',
-                                                                typeAhead:true,
-                                                                mode:'local',
-                                                                forceSelection:true,
-                                                                triggerAction:'all',
-                                                                width: 60
-                                                            })
+                                                            {
+                                                                layout:'fit',
+                                                                items:[
+                                                                    new Ext.form.ComboBox({
+                                                                        id:'searchtypeCombo',
+                                                                        store: new Ext.data.SimpleStore({
+                                                                            fields: ['abbr', 'full'],
+                                                                            data: [['','Keyword'],['ti','Title'],['au','Author'],['su','Subject'],['isbn','ISBN'],['issn','ISSN']]
+                                                                        }),
+                                                                        border:false,
+                                                                        value:'',
+                                                                        hideLabel:true,
+                                                                        displayField:'full',
+                                                                        valueField:'abbr',
+                                                                        typeAhead:true,
+                                                                        mode:'local',
+                                                                        forceSelection:true,
+                                                                        triggerAction:'all',
+                                                                        width: 60
+                                                                    })
+                                                                ]
+                                                            } // panel wrapper around search type combo
                                                         ]
                                                     }, 
                                                     {
@@ -285,23 +290,28 @@ biblios.app = function() {
                                                         border:false,
                                                         width: 100,
                                                         items:[
-                                                            new Ext.form.ComboBox({
-                                                                id:'searchlocCombo',
-                                                                store: new Ext.data.SimpleStore({
-                                                                    fields: ['abbr', 'full'],
-                                                                    data: [['Remote','Remote'],['Local','Local'],['All','All']]
-                                                                }),
-                                                                border:false,
-                                                                value:'Remote',
-                                                                hideLabel:true,
-                                                                displayField:'full',
-                                                                valueField:'abbr',
-                                                                typeAhead:true,
-                                                                mode:'local',
-                                                                forceSelection:true,
-                                                                triggerAction:'all',
-                                                                width: 60
-                                                            })
+                                                            {
+                                                                layout:'fit',
+                                                                items: [
+                                                                    new Ext.form.ComboBox({
+                                                                        id:'searchlocCombo',
+                                                                        store: new Ext.data.SimpleStore({
+                                                                            fields: ['abbr', 'full'],
+                                                                            data: [['Remote','Remote'],['Local','Local'],['All','All']]
+                                                                        }),
+                                                                        border:false,
+                                                                        value:'Remote',
+                                                                        hideLabel:true,
+                                                                        displayField:'full',
+                                                                        valueField:'abbr',
+                                                                        typeAhead:true,
+                                                                        mode:'local',
+                                                                        forceSelection:true,
+                                                                        triggerAction:'all',
+                                                                        width: 60
+                                                                    })
+                                                                ]
+                                                            }
                                                         ]
                                                     },
                                                 ] // inner searchformPanel Panel's items
