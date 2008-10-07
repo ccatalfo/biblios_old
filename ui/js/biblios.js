@@ -1603,10 +1603,10 @@ biblios.app = function() {
                                                                         }
                                                                     },
                                                                     {
-                                                                        text: 'Reload Biblios configuration',
+                                                                        text: 'Reload ‡biblios.net configuration',
                                                                         handler: function(btn) {
                                                                             reloadConfig();
-                                                                            Ext.MessageBox.alert('Configuration reload', 'Biblios configuration has been reloaded');
+                                                                            Ext.MessageBox.alert('Configuration reload', '‡biblios.net configuration has been reloaded');
                                                                         }
                                                                     },
                                                                     {
@@ -1860,7 +1860,7 @@ biblios.app = function() {
                                                                                         record.data.enabled = record.data.enabled ? 1 : 0;
                                                                                         t = DB.SearchTargets.select('SearchTargets.rowid=?', [record.data.rowid]).getOne();
                                                                                         if( t.allowModify == 0 ) {
-                                                                                           Ext.MessageBox.alert('Error', "This search target is defined in the Biblios configuration file.  Please contact your system administrator to change it's settings"); 
+                                                                                           Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings"); 
                                                                                             return false;
                                                                                         }
                                                                                         try {
@@ -1886,7 +1886,7 @@ biblios.app = function() {
                                                                                 }
                                                                                 t = DB.SearchTargets.select('SearchTargets.rowid=?', [id]).getOne();
                                                                                 if( t.allowModify == 0 ) {
-                                                                                   Ext.MessageBox.alert('Error', "This search target is defined in the Biblios configuration file.  Please contact your system administrator to change it's settings"); 
+                                                                                   Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings"); 
                                                                                     return false;
                                                                                 }
                                                                                 var rs;
@@ -2003,7 +2003,7 @@ biblios.app = function() {
                                                                                                 t.remove();
                                                                                             }
                                                                                             else {
-                                                                                               Ext.MessageBox.alert('Error', "This search target is defined in the Biblios configuration file.  Please contact your system administrator to change it's settings"); 
+                                                                                               Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings"); 
                                                                                             }
                                                                                         }
                                                                                         catch(ex) {
@@ -2072,7 +2072,7 @@ biblios.app = function() {
                                                                                 }
                                                                                 t = DB.SendTargets.select('SendTargets.rowid=?', [record.data.rowid]).getOne();
                                                                                 if( t.allowModify == 0 ) {
-                                                                                    Ext.MessageBox.alert('Error', "This is a send target is defined in the biblios configuration file.  Please contact your system administrator to change it's settings");
+                                                                                    Ext.MessageBox.alert('Error', "This send target is defined in the biblios configuration file.  Please contact your system administrator to change it's settings");
                                                                                     return false;
                                                                                 }
                                                                                 if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
@@ -2092,7 +2092,7 @@ biblios.app = function() {
                                                                                 var id = e.record.data.rowid;
                                                                                 var t = DB.SendTargets.select('SendTargets.rowid=?', [id]).getOne();
                                                                                 if( t.allowModify == 0 ) {
-                                                                                    Ext.MessageBox.alert('Error', "This is a send target is defined in the biblios configuration file.  Please contact your system administrator to change it's settings");
+                                                                                    Ext.MessageBox.alert('Error', "This send target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings");
                                                                                     return false;
                                                                                 }
                                                                                 var field = e.field;
@@ -2207,7 +2207,7 @@ biblios.app = function() {
                                                                                                 delete Prefs.remoteILS[ records[i].data.location ];
                                                                                             }
                                                                                             else {
-                                                                                                Ext.MessageBox.alert('Error', "This is a send target is defined in the biblios configuration file.  Please contact your system administrator to change it's settings");
+                                                                                                Ext.MessageBox.alert('Error', "This send target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings");
                                                                                             // remove from Prefs hash
                                                                                             }
                                                                                         }
