@@ -210,15 +210,14 @@ biblios.app = function() {
                                                 {
                                                     layout:'form',
                                                     border:false,
-                                                    width: 300,
+                                                    width: 400,
+                                                    labelWidth:150,
                                                     items:[
                                                         new Ext.form.TextField({
                                                             id:'query',
                                                             width: 200,
                                                             name:'query',
                                                             border:false,
-                                                            labelAlign:'top',
-                                                            labelWidth:100,
                                                             fieldLabel:'Enter a search term'
                                                         })
                                                     ]
