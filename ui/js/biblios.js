@@ -414,16 +414,15 @@ biblios.app = function() {
                                                                                 Ext.getCmp('searchgridEditBtn').enable();
                                                                                 Ext.getCmp('searchgridSendBtn').enable();
                                                                                 Ext.getCmp('searchgridSaveBtn').enable();
-                                                                                
-                                                                                    
-                                                                                    showStatusMsg('Previewing...');
-                                                                                    // get the marcxml for this record and send to preview()
-                                                                                    var xmlstring = record.data.fullrecord;		
-                                                                                    if(bibliosdebug) {
-                                                                                        console.info(xmlstring);
-                                                                                    }																
-                                                                                    var xml = xslTransform.loadString(xmlstring);
-                                                                                    previewRemoteRecord(xml);																			
+                                                                                Ext.getCmp('searchgridToolsBtn').enable();
+                                                                                showStatusMsg('Previewing...');
+                                                                                // get the marcxml for this record and send to preview()
+                                                                                var xmlstring = record.data.fullrecord;		
+                                                                                if(bibliosdebug) {
+                                                                                    console.info(xmlstring);
+                                                                                }																
+                                                                                var xml = xslTransform.loadString(xmlstring);
+                                                                                previewRemoteRecord(xml);																			
                                                                             } // search grid row select handler
                                                                         } // selection listeners
                                                                     })), // search grid selecion model		
@@ -462,6 +461,7 @@ biblios.app = function() {
                                                                     Ext.getCmp('searchgridSelectAllInStoreTbar').show();
                                                                     Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').loadAllSearchResults()">Select all ' + this.store.getTotalCount() + ' records in this search</a>';
                                                                     Ext.getCmp('searchgridExportBtn').enable();
+                                                                    Ext.getCmp('searchgridToolsBtn').enable();
                                                                     Ext.getCmp('searchgridSendBtn').enable();
                                                                     Ext.getCmp('searchgridSaveBtn').enable();
                                                                     Ext.getCmp('searchgridEditBtn').enable();
@@ -472,6 +472,7 @@ biblios.app = function() {
                                                                     this.isAllSearchSelected = false;
                                                                     Ext.getCmp('searchgridSelectAllInStoreTbar').hide();
                                                                     Ext.getCmp('searchgridExportBtn').disable();
+                                                                    Ext.getCmp('searchgridToolsBtn').disable();
                                                                     Ext.getCmp('searchgridSendBtn').disable();
                                                                     Ext.getCmp('searchgridSaveBtn').disable();
                                                                     Ext.getCmp('searchgridEditBtn').disable();
@@ -571,91 +572,103 @@ biblios.app = function() {
                                                                         }
                                                                     },
                                                                     items: [
-                                                                                                                                        {
-                                                                                cls: 'x-btn-text-icon',
-                                                                                icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
-                                                                                id: 'searchgridEditBtn',
-                                                                                disabled: true,
-                                                                                text: 'Edit',
-                                                                                handler: function() {
-                                                                                    var searchgrid = Ext.getCmp('searchgrid');
-                                                                                    var checked = searchgrid.getSelectionModel().getChecked();
-                                                                                    var selections = searchgrid.getSelectionModel().getSelections();
-                                                                                    
-                                                                                    if(checked.length>0 && checked.length<11) {
-                                                                                        UI.editor.loading.numToLoad = checked.length;
-                                                                                        for( var i = 0; i < checked.length; i++ ) {
-                                                                                            searchgrid.editRecord( checked[i] ); 
-                                                                                        } // for each checked record
-                                                                                    }
-                                                                                    else if( checked.length > 10 ) {
-                                                                                        Ext.Msg.alert('Editing error', 'Please select at most 10 records to open simultaneously');
-                                                                                        return false;
-                                                                                    }
-                                                                                    else if(selections.length > 0 ) {
-                                                                                        UI.editor.loading.numToLoad = selections.length;
-                                                                                        for( var j = 0; j < selections.length; j++ ) {
-                                                                                            searchgrid.editRecord( selections[j] ); 
-                                                                                        } // for each checked record
-                                                                                    }
-                                                                                    else if( checked.length == 0 && selections.length == 0){
-                                                                                        Ext.Msg.alert('Editing', 'Please select a record or records to edit by clicking a row or by checking checkboxes next to records you want to edit');
-                                                                                        return false;
+                                                                        {
+                                                                            cls: 'x-btn-text-icon',
+                                                                            icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
+                                                                            id: 'searchgridEditBtn',
+                                                                            disabled: true,
+                                                                            text: 'Edit',
+                                                                            handler: function() {
+                                                                                var searchgrid = Ext.getCmp('searchgrid');
+                                                                                var checked = searchgrid.getSelectionModel().getChecked();
+                                                                                var selections = searchgrid.getSelectionModel().getSelections();
+                                                                                
+                                                                                if(checked.length>0 && checked.length<11) {
+                                                                                    UI.editor.loading.numToLoad = checked.length;
+                                                                                    for( var i = 0; i < checked.length; i++ ) {
+                                                                                        searchgrid.editRecord( checked[i] ); 
+                                                                                    } // for each checked record
+                                                                                }
+                                                                                else if( checked.length > 10 ) {
+                                                                                    Ext.Msg.alert('Editing error', 'Please select at most 10 records to open simultaneously');
+                                                                                    return false;
+                                                                                }
+                                                                                else if(selections.length > 0 ) {
+                                                                                    UI.editor.loading.numToLoad = selections.length;
+                                                                                    for( var j = 0; j < selections.length; j++ ) {
+                                                                                        searchgrid.editRecord( selections[j] ); 
+                                                                                    } // for each checked record
+                                                                                }
+                                                                                else if( checked.length == 0 && selections.length == 0){
+                                                                                    Ext.Msg.alert('Editing', 'Please select a record or records to edit by clicking a row or by checking checkboxes next to records you want to edit');
+                                                                                    return false;
 
-                                                                                    }
-                                                                                    UI.editor.loading.numLoaded = 0;
-                                                                                        
-                                                                                    UI.editor.progress = Ext.Msg.progress(
-                                                                                        'Loading records',
-                                                                                        'Retrieving and formatting records',
-                                                                                        '0%'
-                                                                                    );
-                                                                                } // search grid Edit btn handler
-                                                                            },
-                                                                            {   
-                                                                                cls: 'x-btn-text-icon bmenu', // icon and text class
-                                                                                icon:libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/export', configDoc).text(),
-                                                                                text: 'Export',
-                                                                                id: 'searchgridExportBtn',
-                                                                                disabled: true,
-                                                                                menu: {
-                                                                                    id: 'exportMenu',
-                                                                                    items: getExportMenuItems()
                                                                                 }
-                                                                            },
-                                                                            {
-                                                                                cls: 'x-btn-text-icon bmenu', // icon and text class
-                                                                                icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/send', configDoc).text(),
-                                                                                id: 'searchgridSendBtn',
-                                                                                disabled: true,
-                                                                                text: 'Send',
-                                                                                tooltip: {text: 'Send record to remote target'},
-                                                                                menu: {
-                                                                                    items: getSendFileMenuItems('searchgrid'),
-                                                                                    listeners: {
-                                                                                        beforeshow: function(menu, menuItem, e) {
-                                                                                            updateSendMenu(menu, 'searchgrid');
+                                                                                UI.editor.loading.numLoaded = 0;
+                                                                                    
+                                                                                UI.editor.progress = Ext.Msg.progress(
+                                                                                    'Loading records',
+                                                                                    'Retrieving and formatting records',
+                                                                                    '0%'
+                                                                                );
+                                                                            } // search grid Edit btn handler
+                                                                        }, // search grid Edit button
+                                                                        {
+                                                                            cls:'x-btn-text-icon',
+                                                                            icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
+                                                                            id:'searchgridToolsBtn',
+                                                                            disabled:true,
+                                                                            text:'Tools',
+                                                                            menu: 
+                                                                                {
+                                                                                    items: [
+                                                                                                                                                                                {   
+                                                                                            cls: 'x-btn-text-icon bmenu', // icon and text class
+                                                                                            icon:libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/export', configDoc).text(),
+                                                                                            text: 'Export',
+                                                                                            id: 'searchgridExportBtn',
+                                                                                            disabled: true,
+                                                                                            menu: {
+                                                                                                id: 'exportMenu',
+                                                                                                items: getExportMenuItems()
+                                                                                            }
+                                                                                        },
+                                                                                        {
+                                                                                            cls: 'x-btn-text-icon bmenu', // icon and text class
+                                                                                            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/send', configDoc).text(),
+                                                                                            id: 'searchgridSendBtn',
+                                                                                            disabled: true,
+                                                                                            text: 'Send',
+                                                                                            tooltip: {text: 'Send record to remote target'},
+                                                                                            menu: {
+                                                                                                items: getSendFileMenuItems('searchgrid'),
+                                                                                                listeners: {
+                                                                                                    beforeshow: function(menu, menuItem, e) {
+                                                                                                        updateSendMenu(menu, 'searchgrid');
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        },
+                                                                                        {
+                                                                                            cls: 'x-btn-text-icon bmenu', // icon and text class
+                                                                                            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/save', configDoc).text(),
+                                                                                            text: 'Save',
+                                                                                            id: 'searchgridSaveBtn',
+                                                                                            disabled: true,
+                                                                                            tooltip: {title: 'Save', text: 'Ctrl-s'},
+                                                                                            menu: {
+                                                                                                id: 'searchgridSaveMenu',
+                                                                                                items: getSaveFileMenuItems('searchgrid'),
+                                                                                                listeners: {
+                                                                                                    beforeshow: function(menu, menuItem, e) {
+                                                                                                        updateSaveMenu(menu, 'searchgrid');
+                                                                                                    }
+                                                                                                }
+                                                                                            }
                                                                                         }
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            {
-                                                                                cls: 'x-btn-text-icon bmenu', // icon and text class
-                                                                                icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/save', configDoc).text(),
-                                                                                text: 'Save',
-                                                                                id: 'searchgridSaveBtn',
-                                                                                disabled: true,
-                                                                                tooltip: {title: 'Save', text: 'Ctrl-s'},
-                                                                                menu: {
-                                                                                    id: 'searchgridSaveMenu',
-                                                                                    items: getSaveFileMenuItems('searchgrid'),
-                                                                                    listeners: {
-                                                                                        beforeshow: function(menu, menuItem, e) {
-                                                                                            updateSaveMenu(menu, 'searchgrid');
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            },
+                                                                                    ] // search grid tools menu items
+                                                                                } // search grid tools menu
+                                                                            }, // search grid tools button
                                                                             {
                                                                                 id: 'searchgridUploadsBtn',
                                                                                 cls: 'x-btn-text-icon bmenu',
