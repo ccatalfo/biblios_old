@@ -63,6 +63,7 @@ function doLocalFolderSearch() {
 function initPazPar2(pazurl) {
 	$.get(pazcgiurl, {action:'init', pazpar2url:pazurl}, function(data) {
         biblios.app.paz.sessionID = data;
+        setPazPar2Targets();
     });
 }
 function loadPazpar2Target( pazpar2settings ) {

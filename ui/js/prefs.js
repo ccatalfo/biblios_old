@@ -69,7 +69,6 @@ function setupConfig( configDoc ) {
 				}).save();
 			}
 		  } );
-		  setPazPar2Targets();
           $("plugins//plugin", configDoc).each( function() {
             var name = $(this).children('name').text();
             var file = $(this).children('file').text();
