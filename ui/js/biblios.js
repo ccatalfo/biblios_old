@@ -218,7 +218,7 @@ biblios.app = function() {
                                         }, //biblio tab listeners
                                         tbar: [
                                             {
-                                                text: 'Enter a search term'
+                                                text: 'Enter a search term:'
                                             },
                                             new Ext.form.TextField({
                                                                 id:'query',
