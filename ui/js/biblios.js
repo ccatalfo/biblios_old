@@ -187,108 +187,10 @@ biblios.app = function() {
                                 layout: 'border',
                                 items: [
                                     {
-                                        region: 'north',
+                                        region: 'center',
                                         id: 'brandingPanel',
                                         border: false,
                                         contentEl: 'header',
-                                        width: '100%'
-                                    },
-                                    new Ext.FormPanel({
-                                        region:'center',
-                                        border:false,
-                                        frame:false,
-                                        width: 800,
-                                        keys:{
-                                            key: [10,13],
-                                            fn: function() { doSearch(); }
-
-                                        },
-                                        items:[{
-                                            layout:'column',
-                                            border:false,
-                                            items:[
-                                                {
-                                                    layout:'form',
-                                                    border:false,
-                                                    width: 400,
-                                                    labelWidth:150,
-                                                    items:[
-                                                        new Ext.form.TextField({
-                                                            id:'query',
-                                                            width: 200,
-                                                            name:'query',
-                                                            border:false,
-                                                            fieldLabel:'Enter a search term'
-                                                        })
-                                                    ]
-                                                },
-                                                {
-                                                    layout:'form',
-                                                    border:false,
-                                                    width: 200,
-                                                    items:[
-                                                        new Ext.form.ComboBox({
-                                                            id:'searchtypeCombo',
-                                                            store: new Ext.data.SimpleStore({
-                                                                fields: ['abbr', 'full'],
-                                                                data: [['','Keyword'],['ti','Title'],['au','Author'],['su','Subject'],['isbn','ISBN'],['issn','ISSN']]
-                                                            }),
-                                                            border:false,
-                                                            value:'',
-                                                            hideLabel:true,
-                                                            displayField:'full',
-                                                            valueField:'abbr',
-                                                            typeAhead:true,
-                                                            mode:'local',
-                                                            forceSelection:true,
-                                                            triggerAction:'all',
-                                                        })
-                                                    ]
-                                                }, 
-                                                {
-                                                    layout:'form',
-                                                    border:false,
-                                                    items:[
-                                                        new Ext.Button({
-                                                            border:false,
-                                                            hideLabel:true,
-                                                            text:'Search',
-                                                            handler: function() {
-                                                                doSearch();
-                                                            }
-                                                        })
-                                                    ]
-                                                },
-                                                {
-                                                    layout:'form',
-                                                    border:false,
-                                                    width: 200,
-                                                    items:[
-                                                        new Ext.form.ComboBox({
-                                                            id:'searchlocCombo',
-                                                            store: new Ext.data.SimpleStore({
-                                                                fields: ['abbr', 'full'],
-                                                                data: [['Remote','Remote'],['Local','Local'],['All','All']]
-                                                            }),
-                                                            border:false,
-                                                            value:'Remote',
-                                                            hideLabel:true,
-                                                            displayField:'full',
-                                                            valueField:'abbr',
-                                                            typeAhead:true,
-                                                            mode:'local',
-                                                            forceSelection:true,
-                                                            triggerAction:'all'
-                                                        })
-                                                    ]
-                                                },
-                                            ] // inner searchformPanel Panel's items
-                                        }] // searchformPanel items
-                                    }),
-                                    {
-                                        region: 'west',
-                                        border: false,
-                                        width: 170
                                     },
                                     {
                                         region: 'east',
@@ -314,6 +216,97 @@ biblios.app = function() {
                                                 displayHelpMsg(UI.messages.help.en.welcome);
                                             }
                                         }, //biblio tab listeners
+                                        tbar: new Ext.FormPanel({
+                                            frame:true,
+                                            border:true,
+                                            keys:{
+                                                key: [10,13],
+                                                fn: function() { doSearch(); }
+
+                                            },
+                                            items:[{
+                                                layout:'column',
+                                                border:false,
+                                                items:[
+                                                    {
+                                                        layout:'form',
+                                                        border:false,
+                                                        labelWidth:150,
+                                                        items:[
+                                                            new Ext.form.TextField({
+                                                                id:'query',
+                                                                width: 200,
+                                                                name:'query',
+                                                                border:false,
+                                                                fieldLabel:'Enter a search term'
+                                                            })
+                                                        ]
+                                                    },
+                                                    {
+                                                        layout:'form',
+                                                        border:false,
+                                                        width: 100,
+                                                        items:[
+                                                            new Ext.form.ComboBox({
+                                                                id:'searchtypeCombo',
+                                                                store: new Ext.data.SimpleStore({
+                                                                    fields: ['abbr', 'full'],
+                                                                    data: [['','Keyword'],['ti','Title'],['au','Author'],['su','Subject'],['isbn','ISBN'],['issn','ISSN']]
+                                                                }),
+                                                                border:false,
+                                                                value:'',
+                                                                hideLabel:true,
+                                                                displayField:'full',
+                                                                valueField:'abbr',
+                                                                typeAhead:true,
+                                                                mode:'local',
+                                                                forceSelection:true,
+                                                                triggerAction:'all',
+                                                                width: 60
+                                                            })
+                                                        ]
+                                                    }, 
+                                                    {
+                                                        layout:'form',
+                                                        border:false,
+                                                        items:[
+                                                            new Ext.Button({
+                                                                border:false,
+                                                                hideLabel:true,
+                                                                text:'Search',
+                                                                handler: function() {
+                                                                    doSearch();
+                                                                }
+                                                            })
+                                                        ]
+                                                    },
+                                                    {
+                                                        layout:'form',
+                                                        border:false,
+                                                        width: 100,
+                                                        items:[
+                                                            new Ext.form.ComboBox({
+                                                                id:'searchlocCombo',
+                                                                store: new Ext.data.SimpleStore({
+                                                                    fields: ['abbr', 'full'],
+                                                                    data: [['Remote','Remote'],['Local','Local'],['All','All']]
+                                                                }),
+                                                                border:false,
+                                                                value:'Remote',
+                                                                hideLabel:true,
+                                                                displayField:'full',
+                                                                valueField:'abbr',
+                                                                typeAhead:true,
+                                                                mode:'local',
+                                                                forceSelection:true,
+                                                                triggerAction:'all',
+                                                                width: 60
+                                                            })
+                                                        ]
+                                                    },
+                                                ] // inner searchformPanel Panel's items
+                                            }] // searchformPanel items
+                                        }),
                                         items: [
                                             {
                                                 region: 'center',
