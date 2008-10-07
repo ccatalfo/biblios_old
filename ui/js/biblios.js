@@ -1556,6 +1556,8 @@ biblios.app = function() {
                                                 autoScroll: true,
                                                 title: 'Help',
                                                 id: 'helpPanel',
+                                                listeners: {
+                                                },
                                                 items: [
                                                     new Ext.Panel({
                                                         id: 'helpIframe'

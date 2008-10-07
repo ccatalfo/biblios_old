@@ -216,6 +216,9 @@
 .hideGrouping {
     display: none;
 }
-.helpIcon {
-    background: url(ui/images/Help.gif) 0 6px no-repeat !important;
+#helpPanel-xcollapsed .x-tool.x-tool-expand-east {
+    background: url(ui/images/Help.gif) 0 0px no-repeat !important;
+}
+#helpPanel .x-tool.x-tool-toggle.x-tool-collapse-east {
+    background: url(ui/images/Help.gif) 0 0px no-repeat !important;
 }
