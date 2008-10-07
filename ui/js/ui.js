@@ -291,7 +291,7 @@ function getNewRecordMenu() {
                     UI.editor.loading.numToLoad = 1;
                     UI.editor.loading.numLoaded = 0;
 					Ext.Ajax.request({
-								url: libPath + node.attributes.file,
+								url: node.attributes.file,
 								method: 'GET',
 								callback: function(options, isSuccess, resp) { 
                                     UI.editor.progress.updateProgress(.3, 'Loading template');
