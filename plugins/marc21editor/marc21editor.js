@@ -1775,7 +1775,7 @@ MarcEditor.prototype.getToolBar = function() {
         items: [
         {
             cls: 'x-btn-text-icon',
-            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/edit', configDoc).text(),
+            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/tools', configDoc).text(),
             id: this.editorid+'EditBtn',
             editorid: this.editorid,
             text: 'Commands',
@@ -1936,11 +1936,10 @@ MarcEditor.prototype.getToolBar = function() {
             }
         },
         {
-            cls: 'x-btn-text-icon', // icon and text class
+            cls: 'x-btn-icon',
             icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/trash', configDoc).text(),
             id: this.editorid+'TrashMenu',
             editorid: this.editorid,
-            text: 'Trash',
             tooltip: {text: 'Move this record to trash (losing all changes since saving)'},
             handler: function(btn) {
                 showStatusMsg('Moving record to Trash...');
