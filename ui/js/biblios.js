@@ -1472,7 +1472,7 @@ biblios.app = function() {
                                                                                             savefileid: id, 
                                                                                             id: id,
                                                                                             qtip:'', 
-                                                                                            icon: libPath + 'ui/images/drive-harddisk.png',
+                                                                                            icon: libPath + 'lib/extjs2/resources/images/default/tree/folder-open.gif',
                                                                                             leaf: false, 
                                                                                             allowDelete:true, 
                                                                                             allowAdd: true,
