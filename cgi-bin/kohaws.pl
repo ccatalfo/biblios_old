@@ -28,7 +28,10 @@ if( $action eq 'auth' ) {
     }
     else {
         print $cgi->header(-type=>'text/xml');
-        print '<?xml version="1.0"?><error><msg>' . $resp->status_line . '</msg></error>';
+        my $data = {
+            resp => $resp->content
+        };
+        print to_json($data);
     }
 }
 elsif( $action eq 'bibprofile') {
