@@ -1211,7 +1211,7 @@ biblios.app = function() {
                                                                             allowDrop: false,
                                                                             allowAdd: false,
                                                                             allowDelete: false,
-                                                                            icon: uiPath + 'ui/images/network-server.png',
+                                                                            icon: uiPath + 'ui/images/Search_Target.gif',
                                                                             loader: new Ext.ux.GearsTreeLoader({
                                                                                 db: db,
                                                                                 selectSql: 'select hostname, port, userid, dbname from SearchTargets ',
