@@ -585,9 +585,14 @@ function showUploadDialog(format) {
 function doUploadMarc(dialog, filename, resp_data) {
     //console.info(resp_data);
     $.get(cgiDir+'download.pl?filename='+resp_data.filepath, function(data) {
+        var numToLoad = $('record', data).length;
         //console.info(data);
+        var uploadProgress = Ext.Msg.progress('Uploading records', 'Retrieving and formatting records', '0%');
         for (var i = 0; i < $('record', data).length; i++) {
             var xml = $('record', data).eq(i);
+			var title = $(xml).find('datafield[@tag=245] subfield[@code=a]', data).text();
+            var ratio = i / numToLoad;
+            uploadProgress.updateProgress(ratio, Math.round(100*ratio)+'% completed');
 			var record = new DB.Records({
 				xml: '<record xmlns="http://www.loc.gov/MARC21/slim">' + $(xml).html() + '</record>',
 				title: $(xml).find('datafield[@tag=245] subfield[@code=a]').text(),
@@ -605,9 +610,6 @@ function doUploadMarc(dialog, filename, resp_data) {
 				template: null,
 				marcformat: null
 			}).save();
-			var title = $(xml).find('datafield[@tag=245] subfield[@code=a]', data).text();
-			showStatusMsg('Uploaded ' + title + ' to Drafts');
-			clearStatusMsg();
 		}
             Ext.MessageBox.alert('Upload complete', 'Uploading is completed.  Files have been added to Drafts folder with status \'uploaded\'');
             biblios.app.displaySaveFile(3);
