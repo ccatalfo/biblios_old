@@ -35,7 +35,9 @@ if( $format eq 'marc21' ) {
     $records .= MARC::File::XML::footer();
 }
 elsif ( $format eq 'marcxml') {
-    $records = slurp($fh) or die "can't open $filename for reading";
+    $records = MARC::File::XML::header();
+    $records .= slurp($fh) or die "can't open $filename for reading";
+    $records .= MARC::File::XML::footer();
 }
 #warn MARC::File::XML::footer();
 else {

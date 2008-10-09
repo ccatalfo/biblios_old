@@ -587,12 +587,13 @@ function doUploadMarc(dialog, filename, resp_data) {
     $.get(cgiDir+'download.pl?filename='+resp_data.filepath, function(data) {
         //console.info(data);
         for (var i = 0; i < $('record', data).length; i++) {
+            var xml = $('record', data).eq(i);
 			var record = new DB.Records({
-				xml: '<record xmlns="http://www.loc.gov/MARC21/slim">' + $('record', data).html() + '</record>',
-				title: $('datafield[@tag=245] subfield[@code=a]', data).text(),
-				author: $('datafield[@tag=245] subfield[@code=c]', data).text(),
-				publisher: $('datafield[@tag=260] subfield[@code=b]', data).text(),
-				date: $('datafield[@tag=260] subfield[@code=c]', data).text(),
+				xml: '<record xmlns="http://www.loc.gov/MARC21/slim">' + $(xml).html() + '</record>',
+				title: $(xml).find('datafield[@tag=245] subfield[@code=a]').text(),
+				author: $(xml).find('datafield[@tag=245] subfield[@code=c]').text(),
+				publisher: $(xml).find('datafield[@tag=260] subfield[@code=b]').text(),
+				date: $(xml).find('datafield[@tag=260] subfield[@code=c]').text(),
 				date_added: new Date().toString(),
 				date_modified: new Date().toString(),
 				status: 'uploaded',
@@ -604,7 +605,7 @@ function doUploadMarc(dialog, filename, resp_data) {
 				template: null,
 				marcformat: null
 			}).save();
-			var title = $('datafield[@tag=245] subfield[@code=a]', data).text();
+			var title = $(xml).find('datafield[@tag=245] subfield[@code=a]', data).text();
 			showStatusMsg('Uploaded ' + title + ' to Drafts');
 			clearStatusMsg();
 		}
