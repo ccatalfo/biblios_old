@@ -298,7 +298,34 @@ GearsORMShift.rules = [
             trash.save();
             return true;
         }
-    }// version: 12
+    },// version: 12
+    {
+        version: 13,
+        comment: 'Add Uploads folder to contain newly uploaded files',
+        up: function() {
+            var uploadfolder = new DB.Savefiles({
+				name: 'Uploads',
+				description: 'Uploaded records',
+				parentid: null,
+				children: null,
+				allowDelete: 0,
+				allowAdd: 1,
+				allowRename: 0,
+				allowDrag: 0,
+				allowDrop: 1,
+				ddGroup: 'RecordDrop',
+				icon: libPath + 'ui/images/drive-harddisk.png',
+				date_added: 'datetime("now", "localtime"',
+				date_mofified: 'datetime("now", "localtime"'
+
+            }).save();
+            return true;
+        },
+        down: function() {
+            DB.Savefiles.remove('name=?',['Uploads']); 
+            return true;
+        }
+    } // version 13
 ];
 
 function createTestTargets() {

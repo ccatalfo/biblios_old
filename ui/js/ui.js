@@ -588,6 +588,7 @@ function doUploadMarc(dialog, filename, resp_data) {
         var numToLoad = $('record', data).length;
         //console.info(data);
         var uploadProgress = Ext.Msg.progress('Uploading records', 'Retrieving and formatting records', '0%');
+        var uploadfileid = DB.Savefiles.select('name=?',['Uploads']).getOne().rowid; 
         for (var i = 0; i < $('record', data).length; i++) {
             var xml = $('record', data).eq(i);
 			var title = $(xml).find('datafield[@tag=245] subfield[@code=a]', data).text();
@@ -604,14 +605,14 @@ function doUploadMarc(dialog, filename, resp_data) {
 				status: 'uploaded',
 				medium: '',
 				SearchTargets_id: '',
-				Savefiles_id: 3,
+				Savefiles_id: uploadfileid,
 				xmlformat: 'marcxml',
 				marcflavour: 'marc21',
 				template: null,
 				marcformat: null
 			}).save();
 		}
-            Ext.MessageBox.alert('Upload complete', 'Uploading is completed.  Files have been added to Drafts folder with status \'uploaded\'');
+            Ext.MessageBox.alert('Upload complete', 'Uploading is completed.  Files have been added to Uploads folder with status \'uploaded\'');
             biblios.app.displaySaveFile(3);
 			Ext.getCmp('savegrid').store.reload();
     });
