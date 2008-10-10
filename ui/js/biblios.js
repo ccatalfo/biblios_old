@@ -1833,11 +1833,16 @@ biblios.app = function() {
                                                         layout: 'border',
                                                         listeners: {
                                                             activate: function(tab) {
-                                                                Ext.getCmp('searchtargetsgrid').store.load({db: db, selectSql: biblios.app.db.selectSqlSearchTargets});
-                                                                biblios.app.viewport.doLayout();
-                                                            } // activate search targets grid tab
-
+                                                                this.refresh();
+                                                            }, // activate search targets grid tab
+                                                            beforeshow: function(tab){
+                                                                this.refresh();
+                                                            }, // show tab
                                                         }, // search targets grid tab listeners
+                                                        refresh: function() {
+                                                            Ext.getCmp('searchtargetsgrid').store.load({db:db,selectSql:biblios.app.db.selectSqlSearchTargets});
+                                                            biblios.app.viewport.doLayout();
+                                                         },
                                                         items:
                                                             {
                                                                 region: 'center',
