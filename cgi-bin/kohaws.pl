@@ -65,7 +65,7 @@ elsif( $action eq 'retrieve' ) {
 }
 elsif( $action eq 'save' ) {
     my $saveurl = $cgi->param('saveurl');
-    my $url = $kohaurl;
+    my $url = $kohaurl . $saveurl;
     my $cookie = $cgi->param('cookie');
     my $xml = $cgi->param('xml');
     my $resp = $ua->post( $url,'Cookie' => $cookie, 'Content-type' => 'text/xml', Content => $xml );
