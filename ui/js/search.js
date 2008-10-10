@@ -124,7 +124,7 @@ function getDefaultPazSettingsJSON( target ) {
 	return settings;
 }
 
-function setPazPar2Targets() {
+function getPazPar2Settings() {
 	var targets = getTargets();
 	var settings = new Array();
 	for (var i = 0; i < targets.length; i++) {
@@ -146,6 +146,10 @@ function setPazPar2Targets() {
 				settings.push(s);
 			}
 	}
+}
+
+function setPazPar2Targets() {
+    var settings = getPazPar2Settings();
 	$.post(pazcgiurl, {action:'settings', settings: Ext.util.JSON.encode(settings)});
 }
 
