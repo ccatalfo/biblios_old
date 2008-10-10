@@ -35,16 +35,7 @@ koha.prototype = {
 			this.user = user;
 			this.password = password;
             this.embedded = embedded;
-            if( embedded ) {
-                if( $.cookie('CGISESSID') ) {
-                    this.cgisessid = $.cookie('CGISESSID');
-                }
-                else {
-                    throw {
-                        msg: 'Biblios is embedded but cookie from Koha not found'
-                    }
-                }
-            }
+
             if( user == '' || !user || password == '' || !password) {
                 throw {
                     msg: 'No username or password!'
