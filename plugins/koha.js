@@ -25,27 +25,27 @@ var koha = function() {
 };
 
 koha.prototype = {	
-		init: function(url, name, user, password, embedded) {
-			this.url = url;
-            // add trailing slash if missing
-            if( this.url[ this.url.length-1] != '/') {
-                this.url += '/';
-            }
-			this.name = name;
-			this.user = user;
-			this.password = password;
-            this.embedded = embedded;
-
-            if( user == '' || !user || password == '' || !password) {
+		init: function(config) {
+            if( config.user == '' || !config.user || config.password == '' || !config.password) {
                 throw {
                     msg: 'No username or password!'
                 }
             }
-            if( url == '' || !url ) {
-                throw {
-                    msg: 'No url!'
-                }
+			this.url = config.url || 'http://' + location.host + '/';
+            // add trailing slash if missing
+            if( this.url[ this.url.length-1] != '/') {
+                this.url += '/';
             }
+			this.name = config.name;
+			this.user = config.user;
+			this.password = config.password;
+            this.embedded = config.embedded || '';
+            this.url = config.url;
+            this.authurl = config.authurl || this.url + 'cgi-bin/koha/svc/authentication';
+            this.bibprofileurl = config.bibprofileurl || this.url + 'cgi-bin/koha/svc/bib_profile';
+            this.retrieveurl = config.retrieveurl || this.url + 'cgi-bin/koha/svc/bib';
+            this.saveurl = config.saveurl || this.url + 'cgi-bin/koha/svc/';
+
 			this.auth();
 		}, // end init
 
@@ -54,7 +54,7 @@ koha.prototype = {
                     url: cgiDir + 'kohaws.pl',
                     method: 'post',
                     data:{ 
-                        kohaurl: this.url,
+                        kohaurl: this.authurl,
                         userid: this.user,
                         password: this.password,
                         action:'auth'
@@ -88,7 +88,7 @@ koha.prototype = {
 				url: cgiDir + 'kohaws.pl',
 				method: 'get',
 				dataType: 'xml',
-                data: { action:'bibprofile', cookie:this.cookie, kohaurl:this.url},
+                data: { action:'bibprofile', cookie:this.cookie, kohaurl:this.bibprofileurl},
 				that: this,
 				success: function(xml, status) {
 					this.that.bibprofilexml = xml;
@@ -120,7 +120,7 @@ koha.prototype = {
 				method: 'get',
 				that: this,
 				dataType: 'xml',
-                data:{cookie:this.cookie,action:'retrieve',recid:recid, kohaurl:this.url},
+                data:{cookie:this.cookie,action:'retrieve',recid:recid, kohaurl:this.retrieveurl},
 				id: recid,
 				success: function(xml, status) {
 					this.that.recordCache[ this.id ] = xml;
@@ -153,7 +153,7 @@ koha.prototype = {
                 dataType: 'xml',
 				data: {
                     xml:xml,
-                    kohaurl:this.url, 
+                    kohaurl:this.saveurl, 
                     saveurl:savepath,
                     action:'save',
                     cookie:this.cookie

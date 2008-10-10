@@ -16,7 +16,7 @@ my $password = $cgi->param('password');
 my $action = $cgi->param('action');
 
 if( $action eq 'auth' ) {
-    my $url = $kohaurl . 'cgi-bin/koha/svc/authentication';
+    my $url = $kohaurl;
     my $resp = $ua->post( $url, {userid=>$userid, password=>$password});
     if($resp->is_success) {
         print $cgi->header(-type=>'application/json');
@@ -35,7 +35,7 @@ if( $action eq 'auth' ) {
     }
 }
 elsif( $action eq 'bibprofile') {
-    my $url = $kohaurl . 'cgi-bin/koha/svc/bib_profile';
+    my $url = $kohaurl;
     my $cookie = $cgi->param('cookie');
     my $resp = $ua->post( $url, {},'Cookie' => $cookie );
     if($resp->is_success) {
@@ -49,7 +49,7 @@ elsif( $action eq 'bibprofile') {
 
 }
 elsif( $action eq 'retrieve' ) {
-    my $url = $kohaurl . 'cgi-bin/koha/svc/bib/' . $cgi->param('recid');
+    my $url = $kohaurl;
     my $recid = $cgi->param('recid');
     my $cookie = $cgi->param('cookie');
     my $resp = $ua->get( $url, 'Cookie' => $cookie );
@@ -65,7 +65,7 @@ elsif( $action eq 'retrieve' ) {
 }
 elsif( $action eq 'save' ) {
     my $saveurl = $cgi->param('saveurl');
-    my $url = $kohaurl . 'cgi-bin/koha/svc/' . $saveurl;
+    my $url = $kohaurl;
     my $cookie = $cgi->param('cookie');
     my $xml = $cgi->param('xml');
     my $resp = $ua->post( $url,'Cookie' => $cookie, 'Content-type' => 'text/xml', Content => $xml );

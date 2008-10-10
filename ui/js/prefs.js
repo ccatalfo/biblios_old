@@ -226,28 +226,16 @@ function setILSTargets() {
                             sendtarget.save();
                             Ext.getCmp('sendtargetsgrid').store.reload();
                         }
-                        else {
-                            // if openOnLoadRecId if defined, request it from the plugin whose url matches embeddedUrl
-                            if( openOnLoadRecId ) {
-                                if( this.embedded ) {
-                                    UI.editor.progress = Ext.MessageBox.progress('Loading record', '');
-                                    UI.editor['editorone'].location = this.name;
-                                    UI.editor['editorone'].id = '';
-                                    UI.editor.progress.updateProgress(.4, 'Retrieving record from Koha');
-                                    getRemoteRecord( openOnLoadRecId, this.name, 0, function(data) {
-                                        openRecord( xslTransform.serialize(data), 'editorone', 'marcxml');
-                                        UI.editor.progress.updateProgress(.8, 'Loading into Marc editor');
-                                    });
-                                    // make sure we don't try to open this again if we reset this send target
-                                    delete openOnLoadRecId;
-                                    UI.editor.progress.updateProgress(1, 'Loading completed');
-                                }
-                            }
-                        }
                     }
                     // try initing plugin
                     try {
-                        Prefs.remoteILS[ils.name].instance.init(ils.url, ils.name, ils.user, ils.password, ils.embedded);
+                        Prefs.remoteILS[ils.name].instance.init({
+                            url:ils.url, 
+                            name:ils.name, 
+                            user:ils.user, 
+                            password: ils.password, 
+                            embedded: ils.embedded
+                        });
                     } // try clause for xmlhttp req
                     catch( ex ) {
                         if( ex == 'Permission denied to call method XMLHttpRequest.open' ) {
