@@ -1185,25 +1185,10 @@ biblios.app = function() {
                                                                         baseAttrs: {
                                                                             listeners: {
                                                                                 checkchange: function(node, checked) {
-                                                                                    
-                                                                                    var pazid = node.attributes.hostname;
-                                                                                    if( node.attributes.port != '') {
-                                                                                        pazid += ':' + node.attributes.port;
-                                                                                    }
-                                                                                    if( node.attributes.dbname != undefined ) {
-                                                                                        pazid += '/' + node.attributes.dbname;	
-                                                                                    }
-                                                                                    
-                                                                                    if(checked) {
-                                                                                        UI.searchFilters[pazid] = pazid;
-                                                                                        
-                                                                                    }
-                                                                                    else {
-                                                                                        
-                                                                                        delete UI.searchFilters[pazid];
-                                                                                                                            
-                                                                                    }
-                                                                                    filterSearch();
+                                                                                    var t = DB.SearchTargets.select('SearchTargets.rowid=?',[node.attributes.id]).getOne();
+                                                                                    checked = checked ? 1 : 0;
+                                                                                    t.enabled = checked;
+                                                                                    t.save();
                                                                                 }
                                                                                 
                                                                             },
@@ -1223,6 +1208,7 @@ biblios.app = function() {
                                                                                         var port = data[i][1];
                                                                                         var db = data[i][3];
                                                                                         var user = data[i][2];
+                                                                                        var rowid = data[i][4];
                                                                                         var serverleaf = {
                                                                                             leaf: true,
                                                                                             text: 'Server: ' + server
@@ -1260,9 +1246,11 @@ biblios.app = function() {
                                                                                 var id = data[i][0];
                                                                                 var hostname = data[i][2];
                                                                                 var port = data[i][3];
+                                                                                var enabled = data[i][5];
+                                                                                var checked = enabled ? true : false
                                                                                 json.push({
                                                                                     leaf: false,
-                                                                                    checked: false,
+                                                                                    checked: checked,
                                                                                     servername: servername,
                                                                                     text: text,
                                                                                     id: id,

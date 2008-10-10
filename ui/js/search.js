@@ -170,19 +170,11 @@ function doPazPar2Search(query) {
     }
 }
 
-function runSearch(query, filter) {
-    if(filter) {
-        $.get(pazcgiurl, {action:'search', query:query, filter:filter}, function(data) {
-                Ext.getCmp('searchgrid').store.reload();
-                //Ext.getCmp('facetsTreePanel').root.reload();
-        });
-    }
-    else {
-        $.get(pazcgiurl, {action:'search', query:query}, function(data) {
-                Ext.getCmp('searchgrid').store.reload();
-                //Ext.getCmp('facetsTreePanel').root.reload();
-        });
-    }
+function runSearch(query) {
+    $.get(pazcgiurl, {action:'search', query:query}, function(data) {
+            Ext.getCmp('searchgrid').store.reload();
+            //Ext.getCmp('facetsTreePanel').root.reload();
+    });
 }
 function getPazRecord(recId, offset, callback, callbackParamObject) {
 	if( recordCache[recId] && offset == 0) {
