@@ -290,22 +290,16 @@ function updateSendMenu(menu, component) {
 }
 
 function sendSelectedFromSearchGrid(locsendto) {
-    biblios.app.send.numToSend = 0;
-    biblios.app.send.records.length = 0;
     Prefs.remoteILS[locsendto].instance.saveHandler = function(xmldoc, status) {
         biblios.app.fireEvent('sendrecordcomplete', locsendto, xmldoc, status);
         if( status == 'ok' ) {
             var title = $('datafield[@tag=245] subfield[@code=a]', xmldoc).text();
             showStatusMsg('Saved ' + title + ' to ' + locsendto);
-            biblios.app.send.numToSend--;
-            if( biblios.app.send.numToSend == 0) {
-                biblios.app.send.records.length = 0;
-                setTimeout( function() {clearStatusMsg();}, 2000)
-            }
+            clearStatusMsg();
         }
         else {
             showStatusMsg('Saving failed ' + status);
-            setTimeout( function() {clearStatusMsg();}, 2000)
+            clearStatusMsg();
         }
     };
    	var records = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
