@@ -17,12 +17,12 @@
                     </tr>
                     </xsl:for-each>
                     <xsl:for-each select="//marc:controlfield[@tag='006']">
-                        <tr>
+                        <tr class="006">
                         <xsl:call-template name="tag006"/>
                         </tr>
                     </xsl:for-each>
                     <xsl:for-each select="//marc:controlfield[@tag='007']">
-                        <tr>
+                        <tr class="007">
                         <xsl:call-template name="tag007"/>
                         </tr>
                     </xsl:for-each>
@@ -44,7 +44,7 @@
 		<xsl:param name="tagnumber">008</xsl:param>
 			<xsl:for-each select="$marc21defs//mattypes/mattype[@value=$rectype]/position">
 				<xsl:variable name="name" select="string(.)"/>
-				<xsl:variable name="inputtype" select="$marc21defs//value[@name=$name]/@inputtype"/>
+				<xsl:variable name="inputtype" select="$marc21defs//field[@tag=$tagnumber]/value[@name=$name]/@inputtype"/>
 					<xsl:choose>
 						<xsl:when test="$inputtype = 'textbox'">	
 							<xsl:call-template name="fixed-field-text">
@@ -87,7 +87,13 @@
         <tr>
         <!-- 008 fixed fields for all material types -->
                 <xsl:call-template name="generate_for_rectype">
-                    <xsl:with-param name="rectype">All</xsl:with-param>
+                    <xsl:with-param name="rectype">008All00-17</xsl:with-param>
+                    <xsl:with-param name="offset">0</xsl:with-param>
+                    <xsl:with-param name='tag' select="$tag"/>
+                    <xsl:with-param name='tagnumber'>008</xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="generate_for_rectype">
+                    <xsl:with-param name="rectype">008All35-39</xsl:with-param>
                     <xsl:with-param name="offset">0</xsl:with-param>
                     <xsl:with-param name='tag' select="$tag"/>
                     <xsl:with-param name='tagnumber'>008</xsl:with-param>
@@ -287,8 +293,8 @@
 		<xsl:param name="tagnumber"/>
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="hidden"/>
-		<xsl:param name="position"><xsl:value-of select="$marc21defs//value[@name=$name]/@position+1-$offset"/></xsl:param>
-		<xsl:param name="length"><xsl:value-of select="$marc21defs//value[@name=$name]/@length"/></xsl:param>
+		<xsl:param name="position"><xsl:value-of select="$marc21defs//field[@tag=$tagnumber]/value[@name=$name]/@position+1-$offset"/></xsl:param>
+		<xsl:param name="length"><xsl:value-of select="$marc21defs//field[@tag=$tagnumber]/value[@name=$name]/@length"/></xsl:param>
 		<xsl:param name='value'><xsl:value-of select="substring($tag, $position, $length)"/></xsl:param>
 		<td>
 				<xsl:if test="$hidden=1">

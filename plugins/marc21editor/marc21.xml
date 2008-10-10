@@ -1681,18 +1681,20 @@
 </fields>
 
 <mattypes>
-	<mattype value="All">
+	<mattype value="008All00-17">
 		<!-- 00..17 -->
 		<position>DateEntered</position>
 		<position>DtSt</position>
 		<position>Date1</position>
 		<position>Date2</position>
 		<position>Ctry</position>
+	</mattype>
+    <mattype value="008All35-39">
 		<!-- 35..40 -->
 		<position>Lang</position>
 		<position>MRec</position>
 		<position>Srce</position>
-	</mattype>
+    </mattype>
 	<mattype value="Books">
 		<position>Ills</position>
 		<position>Audn</position>

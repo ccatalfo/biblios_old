@@ -112,12 +112,12 @@ function get008MaterialName(rectype) {
 
 function get008FromEditor(ff_ed) {
 		var tag008val = '';
-		var rectype = $('#Type').val();
+		var rectype = $(ff_ed).find('#Type').val();
 		var mattype = get008MaterialName(rectype);
         if(bibliosdebug) {
             console.debug('get008FromEditor: ' + rectype + ' ' + mattype);
         }
-        $('mattypes mattype[@value=All] position', marc21defs).each( function(i) {
+        $('mattypes mattype[@value=008All00-17] position', marc21defs).each( function(i) {
 				var type = $(this).text();
 				var value = '';
 				if( type.substr(0, 5) == 'Undef') {
@@ -130,7 +130,7 @@ function get008FromEditor(ff_ed) {
 					value = Ext.getCmp(type).getValue() || '';
 				}
 				else {
-					value = $('#'+type).val() || '';
+					value = $(ff_ed).find('#'+type).val() || '';
 				}
                 if(bibliosdebug) {
                     console.debug('get008fromEditor: type: ' + type + ' value: \"' + value + '\"' + ' length: ' + value.length);
@@ -150,13 +150,33 @@ function get008FromEditor(ff_ed) {
 					value = Ext.getCmp(type).getValue() || '';
 				}
 				else {
-					value = $('#'+type).val() || '';
+					value = $(ff_ed).find('#'+type).val() || '';
 				}
                 if(bibliosdebug) {
                     console.debug('get008fromEditor: type: ' + type + ' value: \"' + value + '\"' + ' length: ' + value.length);
                 }
 				tag008val += value;
 			});
+            $('mattypes mattype[@value=008All35-39] position', marc21defs).each( function(i) {
+                    var type = $(this).text();
+                    var value = '';
+                    if( type.substr(0, 5) == 'Undef') {
+                        var length = type.substr(5,1);
+                        for( var k = 0; k<length; k++) {
+                            value += ' ';
+                        }
+                    }
+                    else if( type == 'Lang' || type == 'Ctry' ) {
+                        value = Ext.getCmp(type).getValue() || '';
+                    }
+                    else {
+                        value = $(ff_ed).find('#'+type).val() || '';
+                    }
+                    if(bibliosdebug) {
+                        console.debug('get008fromEditor: type: ' + type + ' value: \"' + value + '\"' + ' length: ' + value.length);
+                    }
+                    tag008val += value;
+                });
 	if( tag008val.length != 40 ) {
 		throw {
 			error: "Invalid008",
@@ -168,9 +188,9 @@ function get008FromEditor(ff_ed) {
     return tag008val;
 }
 
-function get006FromEditor(ff_ed) {
+function get006FromEditor(tr) {
 		var tag006val = '';
-		var rectype = $('#Type').val();
+		var rectype = $(tr).find('#Type').val();
 		var mattype = get008MaterialName(rectype);
 		$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 			var type = $(this).text();
@@ -180,7 +200,7 @@ function get006FromEditor(ff_ed) {
 					tag006val += ' ';
 				}
 			}
-			var value = $('#'+type).val();
+			var value = $(tr).find('#'+type).val();
 			tag006val += value;
 		});
     return tag006val;
@@ -236,10 +256,9 @@ function get007MaterialName(cat) {
 	return mattype;
 }
 
-function get007FromEditor() {
-	var cat = $('#007').children('.controlfield-text').val().substr(0,1);
+function get007FromEditor(tr, cat, mattype) {
+    if(bibliosdebug){'get007FromEditor: category: ' + cat}
 	var tag007val = cat;
-	var mattype = get007MaterialName(cat);
     if(bibliosdebug) {
         console.debug('get007FromEditor: ' + cat + ' ' + mattype);
     }
@@ -252,7 +271,7 @@ function get007FromEditor() {
                     tag007val += ' ';
                 }
             }
-            var value = $('#'+type).val() || '';
+            var value = $(tr).find('#'+type).val() || '';
             if(bibliosdebug) {
                 console.debug('get007FromEditor: type: ' + type + ' value: ' + value);
             }
@@ -292,37 +311,27 @@ function transferFF_EdToTags(ff_ed, var_ed, editorid ) {
         var leaderval = getLeaderFromEditor(ff_ed);
         $('#'+editorid).find(".000", var_ed).children('.controlfield-text').val(leaderval);
         if(bibliosdebug){console.info('Transferring leader value from fixed field editor into leader tag: ' + leaderval);}
-    }
-    catch(ex) {
-        Ext.MessageBox.alert('Error', ex.message);
-    }
-    try {
         var tag008val = get008FromEditor(ff_ed);
         $('#'+editorid).find(".008", var_ed).children('.controlfield-text').val(tag008val);
         if(bibliosdebug){console.info('Transferring 008 value from fixed field editor into 008 tag: ' + tag008val);}
-    }
-    catch(ex) {
-        Ext.MessageBox.alert('Error', ex.message);
+    } catch(ex) {
+        if(bibliosdebug){ console.debug('transferFF_EdToTags: exception ' + ex.error + ' ' + ex.msg + ' ' + ex.length) }
     }
 	if( $('#'+editorid).find('.006').length > 0 ) {
-        try {
-            var tag006val = get006FromEditor(ff_ed);
-            $('#'+editorid).find(".006", var_ed).children('.controlfield-text').val(tag006val);
-            if(bibliosdebug){console.info('Transferring 006 value from fixed field editor into 006 tag: ' + tag006val);}
-        }
-        catch(ex) {
-            Ext.MessageBox.alert('Error', ex.message);
-        }
+        $('#'+editorid).find('.fixedfields_editor tr.006').each(function(i) {
+                var tag006val = get006FromEditor($(this));
+                $('#'+editorid).find(".006").eq(i).children('.controlfield-text').val(tag006val);
+                if(bibliosdebug){console.info('Transferring 006 value from fixed field editor into 006 tag: ' + tag006val);}
+        });
 	}
-	if( $('#'+editorid).find('.007').length > 0 ) {
-        try {
-            var tag007val = get007FromEditor(ff_ed);
-            $('#'+editorid).find(".007").children('.controlfield-text').val(tag007val);
-            if(bibliosdebug){console.info('Transferring 007 value from fixed field editor into 007 tag: ' + tag007val);}
-        }
-        catch(ex) {
-            Ext.MessageBox.alert('Error', ex.message);
-        }
+	if( $('#'+editorid).find('.fixedfields_editor tr.007').length > 0 ) {
+        $('#'+editorid).find('.fixedfields_editor tr.007').each(function(i) {
+                var cat = $('.varfields_editor div.007').eq(i).find('.controlfield-text').val().substr(0,1);
+                var mattype = get007MaterialName(cat);
+                var tag007val = get007FromEditor($(this), cat, mattype);
+                $('#'+editorid).find(".007").eq(i).children('.controlfield-text').val(tag007val);
+                if(bibliosdebug){console.info('Transferring 007 value from fixed field editor into 007 tag: ' + tag007val);}
+        });
 	}
 }
 

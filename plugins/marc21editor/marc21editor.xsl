@@ -18,12 +18,12 @@
                 </tr>
                 </xsl:for-each>
                 <xsl:for-each select="//marc:controlfield[@tag='006']">
-                    <tr>
+                    <tr class="006">
                     <xsl:call-template name="tag006"/>
                     </tr>
                 </xsl:for-each>
                 <xsl:for-each select="//marc:controlfield[@tag='007']">
-                    <tr>
+                    <tr class="007">
                     <xsl:call-template name="tag007"/>
                     </tr>
                 </xsl:for-each>
