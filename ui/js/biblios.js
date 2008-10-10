@@ -1189,6 +1189,8 @@ biblios.app = function() {
                                                                                     checked = checked ? 1 : 0;
                                                                                     t.enabled = checked;
                                                                                     t.save();
+                                                                                    setPazPar2Targets();
+                                                                                    Ext.getCmp('searchtargetsgrid').store.reload();
                                                                                 }
                                                                                 
                                                                             },
@@ -1893,6 +1895,11 @@ biblios.app = function() {
                                                                                 }
                                                                                 catch(ex) {
                                                                                     Ext.MessageBox.alert('Error', ex.message);
+                                                                                }
+                                                                                if(field == 'enabled') {
+                                                                                    setPazPar2Targets();
+                                                                                    Ext.getCmp('searchtargetsgrid').store.reload();
+                                                                                    Ext.getCmp('TargetsTreePanel').getRootNode().reload();
                                                                                 }
                                                                                 
                                                                             } // after edit event on search target grid
