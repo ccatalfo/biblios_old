@@ -1896,11 +1896,9 @@ biblios.app = function() {
                                                                                 catch(ex) {
                                                                                     Ext.MessageBox.alert('Error', ex.message);
                                                                                 }
-                                                                                if(field == 'enabled') {
-                                                                                    setPazPar2Targets();
-                                                                                    Ext.getCmp('searchtargetsgrid').store.reload();
-                                                                                    Ext.getCmp('TargetsTreePanel').getRootNode().reload();
-                                                                                }
+                                                                                setPazPar2Targets();
+                                                                                Ext.getCmp('searchtargetsgrid').store.reload();
+                                                                                Ext.getCmp('TargetsTreePanel').getRootNode().reload();
                                                                                 
                                                                             } // after edit event on search target grid
                                                                         }, // search target grid listeners
