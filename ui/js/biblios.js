@@ -1853,6 +1853,7 @@ biblios.app = function() {
                                                                             },
                                                                             listeners: {
                                                                                 update: function(store, record, operation) {
+                                                                                    record.data.enabled = record.data.enabled ? 1 : 0;
                                                                                     if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT) {
                                                                                         t = DB.SearchTargets.select('SearchTargets.rowid=?', [record.data.rowid]).getOne();
                                                                                         if( t.allowModify == 0 ) {
@@ -1877,6 +1878,9 @@ biblios.app = function() {
                                                                                 var id = e.record.data.id;
                                                                                 var field = e.field;
                                                                                 var value = e.value;
+                                                                                if(field == 'enabled') {
+                                                                                    value = value ? 1 : 0;
+                                                                                }
                                                                                 t = DB.SearchTargets.select('SearchTargets.rowid=?', [id]).getOne();
                                                                                 if( t.allowModify == 0 ) {
                                                                                    Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings"); 
@@ -1891,7 +1895,6 @@ biblios.app = function() {
                                                                                     Ext.MessageBox.alert('Error', ex.message);
                                                                                 }
                                                                                 
-
                                                                             } // after edit event on search target grid
                                                                         }, // search target grid listeners
                                                                         sm: (sm =new Ext.grid.SmartCheckboxSelectionModel({
