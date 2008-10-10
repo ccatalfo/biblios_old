@@ -1866,7 +1866,6 @@ biblios.app = function() {
                                                                             listeners: {
                                                                                 update: function(store, record, operation) {
                                                                                     if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT) {
-                                                                                        record.data.enabled = record.data.enabled ? 1 : 0;
                                                                                         t = DB.SearchTargets.select('SearchTargets.rowid=?', [record.data.rowid]).getOne();
                                                                                         if( t.allowModify == 0 ) {
                                                                                            Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings"); 
@@ -1890,9 +1889,6 @@ biblios.app = function() {
                                                                                 var id = e.record.data.id;
                                                                                 var field = e.field;
                                                                                 var value = e.value;
-                                                                                if(field == 'enabled') {
-                                                                                    value = value ? 1 : 0;
-                                                                                }
                                                                                 t = DB.SearchTargets.select('SearchTargets.rowid=?', [id]).getOne();
                                                                                 if( t.allowModify == 0 ) {
                                                                                    Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings"); 
@@ -2022,12 +2018,6 @@ biblios.app = function() {
                                                                                     } // process search targets records to remove
                                                                                     //updateSearchTargets();
                                                                                     Ext.getCmp('searchtargetsgrid').store.reload();
-                                                                                }
-                                                                            },
-                                                                            {
-                                                                                text: 'Save',
-                                                                                handler: function() {
-                                                                                    setPazPar2Targets();
                                                                                 }
                                                                             }
                                                                         ],

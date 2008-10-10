@@ -128,7 +128,7 @@ function setPazPar2Targets() {
 	var targets = getTargets();
 	var settings = new Array();
 	for (var i = 0; i < targets.length; i++) {
-		if (targets[i].enabled == 1) {
+		if (targets[i].enabled) {
 			// load this target into pazpar2 as search target
 			if (targets[i].pazpar2settings != '' && targets[i].pazpar2settings != null) {
 				var s = Ext.util.JSON.decode(targets[i].pazpar2settings);
