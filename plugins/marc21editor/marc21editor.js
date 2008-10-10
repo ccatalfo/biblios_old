@@ -130,7 +130,7 @@ function get008FromEditor(ff_ed) {
 					value = Ext.getCmp(type).getValue() || '';
 				}
 				else {
-					value = $(ff_ed).find('#'+type).val() || '';
+					value = $(ff_ed).find('#'+type).val() || ' ';
 				}
                 if(bibliosdebug) {
                     console.debug('get008fromEditor: type: ' + type + ' value: \"' + value + '\"' + ' length: ' + value.length);
