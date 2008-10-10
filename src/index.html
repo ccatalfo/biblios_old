@@ -95,42 +95,21 @@
                     "&return="+location.href;
   }
 </script>
-
-<div id='branding-area'>[% headerhtml %]</div>
+<div id="branding-area"</div>
+<div id="header">[% headerhtml %]</div>
 <div id='biblios'>
 <div id='downloads'></div>
-<div id='searchform'>
-	 	<p class='searchtip'>Enter a search term and choose a search type</p>
-		<form onsubmit='doSearch(this); return false;'>
-			<input id='query' class='focus' type='text' size='40' name='query'/>
-			<select id='searchtype'>	
-				<option value=''>Keyword</option>
-				<option value='ti'>Title</option>
-				<option value='au'>Author</option>
-				<option value='su'>Subject</option>
-				<option value='isbn'>ISBN</option>
-				<option value='issn'>ISSN</option>
-			</select>
-			<select id='searchloc'>
-				<option value='All'>All</option>
-				<option value='SearchTargets'>Search Targets</option>
-				<option value='LocalFolders'>Local Folders</option>
-				<!--<option value='Vendors'>Vendors</option>-->
-			</select>
-			<input class='submit' type='submit' value='Search'>
-		</form>
-	  </div>
 </div>
     <script type="text/javascript">
 		var bibliosdebug = [% bibliosdebug %];
         Ext.onReady(function() {
 			Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs2/resources/images/default/s.gif';
             Ext.get('loadingtext').update('Initializing Biblios');
-			biblios.app.initUI();
+			biblios.app.init();
             loadPlugins();
             completeInit();
             displayInitErrors();
-			Ext.fly('loading').remove();
+			//Ext.fly('loading').remove();
 			// placeholder
 		}, biblios.app);
     </script>
