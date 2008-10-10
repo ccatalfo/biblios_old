@@ -68,7 +68,7 @@ elsif( $action eq 'save' ) {
     my $url = $kohaurl . 'cgi-bin/koha/svc/' . $saveurl;
     my $cookie = $cgi->param('cookie');
     my $xml = $cgi->param('xml');
-    my $resp = $ua->post( $url, {xml=>$xml},'Cookie' => $cookie, 'Content-type' => 'text/xml' );
+    my $resp = $ua->post( $url,'Cookie' => $cookie, 'Content-type' => 'text/xml', Content => $xml );
     if($resp->is_success) {
         print $cgi->header(-type=>'text/xml');
         print $resp->content;
