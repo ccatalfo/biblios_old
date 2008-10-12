@@ -1189,8 +1189,12 @@ biblios.app = function() {
                                                                                     checked = checked ? 1 : 0;
                                                                                     t.enabled = checked;
                                                                                     t.save();
-                                                                                    setPazPar2Targets();
-                                                                                    Ext.getCmp('searchtargetsgrid').store.reload();
+                                                                                    setPazPar2Targets(function(data) {
+                                                                                        Ext.getCmp('searchtargetsgrid').store.reload();
+                                                                                        runSearch(biblios.app.currQuery);
+                                                                                    
+                                                                                    });
+
                                                                                 }
                                                                                 
                                                                             },

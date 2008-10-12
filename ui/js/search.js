@@ -148,9 +148,20 @@ function getPazPar2Settings() {
 	}
 }
 
-function setPazPar2Targets() {
+function setPazPar2Targets(callback) {
     var settings = getPazPar2Settings();
-	$.post(pazcgiurl, {action:'settings', settings: Ext.util.JSON.encode(settings)});
+	$.ajax({
+        url: pazcgiurl, 
+        callback:callback,
+        data: {
+            action:'settings', 
+            settings: Ext.util.JSON.encode(settings)
+        },
+        method: 'POST',
+        success: function(xml, status) {
+            this.callback(xml);
+        }
+    });
 }
 
 function changePazPar2TargetStatus(o) {
