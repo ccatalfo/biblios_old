@@ -594,9 +594,9 @@ function doUploadMarc(dialog, filename, resp_data) {
 			var title = $(xml).find('datafield[@tag=245] subfield[@code=a]', data).text();
             var ratio = i / numToLoad;
             // retrieve medium entered into 999 field by uploadMarc script
-            var medium = $(xml).find('datafield[@tag=999] subfield[@code=a]').text();
-            // remove medium entered into 999 field by uploadMarc script
-            $(xml).find('datafield[@tag=999]').remove();
+            var medium = $(xml).find('datafield[@tag=999]:last subfield[@code=a]').text();
+            // remove medium entered into 999 field by uploadMarc script (should be last 999 tag as it ws appended to record)
+            $(xml).find('datafield[@tag=999]:last').remove();
             uploadProgress.updateProgress(ratio, Math.round(100*ratio)+'% completed');
 			var record = new DB.Records({
 				xml: '<record xmlns="http://www.loc.gov/MARC21/slim">' + $(xml).html() + '</record>',
