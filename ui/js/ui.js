@@ -593,6 +593,10 @@ function doUploadMarc(dialog, filename, resp_data) {
             var xml = $('record', data).eq(i);
 			var title = $(xml).find('datafield[@tag=245] subfield[@code=a]', data).text();
             var ratio = i / numToLoad;
+            // retrieve medium entered into 999 field by uploadMarc script
+            var medium = $(xml).find('datafield[@tag=999] subfield[@code=a]').text();
+            // remove medium entered into 999 field by uploadMarc script
+            $(xml).find('datafield[@tag=999]').remove();
             uploadProgress.updateProgress(ratio, Math.round(100*ratio)+'% completed');
 			var record = new DB.Records({
 				xml: '<record xmlns="http://www.loc.gov/MARC21/slim">' + $(xml).html() + '</record>',
@@ -603,7 +607,7 @@ function doUploadMarc(dialog, filename, resp_data) {
 				date_added: new Date().toString(),
 				date_modified: new Date().toString(),
 				status: 'uploaded',
-				medium: '',
+				medium: medium,
 				SearchTargets_id: '',
 				Savefiles_id: uploadfileid,
 				xmlformat: 'marcxml',
