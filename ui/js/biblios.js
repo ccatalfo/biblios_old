@@ -1077,7 +1077,7 @@ biblios.app = function() {
                                                                             {
                                                                                 id: 'savegridUploadsBtn',
                                                                                 cls: 'x-btn-text-icon bmenu',
-                                                                                icon: libPath + 'ui/images/document-save.png',
+                                                                                icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/upload', configDoc).text(),
                                                                                 text: 'Upload',
                                                                                 tooltip: {text: 'Upload marc21 or marcxml files'},
                                                                                 menu: [
