@@ -1214,6 +1214,11 @@ function setupFFEditorCtryCombo() {
             success: function(html) {
                 $('#'+this.editorid).find('.ffeditor').html(html);
                 Ext.get(editorid).unmask();
+                // set change event for Type fixed fields select dropdown
+                $('#'+editorid).find('#Type').change(function() {
+                    var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
+                    UI.editor[editorid].reformatFixedFieldsEditor();
+                });
                 $('#'+this.editorid).find('.ffeditor').show();
             },
             error: function(req, textStatus, errorThrown) {
@@ -1611,6 +1616,11 @@ function setupFFEditorCtryCombo() {
         $('#'+editorid).find('.ffeditor').show();
         // hide fixed field controlfields
         $('#'+editorid).find('.varfields_editor').find(".000, .008, .006, .007").hide();
+        // set change event for Type fixed fields select dropdown
+        $('#'+editorid).find('#Type').change(function() {
+            var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
+            UI.editor[editorid].record.reformatFixedFieldsEditor();
+        });
         UI.editor.lastFocusedEl = $('.001', editorelem).get(0);
         UI.editor[editorid].lastFocusedEl = $('#'+editorid).find('.001').get(0);
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( this.getToolBar() );
