@@ -1198,6 +1198,33 @@ function setupFFEditorCtryCombo() {
 		}
 	};
 
+    this._reformatFixedFieldsEditor = function _reformatFixedFieldsEditor() {
+        var ff_ed = $('#'+editorid).find(".ffeditor");
+        var var_ed = $('#'+editorid).find(".vareditor");
+        Ext.get(editorid).mask('Reformatting fixed fields editor for new record type');
+        transferFF_EdToTags(ff_ed, var_ed, editorid);
+        UI.editor[editorid].record.update();
+        var xml = UI.editor[editorid].record.XMLString();
+        $.ajax({
+            url: cgiDir + 'xsltransform.pl',
+            type: 'POST',
+            editorid: editorid,
+            dataType: 'html',
+            data: {xml:xml, stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid},
+            success: function(html) {
+                $('#'+this.editorid).find('.ffeditor').html(html);
+                Ext.get(editorid).unmask();
+                $('#'+this.editorid).find('.ffeditor').show();
+            },
+            error: function(req, textStatus, errorThrown) {
+                if(bibliosdebug){
+                    console.debug(req + ' ' + textStatus + ' ' + errorThrown);
+                }
+            }
+        });
+
+    };
+
     this._toggleFixedFieldDisplay = function toggleFixedFieldDisplay() {
         UI.editor[editorid].record.showffeditor  = UI.editor[editorid].record.showffeditor ? false : true;
         var ff_ed = $('#'+editorid).find(".ffeditor");
@@ -1603,6 +1630,9 @@ function setupFFEditorCtryCombo() {
 
 }
 // Public methods 
+MarcEditor.prototype.reformatFixedFieldsEditor = function() {
+    return this._reformatFixedFieldsEditor();
+}
 MarcEditor.prototype.toggleFixedFieldDisplay = function() {
     return this._toggleFixedFieldDisplay();
 }
