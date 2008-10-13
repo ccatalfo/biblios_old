@@ -2348,6 +2348,7 @@ biblios.app = function() {
         
 
 		Ext.getCmp('tabpanel').activate(0);
+        Ext.getCmp('facetsTreePanel').hide();
         } // end of init method
     }); // end of public biblios.app space
 }(); // end of app
