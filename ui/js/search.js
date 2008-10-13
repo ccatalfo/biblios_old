@@ -108,13 +108,6 @@ function getDefaultPazSettingsJSON( target ) {
 	
 	settings['pz:cclmap:pub['+db+']'] = 'u=1018 s=al';
     
-    settings['pz:cclmap:group['+db+']'] = 'u=9015 s=al';
-    
-    settings['pz:cclmap:createdby['+db+']'] = 'u=9013 s=al';
-    
-    settings['pz:cclmap:editedby['+db+']'] = 'u=9012 s=al';
-   
-    settings['pz:cclmap:lasteditedby['+db+']'] = 'u=9014 s=al';
     if( target.userid != '') {
         settings['pz:authentication['+db+']'] = target.userid+'/'+target.password; 
     }
