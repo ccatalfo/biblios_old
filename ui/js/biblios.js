@@ -257,7 +257,7 @@ biblios.app = function() {
                                                 id:'searchtypeCombo',
                                                 store: new Ext.data.SimpleStore({
                                                     fields: ['abbr', 'full'],
-                                                    data: [['','Keyword'],['ti','Title'],['au','Author'],['su','Subject'],['isbn','ISBN'],['issn','ISSN']]
+                                                    data: [['kw','Keyword'],['ti','Title'],['au','Author'],['su','Subject'],['isbn','ISBN'],['issn','ISSN'],['','Advanced']]
                                                 }),
                                                 border:false,
                                                 value:'',

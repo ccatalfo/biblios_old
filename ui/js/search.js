@@ -10,7 +10,7 @@ function doSearch(form) {
         searchquery = query;
     }
     else {
-        searchquery = searchtype + '=' + query;
+        var searchquery = searchtype + '=' + query;
     }
     var searchloc = Ext.getCmp('searchlocCombo').getValue();
 	if( searchloc == 'All' ) {
