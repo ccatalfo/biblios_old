@@ -1909,7 +1909,109 @@ biblios.app = function() {
                                                                                 Ext.getCmp('searchtargetsgrid').store.reload();
                                                                                 Ext.getCmp('TargetsTreePanel').getRootNode().reload();
                                                                                 
-                                                                            } // after edit event on search target grid
+                                                                            }, // after edit event on search target grid
+                                                                            celldblclick: function(grid, rowIndex, colIndex, e) {
+                                                                                if( colIndex != 9 ) {
+                                                                                    return true;
+                                                                                }
+                                                                                var record = grid.store.getAt(rowIndex);
+                                                                                var settingsjson = record.data.pazpar2settings;
+                                                                                var settings = {};
+                                                                                if( settingsjson == '' ) {
+                                                                                    var target = DB.SearchTargets.select('SearchTargets.rowid=?',[ record.data.rowid ] ).getOne();
+                                                                                    settings = getDefaultPazSettingsJSON(target);
+
+                                                                                }
+                                                                                else {
+                                                                                    settings = Ext.util.JSON.decode(settingsjson);
+                                                                                }
+                                                                                var win = new Ext.Window({
+                                                                                    id:'pazpar2settingsproperties',
+                                                                                    layout:'fit',
+                                                                                    width: 300,
+                                                                                    height: 300,
+                                                                                    autoScroll: true,
+                                                                                    closeAction:'hide',
+                                                                                    items: (pg = new Ext.grid.PropertyGrid({
+                                                                                        title: 'Advanced Search Settings',
+                                                                                        id: 'searchtargetspropertygrid',
+                                                                                        autoHeight: true,
+                                                                                        width: 300,
+                                                                                        stripeRows:true,
+                                                                                        source: settings
+                                                                                    })),
+                                                                                    buttons: [
+                                                                                        {
+                                                                                            grid:pg,
+                                                                                            record:record,
+                                                                                            text:'New Search Type',
+                                                                                            handler: function(btn) {
+                                                                                                Ext.Msg.prompt('Add new search type', 'Enter abbreviation for new search type', function(btn, text) {
+                                                                                                    var rowid = this.record.data.rowid;
+                                                                                                    var pazid = getPazTargetName( DB.SearchTargets.select('SearchTargets.rowid=?',[rowid]).getOne() );
+                                                                                                    var newcclmap = 'pz:cclmap:'+text+'['+pazid+']';
+                                                                                                    if(bibliosdebug) {
+                                                                                                        console.debug('add searchtype: ' + rowid + ' ' + pazid + ' ' + newcclmap);
+                                                                                                    }
+                                                                                                    var rec = new Ext.grid.PropertyRecord({
+                                                                                                        name: newcclmap,
+                                                                                                        value: ''
+                                                                                                    });
+                                                                                                    this.grid.store.addSorted(rec);
+                                                                                                    this.grid.store.commitChanges();
+                                                                                                    return true;
+                                                                                                }, btn);
+                                                                                                
+
+                                                                                            }
+                                                                                        },
+                                                                                        {
+                                                                                            grid:pg,
+                                                                                            record:record,
+                                                                                            text:'Remove',
+                                                                                            handler: function(btn) {
+                                                                                                Ext.Msg.confirm('Remove search type', 'Are you sure you want to remove this search type?', function(btn, text) {
+                                                                                                    if(btn=='ok') {
+                                                                                                        var r = Ext.getCmp('searchtargetspropertygrid').getSelectionModel().selection.record;
+                                                                                                        this.grid.store.remove( r );
+                                                                                                        this.grid.store.commitChanges();
+                                                                                                        return true;
+                                                                                                    }
+                                                                                                    else {
+                                                                                                        return true;
+                                                                                                    }
+                                                                                                }, btn);
+
+                                                                                            }
+                                                                                        },
+                                                                                        {
+                                                                                            grid: pg,
+                                                                                            record: record,
+                                                                                            text: 'Save',
+                                                                                            handler: function(btn) {
+                                                                                                var settingsjson = btn.grid.getSource();
+                                                                                                if(bibliosdebug) { console.info(settingsjson);}
+                                                                                                var settingsstring = Ext.util.JSON.encode(settingsjson);
+                                                                                                if(bibliosdebug) { console.info(settingsstring);}
+                                                                                                btn.record.data.pazpar2settings = settingsstring;
+                                                                                                btn.record.commit();
+                                                                                                Ext.getCmp('searchtargetsgrid').store.reload();
+                                                                                                setPazPar2Targets();
+                                                                                                Ext.getCmp('pazpar2settingsproperties').close();
+                                                                                            }
+                                                                                        },
+                                                                                        {
+                                                                                            grid: pg,
+                                                                                            text: 'Cancel',
+                                                                                            handler: function(btn) {
+                                                                                                Ext.getCmp('pazpar2settingsproperties').close();
+                                                                                            }
+                                                                                        }
+                                                                                    ]
+                                                                                }).show();
+
+                                                                            } // search targets grid cell dbl click handler
+>>>>>>> Add partly functional means of adding a search type via the searchtargets grid pazpar2settings property grid.  At the moment, extjs is mangling the cclmap string (which should be the "name" of the property) so this is not yet functional.:ui/js/biblios.js
                                                                         }, // search target grid listeners
                                                                         sm: (sm =new Ext.grid.SmartCheckboxSelectionModel({
                                                                             dataIndex:'enabled',
