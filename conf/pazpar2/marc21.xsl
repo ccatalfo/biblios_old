@@ -18,12 +18,34 @@
   	<xsl:variable name="fullrecord">
 		<xsl:call-template name="xml-to-string"/>
 	</xsl:variable>
+    <xsl:variable name="leader" select="marc:leader"/>
+    <xsl:variable name="leader6" select="substring($leader,7,1)"/>
+    <xsl:variable name="leader7" select="substring($leader,8,1)"/>
+    <xsl:variable name="medium">
+        <xsl:choose>
+            <xsl:when test="$leader6='a'">
+                <xsl:choose>
+                    <xsl:when test="$leader7='a' or $leader7='c' or $leader7='d' or $leader7='m'">BKS</xsl:when>
+                    <xsl:when test="$leader7='b' or $leader7='i' or $leader7='s'">CNR</xsl:when>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:when test="$leader6='t'">BKS</xsl:when>
+            <xsl:when test="$leader6='p'">MIX</xsl:when>
+            <xsl:when test="$leader6='m'">COM</xsl:when>
+            <xsl:when test="$leader6='c' or $leader6='d'">SCO</xsl:when>
+            <xsl:when test="$leader6='e' or $leader6='f'">MAP</xsl:when>
+            <xsl:when test="$leader6='g' or $leader6='k' or $leader6='o' or $leader6='r'">VIS</xsl:when>
+            <xsl:when test="$leader6='i' or $leader6='j'">REC</xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+
+
     <xsl:variable name="title_medium" select="marc:datafield[@tag='245']/marc:subfield[@code='h']"/>
     <xsl:variable name="journal_title" select="marc:datafield[@tag='773']/marc:subfield[@code='t']"/>
     <xsl:variable name="electronic_location_url" select="marc:datafield[@tag='856']/marc:subfield[@code='u']"/>
     <xsl:variable name="fulltext_a" select="marc:datafield[@tag='900']/marc:subfield[@code='a']"/>
     <xsl:variable name="fulltext_b" select="marc:datafield[@tag='900']/marc:subfield[@code='b']"/>
-    <xsl:variable name="medium">
+    <xsl:variable name="oldmedium">
       <xsl:choose>
 	<xsl:when test="$title_medium">
 	  <xsl:value-of select="substring-after(substring-before($title_medium,']'),'[')"/>
