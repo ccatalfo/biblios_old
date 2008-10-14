@@ -92,7 +92,7 @@ function getDefaultPazSettingsJSON( target ) {
 	
 	settings['pz:xslt['+db+']'] = 'marc21.xsl';
 	
-	settings['pz:cclmap:term=['+db+']'] = 'u=1016 t=1,r s=al';
+	settings['pz:cclmap:kw['+db+']'] = 'u=1016';
 	
 	settings['pz:cclmap:au['+db+']']  = 'u=1004 s=al';
 	
@@ -142,19 +142,24 @@ function getPazPar2Settings() {
 }
 
 function setPazPar2Targets(callback) {
+    showStatusMsg('Setting targets');
     var settings = getPazPar2Settings();
-	$.ajax({
-        url: pazcgiurl, 
-        callback:callback,
-        data: {
-            action:'settings', 
-            settings: Ext.util.JSON.encode(settings)
-        },
-        method: 'POST',
-        success: function(xml, status) {
-            this.callback(xml);
-        }
-    });
+    for( var i = 0; i < settings.length; i++) {
+        var s = settings[i];
+        $.ajax({
+            url: pazcgiurl, 
+            callback:callback,
+            data: {
+                action:'settings', 
+                settings: Ext.util.JSON.encode([s])
+            },
+            method: 'POST',
+            success: function(xml, status) {
+                this.callback(xml);
+            }
+        });
+    }
+    clearStatusMsg();
 }
 
 function changePazPar2TargetStatus(o) {
