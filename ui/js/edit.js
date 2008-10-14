@@ -16,46 +16,55 @@ function openRecord(xml, recid, syntax) {
 	// we need to display record view first since editors are lazily rendered
 	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
-    var editorid = Ext.id();
-    var tabid = Ext.id();
-    Ext.getCmp('editorTabPanel').add({ 
-        title: '', 
-        id: tabid,
-        closable:true, 
-        html:{ tag: 'div', id: editorid, class: 'marceditor' },
-        listeners: {
-        }
-    }).show()
-    UI.editor[editorid] = {
-        id: recid,
-        tabid: tabid,
-        ffed: '',
-        vared : '',
-        savedRemote : {},
-        savefileid: '',
-        record : '',
-        comboboxes : new Array(),
-        location: ''
-    };
+    if( Ext.getCmp('editorTabPanel').getActiveTab() ) {
+        var sending = Ext.getCmp('editorTabPanel').getActiveTab().sending;
+    }
+    if( sending ) {
+        var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
+        Ext.getCmp('editorTabPanel').getActiveTab().sending = false;
+    }
+    else {
+        var editorid = Ext.id();
+        var tabid = Ext.id();
+        Ext.getCmp('editorTabPanel').add({ 
+            title: '', 
+            id: tabid,
+            closable:true, 
+            html:{ tag: 'div', id: editorid, class: 'marceditor' },
+            listeners: {
+            }
+        }).show()
+        UI.editor[editorid] = {
+            id: recid,
+            tabid: tabid,
+            ffed: '',
+            vared : '',
+            savedRemote : {},
+            savefileid: '',
+            record : '',
+            comboboxes : new Array(),
+            location: ''
+        };
 
-    var editor = DB.Editors.select('syntax=?', [syntax]).getOne();
-    var editor_plugin = DB.Plugins.select('name=?', [editor.name]).getOne();
-    var editor_init = editor_plugin.initcall;
-    try {
-        UI.editor[editorid].record = eval( editor_init );
+        var editor = DB.Editors.select('syntax=?', [syntax]).getOne();
+        var editor_plugin = DB.Plugins.select('name=?', [editor.name]).getOne();
+        var editor_init = editor_plugin.initcall;
+        try {
+            UI.editor[editorid].record = eval( editor_init );
+        }
+        catch(ex) {
+            Ext.MessageBox.alert('Editor error', 'Unable to create editor. Please check your configuration');
+        }
     }
-    catch(ex) {
-        Ext.MessageBox.alert('Editor error', 'Unable to create editor. Please check your configuration');
+    var xmldoc;
+    if( Ext.isIE ) {
+        xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
+        xmldoc.async = false; 
+        xmldoc.loadXML(xml);
     }
-	var xmldoc;
-	if( Ext.isIE ) {
-		xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
-		xmldoc.async = false; 
-		xmldoc.loadXML(xml);
-	}
-	else {
-		xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
-	}
+    else {
+        xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
+    }
 	UI.editor[editorid].record.loadXml( xmldoc, handle_html );
 }
 

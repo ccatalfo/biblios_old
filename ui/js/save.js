@@ -155,7 +155,8 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 function doSaveRemote(loc, xmldoc, editorid) {
 	/*Ext.get('ffeditor').mask();
 	Ext.get('vareditor').mask();*/
-	// make sure we have up to date record
+	Ext.getCmp('editorTabPanel').getActiveTab().sending = true;
+// make sure we have up to date record
 	transferFF_EdToTags(UI.editor[editorid].ffed, UI.editor[editorid].vared, editorid);
 	UI.editor[editorid].record.update();
 	xmldoc = UI.editor[editorid].record.XML();

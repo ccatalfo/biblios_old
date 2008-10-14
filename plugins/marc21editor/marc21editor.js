@@ -1623,7 +1623,9 @@ function setupFFEditorCtryCombo() {
         });
         UI.editor.lastFocusedEl = $('.001', editorelem).get(0);
         UI.editor[editorid].lastFocusedEl = $('#'+editorid).find('.001').get(0);
-        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( this.getToolBar() );
+        if( !Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).items ) {
+            Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( this.getToolBar() );
+        }
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).doLayout();
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).editorid = editorid;
         Ext.get(editorid).unmask();

@@ -96,7 +96,12 @@ koha.prototype = {
 					// construct record id xpath expression from bib profile
 					var tag = $('bib_number tag', xml).text();
 					var subfield = $('bib_number subfield', xml).text();
-					this.that.recidXpath = 'datafield[@tag='+tag+'] subfield[@code='+subfield+']';
+                    if( tag < '010' ) {
+                        this.that.recidXpath = 'controlfield[@tag='+tag+']';
+                    }
+                    else {
+                        this.that.recidXpath = 'datafield[@tag='+tag+'] subfield[@code='+subfield+']';
+                    }
 					this.that.mandatory_tags = $('mandatory_tags', xml).children();
 					this.that.mandatory_subfields = $('mandatory_subfields', xml).children();
 					this.that.reserved_tags = $('reserved_tags', xml).children();
