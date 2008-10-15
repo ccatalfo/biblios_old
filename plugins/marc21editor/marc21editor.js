@@ -1988,27 +1988,6 @@ MarcEditor.prototype.getToolBar = function() {
             }
         },
         {
-            cls: 'x-btn-text-icon', // icon and text class
-            icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/cancel', configDoc).text(),
-            id: this.editorid+'CancelMenu',
-            editorid: this.editorid,
-            text: 'Cancel',
-            tooltip: {text: 'Cancel editing of this record (losing all changes since saving)'},
-            handler: function(btn) {
-                showStatusMsg('Cancelling record...');
-                var t = Ext.getCmp('editorTabPanel').getActiveTab();
-                Ext.getCmp('editorTabPanel').getActiveTab().remove(t);
-                if( UI.lastWindowOpen  == 'savegrid' ) {
-                    biblios.app.displaySaveView();
-                }
-                else if( UI.lastWindowOpen  == 'searchgrid' ) {
-                    biblios.app.displaySearchView();
-                }
-                clear_editor(btn.editorid);
-                clearStatusMsg();
-            }
-        },
-        {
             cls: 'x-btn-icon',
             icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/trash', configDoc).text(),
             id: this.editorid+'TrashMenu',
