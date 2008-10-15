@@ -764,6 +764,7 @@ biblios.app = function() {
                                                                         if(bibliosdebug) {
                                                                             console.info('closing tab and freeing UI.editor' + tab.title);
                                                                         }
+                                                                        biblios.app.displayRecordView();
                                                                         delete UI.editor[ tab.editorid ];
                                                                     }
 
