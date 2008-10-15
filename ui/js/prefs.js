@@ -182,14 +182,21 @@ function getRemoteBibProfiles() {
 }
 
 function loadPlugins() {
+    biblios.app.numPlugins = DB.Plugins.select('enabled=1').toArray().length;
     DB.Plugins.select('enabled=1').each( function(plugin) {
-        $.getScript( libPath + plugin.file, function() {
+        $.getScript( libPath + plugin.file, function(data, textstatus) {
+            biblios.app.numPlugins--;
 
         });
     });
 }
 
 function setILSTargets() {
+    if( biblios.app.numPlugins > 0 ) {
+        setTimeout(function(){ 
+            setILSTargets()
+            }, 500);
+    }
 	// get remote ILS location names so we know when to ask remote ILS for record
 	DB.SendTargets.select().each( function(ils) {
 			if( ils.enabled == 0 ) {

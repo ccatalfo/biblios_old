@@ -173,6 +173,7 @@ biblios.app = function() {
                 biblios.app.initUI();
                 initPazPar2(pazpar2url);
                 loadPlugins();
+                setILSTargets();
             });
         }, 
 
@@ -2379,7 +2380,12 @@ biblios.app = function() {
                                                                                     try {
                                                                                     var instance = eval( initcall );
                                                                                         try {
-                                                                                            instance.init( record.data.url, record.data.name, record.data.user, record.data.password);
+                                                                                            instance.init( {
+                                                                                                url:record.data.url, 
+                                                                                                name:record.data.name, 
+                                                                                                user: record.data.user, 
+                                                                                                password: record.data.password
+                                                                                            });
                                                                                             instance.initHandler = function(sessionStatus) {
                                                                                                 if( sessionStatus != 'ok' ) {
                                                                                                     Ext.MessageBox.alert('Connection error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
@@ -2391,7 +2397,7 @@ biblios.app = function() {
                                                                                             };
                                                                                         }
                                                                                         catch(ex) {
-                                                                                            Ext.MessageBox.alert('Error', ex);
+                                                                                            Ext.MessageBox.alert('Error', ex.msg);
                                                                                         }
                                                                                     }
                                                                                     catch(ex) {
@@ -2477,14 +2483,6 @@ biblios.app = function() {
         });
 
 		treeEditor.render();
-        if( Ext.get('loadingtext') ) {
-            Ext.get('loadingtext').update('Setting up send targets');
-        }
-        setILSTargets.defer(2000);
-        if( Ext.get('loadingtext') ) {
-            Ext.get('loadingtext').update('Setting up search session');
-        }
-        
 
 		Ext.getCmp('tabpanel').activate(0);
         Ext.getCmp('splashpanel').getEl().update(mainsplash); 
