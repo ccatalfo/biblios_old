@@ -25,11 +25,17 @@ biblios.app = function() {
 	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
     // private functions
 	displaySearchView : function displaySearchView() {
-		Ext.getCmp('bibliocenter').layout.setActiveItem(0);
-		Ext.getCmp('resourcesPanel').expand();
-		openState = 'searchgrid';
-		displayHelpMsg(UI.messages.help.en.searchview);
-        Ext.getCmp('FoldersTreePanel').getSelectionModel().clearSelections();
+        if( Ext.getCmp('searchgrid').store.getCount() == 0 ) {
+            Ext.getCmp('splashpanel').getEl().update(searchingsplash);
+            Ext.getCmp('bibliocenter').layout.setActiveItem(3);
+        }
+        else {
+            Ext.getCmp('bibliocenter').layout.setActiveItem(0);
+            Ext.getCmp('resourcesPanel').expand();
+            openState = 'searchgrid';
+            displayHelpMsg(UI.messages.help.en.searchview);
+            Ext.getCmp('FoldersTreePanel').getSelectionModel().clearSelections();
+        }
 	}
 
 	displaySaveFile : function displaySaveFile(id) {
@@ -52,7 +58,13 @@ biblios.app = function() {
 	}
 
 	displayRecordView : function displayRecordView() {
-		Ext.getCmp('bibliocenter').layout.setActiveItem(1);
+        if( Ext.getCmp('editorTabPanel').items.length == 0 ) {
+            Ext.getCmp('splashpanel').getEl().update(editingsplash);
+            Ext.getCmp('bibliocenter').layout.setActiveItem(3);
+        }
+        else {
+            Ext.getCmp('bibliocenter').layout.setActiveItem(1);
+        }
 		openState = 'editorPanel';
 		//Ext.getCmp('helpPanel').collapse();
 		//Ext.getCmp('resourcesPanel').collapse();
@@ -392,6 +404,7 @@ biblios.app = function() {
                                                                                 
                                                                             },
                                                                             load: function(store, records, options) {
+                                                                                biblios.app.displaySearchView();
                                                                                 var xml = store.reader.xmlData;
                                                                                 var activeclients = $('activeclients', xml).text();
                                                                                 if( activeclients == '0' ) {
@@ -1118,7 +1131,12 @@ biblios.app = function() {
                                                                 html: '<div id="select"></div><div id="saveprevrecord"></div>'
                                                             } // savepanel south
                                                         ] // savepanel items
-                                                    } // savefilegrid region 
+                                                    }, // savefilegrid region 
+                                                    {
+                                                        region: 'center',
+                                                        layout: 'fit',
+                                                        id: 'splashpanel'
+                                                    },
                                                 ] // biblio tab center items
                                             }, // biblio tab center
                                             {
@@ -1178,16 +1196,21 @@ biblios.app = function() {
                                                                     icon: uiPath + 'ui/images/resources_parents/' + $('//ui/icons/resources_panel/searching', configDoc).text(),
                                                                     listeners: {
                                                                         load: function(tree) {										
-                                                                        tree.appendChild( new Ext.tree.TreeNode({
-                                                                            text: 'Edit Search Targets',
-                                                                            listeners: {
-                                                                                click: function(n) {
-                                                                                    Ext.getCmp('optionstab').show();
-                                                                                    Ext.getCmp('searchtargetstab').show();
+                                                                            tree.appendChild( new Ext.tree.TreeNode({
+                                                                                text: 'Edit Search Targets',
+                                                                                listeners: {
+                                                                                    click: function(n) {
+                                                                                        Ext.getCmp('optionstab').show();
+                                                                                        Ext.getCmp('searchtargetstab').show();
+                                                                                    }
                                                                                 }
-                                                                            }
-                                                                        }));
-                                                                    }
+                                                                            }));
+                                                                        },
+                                                                        click: function(node, e) {
+                                                                            Ext.getCmp('splashpanel').getEl().update(searchingsplash);
+                                                                            Ext.getCmp('bibliocenter').layout.setActiveItem(3);
+
+                                                                        }
                                                                     },
                                                                     loader: new Ext.ux.GearsTreeLoader({
                                                                         db: db, 
@@ -1327,7 +1350,8 @@ biblios.app = function() {
                                                                     expanded: true,
                                                                     listeners: {
                                                                         click: function(node, e) {
-                                                                            biblios.app.displaySaveView();
+                                                                            Ext.getCmp('splashpanel').getEl().update(folderssplash);
+                                                                            Ext.getCmp('bibliocenter').layout.setActiveItem(3);
                                                                             Ext.getCmp('savegridEditBtn').disable();
                                                                             Ext.getCmp('savegridExportBtn').disable();
                                                                             Ext.getCmp('savegridSendBtn').disable();
@@ -2462,6 +2486,8 @@ biblios.app = function() {
         
 
 		Ext.getCmp('tabpanel').activate(0);
+        Ext.getCmp('splashpanel').getEl().update(mainsplash); 
+        Ext.getCmp('bibliocenter').layout.setActiveItem(3);
         Ext.getCmp('facetsTreePanel').hide();
         } // end of init method
     }); // end of public biblios.app space

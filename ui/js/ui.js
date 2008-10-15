@@ -770,6 +770,9 @@ function completeInit() {
 	if( Ext.getCmp('facetsTreePanel') ) {
         Ext.getCmp('facetsTreePanel').hide();
     }
+
+    // show splash page
+
 	
     var mask = Ext.get('loading-mask');
     mask.setOpacity(.8);

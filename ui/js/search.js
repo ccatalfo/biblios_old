@@ -1,4 +1,5 @@
 function doSearch(form) {
+    Ext.getCmp('bibliocenter').layout.setActiveItem(0);
 	showStatusMsg('Searching...');
 	clearSearchLimits();
     Ext.get('searchprevrecord').update('');

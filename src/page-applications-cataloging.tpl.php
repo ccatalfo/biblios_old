@@ -86,6 +86,10 @@ _overflow-y: visible;
     var hostPort = '';
     var buildtime = '';
     var version = '0.9';
+    var mainsplash = '[% mainsplash %]';
+    var editingsplash = '[% editingsplash %]';
+    var folderssplash = '[% folderssplash %]';
+    var searchingsplash = '[% searchingsplash %]';
     var cgiDir = '[% cgiPath %]';
     var confPath = libPath + "conf/biblios.xml";
 </script>
