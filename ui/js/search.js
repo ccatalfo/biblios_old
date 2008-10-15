@@ -143,6 +143,8 @@ function getPazPar2Settings() {
 
 function setPazPar2Targets(callback) {
     showStatusMsg('Setting targets');
+    Ext.getCmp('TargetsTreePanel').disable();
+    Ext.getCmp('searchButton').disable();
     var settings = getPazPar2Settings();
     $.ajax({
         url: pazcgiurl, 
@@ -156,6 +158,8 @@ function setPazPar2Targets(callback) {
             this.callback(xml);
         }
     });
+    Ext.getCmp('TargetsTreePanel').enable();
+    Ext.getCmp('searchButton').enable();
     clearStatusMsg();
 }
 

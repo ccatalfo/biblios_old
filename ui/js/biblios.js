@@ -275,6 +275,8 @@ biblios.app = function() {
                                             },
                                             new Ext.Button({
                                                 border:false,
+                                                id:'searchButton',
+                                                disabled:true,
                                                 hideLabel:true,
                                                 text:'Search',
                                                 handler: function() {
@@ -1158,6 +1160,8 @@ biblios.app = function() {
                                                                 autoScroll: true,
                                                                 leaf: false,
                                                                 lines: false,
+                                                                maskDisabled:true,
+                                                                disabled:true,
                                                                 listeners: {
                                                                     click: function(node, e) {
                                                                         biblios.app.displaySearchView();
