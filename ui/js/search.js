@@ -141,21 +141,19 @@ function getPazPar2Settings() {
 	}
 }
 
-function setPazPar2Targets(callback) {
+function setPazPar2Targets() {
     showStatusMsg('Setting targets');
     Ext.getCmp('TargetsTreePanel').disable();
     Ext.getCmp('searchButton').disable();
     var settings = getPazPar2Settings();
     $.ajax({
         url: pazcgiurl, 
-        callback:callback,
         data: {
             action:'settings', 
             settings: Ext.util.JSON.encode(settings)
         },
         method: 'POST',
         success: function(xml, status) {
-            this.callback(xml);
         }
     });
     Ext.getCmp('TargetsTreePanel').enable();
