@@ -1979,13 +1979,10 @@ MarcEditor.prototype.getToolBar = function() {
             text: 'Revert',
             tooltip: {text: 'Revert record to last saved state'},
             handler: function(btn) {
-                var progress = Ext.MessageBox.progress('Reverting record to last saved state', '');
+                showStatusMsg('Reverting record');
                 var id = UI.editor[ btn.editorid].id;
                 var xml = getLocalXml(id);
-                openRecord( xml, id, 'marcxml' );
-                progress.updateProgress(1, 'Revert complete');
-                progress.hide();
-                showStatusMsg('Record reverted');
+                UI.editor[btn.editorid].record.loadXml(xml,handle_html);
                 clearStatusMsg();
             }
         },
