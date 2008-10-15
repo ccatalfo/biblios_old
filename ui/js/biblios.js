@@ -160,6 +160,7 @@ biblios.app = function() {
             loadConfig(confPath, function() {
                 biblios.app.initUI();
                 initPazPar2(pazpar2url);
+                loadPlugins();
             });
         }, 
 
