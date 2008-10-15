@@ -78,7 +78,7 @@ GearsORMShift.rules = [
 				allowDrag: 0,
 				allowDrop: 0,
 				ddGroup: null,
-				icon: libPath + 'ui/images/user-trash.png',
+				icon: 'ui/images/toolbar/trash.png',
 				date_added: 'datetime("now", "localtime"',
 				date_mofified: 'datetime("now", "localtime"'
 			}).save();
