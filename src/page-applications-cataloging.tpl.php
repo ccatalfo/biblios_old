@@ -96,7 +96,7 @@ _overflow-y: visible;
 	Ext.get('loadingtext').update('Checking for Google Gears');
   if (!window.google || !google.gears) {
 	Ext.get('loadingtext').update('<p>Unable to load Google Gears.</p><p>Please visit the following url to install:</p><p><a target="_blank" href="http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application">Install Google Gears</a></p>');
-	//location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
+	location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
                     "&return="+location.href;
   }
 </script>
