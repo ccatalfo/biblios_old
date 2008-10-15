@@ -508,7 +508,7 @@ biblios.app = function() {
                                                                     var loc = rec.data.location;
                                                                     var id = rec.id;	
                                                                     biblios.app.fireEvent('remoterecordretrieve', rec.data.fullrecord);
-                                                                    openRecord( xml, '', xmlformat ); 
+                                                                    openRecord( xml, '', xmlformat, '' ); 
                                                                 },
                                                                 listeners: {
                                                                     render: function() {
@@ -570,7 +570,7 @@ biblios.app = function() {
                                                                         var loc = record.data.location[0].name;
                                                                         var xmlformat = 'marcxml';
                                                                         biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
-                                                                        openRecord( record.data.fullrecord,  '', xmlformat ); 
+                                                                        openRecord( record.data.fullrecord,  '', xmlformat, '' ); 
                                                                     },
                                                                     keypress: function(e) {
                                                                       if( e.getKey() == Ext.EventObject.ENTER ) {
@@ -579,7 +579,7 @@ biblios.app = function() {
                                                                         var xmlformat = 'marcxml';
                                                                           
                                                                         biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
-                                                                        openRecord( record.data.fullrecord,  '', xmlformat); 
+                                                                        openRecord( record.data.fullrecord,  '', xmlformat, ''); 
                                                                             
                                                                         }	
                                                                     } // on ENTER keypress
@@ -891,10 +891,10 @@ biblios.app = function() {
                                                                             } // ENTER
                                                                         } // savegrid keypress
                                                                     }, // save grid listeners
-                                                                    editRecord: function(id) {
+                                                                    editRecord: function(id, savefileid) {
                                                                         showStatusMsg('Opening record...');
                                                                         var xml = getLocalXml(id);
-                                                                        openRecord( xml,  id, 'marcxml');
+                                                                        openRecord( xml,  id, 'marcxml', savefileid);
                                                                     },
                                                                     tbar: new Ext.PagingToolbar({
                                                                         id: 'savegridtbar',
@@ -922,8 +922,10 @@ biblios.app = function() {
                                                                                     UI.editor.loading.numLoaded = 0;
                                                                                     if( checked.length > 0 && checked.length < 11) {
                                                                                         UI.editor.loading.numToLoad = checked.length;  
+                                                                                        var savefileid = checked[i].data.Savefiles_id;
+                                                                                        var recid = checked[i].data.Id;
                                                                                         for( var i = 0; i < checked.length; i++) {
-                                                                                            savegrid.editRecord( checked[i].data.Id );
+                                                                                            savegrid.editRecord( recid, savefileid );
                                                                                         }
                                                                                     }
                                                                                     else if (checked.length > 10 ) {
@@ -933,7 +935,8 @@ biblios.app = function() {
                                                                                     else if( selections.length > 0) {
                                                                                         UI.editor.loading.numToLoad = selections.length;
                                                                                         for( var j = 0; j < selections.length; j++) {
-                                                                                            savegrid.editRecord( selections[j].data.Id );
+                                                                                            var savefileid = selections[j].data.Savefiles_id;
+                                                                                            savegrid.editRecord( selections[j].data.Id, savefileid );
                                                                                         }
                                                                                     }
                                                                                     else if( checked.length == 0 && selections.length == 0){

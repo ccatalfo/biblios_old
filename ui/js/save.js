@@ -34,6 +34,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
                 var searchtargetname = data.location[0].name;
                 var searchtargetsid = DB.SearchTargets.select('name=?', [searchtargetname]).getOne().rowid;
 				progress.updateProgress(.6, 'Retrieving record from server');
+                UI.editor[editorid].savefileid = savefileid;
                 var record = new DB.Records({
                     title: UI.editor[editorid].record.getTitle() || '',
                     author: UI.editor[editorid].record.getAuthor() || '',
@@ -73,6 +74,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 					record.status = 'edited';
 					record.date_modified = new Date().toString();
 					record.save();
+                    UI.editor[editorid].savefileid = savefileid;
 					if(bibliosdebug) { 
 						console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
 				}

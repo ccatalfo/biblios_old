@@ -12,7 +12,7 @@
    None.
 
 */
-function openRecord(xml, recid, syntax) {
+function openRecord(xml, recid, syntax, savefileid) {
 	// we need to display record view first since editors are lazily rendered
 	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
@@ -40,7 +40,7 @@ function openRecord(xml, recid, syntax) {
             ffed: '',
             vared : '',
             savedRemote : {},
-            savefileid: '',
+            savefileid: savefileid,
             record : '',
             comboboxes : new Array(),
             location: ''

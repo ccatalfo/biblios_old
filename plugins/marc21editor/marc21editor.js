@@ -1976,6 +1976,7 @@ MarcEditor.prototype.getToolBar = function() {
             icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/revert', configDoc).text(),
             id: this.editorid+'RevertBtn',
             editorid: this.editorid,
+            disabled: UI.editor[this.editorid].savefileid ? false : true,
             text: 'Revert',
             tooltip: {text: 'Revert record to last saved state'},
             handler: function(btn) {
@@ -1995,6 +1996,8 @@ MarcEditor.prototype.getToolBar = function() {
             tooltip: {text: 'Cancel editing of this record (losing all changes since saving)'},
             handler: function(btn) {
                 showStatusMsg('Cancelling record...');
+                var t = Ext.getCmp('editorTabPanel').getActiveTab();
+                Ext.getCmp('editorTabPanel').getActiveTab().remove(t);
                 if( UI.lastWindowOpen  == 'savegrid' ) {
                     biblios.app.displaySaveView();
                 }
