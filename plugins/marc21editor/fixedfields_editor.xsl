@@ -260,8 +260,8 @@
 		<xsl:param name="tag"/>
 		<xsl:param name="tagnumber"/>
 		<xsl:param name="offset">0</xsl:param>
-		<xsl:param name="position"><xsl:value-of select="$marc21defs//value[@name=$name]/@position"/></xsl:param>
-		<xsl:param name="length"><xsl:value-of select="$marc21defs//value[@name=$name]/@length"/></xsl:param>
+		<xsl:param name="position"><xsl:value-of select="$marc21defs//field[@tag=$tagnumber]//value[@name=$name]/@position"/></xsl:param>
+		<xsl:param name="length"><xsl:value-of select="$marc21defs//field[@tag=$tagnumber]//value[@name=$name]/@length"/></xsl:param>
 		<xsl:param name="value"><xsl:value-of select="substring($tag, $position+1-$offset, $length)"/></xsl:param>
 		<!--<p>param name is <xsl:value-of select="$name"/></p>
 		<p>Leader value is <xsl:value-of select="$value"/></p>-->
@@ -273,7 +273,7 @@
 				<xsl:attribute name='onblur'>onFixedFieldEditorBlur(this)</xsl:attribute>
 				<xsl:attribute name='onclick'>showTagHelp(this)</xsl:attribute>
 				<xsl:attribute name="id"><xsl:value-of select="$name"/></xsl:attribute>
-				<xsl:for-each select="$marc21defs//value[@name=$name]/option">
+				<xsl:for-each select="$marc21defs//field[@tag=$tagnumber]//value[@name=$name]/option">
 					<xsl:element name="option">
 						<xsl:if test="$value=.">
 							<xsl:attribute name="selected">selected</xsl:attribute>
