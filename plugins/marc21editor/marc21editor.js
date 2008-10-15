@@ -1351,7 +1351,16 @@ function setupFFEditorCtryCombo() {
 
 			// insert the new field in numerical order among the existing tags
 			var tags = $(".tag",editorelem  );
-			var tagToInsertAfter = $(UI.editor[editorid].lastFocusedEl).parents('.tag'); // the tag just before where we'll insert the new tag
+            var tagToInsertAfter = '';
+            if( $(UI.editor[editorid].lastFocusedEl).parents('.tag').length == 0 ) {
+                tagToInsertAfter = $('.tag', editorelem).eq(0);
+            }
+            else {  
+                tagToInsertAfter = $(UI.editor[editorid].lastFocusedEl).parents('.tag'); // the tag just before where we'll insert the new tag
+            }
+            if(bibliosdebug) {
+                console.debug('addField: adding to ' + tagToInsertAfter);
+            }
 			var highestSuffix = 1; // highest number appended to tag id's with this tag number.  Add 1 to it to get suffix for new tag
 			var newSuffix = tags.length +1;
 			for( var i = 0; i<tags.length; i++) {
@@ -1431,7 +1440,16 @@ function setupFFEditorCtryCombo() {
             tagToAddTo = tag; 
         }
         else {
-            tagToAddTo = $(UI.editor[editorid].lastFocusedEl).parents('.tag').children('.tagnumber').val();
+            if( $(UI.editor[editorid].lastFocusedEl).parents('.tag').children('.tagnumber').length == 0 ) {
+                Ext.Msg.alert('Error', "Please click in the subfield you'd like to add a subfield after and then re-run this command");
+                return false;
+            }
+            else {  
+                tagToAddTo = $(UI.editor[editorid].lastFocusedEl).parents('.tag').children('.tagnumber').val();
+            }
+        }
+        if(bibliosdebug) {
+            console.debug('addSubfield: adding to ' + tagToAddTo);
         }
 		var numsf = $('div[@id^='+tagToAddTo+']', editorelem).eq(indexOfTag).find('.subfield-text').length;
 		var lastsf = $('div[@id^='+tagToAddTo+']',editorelem ).eq(indexOfTag).find('.subfield-text').eq(numsf-1);
