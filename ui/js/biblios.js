@@ -2027,8 +2027,8 @@ biblios.app = function() {
                                                                         sm: (sm =new Ext.grid.SmartCheckboxSelectionModel({
                                                                             dataIndex:'enabled',
                                                                             alwaysSelectOnCheck: true,
-                                                                            email:true
-
+                                                                            email:true,
+                                                                            header: '',
                                                                         })),
                                                                         cm: new Ext.grid.ColumnModel([
                                                                             sm,
@@ -2237,7 +2237,8 @@ biblios.app = function() {
                                                                         sm: (sm =new Ext.grid.SmartCheckboxSelectionModel({
                                                                             dataIndex:'enabled',
                                                                             alwaysSelectOnCheck: true,
-                                                                            email:true
+                                                                            email:true,
+                                                                            header: '',
                                                                         })),
                                                                         cm: new Ext.grid.ColumnModel([
                                                                             sm,
