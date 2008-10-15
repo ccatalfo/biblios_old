@@ -1,7 +1,8 @@
 // load in MarcRecord from plugins
 $.getScript(libPath + 'plugins/marc21editor/marcrecord.js');
 // load in marc21 config files (xml data)
-
+showStatusMsg('Loading marc21 editor files');
+Ext.getCmp('editingTreePanel').disable();
 var showMarcXslPath = libPath + "plugins/marc21editor//marcxmlpreview.xsl";
 var fixedFieldXslPath = libPath + "plugins/marc21editor/fixedfields_editor.xsl";
 var varFieldsXslPath = libPath + "plugins/marc21editor/varfields_inputboxes.xsl";
@@ -20,6 +21,9 @@ var marc21ctrydefs = xslTransform.loadFile(marc21ctrydefsPath);
 var marc21varfields = xslTransform.loadFile(marc21varfieldsPath);
 var marc21controlfields = xslTransform.loadFile(marc21controlfieldsPath);
 
+showStatusMsg('Loading marc21 editor complete');
+clearStatusMsg();
+Ext.getCmp('editingTreePanel').enable();
 /*
     Function: getLeaderFromEditor
 

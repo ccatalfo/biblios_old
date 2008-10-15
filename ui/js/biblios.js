@@ -1137,6 +1137,8 @@ biblios.app = function() {
                                                                 autoScroll: true,
                                                                 leaf: false,
                                                                 expanded: true,
+                                                                maskDisabled:true,
+                                                                disabled:true,
                                                                 root: new Ext.tree.AsyncTreeNode({
                                                                     text: 'Editing',	
                                                                     loader: new Ext.tree.TreeLoader({}),
