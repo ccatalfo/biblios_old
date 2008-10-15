@@ -144,21 +144,18 @@ function getPazPar2Settings() {
 function setPazPar2Targets(callback) {
     showStatusMsg('Setting targets');
     var settings = getPazPar2Settings();
-    for( var i = 0; i < settings.length; i++) {
-        var s = settings[i];
-        $.ajax({
-            url: pazcgiurl, 
-            callback:callback,
-            data: {
-                action:'settings', 
-                settings: Ext.util.JSON.encode([s])
-            },
-            method: 'POST',
-            success: function(xml, status) {
-                this.callback(xml);
-            }
-        });
-    }
+    $.ajax({
+        url: pazcgiurl, 
+        callback:callback,
+        data: {
+            action:'settings', 
+            settings: Ext.util.JSON.encode(settings)
+        },
+        method: 'POST',
+        success: function(xml, status) {
+            this.callback(xml);
+        }
+    });
     clearStatusMsg();
 }
 

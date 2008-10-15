@@ -224,7 +224,7 @@ sub settings {
         $uri->query_param( $setting => $settings->{$setting} );
     }
     warn $uri;
-    my $response = $self->{'ua'}->get($uri);
+    my $response = $self->{'ua'}->post($uri);
     if ($response->is_success) {
         return $response->content;
     } else {
