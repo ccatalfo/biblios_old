@@ -538,7 +538,7 @@ biblios.app = function() {
                                                                     },
                                                                     
                                                                     headerclick: function(grid, colIndex, event) {
-                                                                        var colName = Ext.getCmp('searchgrid').getColumnModel().getColumnById(colIndex).dataIndex;
+                                                                        var colName = grid.getColumnModel().getColumnById(colIndex).dataIndex;
                                                                         var reqName = '';
                                                                         var dir = UI.search.currentSort.dir ? 0 : 1; 
                                                                         switch(colName) {
@@ -557,7 +557,8 @@ biblios.app = function() {
                                                                         }
                                                                         UI.search.currentSort.field = reqName;
                                                                         UI.search.currentSort.dir = dir;
-                                                                        Ext.getCmp('searchgrid').store.load({params:{ start: biblios.app.paz.currentStart, num: 20, sort: reqName + ':' + dir}});
+                                                                        var start = Ext.getCmp('searchgrid').store.lastOptions.params ? Ext.getCmp('searchgrid').store.lastOptions.params.start : 0;
+                                                                        Ext.getCmp('searchgrid').store.load({params:{ start: start, num: 15, sort: reqName + ':' + dir}});
                                                                         return false;
                                                                     }, // headerclick handler
                                                                     rowdblclick: function(grid, rowindex, e) {
