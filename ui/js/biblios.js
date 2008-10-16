@@ -1146,15 +1146,18 @@ biblios.app = function() {
                                                 split: true,
                                                 collapsible: true,
                                                 collapsed: false,
-                                                width: 200,
-                                                maxSize: 200,
-                                                height: 500,
+                                                maxSize: 300,
+                                                width:280,
+                                                height: 'auto',
+                                                autoScroll:true,
                                                 title: 'Resources',
                                                 headerAsText:false,
                                                 layout: 'border',
                                                 id: 'resourcesPanel',
                                                 items: [
                                                     {
+                                                        height: 'auto',
+                                                        autoScroll:true,
                                                         region: 'center',
                                                         items: 
                                                         [
@@ -1181,7 +1184,6 @@ biblios.app = function() {
                                                             new Ext.tree.TreePanel({
                                                                 id: 'TargetsTreePanel',
                                                                 animate: true,
-                                                                autoScroll: true,
                                                                 leaf: false,
                                                                 lines: false,
                                                                 maskDisabled:true,
@@ -1309,7 +1311,6 @@ biblios.app = function() {
                                                             new Ext.tree.TreePanel({
                                                                 id: 'facetsTreePanel',
                                                                 animate: true,
-                                                                autoScroll: true,
                                                                 leaf: false,
                                                                 lines: false,
                                                                 applyLoader: false,
@@ -1336,7 +1337,6 @@ biblios.app = function() {
                                                             new Ext.tree.TreePanel({
                                                                 id: 'FoldersTreePanel',
                                                                 leaf: false,
-                                                                autoScroll: true,
                                                                 animate: true,
                                                                 expanded: true,
                                                                 enableDD: true,
