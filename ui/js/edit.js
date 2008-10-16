@@ -30,7 +30,7 @@ function openRecord(xml, recid, syntax, savefileid) {
             title: '', 
             id: tabid,
             closable:true, 
-            html:{ tag: 'div', id: editorid, class: 'marceditor' },
+            html:{ tag: 'div', id: editorid, cls: 'marceditor' },
             listeners: {
             }
         }).show()
