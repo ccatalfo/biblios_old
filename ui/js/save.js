@@ -75,7 +75,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
                     author: UI.editor[editorid].record.getAuthor() || '',
                     location: data.location[0].name || '',
                     publisher:UI.editor[editorid].record.getPublisher() || '',
-                    medium: data.medium || '',
+                    medium: UI.editor[editorid].record.getFormat(),
                     date:UI.editor[editorid].record.getDate() || '',
                     status: 'new',
                     xml: xml,
@@ -104,6 +104,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 						record.publisher = UI.editor[editorid].record.getPublisher() || '';
 						record.dateofpub = UI.editor[editorid].record.getDate() || '';
 					}
+                    record.medium = UI.editor[editorid].record.getFormat();
 					record.xml = xml;
 					record.Savefiles_id = savefileid;
 					record.status = 'edited';
@@ -208,7 +209,7 @@ function addRecordFromSearch(srchRecord, savefileid, editorid) {
 				author: UI.editor[editorid]? UI.editor[editorid].record.getAuthor():  srchRecord.data.author || '',
 				location: srchRecord.data.location[0].name || '',
 				publisher:UI.editor[editorid]?  UI.editor[editorid].record.getPublisher(): srchRecord.data.publication || '',
-				medium: srchRecord.data.medium || '',
+				medium: UI.editor[editorid] ? UI.editor[editorid].record.getFormat() : srchRecord.data.medium || '',
 				date:UI.editor[editorid]?  UI.editor[editorid].record.getDate(): srchRecord.data.date|| '',
 				status: 'new',
 				xml: xml,

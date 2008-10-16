@@ -1662,6 +1662,11 @@ function setupFFEditorCtryCombo() {
 		return htmled;
 	};
 
+    this._getFormat = function() {
+        var xmldoc = UI.editor[editorid].record.XML();
+        return UI.editor[editorid].record.detectFormat(xmldoc);
+    }
+
 }
 // Public methods 
 MarcEditor.prototype.reformatFixedFieldsEditor = function() {
@@ -1701,6 +1706,10 @@ MarcEditor.prototype.focusSubfield = function(tag, subfield) {
 MarcEditor.prototype.addField = function(tag, ind1, ind2, subfields) {
 	this._addField(tag, ind1, ind2, subfields);
 };
+
+MarcEditor.prototype.getFormat = function() {
+    return this._getFormat();
+}
 
 MarcEditor.prototype.deleteField = function(editorid, tagnumber, i) {
 	this._deleteField(editorid, tagnumber, i);
@@ -1839,6 +1848,43 @@ MarcEditor.prototype.getToolsMenu = function getToolsMenu() {
             }
     ];
 } // getToolsMenu
+
+MarcEditor.prototype.detectFormat = function(xmldoc) {
+    var leader = $('leader', xmldoc).text();
+    var leader6 = leader.substr(6,1);
+    var leader7 = leader.substr(7,1);
+    var format = '';
+    if( leader6 == 'a') {
+        if(leader7 == 'a' || leader7 == 'c' || leader7 == 'd' || leader7 == 'm' ) {
+            format = 'book';
+        }
+        else if(leader7 == 'b' || leader7 == 'i' || leader7 == 's') {
+            format == 'continuing';
+        }
+    }
+    else if(leader6 == 't') {
+        format = 'book';
+    }
+    else if(leader6 == 'p') {
+        format = 'mixed';
+    }
+    else if(leader6 == 'm') {
+        format = 'computer file';
+    }
+    else if(leader6 == 'c' || leader6 == 'd') {
+        format = 'score';
+    }
+    else if(leader6 == 'e' || leader6 == 'f') {
+        format = 'map';
+    }
+    else if(leader6 == 'i' || leader6 == 'j') {
+        format = 'recording';
+    }
+    else if(leader6 == 'g' || leader6 == 'k' || leader6 == 'o' || leader6 == 'r') {
+        format = 'visual';
+    }
+    return format; 
+}
 
 MarcEditor.prototype.getToolBar = function() {
 
