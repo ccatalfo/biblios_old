@@ -1081,7 +1081,7 @@ biblios.app = function() {
                                                                                 icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/trash', configDoc).text(),
                                                                                 tooltip: {text: 'Move selected records to trash'},
                                                                                 handler: function() {
-                                                                                    doSaveLocal(1, 'savegrid');
+                                                                                    doMoveRecords(1);
                                                                                     biblios.app.displaySaveFile( UI.currSaveFile );
                                                                                 }
                                                                             },

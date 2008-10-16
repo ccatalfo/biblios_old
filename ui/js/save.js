@@ -23,10 +23,14 @@ function doMoveRecords(savefileid) {
     clearStatusMsg();
 }
 
+function updateLeaderToUnicode(xmldoc) {
+    var leader = $('leader', xmldoc).text();
+    newleader = leader.substr(0,6)+' ' +leader.substr(7);
+    $('leader', xmldoc).text(newleader);
+    return xmldoc;
+}
+
 function doSaveLocal(savefileid, editorid, offset, dropped ) {
-    if( !biblios.app.fireEvent('beforesaverecord', savefileid, editorid, offset, dropped) ) {
-        return false;
-    }
 		var recoffset = offset || 0;
 		if( !savefileid ) {
 			if(bibliosdebug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" );}
@@ -41,7 +45,14 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 			UI.editor[editorid].record.update();
 			var progress = Ext.MessageBox.progress('Saving record');
 			// transform edited record back into marcxml
-			xml = UI.editor[editorid].record.XMLString();
+            var xmldoc = UI.editor[editorid].record.XML();
+            // update leader/06 to 'a' because this record is definitely unicode
+            var xmldocUpdated = updateLeaderToUnicode(xmldoc);
+            var xml = xslTransform.serialize(xmldocUpdated);
+            if( !biblios.app.fireEvent('beforesaverecord', savefileid, xmldocUpdated) ){
+                progress.hide();
+                return false;
+            }
 			progress.updateProgress(.5, 'Extracing marcxml');
 			var recid = UI.editor[editorid].id;
 			// if we don't have a record id, add this record to the db first
@@ -114,10 +125,8 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 			progress.hide();
 			return true;
 		} // save record from marc editor
-		// if we're picking from the savefile grid 
 
-		// if we're picking from the search grid
-		else if( openState == 'searchgrid' ) {
+		if( openState == 'searchgrid' ) {
 			
 				var records = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
 				
@@ -191,6 +200,9 @@ function addRecordFromSearch(srchRecord, savefileid, editorid) {
 		try {
 			var target = DB.SearchTargets.select('name=?', [srchRecord.data.location[0].name]).getOne();
 			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [savefileid]).getOne();
+            var xmldocOrig = xslTransform.loadString( srchRecord.data.fullrecord );
+            var xmlUpdated = updateLeaderToUnicode(xmldocOrig);
+            var xml = xslTransform.serialize(xmlUpdated);
 			var record = new DB.Records({
 				title: UI.editor[editorid]? UI.editor[editorid].record.getTitle() : srchRecord.data.title || '',
 				author: UI.editor[editorid]? UI.editor[editorid].record.getAuthor():  srchRecord.data.author || '',
@@ -199,7 +211,7 @@ function addRecordFromSearch(srchRecord, savefileid, editorid) {
 				medium: srchRecord.data.medium || '',
 				date:UI.editor[editorid]?  UI.editor[editorid].record.getDate(): srchRecord.data.date|| '',
 				status: 'new',
-				xml: srchRecord.data.fullrecord,
+				xml: xml,
 				date_added: new Date().toString(),
 				date_modified: new Date().toString(),
 				SearchTargets_id: target.rowid,
@@ -397,7 +409,12 @@ function getSaveFileMenuItems(recordSource) {
 			handler: function(btn) {
 				var savefileid = btn.id;
 				var editorid = btn.recordSource;
-				doMoveRecords(savefileid);
+                if( btn.recordSource == 'savegrid' ) {
+                    doMoveRecords(savefileid);
+                }
+                else {
+                    doSaveLocal(savefileid, editorid);
+                }
 			}
 		};
 		list.push(o);

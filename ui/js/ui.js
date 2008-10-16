@@ -590,7 +590,8 @@ function doUploadMarc(dialog, filename, resp_data) {
         var uploadProgress = Ext.Msg.progress('Uploading records', 'Retrieving and formatting records', '0%');
         var uploadfileid = DB.Savefiles.select('name=?',['Uploads']).getOne().rowid; 
         for (var i = 0; i < $('record', data).length; i++) {
-            var xml = $('record', data).eq(i);
+            var xmlorig = $('record', data).eq(i);
+            var xml = updateLeaderToUnicode(xmlorig);
 			var title = $(xml).find('datafield[@tag=245] subfield[@code=a]', data).text();
             var ratio = i / numToLoad;
             // retrieve medium entered into 999 field by uploadMarc script
