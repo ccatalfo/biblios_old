@@ -162,19 +162,24 @@ biblios.app = function() {
 		},
 
         init: function() {
-            if( Ext.get('loadingtext') ) {
-                Ext.get('loadingtext').update('Loading database');
+            if( Ext.isSafari || Ext.isOpera || Ext.isLinux) {
+                Ext.get('biblios').update('<p>Your web browser, Safari, is not yet supported by Google Gears.  Please use Firefox or Internet Explorer to access.</p>'); 
             }
-            init_gears();
-            if( Ext.get('loadingtext') ) {
-                Ext.get('loadingtext').update('Loading settings');
+            else {
+                if( Ext.get('loadingtext') ) {
+                    Ext.get('loadingtext').update('Loading database');
+                }
+                init_gears();
+                if( Ext.get('loadingtext') ) {
+                    Ext.get('loadingtext').update('Loading settings');
+                }
+                loadConfig(confPath, function() {
+                    biblios.app.initUI();
+                    initPazPar2(pazpar2url);
+                    loadPlugins();
+                    setILSTargets();
+                });
             }
-            loadConfig(confPath, function() {
-                biblios.app.initUI();
-                initPazPar2(pazpar2url);
-                loadPlugins();
-                setILSTargets();
-            });
         }, 
 
         initUI: function() {
