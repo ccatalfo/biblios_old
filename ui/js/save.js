@@ -25,7 +25,7 @@ function doMoveRecords(savefileid) {
 
 function updateLeaderToUnicode(xmldoc) {
     var leader = $('leader', xmldoc).text();
-    newleader = leader.substr(0,6)+' ' +leader.substr(7);
+    var newleader = leader.substr(0,9)+'a' +leader.substr(10);
     $('leader', xmldoc).text(newleader);
     return xmldoc;
 }
