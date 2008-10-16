@@ -24,7 +24,7 @@ biblios.app = function() {
 	editor.record = {};
 	var savefileSelectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
     // private functions
-	displaySearchView : function displaySearchView() {
+	function displaySearchView() {
         if( Ext.getCmp('searchgrid').store.getCount() == 0 ) {
             Ext.getCmp('splashpanel').getEl().update(searchingsplash);
             Ext.getCmp('bibliocenter').layout.setActiveItem(3);
@@ -38,7 +38,7 @@ biblios.app = function() {
         }
 	}
 
-	displaySaveFile : function displaySaveFile(id) {
+	function displaySaveFile(id) {
         Ext.getCmp('savegridSelectAllTbar').hide();
 		if( (biblios.app.selectedRecords.savefileid == id) && (biblios.app.selectedRecords.loading == true) ) {
 			Ext.getCmp('savegrid').el.mask('Loading remote records...');
@@ -57,7 +57,7 @@ biblios.app = function() {
 		displayHelpMsg(UI.messages.help.en.saveview);
 	}
 
-	displayRecordView : function displayRecordView() {
+	function displayRecordView() {
         if( Ext.getCmp('editorTabPanel').items.length == 0 ) {
             Ext.getCmp('splashpanel').getEl().update(editingsplash);
             Ext.getCmp('bibliocenter').layout.setActiveItem(3);
@@ -73,7 +73,7 @@ biblios.app = function() {
         Ext.getCmp('TargetsTreePanel').getSelectionModel().clearSelections();
 	}
 
-	displaySaveView: function displaySaveView() {
+	function displaySaveView() {
 		Ext.getCmp('bibliocenter').layout.setActiveItem(2);
 		Ext.getCmp('resourcesPanel').expand();
         Ext.get('saveprevrecord').update('');
@@ -82,7 +82,7 @@ biblios.app = function() {
         Ext.getCmp('TargetsTreePanel').getSelectionModel().clearSelections();
 	}
 	
-	showStatusMsg : function showStatusMsg(msg) {
+	function showStatusMsg(msg) {
 
 	}
 
@@ -265,7 +265,7 @@ biblios.app = function() {
                                                 }
                                             }),
                                             {
-                                                text: '  ',
+                                                text: '  '
                                             },
                                             new Ext.form.ComboBox({
                                                 id:'searchtypeCombo',
@@ -281,11 +281,11 @@ biblios.app = function() {
                                                 typeAhead:true,
                                                 mode:'local',
                                                 forceSelection:true,
-                                                triggerAction:'all',
+                                                triggerAction:'all'
                                             }),
                                             '-',
                                             {
-                                                text: '  ',
+                                                text: '  '
                                             },
                                             new Ext.Button({
                                                 border:false,
@@ -299,7 +299,7 @@ biblios.app = function() {
                                             }),
                                             '-',
                                             {
-                                                text: '  ',
+                                                text: '  '
                                             },
                                             new Ext.form.ComboBox({
                                                 id:'searchlocCombo',
@@ -315,7 +315,7 @@ biblios.app = function() {
                                                 typeAhead:true,
                                                 mode:'local',
                                                 forceSelection:true,
-                                                triggerAction:'all',
+                                                triggerAction:'all'
                                             })
                                         ],
                                         items: [
@@ -838,7 +838,7 @@ biblios.app = function() {
                                                                         {header: "DateOfPub", width: 80, dataIndex: 'DateOfPub', sortable: true},
                                                                         {header: "Status", width: 100, dataIndex: 'Status', sortable: true},
                                                                         {header: "Date Added", width: 120, dataIndex: 'Date Added', sortable: true},
-                                                                        {header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true},
+                                                                        {header: "Last Modified", width: 120, dataIndex: 'Last Modified', sortable: true}
                                                                     ]),
                                                                     checkAllOnLoad: function() {
                                                                         this.getSelectionModel().checkAllInStore();
@@ -1138,7 +1138,7 @@ biblios.app = function() {
                                                         region: 'center',
                                                         layout: 'fit',
                                                         id: 'splashpanel'
-                                                    },
+                                                    }
                                                 ] // biblio tab center items
                                             }, // biblio tab center
                                             {
@@ -1316,7 +1316,7 @@ biblios.app = function() {
                                                                 loader: this.facetsTreeLoader,
                                                                 root: new Ext.tree.AsyncTreeNode({
                                                                     text: 'Facets',
-                                                                    icon: uiPath + 'ui/images/resources_parents/' + $('//ui/icons/resources_panel/facets', configDoc).text(),
+                                                                    icon: uiPath + 'ui/images/resources_parents/' + $('//ui/icons/resources_panel/facets', configDoc).text()
                                                                 }),
                                                                 listeners: {
                                                                     checkchange: function(node, checked) {
@@ -1582,7 +1582,7 @@ biblios.app = function() {
                                                                         }
                                                                     } // save folder tree context menu
                                                                 }
-                                                            }), // resources treepanel with treeeditor applied
+                                                            }) // resources treepanel with treeeditor applied
                                                         ] // tree panel items
                                                     } // center region of sidebar
                                                 ] // resources panel items
@@ -1874,7 +1874,7 @@ biblios.app = function() {
                                                             }, // activate search targets grid tab
                                                             beforeshow: function(tab){
                                                                 this.refresh();
-                                                            }, // show tab
+                                                            } // show tab
                                                         }, // search targets grid tab listeners
                                                         refresh: function() {
                                                             Ext.getCmp('searchtargetsgrid').store.load({db:db,selectSql:biblios.app.db.selectSqlSearchTargets});
@@ -2054,7 +2054,7 @@ biblios.app = function() {
                                                                             dataIndex:'enabled',
                                                                             alwaysSelectOnCheck: true,
                                                                             email:true,
-                                                                            header: '',
+                                                                            header: ''
                                                                         })),
                                                                         cm: new Ext.grid.ColumnModel([
                                                                             sm,
@@ -2264,7 +2264,7 @@ biblios.app = function() {
                                                                             dataIndex:'enabled',
                                                                             alwaysSelectOnCheck: true,
                                                                             email:true,
-                                                                            header: '',
+                                                                            header: ''
                                                                         })),
                                                                         cm: new Ext.grid.ColumnModel([
                                                                             sm,

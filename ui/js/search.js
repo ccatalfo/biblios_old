@@ -204,7 +204,7 @@ function getPazRecord(recId, offset, callback, callbackParamObject) {
 				url: pazcgiurl,
 				data: {
 					records: Ext.util.JSON.encode(recordsjson),
-					action: 'recid',
+					action: 'recid'
 				},
 				type: 'GET',
 				dataType: 'xml',

@@ -42,6 +42,10 @@
     var openOnLoadRecId = '[% openOnLoadRecId %]';
     var confPath = libPath + "conf/biblios.xml";
     var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
+    var mainsplash = '[% mainsplash %]';
+    var editingsplash = '[% editingsplash %]';
+    var folderssplash = '[% folderssplash %]';
+    var searchingsplash = '[% searchingsplash %]';
 </script>
     [% IF debug %]
     <!-- firebug lite -->
@@ -106,7 +110,6 @@
 			Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs2/resources/images/default/s.gif';
             Ext.get('loadingtext').update('Initializing Biblios');
 			biblios.app.init();
-            loadPlugins();
             completeInit();
             displayInitErrors();
 			//Ext.fly('loading').remove();

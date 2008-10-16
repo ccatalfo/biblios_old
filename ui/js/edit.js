@@ -43,7 +43,7 @@ function openRecord(xml, recid, syntax, savefileid) {
             savefileid: savefileid,
             record : '',
             comboboxes : new Array(),
-            location: ''
+            loc: ''
         };
 
         var editor = DB.Editors.select('syntax=?', [syntax]).getOne();
