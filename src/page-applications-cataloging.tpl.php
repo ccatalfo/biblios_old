@@ -23,8 +23,15 @@
   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/fonts/fonts-min.css" /> 
   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/grids/grids-min.css" />
   <?php print $styles ?>
+    [% IF debug %]
+    <link rel="stylesheet" type="text/css" href="[% libPath %]lib/extjs2/resources/css/ext-all.css">
+	<link type="text/css" rel="stylesheet" href="[% uiPath %]ui/css/styles.css" />
+	<link type="text/css" rel="stylesheet" href="[% uiPath %]ui/css/editor-styles.css" />
+	<link type="text/css" rel="stylesheet" href="[% uiPath %]ui/css/preview-styles.css" />
+    [% ELSE %]
     <link rel="stylesheet" type="text/css" href="[% libPath %]lib/extjs2/resources/css/ext-all.css">
 	<link type="text/css" rel="stylesheet" href="[% uiPath %]styles.css" />
+    [% END %]
  <style type="text/css" media="all">
 <?php if($sidebar_left){ echo "#main {margin-right:0; width: auto; margin-left:235px;}";
  } elseif($sidebar_right){ echo "#main {margin-left:0; width: auto; margin-right:235px;}";
@@ -94,15 +101,66 @@ _overflow-y: visible;
     var confPath = libPath + "conf/biblios.xml";
 </script>
     
+    [% IF debug %]
+    <!-- firebug lite -->
+    <script type="text/javascript" src="[% libPath %]lib/firebug/firebug.js"></script>
+    <!-- cookie utility funcs -->
+    <script type="text/javascript" src="[% libPath %]lib/cookieHelpers.js"></script>
+    <!-- extjs -->
+    <script type="text/javascript" src="[% libPath %]lib/extjs2/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="[% libPath %]lib/extjs2/ext-all.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/extjs2/PagingMemoryProxy.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/extjs2/GoogleGearsProxy.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.NestedXmlReader.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.GearsTreeLoader.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.FacetsTreeLoader.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/extjs2/TabCloseMenu.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.UploadDialog.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/extjs2/RowExpander.js"></script>
+    <script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.grid.SmartCheckboxSelectionModel.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/extjs2/miframe.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/extjs2/GridViewOverride.js"></script>
+    <!-- gears -->
+	<script type="text/javascript" src="[% libPath %]lib/google_gears/gears_init.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/google_gears/GearsORM_all.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/google_gears/GearsORMShift.js"></script>
+    <!-- jquery -->
+	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery-1.2.2.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery.hotkeys.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery.xpath.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery.cookie.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/jquery/json.js"></script>
+    <!-- sarissa  -->
+	<script type="text/javascript" src="[% libPath %]lib/sarissa/sarissa.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery.xslTransform.packed.js"></script>
+	<script src="[% libPath %]lib/sarissa/sarissa_ieemu_xpath.js"		type="text/javascript"></script>
+    <script type="text/javascript" src="[% uiPath %]ui/js/db.js"></script>
+    <script type="text/javascript" src="[% uiPath %]ui/js/init.js"></script>
+    <script type="text/javascript" src="[% uiPath %]ui/js/prefs.js"></script>
+    <script type="text/javascript" src="[% uiPath %]ui/js/search.js"></script>
+    <script type="text/javascript" src="[% uiPath %]ui/js/biblios.js"></script>
+    <script type="text/javascript" src="[% uiPath %]ui/js/save.js"></script>
+    <script type="text/javascript" src="[% uiPath %]ui/js/ui.js"></script>
+    <script type="text/javascript" src="[% uiPath %]ui/js/edit.js"></script>
+    [% ELSE %]
     <script type="text/javascript" src="[% libPath %]lib.js"></script>
+    [% END %]
     
+    <script type="text/javascript">
+    </script>
 <script>
-	Ext.get('loadingtext').update('Checking for Google Gears');
-  if (!window.google || !google.gears) {
-	Ext.get('loadingtext').update('<p>Unable to load Google Gears.</p><p>Please visit the following url to install:</p><p><a target="_blank" href="http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application">Install Google Gears</a></p>');
-	location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
-                    "&return="+location.href;
-  }
+    // do some browser checks for browser who aren't supported by google gears.
+    if( Ext.isSafari || Ext.isLinux || Ext.isOpera ) {
+        Ext.get('loadingtext').update('Sorry, your web browser is not supported at the moment.  Please access again using Firefox or Internet Explorer');
+    }
+    else {
+        Ext.get('loadingtext').update('Checking for Google Gears');
+      if (!window.google || !google.gears) {
+        Ext.get('loadingtext').update('<p>Unable to load Google Gears.</p><p>Please visit the following url to install:</p><p><a target="_blank" href="http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application">Install Google Gears</a></p>');
+        location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
+                        "&return="+location.href;
+      }
+    }
 </script>
 
 <div id='branding-area'></div>
