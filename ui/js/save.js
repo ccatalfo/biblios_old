@@ -1,3 +1,28 @@
+function doMoveRecords(savefileid) {
+    var savefilename = getSaveFileNameFromId(savefileid);
+    showStatusMsg('Moving records');
+    var records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
+    if( records.length == 0) {
+        records = Ext.getCmp('savegrid').getSelectionModel().getSelections();
+    }
+    for( var i = 0 ; i < records.length; i++) {
+        var id = parseInt(records[i].data.Id);
+        try {
+            var r = DB.Records.select('Records.rowid=?', [id]).getOne();
+            r.Savefiles_id = savefileid;
+            r.save();
+            biblios.app.fireEvent('saverecordcomplete', savefileid, r.xml);
+        }
+        catch(ex) {
+            showStatusMsg('Unable to move record ' + records[i].title);
+        }
+    }
+    // reload savegrid store to moved records don't appear in currently open folder
+    Ext.getCmp('savegrid').store.reload();
+    showStatusMsg('Records moved to ' + savefilename);
+    clearStatusMsg();
+}
+
 function doSaveLocal(savefileid, editorid, offset, dropped ) {
     if( !biblios.app.fireEvent('beforesaverecord', savefileid, editorid, offset, dropped) ) {
         return false;
@@ -90,48 +115,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 			return true;
 		} // save record from marc editor
 		// if we're picking from the savefile grid 
-		else if( openState == 'savegrid' ) {
-			if( dropped == true) {
-				var grid = Ext.getCmp( 'savegrid' );
-				var ds = grid.store;
-				var sel = grid.getSelectionModel().getChecked();
-				// update the record(s) based on current selection
-				for( var i = 0; i < sel.length; i++) {
-					var id = sel[i].data.Id;
-					try {
-						var record = DB.Records.select('Records.rowid=?',[id]).getOne();
-						record.status = 'edited';
-						record.date_modified = new Date().toString();
-						record.Savefiles_id = savefileid;
-						record.save();
-						if(bibliosdebug) { console.info("saved record with id: " + id + " to savefile: " + savefileid); }
-					}
-					catch(ex) {
-						Ext.MessageBox.alert("Database error", ex.message);
-					}
-				}
-			}
-			else {
-				var records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
-                if( records.length == 0) {
-                    records = Ext.getCmp('savegrid').getSelectionModel().getSelections();
-                }
-				for( var i = 0 ; i < records.length; i++) {
-					var id = parseInt(records[i].data.Id);
-					try {
-						var r = DB.Records.select('Records.rowid=?', [id]).getOne();
-						r.Savefiles_id = savefileid;
-						r.save();
-                        biblios.app.fireEvent('saverecordcomplete', savefileid, r.xml);
-					}
-					catch(ex) {
-						showStatusMsg('Unable to move record ' + records[i].title);
-					}
-				}
-				// reload savegrid store to moved records don't appear in currently open folder
-				Ext.getCmp('savegrid').store.reload();
-			}
-		}
+
 		// if we're picking from the search grid
 		else if( openState == 'searchgrid' ) {
 			
@@ -413,7 +397,7 @@ function getSaveFileMenuItems(recordSource) {
 			handler: function(btn) {
 				var savefileid = btn.id;
 				var editorid = btn.recordSource;
-				doSaveLocal(savefileid, recordSource);
+				doMoveRecords(savefileid);
 			}
 		};
 		list.push(o);
