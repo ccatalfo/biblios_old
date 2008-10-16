@@ -88,6 +88,7 @@ function handle_html(html, editorid) {
         Ext.getCmp(editorid + 'RevertBtn').disable();
     }*/
     updateEditorLoad();
+    biblios.app.viewport.doLayout();
 	clearStatusMsg();
 }
 
