@@ -8,7 +8,6 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 				savefileid = 3; // Drafts
 		}
 		var savefilename = getSaveFileNameFromId(savefileid);
-		showStatusMsg('Saving to '+ savefilename);
 		var rs, xml;
 		// if we have a record open in the marceditor, get its xml and save to drafts
 		if( openState == 'editorPanel' ) {
@@ -115,7 +114,7 @@ function doSaveLocal(savefileid, editorid, offset, dropped ) {
 			else {
 				var records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
                 if( records.length == 0) {
-                    records = Ext.getCmp('searchgrid').getSelectionModel().getSelections();
+                    records = Ext.getCmp('savegrid').getSelectionModel().getSelections();
                 }
 				for( var i = 0 ; i < records.length; i++) {
 					var id = parseInt(records[i].data.Id);
