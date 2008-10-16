@@ -937,9 +937,9 @@ biblios.app = function() {
                                                                                     UI.editor.loading.numLoaded = 0;
                                                                                     if( checked.length > 0 && checked.length < 11) {
                                                                                         UI.editor.loading.numToLoad = checked.length;  
-                                                                                        var savefileid = checked[i].data.Savefiles_id;
-                                                                                        var recid = checked[i].data.Id;
                                                                                         for( var i = 0; i < checked.length; i++) {
+                                                                                            var savefileid = checked[i].data.Savefiles_id;
+                                                                                            var recid = checked[i].data.Id;
                                                                                             savegrid.editRecord( recid, savefileid );
                                                                                         }
                                                                                     }
