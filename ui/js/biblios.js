@@ -347,7 +347,8 @@ biblios.app = function() {
                                                                 id: 'searchgrid',
                                                                 store : (ds = new Ext.data.GroupingStore({
                                                                     groupField:'pzrecid',
-                                                                    sortInfo:{field:'title', direction:'ASC'},
+                                                                    remoteGroup:true,
+                                                                    remoteSort:true,
                                                                     baseParams: {
                                                                         disableCaching: false,
                                                                         action: 'show'
@@ -1695,11 +1696,7 @@ biblios.app = function() {
                                                                     reader: new Ext.data.ArrayReader({
                                                                         record: 'name'
                                                                     }, Macro),
-                                                                    remoteSort: false,
-                                                                    sortInfo: {
-                                                                        field: 'name',
-                                                                        direction: 'ASC'
-                                                                    },
+                                                                    remoteSort: true,
                                                                     listeners: {
                                                                         update: function(store, record, operation) {
                                                                                 if( record.data.enabled == true) {
