@@ -26,14 +26,6 @@ function openRecord(xml, recid, syntax, savefileid) {
     else {
         var editorid = Ext.id();
         var tabid = Ext.id();
-        Ext.getCmp('editorTabPanel').add({ 
-            title: '', 
-            id: tabid,
-            closable:true, 
-            html:{ tag: 'div', id: editorid, cls: 'marceditor' },
-            listeners: {
-            }
-        }).show()
         UI.editor[editorid] = {
             id: recid,
             tabid: tabid,
@@ -45,6 +37,15 @@ function openRecord(xml, recid, syntax, savefileid) {
             comboboxes : new Array(),
             loc: ''
         };
+        Ext.getCmp('editorTabPanel').add({ 
+            title: '', 
+            id: tabid,
+            closable:true, 
+            html:{ tag: 'div', id: editorid, cls: 'marceditor' },
+            listeners: {
+            },
+            tbar: MarcEditor.getToolbar(editorid)
+        }).show();
 
         var editor = DB.Editors.select('syntax=?', [syntax]).getOne();
         var editor_plugin = DB.Plugins.select('name=?', [editor.name]).getOne();

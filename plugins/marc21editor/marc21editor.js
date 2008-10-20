@@ -1645,9 +1645,6 @@ function setupFFEditorCtryCombo() {
         });
         UI.editor.lastFocusedEl = $('.001', editorelem).get(0);
         UI.editor[editorid].lastFocusedEl = $('#'+editorid).find('.001').get(0);
-        if( !Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).items ) {
-            Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( this.getToolBar() );
-        }
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).doLayout();
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).editorid = editorid;
         Ext.get(editorid).unmask();
@@ -1856,7 +1853,7 @@ MarcEditor.prototype.detectFormat = function(xmldoc) {
     var format = '';
     if( leader6 == 'a') {
         if(leader7 == 'a' || leader7 == 'c' || leader7 == 'd' || leader7 == 'm' ) {
-            format = 'book';
+            format = 'BKS';
         }
         else if(leader7 == 'b' || leader7 == 'i' || leader7 == 's') {
             format == 'CNR';
@@ -1886,7 +1883,7 @@ MarcEditor.prototype.detectFormat = function(xmldoc) {
     return format; 
 }
 
-MarcEditor.prototype.getToolBar = function() {
+MarcEditor.getToolbar = function(editorid) {
 
     return new Ext.Toolbar ({
         listeners: {
@@ -1895,19 +1892,19 @@ MarcEditor.prototype.getToolBar = function() {
         {
             cls: 'x-btn-text-icon',
             icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/tools', configDoc).text(),
-            id: this.editorid+'EditBtn',
-            editorid: this.editorid,
+            id: editorid+'EditBtn',
+            editorid: editorid,
             text: 'Commands',
             tooltip: {title: 'MarcEditor tools', text: 'Add field Ctrl-n<br/>Remove field Ctrl-r<br/>Add subfield Ctrl-m<br/>Remove subfield Ctrl-d'},
             menu: 
                 {
-                    id: this.editorid+'EditMenu',
-                    editorid: this.editorid,
+                    id: editorid+'EditMenu',
+                    editorid: editorid,
                     items: [],
                     listeners: {
                         beforeshow: function(menu, menuItem, e) {
                             menu.removeAll();
-                            var items = UI.editor[this.editorid].record.getToolsMenu();
+                            var items = UI.editor[editorid].record.getToolsMenu();
                             for( i in items) {
                                 menu.add( items[i] );
                             }
@@ -1916,12 +1913,12 @@ MarcEditor.prototype.getToolBar = function() {
                 } 
         }, 
         {
-            id: this.editorid+'ToolsBtn',
+            id: editorid+'ToolsBtn',
             cls: 'x-btn-text-icon bmenu',
             icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/tools', configDoc).text(),
             text: 'Tools',
             menu : {
-                id: this.editorid+'toolsmenu',
+                id: editorid+'toolsmenu',
                 items: [
                     {
                         cls: 'x-btn-text-icon bmenu', // icon and text class
@@ -1929,9 +1926,9 @@ MarcEditor.prototype.getToolBar = function() {
                         text: 'Save',
                         tooltip: {title: 'Save', text: 'Ctrl-s'},
                         menu: {
-                            id: this.editorid+'OneSaveMenu',
-                            items: getSaveFileMenuItems(this.editorid),
-                            editorid: this.editorid,
+                            id: editorid+'OneSaveMenu',
+                            items: getSaveFileMenuItems(editorid),
+                            editorid: editorid,
                             listeners: {
                                 beforeshow: function(menu, menuItem, e) {
                                     updateSaveMenu(menu, menu.editorid);
@@ -1945,8 +1942,8 @@ MarcEditor.prototype.getToolBar = function() {
                         text: 'Export',
                         tooltip: {text: 'Export record to marc21 or marcxml'},
                         menu: {
-                            id: this.editorid+'OneExportMenu',
-                            items: getExportMenuItems(this.editorid)
+                            id: editorid+'OneExportMenu',
+                            items: getExportMenuItems(editorid)
                         }
                     },
                     {
@@ -1955,12 +1952,12 @@ MarcEditor.prototype.getToolBar = function() {
                         text: 'Send',
                         tooltip: {text: 'Send record to remote ILS'},
                         menu: {
-                            id: this.editorid+'OneSendMenu',
-                            editorid: this.editorid,
-                            items: getSendFileMenuItems(this.editorid),
+                            id: editorid+'OneSendMenu',
+                            editorid: editorid,
+                            items: getSendFileMenuItems(editorid),
                             listeners: {
                                 beforeshow: function(menu, menuItem, e) {
-                                    updateSendMenu(menu, this.editorid);
+                                    updateSendMenu(menu, editorid);
                                 }
                             }
                         }
@@ -1970,8 +1967,8 @@ MarcEditor.prototype.getToolBar = function() {
                         icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/duplicate', configDoc).text(),
                         text: 'Duplicate',
                         tooltip: {text: 'Duplicate this record to Drafts folder'},
-                        editorid: this.editorid,
-                        id: this.editorid+'DuplicateBtn',
+                        editorid: editorid,
+                        id: editorid+'DuplicateBtn',
                         handler: function(btn) {
                             // get record from db for this record
                             var r = DB.Records.select('Records.rowid=?', [ UI.editor[btn.editorid].id ]).getOne();
@@ -2001,12 +1998,12 @@ MarcEditor.prototype.getToolBar = function() {
                         icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/macros', configDoc).text(),
                         text: 'Macros',
                         menu : {
-                            id: this.editorid+'macrosmenu',
-                            items: getMacroMenuItems(this.editorid),
+                            id: editorid+'macrosmenu',
+                            items: getMacroMenuItems(editorid),
                             listeners: {
                                 beforeshow: function(menu, menuItem, e) {
                                     menu.removeAll();
-                                    var items = getMacroMenuItems(this.editorid);
+                                    var items = getMacroMenuItems(editorid);
                                     for( i in items) {
                                         menu.add( items[i] );
                                     }
@@ -2020,9 +2017,9 @@ MarcEditor.prototype.getToolBar = function() {
         {
             cls: 'x-btn-text-icon',
             icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/revert', configDoc).text(),
-            id: this.editorid+'RevertBtn',
-            editorid: this.editorid,
-            disabled: UI.editor[this.editorid].savefileid ? false : true,
+            id: editorid+'RevertBtn',
+            editorid: editorid,
+            disabled: UI.editor[editorid].savefileid ? false : true,
             text: 'Revert',
             tooltip: {text: 'Revert record to last saved state'},
             handler: function(btn) {
@@ -2036,8 +2033,8 @@ MarcEditor.prototype.getToolBar = function() {
         {
             cls: 'x-btn-icon',
             icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/trash', configDoc).text(),
-            id: this.editorid+'TrashMenu',
-            editorid: this.editorid,
+            id: editorid+'TrashMenu',
+            editorid: editorid,
             tooltip: {text: 'Move this record to trash (losing all changes since saving)'},
             handler: function(btn) {
                 showStatusMsg('Moving record to Trash...');
