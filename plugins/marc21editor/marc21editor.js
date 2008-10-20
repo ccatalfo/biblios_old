@@ -1249,20 +1249,39 @@ function setupFFEditorCtryCombo() {
         }
     }
 
-    this.showFFPopup = function(tagnumber) {
+    this.showFFPopup = function(tagnumber, tagvalue) {
         $.ajax({
             url: cgiDir + 'xsltransform.pl',
             type: 'POST',
             editorid: editorid,
             dataType: 'html',
-            data: {xml:xml, stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid},
+            data: {xml:this.getFFXML(tagnumber, tagvalue), stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid},
             success: function(html) {
-                $('#'+editorid).find('.varfields_editor').find(".000", UI.editor[editorid].vared).hide();
-                $('#'+editorid).find('.varfields_editor').find(".008", UI.editor[editorid].vared).hide();
-                $('#'+editorid).find('.varfields_editor').find(".006", UI.editor[editorid].vared).hide();
-                $('#'+editorid).find('.varfields_editor').find(".007", UI.editor[editorid].vared).hide();
-                $('#'+this.editorid).find('.ffeditor').html(html);
-                $('#'+this.editorid).find('.ffeditor').show();
+                new Ext.Window({
+                    title: 'Fixed Fields Editor',
+                    html: html,
+                    tbar: [
+                        {
+                            text: 'Save',
+                            handler: function() {
+
+                            }
+
+                        },
+                        {
+                            text: 'Cancel',
+                            handler: function() {
+
+                            }
+                        },
+                        {
+                            text: 'Delete',
+                            handler: function() {
+
+                            }
+                        }
+                    ]
+                }).show();
             },
             error: function(req, textStatus, errorThrown) {
                 if(bibliosdebug){
@@ -1549,6 +1568,15 @@ function setupFFEditorCtryCombo() {
         this._postProcessJs();
     }
 
+    this.getFFXML = function(tagnumber, tagvalue) {
+        if( tagnumber == '000' ) {
+         return '<record xmlns="http://www.loc.gov/MARC21/slim"><leader>'+tagvalue+'</leader></record>';
+        }
+        else {
+         return '<record xmlns="http://www.loc.gov/MARC21/slim"><controlfield tag="'+tagnumber+'">'+tagvalue+'</controlfield></record>';
+        }
+    }
+
     this._postProcessJs = function() {
         update();
         Ext.get(editorid).mask();
@@ -1585,8 +1613,11 @@ function setupFFEditorCtryCombo() {
                     },
                     {
                         text: 'Edit',
-                        handler: function(btn) {
-
+                        scope: this,
+                        tagvalue: leader,
+                        tagnumber: '000',
+                        handler: function(btn ) {
+                            this.showFFPopup( btn.tagnumber, btn.tagvalue );
                         }
                     }
                 ]
@@ -1601,8 +1632,11 @@ function setupFFEditorCtryCombo() {
                     },
                     {
                         text: 'Edit',
-                        handler: function(btn) {
-
+                        scope: this,
+                        tagvalue: tag008,
+                        tagnumber: '008',
+                        handler: function(btn ) {
+                            this.showFFPopup( btn.tagnumber, btn.tagvalue );
                         }
                     }
                 ]
@@ -1618,8 +1652,11 @@ function setupFFEditorCtryCombo() {
                         },
                         {
                             text: 'Edit',
-                            handler: function(btn) {
-
+                            scope: UI.editor[editorid].record,
+                            tagvalue: tag006,
+                            tagnumber: '006',
+                            handler: function(btn ) {
+                                this.showFFPopup( btn.tagnumber, btn.tagvalue );
                             }
                         }
                     ]
@@ -1634,10 +1671,13 @@ function setupFFEditorCtryCombo() {
                         {
                             text: '007 ' + tag007
                         },
-                        {
+                         {
                             text: 'Edit',
-                            handler: function(btn) {
-
+                            scope: UI.editor[editorid].record,
+                            tagvalue: tag007,
+                            tagnumber: '007',
+                            handler: function(btn ) {
+                                this.showFFPopup( btn.tagnumber, btn.tagvalue );
                             }
                         }
                     ]
