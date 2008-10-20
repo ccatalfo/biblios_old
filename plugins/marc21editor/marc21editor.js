@@ -1859,29 +1859,29 @@ MarcEditor.prototype.detectFormat = function(xmldoc) {
             format = 'book';
         }
         else if(leader7 == 'b' || leader7 == 'i' || leader7 == 's') {
-            format == 'continuing';
+            format == 'CNR';
         }
     }
     else if(leader6 == 't') {
-        format = 'book';
+        format = 'BKS';
     }
     else if(leader6 == 'p') {
-        format = 'mixed';
+        format = 'MIX';
     }
     else if(leader6 == 'm') {
-        format = 'computer file';
+        format = 'COM';
     }
     else if(leader6 == 'c' || leader6 == 'd') {
-        format = 'score';
+        format = 'SCO';
     }
     else if(leader6 == 'e' || leader6 == 'f') {
-        format = 'map';
+        format = 'MAP';
     }
     else if(leader6 == 'i' || leader6 == 'j') {
-        format = 'recording';
+        format = 'REC';
     }
     else if(leader6 == 'g' || leader6 == 'k' || leader6 == 'o' || leader6 == 'r') {
-        format = 'visual';
+        format = 'VIS';
     }
     return format; 
 }
