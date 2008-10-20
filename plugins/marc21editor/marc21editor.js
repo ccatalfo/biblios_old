@@ -1564,7 +1564,86 @@ function setupFFEditorCtryCombo() {
         if( getPref('ShowFieldBordersInEditor') == "1") {
             addInputOutlines(); 
         }
-            
+        var tag001 = $('#'+editorid).find('.001').children('.controlfield-text').val();
+        var tag003 = $('#'+editorid).find('.003').children('.controlfield-text').val();
+        var tag005 = $('#'+editorid).find('.005').children('.controlfield-text').val();
+        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
+            new Ext.Toolbar({
+                items: [
+                    {
+                        text: '(003)' + tag003 + ' SystemID:'+tag001+' Last edited: '+tag005
+                    }
+                ]
+            })
+        );
+        var leader = $('#'+editorid).find('.000').children('.controlfield-text').val();
+        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
+            new Ext.Toolbar({
+                items: [
+                    {
+                        text: 'LDR ' + leader
+                    },
+                    {
+                        text: 'Edit',
+                        handler: function(btn) {
+
+                        }
+                    }
+                ]
+            })
+        );
+        var tag008 = $('#'+editorid).find('.008').children('.controlfield-text').val();
+        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
+            new Ext.Toolbar({
+                items: [
+                    {
+                        text: '008 ' + tag008
+                    },
+                    {
+                        text: 'Edit',
+                        handler: function(btn) {
+
+                        }
+                    }
+                ]
+            })
+        );
+        $('#'+editorid).find('.006').each( function(i) {
+            var tag006 = $(this).children('.controlfield-text').val();
+            Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
+                new Ext.Toolbar({
+                    items: [
+                        {
+                            text: '006 ' + tag006
+                        },
+                        {
+                            text: 'Edit',
+                            handler: function(btn) {
+
+                            }
+                        }
+                    ]
+                })
+            );
+        });
+        $('#'+editorid).find('.007').each( function(i) {
+            var tag007 = $(this).children('.controlfield-text').val();
+            Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
+                new Ext.Toolbar({
+                    items: [
+                        {
+                            text: '007 ' + tag007
+                        },
+                        {
+                            text: 'Edit',
+                            handler: function(btn) {
+
+                            }
+                        }
+                    ]
+                })
+            );
+        });
         // hide fixed field controlfields
         $('#'+editorid).find('.varfields_editor').find(".000, .001, .003, .005, .008, .006, .007").hide();
         // set change event for Type fixed fields select dropdown
