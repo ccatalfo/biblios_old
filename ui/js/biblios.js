@@ -787,7 +787,6 @@ biblios.app = function() {
                                                                 new Ext.grid.GridPanel({
                                                                     region: 'center',
                                                                     id: 'savegrid',
-                                                                    enableDragDrop: true,
                                                                     ddGroup: 'RecordDrop',
                                                                     height: 300,
                                                                     store: (ds = new Ext.data.Store({
@@ -1410,19 +1409,6 @@ biblios.app = function() {
                                                                     }) // savefiles root gears loader
                                                                 }),
                                                                 listeners: {
-                                                                    beforenodedrop: function(e) {
-                                                                        var droppedsavefileid = e.target.attributes.savefileid;
-                                                                        if( e.data.selections) {
-                                                                            doSaveLocal(droppedsavefileid, '', 0, true);
-                                                                            Ext.getCmp('savegrid').store.reload();
-                                                                        }
-                                                                        // we have a record from a location in search grid
-                                                                        else {
-                                                                            var offset = e.source.id.substr(3); // "loc"+offset
-                                                                            var id = Ext.getCmp('searchgrid').getSelections()[0].id;
-                                                                            doSaveLocal(droppedsavefileid, '', offset, true);
-                                                                        }
-                                                                    }, // savefolders beforenodedrop
                                                                     contextmenu: function(node, e) {
                                                                         if( node.attributes.savefileid == 1 ) {
                                                                             var trashMenu = new Ext.menu.Menu({
@@ -2520,7 +2506,6 @@ biblios.app.addEvents({
             savefileid: savefile where record is to be saved
             editorid: editor id where record is being saved from
             offset: offset used for record retrieval from pazpar2 (optional)
-            dropped: boolean, true if record has been dropped from a grid
     */
     'beforesaverecord' : true,
     /*

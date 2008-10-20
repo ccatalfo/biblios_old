@@ -30,7 +30,7 @@ function updateLeaderToUnicode(xmldoc) {
     return xmldoc;
 }
 
-function doSaveLocal(savefileid, editorid, offset, dropped ) {
+function doSaveLocal(savefileid, editorid, offset) {
 		var recoffset = offset || 0;
 		if( !savefileid ) {
 			if(bibliosdebug == 1 ) { console.info( "doSaveLocal: Setting savefile to Drafts on save" );}
