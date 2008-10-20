@@ -1203,7 +1203,6 @@ function setupFFEditorCtryCombo() {
 	};
 
     this._reformatFixedFieldsEditor = function _reformatFixedFieldsEditor() {
-        var ff_ed = $('#'+editorid).find(".ffeditor");
         var var_ed = $('#'+editorid).find(".vareditor");
         Ext.get(editorid).mask('Reformatting fixed fields editor for new record type');
         transferFF_EdToTags(ff_ed, var_ed, editorid);
@@ -1236,13 +1235,8 @@ function setupFFEditorCtryCombo() {
 
     this._toggleFixedFieldDisplay = function toggleFixedFieldDisplay() {
         UI.editor[editorid].record.showffeditor  = UI.editor[editorid].record.showffeditor ? false : true;
-        var ff_ed = $('#'+editorid).find(".ffeditor");
         var var_ed = $('#'+editorid).find(".vareditor");
         if( UI.editor[editorid].record.showffeditor == false ) {
-            // hide fixed field editor
-            $('#'+editorid).find(".ffeditor").hide();
-            // transfer values from fixed field editor into tags
-            transferFF_EdToTags(ff_ed, var_ed, editorid);
             // show leader and 008
             $('#'+editorid).find('.varfields_editor').find(".000", UI.editor[editorid].vared).show();
             $('#'+editorid).find('.varfields_editor').find(".008", UI.editor[editorid].vared).show();
@@ -1252,27 +1246,30 @@ function setupFFEditorCtryCombo() {
         else {
             UI.editor[editorid].record.update();
             var xml = UI.editor[editorid].record.XMLString();
-            $.ajax({
-                url: cgiDir + 'xsltransform.pl',
-                type: 'POST',
-                editorid: editorid,
-                dataType: 'html',
-                data: {xml:xml, stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid},
-                success: function(html) {
-                    $('#'+editorid).find('.varfields_editor').find(".000", UI.editor[editorid].vared).hide();
-                    $('#'+editorid).find('.varfields_editor').find(".008", UI.editor[editorid].vared).hide();
-                    $('#'+editorid).find('.varfields_editor').find(".006", UI.editor[editorid].vared).hide();
-                    $('#'+editorid).find('.varfields_editor').find(".007", UI.editor[editorid].vared).hide();
-                    $('#'+this.editorid).find('.ffeditor').html(html);
-                    $('#'+this.editorid).find('.ffeditor').show();
-                },
-                error: function(req, textStatus, errorThrown) {
-                    if(bibliosdebug){
-                        console.debug(req + ' ' + textStatus + ' ' + errorThrown);
-                    }
-                }
-            });
         }
+    }
+
+    this.showFFPopup = function(tagnumber) {
+        $.ajax({
+            url: cgiDir + 'xsltransform.pl',
+            type: 'POST',
+            editorid: editorid,
+            dataType: 'html',
+            data: {xml:xml, stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid},
+            success: function(html) {
+                $('#'+editorid).find('.varfields_editor').find(".000", UI.editor[editorid].vared).hide();
+                $('#'+editorid).find('.varfields_editor').find(".008", UI.editor[editorid].vared).hide();
+                $('#'+editorid).find('.varfields_editor').find(".006", UI.editor[editorid].vared).hide();
+                $('#'+editorid).find('.varfields_editor').find(".007", UI.editor[editorid].vared).hide();
+                $('#'+this.editorid).find('.ffeditor').html(html);
+                $('#'+this.editorid).find('.ffeditor').show();
+            },
+            error: function(req, textStatus, errorThrown) {
+                if(bibliosdebug){
+                    console.debug(req + ' ' + textStatus + ' ' + errorThrown);
+                }
+            }
+        });
     }
 
 	this._hasField = function(tagnumber) {
@@ -1530,72 +1527,6 @@ function setupFFEditorCtryCombo() {
 
 	this._loadXmlJS = function(marcXmlDoc, callback) {
 		var html = '';
-		html += '<div class="ffeditor">';
-		html += '<div class="fixedfields_editor">';
-		html += '<table class="fixed_field_grid">';
-		// leader
-		var string = $('leader', marcXmlDoc).text();
-		html += '<tr>';
-		$('field[@tag=000] value', marc21defs).each( function(i) {
-			html += createFixedFieldCell(string, $(this), 0, '000');
-		});
-		//UI.editor.progress.updateProgress(.2, 'Leader editor created');
-		//end leader row
-		html += '</tr>';
-		// 008 row
-		var tag008 = $('controlfield[@tag=008]', marcXmlDoc).text();
-		var rectype = $('leader', marcXmlDoc).text().substr(6,1);
-		var biblevel = $('leader', marcXmlDoc).text().substr(7,1);
-		var mattype = get008MaterialName(rectype);
-		// 008 row
-		html += '<tr>';
-		var cell = 0;
-			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
-				var type = $(this).text();
-				$('field[@tag=008] value[@name='+type+']', marc21defs).each( function(j) {
-					if( cell == 9 ) {
-						html += '</tr><tr>';
-					}
-					html += createFixedFieldCell(tag008, $(this) , 0, '008');
-					cell++;
-				});
-			});
-		html += '</tr>';
-		//UI.editor.progress.updateProgress(.3, '008 editor created');
-
-		// 006 row
-		if( $('controlfield[@tag=006]', marcXmlDoc).length > 0 ) {
-			html += '<tr>';
-			var mattype = get008MaterialName(rectype);	
-			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
-				var type = $(this).text();
-				$('field[@tag=006] value[@name='+type+']', marc21defs).each( function(j) {
-					html += createFixedFieldCell(tag006, $(this) , 17, '006');
-				});
-			});
-			html += '</tr>'; // end 006 row
-			//UI.editor.progress.updateProgress(.4, '006 editor created');
-		}
-		// 007 row
-		if( $('controlfield[@tag=007]', marcXmlDoc ).length > 0 )  {
-			html += '<tr>';
-			var cat = $('controlfield[@tag=007]', marcXmlDoc).text().substr(0,1);
-			var tag007 = $('controlfield[@tag=007]', marcXmlDoc).text();
-			var mattype = get007MaterialName(cat);
-			// find field def for this 007 mat type
-			$('field[@tag=007][@mattype='+mattype+']', marc21defs).each( function(i) {
-				$('value', this).each( function(j) {
-					html += createFixedFieldCell(tag007, $(this) , 0, '007');
-				}); // loop through positions in 007
-
-			});
-
-			html += '</tr>';
-			//UI.editor.progress.updateProgress(.5, '007 editor created');
-		}
-		html += '</table>';
-		html += '</div>'; // close fixedfields_editor
-		html += '</div>'; // close ff_editor
 		html += '<div class="vareditor">';
 		html += '<div class="varfields_editor">';
         html += generateVariableFieldsEditor(marcXmlDoc);
@@ -1627,17 +1558,15 @@ function setupFFEditorCtryCombo() {
         setupMarc21AuthorityLiveSearches();
 
         // setup comboboxes for ctry and lang fixed fields
-        setupFFEditorLangCombo();
-        setupFFEditorCtryCombo();
+        //setupFFEditorLangCombo();
+        //setupFFEditorCtryCombo();
         // set up editor based on any preferences
         if( getPref('ShowFieldBordersInEditor') == "1") {
             addInputOutlines(); 
         }
             
-        // show fixed field editor, hide ldr and 008 divs
-        $('#'+editorid).find('.ffeditor').show();
         // hide fixed field controlfields
-        $('#'+editorid).find('.varfields_editor').find(".000, .008, .006, .007").hide();
+        $('#'+editorid).find('.varfields_editor').find(".000, .001, .003, .005, .008, .006, .007").hide();
         // set change event for Type fixed fields select dropdown
         $('#'+editorid).find('#Type').change(function() {
             var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
