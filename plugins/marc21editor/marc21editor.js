@@ -154,9 +154,8 @@ function get008FromEditor(ff_ed, rectype) {
     return tag008val;
 }
 
-function get006FromEditor(tr) {
+function get006FromEditor(tr, rectype) {
 		var tag006val = '';
-		var rectype = $(tr).find('#Type').val();
 		var mattype = get008MaterialName(rectype);
 		$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 			var type = $(this).text();
@@ -491,7 +490,7 @@ function getFFTagFromPopup(tagnumber, i, rectype, ffid) {
     }
     else if( tagnumber == '006' ) {
         try {
-            var tag006val = get006FromEditor(html);
+            var tag006val = get006FromEditor(html, rectype);
         } catch(ex) {
             if(bibliosdebug){ console.debug('transferFF_EdToTags: exception ' + ex.error + ' ' + ex.msg + ' ' + ex.length) }
         }
@@ -1202,8 +1201,14 @@ function setupFFEditorCtryCombo() {
     }
 
     this.showFFPopup = function(tagnumber, tagvalue, i) {
+        if(bibliosdebug){ 
+            console.debug('showFFPopup: ' + tagnumber + ' ' + tagvalue + ' ' + i); 
+        }
         if( tagnumber == '008' ) {
             var rectype = $('#'+editorid).find('.000').children('.controlfield-text').val().substr(6,1);
+        }
+        else if( tagnumber == '006') {
+            var rectype = $('#'+editorid).find('.006').children('.controlfield-text').val().substr(0,1);
         }
         else if( tagnumber == '007') {
             var rectype = $('#'+editorid).find('.007').children('.controlfield-text').val().substr(0,1);
@@ -1225,14 +1230,14 @@ function setupFFEditorCtryCombo() {
                     editorid: this.editorid,
                     rectype: this.rectype,
                     i: this.i,
-                    id: this.editorid+'-'+this.tagnumber+'-'+'ffpopup',
+                    id: this.editorid+'-'+this.tagnumber+'-'+'ffpopup'+'-'+this.i,
                     tbar: [
                         {
                             text: 'Save',
                             editorid: this.editorid,
                             tagnumber: tagnumber,
                             rectype: this.rectype,
-                            ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup',
+                            ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup'+'-'+this.i,
                             i: this.i,
                             handler: function(btn) {
                                 var newvalue = getFFTagFromPopup(btn.tagnumber, btn.i, btn.rectype, btn.ffid);
@@ -1249,7 +1254,8 @@ function setupFFEditorCtryCombo() {
                         },
                         {
                             text: 'Cancel',
-                            ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup',
+                            i: this.i,
+                            ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup'+'-'+this.i,
                             handler: function(btn) {
                                 Ext.WindowMgr.getActive().close();
                             }
@@ -1259,16 +1265,13 @@ function setupFFEditorCtryCombo() {
                             editorid: this.editorid,
                             tagnumber: this.tagnumber,
                             rectype: this.rectype,
+                            i: this.i,
                             disabled: this.tagnumber == '008' || this.tagnumber == '000' ? true : false,
-                            ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup',
+                            ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup'+'-'+this.i,
                             i:this.i,
                             handler: function(btn) {
-                                try {
-                                    $('#'+btn.editorid).find('.'+btn.tagnumber).eq(btn.i).remove();
-                                } catch(ex) {
-                                    Ext.Msg.alert('Error', 'An error has occurred. Unable to delete tag ' + btn.tagnumber + ' with index ' + btn.i + '.  Please report as a bug');
-                                }
-                                Ext.Msg.alert('Tag deleted', 'Tag has been deleted');
+                                $('#'+btn.editorid).find('.'+btn.tagnumber).eq(btn.i).remove();
+                                Ext.getCmp(btn.ffid).destroy();
                                 Ext.WindowMgr.getActive().close();
                             }
                         }
@@ -1366,7 +1369,7 @@ function setupFFEditorCtryCombo() {
 			var firstind = ind1 || ' ';
 			var secondind = ind2 || ' ';
 			var sf = subfields || [ {'delimiter': 'a', 'text': ''} ];
-			if(bibliosdebug) { console.info("Adding tag with tagnumber: " + tagnumber);  }
+			if(bibliosdebug) { console.info("Adding tag with tagnumber: " + tagnumber + 'ind1: ' + ind1 + 'ind2: ' +ind2 + 'subfields: ' + sf[0].delimiter + ' ' + sf[0].text);  }
 
 			// insert the new field in numerical order among the existing tags
 			var tags = $(".tag",editorelem  );
@@ -1386,12 +1389,12 @@ function setupFFEditorCtryCombo() {
 				var id = $(tags[i]).attr('id').substr(0,3);
 			}
 			var newId = tagnumber + "-" + newSuffix;
-			  var newtag = '<div class="tag" id="'+newId+editorid+'">';
+			  var newtag = '<div class="tag '+tagnumber+'" id="'+newId+editorid+'">';
 			  newtag += '<input size="3" onblur="onBlur(this)" onfocus="onFocus(this)" class="tagnumber" id="d'+tagnumber+editorid+'" value="'+tagnumber+'" />';
 			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+editorid+'"/>';
 			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+editorid+'"/>';
 			if( tagnumber < '010' ) {
-				newtag += '<input type="text" onblue="onBlur(this)" onfocus="onFocus(this)" class="controlfield-text '+tagnumber+'" value="">';
+				newtag += '<input type="text" onblue="onBlur(this)" onfocus="onFocus(this)" class="controlfield-text '+tagnumber+'" value="'+sf[0].text+'">';
 			} // insert controlfield
 			else {
 			  newtag += '<span class="subfields" id="dsubfields'+newId+'">';
@@ -1655,6 +1658,79 @@ function setupFFEditorCtryCombo() {
                 ]
             })
         );
+        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
+            new Ext.Toolbar({
+                items: [
+                    {
+                        text: 'Create 006',
+                        scope: this,
+                        handler: function() {
+                            Ext.Msg.prompt('Create 006', 'Enter type of 006', function(btn,text) {
+                                var l = $('#'+editorid).find('.006').length;
+                                UI.editor[editorid].record.addField('006', '#', '#', [{delimiter:'', text: text+'       '}]);
+                                Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
+                                    new Ext.Toolbar({
+                                        items: [
+                                            {
+                                                id: editorid+'-006-'+l,
+                                                text: '006 ' + text+'     '
+                                            },
+                                            {
+                                                text: 'Edit',
+                                                scope: UI.editor[editorid].record,
+                                                tagvalue: text+'    ',
+                                                tagnumber: '006',
+                                                i:l,
+                                                handler: function(btn ) {
+                                                    this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
+                                                }
+                                            }
+                                        ]
+                                    })
+                                );
+                                biblios.app.viewport.doLayout();
+                                UI.editor[editorid].record.showFFPopup('006', text+'            ', l);
+
+                            });
+
+                        }
+                    },
+                    {
+                        text: 'Create 007',
+                        handler: function() {
+                            Ext.Msg.prompt('Create 007', 'Enter type of 007', function(btn,text) {
+                                var l = $('#'+editorid).find('.007').length;
+                                UI.editor[editorid].record.addField('007', '#', '#', [{delimiter:'', text: text+'       '}]);
+                                Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
+                                    new Ext.Toolbar({
+                                        items: [
+                                            {
+                                                id: editorid+'-007-'+l,
+                                                text: '007' + text+'     '
+                                            },
+                                            {
+                                                text: 'Edit',
+                                                scope: UI.editor[editorid].record,
+                                                tagvalue: text+'    ',
+                                                tagnumber: '007',
+                                                i:l,
+                                                handler: function(btn ) {
+                                                    this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
+                                                }
+                                            }
+                                        ]
+                                    })
+                                );
+                                biblios.app.viewport.doLayout();
+                                UI.editor[editorid].record.showFFPopup('007', text+'            ', l);
+
+                            });
+
+                        }
+                    }
+                ]
+            })
+        );
         $('#'+editorid).find('.006').each( function(i) {
             var tag006 = $(this).children('.controlfield-text').val();
             Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
@@ -1752,6 +1828,9 @@ function setupFFEditorCtryCombo() {
 // Public methods 
 MarcEditor.prototype.reformatFixedFieldsEditor = function() {
     return this._reformatFixedFieldsEditor();
+}
+MarcEditor.prototype.showFFPopup = function() {
+    return this.showFFPopup();
 }
 MarcEditor.prototype.toggleFixedFieldDisplay = function() {
     return this._toggleFixedFieldDisplay();

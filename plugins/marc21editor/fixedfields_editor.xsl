@@ -19,7 +19,10 @@
                     </xsl:for-each>
                     <xsl:for-each select="//marc:controlfield[@tag='006']">
                         <tr class="006">
-                        <xsl:call-template name="tag006"/>
+                        <xsl:call-template name="tag006">
+                            <xsl:with-param name="rectype" select="$rectype"/>
+                            <xsl:with-param name="tag" select="."></xsl:with-param>
+                        </xsl:call-template>
                         </tr>
                     </xsl:for-each>
                     <xsl:for-each select="//marc:controlfield[@tag='007']">
@@ -162,8 +165,8 @@
     </xsl:template>
 
 	<xsl:template name="tag006">
-			<xsl:variable name="form" select="substring(.,1, 1)"/>
-			<xsl:if test="$form = 'a' or $form = 't'">
+			<xsl:param name="rectype" select="substring(.,1, 1)"/>
+			<xsl:if test="$rectype = 'a' or $rectype = 't'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">Books</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
@@ -171,7 +174,7 @@
 					<xsl:with-param name='tagnumber'>006</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="$form = 'e' or $form = 'f'">
+			<xsl:if test="$rectype = 'e' or $rectype = 'f'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">Maps</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
@@ -179,7 +182,7 @@
 					<xsl:with-param name='tagnumber'>006</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="$form = 'c' or $form = 'd' or $form = 'j' or $form = 'i'">
+			<xsl:if test="$rectype = 'c' or $rectype = 'd' or $rectype = 'j' or $rectype = 'i'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">Music</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
@@ -187,7 +190,7 @@
 					<xsl:with-param name='tagnumber'>006</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="$form = 'g' or $form = 'k' or $form = 'o' or $form = 'r'">
+			<xsl:if test="$rectype = 'g' or $rectype = 'k' or $rectype = 'o' or $rectype = 'r'">
 					<xsl:call-template name="generate_for_rectype">
 						<xsl:with-param name="rectype">Visual</xsl:with-param>
 						<xsl:with-param name="offset">17</xsl:with-param>
@@ -195,7 +198,7 @@
                         <xsl:with-param name='tagnumber'>006</xsl:with-param>
 					</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="$form = 'm'">
+			<xsl:if test="$rectype = 'm'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">ComputerFile</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
@@ -203,7 +206,7 @@
                     <xsl:with-param name='tagnumber'>006</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:if test="$form = 'p'">
+			<xsl:if test="$rectype = 'p'">
 					<xsl:call-template name="generate_for_rectype">
 						<xsl:with-param name="rectype">Mixed</xsl:with-param>
 						<xsl:with-param name="offset">17</xsl:with-param>
