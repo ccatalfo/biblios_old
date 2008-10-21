@@ -3,16 +3,17 @@
 	<xsl:output method="xml" indent="yes"/>
 	<xsl:variable name='marc21defs' select="document('marc21.xml')"/>
 	<xsl:param name='debug'/>
+    <xsl:param name="editorid"/>
+    <xsl:param name="rectype"/>
 
     <xsl:template match="/">
         <xsl:variable name='leader'><xsl:value-of select="."/></xsl:variable>
         <xsl:variable name='tag008'><xsl:value-of select="marc:controlfield[@tag='008']"/></xsl:variable> 
-        <xsl:variable name="rectype" select="substring($leader, $marc21defs//value[@name='Type']/@position+1, $marc21defs//value[@name='Type']/@length)"/>
-        <div class="ffeditor">
+        <div class="ffeditor {$editorid}">
             <div class="fixedfields_editor">
                 <table id="fixed_field_grid" class="fixed_field">
                     <xsl:for-each select="//marc:leader">
-                    <tr>
+                    <tr class="leader">
                         <xsl:call-template name="leader"/>
                     </tr>
                     </xsl:for-each>
@@ -84,7 +85,7 @@
     <xsl:template name="tag008">
     <xsl:param name="rectype"/>
     <xsl:param name="tag"/>
-        <tr>
+        <tr class="008">
         <!-- 008 fixed fields for all material types -->
                 <xsl:call-template name="generate_for_rectype">
                     <xsl:with-param name="rectype">008All00-17</xsl:with-param>
@@ -100,7 +101,7 @@
                 </xsl:call-template>
         </tr>
         <!-- 008 fixed fields for Books -->
-        <tr>
+        <tr class="008">
         <xsl:if test="$rectype = 'a' or $rectype = 't'">
                 <xsl:call-template name="generate_for_rectype">
                     <xsl:with-param name="rectype">Books</xsl:with-param>
