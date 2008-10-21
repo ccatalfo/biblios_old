@@ -40,9 +40,14 @@ function openRecord(xml, recid, syntax, savefileid) {
         Ext.getCmp('editorTabPanel').add({ 
             title: '', 
             id: tabid,
+            editorid: editorid,
             closable:true, 
             html:{ tag: 'div', id: editorid, cls: 'marceditor' },
             listeners: {
+                activate: function(tab) {
+                    biblios.app.currentEditor = UI.editor[tab.editorid].record;
+                    biblios.app.currentTabId = tab.id;
+                }
             },
             tbar: MarcEditor.getToolbar(editorid)
         }).show();

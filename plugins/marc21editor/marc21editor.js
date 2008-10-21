@@ -1187,16 +1187,17 @@ function setupFFEditorCtryCombo() {
         if( UI.editor[editorid].record.showffeditor == false ) {
             var items = Ext.getCmp( UI.editor[editorid].tabid ).items;
             for( var i = 0; i < items.length; i++) {
-                Ext.getCmp( UI.editor[editorid].tabid ).items.itemAt(i).hide();
+                items.itemAt(i).hide();
             }
                 $('#'+editorid).find('.varfields_editor').find(".000, .001, .003, .005, .006, .007, .008", UI.editor[editorid].vared).show();
         }
         else {
+            this._updateFixedFieldToolbars();
             var items = Ext.getCmp( UI.editor[editorid].tabid ).items;
             for( var i = 0; i < items.length; i++) {
-                Ext.getCmp( UI.editor[editorid].tabid ).items.itemAt(i).show();
-                $('#'+editorid).find('.varfields_editor').find(".000, .001, .003, .005, .006, .007, .008", UI.editor[editorid].vared).hide();
+                items.itemAt(i).show();
             }
+            $('#'+editorid).find('.varfields_editor').find(".000, .001, .003, .005, .006, .007, .008", UI.editor[editorid].vared).hide();
         }
     }
 
@@ -1575,21 +1576,30 @@ function setupFFEditorCtryCombo() {
         }
     }
 
-    this._postProcessJs = function() {
-        update();
-        Ext.get(editorid).mask();
-        //UI.editor.progress.updateProgress(.9, 'Setting up editor hot keys');
-        setupEditorHotkeys();
-        //UI.editor.progress.updateProgress(.9, 'Setting up authority control');
-        setupMarc21AuthorityLiveSearches();
+    this._updateFixedFieldToolbars = function() {
+        var tag001 = $('#'+editorid).find('.001').children('.controlfield-text').val();
+        var tag003 = $('#'+editorid).find('.003').children('.controlfield-text').val();
+        var tag005 = $('#'+editorid).find('.005').children('.controlfield-text').val();
+        Ext.getCmp(editorid+'-003').setText('(003) '+tag003+' SystemID:'+tag001+' Last edited: '+tag005);
 
-        // setup comboboxes for ctry and lang fixed fields
-        //setupFFEditorLangCombo();
-        //setupFFEditorCtryCombo();
-        // set up editor based on any preferences
-        if( getPref('ShowFieldBordersInEditor') == "1") {
-            addInputOutlines(); 
-        }
+        var leader = $('#'+editorid).find('.000').children('.controlfield-text').val();
+        Ext.getCmp(editorid+'-000-0').setText( leader );
+
+        var tag008 = $('#'+editorid).find('.008').children('.controlfield-text').val();
+        Ext.getCmp(editorid+'-008-0').setText( tag008 );
+
+        $('#'+editorid).find('.007').each( function(i) {
+            var tag007 = $(this).children('.controlfield-text').val();
+            Ext.getCmp(editorid+'-007-'+i).setText( tag007 );
+        });
+
+        $('#'+editorid).find('.006').each( function(i) {
+            var tag006 = $(this).children('.controlfield-text').val();
+            Ext.getCmp(editorid+'-006-'+i).setText( tag006 );
+        });
+    }
+
+    this._addFixedFieldToolbars = function() {
         var tag001 = $('#'+editorid).find('.001').children('.controlfield-text').val();
         var tag003 = $('#'+editorid).find('.003').children('.controlfield-text').val();
         var tag005 = $('#'+editorid).find('.005').children('.controlfield-text').val();
@@ -1597,6 +1607,7 @@ function setupFFEditorCtryCombo() {
             new Ext.Toolbar({
                 items: [
                     {
+                        id: editorid+'-003',
                         text: '(003)' + tag003 + ' SystemID:'+tag001+' Last edited: '+tag005
                     }
                 ]
@@ -1690,6 +1701,25 @@ function setupFFEditorCtryCombo() {
                 })
             );
         });
+        biblios.app.viewport.doLayout();
+    }
+
+    this._postProcessJs = function() {
+        update();
+        Ext.get(editorid).mask();
+        //UI.editor.progress.updateProgress(.9, 'Setting up editor hot keys');
+        setupEditorHotkeys();
+        //UI.editor.progress.updateProgress(.9, 'Setting up authority control');
+        setupMarc21AuthorityLiveSearches();
+
+        // setup comboboxes for ctry and lang fixed fields
+        //setupFFEditorLangCombo();
+        //setupFFEditorCtryCombo();
+        // set up editor based on any preferences
+        if( getPref('ShowFieldBordersInEditor') == "1") {
+            addInputOutlines(); 
+        }
+        this._addFixedFieldToolbars();
         // hide fixed field controlfields
         $('#'+editorid).find('.varfields_editor').find(".000, .001, .003, .005, .008, .006, .007").hide();
         // set change event for Type fixed fields select dropdown
