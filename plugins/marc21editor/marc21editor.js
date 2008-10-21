@@ -1673,12 +1673,12 @@ function setupFFEditorCtryCombo() {
                                         items: [
                                             {
                                                 id: editorid+'-006-'+l,
-                                                text: '006 ' + text+'     '
+                                                text: '006 ' + text+'                 '
                                             },
                                             {
                                                 text: 'Edit',
                                                 scope: UI.editor[editorid].record,
-                                                tagvalue: text+'    ',
+                                                tagvalue: text+'                 ',
                                                 tagnumber: '006',
                                                 i:l,
                                                 handler: function(btn ) {

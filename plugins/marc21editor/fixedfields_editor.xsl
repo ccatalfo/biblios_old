@@ -20,7 +20,6 @@
                     <xsl:for-each select="//marc:controlfield[@tag='006']">
                         <tr class="006">
                         <xsl:call-template name="tag006">
-                            <xsl:with-param name="rectype" select="$rectype"/>
                             <xsl:with-param name="tag" select="."></xsl:with-param>
                         </xsl:call-template>
                         </tr>
@@ -46,6 +45,7 @@
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="tag"></xsl:param>
 		<xsl:param name="tagnumber">008</xsl:param>
+        <xsl:param name="classnumber">008</xsl:param>
 			<xsl:for-each select="$marc21defs//mattypes/mattype[@value=$rectype]/position">
 				<xsl:variable name="name" select="string(.)"/>
 				<xsl:variable name="inputtype" select="$marc21defs//field[@tag=$tagnumber]/value[@name=$name]/@inputtype"/>
@@ -54,6 +54,7 @@
 							<xsl:call-template name="fixed-field-text">
 								<xsl:with-param name="name" select="." />
 								<xsl:with-param name="tagnumber" select="$tagnumber" />
+								<xsl:with-param name="classnumber" select="$classnumber" />
 								<xsl:with-param name="tag"><xsl:value-of select="$tag"/></xsl:with-param>
 								<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
 							</xsl:call-template>
@@ -63,6 +64,7 @@
 							<xsl:call-template name="fixed-field-text">
 								<xsl:with-param name="name" select="." />
 								<xsl:with-param name="tagnumber" select="$tagnumber" />
+								<xsl:with-param name="classnumber" select="$classnumber" />
 								<xsl:with-param name="tag"><xsl:value-of select="$tag"/></xsl:with-param>
 								<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
                                 <xsl:with-param name="hidden" select="1"/>
@@ -76,8 +78,8 @@
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="." />
 								<xsl:with-param name="tagnumber" select="$tagnumber" />
+								<xsl:with-param name="classnumber" select="$classnumber" />
 								<xsl:with-param name="tag"><xsl:value-of select="$tag"/></xsl:with-param>
-                                <xsl:with-param name='tagnumber' select="$tagnumber"/>
 								<xsl:with-param name="offset"><xsl:value-of select="$offset"/></xsl:with-param>
 							</xsl:call-template>
 						</xsl:otherwise>
@@ -165,53 +167,60 @@
     </xsl:template>
 
 	<xsl:template name="tag006">
-			<xsl:param name="rectype" select="substring(.,1, 1)"/>
+        <xsl:param name="rectype" select="substring(., 1, 1)"/>
+            <xsl:param name="tag"/>
 			<xsl:if test="$rectype = 'a' or $rectype = 't'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">Books</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
-					<xsl:with-param name='tag' select="."/>
-					<xsl:with-param name='tagnumber'>006</xsl:with-param>
+					<xsl:with-param name='tag' select="$tag"/>
+                    <xsl:with-param name='classnumber'>006</xsl:with-param>
+					<xsl:with-param name='tagnumber'>008</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$rectype = 'e' or $rectype = 'f'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">Maps</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
-					<xsl:with-param name='tag' select="."/>
-					<xsl:with-param name='tagnumber'>006</xsl:with-param>
+					<xsl:with-param name='tag' select="$tag"/>
+					<xsl:with-param name='tagnumber'>008</xsl:with-param>
+                    <xsl:with-param name='classnumber'>006</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$rectype = 'c' or $rectype = 'd' or $rectype = 'j' or $rectype = 'i'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">Music</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
-					<xsl:with-param name='tag' select="."/>
-					<xsl:with-param name='tagnumber'>006</xsl:with-param>
+					<xsl:with-param name='tag' select="$tag"/>
+					<xsl:with-param name='tagnumber'>008</xsl:with-param>
+                    <xsl:with-param name='classnumber'>006</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$rectype = 'g' or $rectype = 'k' or $rectype = 'o' or $rectype = 'r'">
 					<xsl:call-template name="generate_for_rectype">
 						<xsl:with-param name="rectype">Visual</xsl:with-param>
 						<xsl:with-param name="offset">17</xsl:with-param>
-						<xsl:with-param name='tag' select="."/>
-                        <xsl:with-param name='tagnumber'>006</xsl:with-param>
+						<xsl:with-param name='tag' select="$tag"/>
+                        <xsl:with-param name='tagnumber'>008</xsl:with-param>
+                        <xsl:with-param name='classnumber'>006</xsl:with-param>
 					</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$rectype = 'm'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">ComputerFile</xsl:with-param>
 					<xsl:with-param name="offset">17</xsl:with-param>
-					<xsl:with-param name='tag' select="."/>
-                    <xsl:with-param name='tagnumber'>006</xsl:with-param>
+					<xsl:with-param name='tag' select="$tag"/>
+                    <xsl:with-param name='tagnumber'>008</xsl:with-param>
+                    <xsl:with-param name='classnumber'>006</xsl:with-param>
 				</xsl:call-template>
 			</xsl:if>
 			<xsl:if test="$rectype = 'p'">
 					<xsl:call-template name="generate_for_rectype">
 						<xsl:with-param name="rectype">Mixed</xsl:with-param>
 						<xsl:with-param name="offset">17</xsl:with-param>
-						<xsl:with-param name='tag' select="."/>
-                        <xsl:with-param name='tagnumber'>006</xsl:with-param>
+						<xsl:with-param name='tag' select="$tag"/>
+                        <xsl:with-param name='tagnumber'>008</xsl:with-param>
+                        <xsl:with-param name='classnumber'>006</xsl:with-param>
 					</xsl:call-template>
 			</xsl:if>
 	</xsl:template>
@@ -230,6 +239,7 @@
                                 <xsl:with-param name="length"><xsl:value-of select="@length"/></xsl:with-param>
                                 <xsl:with-param name="tag"><xsl:value-of select="$tag007"/></xsl:with-param>
                                 <xsl:with-param name="tagnumber">007</xsl:with-param>
+                                <xsl:with-param name="classnumber">007</xsl:with-param>
                                 <xsl:with-param name="offset">0</xsl:with-param>
                             </xsl:call-template>
                         </xsl:when>
@@ -240,6 +250,7 @@
                                 <xsl:with-param name="length"><xsl:value-of select="@length"/></xsl:with-param>
                                 <xsl:with-param name="tag"><xsl:value-of select="$tag007"/></xsl:with-param>
                                 <xsl:with-param name="tagnumber">007</xsl:with-param>
+                                <xsl:with-param name="classnumber">007</xsl:with-param>
                                 <xsl:with-param name="offset">0</xsl:with-param>
                                 <xsl:with-param name="hidden">1</xsl:with-param>
                             </xsl:call-template>
@@ -251,6 +262,7 @@
                                 <xsl:with-param name="length"><xsl:value-of select="@length"/></xsl:with-param>
                                 <xsl:with-param name="tag"><xsl:value-of select="$tag007"/></xsl:with-param>
                                 <xsl:with-param name="tagnumber">007</xsl:with-param>
+                                <xsl:with-param name="classnumber">007</xsl:with-param>
                                 <xsl:with-param name="offset">0</xsl:with-param>
                             </xsl:call-template>
                         </xsl:otherwise>
@@ -263,6 +275,7 @@
 		<xsl:param name="name"/>
 		<xsl:param name="tag"/>
 		<xsl:param name="tagnumber"/>
+        <xsl:param name="classnumber">008</xsl:param>
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="position"><xsl:value-of select="$marc21defs//field[@tag=$tagnumber]//value[@name=$name]/@position"/></xsl:param>
 		<xsl:param name="length"><xsl:value-of select="$marc21defs//field[@tag=$tagnumber]//value[@name=$name]/@length"/></xsl:param>
@@ -272,7 +285,7 @@
 		<td><xsl:value-of select="$name"/></td>
 		<td>
 			<xsl:if test='$debug=1'><span style='color:red'><xsl:value-of select="$name"/>=<xsl:value-of select="$value"/></span><br/></xsl:if>
-			<select class="{$tagnumber}">
+			<select class="{$classnumber}">
 				<xsl:attribute name="name"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:attribute name='onblur'>onFixedFieldEditorBlur(this)</xsl:attribute>
 				<xsl:attribute name='onclick'>showTagHelp(this)</xsl:attribute>
@@ -295,6 +308,7 @@
 		<xsl:param name="name"/>
 		<xsl:param name="tag"/>
 		<xsl:param name="tagnumber"/>
+        <xsl:param name="classnumber">008</xsl:param>
 		<xsl:param name="offset">0</xsl:param>
 		<xsl:param name="hidden"/>
 		<xsl:param name="position"><xsl:value-of select="$marc21defs//field[@tag=$tagnumber]/value[@name=$name]/@position+1-$offset"/></xsl:param>
@@ -310,7 +324,7 @@
             <xsl:if test="$hidden=1">
                 <xsl:attribute name="style">display:none;</xsl:attribute>
             </xsl:if>
-			<input class="{$tagnumber}" type="text">
+			<input class="{$classnumber}" type="text">
 				<xsl:attribute name="id"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:attribute name="name"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:attribute name="size"><xsl:value-of select="$length"/></xsl:attribute>
@@ -337,6 +351,7 @@
 								<xsl:with-param name="tag" select="$leader" />
 								<xsl:with-param name="hidden" select="1" />
 								<xsl:with-param name="tagnumber" select="'000'" />
+								<xsl:with-param name="classnumber" select="'000'" />
 							</xsl:call-template>
 
 							<xsl:call-template name="fixed-field-text">
@@ -344,12 +359,14 @@
 								<xsl:with-param name="hidden" select="1" />
 								<xsl:with-param name="tag" select="$leader" />
 								<xsl:with-param name="tagnumber" select="'000'" />
+								<xsl:with-param name="classnumber" select="'000'" />
 							</xsl:call-template>
 
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'RStat'" />
 								<xsl:with-param name="tag" select="$leader" />
 								<xsl:with-param name="tagnumber" select="'000'" />
+								<xsl:with-param name="classnumber" select="'000'" />
 							</xsl:call-template>
 
 
@@ -357,38 +374,45 @@
 								<xsl:with-param name="name" select="'Type'" />
 								<xsl:with-param name="tag" select="$leader" />
 								<xsl:with-param name="tagnumber" select="'000'" />
+								<xsl:with-param name="classnumber" select="'000'" />
 							</xsl:call-template>
 
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'BLvl'" />
 								<xsl:with-param name="tag" select="$leader" />
 								<xsl:with-param name="tagnumber" select="'000'" />
+								<xsl:with-param name="classnumber" select="'000'" />
 							</xsl:call-template>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'Desc'" />
 								<xsl:with-param name="tag" select="$leader" />
 								<xsl:with-param name="tagnumber" select="'000'" />
+								<xsl:with-param name="classnumber" select="'000'" />
 							</xsl:call-template>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'Multipart'" />
 								<xsl:with-param name="tag" select="$leader" />
 								<xsl:with-param name="tagnumber" select="'000'" />
+								<xsl:with-param name="classnumber" select="'000'" />
 							</xsl:call-template>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'ELvl'" />
 								<xsl:with-param name="tag" select="$leader" />
 								<xsl:with-param name="tagnumber" select="'000'" />
+								<xsl:with-param name="classnumber" select="'000'" />
 							</xsl:call-template>
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'Enc'" />
 								<xsl:with-param name="tag" select="$leader" />
 								<xsl:with-param name="tagnumber" select="'000'" />
+								<xsl:with-param name="classnumber" select="'000'" />
                             </xsl:call-template>
 
 							<xsl:call-template name="fixed-field-select">
 								<xsl:with-param name="name" select="'Ctrl'" />
 								<xsl:with-param name="tag" select="$leader" />
 								<xsl:with-param name="tagnumber" select="'000'" />
+								<xsl:with-param name="classnumber" select="'000'" />
 							</xsl:call-template>
 			</xsl:template>
 </xsl:stylesheet>
