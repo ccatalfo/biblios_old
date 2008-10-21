@@ -41,7 +41,6 @@ function doSaveLocal(savefileid, editorid, offset) {
 		// if we have a record open in the marceditor, get its xml and save to drafts
 		if( openState == 'editorPanel' ) {
 			// make sure we have up to date record
-			transferFF_EdToTags(UI.editor[editorid].ffed, UI.editor[editorid].vared, editorid);
 			UI.editor[editorid].record.update();
 			var progress = Ext.MessageBox.progress('Saving record');
 			// transform edited record back into marcxml
@@ -152,7 +151,6 @@ function doSaveRemote(loc, xmldoc, editorid) {
 	Ext.get('vareditor').mask();*/
 	Ext.getCmp('editorTabPanel').getActiveTab().sending = true;
 // make sure we have up to date record
-	transferFF_EdToTags(UI.editor[editorid].ffed, UI.editor[editorid].vared, editorid);
 	UI.editor[editorid].record.update();
 	xmldoc = UI.editor[editorid].record.XML();
 	UI.editor[editorid].location = loc;

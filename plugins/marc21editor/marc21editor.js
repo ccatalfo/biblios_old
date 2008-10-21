@@ -456,12 +456,14 @@ function onBlur(elem) {
 	UI.editor[editorid].lastFocusedEl = elem;
 }
 
+/*
 function onFixedFieldEditorBlur(elem) {
 	var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
 	transferFF_EdToTags(UI.editor[editorid].ffed, UI.editor[editorid].vared, editorid);
 	UI.editor[editorid].record.update($('#000').find('.controlfield'));
 	UI.editor[editorid].record.update($('#008').find('.controlfield'));
 }
+*/
 
 
 
@@ -1281,7 +1283,14 @@ function setupFFEditorCtryCombo() {
                             i: this.i,
                             handler: function(btn) {
                                 var newvalue = getFFTagFromPopup(btn.tagnumber, btn.i, btn.rectype, btn.ffid);
-                                Ext.getCmp(this.editorid+'-'+btn.tagnumber+'-'+btn.i).setText( newvalue );
+                                if( btn.tagnumber == '000') {
+                                    tag = 'LDR';
+                                }
+                                else {
+                                    tag = btn.tagnumber;
+                                }
+                                Ext.getCmp(this.editorid+'-'+btn.tagnumber+'-'+btn.i).setText( tag + ' ' + newvalue );
+                                Ext.WindowMgr.getActive().close();
                             }
 
                         },
@@ -1297,6 +1306,7 @@ function setupFFEditorCtryCombo() {
                             editorid: this.editorid,
                             tagnumber: this.tagnumber,
                             rectype: this.rectype,
+                            disabled: this.tagnumber == '008' || this.tagnumber == '000' ? true : false,
                             ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup',
                             i:this.i,
                             handler: function(btn) {
