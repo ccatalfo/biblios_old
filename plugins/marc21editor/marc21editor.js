@@ -531,7 +531,7 @@ function MarcEditor(editorid) {
 	// private methods
 
 function getFFTagFromPopup(tagnumber, i, rectype, ffid) {
-    var html = $('#'+ffid).html();
+    var html = $('#'+ffid);
     var value = '';
     if( tagnumber == '000' ) {
         try {
