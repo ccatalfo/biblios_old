@@ -552,10 +552,10 @@ function getFFTagFromPopup(tagnumber, i, rectype, ffid) {
         try {
             var mattype = get007MaterialName(rectype);
             var tag007val = get007FromEditor(html, rectype, mattype);
-            if( bibliosdebug ) { console.debug('getFFTagFromPopup: 007: ' + cat + ' ' + mattype + ' ' + tag007val) }
         } catch(ex) {
             if(bibliosdebug){ console.debug('transferFF_EdToTags: exception ' + ex.error + ' ' + ex.msg + ' ' + ex.length) }
         }
+            if( bibliosdebug ) { console.debug('getFFTagFromPopup: 007: ' + rectype + ' ' + mattype + ' ' + tag007val) }
             $('#'+editorid).find(".007").eq(i).children('.controlfield-text').val(tag007val);
             if(bibliosdebug){console.info('Transferring 007 value from fixed field editor into 007 tag: ' + tag007val);}
             value = tag007val;

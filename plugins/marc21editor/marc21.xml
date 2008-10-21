@@ -751,7 +751,7 @@
          <option description="Other">z</option>
          <option description="No attempt to code">|</option>
       </value>
-      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="menubox">
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="hidden">
          <option description="Blank or #"> </option>
          <option description="Fill character">|</option>
       </value>
@@ -807,7 +807,7 @@
          <option description="Other">z</option>
          <option description="No attempt to code">|</option>
       </value>
-      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="menubox">
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="hidden">
          <option description="Blank or #"> </option>
          <option description="Fill character">|</option>
       </value>
@@ -893,7 +893,7 @@
          <option description="Other">z</option>
          <option description="No attempt to code">|</option>
       </value>
-      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="menubox">
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="hidden">
          <option description="Blank or #"> </option>
          <option description="Fill character">|</option>
       </value>
@@ -936,7 +936,7 @@
          <option description="Other">z</option>
          <option description="No attempt to code">|</option>
       </value>
-      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="menubox">
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="hidden">
          <option description="Blank or #"> </option>
          <option description="Fill character">|</option>
       </value>
@@ -999,7 +999,7 @@
          <option description="Other">z</option>
          <option description="No attempt to code">|</option>
       </value>
-      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="menubox">
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="hidden">
          <option description="Blank or #"> </option>
          <option description="Fill character">|</option>
       </value>
@@ -1071,7 +1071,7 @@
          <option description="Unspecified">u</option>
          <option description="No attempt to code">|</option>
       </value>
-      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="menubox">
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="hidden">
          <option description="Blank or #"> </option>
          <option description="Fill character">|</option>
       </value>
@@ -1145,7 +1145,7 @@
          <option description="Unspecified">u</option>
          <option description="No attempt to code">|</option>
       </value>
-      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="menubox">
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="hidden">
          <option description="Blank or #"> </option>
          <option description="Fill character">|</option>
       </value>
@@ -1199,7 +1199,7 @@
          <option description="Other">z</option>
          <option description="No attempt to code">|</option>
       </value>
-      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="menubox">
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="hidden">
          <option description="Blank or #"> </option>
          <option description="Fill character">|</option>
       </value>
@@ -1346,7 +1346,7 @@
          <option description="Unspecified">u</option>
          <option description="No attempt to code">|</option>
       </value>
-      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="menubox">
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="hidden">
          <option description="Blank or #"> </option>
          <option description="Fill character">|</option>
       </value>
@@ -1466,7 +1466,7 @@
          <option description="Other">z</option>
          <option description="No attempt to code">|</option>
       </value>
-      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="menubox">
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="hidden">
          <option description="Blank or #"> </option>
          <option description="Fill character">|</option>
       </value>
@@ -1611,7 +1611,7 @@
          <option description="Other">z</option>
          <option description="No attempt to code">|</option>
       </value>
-      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="menubox">
+      <value name="Undefined" position="2" length="1" description="Each contains a blank (#) or fill character (|)" inputtype="hidden">
          <option description="Blank or #"> </option>
          <option description="Fill character">|</option>
       </value>
