@@ -1236,15 +1236,18 @@ function setupFFEditorCtryCombo() {
         UI.editor[editorid].record.showffeditor  = UI.editor[editorid].record.showffeditor ? false : true;
         var var_ed = $('#'+editorid).find(".vareditor");
         if( UI.editor[editorid].record.showffeditor == false ) {
-            // show leader and 008
-            $('#'+editorid).find('.varfields_editor').find(".000", UI.editor[editorid].vared).show();
-            $('#'+editorid).find('.varfields_editor').find(".008", UI.editor[editorid].vared).show();
-            $('#'+editorid).find('.varfields_editor').find(".006", UI.editor[editorid].vared).show();
-            $('#'+editorid).find('.varfields_editor').find(".007", UI.editor[editorid].vared).show();
+            var items = Ext.getCmp( UI.editor[editorid].tabid ).items;
+            for( var i = 0; i < items.length; i++) {
+                Ext.getCmp( UI.editor[editorid].tabid ).items.itemAt(i).hide();
+            }
+                $('#'+editorid).find('.varfields_editor').find(".000, .001, .003, .005, .006, .007, .008", UI.editor[editorid].vared).show();
         }
         else {
-            UI.editor[editorid].record.update();
-            var xml = UI.editor[editorid].record.XMLString();
+            var items = Ext.getCmp( UI.editor[editorid].tabid ).items;
+            for( var i = 0; i < items.length; i++) {
+                Ext.getCmp( UI.editor[editorid].tabid ).items.itemAt(i).show();
+                $('#'+editorid).find('.varfields_editor').find(".000, .001, .003, .005, .006, .007, .008", UI.editor[editorid].vared).hide();
+            }
         }
     }
 
