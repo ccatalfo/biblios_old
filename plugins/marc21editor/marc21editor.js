@@ -24,20 +24,6 @@ var marc21controlfields = xslTransform.loadFile(marc21controlfieldsPath);
 showStatusMsg('Loading marc21 editor complete');
 clearStatusMsg();
 Ext.getCmp('editingTreePanel').enable();
-/*
-    Function: getLeaderFromEditor
-
-    Serialize the leader values from the fixed field editor into a string suitable to be placed in <leader> element of marcxml document.
-
-    Parameters:
-
-    ff_ed: the fixed field editor
-
-    Returns:
-
-    leaderval: string containing serialized leader from editor
-
-*/
 
 function getLeaderFromEditor(ff_ed) {
 	var leaderval = '';
@@ -66,20 +52,6 @@ function getLeaderFromEditor(ff_ed) {
     return leaderval;
 }
 
-/* 
-    Function: get008FromEditor
-
-    Get string representation of 008 from fixed fields editor.
-
-    Parameters:
-
-    ff_ed: the fixed field editor
-
-    Returns:
-
-    tag008val: string version of 008
-
-*/
 
 function check008AllMaterials(position) {
 	var allmaterialscodes = new Array('00', '01', '02','03', '04', '05', '06','07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '35', '36', '37', '38', '39', '40');
@@ -129,11 +101,6 @@ function get008FromEditor(ff_ed, rectype) {
 						value += ' ';
 					}
 				}
-                /*
-				else if( type == 'Lang' || type == 'Ctry' ) {
-					//value = Ext.getCmp(type).getValue() || '';
-				}
-                */
 				else {
 					value = $(ff_ed).find('#'+type).val() || ' ';
 				}
@@ -151,11 +118,6 @@ function get008FromEditor(ff_ed, rectype) {
 						value += ' ';
 					}
 				}
-                /*
-				else if( type == 'Lang' || type == 'Ctry' ) {
-					//value = Ext.getCmp(type).getValue() || '';
-				}
-                */
 				else {
 					value = $(ff_ed).find('#'+type).val() || '';
 				}
@@ -173,11 +135,6 @@ function get008FromEditor(ff_ed, rectype) {
                             value += ' ';
                         }
                     }
-                    /*
-                    else if( type == 'Lang' || type == 'Ctry' ) {
-                        //value = Ext.getCmp(type).getValue() || '';
-                    }
-                    */
                     else {
                         value = $(ff_ed).find('#'+type).val() || '';
                     }
@@ -456,14 +413,6 @@ function onBlur(elem) {
 	UI.editor[editorid].lastFocusedEl = elem;
 }
 
-/*
-function onFixedFieldEditorBlur(elem) {
-	var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
-	transferFF_EdToTags(UI.editor[editorid].ffed, UI.editor[editorid].vared, editorid);
-	UI.editor[editorid].record.update($('#000').find('.controlfield'));
-	UI.editor[editorid].record.update($('#008').find('.controlfield'));
-}
-*/
 
 
 
