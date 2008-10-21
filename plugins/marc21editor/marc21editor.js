@@ -457,12 +457,10 @@ function onBlur(elem) {
 }
 
 function onFixedFieldEditorBlur(elem) {
-/*
 	var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
 	transferFF_EdToTags(UI.editor[editorid].ffed, UI.editor[editorid].vared, editorid);
 	UI.editor[editorid].record.update($('#000').find('.controlfield'));
 	UI.editor[editorid].record.update($('#008').find('.controlfield'));
-*/
 }
 
 
@@ -471,22 +469,6 @@ function onFixedFieldEditorBlur(elem) {
 
 
 
-/* 
-   Function: clearEditor
-
-   Clear the editor divs currently open record.
-
-   Parameters:
-  
-   None.
-
-   Returns:
-
-   None.
- 
-   See Also:
-   <openRecord>
-*/
 function clear_editor(editorid) {
     // reset current open record to none
     UI.editor[editorid].id = '';
@@ -568,9 +550,9 @@ function getFFTagFromPopup(tagnumber, i, rectype, ffid) {
     }
     else if( tagnumber == '007' ) {
         try {
-            var cat = $('.varfields_editor div.007').eq(i).find('.controlfield-text').val().substr(0,1);
-            var mattype = get007MaterialName(cat);
-            var tag007val = get007FromEditor(html, cat, mattype);
+            var mattype = get007MaterialName(rectype);
+            var tag007val = get007FromEditor(html, rectype, mattype);
+            if( bibliosdebug ) { console.debug('getFFTagFromPopup: 007: ' + cat + ' ' + mattype + ' ' + tag007val) }
         } catch(ex) {
             if(bibliosdebug){ console.debug('transferFF_EdToTags: exception ' + ex.error + ' ' + ex.msg + ' ' + ex.length) }
         }
@@ -1267,6 +1249,9 @@ function setupFFEditorCtryCombo() {
     this.showFFPopup = function(tagnumber, tagvalue, i) {
         if( tagnumber == '008' ) {
             var rectype = $('#'+editorid).find('.000').children('.controlfield-text').val().substr(6,1);
+        }
+        else if( tagnumber == '007') {
+            var rectype = $('#'+editorid).find('.007').children('.controlfield-text').val().substr(0,1);
         }
         $.ajax({
             url: cgiDir + 'xsltransform.pl',
