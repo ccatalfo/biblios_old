@@ -1280,7 +1280,8 @@ function setupFFEditorCtryCombo() {
                             ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup',
                             i: this.i,
                             handler: function(btn) {
-                                getFFTagFromPopup(btn.tagnumber, btn.i, btn.rectype, btn.ffid);
+                                var newvalue = getFFTagFromPopup(btn.tagnumber, btn.i, btn.rectype, btn.ffid);
+                                Ext.getCmp(this.editorid+'-'+btn.tagnumber+'-'+btn.i).setText( newvalue );
                             }
 
                         },
@@ -1644,6 +1645,7 @@ function setupFFEditorCtryCombo() {
             new Ext.Toolbar({
                 items: [
                     {
+                        id: this.editorid + '-000-0',
                         text: 'LDR ' + leader
                     },
                     {
@@ -1664,6 +1666,7 @@ function setupFFEditorCtryCombo() {
             new Ext.Toolbar({
                 items: [
                     {
+                        id: this.editorid + '-008-0',
                         text: '008 ' + tag008
                     },
                     {
@@ -1685,6 +1688,7 @@ function setupFFEditorCtryCombo() {
                 new Ext.Toolbar({
                     items: [
                         {
+                            id: editorid+'-006-'+i,
                             text: '006 ' + tag006
                         },
                         {
@@ -1707,6 +1711,7 @@ function setupFFEditorCtryCombo() {
                 new Ext.Toolbar({
                     items: [
                         {
+                            id: editorid+'-007-'+i,
                             text: '007 ' + tag007
                         },
                          {
