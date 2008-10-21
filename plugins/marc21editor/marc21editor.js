@@ -1286,8 +1286,9 @@ function setupFFEditorCtryCombo() {
                         },
                         {
                             text: 'Cancel',
-                            handler: function() {
-
+                            ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup',
+                            handler: function(btn) {
+                                Ext.WindowMgr.getActive().close();
                             }
                         },
                         {
@@ -1295,10 +1296,16 @@ function setupFFEditorCtryCombo() {
                             editorid: this.editorid,
                             tagnumber: this.tagnumber,
                             rectype: this.rectype,
+                            ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup',
                             i:this.i,
                             handler: function(btn) {
-                                $('#'+btn.editorid).find('.'+btn.tagnumber).eq(i).remove();
-
+                                try {
+                                    $('#'+btn.editorid).find('.'+btn.tagnumber).eq(btn.i).remove();
+                                } catch(ex) {
+                                    Ext.Msg.alert('Error', 'An error has occurred. Unable to delete tag ' + btn.tagnumber + ' with index ' + btn.i + '.  Please report as a bug');
+                                }
+                                Ext.Msg.alert('Tag deleted', 'Tag has been deleted');
+                                Ext.WindowMgr.getActive().close();
                             }
                         }
                     ]
@@ -1644,8 +1651,9 @@ function setupFFEditorCtryCombo() {
                         scope: this,
                         tagvalue: leader,
                         tagnumber: '000',
+                        i:0,
                         handler: function(btn ) {
-                            this.showFFPopup( btn.tagnumber, btn.tagvalue );
+                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
                         }
                     }
                 ]
@@ -1663,8 +1671,9 @@ function setupFFEditorCtryCombo() {
                         scope: this,
                         tagvalue: tag008,
                         tagnumber: '008',
+                        i:0,
                         handler: function(btn ) {
-                            this.showFFPopup( btn.tagnumber, btn.tagvalue );
+                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
                         }
                     }
                 ]
@@ -1683,8 +1692,9 @@ function setupFFEditorCtryCombo() {
                             scope: UI.editor[editorid].record,
                             tagvalue: tag006,
                             tagnumber: '006',
+                            i:i,
                             handler: function(btn ) {
-                                this.showFFPopup( btn.tagnumber, btn.tagvalue );
+                                this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
                             }
                         }
                     ]
@@ -1704,8 +1714,9 @@ function setupFFEditorCtryCombo() {
                             scope: UI.editor[editorid].record,
                             tagvalue: tag007,
                             tagnumber: '007',
+                            i: i,
                             handler: function(btn ) {
-                                this.showFFPopup( btn.tagnumber, btn.tagvalue );
+                                this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
                             }
                         }
                     ]
