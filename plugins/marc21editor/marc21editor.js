@@ -1636,6 +1636,8 @@ function setupFFEditorCtryCombo() {
                     },
                     {
                         text: 'Edit',
+                        cls: 'x-btn-text-icon',
+                        icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
                         scope: this,
                         tagvalue: leader,
                         tagnumber: '000',
@@ -1657,6 +1659,8 @@ function setupFFEditorCtryCombo() {
                     },
                     {
                         text: 'Edit',
+                        cls: 'x-btn-text-icon',
+                        icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
                         scope: this,
                         tagvalue: tag008,
                         tagnumber: '008',
@@ -1688,6 +1692,8 @@ function setupFFEditorCtryCombo() {
                                             },
                                             {
                                                 text: 'Edit',
+                                                cls: 'x-btn-text-icon',
+                                                icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
                                                 scope: UI.editor[editorid].record,
                                                 tagvalue: text+'                 ',
                                                 tagnumber: '006',
@@ -1722,6 +1728,8 @@ function setupFFEditorCtryCombo() {
                                             },
                                             {
                                                 text: 'Edit',
+                                                cls: 'x-btn-text-icon',
+                                                icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
                                                 scope: UI.editor[editorid].record,
                                                 tagvalue: text+'    ',
                                                 tagnumber: '007',
@@ -1754,6 +1762,8 @@ function setupFFEditorCtryCombo() {
                         },
                         {
                             text: 'Edit',
+                            cls: 'x-btn-text-icon',
+                            icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
                             scope: UI.editor[editorid].record,
                             tagvalue: tag006,
                             tagnumber: '006',
@@ -1777,6 +1787,8 @@ function setupFFEditorCtryCombo() {
                         },
                          {
                             text: 'Edit',
+                            icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
+                            cls: 'x-btn-text-icon',
                             scope: UI.editor[editorid].record,
                             tagvalue: tag007,
                             tagnumber: '007',
