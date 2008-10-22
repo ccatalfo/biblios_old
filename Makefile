@@ -43,7 +43,7 @@ build: $(SRCS)
 	@echo
 	@echo "Concatenating css files"
 	@echo
-	$(CAT) build/css/styles-min.css build/css/editor-styles-min.css build/css/preview-styles-min.css build/css/Ext.ux.ToolbarContainer.css > build/styles.css
+	$(CAT) build/css/styles-min.css build/css/editor-styles-min.css build/css/preview-styles-min.css build/css/Ext.ux.ToolbarContainer-min.css > build/styles.css
 
 install: 
 	cp build/index.html $(HTMLDIR)/index.html
