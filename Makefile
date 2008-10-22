@@ -25,7 +25,7 @@ build: $(SRCS)
 	@echo
 	@echo "Building javascript libraries"	
 	@echo
-	$(CAT) lib/extjs2/TabCloseMenu.js lib/extjs2/Ext.grid.SmartCheckboxSelectionModel.js lib/extjs2/PagingMemoryProxy.js lib/extjs2/GoogleGearsProxy.js lib/extjs2/Ext.ux.NestedXmlReader.js lib/extjs2/Ext.ux.GearsTreeLoader.js lib/extjs2/Ext.ux.FacetsTreeLoader.js lib/extjs2/Ext.ux.UploadDialog.js lib/extjs2/RowExpander.js lib/extjs2/miframe.js lib/extjs2/GridViewOverride.js > build/lib/ext_ux_libs.js
+	$(CAT) lib/extjs2/Ext.ux.ToolbarContainer.js lib/extjs2/TabCloseMenu.js lib/extjs2/Ext.grid.SmartCheckboxSelectionModel.js lib/extjs2/PagingMemoryProxy.js lib/extjs2/GoogleGearsProxy.js lib/extjs2/Ext.ux.NestedXmlReader.js lib/extjs2/Ext.ux.GearsTreeLoader.js lib/extjs2/Ext.ux.FacetsTreeLoader.js lib/extjs2/Ext.ux.UploadDialog.js lib/extjs2/RowExpander.js lib/extjs2/miframe.js lib/extjs2/GridViewOverride.js > build/lib/ext_ux_libs.js
 	$(JSMIN) build/lib/ext_ux_libs.js build/lib/ext_ux_libs-min.js
 	$(CAT) lib/jquery/jquery.hotkeys.js lib/jquery/jquery.xpath.js lib/jquery/jquery.cookie.js lib/jquery/json.js > build/lib/jquery_plugins.js
 	$(JSMIN) build/lib/jquery_plugins.js build/lib/jquery_plugins-min.js
@@ -39,10 +39,11 @@ build: $(SRCS)
 	$(CSSMIN) ui/css/styles.css build/css/styles-min.css
 	$(CSSMIN) ui/css/editor-styles.css build/css/editor-styles-min.css
 	$(CSSMIN) ui/css/preview-styles.css build/css/preview-styles-min.css
+	$(CSSMIN) lib/extjs2/Ext.ux.ToolbarContainer.css build/css/Ext.ux.ToolbarContainer-min.css
 	@echo
 	@echo "Concatenating css files"
 	@echo
-	$(CAT) build/css/styles-min.css build/css/editor-styles-min.css build/css/preview-styles-min.css > build/styles.css
+	$(CAT) build/css/styles-min.css build/css/editor-styles-min.css build/css/preview-styles-min.css build/css/Ext.ux.ToolbarContainer.css > build/styles.css
 
 install: 
 	cp build/index.html $(HTMLDIR)/index.html
