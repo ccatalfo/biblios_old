@@ -1662,7 +1662,7 @@ function setupFFEditorCtryCombo() {
                 id: this.editorid + '006tbar',
                 items: [
                     {
-                        text: 'Create 006',
+                        text: '006',
                         scope: this,
                         handler: function() {
                             Ext.Msg.prompt('Create 006', 'Enter type of 006', function(btn,text) {
@@ -1697,7 +1697,7 @@ function setupFFEditorCtryCombo() {
                 id: this.editorid + '007tbar',
                 items: [
                     {
-                        text: 'Create 007',
+                        text: '007',
                         handler: function() {
                             Ext.Msg.prompt('Create 007', 'Enter type of 007', function(btn,text) {
                                 var l = $('#'+editorid).find('.007').length;
