@@ -54,6 +54,7 @@
 		<option>o</option>
 		<option>p</option>
 		<option>r</option>
+		<option>s</option>
 		<option>t</option>
 	</value>
 	<value name="Indc" position="10" length="1" inputtype="hidden">
@@ -739,6 +740,24 @@
 	<!-- mixed materials -->
 
 
+</field>
+    <field tag="006">
+	<value name="Type" position="0" length="1" inputtype="menulist">
+		<option>a</option>
+		<option>c</option>
+		<option>d</option>
+		<option>e</option>
+		<option>f</option>
+		<option>g</option>
+		<option>i</option>
+		<option>j</option>
+		<option>k</option>
+		<option>m</option>
+		<option>o</option>
+		<option>p</option>
+		<option>r</option>
+		<option>t</option>
+	</value>
 </field>
    <field mattype="Map" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">

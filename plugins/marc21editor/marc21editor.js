@@ -155,18 +155,25 @@ function get008FromEditor(ff_ed, rectype) {
 }
 
 function get006FromEditor(tr, rectype) {
-		var tag006val = '';
+		var tag006val = rectype;
 		var mattype = get008MaterialName(rectype);
+        if(bibliosdebug) {
+            console.debug('get006fromEditor: mattype: ' + mattype );
+        }
 		$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 			var type = $(this).text();
-			if( type.substr(0, 4) == 'Undef') {
+			if( type.substr(0, 5) == 'Undef') {
 				var length = type.substr(5,1);
 				for( var k = 0; k<length; k++) {
 					tag006val += ' ';
 				}
 			}
-			var value = $(tr).find('#'+type).val();
-			tag006val += value;
+            else {
+                tag006val += $(tr).find('#'+type).val();
+            }
+            if(bibliosdebug) {
+                console.debug('get006fromEditor: type: ' + type + ' value: \"' + tag006val + '\"' + ' length: ' + tag006val.length);
+            }
 		});
     return tag006val;
 }
@@ -465,6 +472,9 @@ function MarcEditor(editorid) {
 function getFFTagFromPopup(tagnumber, i, rectype, ffid) {
     var html = $('#'+ffid);
     var value = '';
+    if(bibliosdebug){
+        console.debug('getFFTagFromPopup: ' + tagnumber + ' ' + i + ' ' + rectype + ' ' + ffid);
+    }
     if( tagnumber == '000' ) {
         try {
             var leaderval = getLeaderFromEditor(html);
@@ -492,7 +502,7 @@ function getFFTagFromPopup(tagnumber, i, rectype, ffid) {
         try {
             var tag006val = get006FromEditor(html, rectype);
         } catch(ex) {
-            if(bibliosdebug){ console.debug('transferFF_EdToTags: exception ' + ex.error + ' ' + ex.msg + ' ' + ex.length) }
+            if(bibliosdebug){ console.debug(ex);}
         }
             $('#'+editorid).find(".006").eq(i).children('.controlfield-text').val(tag006val);
             if(bibliosdebug){console.info('Transferring 006 value from fixed field editor into 006 tag: ' + tag006val);}
@@ -1668,6 +1678,7 @@ function setupFFEditorCtryCombo() {
                             Ext.Msg.prompt('Create 006', 'Enter type of 006', function(btn,text) {
                                 var l = $('#'+editorid).find('.006').length;
                                 UI.editor[editorid].record.addField('006', '#', '#', [{delimiter:'', text: text+'       '}]);
+                                $('#'+editorid).find('.006').hide();
                                 Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
                                     new Ext.Toolbar({
                                         items: [
@@ -1701,6 +1712,7 @@ function setupFFEditorCtryCombo() {
                             Ext.Msg.prompt('Create 007', 'Enter type of 007', function(btn,text) {
                                 var l = $('#'+editorid).find('.007').length;
                                 UI.editor[editorid].record.addField('007', '#', '#', [{delimiter:'', text: text+'       '}]);
+                                $('#'+editorid).find('.007').hide();
                                 Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
                                     new Ext.Toolbar({
                                         items: [

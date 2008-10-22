@@ -167,8 +167,15 @@
     </xsl:template>
 
 	<xsl:template name="tag006">
-        <xsl:param name="rectype" select="substring(., 1, 1)"/>
-            <xsl:param name="tag"/>
+        <xsl:param name="tag"/>
+        <xsl:param name="rectype" select="substring($tag, 1, 1)"/>
+        <xsl:call-template name="fixed-field-select">
+            <xsl:with-param name="name" select="'Type'"/>
+            <xsl:with-param name="tag" select="$tag"/>
+            <xsl:with-param name="tagnumber" select="'006'"/>
+            <xsl:with-param name="classnumber" select="'006'"/>
+            <xsl:with-param name="offset" select="0"/>
+        </xsl:call-template>
 			<xsl:if test="$rectype = 'a' or $rectype = 't'">
 				<xsl:call-template name="generate_for_rectype">
 					<xsl:with-param name="rectype">Books</xsl:with-param>
