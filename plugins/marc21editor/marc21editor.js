@@ -1215,13 +1215,13 @@ function setupFFEditorCtryCombo() {
             console.debug('showFFPopup: ' + tagnumber + ' ' + tagvalue + ' ' + i); 
         }
         if( tagnumber == '008' ) {
-            var rectype = $('#'+editorid).find('.000').children('.controlfield-text').val().substr(6,1);
+            var rectype = $('#'+editorid).find('.000').eq(i).children('.controlfield-text').val().substr(6,1);
         }
         else if( tagnumber == '006') {
-            var rectype = $('#'+editorid).find('.006').children('.controlfield-text').val().substr(0,1);
+            var rectype = $('#'+editorid).find('.006').eq(i).children('.controlfield-text').val().substr(0,1);
         }
         else if( tagnumber == '007') {
-            var rectype = $('#'+editorid).find('.007').children('.controlfield-text').val().substr(0,1);
+            var rectype = $('#'+editorid).find('.007').eq(i).children('.controlfield-text').val().substr(0,1);
         }
         $.ajax({
             url: cgiDir + 'xsltransform.pl',
@@ -1257,7 +1257,7 @@ function setupFFEditorCtryCombo() {
                                 else {
                                     tag = btn.tagnumber;
                                 }
-                                Ext.getCmp(this.editorid+'-'+btn.tagnumber+'-'+btn.i).setText( tag + ' ' + newvalue );
+                                Ext.getCmp(this.editorid+'-'+btn.tagnumber+'-'+btn.i).setText( '<b>'+tag+'</b>' + ' ' + newvalue );
                                 Ext.WindowMgr.getActive().close();
                             }
 
@@ -1593,7 +1593,7 @@ function setupFFEditorCtryCombo() {
         var tag001 = $('#'+editorid).find('.001').children('.controlfield-text').val();
         var tag003 = $('#'+editorid).find('.003').children('.controlfield-text').val();
         var tag005 = $('#'+editorid).find('.005').children('.controlfield-text').val();
-        Ext.getCmp(editorid+'-003').setText('(003) '+tag003+' SystemID:'+tag001+' Last edited: '+tag005);
+        Ext.getCmp(editorid+'-003').setText('<b>(003)</b> '+tag003+' SystemID:'+tag001+' Last edited: '+tag005);
 
         var leader = $('#'+editorid).find('.000').children('.controlfield-text').val();
         Ext.getCmp(editorid+'-000-0').setText( leader );
@@ -1627,17 +1627,14 @@ function setupFFEditorCtryCombo() {
             })
         );
         var leader = $('#'+editorid).find('.000').children('.controlfield-text').val();
+        var tag008 = $('#'+editorid).find('.008').children('.controlfield-text').val();
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
             new Ext.Toolbar({
+                id: this.editorid + 'ldr008tbar',
                 items: [
                     {
                         id: this.editorid + '-000-0',
-                        text: 'LDR ' + leader
-                    },
-                    {
-                        text: 'Edit',
-                        cls: 'x-btn-text-icon',
-                        icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
+                        text: '<b>LDR</b> ' + leader,
                         scope: this,
                         tagvalue: leader,
                         tagnumber: '000',
@@ -1645,22 +1642,10 @@ function setupFFEditorCtryCombo() {
                         handler: function(btn ) {
                             this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
                         }
-                    }
-                ]
-            })
-        );
-        var tag008 = $('#'+editorid).find('.008').children('.controlfield-text').val();
-        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
-            new Ext.Toolbar({
-                items: [
-                    {
-                        id: this.editorid + '-008-0',
-                        text: '008 ' + tag008
                     },
                     {
-                        text: 'Edit',
-                        cls: 'x-btn-text-icon',
-                        icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
+                        id: this.editorid + '-008-0',
+                        text: '<b>008</b> ' + tag008,
                         scope: this,
                         tagvalue: tag008,
                         tagnumber: '008',
@@ -1674,6 +1659,7 @@ function setupFFEditorCtryCombo() {
         );
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
             new Ext.Toolbar({
+                id: this.editorid + '006tbar',
                 items: [
                     {
                         text: 'Create 006',
@@ -1683,27 +1669,18 @@ function setupFFEditorCtryCombo() {
                                 var l = $('#'+editorid).find('.006').length;
                                 UI.editor[editorid].record.addField('006', '#', '#', [{delimiter:'', text: text+'       '}]);
                                 $('#'+editorid).find('.006').hide();
-                                Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
-                                    new Ext.Toolbar({
-                                        items: [
-                                            {
-                                                id: editorid+'-006-'+l,
-                                                text: '006 ' + text+'                 '
-                                            },
-                                            {
-                                                text: 'Edit',
-                                                cls: 'x-btn-text-icon',
-                                                icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
-                                                scope: UI.editor[editorid].record,
-                                                tagvalue: text+'                 ',
-                                                tagnumber: '006',
-                                                i:l,
-                                                handler: function(btn ) {
-                                                    this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
-                                                }
-                                            }
-                                        ]
-                                    })
+                                Ext.getCmp(editorid+'006tbar').add(
+                                    {
+                                        id: editorid+'-006-'+l,
+                                        text: '<b>006</b> ' + text+'                 ',
+                                        tagvalue: text+'                 ',
+                                        tagnumber: '006',
+                                        i: l,
+                                        scope: UI.editor[editorid].record,
+                                        handler: function(btn ) {
+                                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
+                                        }
+                                    }
                                 );
                                 biblios.app.viewport.doLayout();
                                 UI.editor[editorid].record.showFFPopup('006', text+'            ', l);
@@ -1711,7 +1688,14 @@ function setupFFEditorCtryCombo() {
                             });
 
                         }
-                    },
+                    }
+                ]
+            })
+        );
+        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
+            new Ext.Toolbar({
+                id: this.editorid + '007tbar',
+                items: [
                     {
                         text: 'Create 007',
                         handler: function() {
@@ -1719,27 +1703,18 @@ function setupFFEditorCtryCombo() {
                                 var l = $('#'+editorid).find('.007').length;
                                 UI.editor[editorid].record.addField('007', '#', '#', [{delimiter:'', text: text+'       '}]);
                                 $('#'+editorid).find('.007').hide();
-                                Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
-                                    new Ext.Toolbar({
-                                        items: [
-                                            {
-                                                id: editorid+'-007-'+l,
-                                                text: '007' + text+'     '
-                                            },
-                                            {
-                                                text: 'Edit',
-                                                cls: 'x-btn-text-icon',
-                                                icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
-                                                scope: UI.editor[editorid].record,
-                                                tagvalue: text+'    ',
-                                                tagnumber: '007',
-                                                i:l,
-                                                handler: function(btn ) {
-                                                    this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
-                                                }
-                                            }
-                                        ]
-                                    })
+                                Ext.getCmp(editorid+'007tbar').add(
+                                    {
+                                        id: editorid+'-007-'+l,
+                                        text: '<b>007</b>' + text+'     ',
+                                        scope: UI.editor[editorid].record,
+                                        tagvalue: text+'    ',
+                                        tagnumber: '007',
+                                        i:l,
+                                        handler: function(btn ) {
+                                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
+                                        }
+                                    }
                                 );
                                 biblios.app.viewport.doLayout();
                                 UI.editor[editorid].record.showFFPopup('007', text+'            ', l);
@@ -1753,52 +1728,34 @@ function setupFFEditorCtryCombo() {
         );
         $('#'+editorid).find('.006').each( function(i) {
             var tag006 = $(this).children('.controlfield-text').val();
-            Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
-                new Ext.Toolbar({
-                    items: [
-                        {
-                            id: editorid+'-006-'+i,
-                            text: '006 ' + tag006
-                        },
-                        {
-                            text: 'Edit',
-                            cls: 'x-btn-text-icon',
-                            icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
-                            scope: UI.editor[editorid].record,
-                            tagvalue: tag006,
-                            tagnumber: '006',
-                            i:i,
-                            handler: function(btn ) {
-                                this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
-                            }
+            Ext.getCmp(this.editorid+'006tbar').add(
+                    {
+                        id: editorid+'-006-'+i,
+                        text: '006 ' + tag006,
+                        scope: UI.editor[editorid].record,
+                        tagvalue: tag006,
+                        tagnumber: '006',
+                        i:i,
+                        handler: function(btn ) {
+                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
                         }
-                    ]
-                })
+                    }
             );
         });
         $('#'+editorid).find('.007').each( function(i) {
             var tag007 = $(this).children('.controlfield-text').val();
-            Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add(
-                new Ext.Toolbar({
-                    items: [
-                        {
-                            id: editorid+'-007-'+i,
-                            text: '007 ' + tag007
-                        },
-                         {
-                            text: 'Edit',
-                            icon: libPath + 'ui/images/toolbar/'+$('//ui/icons/toolbar/edit', configDoc).text(),
-                            cls: 'x-btn-text-icon',
-                            scope: UI.editor[editorid].record,
-                            tagvalue: tag007,
-                            tagnumber: '007',
-                            i: i,
-                            handler: function(btn ) {
-                                this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
-                            }
-                        }
-                    ]
-                })
+            Ext.getCmp(this.editorid+'007tbar').add(
+                {
+                    id: editorid+'-007-'+i,
+                    text: '<b>007</b> ' + tag007,
+                    scope: UI.editor[editorid].record,
+                    tagvalue: tag007,
+                    tagnumber: '007',
+                    i: i,
+                    handler: function(btn ) {
+                        this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
+                    }
+                }
             );
         });
         biblios.app.viewport.doLayout();
