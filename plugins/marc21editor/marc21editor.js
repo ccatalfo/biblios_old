@@ -469,11 +469,11 @@ function MarcEditor(editorid) {
 
 	// private methods
 
-function getFFTagFromPopup(tagnumber, i, rectype, ffid) {
+function getFFTagFromPopup(tagnumber, rectype, ffid) {
     var html = $('#'+ffid);
     var value = '';
     if(bibliosdebug){
-        console.debug('getFFTagFromPopup: ' + tagnumber + ' ' + i + ' ' + rectype + ' ' + ffid);
+        console.debug('getFFTagFromPopup: ' + tagnumber + ' ' + rectype + ' ' + ffid);
     }
     if( tagnumber == '000' ) {
         try {
@@ -481,7 +481,6 @@ function getFFTagFromPopup(tagnumber, i, rectype, ffid) {
         } catch(ex) {
             if(bibliosdebug){ console.debug('transferFF_EdToTags: exception ' + ex.error + ' ' + ex.msg + ' ' + ex.length) }
         }    
-        $('#'+editorid).find(".000").children('.controlfield-text').val(leaderval);
             if(bibliosdebug){console.info('Transferring leader value from fixed field editor into leader tag: ' + leaderval);}
             value = leaderval;
         
@@ -495,7 +494,6 @@ function getFFTagFromPopup(tagnumber, i, rectype, ffid) {
             if(bibliosdebug){ console.debug('transferFF_EdToTags: exception ' + ex.error + ' ' + ex.msg + ' ' + ex.length) }
         }
             if(bibliosdebug){console.info('Transferring 008 value from fixed field editor into 008 tag: ' + tag008val);}
-            $('#'+editorid).find(".008").children('.controlfield-text').val(tag008val);
             value = tag008val;
     }
     else if( tagnumber == '006' ) {
@@ -504,7 +502,6 @@ function getFFTagFromPopup(tagnumber, i, rectype, ffid) {
         } catch(ex) {
             if(bibliosdebug){ console.debug(ex);}
         }
-            $('#'+editorid).find(".006").eq(i).children('.controlfield-text').val(tag006val);
             if(bibliosdebug){console.info('Transferring 006 value from fixed field editor into 006 tag: ' + tag006val);}
         value = tag006val;
     }
@@ -516,7 +513,6 @@ function getFFTagFromPopup(tagnumber, i, rectype, ffid) {
             if(bibliosdebug){ console.debug('transferFF_EdToTags: exception ' + ex.error + ' ' + ex.msg + ' ' + ex.length) }
         }
             if( bibliosdebug ) { console.debug('getFFTagFromPopup: 007: ' + rectype + ' ' + mattype + ' ' + tag007val) }
-            $('#'+editorid).find(".007").eq(i).children('.controlfield-text').val(tag007val);
             if(bibliosdebug){console.info('Transferring 007 value from fixed field editor into 007 tag: ' + tag007val);}
             value = tag007val;
 	}
@@ -1210,12 +1206,12 @@ function setupFFEditorCtryCombo() {
         }
     }
 
-    this.showFFPopup = function(tagnumber, tagvalue, i) {
+    this.showFFPopup = function(tagnumber, tagvalue, tagel, itemid) {
         if(bibliosdebug){ 
-            console.debug('showFFPopup: ' + tagnumber + ' ' + tagvalue + ' ' + i); 
+            console.debug('showFFPopup: ' + tagnumber + ' ' + tagvalue + ' ' + itemid); 
         }
         if( tagnumber == '008' ) {
-            var rectype = $('#'+editorid).find('div.000').eq(i).children('.controlfield-text').val().substr(6,1);
+            var rectype = $('#'+editorid).find('div.000').children('.controlfield-text').val().substr(6,1);
         }
         else if( tagnumber == '006') {
             var rectype = $('#'+editorid).find('div.006').eq(i).children('.controlfield-text').val().substr(0,1);
@@ -1227,37 +1223,39 @@ function setupFFEditorCtryCombo() {
             url: cgiDir + 'xsltransform.pl',
             type: 'POST',
             editorid: editorid,
-            tagnumber: tagnumber,
+            ffdata: {
+                tagnumber: tagnumber,
+                tagel: tagel,
+                itemid: itemid
+            },
             rectype: rectype,
-            i: i,
             dataType: 'html',
             data: {xml:this.getFFXML(tagnumber, tagvalue), stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid, rectype:rectype},
             success: function(html) {
                 var win = new Ext.Window({
                     title: 'Fixed Fields Editor',
                     html: html,
-                    tagnumber: this.tagnumber,
-                    editorid: this.editorid,
-                    rectype: this.rectype,
-                    i: this.i,
-                    id: this.editorid+'-'+this.tagnumber+'-'+'ffpopup'+'-'+this.i,
+                    id: (winid=Ext.id()),
                     tbar: [
                         {
                             text: 'Save',
                             editorid: this.editorid,
-                            tagnumber: tagnumber,
+                            tagnumber: this.ffdata.tagnumber,
                             rectype: this.rectype,
-                            ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup'+'-'+this.i,
-                            i: this.i,
+                            itemid:this.ffdata.itemid,
+                            winid: winid,
+                            tagel: this.ffdata.tagel,
                             handler: function(btn) {
-                                var newvalue = getFFTagFromPopup(btn.tagnumber, btn.i, btn.rectype, btn.ffid);
+                                var newvalue = getFFTagFromPopup(btn.tagnumber, btn.rectype, btn.winid);
+                                if(bibliosdebug){ console.debug('setting raw value for ' + $(btn.tagel).val()) }
+                                $(btn.tagel).val(newvalue);
                                 if( btn.tagnumber == '000') {
                                     tag = 'LDR';
                                 }
                                 else {
                                     tag = btn.tagnumber;
                                 }
-                                Ext.getCmp(this.editorid+'-'+btn.tagnumber+'-'+btn.i).setText( '<b>'+tag+'</b>' + ' ' + newvalue );
+                                Ext.getCmp(btn.itemid).setText( '<b>'+tag+'</b>' + ' ' + newvalue );
                                 Ext.WindowMgr.getActive().close();
                             }
 
@@ -1275,13 +1273,13 @@ function setupFFEditorCtryCombo() {
                             editorid: this.editorid,
                             tagnumber: this.tagnumber,
                             rectype: this.rectype,
+                            itemid:this.itemid,
                             disabled: this.tagnumber == '008' || this.tagnumber == '000' ? true : false,
                             ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup'+'-'+this.i,
                             i:this.i,
                             handler: function(btn) {
                                 $('#'+btn.editorid).find('.'+btn.tagnumber).eq(btn.i).remove();
-                                var tb = Ext.getCmp(btn.editorid+'-'+btn.tagnumber+'-'+btn.i);
-                                Ext.getCmp(btn.editorid+btn.tagnumber+'tbar').remove(tb);
+                                Ext.getCmp(btn.editorid+btn.tagnumber+'tbar').remove(Ext.getCmp(btn.itemid));
                                 Ext.WindowMgr.getActive().close();
                             }
                         }
@@ -1625,32 +1623,36 @@ function setupFFEditorCtryCombo() {
             ]
         });
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( UI.editor[editorid].tbar003 );
-        var leader = $('#'+editorid).find('.000').children('.controlfield-text').val();
-        var tag008 = $('#'+editorid).find('.008').children('.controlfield-text').val();
+        var leader = $('#'+editorid).find('div.000').children('.controlfield-text');
+        var tag008 = $('#'+editorid).find('div.008').children('.controlfield-text');
         UI.editor[editorid].tbarldr008 =
             new Ext.Toolbar({
                 id: this.editorid + 'ldr008tbar',
                 items: [
                     {
                         id: this.editorid + '-000-0',
-                        text: '<b>LDR</b> ' + leader,
+                        text: '<b>LDR</b> ' + $(leader).val(),
                         scope: this,
-                        tagvalue: leader,
+                        tagvalue: $(leader).val(),
                         tagnumber: '000',
                         i:0,
+                        tagel: leader,
+                        itemid: this.editorid + '-000-0',
                         handler: function(btn ) {
-                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
+                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
                         }
                     },
                     {
                         id: this.editorid + '-008-0',
-                        text: '<b>008</b> ' + tag008,
+                        text: '<b>008</b> ' + $(tag008).val(),
                         scope: this,
-                        tagvalue: tag008,
+                        tagvalue: $(tag008).val(),
                         tagnumber: '008',
+                        tagel: tag008,
                         i:0,
+                        itemid: this.editorid + '-008-0',
                         handler: function(btn ) {
-                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
+                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel,btn.itemid );
                         }
                     }
                 ]
