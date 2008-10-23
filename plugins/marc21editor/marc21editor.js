@@ -1601,15 +1601,16 @@ function setupFFEditorCtryCombo() {
         var tag008 = $('#'+editorid).find('.008').children('.controlfield-text').val();
         Ext.getCmp(editorid+'-008-0').setText( tag008 );
 
-        $('#'+editorid).find('.007').each( function(i) {
-            var tag007 = $(this).children('.controlfield-text').val();
-            Ext.getCmp(editorid+'-007-'+i).setText( tag007 );
-        });
-
-        $('#'+editorid).find('.006').each( function(i) {
-            var tag006 = $(this).children('.controlfield-text').val();
-            Ext.getCmp(editorid+'-006-'+i).setText( tag006 );
-        });
+        var items006 = UI.editor[editorid].tbar006.items;
+        for( var i = 1; i < items006.length; i++) {
+            var newval = $(items006.itemAt(i).tagel).val();
+            items006.itemAt(i).setText('<b>006</b>'+newval);
+        }
+        var items007 = UI.editor[editorid].tbar007.items;
+        for( var i = 1; i < items007.length; i++) {
+            var newval = $(items007.itemAt(i).tagel).val();
+            items007.itemAt(i).setText('<b>007</b>'+newval);
+        }
     };
 
     this._createNew006007 = function(tagnumber) {
