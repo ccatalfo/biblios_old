@@ -1677,8 +1677,12 @@ function setupFFEditorCtryCombo() {
             items: [
                 {
                     id: editorid+'-003',
-                    text: '<b>(003)</b> ' + tag003 + ' <b>SystemID:</b>'+tag001+' <b>Last edited:</b> '+tag005
+                    text: '<b>(003)</b> ' + tag003 + ' <b>001:</b>'+tag001+' <b>005:</b> '+tag005,
+                    handler: function(btn) {
+                        Ext.Msg.alert('Control Fields Guided Editor', 'These fields are normally system-generated.  If you need to edit them, please turn off the guided control fields editor.');
+                    }
                 }
+
             ]
         });
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( UI.editor[editorid].tbar003 );
