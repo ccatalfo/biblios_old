@@ -310,7 +310,7 @@ function showTagHelp(elem) {
 	Ext.get('helpIframe').mask('Loading...');
 	Ext.get('helpIframe').update('');
 	// if we have a fixed field editor element
-	if( $(elem).parents('.ffeditor').length > 0 ) {
+	if( $(elem).parents('.fixedfields_editor').length > 0 ) {
 		var name = $(elem).get(0).id;
 		var currval = $(elem).val();
 		// get position location
@@ -322,7 +322,7 @@ function showTagHelp(elem) {
 		// get tag this field is part of
 		var tag = '';
 		// figure out material type if necessary
-		var rectype = $('#Type').val();
+		var rectype = $('div.000').children('.controlfield-text').val().substr(6,1);
 		var mattype = '';
 		if( $(elem).hasClass('000') ) {
 			tag = '000';
@@ -339,10 +339,16 @@ function showTagHelp(elem) {
 		else if( $(elem).hasClass('007') ) {
 			tag = '007';
 			mattype = get007MaterialName( $('#Category').val() );
+            if(bibliosdebug){
+                console.debug('showTagHelp 007: ' + mattype);
+            }
 		}
 		else if( $(elem).hasClass('006') ) {
-			tag = '006';
+			tag = '008';
 			mattype = get008MaterialName(rectype);
+            if(bibliosdebug){
+                console.debug('showTagHelp 006: ' + mattype);
+            }
 		}
 		// get the help text for this fixed field
 		var tagxml = '';
