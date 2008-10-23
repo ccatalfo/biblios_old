@@ -1598,7 +1598,7 @@ function setupFFEditorCtryCombo() {
         var tag001 = $('#'+editorid).find('.001').children('.controlfield-text').val();
         var tag003 = $('#'+editorid).find('.003').children('.controlfield-text').val();
         var tag005 = $('#'+editorid).find('.005').children('.controlfield-text').val();
-        Ext.getCmp(editorid+'-003').setText('<b>(003)</b> '+tag003+' <b>SystemID</b>:'+tag001+' <b>Last edited</b>: '+tag005);
+        Ext.getCmp(editorid+'-003').setText('<b>(003)</b> '+tag003+' <b>001</b>:'+tag001+' <b>005</b>: '+tag005);
 
         var leader = $('#'+editorid).find('.000').children('.controlfield-text').val();
         Ext.getCmp(editorid+'-000-0').setText( '<b>LDR</b> ' + leader );
