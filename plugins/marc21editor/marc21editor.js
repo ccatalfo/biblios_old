@@ -1729,17 +1729,19 @@ function setupFFEditorCtryCombo() {
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( UI.editor[editorid].tbar007 );
         UI.editor[editorid].tbar006.on('render', function(tbar) {
             $('#'+editorid).find('.006').each( function(i) {
-                var tag006 = $(this).children('.controlfield-text').val();
+                var tag006 = $(this).children('.controlfield-text');
+                var itemid = editorid+'-006-'+i;
                 tbar.add(
                         {
-                            id: editorid+'-006-'+i,
-                            text: '006 ' + tag006,
+                            id: itemid,
+                            text: '006 ' + $(tag006).val(),
                             scope: UI.editor[editorid].record,
-                            tagvalue: tag006,
+                            tagel: tag006,
+                            tagvalue: $(tag006).val(),
                             tagnumber: '006',
-                            i:i,
+                            itemid: itemid,
                             handler: function(btn ) {
-                                this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
+                                this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
                             }
                         }
                 );
