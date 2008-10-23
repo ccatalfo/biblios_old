@@ -1214,10 +1214,10 @@ function setupFFEditorCtryCombo() {
             var rectype = $('#'+editorid).find('div.000').children('.controlfield-text').val().substr(6,1);
         }
         else if( tagnumber == '006') {
-            var rectype = $('#'+editorid).find('div.006').eq(i).children('.controlfield-text').val().substr(0,1);
+            var rectype = $(tagel).val().substr(0,1);
         }
         else if( tagnumber == '007') {
-            var rectype = $('#'+editorid).find('div.007').eq(i).children('.controlfield-text').val().substr(0,1);
+            var rectype = $(tagel).val().substr(0,1);
         }
         $.ajax({
             url: cgiDir + 'xsltransform.pl',
@@ -1366,11 +1366,11 @@ function setupFFEditorCtryCombo() {
 
 	this._addField = function(tagnumber, ind1, ind2, subfields) {
 		if( tagnumber ) {
-			doAddField(tagnumber, ind1, ind2, subfields);
+			return doAddField(tagnumber, ind1, ind2, subfields);
 		}
 		else {
 			Ext.MessageBox.prompt('Add tag', 'Choose a tag number', function(btn, tagnumber) {
-				doAddField(tagnumber);
+				return doAddField(tagnumber);
 			});
 		}
 		function doAddField(tagnumber, ind1, ind2, subfields) {
@@ -1396,18 +1396,18 @@ function setupFFEditorCtryCombo() {
 			for( var i = 0; i<tags.length; i++) {
 				var id = $(tags[i]).attr('id').substr(0,3);
 			}
-			var newId = tagnumber + "-" + newSuffix;
-			  var newtag = '<div class="tag '+tagnumber+'" id="'+newId+editorid+'">';
+			var newId = tagnumber + "-" + newSuffix + editorid;
+			  var newtag = '<div class="tag '+tagnumber+'" id="'+newId+'">';
 			  newtag += '<input size="3" onblur="onBlur(this)" onfocus="onFocus(this)" class="tagnumber" id="d'+tagnumber+editorid+'" value="'+tagnumber+'" />';
-			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+editorid+'"/>';
-			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+editorid+'"/>';
+			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+'"/>';
+			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+secondind+'" id="dind2'+newId+'"/>';
 			if( tagnumber < '010' ) {
 				newtag += '<input type="text" onblue="onBlur(this)" onfocus="onFocus(this)" class="controlfield-text '+tagnumber+'" value="'+sf[0].text+'">';
 			} // insert controlfield
 			else {
 			  newtag += '<span class="subfields" id="dsubfields'+newId+'">';
 			  for( var i = 0; i< sf.length; i++) {
-				  newtag += '<span class="subfield" id="dsubfields'+tagnumber+newId+editorid+'">';
+				  newtag += '<span class="subfield" id="dsubfields'+tagnumber+newId+'">';
 				  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;'+sf[i]['delimiter']+'">';
 				  var textlength = sf[i]['text'].length;
 				  newtag += '<input id="dsubfields'+newId+i+'text" onfocus="onFocus(this)" onblur="onBlur(this)" class="subfield-text" size="'+textlength+'" value="'+sf[i]['text']+'">';
@@ -1418,6 +1418,7 @@ function setupFFEditorCtryCombo() {
 			update();
 			// set the focus to this new tag
 			//$( newId ).get(0).focus();
+            return $( newId );
 		}
 	};
 
@@ -1667,23 +1668,24 @@ function setupFFEditorCtryCombo() {
                         handler: function() {
                             Ext.Msg.prompt('Create 006', 'Enter type of 006', function(btn,text) {
                                 var l = $('#'+editorid).find('div.006').length;
-                                UI.editor[editorid].record.addField('006', '#', '#', [{delimiter:'', text: text+'       '}]);
-                                $('#'+editorid).find('.006').hide();
+                                var newtag = UI.editor[editorid].record.addField('006', '#', '#', [{delimiter:'', text: text+'       '}]);
+                                //$('#'+editorid).find('.006').hide();
                                 Ext.getCmp(editorid+'006tbar').add(
                                     {
                                         id: editorid+'-006-'+l,
                                         text: '<b>006</b> ' + text+'                 ',
                                         tagvalue: text+'                 ',
                                         tagnumber: '006',
-                                        i: l,
+                                        tagel: newtag,
+                                        itemid: editorid+'-006-'+l,
                                         scope: UI.editor[editorid].record,
                                         handler: function(btn ) {
-                                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
+                                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
                                         }
                                     }
                                 );
                                 biblios.app.viewport.doLayout();
-                                UI.editor[editorid].record.showFFPopup('006', text+'            ', l);
+                                UI.editor[editorid].record.showFFPopup('006', text+'            ', newtag, editorid+'-006-'+l);
 
                             });
 
@@ -1745,17 +1747,19 @@ function setupFFEditorCtryCombo() {
         });
         UI.editor[editorid].tbar007.on('render', function(tbar) {
             $('#'+editorid).find('.007').each( function(i) {
-                var tag007 = $(this).children('.controlfield-text').val();
+                var tag007 = $(this).children('.controlfield-text');
+                var itemid = editorid+'-007-'+i;
                 tbar.add(
                     {
-                        id: editorid+'-007-'+i,
-                        text: '<b>007</b> ' + tag007,
+                        id: itemid,
+                        text: '<b>007</b> ' + $(tag007).val(),
                         scope: UI.editor[editorid].record,
-                        tagvalue: tag007,
+                        tagel: tag007,
+                        tagvalue: $(tag007).val(),
                         tagnumber: '007',
-                        i: i,
+                        itemid: itemid,
                         handler: function(btn ) {
-                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
+                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
                         }
                     }
                 );
@@ -1848,7 +1852,7 @@ MarcEditor.prototype.focusSubfield = function(tag, subfield) {
 };
 
 MarcEditor.prototype.addField = function(tag, ind1, ind2, subfields) {
-	this._addField(tag, ind1, ind2, subfields);
+	return this._addField(tag, ind1, ind2, subfields);
 };
 
 MarcEditor.prototype.getFormat = function() {
