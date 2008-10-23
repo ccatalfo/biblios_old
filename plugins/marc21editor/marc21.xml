@@ -780,9 +780,6 @@
     </value>
 </field>
    <field mattype="Map" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden">
-         <option description="Map">a</option>
-      </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Atlas">d</option>
          <option description="Map A two-dimensional map.">j</option>
@@ -829,9 +826,6 @@
       </value>
    </field>
    <field mattype="Electronic Resource" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden">
-         <option description="Electronic resource">c</option>
-      </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Tape cartridge">a</option>
          <option description="Chip cartridge">b</option>
@@ -922,9 +916,6 @@
       </value>
    </field>
    <field mattype="Globe" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden">
-         <option description="Globe">d</option>
-      </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Terrestrial globe">c</option>
          <option description="Earth moon globe">e</option>
@@ -963,9 +954,6 @@
       </value>
    </field>
    <field mattype="Tactile Material" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden">
-         <option description="Tactile material">f</option>
-      </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Moon">a</option>
          <option description="Braille">b</option>
@@ -1029,9 +1017,6 @@
       </value>
    </field>
    <field mattype="Projected Graphic" tag="007">
-       <value name="Category" position="0" length="1" inputtype="hidden">
-           <option description="Projected Graphic">g</option>
-        </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Filmstrip roll">o</option>
          <option description="Slide Includes modern stereographs.">s</option>
@@ -1101,9 +1086,6 @@
       </value>
    </field>
    <field mattype="Microform" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden">
-         <option description="Microform">h</option>
-      </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Aperture card">a</option>
          <option description="Microfilm reel">d</option>
@@ -1172,9 +1154,6 @@
       </value>
    </field>
    <field mattype="Nonprojected Graphic" tag="007">
-       <value name="Category" position="0" length="1" inputtype="hidden">
-           <option>k</option>
-       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Collage">c</option>
          <option description="Drawing">d</option>
@@ -1234,7 +1213,6 @@
       </value>
    </field>
    <field mattype="Motion Picture" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden"><option>m</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Film cartridge">c</option>
          <option description="Film cassette">f</option>
@@ -1366,25 +1344,18 @@
       <value name="22" position="17" length="6" inputtype="menubox"></value>
    </field>
    <field mattype="Kit" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden">
-         <option description="Kit">o</option>
-      </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Unspecified">u</option>
          <option description="No attempt to code">|</option>
       </value>
    </field>
    <field mattype="Notated Music" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden">
-         <option description="Notated music">q</option>
-      </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Unspecified">u</option>
          <option description="No attempt to code">|</option>
       </value>
    </field>
    <field mattype="Remote-Sensing Image" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden"><option>r</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Unspecified">u</option>
          <option description="No attempt to code">|</option>
@@ -1495,7 +1466,6 @@
       </value>
    </field>
    <field mattype="Sound Recording" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden"><option>s</option></value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Sound disc">d</option>
          <option description="Cylinder">e</option>
@@ -1629,9 +1599,6 @@
       </value>
    </field>
    <field mattype="Text" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden">
-         <option description="Text">t</option>
-      </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Regular print">a</option>
          <option description="Large print">b</option>
@@ -1642,9 +1609,6 @@
       </value>
    </field>
    <field mattype="Videorecording" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden">
-         <option description="Videorecording">v</option>
-      </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Videocartridge">c</option>
          <option description="Videodisc">d</option>
@@ -1711,9 +1675,6 @@
       </value>
    </field>
    <field mattype="Unspecified" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden">
-         <option description="Unspecified">z</option>
-      </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Unspecified">u</option>
          <option description="Other">z</option>

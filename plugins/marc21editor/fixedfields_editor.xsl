@@ -263,6 +263,14 @@
             <xsl:variable name="tag007"><xsl:value-of select="."/></xsl:variable>
 			<xsl:variable name="cat" select="substring(.,1, 1)"/>
             <xsl:variable name="mattype" select="$marc21defs//categoryname007/cat[@type=$cat]"/>
+            <xsl:call-template name="fixed-field-select">
+                <xsl:with-param name="name"><xsl:value-of select="'Category'"/></xsl:with-param>
+                <xsl:with-param name="tag"><xsl:value-of select="."/></xsl:with-param>
+                <xsl:with-param name="tagnumber">007</xsl:with-param>
+                <xsl:with-param name="classnumber">007</xsl:with-param>
+                <xsl:with-param name="offset">0</xsl:with-param>
+                <xsl:with-param name="hidden">1</xsl:with-param>
+            </xsl:call-template>
             <xsl:for-each select="$marc21defs//field[@tag='007'][@mattype=$mattype]">
                 <xsl:for-each select="value">
                     <xsl:choose>
