@@ -1636,7 +1636,7 @@ function setupFFEditorCtryCombo() {
                                 if(bibliosdebug) {
                                     console.debug('added new ' +btn.tagnumber+' with value '+text+' '+l+' already found ' + 'new tag id: ' +newId);
                                 }
-                                //$('#'+editorid).find('.006').hide();
+                                $('#'+editorid).find('.'+btn.tagnumber).hide();
                                 Ext.getCmp(editorid+btn.tagnumber+'tbar').add(
                                     {
                                         id: editorid+'-'+btn.tagnumber+'-'+l,
