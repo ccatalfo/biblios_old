@@ -1988,7 +1988,7 @@ MarcEditor.prototype.getToolsMenu = function getToolsMenu() {
             {
                 id: this.editorid+'toggleFixedFieldGrid',
                 editorid: this.editorid,
-                text: 'Toggle Fixed Field Editor',
+                text: 'Toggle Guided Control Fields Editor',
                 mytoggled: false,
                 listeners: {
                     click: function(btn, e) {
