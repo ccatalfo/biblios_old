@@ -1612,6 +1612,60 @@ function setupFFEditorCtryCombo() {
         });
     };
 
+    this._createNew006007 = function(tagnumber) {
+        $.ajax({
+            url: cgiDir + 'xsltransform.pl',
+            type: 'POST',
+            editorid: editorid,
+            dataType: 'html',
+            tagnumber: tagnumber,
+            data: {tag:tagnumber, xml:this.getFFXML(tagnumber,''), stylesheet:'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid},
+            success: function(html) {
+                var win = new Ext.Window({
+                    title: 'Select type of field',
+                    html: html,
+                    bbar: [
+                        {
+                            text: 'OK',
+                            tagnumber: this.tagnumber,
+                            handler: function(btn) {
+                                var id = Ext.WindowMgr.getActive().id;
+                                var text = $('#'+id).find('select').val();
+                                var l = $('#'+editorid).find('div.'+btn.tagnumber).length;
+                                var newtag = UI.editor[editorid].record.addField(btn.tagnumber, '#', '#', [{delimiter:'', text: text+'       '}]);
+                                //$('#'+editorid).find('.006').hide();
+                                Ext.getCmp(editorid+btn.tagnumber+'tbar').add(
+                                    {
+                                        id: editorid+'-'+this.tagnumber+'-'+l,
+                                        text: '<b>'+this.tagnumber+'</b> ' + text+'                 ',
+                                        tagvalue: text+'                 ',
+                                        tagnumber: this.tagnumber,
+                                        tagel: newtag,
+                                        itemid: editorid+'-'+this.tagnumber+'-'+l,
+                                        scope: UI.editor[editorid].record,
+                                        handler: function(btn ) {
+                                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
+                                        }
+                                    }
+                                );
+                                Ext.WindowMgr.getActive().close();
+                                biblios.app.viewport.doLayout();
+                                UI.editor[editorid].record.showFFPopup(btn.tagnumber, text+'            ', newtag, editorid+'-'+btn.tagnumber+'-'+l);
+                            }
+                        },
+                        {
+                        text: 'Cancel',
+                          handler: function(btn) {
+                                Ext.WindowMgr.getActive().close();
+                          }
+                        }
+                    ]
+                });
+                win.show();
+            }// success
+        });
+    }
+
     this._addFixedFieldToolbars = function() {
         var tag001 = $('#'+editorid).find('.001').children('.controlfield-text').val();
         var tag003 = $('#'+editorid).find('.003').children('.controlfield-text').val();
@@ -1665,31 +1719,10 @@ function setupFFEditorCtryCombo() {
                 items: [
                     {
                         text: '006',
-                        scope: this,
-                        handler: function() {
-                            Ext.Msg.prompt('Create 006', 'Enter type of 006', function(btn,text) {
-                                var l = $('#'+editorid).find('div.006').length;
-                                var newtag = UI.editor[editorid].record.addField('006', '#', '#', [{delimiter:'', text: text+'       '}]);
-                                //$('#'+editorid).find('.006').hide();
-                                Ext.getCmp(editorid+'006tbar').add(
-                                    {
-                                        id: editorid+'-006-'+l,
-                                        text: '<b>006</b> ' + text+'                 ',
-                                        tagvalue: text+'                 ',
-                                        tagnumber: '006',
-                                        tagel: newtag,
-                                        itemid: editorid+'-006-'+l,
-                                        scope: UI.editor[editorid].record,
-                                        handler: function(btn ) {
-                                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
-                                        }
-                                    }
-                                );
-                                biblios.app.viewport.doLayout();
-                                UI.editor[editorid].record.showFFPopup('006', text+'            ', newtag, editorid+'-006-'+l);
-
-                            });
-
+                        scope: UI.editor[editorid].record,
+                        tagnumber: '006',
+                        handler: function(btn) {
+                            this.createNew006007(btn.tagnumber);
                         }
                     }
                 ]
@@ -1700,29 +1733,10 @@ function setupFFEditorCtryCombo() {
             items: [
                 {
                     text: '007',
-                    handler: function() {
-                        Ext.Msg.prompt('Create 007', 'Enter type of 007', function(btn,text) {
-                            var l = $('#'+editorid).find('div.007').length;
-                            UI.editor[editorid].record.addField('007', '#', '#', [{delimiter:'', text: text+'       '}]);
-                            $('#'+editorid).find('.007').hide();
-                            Ext.getCmp(editorid+'007tbar').add(
-                                {
-                                    id: editorid+'-007-'+l,
-                                    text: '<b>007</b>' + text+'     ',
-                                    scope: UI.editor[editorid].record,
-                                    tagvalue: text+'    ',
-                                    tagnumber: '007',
-                                    i:l,
-                                    handler: function(btn ) {
-                                        this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.i );
-                                    }
-                                }
-                            );
-                            biblios.app.viewport.doLayout();
-                            UI.editor[editorid].record.showFFPopup('007', text+'            ', l);
-
-                        });
-
+                    scope: UI.editor[editorid].record,
+                    tagnumber: '007',
+                    handler: function(btn) {
+                        this.createNew006007(btn.tagnumber);
                     }
                 }
             ]
@@ -1817,6 +1831,10 @@ function setupFFEditorCtryCombo() {
 
 }
 // Public methods 
+MarcEditor.prototype.createNew006007 = function(tagnumber) {
+    return this._createNew006007(tagnumber);
+}
+
 MarcEditor.prototype.reformatFixedFieldsEditor = function() {
     return this._reformatFixedFieldsEditor();
 }

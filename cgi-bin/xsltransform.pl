@@ -23,6 +23,7 @@ my $xml = Encode::decode_utf8( $cgi->param('xml') );
 my $xsl_file = $cgi->param('stylesheet');
 my $editorid = $cgi->param('editorid') || 'editorone';
 my $rectype = $cgi->param('rectype') || '';
+my $tag = $cgi->param('tag') || '';
 my $contenttype = $cgi->param('contenttype') || 'text/html';
 if($debug){
 	warn "xsltransform: generating for editorid: $editorid";
@@ -31,7 +32,7 @@ if($debug){
 my $source = $parser->parse_string($xml);
 my $style_doc = $parser->parse_file($xsl_path . $xsl_file) or print "Can't open stylesheet $xsl_file";
 my $stylesheet = $xslt->parse_stylesheet($style_doc) or print "Can't parse stylesheet $!";
-my $results = $stylesheet->transform($source, XML::LibXSLT::xpath_to_string(editorid => $editorid, rectype=>$rectype)) or print "Can't transform $!";
+my $results = $stylesheet->transform($source, XML::LibXSLT::xpath_to_string(editorid => $editorid, rectype=>$rectype, tag => $tag)) or print "Can't transform $!";
 
 print $cgi->header(-type=>$contenttype, -charset=>'utf-8');
 # output_as_chars should return utf-8
