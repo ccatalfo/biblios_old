@@ -1419,7 +1419,7 @@ function setupFFEditorCtryCombo() {
 			update();
 			// set the focus to this new tag
 			//$( newId ).get(0).focus();
-            return $( newId );
+            return newId;
 		}
 	};
 
@@ -1632,7 +1632,7 @@ function setupFFEditorCtryCombo() {
                                 var id = Ext.WindowMgr.getActive().id;
                                 var text = $('#'+id).find('select').val();
                                 var l = $('#'+editorid).find('div.'+btn.tagnumber).length;
-                                var newtag = UI.editor[editorid].record.addField(btn.tagnumber, '#', '#', [{delimiter:'', text: text+'       '}]);
+                                var newId = UI.editor[editorid].record.addField(btn.tagnumber, '#', '#', [{delimiter:'', text: text+'       '}]);
                                 //$('#'+editorid).find('.006').hide();
                                 Ext.getCmp(editorid+btn.tagnumber+'tbar').add(
                                     {
@@ -1640,7 +1640,7 @@ function setupFFEditorCtryCombo() {
                                         text: '<b>'+this.tagnumber+'</b> ' + text+'                 ',
                                         tagvalue: text+'                 ',
                                         tagnumber: this.tagnumber,
-                                        tagel: newtag,
+                                        tagel: $('#'+newId).children('.controlfield-text'),
                                         itemid: editorid+'-'+this.tagnumber+'-'+l,
                                         scope: UI.editor[editorid].record,
                                         handler: function(btn ) {
@@ -1650,7 +1650,7 @@ function setupFFEditorCtryCombo() {
                                 );
                                 Ext.WindowMgr.getActive().close();
                                 biblios.app.viewport.doLayout();
-                                UI.editor[editorid].record.showFFPopup(btn.tagnumber, text+'            ', newtag, editorid+'-'+btn.tagnumber+'-'+l);
+                                UI.editor[editorid].record.showFFPopup(btn.tagnumber, text+'            ', $('#'+newId).children('.controlfield-text'), editorid+'-'+btn.tagnumber+'-'+l);
                             }
                         },
                         {
