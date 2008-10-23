@@ -1592,23 +1592,23 @@ function setupFFEditorCtryCombo() {
         var tag001 = $('#'+editorid).find('.001').children('.controlfield-text').val();
         var tag003 = $('#'+editorid).find('.003').children('.controlfield-text').val();
         var tag005 = $('#'+editorid).find('.005').children('.controlfield-text').val();
-        Ext.getCmp(editorid+'-003').setText('<b>(003)</b> '+tag003+' SystemID:'+tag001+' Last edited: '+tag005);
+        Ext.getCmp(editorid+'-003').setText('<b>(003)</b> '+tag003+' <b>SystemID</b>:'+tag001+' <b>Last edited</b>: '+tag005);
 
         var leader = $('#'+editorid).find('.000').children('.controlfield-text').val();
-        Ext.getCmp(editorid+'-000-0').setText( leader );
+        Ext.getCmp(editorid+'-000-0').setText( '<b>LDR</b> ' + leader );
 
         var tag008 = $('#'+editorid).find('.008').children('.controlfield-text').val();
-        Ext.getCmp(editorid+'-008-0').setText( tag008 );
+        Ext.getCmp(editorid+'-008-0').setText( '<b>008</b> ' +tag008 );
 
         var items006 = UI.editor[editorid].tbar006.items;
         for( var i = 1; i < items006.length; i++) {
             var newval = $(items006.itemAt(i).tagel).val();
-            items006.itemAt(i).setText('<b>006</b>'+newval);
+            items006.itemAt(i).setText('<b>006</b> '+newval);
         }
         var items007 = UI.editor[editorid].tbar007.items;
         for( var i = 1; i < items007.length; i++) {
             var newval = $(items007.itemAt(i).tagel).val();
-            items007.itemAt(i).setText('<b>007</b>'+newval);
+            items007.itemAt(i).setText('<b>007</b> '+newval);
         }
     };
 
@@ -1677,7 +1677,7 @@ function setupFFEditorCtryCombo() {
             items: [
                 {
                     id: editorid+'-003',
-                    text: '(003)' + tag003 + ' SystemID:'+tag001+' Last edited: '+tag005
+                    text: '<b>(003)</b> ' + tag003 + ' <b>SystemID:</b>'+tag001+' <b>Last edited:</b> '+tag005
                 }
             ]
         });
