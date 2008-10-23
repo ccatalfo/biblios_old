@@ -1735,7 +1735,7 @@ function setupFFEditorCtryCombo() {
                 tbar.add(
                         {
                             id: itemid,
-                            text: '006 ' + $(tag006).val(),
+                            text: '<b>006</b> ' + $(tag006).val(),
                             scope: UI.editor[editorid].record,
                             tagel: tag006,
                             tagvalue: $(tag006).val(),
