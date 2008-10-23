@@ -759,6 +759,26 @@
 		<option>t</option>
 	</value>
 </field>
+<field mattype="all" tag="007">
+    <value name="Category" position="0" length="1" inputtype="menubox">
+         <option description="Map">a</option>
+         <option description="Electronic resource">c</option>
+         <option description="Globe">d</option>
+         <option description="Tactile material">f</option>
+         <option description="Projected Graphic">g</option>
+         <option description="Microform">h</option>
+         <option description="Nonprojected Graphic">k</option>
+         <option description="Motion Picture">m</option>
+         <option description="Kit">o</option>
+         <option description="Notated music">q</option>
+         <option description="Remote-Sensing Image">r</option>
+         <option description="Sound Recording">s</option>
+         <option description="Text">t</option>
+         <option description="Videorecording">v</option>
+         <option description="Unspecified">z</option>
+    
+    </value>
+</field>
    <field mattype="Map" tag="007">
       <value name="Category" position="0" length="1" inputtype="hidden">
          <option description="Map">a</option>
@@ -1009,7 +1029,9 @@
       </value>
    </field>
    <field mattype="Projected Graphic" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden"><option>g</option></value>
+       <value name="Category" position="0" length="1" inputtype="hidden">
+           <option description="Projected Graphic">g</option>
+        </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Filmstrip roll">o</option>
          <option description="Slide Includes modern stereographs.">s</option>
@@ -1150,7 +1172,9 @@
       </value>
    </field>
    <field mattype="Nonprojected Graphic" tag="007">
-      <value name="Category" position="0" length="1" inputtype="hidden"><option>k</option></value>
+       <value name="Category" position="0" length="1" inputtype="hidden">
+           <option>k</option>
+       </value>
       <value name="Specific" position="1" length="1" inputtype="menubox">
          <option description="Collage">c</option>
          <option description="Drawing">d</option>

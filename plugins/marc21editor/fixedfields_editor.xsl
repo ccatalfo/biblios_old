@@ -5,10 +5,33 @@
 	<xsl:param name='debug'/>
     <xsl:param name="editorid"/>
     <xsl:param name="rectype"/>
+    <xsl:param name="tag"/>
 
     <xsl:template match="/">
         <xsl:variable name='leader'><xsl:value-of select="."/></xsl:variable>
         <xsl:variable name='tag008'><xsl:value-of select="marc:controlfield[@tag='008']"/></xsl:variable> 
+        <xsl:choose>
+            <xsl:when test="$tag='006'">
+                <xsl:call-template name="fixed-field-select">
+                    <xsl:with-param name="name" select="'Type'"/>
+                    <xsl:with-param name="tag" select="//marc:record//controlfield[@tag='006']"/>
+                    <xsl:with-param name="tagnumber" select="'006'"/>
+                    <xsl:with-param name="classnumber" select="'006'"/>
+                    <xsl:with-param name="offset" select="0"/>
+                </xsl:call-template>
+            
+            </xsl:when>
+            <xsl:when test="$tag='007'">
+                <xsl:call-template name="fixed-field-select">
+                    <xsl:with-param name="name" select="'Category'"/>
+                    <xsl:with-param name="tag" select="//marc:record//controlfield[@tag='007']"/>
+                    <xsl:with-param name="tagnumber" select="'007'"/>
+                    <xsl:with-param name="classnumber" select="'007'"/>
+                    <xsl:with-param name="offset" select="0"/>
+                </xsl:call-template>
+            
+            </xsl:when>
+            <xsl:otherwise>
         <div class="ffeditor {$editorid}">
             <div class="fixedfields_editor">
                 <table id="fixed_field_grid" class="fixed_field">
@@ -38,6 +61,10 @@
                 </table>
             </div>
         </div>
+            
+            </xsl:otherwise>
+        
+        </xsl:choose>
     </xsl:template>
 
 	<xsl:template name="generate_for_rectype">
