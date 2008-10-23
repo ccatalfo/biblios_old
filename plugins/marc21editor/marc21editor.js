@@ -1633,15 +1633,18 @@ function setupFFEditorCtryCombo() {
                                 var text = $('#'+id).find('select').val();
                                 var l = $('#'+editorid).find('div.'+btn.tagnumber).length;
                                 var newId = UI.editor[editorid].record.addField(btn.tagnumber, '#', '#', [{delimiter:'', text: text+'       '}]);
+                                if(bibliosdebug) {
+                                    console.debug('added new ' +btn.tagnumber+' with value '+text+' '+l+' already found ' + 'new tag id: ' +newId);
+                                }
                                 //$('#'+editorid).find('.006').hide();
                                 Ext.getCmp(editorid+btn.tagnumber+'tbar').add(
                                     {
-                                        id: editorid+'-'+this.tagnumber+'-'+l,
-                                        text: '<b>'+this.tagnumber+'</b> ' + text+'                 ',
+                                        id: editorid+'-'+btn.tagnumber+'-'+l,
+                                        text: '<b>'+btn.tagnumber+'</b> ' + text+'                 ',
                                         tagvalue: text+'                 ',
-                                        tagnumber: this.tagnumber,
+                                        tagnumber: btn.tagnumber,
                                         tagel: $('#'+newId).children('.controlfield-text'),
-                                        itemid: editorid+'-'+this.tagnumber+'-'+l,
+                                        itemid: editorid+'-'+btn.tagnumber+'-'+l,
                                         scope: UI.editor[editorid].record,
                                         handler: function(btn ) {
                                             this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
