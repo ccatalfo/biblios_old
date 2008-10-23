@@ -1233,7 +1233,7 @@ function setupFFEditorCtryCombo() {
             data: {xml:this.getFFXML(tagnumber, tagvalue), stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid, rectype:rectype},
             success: function(html) {
                 var win = new Ext.Window({
-                    title: 'Fixed Fields Editor',
+                    title: 'Control Fields Guided Editor',
                     html: html,
                     id: (winid=Ext.id()),
                     tbar: [
