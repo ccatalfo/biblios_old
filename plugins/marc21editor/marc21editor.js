@@ -1272,15 +1272,14 @@ function setupFFEditorCtryCombo() {
                         {
                             text: 'Delete',
                             editorid: this.editorid,
-                            tagnumber: this.tagnumber,
+                            tagnumber: this.ffdata.tagnumber,
                             rectype: this.rectype,
-                            itemid:this.itemid,
+                            itemid:this.ffdata.itemid,
                             disabled: this.tagnumber == '008' || this.tagnumber == '000' ? true : false,
-                            ffid: this.editorid+'-'+this.tagnumber+'-'+'ffpopup'+'-'+this.i,
-                            i:this.i,
+                            tagel: this.ffdata.tagel,
                             handler: function(btn) {
-                                $('#'+btn.editorid).find('.'+btn.tagnumber).eq(btn.i).remove();
-                                Ext.getCmp(btn.editorid+btn.tagnumber+'tbar').remove(Ext.getCmp(btn.itemid));
+                                $(btn.tagel).parents('.tag').remove();
+                                UI.editor[btn.editorid]['tbar'+btn.tagnumber].remove(Ext.getCmp(btn.itemid));
                                 Ext.WindowMgr.getActive().close();
                             }
                         }
