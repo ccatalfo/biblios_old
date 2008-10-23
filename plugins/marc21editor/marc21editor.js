@@ -1256,6 +1256,7 @@ function setupFFEditorCtryCombo() {
                                     tag = btn.tagnumber;
                                 }
                                 Ext.getCmp(btn.itemid).setText( '<b>'+tag+'</b>' + ' ' + newvalue );
+                                Ext.getCmp(btn.itemid).tagvalue = newvalue;
                                 Ext.WindowMgr.getActive().close();
                             }
 
@@ -1741,7 +1742,7 @@ function setupFFEditorCtryCombo() {
                             tagnumber: '006',
                             itemid: itemid,
                             handler: function(btn ) {
-                                this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
+                                this.showFFPopup( btn.tagnumber, $(btn.tagel).val(),btn.tagel, btn.itemid );
                             }
                         }
                 );
@@ -1761,7 +1762,7 @@ function setupFFEditorCtryCombo() {
                         tagnumber: '007',
                         itemid: itemid,
                         handler: function(btn ) {
-                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
+                            this.showFFPopup( btn.tagnumber, $(btn.tagel).val(),btn.tagel, btn.itemid );
                         }
                     }
                 );
