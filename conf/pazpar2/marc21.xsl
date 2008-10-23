@@ -15,10 +15,13 @@
   <xsl:include href="xml-to-string.xsl" />
   
   <xsl:template match="/marc:record">
-  	<xsl:variable name="fullrecord">
+  	<xsl:variable name="oldfullrecord">
 		<xsl:call-template name="xml-to-string"/>
 	</xsl:variable>
-    <xsl:variable name="leader" select="marc:leader"/>
+	<xsl:variable name="leader" select="marc:leader"/>
+	<xsl:variable name="newleader" select="concat( substring($leader,1,9),'a',substring($leader,11,14) )"/>
+	<xsl:variable name="fullrecord" select="concat(substring-before($oldfullrecord,$leader),$newleader,substring-after($oldfullrecord,$leader) )"/>
+
     <xsl:variable name="leader6" select="substring($leader,7,1)"/>
     <xsl:variable name="leader7" select="substring($leader,8,1)"/>
     <xsl:variable name="medium">
