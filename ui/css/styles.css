@@ -224,3 +224,6 @@
     background: url(ui/images/Help.gif) 0 0px no-repeat !important;
 }
 */
+.groupingClass {
+    background-color:yellow;
+}

@@ -438,6 +438,7 @@ biblios.app = function() {
                                                                 view: new Ext.grid.GroupingView({
                                                                     forceFit:true,
                                                                     groupTextTpl:'{[values.rs[0].data.title]}',
+                                                                    showGroupName:false,
                                                                     header: 'title:',
                                                                     groupRenderer: function(v, unused, r, rowIndex, colIndex, ds) {
                                                                         return v;
