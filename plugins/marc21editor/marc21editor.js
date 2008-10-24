@@ -1370,6 +1370,28 @@ function setupFFEditorCtryCombo() {
 		}
 	};
 
+    this._getNextField = function(tagnumber) {
+        var fields = fieldlist;
+        var lastseen = '';
+        if(bibliosdebug){
+            console.debug('_getNextField(): fields: ' + fields);
+        }
+        for( var i = 0; i < fields.length; i++) {
+            if( tagnumber >= fields[i] ) {
+                lastseen = fields[i];
+            }
+            else if( tagnumber < fields[i]) {
+                var lasttagnumber = lastseen;
+                if(bibliosdebug){
+                    console.debug('_getNextField(): found tag greater than ' + tagnumber + 'at position ' + i + 'previous field was: ' + lasttagnumber);
+                }
+                var el = $('#'+editorid).find('div.'+lasttagnumber);
+                return el;
+            }
+        }
+
+    }
+
 	this._addField = function(tagnumber, ind1, ind2, subfields) {
 		if( tagnumber ) {
 			return doAddField(tagnumber, ind1, ind2, subfields);
@@ -1389,7 +1411,7 @@ function setupFFEditorCtryCombo() {
 			var tags = $(".tag",editorelem  );
             var tagToInsertAfter = '';
             if( $(UI.editor[editorid].lastFocusedEl).parents('.tag').length == 0 ) {
-                tagToInsertAfter = $('.tag', editorelem).eq(0);
+                tagToInsertAfter = UI.editor[editorid].record.getNextField( tagnumber );
             }
             else {  
                 tagToInsertAfter = $(UI.editor[editorid].lastFocusedEl).parents('.tag'); // the tag just before where we'll insert the new tag
@@ -1844,6 +1866,10 @@ function setupFFEditorCtryCombo() {
 
 }
 // Public methods 
+MarcEditor.prototype.getNextField = function(tagnumber) {
+    return this._getNextField(tagnumber);
+}
+
 MarcEditor.prototype.createNew006007 = function(tagnumber) {
     return this._createNew006007(tagnumber);
 }
