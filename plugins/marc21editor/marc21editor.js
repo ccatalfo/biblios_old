@@ -1443,6 +1443,9 @@ function setupFFEditorCtryCombo() {
 			} // insert datafield
 			// insert out new tag after the tag we just found
 			$(tagToInsertAfter, editorelem).after(newtag);
+            if( getPref('ShowFieldBordersInEditor') == "1") {
+                addInputOutlines(); 
+            }
 			update();
 			// set the focus to this new tag
 			//$( newId ).get(0).focus();
