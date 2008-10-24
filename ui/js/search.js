@@ -153,7 +153,7 @@ function setPazPar2Targets() {
             action:'settings', 
             settings: Ext.util.JSON.encode(settings)
         },
-        method: 'POST',
+        type: 'POST',
         success: function(xml, status) {
         }
     });
