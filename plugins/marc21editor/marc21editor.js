@@ -1172,7 +1172,7 @@ function setupFFEditorCtryCombo() {
             type: 'POST',
             editorid: editorid,
             dataType: 'html',
-            data: {xml:xml, stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid},
+            data: {xml:xml, stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios-ec2/plugins/marc21editor/', editorid: editorid},
             success: function(html) {
                 $('#'+this.editorid).find('.ffeditor').html(html);
                 Ext.get(editorid).unmask();

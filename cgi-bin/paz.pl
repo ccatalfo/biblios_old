@@ -8,13 +8,17 @@ use CGI::Carp qw(fatalsToBrowser);
 use CGI::Session;
 use JSON;
 use Data::Dumper;
+use XML::LibXML;
 use XML::Simple;
+
+binmode STDOUT, ":utf8";
 
 my $debug = 1;
 
 my $cgi = CGI->new();
 CGI::Session->name('bibliospazsession');
 my $session = new CGI::Session or die CGI::Session->errstr;
+my $parser = XML::LibXML->new();
 
 my $sessionID = $session->param('sessionID');
 my $action = $cgi->param('action');
@@ -93,8 +97,61 @@ elsif ( $action eq 'show') {
     	$pazsort .= ':0';
     }
     $session->save_param();
-    print $session->header(-type=>'text/xml', -charset=>'utf-8');
-    print $paz->show($start, $num, $pazsort, 1);
+    print $session->header(-type=>'text/html', -charset=>'utf-8');
+    my $showxml = $paz->show($start, $num, $pazsort, 1);
+    if( $debug) {
+        #warn $showxml;
+    }
+    my $doc = $parser->parse_string($showxml);
+    my $root = $doc->getDocumentElement();
+    my $jsondata = {};
+    $jsondata->{'total'} = $root->findvalue('total');
+    $jsondata->{'merged'} = $root->findvalue('merged');
+    $jsondata->{'status'} = $root->findvalue('status');
+    $jsondata->{'activeclients'} = $root->findvalue('activeclients');
+    $jsondata->{'num'} = $root->findvalue('num');
+    $jsondata->{'hits'} = [];
+    if($debug){
+        #warn Dumper $jsondata;
+    }
+    foreach my $pzhit ($root->findnodes('hit')) {
+        my $recid = $pzhit->findvalue('recid');
+        my $count = $pzhit->findvalue('count');
+        my $title = $pzhit->findvalue('md-title');
+        my $author = $pzhit->findvalue('md-author');
+        my $publisher = $pzhit->findvalue('md-publisher');
+        my $date = $pzhit->findvalue('md-date');
+        my $medium = $pzhit->findvalue('md-medium');
+        my @fullrecords = $pzhit->findnodes('md-fullrecord');
+        my @locations = $pzhit->findnodes('location');
+        my @ids = $pzhit->findnodes('md-id');
+        if($debug) {
+            warn "processing $title";
+            #warn Dumper @ids;
+        }
+        my $i = 0;
+        foreach my $fullrecord ( @fullrecords ) {
+                my $marcxml = $fullrecord->findvalue('.');
+                my $hit = {};
+                $hit->{'recid'} = $recid;
+                $hit->{'count'} = $count;
+                $hit->{'title'} = $title;
+                $hit->{'author'} = $author;
+                $hit->{'publisher'} = $publisher;
+                $hit->{'date'} = $date;
+                $hit->{'medium'} = $medium;
+                $hit->{'fullrecord'} = $marcxml;
+                $hit->{'location_id'} = $locations[$i]->findvalue('@id');
+                $hit->{'location_name'} = $locations[$i]->findvalue('@name');
+                push @{$jsondata->{'hits'}}, $hit;
+                $i++;
+            if($debug) {
+                warn "Adding fullrecord $i with recid " . $hit->{'recid'} . " for title " . $hit->{'title'} . " for location " . $hit->{'location_id'};
+            }
+        }
+    }
+    print to_json( $jsondata );
+    #print $showxml;
 }
 elsif( $action eq 'stat' ) {
     print $session->header(-type=>'text/xml');

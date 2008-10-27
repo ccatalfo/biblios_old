@@ -346,8 +346,8 @@ biblios.app = function() {
                                                                 loadMask: true,
                                                                 id: 'searchgrid',
                                                                 store : (ds = new Ext.data.GroupingStore({
-                                                                    groupField:'pzrecid',
-                                                                    remoteGroup:true,
+                                                                    groupField:'recid',
+                                                                    remoteGroup:false,
                                                                     remoteSort:true,
                                                                     baseParams: {
                                                                         disableCaching: false,
@@ -355,55 +355,11 @@ biblios.app = function() {
                                                                     },
                                                                     proxy: new Ext.data.HttpProxy({url: pazcgiurl}),
                                                                     reader: 
-                                                                        new Ext.ux.NestedXmlReader({
-                                                                            totalRecords: 'merged',
-                                                                            record: 'hit',
-                                                                            id: 'recid'
-                                                                        }, Ext.data.Record.create([
-                                                                            {name: 'title', mapping: 'md-title'},
-                                                                            {name: 'title-remainder', mapping: 'md-title-remainder'},
-                                                                            {name: 'author', mapping:'md-author'},
-                                                                            {name: 'title-responsibility', mapping:'md-author'},
-                                                                            {name: 'publisher', mapping:'md-publication-name'},
-                                                                            {name: 'date', mapping: 'md-date'},
-                                                                            {name: 'medium', mapping:'md-medium'},
-                                                                            {name: 'pzrecid', mapping:'md-pzrecid'},
-                                                                            {name: 'checked' },
-                                                                            {name: 'fullrecord', type:'string', mapping: function(rec){
-                                                                                var xmlNode = Ext.DomQuery.select('md-fullrecord', rec)[0];
-                                                                                var xmlString = '';
-                                                                                if (typeof(xmlNode.textContent) != "undefined") {
-                                                                                    xmlString = xmlNode.textContent;
-                                                                                    if(bibliosdebug){
-                                                                                        'Getting textContent of fullrecord node';
-                                                                                    }
-                                                                                }
-                                                                                else {
-                                                                                    xmlString = xmlNode.firstChild.nodeValue;	
-                                                                                    if(bibliosdebug) {
-                                                                                        'Getting nodeValue of fullrecord node';
-                                                                                    }
-                                                                                }
-                                                                                var xml_decoded = Ext.util.Format.htmlDecode(xmlString);
-                                                                                var xml_escaped = xml_decoded.replace(/%26/g, '&amp;');
-                                                                                xml_escaped = xml_escaped.replace(/%3C/g, '&lt;');
-                                                                                xml_escaped = xml_escaped.replace(/%3E/g, '&gt;');
-                                                                                return xml_escaped;
-
-                                                                            }},
-                                                                            {name: 'location', mapping: function(rec) {
-                                                                                var locations = Ext.DomQuery.select('location', rec);
-                                                                                var result = new Array();
-                                                                                for( var i = 0; i < locations.length; i++) {
-                                                                                    var name = Ext.DomQuery.select('@name', locations[i])[0].firstChild.nodeValue;
-                                                                                    var id = Ext.DomQuery.select('@id', locations[i])[0].firstChild.nodeValue;
-                                                                                    result.push({name: name, id: id});
-                                                                                }
-                                                                                return result;
-                                                                                } // location mapping function
-                                                                            }, // end location mapping
-                                                                            {name: 'count', mapping: 'count'}																
-                                                                            ]) // search grid record
+                                                                        new Ext.data.JsonReader({
+                                                                            totalProperty: 'total',
+                                                                            root: 'hits',
+                                                                            activeclients: 'activeclients'
+                                                                        }, PazPar2Results // search grid record
                                                                         ),//search grid reader
                                                                         remoteSort: true,
                                                                         listeners: {
@@ -412,8 +368,14 @@ biblios.app = function() {
                                                                             },
                                                                             load: function(store, records, options) {
                                                                                 biblios.app.displaySearchView();
-                                                                                var xml = store.reader.xmlData;
-                                                                                var activeclients = $('activeclients', xml).text();
+                                                                                var activeclients = store.reader.jsonData.activeclients;
+                                                                                    clearStatusMsg();
+                                                                                    Ext.getCmp('searchgrid').getGridEl().unmask()
+                                                                                    Ext.getCmp('facetsTreePanel').root.reload();
+                                                                                    Ext.getCmp('searchgridSelectAllTbar').show();
+                                                                                    refreshTargetHits();
+                                                                                    Ext.getCmp('facetsTreePanel').show();
+                                                                                    //this.selectNone();
                                                                                 if( activeclients == '0' ) {
                                                                                     clearStatusMsg();
                                                                                     Ext.getCmp('searchgrid').getGridEl().unmask()
@@ -437,15 +399,12 @@ biblios.app = function() {
                                                                 
                                                                 view: new Ext.grid.GroupingView({
                                                                     forceFit:true,
-                                                                    groupTextTpl:'{[values.rs[0].data.title]}',
-                                                                    showGroupName:false,
-                                                                    header: 'title:',
-                                                                    groupRenderer: function(v, unused, r, rowIndex, colIndex, ds) {
+                                                                    groupTextTpl:'{[ values.rs[0].data.title ]} {[ values.rs[0].data.author ]} {[ values.rs[0].data.date ]}',
+                                                                    groupRenderer: function(v, unused,r, rowIndex, colIndex,ds) {
                                                                         return v;
                                                                     },
-                                                                    getRowClass: function(rec, index, rowParams, ds) {
-                                                                        return '';
-                                                                    }
+                                                                    showGroupName:true,
+                                                                    header: 'title:'
                                                                    
                                                               }),
                                                                 sm: (sm = new Ext.grid.SmartCheckboxSelectionModel({
@@ -479,12 +438,11 @@ biblios.app = function() {
                                                                     {header: "Author", sortable: true, width: 170, dataIndex: 'author'},
                                                                     {header: "Publisher", sortable: true, width: 120, dataIndex: 'publisher'},
                                                                     {header: "Date", sortable: true, width: 40, dataIndex: 'date'},
-                                                                    {header: "Location", sortable: true, width: 110, dataIndex: 'location'
-                                                                        ,renderer: function(data, meta, record, row, col, store) {
-                                                                            return record.data.location[0].name;																		
-                                                                        } // renderer function for Location
+                                                                    {header: "Location", sortable: true, width: 110, dataIndex: 'location_name'},
+                                                                    {header: "Location Id", hidden: true, sortable: true, width: 110, dataIndex: 'location_id'
                                                                     }, // Location column
-                                                                    {header: "PazPar2 id", id: 'pazrecid', width: 30, hidden:true, dataIndex:'pzrecid'},
+                                                                    {header: "recid", id: 'recid', width: 30, hidden:true, dataIndex:'recid'},
+                                                                    {header: "id", id: 'id', width: 30, hidden:true, dataIndex:'id'},
                                                                     {header: 'Full record', id:'fullrecord', hidden:true, dataIndex:'fullrecord'}
                                                                 ]), // column model for search grid
                                                                 //plugins: expander, // search grid plugins

@@ -22,7 +22,20 @@ var resultsDoc;
 
 // record cache for search results
 var recordCache = {};
-	
+
+var PazPar2Results = Ext.data.Record.create([
+    {name: 'title', mapping: 'title'},
+    {name: 'author', mapping:'author'},
+    {name: 'publisher', mapping:'publication-name'},
+    {name: 'date', mapping: 'date'},
+    {name: 'medium', mapping:'medium'},
+    {name: 'recid', mapping:'recid'},
+    {name: 'checked' },
+    {name: 'fullrecord'},
+    {name: 'location_name', mapping:'location_name'},
+    {name: 'location_id', mapping:'location_id'},
+    {name: 'count', mapping: 'count'}																
+    ]); 
 var SearchTarget = Ext.data.Record.create([
 	{name: 'rowid'},
 	{name: 'name', type: 'string'},

@@ -73,32 +73,30 @@
 	
     <pz:record>
       <xsl:attribute name="mergekey">
+      <!--
           <xsl:text>controlnumber </xsl:text>
           <xsl:value-of select="marc:controlfield[@tag='001']"/>
 	  control008 
           <xsl:value-of select="marc:controlfield[@tag='008']"/>
-          <!--<xsl:text>title </xsl:text>
+    -->
+          <xsl:text>title </xsl:text>
 	<xsl:value-of select="marc:datafield[@tag='245']/marc:subfield[@code='a']"/>
 	<xsl:text> author </xsl:text>
 	<xsl:value-of select="marc:datafield[@tag='100']/marc:subfield[@code='a']"/>
 	<xsl:text> medium </xsl:text>
-    <xsl:value-of select="$medium"/>-->
+    <xsl:value-of select="$medium"/>
       </xsl:attribute>
+        <pz:metadata type="id">
+              <xsl:text>controlnumber </xsl:text>
+              <xsl:value-of select="marc:controlfield[@tag='001']"/>
+          control008 
+              <xsl:value-of select="marc:controlfield[@tag='008']"/>
+        </pz:metadata>
 
       <pz:metadata type="fullrecord"><xsl:value-of select="$fullrecord"/>
   </pz:metadata>
-      <pz:metadata type="pzrecid">
-          <xsl:text>title </xsl:text>
-        <xsl:value-of select="marc:datafield[@tag='245']/marc:subfield[@code='a']"/>
-        <xsl:text> author </xsl:text>
-        <xsl:value-of select="marc:datafield[@tag='100']/marc:subfield[@code='a']"/>
-        <xsl:text> medium </xsl:text>
-        <xsl:value-of select="$medium"/>
-    </pz:metadata>
       <xsl:for-each select="marc:controlfield[@tag='001']">
-        <pz:metadata type="id">
-          <xsl:value-of select="."/>
-        </pz:metadata>
+
       </xsl:for-each>
 
       <xsl:for-each select="marc:datafield[@tag='010']">
