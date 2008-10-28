@@ -568,7 +568,10 @@ biblios.app = function() {
                                                                     id: 'searchgridtbar',
                                                                     store: ds,
                                                                     displayInfo: true,
-                                                                    displayMsg: 'Displaying records {0} - {1} of {2}',
+                                                                    displayMsg: '{0} - {1} (merged) {2} - {3} (unmerged) of {4}',
+                                                                    msgFormatFunc: function(disp,count) {
+                                                                        return String.format(this.displayMsg, disp, disp +this.pageSize-1, disp, disp + count - 1, this.store.getTotalCount())
+                                                                    },
                                                                     emptyMsg: 'No records to display',
                                                                     listeners: {
                                                                         beforerender: function(tbar) {
