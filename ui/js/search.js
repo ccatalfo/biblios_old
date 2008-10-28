@@ -313,6 +313,20 @@ function handleLocationClick(recid, offset) {
 	previewRemoteRecord(recid, offset);
 }
 
+var pzStateToCss = {
+Client_Connecting: '',
+Client_Connected: '',
+Client_Idle: '',
+Client_Initializing: '',
+Client_Searching: '',
+Client_Presenting: '',
+Client_Error: '',
+Client_Failed: '',
+Client_Disconnected: '',
+Client_Stopped: '',
+Client_Continue: ''
+};
+
 function refreshTargetHits(){
 	$.getJSON(pazcgiurl, {
 		action: 'bytarget'
@@ -321,9 +335,13 @@ function refreshTargetHits(){
 		for (var i = 0; i < data.targets.length; i++) {
 			for (var j = 0; j < nodes.length; j++) {
 				var pazid = nodes[j].attributes.pazid;
+                var state = data.targets[i].state;
+                var diagnostic = data.targets[i].diagnostic;
 				if (pazid == data.targets[i].id) {
 					if (nodes[j]) {
 						nodes[j].setText(nodes[j].attributes.servername + ' (' + data.targets[i].records + ')');
+                        var classToAdd = pzStateToCss[state];
+                        nodes[j].getUI().addClass(classToAdd);
 					}
 				}
 			}
