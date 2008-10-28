@@ -176,6 +176,7 @@ function doPazPar2Search(query) {
 	Ext.getCmp('searchgridEditBtn').disable();
 	Ext.getCmp('searchgridExportBtn').disable();
 	Ext.getCmp('searchgrid').getGridEl().mask();
+    Ext.getCmp('searchgrid').getTopToolbar().moveFirst();
 	// save this query
 	biblios.app.currQuery = query;
     if( biblios.app.fireEvent('beforesearch', getTargets(), query) ) {
