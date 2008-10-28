@@ -65,14 +65,14 @@ function doSaveLocal(savefileid, editorid, offset) {
                     var data = Ext.getCmp('searchgrid').getSelectionModel().getSelections()[0].data;
                     var id = Ext.getCmp('searchgrid').getSelectionModel().getSelections()[0].id;
                 }
-                var searchtargetname = data.location[0].name;
+                var searchtargetname = data.location_name;
                 var searchtargetsid = DB.SearchTargets.select('name=?', [searchtargetname]).getOne().rowid;
 				progress.updateProgress(.6, 'Retrieving record from server');
                 UI.editor[editorid].savefileid = savefileid;
                 var record = new DB.Records({
                     title: UI.editor[editorid].record.getTitle() || '',
                     author: UI.editor[editorid].record.getAuthor() || '',
-                    location: data.location[0].name || '',
+                    location: data.location_name || '',
                     publisher:UI.editor[editorid].record.getPublisher() || '',
                     medium: UI.editor[editorid].record.getFormat(),
                     date:UI.editor[editorid].record.getDate() || '',
@@ -197,7 +197,7 @@ function addRecordFromSearch(srchRecord, savefileid, editorid) {
 		// o is a json literal containing the record id, grid data and savefileid for this record
 		if(bibliosdebug == 1 ) {console.info('inserting into savefile: ' + savefileid + ' record with title: ' + srchRecord.data.title);}
 		try {
-			var target = DB.SearchTargets.select('name=?', [srchRecord.data.location[0].name]).getOne();
+			var target = DB.SearchTargets.select('name=?', [srchRecord.data.location_name]).getOne();
 			var savefile = DB.Savefiles.select('Savefiles.rowid=?', [savefileid]).getOne();
             var xmldocOrig = xslTransform.loadString( srchRecord.data.fullrecord );
             var xmlUpdated = updateLeaderToUnicode(xmldocOrig);
@@ -205,7 +205,7 @@ function addRecordFromSearch(srchRecord, savefileid, editorid) {
 			var record = new DB.Records({
 				title: UI.editor[editorid]? UI.editor[editorid].record.getTitle() : srchRecord.data.title || '',
 				author: UI.editor[editorid]? UI.editor[editorid].record.getAuthor():  srchRecord.data.author || '',
-				location: srchRecord.data.location[0].name || '',
+				location: srchRecord.data.location_name || '',
 				publisher:UI.editor[editorid]?  UI.editor[editorid].record.getPublisher(): srchRecord.data.publication || '',
 				medium: UI.editor[editorid] ? UI.editor[editorid].record.getFormat() : srchRecord.data.medium || '',
 				date:UI.editor[editorid]?  UI.editor[editorid].record.getDate(): srchRecord.data.date|| '',
@@ -302,7 +302,7 @@ function sendSelectedFromSearchGrid(locsendto) {
    	var records = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
     for(var i= 0; i < records.length; i++) {
         var id= records[i].id;
-        var loc= records[i].data.location;
+        var loc= records[i].data.location_name;
         
         var title= records[i].data.title;
 		var xml = records[i].data.fullrecord;
