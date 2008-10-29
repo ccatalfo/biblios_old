@@ -227,3 +227,35 @@
 .groupingClass {
     background-color:yellow;
 }
+.groupingSummary {
+font-family:arial,tahoma,helvetica,sans-serif !important;;
+font-size:11px !important;
+font-size-adjust:none !important;
+font-style:normal !important;
+font-variant:normal !important;
+font-weight:normal !important;
+line-height:normal !important;
+color: #000 !important;
+}
+.x-grid-group-hd {
+    background: none;
+    border: none !important;
+}
+.x-grid-group-hd div{
+    border: none !important;
+    font-family:arial,tahoma,helvetica,sans-serif !important;
+    font-size:11px !important;
+    font-size-adjust:none !important;
+    font-style:normal !important;
+    font-variant:normal !important;
+    font-weight:normal !important;
+    line-height:normal !important;
+    color: #000 !important;
+    border-bottom: none !important;
+    padding-top: 0px;
+}
+.x-grid-group-hd td div{
+    background: none !important;
+    padding: 0px !important;
+    display: inline !important;
+}

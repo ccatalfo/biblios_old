@@ -398,9 +398,36 @@ biblios.app = function() {
                                                                 })), // data store search grid aka ds
                                                                 
                                                                 view: new Ext.grid.GroupingView({
-                                                                    forceFit:true,
-                                                                    groupTextTpl:'{[ values.rs[0].data.title ]} {[ values.rs[0].data.author ]} {[ values.rs[0].data.date ]}',
-                                                                    groupRenderer: function(v, unused,r, rowIndex, colIndex,ds) {
+                                                                    forceFit:true
+                                                                    ,groupTextTpl:
+                                                                        '<table class="x-grid3-row-table">'
+                                                                        + '<tbody>'
+                                                                        + '<tr>' 
+
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-1">'
+                                                                        + '   '
+                                                                        + '</td>'
+                                                                        
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-2">'
+                                                                        + '{[ values.rs[0].data.title ]}'
+                                                                        + '</td>'
+
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-3">'
+                                                                        + '{[ values.rs[0].data.author ]}'
+                                                                        + '</td>'
+
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-4"></td>'
+                                                                        + '</td>'
+                                                                    
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-5">'
+                                                                        + '{[ values.rs[0].data.date ]}'
+                                                                        + '</td>'
+
+                                                                        + '</tr>'
+                                                                        + '</tbody>'
+                                                                        + '</table>'
+                                                                    
+                                                                    ,groupRenderer: function(v, unused,r, rowIndex, colIndex,ds) {
                                                                         return v;
                                                                     },
                                                                     showGroupName:true,
