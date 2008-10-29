@@ -11,6 +11,7 @@ var marc21defsPath = libPath + "plugins/marc21editor/marc21.xml";
 var marc21langdefsPath = libPath + 'plugins/marc21editor/languages.xml';
 var marc21ctrydefsPath = libPath + 'plugins/marc21editor/countries.xml';
 var marc21controlfieldsPath = libPath + 'plugins/marc21editor/marc21controlfields.xml';
+var xslpath = $('plugin:contains(MARC21Editor)', configDoc).children('xslpath').text();
 // load xsl docs for transforming marcxml
 var marcxsl = xslTransform.loadFile(showMarcXslPath);
 //var ffxsl = xslTransform.loadFile(fixedFieldXslPath);
@@ -1172,7 +1173,7 @@ function setupFFEditorCtryCombo() {
             type: 'POST',
             editorid: editorid,
             dataType: 'html',
-            data: {xml:xml, stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios-ec2/plugins/marc21editor/', editorid: editorid},
+            data: {xml:xml, stylesheet: 'fixedfields_editor.xsl', xslpath: xslpath, editorid: editorid},
             success: function(html) {
                 $('#'+this.editorid).find('.ffeditor').html(html);
                 Ext.get(editorid).unmask();
@@ -1236,7 +1237,7 @@ function setupFFEditorCtryCombo() {
             },
             rectype: rectype,
             dataType: 'html',
-            data: {xml:this.getFFXML(tagnumber, tagvalue), stylesheet: 'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid, rectype:rectype},
+            data: {xml:this.getFFXML(tagnumber, tagvalue), stylesheet: 'fixedfields_editor.xsl', xslpath: xslpath, editorid: editorid, rectype:rectype},
             success: function(html) {
                 var win = new Ext.Window({
                     title: 'Control Fields Guided Editor',
@@ -1572,7 +1573,7 @@ function setupFFEditorCtryCombo() {
             data: {
                 xml: xslTransform.serialize(marcXmlDoc), 
                 stylesheet: 'marc21editor.xsl', 
-                xslpath:'/home/fuzzy/src/biblios/plugins/marc21editor/', 
+                xslpath: xslpath,
                 editorid: editorid
             }, 
             success: function(html) {
@@ -1650,7 +1651,7 @@ function setupFFEditorCtryCombo() {
             editorid: editorid,
             dataType: 'html',
             tagnumber: tagnumber,
-            data: {tag:tagnumber, xml:this.getFFXML(tagnumber,''), stylesheet:'fixedfields_editor.xsl', xslpath: '/home/fuzzy/src/biblios/plugins/marc21editor/', editorid: editorid},
+            data: {tag:tagnumber, xml:this.getFFXML(tagnumber,''), stylesheet:'fixedfields_editor.xsl', xslpath: xslpath, editorid: editorid},
             success: function(html) {
                 var win = new Ext.Window({
                     title: 'Select type of field',
