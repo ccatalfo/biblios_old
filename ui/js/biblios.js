@@ -404,15 +404,15 @@ biblios.app = function() {
                                                                         + '<tbody>'
                                                                         + '<tr>' 
 
-                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-1">'
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-1" width="49">'
                                                                         + '   '
                                                                         + '</td>'
                                                                         
-                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-2">'
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-2" width="222">'
                                                                         + '{[ values.rs[0].data.title ]}'
                                                                         + '</td>'
 
-                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-3">'
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-3" width="275">'
                                                                         + '{[ values.rs[0].data.author ]}'
                                                                         + '</td>'
 
