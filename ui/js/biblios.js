@@ -374,7 +374,8 @@ biblios.app = function() {
                                                                                 var publisherWidth = grid.getColumnModel().getColumnWidth(4);
                                                                                 var dateWidth = grid.getColumnModel().getColumnWidth(5);
                                                                                 var locationWidth = grid.getColumnModel().getColumnWidth(6);
-                                                                                $('.groupingTitle').css('width', checkboxWidth + mediumWidth + titleWidth);
+                                                                                $('.groupingMedium').css('width', checkboxWidth + mediumWidth);
+                                                                                $('.groupingTitle').css('width', titleWidth);
                                                                                 $('.groupingAuthor').css('width', authorWidth);
                                                                                 $('.groupingLocation').css('width', publisherWidth + dateWidth + locationWidth);
                                                                             },
@@ -417,7 +418,7 @@ biblios.app = function() {
                                                                         + '<tr>' 
 
                                                                         + '<td class="x-grid3-col x-grid3-cell x-grid3-td-1 groupingMedium" width="49">'
-                                                                        + '   '
+                                                                        + '{[ values.rs[0].data.medium ]}' 
                                                                         + '</td>'
                                                                         
                                                                         + '<td class="x-grid3-col x-grid3-cell x-grid3-td-2 groupingTitle" width="222">'
