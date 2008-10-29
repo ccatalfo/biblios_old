@@ -366,6 +366,18 @@ biblios.app = function() {
                                                                             beforeload: function(store, options) {
                                                                                 
                                                                             },
+                                                                            render: function(grid) {
+                                                                                var checkboxWidth = grid.getColumnModel().getColumnWidth(0);
+                                                                                var mediumWidth = grid.getColumnModel().getColumnWidth(1);
+                                                                                var titleWidth = grid.getColumnModel().getColumnWidth(2);
+                                                                                var authorWidth = grid.getColumnModel().getColumnWidth(3);
+                                                                                var publisherWidth = grid.getColumnModel().getColumnWidth(4);
+                                                                                var dateWidth = grid.getColumnModel().getColumnWidth(5);
+                                                                                var locationWidth = grid.getColumnModel().getColumnWidth(6);
+                                                                                $('.groupingTitle').css('width', checkboxWidth + mediumWidth + titleWidth);
+                                                                                $('.groupingAuthor').css('width', authorWidth);
+                                                                                $('.groupingLocation').css('width', publisherWidth + dateWidth + locationWidth);
+                                                                            },
                                                                             load: function(store, records, options) {
                                                                                 biblios.app.displaySearchView();
                                                                                 var activeclients = store.reader.jsonData.activeclients;
@@ -404,15 +416,15 @@ biblios.app = function() {
                                                                         + '<tbody>'
                                                                         + '<tr>' 
 
-                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-1" width="49">'
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-1 groupingMedium" width="49">'
                                                                         + '   '
                                                                         + '</td>'
                                                                         
-                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-2" width="222">'
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-2 groupingTitle" width="222">'
                                                                         + '{[ values.rs[0].data.title ]}'
                                                                         + '</td>'
 
-                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-3" width="275">'
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-3 groupingAuthor" width="275">'
                                                                         + '{[ values.rs[0].data.author ]}'
                                                                         + '</td>'
 
@@ -420,7 +432,7 @@ biblios.app = function() {
                                                                         + '{[ values.rs[0].data.date ]}'
                                                                         + '</td>'*/
 
-                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-5" >'
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-5 groupingCount">'
                                                                         + '{[ values.rs[0].data.count ]} target(s)'
                                                                         + '</td>'
 
