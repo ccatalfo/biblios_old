@@ -118,6 +118,7 @@ koha-install:
 	cp -r tools $(KOHADIR)/lib/biblios
 	cp -r plugins $(KOHADIR)/lib/biblios
 	cp -r conf $(KOHADIR)/lib/biblios
+	cp -r templates $(KOHADIR)/lib/biblios
 	cp integration/koha/biblios.tmpl $(KOHADIR)/modules/cataloguing/biblios.tmpl
 	cp integration/koha/biblios.pl $(KOHACGIDIR)/cataloguing/
 	cp cgi-bin/xsltransform.pl cgi-bin/paz.pl cgi-bin/PazPar2.pm cgi-bin/kohaws.pl cgi-bin/uploaddb.pl cgi-bin/exportdb.pl cgi-bin/downloadMarc.pl cgi-bin/download.pl cgi-bin/uploadMarc.pl $(KOHACGIDIR)/plugins/biblios/
