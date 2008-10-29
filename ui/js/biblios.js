@@ -578,7 +578,7 @@ biblios.app = function() {
                                                                     msgFormatFunc: function() {
                                                                         var count = this.store.getCount(); 
                                                                         var mergedStart = (this.current * this.pageSize) + 1;
-                                                                        var mergedEnd = mergedStart + this.pageSize -1;
+                                                                        var mergedEnd = this.store.getCount() < this.pageSize ? this.store.getCount() : mergedStart + this.pageSize -1;
                                                                         var unmergedStart = this.unmergedCounts[this.current].start;
                                                                         var unmergedEnd = this.unmergedCounts[this.current].end;
                                                                         return String.format(this.displayMsg, mergedStart, mergedEnd, unmergedStart, unmergedEnd, this.store.getTotalCount())
@@ -598,7 +598,7 @@ biblios.app = function() {
                                                                                         var start = 1;
                                                                                         tbar.unmergedCounts[currentPage] = {
                                                                                             start: start,        
-                                                                                            end: start + tbar.store.getCount()
+                                                                                            end: tbar.store.getCount()
                                                                                         }
                                                                                     }
                                                                                     else {
