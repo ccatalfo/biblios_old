@@ -224,8 +224,9 @@
     background: url(ui/images/Help.gif) 0 0px no-repeat !important;
 }
 */
-.groupingClass {
-    background-color:yellow;
+.groupingClass .x-grid-group-body{
+    /*background-color:yellow;*/
+    padding-left:10px;
 }
 .groupingSummary {
 font-family:arial,tahoma,helvetica,sans-serif !important;;

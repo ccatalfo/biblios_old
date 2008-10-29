@@ -416,14 +416,11 @@ biblios.app = function() {
                                                                         + '{[ values.rs[0].data.author ]}'
                                                                         + '</td>'
 
-                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-4"></td>'
-                                                                        + '</td>'
-                                                                    
-                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-5">'
+                                                                        /*+ '<td class="x-grid3-col x-grid3-cell x-grid3-td-5">'
                                                                         + '{[ values.rs[0].data.date ]}'
-                                                                        + '</td>'
+                                                                        + '</td>'*/
 
-                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-5">'
+                                                                        + '<td class="x-grid3-col x-grid3-cell x-grid3-td-5" >'
                                                                         + '{[ values.rs[0].data.count ]} target(s)'
                                                                         + '</td>'
 
