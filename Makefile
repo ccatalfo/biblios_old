@@ -108,24 +108,23 @@ tags:
 	$(CTAGS) ui/js/biblios.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js ui/js/init.js ui/js/prefs.js
 
 koha-install: 
-	mkdir -p $(KOHADIR)/plugins/biblios
-	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
-	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/ui
-	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/lib/extjs2/resources 
-	mkdir -p $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/lib/extjs2/resources/images/images
-	cp build/index.html $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/index.html
-	cp -r ui/images ui/xsl $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/ui
-	cp -r tools $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
-	cp -r plugins $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
-	cp -r conf $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
-	cp -r templates $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios
-	cp integration/koha/biblios.tmpl $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/modules/cataloguing/biblios.tmpl
-	cp integration/koha/biblios.pl $(KOHADIR)/cataloguing/
-	cp cgi-bin/uploaddb.pl cgi-bin/exportdb.pl cgi-bin/downloadMarc.pl cgi-bin/download.pl cgi-bin/uploadMarc.pl $(KOHADIR)/plugins/biblios/
-	cp build/lib.js $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/
-	cp build/styles.css $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/
-	cp -r lib/extjs2/resources/css $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios//lib/extjs2/resources
-	cp -r lib/extjs2/resources/images/default $(KOHADIR)/koha-tmpl/intranet-tmpl$(KOHALANGTHEME)/lib/biblios/lib/extjs2/resources/images
+	mkdir -p $(KOHACGIDIR)/plugins/biblios
+	mkdir -p $(KOHADIR)/lib/biblios
+	mkdir -p $(KOHADIR)/lib/biblios/ui
+	mkdir -p $(KOHADIR)/lib/biblios/lib/extjs2/resources 
+	mkdir -p $(KOHADIR)/lib/biblios/lib/extjs2/resources/images/images
+	cp build/index.html $(KOHADIR)/lib/biblios/index.html
+	cp -r ui/images ui/xsl $(KOHADIR)/lib/biblios/ui
+	cp -r tools $(KOHADIR)/lib/biblios
+	cp -r plugins $(KOHADIR)/lib/biblios
+	cp -r conf $(KOHADIR)/lib/biblios
+	cp integration/koha/biblios.tmpl $(KOHADIR)/modules/cataloguing/biblios.tmpl
+	cp integration/koha/biblios.pl $(KOHACGIDIR)/cataloguing/
+	cp cgi-bin/xsltransform.pl cgi-bin/paz.pl cgi-bin/PazPar2.pm cgi-bin/kohaws.pl cgi-bin/uploaddb.pl cgi-bin/exportdb.pl cgi-bin/downloadMarc.pl cgi-bin/download.pl cgi-bin/uploadMarc.pl $(KOHACGIDIR)/plugins/biblios/
+	cp build/lib.js $(KOHADIR)/lib/biblios/
+	cp build/styles.css $(KOHADIR)/lib/biblios/
+	cp -r lib/extjs2/resources/css $(KOHADIR)/lib/biblios/lib/extjs2/resources
+	cp -r lib/extjs2/resources/images/default $(KOHADIR)/lib/biblios/lib/extjs2/resources/images
 
 koha-uninstall:
 	@echo Uninstalling biblios files from koha path $(KOHADIR)
