@@ -566,17 +566,48 @@ biblios.app = function() {
                                                                 tbar: new Ext.PagingToolbar({
                                                                     pageSize: 15,
                                                                     id: 'searchgridtbar',
+                                                                    unmergedCounts: [
+                                                                        {
+                                                                            start:0,
+                                                                            end: 0
+                                                                        }
+                                                                    ],
                                                                     store: ds,
                                                                     displayInfo: true,
                                                                     displayMsg: '{0} - {1} (merged) {2} - {3} (unmerged) of {4}',
-                                                                    msgFormatFunc: function(disp,count) {
-                                                                        return String.format(this.displayMsg, disp, disp +this.pageSize-1, disp, disp + count - 1, this.store.getTotalCount())
+                                                                    msgFormatFunc: function() {
+                                                                        var count = this.store.getCount(); 
+                                                                        var mergedStart = (this.current * this.pageSize) + 1;
+                                                                        var mergedEnd = mergedStart + this.pageSize -1;
+                                                                        var unmergedStart = this.unmergedCounts[this.current].start;
+                                                                        var unmergedEnd = this.unmergedCounts[this.current].end;
+                                                                        return String.format(this.displayMsg, mergedStart, mergedEnd, unmergedStart, unmergedEnd, this.store.getTotalCount())
                                                                     },
                                                                     emptyMsg: 'No records to display',
                                                                     listeners: {
                                                                         beforerender: function(tbar) {
                                                                             
 
+                                                                        },
+                                                                        beforepagechange: function(tbar, start) {
+                                                                        },//searchgrid paging tbar beforepagechange
+                                                                        pagechange: function(tbar, page) {
+                                                                                    var currentPage = page;
+                                                                                    console.debug('searchgrid paging tbar setting for ' + currentPage);
+                                                                                    if( currentPage == 0 ) {
+                                                                                        var start = 1;
+                                                                                        tbar.unmergedCounts[currentPage] = {
+                                                                                            start: start,        
+                                                                                            end: start + tbar.store.getCount()
+                                                                                        }
+                                                                                    }
+                                                                                    else {
+                                                                                        var start = tbar.unmergedCounts[currentPage-1].end;
+                                                                                        tbar.unmergedCounts[currentPage] = {
+                                                                                            start: start+1,
+                                                                                            end: start+tbar.store.getCount()
+                                                                                        }
+                                                                                    }
                                                                         }
                                                                     },
                                                                     items: [
