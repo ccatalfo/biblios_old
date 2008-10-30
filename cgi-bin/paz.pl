@@ -117,7 +117,7 @@ elsif ( $action eq 'show') {
     }
     foreach my $pzhit ($root->findnodes('hit')) {
         my $recid = $pzhit->findvalue('recid');
-        my $count = $pzhit->findvalue('count');
+        my $count = $pzhit->findvalue('count') || 1;
         my $title = $pzhit->findvalue('md-title');
         my $author = $pzhit->findvalue('md-author');
         my $publisher = $pzhit->findvalue('md-publisher');
@@ -151,6 +151,7 @@ elsif ( $action eq 'show') {
             }
         }
     }
+    $jsondata->{'totalrecords'} = getByTargetJson( $paz->bytarget() )->{'totalrecords'};
     print to_json( $jsondata );
     #print $showxml;
 }
@@ -196,26 +197,7 @@ elsif( $action eq 'termlist' ) {
 elsif( $action eq 'bytarget' ) {
     my $name = $cgi->param('name');
     my $bytargetxml = $paz->bytarget($name);
-    my $doc = $parser->parse_string($bytargetxml);
-    my $root = $doc->getDocumentElement();
-    my $jsondata = {};
-    $jsondata->{'status'} = $root->findvalue('status');
-    $jsondata->{'targets'} = [];
-    my $totalrecords = 0;
-    foreach my $target ( $root->findnodes('target') ) {
-      my $targetjson = {};
-      $targetjson->{'id'} = $target->findvalue('id');
-      $targetjson->{'hits'} = $target->findvalue('hits');
-      $targetjson->{'diagnostic'} = $target->findvalue('diagnostic');
-      $targetjson->{'records'} = $target->findvalue('records');
-      $targetjson->{'state'} = $target->findvalue('state');
-      push @{$jsondata->{'targets'}}, $targetjson;
-      if($debug) {
-	warn 'Adding ' . $targetjson->{'records'} . ' to total record count';
-      }
-      $totalrecords += $targetjson->{'records'};
-    }
-    $jsondata->{'totalrecords'} = $totalrecords;
+    my $jsondata = getByTargetJson($bytargetxml);
     print $cgi->header(-type => 'text/x-json');
     print to_json($jsondata);
 }
@@ -242,3 +224,27 @@ sub print_session {
     print to_json($data);
 }
 
+sub getByTargetJson {
+    my $bytargetxml = shift;
+    my $doc = $parser->parse_string($bytargetxml);
+    my $root = $doc->getDocumentElement();
+    my $jsondata = {};
+    $jsondata->{'status'} = $root->findvalue('status');
+    $jsondata->{'targets'} = [];
+    my $totalrecords = 0;
+    foreach my $target ( $root->findnodes('target') ) {
+      my $targetjson = {};
+      $targetjson->{'id'} = $target->findvalue('id');
+      $targetjson->{'hits'} = $target->findvalue('hits');
+      $targetjson->{'diagnostic'} = $target->findvalue('diagnostic');
+      $targetjson->{'records'} = $target->findvalue('records');
+      $targetjson->{'state'} = $target->findvalue('state');
+      push @{$jsondata->{'targets'}}, $targetjson;
+      if($debug) {
+	warn 'Adding ' . $targetjson->{'records'} . ' to total record count';
+      }
+      $totalrecords += $targetjson->{'records'};
+    }
+    $jsondata->{'totalrecords'} = $totalrecords;
+    return $jsondata;
+}

@@ -356,7 +356,10 @@ biblios.app = function() {
                                                                     proxy: new Ext.data.HttpProxy({url: pazcgiurl}),
                                                                     reader: 
                                                                         new Ext.data.JsonReader({
-                                                                            totalProperty: 'total',
+                                                                            totalProperty: 'merged',
+                                                                            merged: 'merged',
+                                                                            totalrecords: 'totalrecords',
+                                                                            num: 'num',
                                                                             root: 'hits',
                                                                             activeclients: 'activeclients'
                                                                         }, PazPar2Results // search grid record
@@ -619,14 +622,16 @@ biblios.app = function() {
                                                                     ],
                                                                     store: ds,
                                                                     displayInfo: true,
-                                                                    displayMsg: '{0} - {1} (merged) {2} - {3} (unmerged) of {4}',
+                                                                    displayMsg: '{0} - {1} of {2} (merged) {3} - {4} of {5} (unmerged) ',
                                                                     msgFormatFunc: function() {
                                                                         var count = this.store.getCount(); 
                                                                         var mergedStart = (this.current * this.pageSize) + 1;
                                                                         var mergedEnd = this.store.getCount() < this.pageSize ? this.store.getCount() : mergedStart + this.pageSize -1;
+                                                                        var mergedTotal = this.store.reader.jsonData.merged;
                                                                         var unmergedStart = this.unmergedCounts[this.current].start;
                                                                         var unmergedEnd = this.unmergedCounts[this.current].end;
-                                                                        return String.format(this.displayMsg, mergedStart, mergedEnd, unmergedStart, unmergedEnd, this.store.getTotalCount())
+                                                                        var unmergedTotal = this.store.reader.jsonData.totalrecords;
+                                                                        return String.format(this.displayMsg, mergedStart, mergedEnd, mergedTotal, unmergedStart, unmergedEnd, unmergedTotal)
                                                                     },
                                                                     emptyMsg: 'No records to display',
                                                                     listeners: {
