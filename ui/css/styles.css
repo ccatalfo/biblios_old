@@ -263,3 +263,7 @@ color: #000 !important;
 .fftbarfield {
     font-style:italic !important;
 }
+.fftbarvalue {
+    padding-left: 3px;
+    padding-right: 3px;
+}

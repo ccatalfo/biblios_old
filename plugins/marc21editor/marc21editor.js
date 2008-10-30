@@ -1624,7 +1624,7 @@ function setupFFEditorCtryCombo() {
         var tag001 = $('#'+editorid).find('.001').children('.controlfield-text').val();
         var tag003 = $('#'+editorid).find('.003').children('.controlfield-text').val();
         var tag005 = $('#'+editorid).find('.005').children('.controlfield-text').val();
-        Ext.getCmp(editorid+'-003').setText('<span class="fftbarfield">001</span>:'+tag001+'<span class="fftbarfield">003</span> '+tag003+' <span class="fftbarfield">005</span>: '+tag005);
+        Ext.getCmp(editorid+'-003').setText('<span class="fftbarfield">001</span><span class="fftbarvalue">'+tag001+'</span><span class="fftbarfield">003</span><span class="fftbarvalue">'+tag003+'</span><span class="fftbarfield">005</span><span class="fftbarvalue">'+tag005+'</span>');
 
         var leader = $('#'+editorid).find('.000').children('.controlfield-text').val();
         Ext.getCmp(editorid+'-000-0').setText( '<span class="fftbarfield">LDR</span> ' + leader );
@@ -1709,7 +1709,7 @@ function setupFFEditorCtryCombo() {
             items: [
                 {
                     id: editorid+'-003',
-                    text: '<span class="fftbarfield">001</span> '+tag001+'<span class="fftbarfield">003</span> ' + tag003 + ' <span class="fftbarfield">005</span> '+tag005,
+                    text: '<span class="fftbarfield">001</span><span class="fftbarvalue">'+tag001+'</span><span class="fftbarfield">003</span><span class="fftbarvalue">' + tag003 + '</span><span class="fftbarfield">005</span><span class="fftbarvalue">'+tag005+'</span>',
                     handler: function(btn) {
                         Ext.Msg.alert('Control Fields Guided Editor', 'These fields are normally system-generated.  If you need to edit them, please turn off the guided control fields editor.');
                     }
