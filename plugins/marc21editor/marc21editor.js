@@ -1403,6 +1403,8 @@ function setupFFEditorCtryCombo() {
 			});
 		}
 		function doAddField(tagnumber, ind1, ind2, subfields) {
+            // get length of already exisitng tags -- for use when adding 006/007
+            var lengthOfPrevious = $('#'+editorid).find('div.'+tagnumber).length;
 			var firstind = ind1 || ' ';
 			var secondind = ind2 || ' ';
 			var sf = subfields || [ {'delimiter': 'a', 'text': ''} ];
@@ -1448,6 +1450,28 @@ function setupFFEditorCtryCombo() {
                 addInputOutlines(); 
             }
 			update();
+            // if user is adding an 006 or 007, add a new tbar item to the appropriate fixed fields tbar
+            if( tagnumber == '006' || tagnumber == '007' ) {
+                if(bibliosdebug) {
+                    console.debug('marc21editor addField: adding toolbar for ' + tagnumber);
+                }
+                Ext.getCmp(editorid+tagnumber+'tbar').add(
+                    {
+                        id: editorid+'-'+tagnumber+'-'+lengthOfPrevious,
+                        text: '<span class="fftbarfield">'+tagnumber+'</span> ' + '                 ',
+                        tagvalue: '                 ',
+                        tagnumber: tagnumber,
+                        tagel: $('#'+newId).children('.controlfield-text'),
+                        itemid: editorid+'-'+tagnumber+'-'+lengthOfPrevious,
+                        scope: UI.editor[editorid].record,
+                        handler: function(btn ) {
+                            this.showFFPopup( btn.tagnumber, $(btn.tagel).val(),btn.tagel, btn.itemid );
+                        }
+                    }
+                );
+                biblios.app.viewport.doLayout();
+            }
+
 			// set the focus to this new tag
 			//$( newId ).get(0).focus();
             return newId;
