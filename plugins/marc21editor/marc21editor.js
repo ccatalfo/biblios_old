@@ -1761,7 +1761,7 @@ function setupFFEditorCtryCombo() {
                 tagel: leader,
                 itemid: this.editorid + '-000-0',
                 handler: function(btn ) {
-                    this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
+                    this.showFFPopup( btn.tagnumber, $(btn.tagel).val(),btn.tagel, btn.itemid );
                 }
             }
         );
@@ -1776,7 +1776,7 @@ function setupFFEditorCtryCombo() {
                 i:0,
                 itemid: this.editorid + '-008-0',
                 handler: function(btn ) {
-                    this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel,btn.itemid );
+                    this.showFFPopup( btn.tagnumber, $(btn.tagel).val(),btn.tagel,btn.itemid );
                 }
             }
         );
