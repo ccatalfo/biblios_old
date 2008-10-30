@@ -366,6 +366,10 @@ biblios.app = function() {
                                                                             beforeload: function(store, options) {
                                                                                 
                                                                             },
+									  loadexception: function(proxy, options, response, e) {
+									  Ext.Msg.alert('Search error', 'Error: ' + response + e);
+
+									},
                                                                             render: function(grid) {
                                                                                 var checkboxWidth = grid.getColumnModel().getColumnWidth(0);
                                                                                 var mediumWidth = grid.getColumnModel().getColumnWidth(1);
