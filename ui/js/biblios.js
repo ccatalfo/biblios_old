@@ -621,7 +621,7 @@ biblios.app = function() {
                                                                     ],
                                                                     store: ds,
                                                                     displayInfo: true,
-                                                                    displayMsg: '{0} - {1} of {2} (merged) {3} - {4} of {5} (unmerged) ',
+                                                                    displayMsg: '{0} - {1} of {2} (de-duplicated) {3} - {4} of {5} (records)',
                                                                     msgFormatFunc: function() {
                                                                         var count = this.store.getCount(); 
                                                                         var mergedStart = (this.current * this.pageSize) + 1;
