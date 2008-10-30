@@ -369,10 +369,9 @@ biblios.app = function() {
                                                                             beforeload: function(store, options) {
                                                                                 
                                                                             },
-									  loadexception: function(proxy, options, response, e) {
-									  Ext.Msg.alert('Search error', 'Error: ' + response + e);
-
-									},
+                                                                            loadexception: function(proxy, options, response, e) {
+                                                                                Ext.Msg.alert('Search error', 'Error: ' + response + e);
+                                                                            },
                                                                             render: function(grid) {
                                                                                 var checkboxWidth = grid.getColumnModel().getColumnWidth(0);
                                                                                 var mediumWidth = grid.getColumnModel().getColumnWidth(1);
@@ -646,15 +645,21 @@ biblios.app = function() {
                                                                                     if(bibliosdebug){
                                                                                         console.debug('searchgrid paging tbar setting for ' + currentPage);
                                                                                     }
+                                                                                    var start = 0;
                                                                                     if( currentPage == 0 ) {
-                                                                                        var start = 1;
+                                                                                        start = 1;
                                                                                         tbar.unmergedCounts[currentPage] = {
                                                                                             start: start,        
                                                                                             end: tbar.store.getCount()
                                                                                         }
                                                                                     }
                                                                                     else {
-                                                                                        var start = tbar.unmergedCounts[currentPage-1].end;
+                                                                                        if( tbar.unmergedCounts[currentPage-1] ) {
+                                                                                            start = tbar.unmergedCounts[currentPage-1].end;
+                                                                                        }
+                                                                                        else {
+                                                                                            start = page*this.pageSize;
+                                                                                        }
                                                                                         tbar.unmergedCounts[currentPage] = {
                                                                                             start: start+1,
                                                                                             end: start+tbar.store.getCount()
