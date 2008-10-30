@@ -625,7 +625,7 @@ biblios.app = function() {
                                                                     msgFormatFunc: function() {
                                                                         var count = this.store.getCount(); 
                                                                         var mergedStart = (this.current * this.pageSize) + 1;
-                                                                        var mergedEnd = this.store.getCount() < this.pageSize ? this.store.getCount() : mergedStart + this.pageSize -1;
+                                                                        var mergedEnd = (this.current * this.pageSize) + parseInt(this.store.reader.jsonData.num);
                                                                         var mergedTotal = this.store.reader.jsonData.merged;
                                                                         var unmergedStart = this.unmergedCounts[this.current].start;
                                                                         var unmergedEnd = this.unmergedCounts[this.current].end;
