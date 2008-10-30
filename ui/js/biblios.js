@@ -638,7 +638,9 @@ biblios.app = function() {
                                                                         },//searchgrid paging tbar beforepagechange
                                                                         pagechange: function(tbar, page) {
                                                                                     var currentPage = page;
-                                                                                    console.debug('searchgrid paging tbar setting for ' + currentPage);
+                                                                                    if(bibliosdebug){
+                                                                                        console.debug('searchgrid paging tbar setting for ' + currentPage);
+                                                                                    }
                                                                                     if( currentPage == 0 ) {
                                                                                         var start = 1;
                                                                                         tbar.unmergedCounts[currentPage] = {
