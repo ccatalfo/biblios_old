@@ -1729,81 +1729,89 @@ function setupFFEditorCtryCombo() {
         var tag001 = $('#'+editorid).find('.001').children('.controlfield-text').val();
         var tag003 = $('#'+editorid).find('.003').children('.controlfield-text').val();
         var tag005 = $('#'+editorid).find('.005').children('.controlfield-text').val();
-        UI.editor[editorid].tbar003 = new Ext.Toolbar({
-            items: [
-                {
-                    id: editorid+'-003',
-                    text: '<span class="fftbarfield">001</span><span class="fftbarvalue">'+tag001+'</span><span class="fftbarfield">003</span><span class="fftbarvalue">' + tag003 + '</span><span class="fftbarfield">005</span><span class="fftbarvalue">'+tag005+'</span>',
-                    handler: function(btn) {
-                        Ext.Msg.alert('Control Fields Guided Editor', 'These fields are normally system-generated.  If you need to edit them, please turn off the guided control fields editor.');
-                    }
+        if( !UI.editor[editorid].tbar003 ) {
+            UI.editor[editorid].tbar003 = new Ext.Toolbar({});
+        }
+        UI.editor[editorid].tbar003.add(
+            {
+                id: editorid+'-003',
+                text: '<span class="fftbarfield">001</span><span class="fftbarvalue">'+tag001+'</span><span class="fftbarfield">003</span><span class="fftbarvalue">' + tag003 + '</span><span class="fftbarfield">005</span><span class="fftbarvalue">'+tag005+'</span>',
+                handler: function(btn) {
+                    Ext.Msg.alert('Control Fields Guided Editor', 'These fields are normally system-generated.  If you need to edit them, please turn off the guided control fields editor.');
                 }
-
-            ]
-        });
+            }
+        );
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( UI.editor[editorid].tbar003 );
         var leader = $('#'+editorid).find('div.000').children('.controlfield-text');
         var tag008 = $('#'+editorid).find('div.008').children('.controlfield-text');
-        UI.editor[editorid].tbarldr008 =
-            new Ext.Toolbar({
-                id: this.editorid + 'ldr008tbar',
-                items: [
-                    {
-                        id: this.editorid + '-000-0',
-                        text: '<span class="fftbarfield">LDR</span> ' + $(leader).val(),
-                        scope: this,
-                        tagvalue: $(leader).val(),
-                        tagnumber: '000',
-                        i:0,
-                        tagel: leader,
-                        itemid: this.editorid + '-000-0',
-                        handler: function(btn ) {
-                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
-                        }
-                    },
-                    {
-                        id: this.editorid + '-008-0',
-                        text: '<span class="fftbarfield">008</span> ' + $(tag008).val(),
-                        scope: this,
-                        tagvalue: $(tag008).val(),
-                        tagnumber: '008',
-                        tagel: tag008,
-                        i:0,
-                        itemid: this.editorid + '-008-0',
-                        handler: function(btn ) {
-                            this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel,btn.itemid );
-                        }
-                    }
-                ]
-            });
+        if( !UI.editor[editorid].tbarldr008 ) {
+            UI.editor[editorid].tbarldr008 =
+                new Ext.Toolbar({
+                    id: this.editorid + 'ldr008tbar'
+                });
+            }
+        UI.editor[editorid].tbarldr008.add(
+            {
+                id: this.editorid + '-000-0',
+                text: '<span class="fftbarfield">LDR</span> ' + $(leader).val(),
+                scope: this,
+                tagvalue: $(leader).val(),
+                tagnumber: '000',
+                i:0,
+                tagel: leader,
+                itemid: this.editorid + '-000-0',
+                handler: function(btn ) {
+                    this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel, btn.itemid );
+                }
+            }
+        );
+        UI.editor[editorid].tbarldr008.add(
+            {
+                id: this.editorid + '-008-0',
+                text: '<span class="fftbarfield">008</span> ' + $(tag008).val(),
+                scope: this,
+                tagvalue: $(tag008).val(),
+                tagnumber: '008',
+                tagel: tag008,
+                i:0,
+                itemid: this.editorid + '-008-0',
+                handler: function(btn ) {
+                    this.showFFPopup( btn.tagnumber, btn.tagvalue,btn.tagel,btn.itemid );
+                }
+            }
+        );
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( UI.editor[editorid].tbarldr008);
-        UI.editor[editorid].tbar006 = new Ext.Toolbar({
-                id: this.editorid + '006tbar',
+        if( !UI.editor[editorid].tbar006 ) {
+            UI.editor[editorid].tbar006 = new Ext.Toolbar({
+                    id: this.editorid + '006tbar',
+                    items: [
+                        {
+                            text: '<span class="fftbarfield">006</span>',
+                            scope: UI.editor[editorid].record,
+                            tagnumber: '006',
+                            handler: function(btn) {
+                                this.createNew006007(btn.tagnumber);
+                            }
+                        }
+                    ]
+                });
+        }
+        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( UI.editor[editorid].tbar006);
+        if( !UI.editor[editorid].tbar007) {
+            UI.editor[editorid].tbar007 = new Ext.Toolbar({
+                id: this.editorid + '007tbar',
                 items: [
                     {
-                        text: '<span class="fftbarfield">006</span>',
+                        text: '<span class="fftbarfield">007</span>',
                         scope: UI.editor[editorid].record,
-                        tagnumber: '006',
+                        tagnumber: '007',
                         handler: function(btn) {
                             this.createNew006007(btn.tagnumber);
                         }
                     }
                 ]
-            })
-        Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( UI.editor[editorid].tbar006);
-        UI.editor[editorid].tbar007 = new Ext.Toolbar({
-            id: this.editorid + '007tbar',
-            items: [
-                {
-                    text: '<span class="fftbarfield">007</span>',
-                    scope: UI.editor[editorid].record,
-                    tagnumber: '007',
-                    handler: function(btn) {
-                        this.createNew006007(btn.tagnumber);
-                    }
-                }
-            ]
-        });
+            });
+        }
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( UI.editor[editorid].tbar007 );
         UI.editor[editorid].tbar006.on('render', function(tbar) {
             $('#'+editorid).find('.006').each( function(i) {
