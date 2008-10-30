@@ -3,6 +3,7 @@
 	<record-defs>
 		<marcflavor>marc21</marcflavor>
 	</record-defs>
+    <pazpar2url>http://localhost:9004</pazpar2url>
 	
     <editors>
 	
@@ -22,53 +23,98 @@
 
 	<searching>
 		<searchtargets>
-        <!--
 		  <server>
-			<name>Library of Congress</name>
+			<name>‡biblios.net</name>
             <id>1</id> 
-		 	<hostname>z3950.loc.gov</hostname>
-			<port>7090</port>
-			<dbname>Voyager</dbname>
+		 	<hostname>z3950.beta.biblios.net</hostname>
+			<port>210</port>
+			<dbname>bibliographic</dbname>
 			<userid></userid>
 			<password></password>
 			<enabled>1</enabled>
-			<description>LOC</description>
-            <allowDelete>0</allowDelete>
-            <allowModify>0</allowModify>
+			<description>‡biblios.net</description>
+            <allowDelete>1</allowDelete>
+            <allowModify>1</allowModify>
+            <pazpar2settings>{"pz:name[z3950.beta.biblios.net:210/bibliographic]":"‡biblios.net",
+"pz:requestsyntax[z3950.beta.biblios.net:210/bibliographic]":"marc21",
+"pz:allow[z3950.beta.biblios.net:210/bibliographic]":"1",
+"pz:elements[z3950.beta.biblios.net:210/bibliographic]":"F",
+"pz:nativesyntax[z3950.beta.biblios.net:210/bibliographic]":"iso2709;utf-8",
+"pz:xslt[z3950.beta.biblios.net:210/bibliographic]":"marc21.xsl",
+"pz:cclmap:kw[z3950.beta.biblios.net:210/bibliographic]":"u=1016 t=1,r s=al",
+"pz:cclmap:au[z3950.beta.biblios.net:210/bibliographic]":"u=1004 s=al",
+"pz:cclmap:ti[z3950.beta.biblios.net:210/bibliographic]":"u=4 s=al",
+"pz:cclmap:su[z3950.beta.biblios.net:210/bibliographic]":"u=21 s=al",
+"pz:cclmap:isbn[z3950.beta.biblios.net:210/bibliographic]":"u=7",
+"pz:cclmap:issn[z3950.beta.biblios.net:210/bibliographic]":"u=8",
+"pz:cclmap:date[z3950.beta.biblios.net:210/bibliographic]":"u=30 r=r",
+"pz:cclmap:pub[z3950.beta.biblios.net:210/bibliographic]":"u=1018 s=al"}</pazpar2settings>
 		  </server>
-          -->
 		</searchtargets>
 
 	</searching>
 
 	<saving>
 		<sendtargets>
-            <!--
 			<server>
-				<name>Koha</name>
-                <id>1</id>
-				<location>Koha</location>
-				<url>http://staff.mykoha.org/kohaapi/</url>
-				<user>admin</user>
-				<password>adminspw</password>
+				<name>‡biblios.net</name>
+				<location>‡biblios.net</location>
+				<url>api.beta.biblios.net</url>
+				<user>cataloger</user>
+				<password>cataloger</password>
 				<plugin>Save To Koha</plugin>
 				<enabled>1</enabled>
                 <allowDelete>0</allowDelete>
                 <allowModify>0</allowModify>
                 <embedded>0</embedded>
+                <authurl>http://api.beta.biblios.net/authentication</authurl>
+                <bibprofileurl>http://api.beta.biblios.net/bib_profile</bibprofileurl> 
+                <retrieveurl>http://api.beta.biblios.net/bib/</retrieveurl>
+                <saveurl>http://api.beta.biblios.net/</saveurl>
 			</server>
-           --> 
 		</sendtargets>
 	</saving>
 
 	<templates>
 		<template>
-			<name>Book template</name>
+			<name>New Book </name>
 			<file>templates/book-template.xml</file>
+            <icon>ui/images/material_types/books.gif</icon>
 		</template>
 		<template>
-			<name>Sound recording template</name>
-			<file>templates/sound-template.xml</file>
+			<name>New Sound Recording</name>
+			<file>templates/sound.xml</file>
+            <icon>ui/images/material_types/sound_recordings.gif</icon>
+		</template>
+		<template>
+			<name>New Musical Score</name>
+			<file>templates/music.xml</file>
+            <icon>ui/images/material_types/musical_scores.gif</icon>
+		</template>
+		<template>
+			<name>New Computer File </name>
+			<file>templates/electronic.xml</file>
+            <icon>ui/images/material_types/computer_files.gif</icon>
+		</template>
+		<template>
+			<name>New Continuing Resource</name>
+			<file>templates/continuing.xml</file>
+            <icon>ui/images/material_types/continuing_resources.gif</icon>
+		</template>
+		<template>
+			<name>New Map </name>
+			<file>templates/map.xml</file>
+            <icon>ui/images/material_types/maps.gif</icon>
+		</template>
+		<template>
+			<name>New Visual Material </name>
+			<file>templates/visual.xml</file>
+            <icon>ui/images/material_types/visual_materials.gif</icon>
+		</template>
+		<template>
+			<name>New Mixed Material </name>
+			<file>templates/book-template.xml</file>
+            <icon>ui/images/material_types/mixed_materials.gif</icon>
 		</template>
 	</templates>
 
@@ -91,6 +137,7 @@
             <enabled>1</enabled>
             <allowDelete>0</allowDelete>
             <allowModify>0</allowModify>
+            <xslpath>plugins/marc21editor/</xslpath>
         </plugin>
 
         <plugin>
@@ -104,4 +151,43 @@
         </plugin>
 
 	</plugins>
+
+    <ui>
+        <icons>
+            <facets>
+                <author>ui/images/facet_headings/authors.gif</author>
+                <publication-name>ui/images/facet_headings/publications.gif</publication-name>
+                <subject>ui/images/facet_headings/subjects.gif</subject>
+                <date>ui/images/facet_headings/dates.gif</date>
+            </facets>
+            <material_types>
+                <books>ui/images/material_types.books.gif</books>
+                <computer_files>ui/images/material_types.books.gif</computer_files>
+                <internet_resources>ui/images/internet_resources.gif</internet_resources>
+                <maps>ui/images/maps.gif</maps>
+                <mixed_materials>ui/images/mixed_materials.gif</mixed_materials>
+                <sound_recordings>ui/images/sound_recordings.gif</sound_recordings>
+                <visual_materials>ui/images/visual_materials.gif</visual_materials>
+            </material_types>
+            <resources_panel>
+                <searching>searching.gif</searching>
+                <editing>editing.gif</editing>
+                <facets>facets.gif</facets>
+            </resources_panel>
+            <toolbar>
+                <cancel>cancel.gif</cancel>
+                <duplicate>duplicate.gif</duplicate>
+                <edit>edit.gif</edit>
+                <export>export.gif</export>
+                <macros>macros.gif</macros>
+                <move>move.gif</move>
+                <revert>revert.gif</revert>
+                <save>save.gif</save>
+                <send>send.gif</send>
+                <tools>tools.gif</tools>
+                <trash>trash.gif</trash>
+                <upload>upload.gif</upload>
+            </toolbar>
+        </icons>
+    </ui>
 </conf>
