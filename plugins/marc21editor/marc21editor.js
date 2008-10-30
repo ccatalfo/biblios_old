@@ -1624,23 +1624,23 @@ function setupFFEditorCtryCombo() {
         var tag001 = $('#'+editorid).find('.001').children('.controlfield-text').val();
         var tag003 = $('#'+editorid).find('.003').children('.controlfield-text').val();
         var tag005 = $('#'+editorid).find('.005').children('.controlfield-text').val();
-        Ext.getCmp(editorid+'-003').setText('<b>(003)</b> '+tag003+' <b>001</b>:'+tag001+' <b>005</b>: '+tag005);
+        Ext.getCmp(editorid+'-003').setText('<span class="fftbarfield">001</span>:'+tag001+'<span class="fftbarfield">003</span> '+tag003+' <span class="fftbarfield">005</span>: '+tag005);
 
         var leader = $('#'+editorid).find('.000').children('.controlfield-text').val();
-        Ext.getCmp(editorid+'-000-0').setText( '<b>LDR</b> ' + leader );
+        Ext.getCmp(editorid+'-000-0').setText( '<span class="fftbarfield">LDR</span> ' + leader );
 
         var tag008 = $('#'+editorid).find('.008').children('.controlfield-text').val();
-        Ext.getCmp(editorid+'-008-0').setText( '<b>008</b> ' +tag008 );
+        Ext.getCmp(editorid+'-008-0').setText( '<span class="fftbarfield">008</span> ' +tag008 );
 
         var items006 = UI.editor[editorid].tbar006.items;
         for( var i = 1; i < items006.length; i++) {
             var newval = $(items006.itemAt(i).tagel).val();
-            items006.itemAt(i).setText('<b>006</b> '+newval);
+            items006.itemAt(i).setText('<span class="fftbarfield">006</span> '+newval);
         }
         var items007 = UI.editor[editorid].tbar007.items;
         for( var i = 1; i < items007.length; i++) {
             var newval = $(items007.itemAt(i).tagel).val();
-            items007.itemAt(i).setText('<b>007</b> '+newval);
+            items007.itemAt(i).setText('<span class="fftbarfield">007</span> '+newval);
         }
     };
 
@@ -1709,7 +1709,7 @@ function setupFFEditorCtryCombo() {
             items: [
                 {
                     id: editorid+'-003',
-                    text: '<b>(003)</b> ' + tag003 + ' <b>001:</b>'+tag001+' <b>005:</b> '+tag005,
+                    text: '<span class="fftbarfield">001</span> '+tag001+'<span class="fftbarfield">003</span> ' + tag003 + ' <span class="fftbarfield">005</span> '+tag005,
                     handler: function(btn) {
                         Ext.Msg.alert('Control Fields Guided Editor', 'These fields are normally system-generated.  If you need to edit them, please turn off the guided control fields editor.');
                     }
@@ -1726,7 +1726,7 @@ function setupFFEditorCtryCombo() {
                 items: [
                     {
                         id: this.editorid + '-000-0',
-                        text: '<b>LDR</b> ' + $(leader).val(),
+                        text: '<span class="fftbarfield">LDR</span> ' + $(leader).val(),
                         scope: this,
                         tagvalue: $(leader).val(),
                         tagnumber: '000',
@@ -1739,7 +1739,7 @@ function setupFFEditorCtryCombo() {
                     },
                     {
                         id: this.editorid + '-008-0',
-                        text: '<b>008</b> ' + $(tag008).val(),
+                        text: '<span class="fftbarfield">008</span> ' + $(tag008).val(),
                         scope: this,
                         tagvalue: $(tag008).val(),
                         tagnumber: '008',
@@ -1757,7 +1757,7 @@ function setupFFEditorCtryCombo() {
                 id: this.editorid + '006tbar',
                 items: [
                     {
-                        text: '006',
+                        text: '<span class="fftbarfield">006</span>',
                         scope: UI.editor[editorid].record,
                         tagnumber: '006',
                         handler: function(btn) {
@@ -1771,7 +1771,7 @@ function setupFFEditorCtryCombo() {
             id: this.editorid + '007tbar',
             items: [
                 {
-                    text: '007',
+                    text: '<span class="fftbarfield">007</span>',
                     scope: UI.editor[editorid].record,
                     tagnumber: '007',
                     handler: function(btn) {
@@ -1788,7 +1788,7 @@ function setupFFEditorCtryCombo() {
                 tbar.add(
                         {
                             id: itemid,
-                            text: '<b>006</b> ' + $(tag006).val(),
+                            text: '<span class="fftbarfield">006</span> ' + $(tag006).val(),
                             scope: UI.editor[editorid].record,
                             tagel: tag006,
                             tagvalue: $(tag006).val(),
@@ -1808,7 +1808,7 @@ function setupFFEditorCtryCombo() {
                 tbar.add(
                     {
                         id: itemid,
-                        text: '<b>007</b> ' + $(tag007).val(),
+                        text: '<span class="fftbarfield">007</span> ' + $(tag007).val(),
                         scope: UI.editor[editorid].record,
                         tagel: tag007,
                         tagvalue: $(tag007).val(),

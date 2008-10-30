@@ -260,3 +260,6 @@ color: #000 !important;
     padding: 0px !important;
     display: inline !important;
 }
+.fftbarfield {
+    font-style:italic !important;
+}
