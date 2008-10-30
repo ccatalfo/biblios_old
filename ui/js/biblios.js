@@ -440,7 +440,7 @@ biblios.app = function() {
                                                                         + '</td>'*/
 
                                                                         + '<td class="x-grid3-col x-grid3-cell x-grid3-td-5 groupingCount">'
-                                                                        + '{[ values.rs[0].data.count ]} target(s)'
+                                                                        + '{[ values.rs[0].data.count ]} record(s)'
                                                                         + '</td>'
 
                                                                         + '</tr>'
