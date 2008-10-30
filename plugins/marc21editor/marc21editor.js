@@ -1262,7 +1262,7 @@ function setupFFEditorCtryCombo() {
                                 else {
                                     tag = btn.tagnumber;
                                 }
-                                Ext.getCmp(btn.itemid).setText( '<b>'+tag+'</b>' + ' ' + newvalue );
+                                Ext.getCmp(btn.itemid).setText( '<span class="fftbarfield">'+tag+'</span>' + ' ' + newvalue );
                                 Ext.getCmp(btn.itemid).tagvalue = newvalue;
                                 Ext.WindowMgr.getActive().close();
                             }
@@ -1282,7 +1282,7 @@ function setupFFEditorCtryCombo() {
                             tagnumber: this.ffdata.tagnumber,
                             rectype: this.rectype,
                             itemid:this.ffdata.itemid,
-                            disabled: this.tagnumber == '008' || this.tagnumber == '000' ? true : false,
+                            hidden: this.ffdata.tagnumber == '008' || this.ffdata.tagnumber == '000' ? true : false,
                             tagel: this.ffdata.tagel,
                             handler: function(btn) {
                                 $(btn.tagel).parents('.tag').remove();
@@ -1672,7 +1672,7 @@ function setupFFEditorCtryCombo() {
                                 Ext.getCmp(editorid+btn.tagnumber+'tbar').add(
                                     {
                                         id: editorid+'-'+btn.tagnumber+'-'+l,
-                                        text: '<b>'+btn.tagnumber+'</b> ' + text+'                 ',
+                                        text: '<span class="fftbarfield">'+btn.tagnumber+'</span> ' + text+'                 ',
                                         tagvalue: text+'                 ',
                                         tagnumber: btn.tagnumber,
                                         tagel: $('#'+newId).children('.controlfield-text'),
