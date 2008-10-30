@@ -196,13 +196,28 @@ elsif( $action eq 'termlist' ) {
 elsif( $action eq 'bytarget' ) {
     my $name = $cgi->param('name');
     my $bytargetxml = $paz->bytarget($name);
-    my $bytargetdata = XMLin($bytargetxml, ForceArray => 1);
-    my $bytargetjson = {
-    	'status' => $bytargetdata->{'status'},
-    	'targets' => $bytargetdata->{'target'},
-    };
-    print $cgi->header(-type => 'text/html');
-    print to_json($bytargetjson);
+    my $doc = $parser->parse_string($bytargetxml);
+    my $root = $doc->getDocumentElement();
+    my $jsondata = {};
+    $jsondata->{'status'} = $root->findvalue('status');
+    $jsondata->{'targets'} = [];
+    my $totalrecords = 0;
+    foreach my $target ( $root->findnodes('target') ) {
+      my $targetjson = {};
+      $targetjson->{'id'} = $target->findvalue('id');
+      $targetjson->{'hits'} = $target->findvalue('hits');
+      $targetjson->{'diagnostic'} = $target->findvalue('diagnostic');
+      $targetjson->{'records'} = $target->findvalue('records');
+      $targetjson->{'state'} = $target->findvalue('state');
+      push @{$jsondata->{'targets'}}, $targetjson;
+      if($debug) {
+	warn 'Adding ' . $targetjson->{'records'} . ' to total record count';
+      }
+      $totalrecords += $targetjson->{'records'};
+    }
+    $jsondata->{'totalrecords'} = $totalrecords;
+    print $cgi->header(-type => 'text/x-json');
+    print to_json($jsondata);
 }
 elsif( $action eq 'settings' ) {
     my $settingsjson = $cgi->param('settings');
