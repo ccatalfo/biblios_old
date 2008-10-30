@@ -83,9 +83,10 @@ if( $action eq 'search' ) {
 }
 elsif ( $action eq 'show') {
     my $start = $cgi->param('start') || 0;
-    my $num = $cgi->param('num') || 15;
+    my $num = $cgi->param('limit') || 15;
     my $sort = $cgi->param('sort') || 'relevance';
     my $dir = $cgi->param('dir') || 'ASC';
+    my $block = $cgi->param('block') || 1;
     #get sort param right for pazpar2 protocol
     # format: title:0 where
     # ASC = 1, DESC = 0  
@@ -98,7 +99,7 @@ elsif ( $action eq 'show') {
     }
     $session->save_param();
     print $session->header(-type=>'text/html', -charset=>'utf-8');
-    my $showxml = $paz->show($start, $num, $pazsort, 1);
+    my $showxml = $paz->show($start, $num, $pazsort, $block);
     if( $debug) {
         #warn $showxml;
     }
