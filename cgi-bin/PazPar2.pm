@@ -56,15 +56,16 @@ sub init {
     my $uri = URI->new($self->{'endpoint'});
     $uri->query_param(command => 'init');
     my $response = $self->{'ua'}->get($uri);
+    $self->{'httpstatus'} = $response->code;
     if ($response->is_success) {
         my $message = XMLin($response->content);
         if ($message->{'status'} eq 'OK') {
             $self->{'session'} = $message->{'session'};
-            return $self->{'session'};
         }
     } else {
-        return $response->status_line;
+        $self->{'session'} = 'failed';
     }
+    return $self->{'session'};
 }
 
 sub getSession {
@@ -92,6 +93,7 @@ sub search {
     $uri->query_param(query => $query);
     #print "PazPar2::search:$uri";
     my $response = $self->{'ua'}->get($uri);
+    $self->{'httpstatus'} = $response->code;
     if ($response->is_success) {
         return $response->content, "\n";
     } else {
@@ -106,6 +108,7 @@ sub stat {
     $uri->query_param(command => 'stat');
     $uri->query_param(session => $self->{'session'});
     my $response = $self->{'ua'}->get($uri);
+    $self->{'httpstatus'} = $response->code;
     if ($response->is_success) {
         return $response->content;
     } else {
@@ -131,6 +134,7 @@ sub show {
     $uri->query_param(session => $self->{'session'});
     $uri->query_param(sort => $sort);
     my $response = $self->{'ua'}->get($uri);
+    $self->{'httpstatus'} = $response->code;
     if ($response->is_success) {
         return $response->content;
     } else {
@@ -159,6 +163,7 @@ sub record {
     }
     $uri->query_param(session => $self->{'session'});
     my $response = $self->{'ua'}->get($uri);
+    $self->{'httpstatus'} = $response->code;
     if ($response->is_success) {
         return $response->content;
     } else {
@@ -176,6 +181,7 @@ sub termlist {
     $uri->query_param(name => $name);
     $uri->query_param(session => $self->{'session'});
     my $response = $self->{'ua'}->get($uri);
+    $self->{'httpstatus'} = $response->code;
     if ($response->is_success) {
         return $response->content;
     } else {
@@ -192,6 +198,7 @@ sub bytarget {
     $uri->query_param(command => 'bytarget');
     $uri->query_param(session => $self->{'session'});
     my $response = $self->{'ua'}->get($uri);
+    $self->{'httpstatus'} = $response->code;
     if ($response->is_success) {
         return $response->content;
     } else {
@@ -206,6 +213,7 @@ sub ping {
     $uri->query_param(command => 'ping');
     $uri->query_param(session => $self->{'session'});
     my $response = $self->{'ua'}->get($uri);
+    $self->{'httpstatus'} = $response->code;
     if ($response->is_success) {
         return $response->content;
     } else {
@@ -225,6 +233,7 @@ sub settings {
     }
     warn $uri;
     my $response = $self->{'ua'}->post($uri);
+    $self->{'httpstatus'} = $response->code;
     if ($response->is_success) {
         return $response->content;
     } else {

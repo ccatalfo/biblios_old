@@ -32,12 +32,13 @@ if( $action eq 'init') {
     print $session->header();
     my $paz = PazPar2->new("$pazpar2url");
     my $sessionID = $paz->init();
-    if( $sessionID !~ /2.*/ ) {
-        print $cgi->header(-type=>'text/x-json', -status=>$sessionID);
+    if($debug){ warn 'paz.pl::init initresp: ' . $sessionID;}
+    warn 'paz.pl httpstatus: ' . $paz->{'httpstatus'};
+    if( $paz->{'httpstatus'} !~ /2.*/ ) {
+        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
         print to_json({sessionID => 'failed'});
         return;
     }
-    if($debug){ warn 'paz.pl::init initresp: ' . $sessionID;}
     $session->param('sessionID', $sessionID);
     print $cgi->header(-type=>'text/x-json');
     print to_json({sessionID => $sessionID});
@@ -54,9 +55,11 @@ if( $sessionID and $action ne 'init') {
     if($debug) {warn $pingresp;}
     if( $pingresp =~ /417/ ) {
         if($debug) {warn 'Session had expired...reinitializing';}
-        my $sessionID = $paz->init();
-        if( $sessionID !~ /2.*/ ) {
-            print $cgi->header(-type=>'text/x-json', -status=>$sessionID);
+        $sessionID = $paz->init();
+        if($debug){ warn 'paz.pl::init initresp: ' . $sessionID;}
+        if( $paz->{'httpstatus'} =~ /2.*/ ) {
+            if($debug) {warn 'Session had expired but unable to reinitialize!';}
+            print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
             print to_json({sessionID => 'failed'});
             return;
         }
