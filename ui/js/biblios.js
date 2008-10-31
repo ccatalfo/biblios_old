@@ -497,7 +497,7 @@ biblios.app = function() {
                                                                 selectAll: function() {
                                                                     this.getSelectionModel().checkAllInStore();
                                                                     Ext.getCmp('searchgridSelectAllInStoreTbar').show();
-                                                                    Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().update('You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').loadAllSearchResults()">Select all ' + this.store.getTotalCount() + ' records in this search</a>');
+                                                                    Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().update('You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').loadAllSearchResults()">Select all ' + this.store.reader.jsonData.totalrecords + ' records in this search</a>');
                                                                     Ext.getCmp('searchgridExportBtn').enable();
                                                                     Ext.getCmp('searchgridToolsBtn').enable();
                                                                     Ext.getCmp('searchgridSendBtn').enable();
