@@ -62,9 +62,18 @@ function doLocalFolderSearch() {
 }
 
 function initPazPar2(pazurl) {
-	$.get(pazcgiurl, {action:'init', pazpar2url:pazurl}, function(data) {
-        biblios.app.paz.sessionID = data;
-        setPazPar2Targets();
+	$.ajax({
+        url: pazcgiurl 
+        ,method: 'POST'
+        ,dataType: 'json'
+        ,data: {action:'init', pazpar2url:pazurl}
+        ,success: function(json, status) {
+            biblios.app.paz.sessionID = json.sessionID;
+            setPazPar2Targets();
+        }
+        ,error: function(req, textStatus, errorThrown) {
+            biblios.app.initerrors.push({title:'Error', msg: 'Error connecting to PazPar2 search server.  Please contact the administrator for this site.'});
+        }
     });
 }
 function loadPazpar2Target( pazpar2settings ) {

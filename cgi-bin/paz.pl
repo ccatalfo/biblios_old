@@ -32,9 +32,15 @@ if( $action eq 'init') {
     print $session->header();
     my $paz = PazPar2->new("$pazpar2url");
     my $sessionID = $paz->init();
+    if( $sessionID !~ /2.*/ ) {
+        print $cgi->header(-type=>'text/x-json', -status=>$sessionID);
+        print to_json({sessionID => 'failed'});
+        return;
+    }
     if($debug){ warn 'paz.pl::init initresp: ' . $sessionID;}
     $session->param('sessionID', $sessionID);
-    print $sessionID;
+    print $cgi->header(-type=>'text/x-json');
+    print to_json({sessionID => $sessionID});
     exit 0;
 }
 my $pazpar2url = $session->param('pazpar2url');
@@ -49,6 +55,11 @@ if( $sessionID and $action ne 'init') {
     if( $pingresp =~ /417/ ) {
         if($debug) {warn 'Session had expired...reinitializing';}
         my $sessionID = $paz->init();
+        if( $sessionID !~ /2.*/ ) {
+            print $cgi->header(-type=>'text/x-json', -status=>$sessionID);
+            print to_json({sessionID => 'failed'});
+            return;
+        }
         $session->param('sessionID', $sessionID);
         $paz->setSession($sessionID);
         my $settings = $session->param('settings');

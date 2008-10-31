@@ -63,7 +63,7 @@ sub init {
             return $self->{'session'};
         }
     } else {
-        warn $response->status_line;
+        return $response->status_line;
     }
 }
 
