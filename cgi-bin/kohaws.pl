@@ -7,6 +7,8 @@ use CGI;
 use CGI::Carp;
 use JSON;
 
+my $debug = 1;
+
 my $ua = LWP::UserAgent->new();
 $ua->cookie_jar({});
 my $cgi = CGI->new();
@@ -17,6 +19,9 @@ my $action = $cgi->param('action');
 
 if( $action eq 'auth' ) {
     my $url = $kohaurl;
+    if($debug){
+        warn "Authenticating to $url";
+    }
     my $resp = $ua->post( $url, {userid=>$userid, password=>$password});
     if($resp->is_success) {
         print $cgi->header(-type=>'application/json');
@@ -36,6 +41,9 @@ if( $action eq 'auth' ) {
 }
 elsif( $action eq 'bibprofile') {
     my $url = $kohaurl;
+    if($debug) {
+        warn "Requesting bib profile from $url";
+    }
     my $cookie = $cgi->param('cookie');
     my $resp = $ua->post( $url, {},'Cookie' => $cookie );
     if($resp->is_success) {
@@ -50,6 +58,9 @@ elsif( $action eq 'bibprofile') {
 }
 elsif( $action eq 'retrieve' ) {
     my $url = $kohaurl;
+    if($debug) {
+        warn "Retrieving record from $url";
+    }
     my $recid = $cgi->param('recid');
     my $cookie = $cgi->param('cookie');
     my $resp = $ua->get( $url, 'Cookie' => $cookie );
@@ -66,6 +77,9 @@ elsif( $action eq 'retrieve' ) {
 elsif( $action eq 'save' ) {
     my $saveurl = $cgi->param('saveurl');
     my $url = $kohaurl . $saveurl;
+    if($debug) {
+        warn "Saving record to $url";
+    }
     my $cookie = $cgi->param('cookie');
     my $xml = $cgi->param('xml');
     my $resp = $ua->post( $url,'Cookie' => $cookie, 'Content-type' => 'text/xml', Content => $xml );
