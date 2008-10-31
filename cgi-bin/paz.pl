@@ -57,7 +57,7 @@ if( $sessionID and $action ne 'init') {
         if($debug) {warn 'Session had expired...reinitializing';}
         $sessionID = $paz->init();
         if($debug){ warn 'paz.pl::init initresp: ' . $sessionID;}
-        if( $paz->{'httpstatus'} =~ /2.*/ ) {
+        if( $paz->{'httpstatus'} !~ /2.*/ ) {
             if($debug) {warn 'Session had expired but unable to reinitialize!';}
             print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
             print to_json({sessionID => 'failed'});
