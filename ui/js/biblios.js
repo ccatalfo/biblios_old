@@ -369,7 +369,7 @@ biblios.app = function() {
                                                                             
                                                                         },
                                                                         loadexception: function(proxy, options, response, e) {
-                                                                            Ext.Msg.alert('Search error', 'Error: ' + response + e);
+                                                                            Ext.Msg.alert('Search error', 'Error: ' +response.status + ' ' + response.responseText );
                                                                         },
                                                                         load: function(store, records, options) {
                                                                             biblios.app.displaySearchView();
