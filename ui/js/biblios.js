@@ -364,56 +364,43 @@ biblios.app = function() {
                                                                             activeclients: 'activeclients'
                                                                         }, PazPar2Results // search grid record
                                                                         ),//search grid reader
-                                                                        remoteSort: true,
-                                                                        listeners: {
-                                                                            beforeload: function(store, options) {
-                                                                                
-                                                                            },
-                                                                            loadexception: function(proxy, options, response, e) {
-                                                                                Ext.Msg.alert('Search error', 'Error: ' + response + e);
-                                                                            },
-                                                                            render: function(grid) {
-                                                                                var checkboxWidth = grid.getColumnModel().getColumnWidth(0);
-                                                                                var mediumWidth = grid.getColumnModel().getColumnWidth(1);
-                                                                                var titleWidth = grid.getColumnModel().getColumnWidth(2);
-                                                                                var authorWidth = grid.getColumnModel().getColumnWidth(3);
-                                                                                var publisherWidth = grid.getColumnModel().getColumnWidth(4);
-                                                                                var dateWidth = grid.getColumnModel().getColumnWidth(5);
-                                                                                var locationWidth = grid.getColumnModel().getColumnWidth(6);
-                                                                                $('.groupingMedium').css('width', checkboxWidth + mediumWidth);
-                                                                                $('.groupingTitle').css('width', titleWidth);
-                                                                                $('.groupingAuthor').css('width', authorWidth);
-                                                                                $('.groupingLocation').css('width', publisherWidth + dateWidth + locationWidth);
-                                                                            },
-                                                                            load: function(store, records, options) {
-                                                                                biblios.app.displaySearchView();
-                                                                                var activeclients = store.reader.jsonData.activeclients;
-                                                                                    clearStatusMsg();
-                                                                                    Ext.getCmp('searchgrid').getGridEl().unmask()
-                                                                                    Ext.getCmp('facetsTreePanel').root.reload();
-                                                                                    Ext.getCmp('searchgridSelectAllTbar').show();
-                                                                                    refreshTargetHits();
-                                                                                    Ext.getCmp('facetsTreePanel').show();
-                                                                                    //this.selectNone();
-                                                                                if( activeclients == '0' ) {
-                                                                                    clearStatusMsg();
-                                                                                    Ext.getCmp('searchgrid').getGridEl().unmask()
-                                                                                    Ext.getCmp('facetsTreePanel').root.reload();
-                                                                                    Ext.getCmp('searchgridSelectAllTbar').show();
-                                                                                    refreshTargetHits();
-                                                                                    Ext.getCmp('facetsTreePanel').show();
-                                                                                    //this.selectNone();
-                                                                                }
-                                                                                else {
-                                                                                    refreshTargetHits();
-                                                                                    // reload after 2s
-                                                                                    setTimeout( function() {
-                                                                                        store.reload();
-                                                                                    }, 2000);
-                                                                                    return false;
-                                                                                }
+                                                                    remoteSort: true,
+                                                                    listeners: {
+                                                                        beforeload: function(store, options) {
+                                                                            
+                                                                        },
+                                                                        loadexception: function(proxy, options, response, e) {
+                                                                            Ext.Msg.alert('Search error', 'Error: ' + response + e);
+                                                                        },
+                                                                        load: function(store, records, options) {
+                                                                            biblios.app.displaySearchView();
+                                                                            var activeclients = store.reader.jsonData.activeclients;
+                                                                                clearStatusMsg();
+                                                                                Ext.getCmp('searchgrid').getGridEl().unmask()
+                                                                                Ext.getCmp('facetsTreePanel').root.reload();
+                                                                                Ext.getCmp('searchgridSelectAllTbar').show();
+                                                                                refreshTargetHits();
+                                                                                Ext.getCmp('facetsTreePanel').show();
+                                                                                //this.selectNone();
+                                                                            if( activeclients == '0' ) {
+                                                                                clearStatusMsg();
+                                                                                Ext.getCmp('searchgrid').getGridEl().unmask()
+                                                                                Ext.getCmp('facetsTreePanel').root.reload();
+                                                                                Ext.getCmp('searchgridSelectAllTbar').show();
+                                                                                refreshTargetHits();
+                                                                                Ext.getCmp('facetsTreePanel').show();
+                                                                                //this.selectNone();
                                                                             }
-                                                                        } // searchgrid listeners
+                                                                            else {
+                                                                                refreshTargetHits();
+                                                                                // reload after 2s
+                                                                                setTimeout( function() {
+                                                                                    store.reload();
+                                                                                }, 2000);
+                                                                                return false;
+                                                                            }
+                                                                        }
+                                                                    } // searchgrid listeners
                                                                 })), // data store search grid aka ds
                                                                 
                                                                 view: new Ext.grid.GroupingView({
@@ -454,30 +441,30 @@ biblios.app = function() {
                                                                     header: 'title:'
                                                                    
                                                               }),
-                                                                sm: (sm = new Ext.grid.SmartCheckboxSelectionModel({
-                                                                        //singleSelect: false,
-                                                                        alwaysSelectOnCheck: true,
-                                                                        email: true,
-                                                                        dataIndex: 'checked',
-                                                                        header: '',
-                                                                        listeners: {
-                                                                            rowselect: function(selmodel, rowindex, record) {
-                                                                                Ext.getCmp('searchgridExportBtn').enable();
-                                                                                Ext.getCmp('searchgridEditBtn').enable();
-                                                                                Ext.getCmp('searchgridSendBtn').enable();
-                                                                                Ext.getCmp('searchgridSaveBtn').enable();
-                                                                                Ext.getCmp('searchgridToolsBtn').enable();
-                                                                                showStatusMsg('Previewing...');
-                                                                                // get the marcxml for this record and send to preview()
-                                                                                var xmlstring = record.data.fullrecord;		
-                                                                                if(bibliosdebug) {
-                                                                                    console.info(xmlstring);
-                                                                                }																
-                                                                                var xml = xslTransform.loadString(xmlstring);
-                                                                                previewRemoteRecord(xml);																			
-                                                                            } // search grid row select handler
-                                                                        } // selection listeners
-                                                                    })), // search grid selecion model		
+                                                            sm: (sm = new Ext.grid.SmartCheckboxSelectionModel({
+                                                                    //singleSelect: false,
+                                                                    alwaysSelectOnCheck: true,
+                                                                    email: true,
+                                                                    dataIndex: 'checked',
+                                                                    header: '',
+                                                                    listeners: {
+                                                                        rowselect: function(selmodel, rowindex, record) {
+                                                                            Ext.getCmp('searchgridExportBtn').enable();
+                                                                            Ext.getCmp('searchgridEditBtn').enable();
+                                                                            Ext.getCmp('searchgridSendBtn').enable();
+                                                                            Ext.getCmp('searchgridSaveBtn').enable();
+                                                                            Ext.getCmp('searchgridToolsBtn').enable();
+                                                                            showStatusMsg('Previewing...');
+                                                                            // get the marcxml for this record and send to preview()
+                                                                            var xmlstring = record.data.fullrecord;		
+                                                                            if(bibliosdebug) {
+                                                                                console.info(xmlstring);
+                                                                            }																
+                                                                            var xml = xslTransform.loadString(xmlstring);
+                                                                            previewRemoteRecord(xml);																			
+                                                                        } // search grid row select handler
+                                                                    } // selection listeners
+                                                                })), // search grid selecion model		
                                                                 cm : new Ext.grid.ColumnModel([			
                                                                     sm,																					
                                                                     {header: "Medium", width: 50, dataIndex: 'medium'},
@@ -505,12 +492,12 @@ biblios.app = function() {
                                                                     var totalcount = this.store.getTotalCount();
                                                                     this.store.on('load', this.checkAllSearchResults);
                                                                     this.getGridEl().mask();
-                                                                    this.store.load({params:{start:0, num:totalcount}});
+                                                                    this.store.load({params:{start:0, limit:totalcount}});
                                                                 },
                                                                 selectAll: function() {
                                                                     this.getSelectionModel().checkAllInStore();
                                                                     Ext.getCmp('searchgridSelectAllInStoreTbar').show();
-                                                                    Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').loadAllSearchResults()">Select all ' + this.store.getTotalCount() + ' records in this search</a>';
+                                                                    Ext.getCmp('searchgridSelectAllInStoreTbar').items.items[0].getEl().update('You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').loadAllSearchResults()">Select all ' + this.store.getTotalCount() + ' records in this search</a>');
                                                                     Ext.getCmp('searchgridExportBtn').enable();
                                                                     Ext.getCmp('searchgridToolsBtn').enable();
                                                                     Ext.getCmp('searchgridSendBtn').enable();
@@ -537,7 +524,18 @@ biblios.app = function() {
                                                                     openRecord( xml, '', xmlformat, '' ); 
                                                                 },
                                                                 listeners: {
-                                                                    render: function() {
+                                                                    render: function(grid) {
+                                                                        var checkboxWidth = grid.getColumnModel().getColumnWidth(0);
+                                                                        var mediumWidth = grid.getColumnModel().getColumnWidth(1);
+                                                                        var titleWidth = grid.getColumnModel().getColumnWidth(2);
+                                                                        var authorWidth = grid.getColumnModel().getColumnWidth(3);
+                                                                        var publisherWidth = grid.getColumnModel().getColumnWidth(4);
+                                                                        var dateWidth = grid.getColumnModel().getColumnWidth(5);
+                                                                        var locationWidth = grid.getColumnModel().getColumnWidth(6);
+                                                                        $('.groupingMedium').css('width', checkboxWidth + mediumWidth);
+                                                                        $('.groupingTitle').css('width', titleWidth);
+                                                                        $('.groupingAuthor').css('width', authorWidth);
+                                                                        $('.groupingLocation').css('width', publisherWidth + dateWidth + locationWidth);
                                                                         var selectAllTbar = new Ext.Toolbar({
                                                                             id: 'searchgridSelectAllTbar',
                                                                             hidden: true,
@@ -559,12 +557,12 @@ biblios.app = function() {
                                                                                 {
                                                                                     id: 'searchgridselectallfrompz2',
                                                                                     xtype:'tbtext',
-                                                                                    text: "You have selected all" + Ext.getCmp('searchgrid').getSelectionModel().getChecked() + " records in this folder."
+                                                                                    text: "You have selected all" + Ext.getCmp('searchgrid').getSelectionModel().getChecked() + " records on this page."
                                                                                 }
                                                                             ]
                                                                         });
                                                                         this.syncSize();
-                                                                    },
+                                                                    }, // search grid render listener
                                                                     
                                                                     headerclick: function(grid, colIndex, event) {
                                                                         var colName = grid.getColumnModel().getColumnById(colIndex).dataIndex;
