@@ -31,34 +31,45 @@ function doSearch(form) {
 
 function doLocalFolderSearch() {
 	//Ext.MessageBox.alert('Error', 'Not yet implemented');
-	var query = $('#query').val();
-	var searchtype  = $("#searchtype").val();
-	var selectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records';
+	var query = Ext.getCmp('query').getValue();
+	var searchtype  = Ext.getCmp('searchtypeCombo').getValue();
+	var selectSql = 'SELECT Records.rowid as Id, Records.title as Title, Records.author as Author, Records.date as DateOfPub, Records.location as Location, Records.publisher as Publisher, Records.medium as Medium, Records.xml as xml, Records.status as Status, Records.date_added as DateAdded, Records.date_modified as DateModified, Records.xmlformat as xmlformat, Records.marcflavour as marcflavour, Records.template as template, Records.marcformat as marcformat, Records.Savefiles_id as Savefiles_id, Records.SearchTargets_id as SearchTargets_id FROM Records ';
 	var sql = ' where ';
-	var col = '';
 	switch(searchtype) {
-		case '': 
-			col = 'title or author or xml or publisher ';
+		case 'kw': 
+			whereClause = 'Records.title like "%'+query+'%" or Records.author like "%'+query+'%" or Records.xml like "%'+query+'%" or Records.publisher like "%'+query+'%"';
 			break;
 		case 'ti':
-			col = 'title ';
+			whereClause = 'Records.title like "%'+query+'%"';
 			break;
 		case 'au':
-			col = 'author ';
+			whereClause = 'Records.author like "%'+query+'%"';
 			break;
 		case 'su':
-			col = 'xml ';
+			whereClause = 'Records.xml like "%'+query+'%"';
 			break;
 		case 'isbn':
-			col = 'xml ';
+			whereClause = 'Records.xml like "%'+query+'%"';
 			break;
 		case 'issn':
-			col = 'xml ';
+			whereClause = 'Records.xml like "%'+query+'%"';
 			break;
+        case '':
+            Ext.Msg.alert('Error', 'Advanced searching is not implemented for Local folders.');
+            return;
 	}
-	sql += col + ' like "%' + query + '%"';
-	selectSql += sql;
-	Ext.getCmp('savegrid').store.load({db: db, selectSql: selectSql});
+	selectSql += 'where ' + whereClause;
+    if(bibliosdebug) {
+        console.debug('Searching local db with select sql: ' + selectSql);
+    }
+	Ext.getCmp('savegrid').store.load({db: db, selectSql: selectSql,params:{start:0,limit:15}});
+    if( Ext.getCmp('savegrid').store.getCount() > 0 ) {
+        Ext.getCmp('savegridSelectAllTbar').show();
+    }
+    biblios.app.displaySaveView();
+    Ext.getCmp('savegrid').selectNone();
+    openState = 'savegrid';
+    displayHelpMsg(UI.messages.help.en.saveview);
 }
 
 function initPazPar2(pazurl) {
