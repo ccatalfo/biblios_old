@@ -160,7 +160,7 @@ function doSaveRemote(loc, xmldoc, editorid) {
 	Prefs.remoteILS[loc].instance.saveHandler = function(xmldoc, status) {
 		if( status == 'failed' ) {
 			UI.editor.progress.hide();
-			Ext.MessageBox.alert('Remote Send Target failure', "Remote send target couldn't save record");
+			Ext.MessageBox.alert('Remote Send Target failure', "Remote send target couldn't save record.  Returned http status code: " + status);
             biblios.app.fireEvent('sendrecordcomplete', loc, xmldoc, status);
 		} 
 		else {
