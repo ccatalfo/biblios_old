@@ -901,12 +901,12 @@ biblios.app = function() {
                                                                         var totalcount = this.store.getTotalCount();
                                                                         this.store.on('load', this.checkAllOnLoad, this);
                                                                         this.store.load({params:{start:0, limit:totalcount}});
-                                                                        Ext.getCmp('savegridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'All ' + this.store.getCount() + ' records in this folder are selected.'  + '<a href="#" onclick="Ext.getCmp(\'savegrid\').selectNone()">Clear selection</a>';
+                                                                        Ext.getCmp('savegridSelectAllInStoreTbar').items.items[0].getEl().update('All ' + this.store.getCount() + ' records in this folder are selected.'  + '<a href="#" onclick="Ext.getCmp(\'savegrid\').selectNone()">Clear selection</a>');
                                                                     },
                                                                     selectAll: function() {
                                                                         this.getSelectionModel().checkAllInStore();
                                                                         Ext.getCmp('savegridSelectAllInStoreTbar').show();
-                                                                        Ext.getCmp('savegridSelectAllInStoreTbar').items.items[0].getEl().innerHTML = 'You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'savegrid\').selectAllInStore()">Select all ' + this.store.getTotalCount() + ' records in this folder</a>';
+                                                                        Ext.getCmp('savegridSelectAllInStoreTbar').items.items[0].getEl().update('You have selected all ' + this.store.getCount() + ' records on this page.'  + '<a href="#" onclick="Ext.getCmp(\'savegrid\').selectAllInStore()">Select all ' + this.store.getTotalCount() + ' records in this folder</a>');
                                                                         Ext.getCmp('savegridExportBtn').enable();
                                                                         Ext.getCmp('savegridSendBtn').enable();
                                                                         Ext.getCmp('savegridEditBtn').enable();
