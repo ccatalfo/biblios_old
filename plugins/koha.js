@@ -41,10 +41,20 @@ koha.prototype = {
 			this.password = config.password;
             this.embedded = config.embedded || '';
             this.url = config.url;
-            this.authurl = config.authurl || this.url + 'cgi-bin/koha/svc/authentication';
-            this.bibprofileurl = config.bibprofileurl || this.url + 'cgi-bin/koha/svc/bib_profile';
-            this.retrieveurl = config.retrieveurl || this.url + 'cgi-bin/koha/svc/bib';
-            this.saveurl = config.saveurl || this.url + 'cgi-bin/koha/svc/';
+            this.authurl = config.authurl || this.url + '/cgi-bin/koha/svc/authentication';
+            this.bibprofileurl = config.bibprofileurl || this.url + '/cgi-bin/koha/svc/bib_profile';
+            this.retrieveurl = config.retrieveurl || this.url + '/cgi-bin/koha/svc/bib';
+            this.saveurl = config.saveurl || this.url + '/cgi-bin/koha/svc/';
+                
+            // override url settings if found in biblios config doc for this send target
+            var authurl = $('url:contains('+this.url+') ~ authurl', configDoc).text();
+            var bibprofileurl = $('url:contains('+this.url+') ~ bibprofileurl', configDoc).text();
+            var retrieveurl = $('url:contains('+this.url+') ~ retrieveurl', configDoc).text();
+            var saveurl = $('url:contains('+this.url+') ~ saveurl', configDoc).text();
+            this.authurl = authurl ? authurl : this.authurl;
+            this.bibprofileurl = bibprofileurl ? bibprofileurl : this.bibprofileurl;
+            this.retrieveurl = retrieveurl ? retrieveurl : this.retrieveurl;
+            this.saveurl = saveurl ? saveurl : this.saveurl;
 
 			this.auth();
 		}, // end init
