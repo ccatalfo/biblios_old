@@ -114,6 +114,11 @@ elsif ( $action eq 'show') {
     $session->save_param();
     print $session->header(-type=>'text/html', -charset=>'utf-8');
     my $showxml = $paz->show($start, $num, $pazsort, $block);
+    if( $paz->{'httpstatus'} !~ /2.*/ ) {
+        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print to_json({sessionID => 'failed'});
+        return;
+    }
     if( $debug) {
         #warn $showxml;
     }
@@ -184,6 +189,11 @@ elsif( $action eq 'recid' ) {
         my $recid = $record->{'recid'};
         if($debug){ warn "paz.pl::recid Fetching $offset of $recid";}
         my $rec = $paz->record($recid, $offset);
+        if( $paz->{'httpstatus'} !~ /2.*/ ) {
+            print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+            print to_json({sessionID => 'failed'});
+            return;
+        }
         #warn 'paz.pl::record ' . $rec;
         $rec =~ s/<\?xml version="1\.0"\?>//;
         print $rec;
@@ -195,6 +205,11 @@ elsif( $action eq 'records' ) {
     #print Dumper $session->{'records'};
     my $num = $cgi->param('num');
     my $showxml = $paz->show(0, $num, 'relevance', 1);
+    if( $paz->{'httpstatus'} !~ /2.*/ ) {
+        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print to_json({sessionID => 'failed'});
+        return;
+    }
     if($debug){warn $showxml;}
     my $showdata = XMLin($showxml, ForceArray=>['hit']);
     if($debug){warn $showdata;}
@@ -205,12 +220,22 @@ elsif( $action eq 'records' ) {
 elsif( $action eq 'termlist' ) {
     my $name = $cgi->param('name');
     my $termlistxml = $paz->termlist($name);
+    if( $paz->{'httpstatus'} !~ /2.*/ ) {
+        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print to_json({sessionID => 'failed'});
+        return;
+    }
     print $cgi->header(-type => 'text/xml');
     print $termlistxml;
 }
 elsif( $action eq 'bytarget' ) {
     my $name = $cgi->param('name');
     my $bytargetxml = $paz->bytarget($name);
+    if( $paz->{'httpstatus'} !~ /2.*/ ) {
+        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print to_json({sessionID => 'failed'});
+        return;
+    }
     my $jsondata = getByTargetJson($bytargetxml);
     print $cgi->header(-type => 'text/x-json');
     print to_json($jsondata);
@@ -221,6 +246,11 @@ elsif( $action eq 'settings' ) {
     $session->param('settings', $settings);
     print $cgi->header(-type => 'text/xml');
     foreach my $setting (@{$settings}) {
+        if( $paz->{'httpstatus'} !~ /2.*/ ) {
+            print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+            print to_json({sessionID => 'failed'});
+            return;
+        }
     	print $paz->settings($setting);
     	#warn Dumper $setting;
     }
