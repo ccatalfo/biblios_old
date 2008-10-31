@@ -2262,6 +2262,7 @@ biblios.app = function() {
                                                                                     catch(ex) {
                                                                                         Ext.MessageBox.alert('Error', ex.message);
                                                                                     }
+                                                                                    setILSTargets();
                                                                                 }
                                                                             }
                                                                         } // send target grid store listeners
