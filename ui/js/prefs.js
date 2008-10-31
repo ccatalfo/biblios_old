@@ -188,6 +188,7 @@ function loadPlugins() {
             biblios.app.numPlugins--;
             if( biblios.app.numPlugins == 0 ) {
                 setILSTargets();
+                displayInitErrors();
             }
         });
     });
