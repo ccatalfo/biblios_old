@@ -585,7 +585,7 @@ biblios.app = function() {
                                                                         UI.search.currentSort.field = reqName;
                                                                         UI.search.currentSort.dir = dir;
                                                                         var start = Ext.getCmp('searchgrid').store.lastOptions.params ? Ext.getCmp('searchgrid').store.lastOptions.params.start : 0;
-                                                                        Ext.getCmp('searchgrid').store.load({params:{ start: start, num: 15, sort: reqName + ':' + dir}});
+                                                                        Ext.getCmp('searchgrid').store.load({params:{ start: start, limit: 15, sort: reqName + ':' + dir}});
                                                                         return false;
                                                                     }, // headerclick handler
                                                                     rowdblclick: function(grid, rowindex, e) {
