@@ -29,7 +29,6 @@ if( $action eq 'init') {
     my $pazpar2url = $cgi->param('pazpar2url');
     $session->param('pazpar2url', $pazpar2url);
     if($debug){ warn 'paz.pl::init pazpar2url:' . $pazpar2url;}
-    print $session->header();
     my $paz = PazPar2->new("$pazpar2url");
     my $sessionID = $paz->init();
     if($debug){ warn 'paz.pl::init initresp: ' . $sessionID;}
@@ -87,13 +86,20 @@ if( $action eq 'search' ) {
     my $filter = $cgi->param('filter');
     if($debug){ warn 'paz.pl::search query: ' . $query;}
     $session->save_param();
-    print $cgi->header(-type=>'text/xml');
+    my $searchxml = '';
     if( $filter ) {
-        print $paz->search($query, $filter);
+        $searchxml =  $paz->search($query, $filter);
     }
     else {
-        print $paz->search($query);
+        $searchxml = $paz->search($query);
     }
+    if( $paz->{'httpstatus'} !~ /2.*/ ) {
+        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print to_json({sessionID => 'failed'});
+        return;
+    }
+    print $cgi->header(-type=>'text/xml');
+    print $searchxml;
 }
 elsif ( $action eq 'show') {
     my $start = $cgi->param('start') || 0;
@@ -112,10 +118,14 @@ elsif ( $action eq 'show') {
     	$pazsort .= ':0';
     }
     $session->save_param();
-    print $session->header(-type=>'text/html', -charset=>'utf-8');
     my $showxml = $paz->show($start, $num, $pazsort, $block);
     if( $paz->{'httpstatus'} !~ /2.*/ ) {
         print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print to_json({sessionID => 'failed'});
+        return;
+    }
+    if($showxml =~ /^\s*$/ ) {
+        print $cgi->header(-type=>'text/x-json', -status=>500);
         print to_json({sessionID => 'failed'});
         return;
     }
@@ -171,6 +181,7 @@ elsif ( $action eq 'show') {
         }
     }
     $jsondata->{'totalrecords'} = getByTargetJson( $paz->bytarget() )->{'totalrecords'};
+    print $cgi->header(-type=>'text/x-json');
     print to_json( $jsondata );
     #print $showxml;
 }
@@ -246,12 +257,12 @@ elsif( $action eq 'settings' ) {
     $session->param('settings', $settings);
     print $cgi->header(-type => 'text/xml');
     foreach my $setting (@{$settings}) {
+    	print $paz->settings($setting);
         if( $paz->{'httpstatus'} !~ /2.*/ ) {
             print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
             print to_json({sessionID => 'failed'});
             return;
         }
-    	print $paz->settings($setting);
     	#warn Dumper $setting;
     }
 }
