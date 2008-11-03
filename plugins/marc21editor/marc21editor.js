@@ -95,6 +95,7 @@ function get008FromEditor(ff_ed, rectype) {
         }
         $('mattypes mattype[@value=008All00-17] position', marc21defs).each( function(i) {
 				var type = $(this).text();
+                var length = $('field[@tag=008] value[@name='+type+']', marc21defs).attr('length');
 				var value = '';
 				if( type.substr(0, 5) == 'Undef') {
 					var length = type.substr(5,1);
@@ -104,14 +105,23 @@ function get008FromEditor(ff_ed, rectype) {
 				}
 				else {
 					value = $(ff_ed).find('#'+type).val() || ' ';
+                    if( value.length < length ) {
+                        if(bibliosdebug) {
+                            console.debug('Padding ' + type + ' to length: ' + length);
+                        }
+                        for( var j = value.length; j < length; j++) {
+                            value += ' ';
+                        }
+                    }
 				}
                 if(bibliosdebug) {
-                    console.debug('get008fromEditor: type: ' + type + ' value: \"' + value + '\"' + ' length: ' + value.length);
+                    console.debug('get008fromEditor: type: ' + type + ' length: ' + length + ' value: \"' + value + '\"' + ' length: ' + value.length);
                 }
 				tag008val += value;
 			});
 			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 				var type = $(this).text();
+                var length = $('field[@tag=008] value[@name='+type+']', marc21defs).attr('length');
 				var value = '';
 				if( type.substr(0, 5) == 'Undef') {
 					var length = type.substr(5,1);
@@ -121,6 +131,14 @@ function get008FromEditor(ff_ed, rectype) {
 				}
 				else {
 					value = $(ff_ed).find('#'+type).val() || '';
+                    if( value.length < length ) {
+                        if(bibliosdebug) {
+                            console.debug('Padding ' + type + ' to length: ' + length);
+                        }
+                        for( var j = value.length; j < length; j++) {
+                            value += ' ';
+                        }
+                    }
 				}
                 if(bibliosdebug) {
                     console.debug('get008fromEditor: type: ' + type + ' value: \"' + value + '\"' + ' length: ' + value.length);
@@ -129,6 +147,7 @@ function get008FromEditor(ff_ed, rectype) {
 			});
             $('mattypes mattype[@value=008All35-39] position', marc21defs).each( function(i) {
                     var type = $(this).text();
+                    var length = $('field[@tag=008] value[@name='+type+']', marc21defs).attr('length');
                     var value = '';
                     if( type.substr(0, 5) == 'Undef') {
                         var length = type.substr(5,1);
@@ -138,6 +157,14 @@ function get008FromEditor(ff_ed, rectype) {
                     }
                     else {
                         value = $(ff_ed).find('#'+type).val() || '';
+                        if( value.length < length ) {
+                            if(bibliosdebug) {
+                                console.debug('Padding ' + type + ' to length: ' + length);
+                            }
+                            for( var j = value.length; j < length; j++) {
+                                value += ' ';
+                            }
+                        }
                     }
                     if(bibliosdebug) {
                         console.debug('get008fromEditor: type: ' + type + ' value: \"' + value + '\"' + ' length: ' + value.length);
