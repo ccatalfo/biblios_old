@@ -181,9 +181,14 @@ function setPazPar2Targets(callback) {
             settings: Ext.util.JSON.encode(settings)
         },
         type: 'POST',
-        success: function(xml, status) {
+        success: function(data, textStatus) {
             if( this.callback ) {
                 this.callback(xml);
+            }
+        },
+        error: function(req, textStatus, errorThrown) {
+            if( this.callback) {
+                this.callback(req);
             }
         }
     });
