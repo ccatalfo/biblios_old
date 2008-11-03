@@ -149,7 +149,7 @@ elsif ( $action eq 'show') {
         my $count = $pzhit->findvalue('count') || 1;
         my $title = $pzhit->findvalue('md-title');
         my $author = $pzhit->findvalue('md-author');
-        my $publisher = $pzhit->findvalue('md-publisher');
+        my $publisher = $pzhit->findvalue('md-publication-name');
         my $date = $pzhit->findvalue('md-date');
         my $medium = $pzhit->findvalue('md-medium');
         my @fullrecords = $pzhit->findnodes('md-fullrecord');

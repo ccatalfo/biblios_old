@@ -26,7 +26,7 @@ var recordCache = {};
 var PazPar2Results = Ext.data.Record.create([
     {name: 'title', mapping: 'title'},
     {name: 'author', mapping:'author'},
-    {name: 'publisher', mapping:'publication-name'},
+    {name: 'publisher', mapping:'publisher'},
     {name: 'date', mapping: 'date'},
     {name: 'medium', mapping:'medium'},
     {name: 'recid', mapping:'recid'},
