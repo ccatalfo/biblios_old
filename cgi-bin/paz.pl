@@ -39,7 +39,7 @@ if( $action eq 'init') {
         return;
     }
     $session->param('sessionID', $sessionID);
-    print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
+    print $cgi->header(-type=>'application/json');
     print to_json({sessionID => $sessionID});
     exit 0;
 }
@@ -58,7 +58,7 @@ if( $sessionID and $action ne 'init') {
         if($debug){ warn 'paz.pl::init initresp: ' . $sessionID;}
         if( $paz->{'httpstatus'} !~ /2.*/ ) {
             if($debug) {warn 'Session had expired but unable to reinitialize!';}
-            print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+            print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
             print to_json({sessionID => 'failed'});
             return;
         }
@@ -94,7 +94,7 @@ if( $action eq 'search' ) {
         $searchxml = $paz->search($query);
     }
     if( $paz->{'httpstatus'} !~ /2.*/ ) {
-        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
         print to_json({sessionID => 'failed'});
         return;
     }
@@ -120,12 +120,12 @@ elsif ( $action eq 'show') {
     $session->save_param();
     my $showxml = $paz->show($start, $num, $pazsort, $block);
     if( $paz->{'httpstatus'} !~ /2.*/ ) {
-        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
         print to_json({sessionID => 'failed'});
         return;
     }
     if($showxml =~ /^\s*$/ ) {
-        print $cgi->header(-type=>'text/x-json', -status=>500);
+        print $cgi->header(-type=>'application/json', -status=>500);
         print to_json({sessionID => 'failed'});
         return;
     }
@@ -181,7 +181,7 @@ elsif ( $action eq 'show') {
         }
     }
     $jsondata->{'totalrecords'} = getByTargetJson( $paz->bytarget() )->{'totalrecords'};
-    print $cgi->header(-type=>'text/x-json');
+    print $cgi->header(-type=>'application/json');
     print to_json( $jsondata );
     #print $showxml;
 }
@@ -201,7 +201,7 @@ elsif( $action eq 'recid' ) {
         if($debug){ warn "paz.pl::recid Fetching $offset of $recid";}
         my $rec = $paz->record($recid, $offset);
         if( $paz->{'httpstatus'} !~ /2.*/ ) {
-            print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+            print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
             print to_json({sessionID => 'failed'});
             return;
         }
@@ -217,7 +217,7 @@ elsif( $action eq 'records' ) {
     my $num = $cgi->param('num');
     my $showxml = $paz->show(0, $num, 'relevance', 1);
     if( $paz->{'httpstatus'} !~ /2.*/ ) {
-        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
         print to_json({sessionID => 'failed'});
         return;
     }
@@ -232,7 +232,7 @@ elsif( $action eq 'termlist' ) {
     my $name = $cgi->param('name');
     my $termlistxml = $paz->termlist($name);
     if( $paz->{'httpstatus'} !~ /2.*/ ) {
-        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
         print to_json({sessionID => 'failed'});
         return;
     }
@@ -243,12 +243,12 @@ elsif( $action eq 'bytarget' ) {
     my $name = $cgi->param('name');
     my $bytargetxml = $paz->bytarget($name);
     if( $paz->{'httpstatus'} !~ /2.*/ ) {
-        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
         print to_json({sessionID => 'failed'});
         return;
     }
     my $jsondata = getByTargetJson($bytargetxml);
-    print $cgi->header(-type => 'text/x-json');
+    print $cgi->header(-type => 'application/json');
     print to_json($jsondata);
 }
 elsif( $action eq 'settings' ) {
@@ -259,7 +259,7 @@ elsif( $action eq 'settings' ) {
     foreach my $setting (@{$settings}) {
     	print $paz->settings($setting);
         if( $paz->{'httpstatus'} !~ /2.*/ ) {
-            print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+            print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
             print to_json({sessionID => 'failed'});
             return;
         }
