@@ -1281,9 +1281,7 @@ biblios.app = function() {
                                                                                     t.enabled = checked;
                                                                                     t.save();
                                                                                     setPazPar2Targets(function(data) {
-                                                                                        Ext.getCmp('searchtargetsgrid').store.reload();
-                                                                                        runSearch(biblios.app.currQuery);
-                                                                                    
+                                                                                        doPazPar2Search(biblios.app.currQuery);
                                                                                     });
 
                                                                                 }

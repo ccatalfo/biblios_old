@@ -114,6 +114,8 @@ function getDefaultPazSettingsJSON( target ) {
 	settings['pz:nativesyntax['+db+']'] = 'iso2709';
 	
 	settings['pz:xslt['+db+']'] = 'marc21.xsl';
+
+	settings['pz:allow['+db+']'] = '1';
 	
 	settings['pz:cclmap:kw['+db+']'] = 'u=1016';
 	
@@ -148,6 +150,8 @@ function getPazPar2Settings() {
 			// load this target into pazpar2 as search target
 			if (targets[i].pazpar2settings != '' && targets[i].pazpar2settings != null) {
 				var s = Ext.util.JSON.decode(targets[i].pazpar2settings);
+				var db = getPazTargetName( targets[i] )
+				s['pz:allow[' + db + ']'] = 1;
 				settings.push(s);
 			}
 			else {
@@ -164,28 +168,28 @@ function getPazPar2Settings() {
 	}
 }
 
-function setPazPar2Targets() {
+function setPazPar2Targets(callback) {
     showStatusMsg('Setting targets');
     Ext.getCmp('TargetsTreePanel').disable();
     Ext.getCmp('searchButton').disable();
     var settings = getPazPar2Settings();
     $.ajax({
         url: pazcgiurl, 
+        callback: callback,
         data: {
             action:'settings', 
             settings: Ext.util.JSON.encode(settings)
         },
         type: 'POST',
         success: function(xml, status) {
+            if( this.callback ) {
+                this.callback(xml);
+            }
         }
     });
     Ext.getCmp('TargetsTreePanel').enable();
     Ext.getCmp('searchButton').enable();
     clearStatusMsg();
-}
-
-function changePazPar2TargetStatus(o) {
-		$.get( biblios.app.paz.pz2String + "?command=settings&session="+biblios.app.paz.sessionID+"&pz:allow["+o.db+"]="+o.allow );
 }
 
 function clearSearchLimits() {
