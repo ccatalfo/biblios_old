@@ -1757,10 +1757,15 @@ biblios.app = function() {
                                                                             } // update listener
                                                                         }
                                                                 }),
-                                                                sm: new Ext.grid.RowSelectionModel({
-
-                                                                }),
+                                                                sm: (sm = new Ext.grid.SmartCheckboxSelectionModel({
+                                                                    //singleSelect: false,
+                                                                    alwaysSelectOnCheck: true,
+                                                                    email: true,
+                                                                    dataIndex: 'enabled',
+                                                                    header: '',
+                                                                })),
                                                                 cm: new Ext.grid.ColumnModel([
+                                                                    sm,
                                                                     {
                                                                         header: 'Name',
                                                                         dataIndex: 'name',
@@ -1783,11 +1788,6 @@ biblios.app = function() {
                                                                         dataIndex: 'file',
                                                                         hidden: true,
                                                                         editor: new Ext.form.TextField()
-                                                                    },
-                                                                    {
-                                                                        header: 'Enabled',
-                                                                        dataIndex: 'enabled',
-                                                                        editor: new Ext.form.Checkbox()
                                                                     }
                                                                 ]),
                                                                 tbar: new Ext.Toolbar({
@@ -1824,7 +1824,6 @@ biblios.app = function() {
                                                                     ], // macros grid toolbar
                                                                     listeners: {
                                                                         beforerender: function(tbar) {
-                                                                                tbar.autoCreate.html = '<table cellspacing="0"><tr></tr></table>';
                                                                         }
                                                                     }
                                                                 }) // macros grid tbar
