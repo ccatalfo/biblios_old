@@ -1333,6 +1333,11 @@ function setupFFEditorCtryCombo() {
                         //setupFFEditorLangCombo();
                     });
                 }
+                win.on('show', function(win) {
+                    formatFixedFieldsPopupWidth(9);
+                    win.doLayout();
+                    win.setPosition(200,200);
+                });
                 win.show();
             },
             error: function(req, textStatus, errorThrown) {
@@ -2338,4 +2343,23 @@ MarcEditor.getToolbar = function(editorid) {
         } // editor trash button
     ] 
     });
+}
+function formatFixedFieldsPopupWidth(index) {
+    var done = 0;
+    var i = 0;
+    while( done != 1 ) {
+        var length = $('.fixedfields_editor').find('tr:last').find('td').length;
+        if( length < index ) {
+            done = 1;
+        }
+        else {
+            // get td's greater than index
+            var td = $('.fixedfields_editor').find('tr:last').find('td:gt('+index+')').remove();
+            // create new tr to put them in
+            var newrowid = 'newrow'+i;
+            var tr = $('.fixedfields_editor').find('tr:last').after('<tr id="'+newrowid+'"></tr>');
+            $('#'+newrowid).append(td);
+            i++;
+        }
+    }
 }
