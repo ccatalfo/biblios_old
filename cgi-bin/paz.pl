@@ -17,12 +17,12 @@ my $debug = 1;
 
 my $cgi = CGI->new();
 CGI::Session->name('bibliospazsession');
-my $session = new CGI::Session or die CGI::Session->errstr;
+my $session = new CGI::Session(undef, $cgi, {Directory=>File::Spec->tmpdir}) or die CGI::Session->errstr;
 my $parser = XML::LibXML->new();
 
 my $sessionID = $session->param('sessionID');
 my $action = $cgi->param('action');
-if($debug){ warn "paz.pl: action: $action";}
+if($debug){ warn "paz.pl: action: $action using sessionID $sessionID";}
 
 if( $action eq 'init') {
     if($debug){ warn 'creating new paz session';}
@@ -32,14 +32,10 @@ if( $action eq 'init') {
     my $paz = PazPar2->new("$pazpar2url");
     my $sessionID = $paz->init();
     if($debug){ warn 'paz.pl::init initresp: ' . $sessionID;}
-    warn 'paz.pl httpstatus: ' . $paz->{'httpstatus'};
-    if( $paz->{'httpstatus'} !~ /2.*/ ) {
-        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
-        print to_json({sessionID => 'failed'});
-        return;
-    }
     $session->param('sessionID', $sessionID);
-    print $cgi->header(-type=>'application/json');
+    warn 'paz.pl httpstatus: ' . $paz->{'httpstatus'};
+    my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+    print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
     print to_json({sessionID => $sessionID});
     exit 0;
 }
@@ -58,7 +54,8 @@ if( $sessionID and $action ne 'init') {
         if($debug){ warn 'paz.pl::init initresp: ' . $sessionID;}
         if( $paz->{'httpstatus'} !~ /2.*/ ) {
             if($debug) {warn 'Session had expired but unable to reinitialize!';}
-            print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
+            my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+            print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
             print to_json({sessionID => 'failed'});
             return;
         }
@@ -94,7 +91,8 @@ if( $action eq 'search' ) {
         $searchxml = $paz->search($query);
     }
     if( $paz->{'httpstatus'} !~ /2.*/ ) {
-        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
+        my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
         print to_json({sessionID => 'failed'});
         return;
     }
@@ -120,12 +118,14 @@ elsif ( $action eq 'show') {
     $session->save_param();
     my $showxml = $paz->show($start, $num, $pazsort, $block);
     if( $paz->{'httpstatus'} !~ /2.*/ ) {
-        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
+        my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
         print to_json({sessionID => 'failed'});
         return;
     }
     if($showxml =~ /^\s*$/ ) {
-        print $cgi->header(-type=>'application/json', -status=>500);
+        my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
         print to_json({sessionID => 'failed'});
         return;
     }
@@ -181,12 +181,14 @@ elsif ( $action eq 'show') {
         }
     }
     $jsondata->{'totalrecords'} = getByTargetJson( $paz->bytarget() )->{'totalrecords'};
-    print $cgi->header(-type=>'application/json');
+    my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+    print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
     print to_json( $jsondata );
     #print $showxml;
 }
 elsif( $action eq 'stat' ) {
-    print $session->header(-type=>'text/xml');
+    my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+    print $cgi->header(-type=>'text/xml', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
     print $paz->stat();
 }
 elsif( $action eq 'recid' ) {
@@ -232,7 +234,8 @@ elsif( $action eq 'termlist' ) {
     my $name = $cgi->param('name');
     my $termlistxml = $paz->termlist($name);
     if( $paz->{'httpstatus'} !~ /2.*/ ) {
-        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
+        my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
         print to_json({sessionID => 'failed'});
         return;
     }
@@ -243,12 +246,14 @@ elsif( $action eq 'bytarget' ) {
     my $name = $cgi->param('name');
     my $bytargetxml = $paz->bytarget($name);
     if( $paz->{'httpstatus'} !~ /2.*/ ) {
-        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
+        my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
         print to_json({sessionID => 'failed'});
         return;
     }
     my $jsondata = getByTargetJson($bytargetxml);
-    print $cgi->header(-type => 'application/json');
+    my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+    print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
     print to_json($jsondata);
 }
 elsif( $action eq 'settings' ) {
@@ -259,10 +264,12 @@ elsif( $action eq 'settings' ) {
     foreach my $setting (@{$settings}) {
     	print $paz->settings($setting);
         if( $paz->{'httpstatus'} !~ /2.*/ ) {
-            print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
+            my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+            print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
             print to_json({sessionID => 'failed'});
             return;
         }
+        print to_json({status => 'OK'});
     	#warn Dumper $setting;
     }
 }
