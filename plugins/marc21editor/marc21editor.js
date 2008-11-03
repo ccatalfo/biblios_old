@@ -265,13 +265,16 @@ function get007FromEditor(tr, cat, mattype) {
     $('field[@tag=007][@mattype='+mattype+']', marc21defs).each( function(i) {
         $('value', this).each( function(j) {
             var type = $(this).attr('name');
+            var value = '';
             if( type == 'Undefined') {
                 var length = $(this).attr('length');
                 for( var k = 0; k<length; k++) {
-                    tag007val += ' ';
+                    value += ' ';
                 }
             }
-            var value = $(tr).find('#'+type).val() || '';
+            else {
+                value = $(tr).find('#'+type).val() || '';
+            }
             if(bibliosdebug) {
                 console.debug('get007FromEditor: type: ' + type + ' value: ' + value);
             }
