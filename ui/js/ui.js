@@ -493,11 +493,11 @@ function getMacroMenuItems(recordSource) {
 	}
 	else if( recordSource == 'savegrid' ) {
 		handler = function(btn) {
-			var records = Ext.getCmp('savegrid').getSelectionModel.getChecked();
+			var records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
 			for( var i = 0; i < records.length; i++) {
-				var xmldoc = xslTransform.loadString( records[i].xmldoc  );
-				var dbrecord = DB.Records.select('Records.rowid=?', [ records[i].rowid ]).getOne();
-				var title = records[i].title;
+				var xmldoc = xslTransform.loadString( records[i].data.xml  );
+				var dbrecord = DB.Records.select('Records.rowid=?', [ records[i].data.Id ]).getOne();
+				var title = records[i].data.title;
 				var record = new MarcRecord();
 				record.loadMarcXml( xmldoc );
 				var macro = DB.Macros.select('Macros.rowid=?',[btn.id]).getOne();
@@ -505,6 +505,11 @@ function getMacroMenuItems(recordSource) {
 				try {
 					eval( macro.code );
 					dbrecord.xml = record.XMLString();
+				}
+				catch(ex) {
+					Ext.MessageBox.alert('Macro error', ex);
+				}
+                try {
                     if( record.field('245') && record.field('245').subfield('a')) {
                         dbrecord.title = record.field('245').subfield('a').getValue();
                     }
@@ -519,10 +524,10 @@ function getMacroMenuItems(recordSource) {
                     }
                     dbrecord.date_modified = new Date().toString();
 					dbrecord.save();
-				}
-				catch(ex) {
+                }
+                catch(ex) {
 					Ext.MessageBox.alert('Macro error', ex);
-				}
+                }
 				clearStatusMsg();
 			}
             Ext.getCmp('savegrid').store.reload();
