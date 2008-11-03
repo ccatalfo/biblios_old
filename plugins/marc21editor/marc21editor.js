@@ -95,6 +95,7 @@ function get008FromEditor(ff_ed, rectype) {
         }
         $('mattypes mattype[@value=008All00-17] position', marc21defs).each( function(i) {
 				var type = $(this).text();
+                type = type.replace(' ', '_');
                 var length = $('field[@tag=008] value[@name='+type+']', marc21defs).attr('length');
 				var value = '';
 				if( type.substr(0, 5) == 'Undef') {
@@ -121,6 +122,7 @@ function get008FromEditor(ff_ed, rectype) {
 			});
 			$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 				var type = $(this).text();
+                type = type.replace(' ', '_');
                 var length = $('field[@tag=008] value[@name='+type+']', marc21defs).attr('length');
 				var value = '';
 				if( type.substr(0, 5) == 'Undef') {
@@ -147,6 +149,7 @@ function get008FromEditor(ff_ed, rectype) {
 			});
             $('mattypes mattype[@value=008All35-39] position', marc21defs).each( function(i) {
                     var type = $(this).text();
+                    type = type.replace(' ', '_');
                     var length = $('field[@tag=008] value[@name='+type+']', marc21defs).attr('length');
                     var value = '';
                     if( type.substr(0, 5) == 'Undef') {
@@ -190,6 +193,7 @@ function get006FromEditor(tr, rectype) {
         }
 		$('mattypes mattype[@value='+mattype+'] position', marc21defs).each( function(i) {
 			var type = $(this).text();
+            type = type.replace(' ', '_');
 			if( type.substr(0, 5) == 'Undef') {
 				var length = type.substr(5,1);
 				for( var k = 0; k<length; k++) {
@@ -265,6 +269,7 @@ function get007FromEditor(tr, cat, mattype) {
     $('field[@tag=007][@mattype='+mattype+']', marc21defs).each( function(i) {
         $('value', this).each( function(j) {
             var type = $(this).attr('name');
+            type = type.replace(' ', '_');
             var value = '';
             if( type == 'Undefined') {
                 var length = $(this).attr('length');

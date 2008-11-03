@@ -331,7 +331,7 @@
 				<xsl:attribute name="name"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:attribute name='onblur'>onFixedFieldEditorBlur(this)</xsl:attribute>
 				<xsl:attribute name='onclick'>showTagHelp(this)</xsl:attribute>
-				<xsl:attribute name="id"><xsl:value-of select="$name"/></xsl:attribute>
+				<xsl:attribute name="id"><xsl:value-of select="translate($name,' ', '_')"/></xsl:attribute>
 				<xsl:for-each select="$marc21defs//field[@tag=$tagnumber]//value[@name=$name]/option">
 					<xsl:element name="option">
 						<xsl:if test="$value=.">
@@ -367,7 +367,7 @@
                 <xsl:attribute name="style">display:none;</xsl:attribute>
             </xsl:if>
 			<input class="{$classnumber}" type="text">
-				<xsl:attribute name="id"><xsl:value-of select="$name"/></xsl:attribute>
+				<xsl:attribute name="id"><xsl:value-of select="translate($name,' ', '_')"/></xsl:attribute>
 				<xsl:attribute name="name"><xsl:value-of select="$name"/></xsl:attribute>
 				<xsl:attribute name="size"><xsl:value-of select="$length"/></xsl:attribute>
 				<xsl:attribute name="maxlength"><xsl:value-of select="$length"/></xsl:attribute>
