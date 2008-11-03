@@ -76,13 +76,15 @@ function initPazPar2(pazurl) {
 	$.ajax({
         url: pazcgiurl 
         ,method: 'POST'
-        ,dataType: 'json'
         ,data: {action:'init', pazpar2url:pazurl}
         ,success: function(json, status) {
             biblios.app.paz.sessionID = json.sessionID;
             setPazPar2Targets();
         }
         ,error: function(req, textStatus, errorThrown) {
+            if(bibliosdebug) {
+                console.debug('error initializing pazpar2' + req + textStatus + errorThrown);
+            }
             biblios.app.initerrors.push({title:'Error', msg: 'Error connecting to PazPar2 search server.  Please contact the administrator for this site.'});
         }
     });

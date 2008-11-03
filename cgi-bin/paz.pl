@@ -35,12 +35,12 @@ if( $action eq 'init') {
     if($debug){ warn 'paz.pl::init initresp: ' . $sessionID;}
     warn 'paz.pl httpstatus: ' . $paz->{'httpstatus'};
     if( $paz->{'httpstatus'} !~ /2.*/ ) {
-        print $cgi->header(-type=>'text/x-json', -status=>$paz->{'httpstatus'});
+        print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
         print to_json({sessionID => 'failed'});
         return;
     }
     $session->param('sessionID', $sessionID);
-    print $cgi->header(-type=>'text/x-json');
+    print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'});
     print to_json({sessionID => $sessionID});
     exit 0;
 }
