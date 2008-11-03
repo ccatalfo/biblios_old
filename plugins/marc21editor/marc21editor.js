@@ -348,6 +348,8 @@ function showTagHelp(elem) {
 	// if we have a fixed field editor element
 	if( $(elem).parents('.fixedfields_editor').length > 0 ) {
 		var name = $(elem).get(0).id;
+        // replace underscores in html id with blank spaces, as this is how fixed fields editor generates
+        name = name.replace('_',' ');
 		var currval = $(elem).val();
 		// get position location
 		var position = $('value[@name='+name+']', marc21defs).attr('position');
