@@ -163,6 +163,7 @@ function doDownloadRecords(format, editorid) {
 	// if we're exporting a record from the marc editor
 	if( openState == 'editorPanel' ) {
 			// transform edited record back into marcxml
+            UI.editor[editorid].record.update();
 			xml = UI.editor[editorid].record.XMLString();
 			var encoding = 'utf-8';
             if( biblios.app.fireEvent('beforerecordexport', xml) ) {
