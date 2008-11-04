@@ -1775,7 +1775,7 @@ function setupFFEditorCtryCombo() {
         var tag003 = $('#'+editorid).find('.003').children('.controlfield-text').val();
         var tag005 = $('#'+editorid).find('.005').children('.controlfield-text').val();
         if( !UI.editor[editorid].tbar003 ) {
-            UI.editor[editorid].tbar003 = new Ext.Toolbar({});
+            UI.editor[editorid].tbar003 = new Ext.ux.ToolbarContainer({});
         }
         UI.editor[editorid].tbar003.add(
             {
@@ -1791,7 +1791,7 @@ function setupFFEditorCtryCombo() {
         var tag008 = $('#'+editorid).find('div.008').children('.controlfield-text');
         if( !UI.editor[editorid].tbarldr008 ) {
             UI.editor[editorid].tbarldr008 =
-                new Ext.Toolbar({
+                new Ext.ux.ToolbarContainer({
                     id: this.editorid + 'ldr008tbar'
                 });
             }
@@ -1827,7 +1827,7 @@ function setupFFEditorCtryCombo() {
         );
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( UI.editor[editorid].tbarldr008);
         if( !UI.editor[editorid].tbar006 ) {
-            UI.editor[editorid].tbar006 = new Ext.Toolbar({
+            UI.editor[editorid].tbar006 = new Ext.ux.ToolbarContainer({
                     id: this.editorid + '006tbar',
                     items: [
                         {
@@ -1843,7 +1843,7 @@ function setupFFEditorCtryCombo() {
         }
         Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).add( UI.editor[editorid].tbar006);
         if( !UI.editor[editorid].tbar007) {
-            UI.editor[editorid].tbar007 = new Ext.Toolbar({
+            UI.editor[editorid].tbar007 = new Ext.ux.ToolbarContainer({
                 id: this.editorid + '007tbar',
                 items: [
                     {

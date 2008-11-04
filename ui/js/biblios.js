@@ -608,7 +608,7 @@ biblios.app = function() {
                                                                         }	
                                                                     } // on ENTER keypress
                                                                 }, // search grid listeners
-                                                                tbar: new Ext.PagingToolbar({
+                                                                tbar: new Ext.ux.ImprovedPagingToolbar({
                                                                     pageSize: 15,
                                                                     id: 'searchgridtbar',
                                                                     unmergedCounts: [
