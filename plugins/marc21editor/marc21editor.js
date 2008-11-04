@@ -513,6 +513,9 @@ function MarcEditor(editorid) {
 
 	// private methods
 
+    this._getMarcRecord = function() {
+        return marcrecord;
+    }
 function getFFTagFromPopup(tagnumber, rectype, ffid) {
     var html = $('#'+ffid);
     var value = '';
@@ -1944,6 +1947,10 @@ function setupFFEditorCtryCombo() {
 
 }
 // Public methods 
+MarcEditor.prototype.getMarcRecord = function() {
+    return this._getMarcRecord();
+}
+
 MarcEditor.prototype.getNextField = function(tagnumber) {
     return this._getNextField(tagnumber);
 }

@@ -536,14 +536,13 @@ function getMacroMenuItems(recordSource) {
 	else {
 		handler = function(btn) {
 			var editorid = btn.recordSource;
-			var xmldoc = UI.editor[editorid].record.XML();
-			var record = new MarcRecord();
-			record.loadMarcXml( xmldoc );
+			var record = UI.editor[editorid].record.getMarcRecord();
 			var macro = DB.Macros.select('Macros.rowid=?',[btn.id]).getOne();
 			showStatusMsg('Running macro ' + macro.name );
 			try {
 				eval( macro.code );
-				openRecord(record.XMLString(), editorid);
+                var newxml = record.XML();
+                UI.editor[editorid].record.loadXml( newxml, handle_html );
 			}
 			catch(ex) {
 				Ext.MessageBox.alert('Macro error', ex);
