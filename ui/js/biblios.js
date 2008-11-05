@@ -211,7 +211,7 @@ biblios.app = function() {
                                         region: 'north',
                                         id: 'brandingPanel',
                                         border: false,
-                                        contentEl: 'header',
+                                        contentEl: 'bibliosheader',
                                         width:'100%'
                                     },
                                     {
