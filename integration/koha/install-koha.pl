@@ -38,6 +38,7 @@ print "Building Biblios for installation into Koha\n";
 my $vars = {
   buildtime => $buildtime,
   kohaintranetdir => $kohaintranetdir,
+  kohacgidir => '/cgi-bin/koha/plugins/biblios/',
 };
 $tt->process('./integration/koha/biblios.tmpl', $vars, './build/biblios.tmpl')
   || die $tt->error(), "\n";
