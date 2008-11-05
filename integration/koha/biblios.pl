@@ -23,10 +23,12 @@ use C4::Auth;
 use C4::Context;
 use C4::Biblio;
 use CGI;
+use CGI::Carp;
 use LWP::Simple;
 use XML::Simple;
 use MARC::File::XML;
 
+my $debug = 0;
 my $query = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -39,9 +41,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 my $biblionumber = $query->param('biblionumber');
- my $sessionID = $query->cookie("CGISESSID");
-$template->param( biblionumber => $biblionumber );
+if( $biblionumber ) {
+    my $record = GetMarcBiblio($biblionumber);
+    my $recordxml = $record->as_xml_record();
+    $template->param( biblionumber => $biblionumber );
+    $template->param( recordxml => $recordxml );
+    if($debug) {
+        warn "Retrieving marcxml for biblionumber $biblionumber";
+    }
+}
+
 $template->param( loggedinuser => $loggedinuser );
-$template->param( sessionID => $sessionID );
 
 output_html_with_http_headers $query, $cookie, $template->output;
