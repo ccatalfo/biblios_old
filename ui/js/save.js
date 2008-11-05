@@ -56,23 +56,30 @@ function doSaveLocal(savefileid, editorid, offset) {
 			var recid = UI.editor[editorid].id;
 			// if we don't have a record id, add this record to the db first
 			if( recid == '' ) {
-				if(bibliosdebug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
-                if( Ext.getCmp('searchgrid').getSelectionModel().getChecked().length > 0 ) {
-                    var data = Ext.getCmp('searchgrid').getSelectionModel().getChecked()[0].data;
-                    var id = Ext.getCmp('searchgrid').getSelectionModel().getChecked()[0].id;
-                }
+                // if we dont have any embedded marcxml
+                if( recordxml == '' ) {
+                    if(bibliosdebug == 1 ) { console.info( "doSaveLocal: no recid so record must be from search results.  Retrieving data from searchgrid."); }
+                    if( Ext.getCmp('searchgrid').getSelectionModel().getChecked().length > 0 ) {
+                        var data = Ext.getCmp('searchgrid').getSelectionModel().getChecked()[0].data;
+                        var id = Ext.getCmp('searchgrid').getSelectionModel().getChecked()[0].id;
+                    }
+                    else {
+                        var data = Ext.getCmp('searchgrid').getSelectionModel().getSelections()[0].data;
+                        var id = Ext.getCmp('searchgrid').getSelectionModel().getSelections()[0].id;
+                    }
+                    var searchtargetname = data.location_name;
+                    var searchtargetsid = DB.SearchTargets.select('name=?', [searchtargetname]).getOne().rowid;
+                } // no recordxml
                 else {
-                    var data = Ext.getCmp('searchgrid').getSelectionModel().getSelections()[0].data;
-                    var id = Ext.getCmp('searchgrid').getSelectionModel().getSelections()[0].id;
+                    var searchtargetname = '';
+                    var searchtargetsid = '';
                 }
-                var searchtargetname = data.location_name;
-                var searchtargetsid = DB.SearchTargets.select('name=?', [searchtargetname]).getOne().rowid;
 				progress.updateProgress(.6, 'Retrieving record from server');
                 UI.editor[editorid].savefileid = savefileid;
                 var record = new DB.Records({
                     title: UI.editor[editorid].record.getTitle() || '',
                     author: UI.editor[editorid].record.getAuthor() || '',
-                    location: data.location_name || '',
+                    location: searchtargetname || '',
                     publisher:UI.editor[editorid].record.getPublisher() || '',
                     medium: UI.editor[editorid].record.getFormat(),
                     date:UI.editor[editorid].record.getDate() || '',
