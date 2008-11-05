@@ -220,6 +220,7 @@ function getRemoteBibProfiles() {
 }
 
 function loadEmbeddedRecord() {
+    showStatusMsg('Loading remote record');
     UI.editor.loading.numToLoad = 1;
     UI.editor.loading.numLoaded = 0;
     UI.editor.progress = Ext.Msg.progress(
@@ -231,6 +232,7 @@ function loadEmbeddedRecord() {
     if( recordxml != '' ) {
         openRecord( recordxml, '', 'marcxml');
     }
+    clearStatusMsg();
 }
 
 function loadPlugins() {
