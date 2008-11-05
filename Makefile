@@ -123,6 +123,7 @@ koha-install:
 	cp cgi-bin/xsltransform.pl cgi-bin/paz.pl cgi-bin/PazPar2.pm cgi-bin/kohaws.pl cgi-bin/uploaddb.pl cgi-bin/exportdb.pl cgi-bin/downloadMarc.pl cgi-bin/download.pl cgi-bin/uploadMarc.pl $(KOHACGIDIR)/plugins/biblios/
 	cp build/lib.js $(KOHADIR)/lib/biblios/
 	cp build/styles.css $(KOHADIR)/lib/biblios/
+	cp ui/css/reset.css $(KOHADIR)/lib/biblios/
 	cp -r lib/extjs2/resources/css $(KOHADIR)/lib/biblios/lib/extjs2/resources
 	cp -r lib/extjs2/resources/images/default $(KOHADIR)/lib/biblios/lib/extjs2/resources/images
 
