@@ -795,6 +795,7 @@ function completeInit() {
             loading.fadeOut({duration:.2,remove:true});
         }
     });
+
 }
 
 function displayInitErrors() {

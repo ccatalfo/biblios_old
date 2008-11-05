@@ -219,6 +219,20 @@ function getRemoteBibProfiles() {
 	}
 }
 
+function loadEmbeddedRecord() {
+    UI.editor.loading.numToLoad = 1;
+    UI.editor.loading.numLoaded = 0;
+    UI.editor.progress = Ext.Msg.progress(
+        'Loading record',
+        'Retrieving and formatting record',
+        '0%'
+    );
+    // if we have xml in recordxml (passed in by embedding system) open in editor
+    if( recordxml != '' ) {
+        openRecord( recordxml, '', 'marcxml');
+    }
+}
+
 function loadPlugins() {
     biblios.app.numPlugins = DB.Plugins.select('enabled=1').toArray().length;
     DB.Plugins.select('enabled=1').each( function(plugin) {
@@ -227,6 +241,7 @@ function loadPlugins() {
             if( biblios.app.numPlugins == 0 ) {
                 setILSTargets();
                 displayInitErrors();
+                loadEmbeddedRecord();
             }
         });
     });
