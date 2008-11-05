@@ -1,5 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Biblios</title>
+    <link rel="stylesheet" type="text/css" href="[% kohaintranetdir %]lib/extjs2/resources/css/ext-all.css">
+	<link type="text/css" rel="stylesheet" href="[% kohaintranetdir %]styles.css" />
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -15,5 +17,63 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a> &rsaquo; Biblios</div>
 
-		<iframe src="/intranet-tmpl/prog/en/lib/biblios/index.html" width="100%" height="600" frameborder="0"></iframe>
+<div id="loading-mask" ></div>
+
+<div id="loading">
+
+	<div class="loading-ind">
+		<img src="[% kohaintranetdir %]ui/images/biblios-logo.gif"><p id='loadingtext'>Loading...</p>
+	</div>
+
+</div>
+<!-- properties which need to be modified on a global basis -->
+<script type="text/javascript">
+    var libPath = '[% kohaintranetdir %]';
+    var uiPath = '[% kohaintranetdir %]';
+    var hostPort = '[% hostPort %]';
+    var buildtime = '[% buildtime %]';
+    var version = '[% version %]';
+    var cgiDir = '[% kohacgidir %]';
+    var embeddedUrl = '[% embeddedUrl %]';
+    var userid = '[% userid %]';
+    var embeddedSESSID = '[% SESSID %]';
+    var openOnLoadRecId = '[% openOnLoadRecId %]';
+    var confPath = libPath + "conf/biblios.xml";
+    var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
+    var mainsplash = '[% mainsplash %]';
+    var editingsplash = '[% editingsplash %]';
+    var folderssplash = '[% folderssplash %]';
+    var searchingsplash = '[% searchingsplash %]';
+</script>
+    <script type="text/javascript" src="[% kohaintranetdir %]lib.js"></script>
+<script>
+    if( $.browser.safari ) {
+        $('#loadingtext').html('safari detected');
+    }
+    else {
+        Ext.get('loadingtext').update('Checking for Google Gears');
+      if (!window.google || !google.gears) {
+        Ext.get('loadingtext').update('<p>Unable to load Google Gears.</p><p>Please visit the following url to install:</p><p><a target="_blank" href="http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application">Install Google Gears</a></p>');
+        //location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
+                        "&return="+location.href;
+      }
+    }
+</script>
+<div id="branding-area"</div>
+<div id="header">[% headerhtml %]</div>
+<div id='biblios'>
+<div id='downloads'></div>
+</div>
+    <script type="text/javascript">
+		var bibliosdebug = [% bibliosdebug %];
+        Ext.onReady(function() {
+			Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs2/resources/images/default/s.gif';
+            Ext.get('loadingtext').update('Initializing Biblios');
+			biblios.app.init();
+            completeInit();
+			//Ext.fly('loading').remove();
+			// placeholder
+		}, biblios.app);
+    </script>
+    <div id="bibliosfooter">[% footerhtml %]</div>
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

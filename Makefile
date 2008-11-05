@@ -113,13 +113,12 @@ koha-install:
 	mkdir -p $(KOHADIR)/lib/biblios/ui
 	mkdir -p $(KOHADIR)/lib/biblios/lib/extjs2/resources 
 	mkdir -p $(KOHADIR)/lib/biblios/lib/extjs2/resources/images/images
-	cp build/index.html $(KOHADIR)/lib/biblios/index.html
 	cp -r ui/images ui/xsl $(KOHADIR)/lib/biblios/ui
 	cp -r tools $(KOHADIR)/lib/biblios
 	cp -r plugins $(KOHADIR)/lib/biblios
 	cp -r conf $(KOHADIR)/lib/biblios
 	cp -r templates $(KOHADIR)/lib/biblios
-	cp integration/koha/biblios.tmpl $(KOHADIR)/modules/cataloguing/biblios.tmpl
+	cp build/biblios.tmpl $(KOHADIR)/modules/cataloguing/biblios.tmpl
 	cp integration/koha/biblios.pl $(KOHACGIDIR)/cataloguing/
 	cp cgi-bin/xsltransform.pl cgi-bin/paz.pl cgi-bin/PazPar2.pm cgi-bin/kohaws.pl cgi-bin/uploaddb.pl cgi-bin/exportdb.pl cgi-bin/downloadMarc.pl cgi-bin/download.pl cgi-bin/uploadMarc.pl $(KOHACGIDIR)/plugins/biblios/
 	cp build/lib.js $(KOHADIR)/lib/biblios/
