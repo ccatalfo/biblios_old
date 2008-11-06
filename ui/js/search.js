@@ -222,6 +222,7 @@ function runSearch(query) {
         ,success: function(data) {
             setTimeout(function() {
                 Ext.getCmp('searchgrid').store.load({params:{start:0,limit:15}});
+                Ext.getCmp('facetsTreePanel').root.reload();
             },
             500);
         }
