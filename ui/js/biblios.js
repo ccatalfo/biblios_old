@@ -145,7 +145,7 @@ biblios.app = function() {
         // public methods
         search : function(searchWhere, searchQuery) {
             if( this.fireEvent('beforesearch', searchWhere, searchQuery) ) {
-                runSearch(searchWhere, searchQuery);
+                //runSearch(searchWhere, searchQuery);
             }
         },
 		displaySearchView : function() {
@@ -374,30 +374,22 @@ biblios.app = function() {
                                                                         },
                                                                         load: function(store, records, options) {
                                                                             biblios.app.displaySearchView();
+                                                                            refreshTargetHits();
                                                                             var activeclients = store.reader.jsonData.activeclients;
-                                                                                clearStatusMsg();
-                                                                                Ext.getCmp('searchgrid').getGridEl().unmask()
-                                                                                Ext.getCmp('facetsTreePanel').root.reload();
-                                                                                Ext.getCmp('searchgridSelectAllTbar').show();
-                                                                                refreshTargetHits();
-                                                                                Ext.getCmp('facetsTreePanel').show();
-                                                                                //this.selectNone();
                                                                             if( activeclients == '0' ) {
                                                                                 clearStatusMsg();
                                                                                 Ext.getCmp('searchgrid').getGridEl().unmask()
                                                                                 Ext.getCmp('facetsTreePanel').root.reload();
                                                                                 Ext.getCmp('searchgridSelectAllTbar').show();
-                                                                                refreshTargetHits();
                                                                                 Ext.getCmp('facetsTreePanel').show();
+                                                                                Ext.getCmp('facetsTreePanel').root.reload();
                                                                                 //this.selectNone();
                                                                             }
                                                                             else {
-                                                                                refreshTargetHits();
-                                                                                // reload after 2s
+                                                                                // reload after 1s
                                                                                 setTimeout( function() {
-                                                                                    store.reload();
-                                                                                }, 2000);
-                                                                                return false;
+                                                                                    Ext.getCmp('searchgrid').store.reload();
+                                                                                }, 1000);
                                                                             }
                                                                         }
                                                                     } // searchgrid listeners
@@ -1381,8 +1373,6 @@ biblios.app = function() {
                                                                         else if( checked == false ) {
                                                                             delete UI.searchLimits[node.id];
                                                                         }
-                                                                        // reload so user can't click second facet until new ones are loaded
-                                                                        Ext.getCmp('facetsTreePanel').root.reload();
                                                                         limitSearch();
                                                                     } // facets panel check change listener
 

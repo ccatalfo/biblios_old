@@ -97,7 +97,7 @@ sub search {
     if ($response->is_success) {
         return $response->content, "\n";
     } else {
-        warn $response->status_line;
+        return $response->content,"\n";
     }
 }
 

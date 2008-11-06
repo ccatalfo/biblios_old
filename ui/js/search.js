@@ -207,7 +207,6 @@ function doPazPar2Search(query) {
 	Ext.getCmp('searchgridEditBtn').disable();
 	Ext.getCmp('searchgridExportBtn').disable();
 	Ext.getCmp('searchgrid').getGridEl().mask();
-    Ext.getCmp('searchgrid').getTopToolbar().moveFirst();
 	// save this query
 	biblios.app.currQuery = query;
     if( biblios.app.fireEvent('beforesearch', getTargets(), query) ) {
@@ -216,9 +215,19 @@ function doPazPar2Search(query) {
 }
 
 function runSearch(query) {
-    $.get(pazcgiurl, {action:'search', query:query}, function(data) {
-            Ext.getCmp('searchgrid').store.reload();
-            //Ext.getCmp('facetsTreePanel').root.reload();
+    $.ajax({
+        url: pazcgiurl
+        ,dataType:'json'
+        ,data: {action:'search', query:query}
+        ,success: function(data) {
+            setTimeout(function() {
+                Ext.getCmp('searchgrid').store.load({params:{start:0,limit:15}});
+            },
+            500);
+        }
+        ,error: function(req, textStatus, errorThrown) {
+            Ext.Msg.alert('Search Error', req.status + req.responseText);
+        }
     });
 }
 function getPazRecord(recId, offset, callback, callbackParamObject) {

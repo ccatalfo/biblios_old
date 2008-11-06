@@ -96,8 +96,10 @@ if( $action eq 'search' ) {
         print to_json({sessionID => 'failed'});
         return;
     }
-    print $cgi->header(-type=>'text/xml');
-    print $searchxml;
+    my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
+    print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
+    warn 'paz.pl: search xml: ' . $searchxml;
+    print to_json({xmlresp => $searchxml});
 }
 elsif ( $action eq 'show') {
     my $start = $cgi->param('start') || 0;
