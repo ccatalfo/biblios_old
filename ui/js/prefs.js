@@ -220,19 +220,19 @@ function getRemoteBibProfiles() {
 }
 
 function loadEmbeddedRecord() {
-    showStatusMsg('Loading remote record');
-    UI.editor.loading.numToLoad = 1;
-    UI.editor.loading.numLoaded = 0;
-    UI.editor.progress = Ext.Msg.progress(
-        'Loading record',
-        'Retrieving and formatting record',
-        '0%'
-    );
     // if we have xml in recordxml (passed in by embedding system) open in editor
     if( recordxml != '' ) {
+        showStatusMsg('Loading remote record');
+        UI.editor.loading.numToLoad = 1;
+        UI.editor.loading.numLoaded = 0;
+        UI.editor.progress = Ext.Msg.progress(
+            'Loading record',
+            'Retrieving and formatting record',
+            '0%'
+        );
         openRecord( recordxml, '', 'marcxml');
+        clearStatusMsg();
     }
-    clearStatusMsg();
 }
 
 function loadPlugins() {
