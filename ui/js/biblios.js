@@ -1435,9 +1435,20 @@ biblios.app = function() {
                                                                                 baseAttrs: {
                                                                                     listeners: {
                                                                                         click: function(node, e) {
+                                                                                            Ext.getCmp('savegridEditBtn').disable();
+                                                                                            Ext.getCmp('savegridExportBtn').disable();
+                                                                                            Ext.getCmp('savegridSendBtn').disable();
                                                                                             UI.currSaveFile = node.attributes.id;
                                                                                             UI.currSaveFileName = node.text;
                                                                                             biblios.app.displaySaveFile( node.attributes.id );
+                                                                                            if(node.text == 'Trash') {
+                                                                                                Ext.getCmp('savegridEmptyTrash').show();
+                                                                                                Ext.getCmp('savegridTrashBtn').hide();
+                                                                                            }
+                                                                                            else {
+                                                                                                Ext.getCmp('savegridEmptyTrash').hide();
+                                                                                                Ext.getCmp('savegridTrashBtn').show();
+                                                                                            }
                                                                                             biblios.app.displaySaveView();
                                                                                         }
                                                                                     } // save folder listeners
@@ -1535,7 +1546,6 @@ biblios.app = function() {
                                                                                                 allowRename: 1,
                                                                                                 allowDrag: 1,
                                                                                                 allowDrop: 1,
-                                                                                                ddGroup: 'RecordDrop',
                                                                                                 icon: libPath + 'ui/images/drive-harddisk.png',
                                                                                                 date_added: '',
                                                                                                 date_modified: ''
@@ -1567,22 +1577,26 @@ biblios.app = function() {
                                                                                             ddGroup:'SaveFileNodeDrop',
                                                                                             listeners: {
                                                                                                 click: function(node, e) {
+                                                                                                    Ext.getCmp('savegridEditBtn').disable();
+                                                                                                    Ext.getCmp('savegridExportBtn').disable();
+                                                                                                    Ext.getCmp('savegridSendBtn').disable();
                                                                                                     UI.currSaveFile = node.attributes.id;
                                                                                                     UI.currSaveFileName = node.text;
                                                                                                     biblios.app.displaySaveFile( node.attributes.id );
+                                                                                                    if(node.text == 'Trash') {
+                                                                                                        Ext.getCmp('savegridEmptyTrash').show();
+                                                                                                        Ext.getCmp('savegridTrashBtn').hide();
+                                                                                                    }
+                                                                                                    else {
+                                                                                                        Ext.getCmp('savegridEmptyTrash').hide();
+                                                                                                        Ext.getCmp('savegridTrashBtn').show();
+                                                                                                    }
                                                                                                     biblios.app.displaySaveView();
                                                                                                 }
                                                                                             } // save folder listeners
                                                                                         });
                                                                                         n.appendChild(newnode);
                                                                                         n.expand();
-                                                                                        newnode.on('click', function(n) {
-                                                                                            displaySaveView();
-                                                                                            Ext.getCmp('FoldersTreePanel').getSelectionModel().select(n); // displaySaveView selects root save so select the node user clicked
-                                                                                            showStatusMsg('Displaying ' + n.attributes.id);
-                                                                                            displaySaveFile(n.attributes.savefileid, n.text); 
-                                                                                            clearStatusMsg();
-                                                                                        });
                                                                                         Ext.getCmp('FoldersTreePanel').getSelectionModel().select(newnode);
                                                                                         treeEditor.editNode = newnode;
                                                                                         treeEditor.startEdit(newnode.ui.textNode);
