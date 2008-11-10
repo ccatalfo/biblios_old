@@ -12,7 +12,7 @@ var plugins = '';
 var templates = '';
 var pazcgiurl = cgiDir +'paz.pl';
 var pazpar2url = 'http://localhost:9004';
-var kohaauthurl = 'http://'+ location.hostname+ ':' + hostPort + '/kohaauth/authorities';
+var sruauthurl = 'http://'+ location.hostname+ ':' + hostPort + '/authorities';
 
 
 

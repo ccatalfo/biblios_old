@@ -689,7 +689,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 	var ds = new Ext.data.Store({
 		proxy: new Ext.data.HttpProxy(
 			{
-				url: kohaauthurl,
+				url: sruauthurl,
 				method: 'GET',
 				disableCaching: false
 			
