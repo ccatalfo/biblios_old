@@ -749,8 +749,12 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 			}
 			// add new one if we have a value for it
 			else if( value != '' || null ) {
-				UI.editor[editorid].record.addSubfield(tagnumber, tagindex, subfieldcode, value);
-			}
+                var newid = Ext.id();
+                $(tag).find('.subfield:last').after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;"+subfieldcode+"'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text' value=\""+value+"\"></span>");
+                if(bibliosdebug) {
+                    console.debug('adding subfield to ' + $(tag) + ' with value ' + value);
+                }
+            }
 		}
 		UI.editor[editorid].cbOpen = false;
 
