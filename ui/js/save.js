@@ -322,8 +322,15 @@ function sendSelectedFromSearchGrid(locsendto) {
             if( !biblios.app.fireEvent('beforesendrecord', loc, xml, '') ) {
                 return false;
             }
-            showStatusMsg('Sending ' + title + ' to ' + locsendto);
-            Prefs.remoteILS[locsendto].instance.save(xml);
+            var editing = 0;
+            if( locsendto == loc ) {
+                editing = 1;
+            }
+            if(bibliosdebug) {
+                console.debug('sendSelectedFromSearchGrid(): locsendto: ' + locsendto + ' record loc: ' + loc + ' editing = ' + editing);
+            }
+            showStatusMsg('Sending ' + title + ' to ' + locsendto );
+            Prefs.remoteILS[locsendto].instance.save(xml, editing);
        
         }
 }
@@ -350,6 +357,7 @@ function sendSelectedFromSaveGrid(locsendto) {
     var records = Ext.getCmp('savegrid').getSelectionModel().getChecked();
     for( var i = 0; i < records.length; i++) {
             var xml = records[i].data.xml;
+            var recordloc = records[i].data.SearchTargets_id;
             var xmldoc = '';
             if( Ext.isIE ) {
                 xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
@@ -362,8 +370,18 @@ function sendSelectedFromSaveGrid(locsendto) {
             if( !biblios.app.fireEvent('beforesendrecord', locsendto, xml, '') ) {
                 return false;
             }
+            var editing = 0;
+            var searchtargetid = DB.SendTargets.select('name=?',[locsendto]).getOne().searchtarget;
+            var searchtarget = DB.SearchTargets.select('SearchTargets.rowid=?',[searchtargetid]).getOne().name;
+            var recordlocname = DB.SearchTargets.select('SearchTargets.rowid=?',[recordloc]).getOne().name;
+            if( searchtarget == recordlocname ) {
+                editing = 1;
+            }
+            if(bibliosdebug) {
+                console.debug('sendSelectedFromSaveGrid(): editing = ' + editing);
+            }
             showStatusMsg('Sending ' + records[i].data.title + ' to ' + locsendto);
-            Prefs.remoteILS[locsendto].instance.save(xmldoc);
+            Prefs.remoteILS[locsendto].instance.save(xmldoc, editing);
     }
 }
 
