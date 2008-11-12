@@ -78,7 +78,7 @@
 	<templates>
 		<template>
 			<name>New Book </name>
-			<file>templates/book-template.xml</file>
+			<file>templates/bks.xml</file>
             <icon>ui/images/material_types/books.gif</icon>
 		</template>
 		<template>
@@ -88,17 +88,17 @@
 		</template>
 		<template>
 			<name>New Musical Score</name>
-			<file>templates/music.xml</file>
+			<file>templates/score.xml</file>
             <icon>ui/images/material_types/musical_scores.gif</icon>
 		</template>
 		<template>
 			<name>New Computer File </name>
-			<file>templates/electronic.xml</file>
+			<file>templates/comp.xml</file>
             <icon>ui/images/material_types/computer_files.gif</icon>
 		</template>
 		<template>
 			<name>New Continuing Resource</name>
-			<file>templates/continuing.xml</file>
+			<file>templates/cnr.xml</file>
             <icon>ui/images/material_types/continuing_resources.gif</icon>
 		</template>
 		<template>
@@ -108,12 +108,12 @@
 		</template>
 		<template>
 			<name>New Visual Material </name>
-			<file>templates/visual.xml</file>
+			<file>templates/vis.xml</file>
             <icon>ui/images/material_types/visual_materials.gif</icon>
 		</template>
 		<template>
 			<name>New Mixed Material </name>
-			<file>templates/book-template.xml</file>
+			<file>templates/mix.xml</file>
             <icon>ui/images/material_types/mixed_materials.gif</icon>
 		</template>
 	</templates>
