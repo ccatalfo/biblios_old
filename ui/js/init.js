@@ -58,6 +58,7 @@ var SendTarget = Ext.data.Record.create([
 	{name: 'password', type: 'string'},
 	{name: 'plugin', type: 'string'},
 	{name: 'enabled', type: 'bool'}
+    ,{name: 'searchtarget', type:'string'}
 ]);
 var Macro = Ext.data.Record.create([
 	{name: 'rowid'},

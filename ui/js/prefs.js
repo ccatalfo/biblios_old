@@ -126,6 +126,7 @@ function setupConfig( configDoc ) {
                 var allowDelete= $(this).children('allowDelete').text();
                 var allowModify= $(this).children('allowModify').text();
                 var embedded = $(this).children('embedded').text();
+                var searchtarget = $(this).children('searchtarget').text();
 				// check db for sendtarget based on url field
 				if( t = DB.SendTargets.select('SendTargets.url=?', [url]).getOne() ) {
 					t.name = name;
@@ -138,6 +139,7 @@ function setupConfig( configDoc ) {
                     t.allowDelete = allowDelete || 1;
                     t.allowModify = allowModify || 1;
                     t.embedded = embedded || 0;
+                    t.searchtarget = searchtarget || '';
 					t.save();
 				}
 				else {
@@ -151,7 +153,8 @@ function setupConfig( configDoc ) {
 						enabled: enabled,
                         allowDelete: allowDelete || 1,
                         allowModify: allowModify || 1,
-                        embedded: embedded || 0
+                        embedded: embedded || 0,
+                        searchtarget: searchtarget || ''
 					}).save();
 				}
 		  });
@@ -261,6 +264,15 @@ function setILSTargets() {
 function getTargets() {
 	var targets = DB.SearchTargets.select().toArray();
 	return targets;
+}
+
+function getTargetsForCombo() {
+    var list = new Array();
+	var targets = DB.SearchTargets.select().toArray();
+    for( var i = 0; i < targets.length; i++) {
+        list.push([targets[i].rowid,targets[i].name]);
+    }
+    return list;
 }
 
 function getSaveFileNames() {

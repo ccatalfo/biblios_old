@@ -135,8 +135,8 @@ biblios.app = function() {
 			numToGet: 0
 		},
 		db : {
-			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled from SendTargets',
-			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled from SearchTargets',
+			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled, searchtarget from SendTargets',
+			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled, pazpar2settings from SearchTargets',
 			selectSqlMacros: 'select Macros.rowid as rowid, name, code, hotkey, file, enabled from Macros',
             handle: db,
             selectSqlPlugins: 'select Plugins.rowid as rowid, name, file, type, initcall, enabled from Plugins'
@@ -510,10 +510,10 @@ biblios.app = function() {
                                                                 editRecord: function(rec) {
                                                                     var xml = rec.data.fullrecord;	
                                                                     var xmlformat = 'marcxml';
-                                                                    var loc = rec.data.location;
+                                                                    var loc = rec.data.location_name;
                                                                     var id = rec.id;	
                                                                     biblios.app.fireEvent('remoterecordretrieve', rec.data.fullrecord);
-                                                                    openRecord( xml, '', xmlformat, '' ); 
+                                                                    openRecord( xml, '', xmlformat, '',loc ); 
                                                                 },
                                                                 listeners: {
                                                                     render: function(grid) {
@@ -2260,7 +2260,7 @@ biblios.app = function() {
                                                                                 }
                                                                                 if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
                                                                                     try {
-                                                                                        var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, plugin= ?, enabled = ? where rowid = ?', [record.data.name, record.data.location, record.data.user, record.data.password, record.data.plugin, record.data.enabled, record.data.rowid]);
+                                                                                     var rs = db.execute('update SendTargets set name = ?, location = ?, user= ?, password = ?, plugin= ?, enabled = ?, searchtarget = ? where rowid = ?', [record.data.name, record.data.location, record.data.user, record.data.password, record.data.plugin, record.data.enabled, record.data.searchtarget, record.data.rowid ]);
                                                                                         rs.close();
                                                                                     }
                                                                                     catch(ex) {
@@ -2297,7 +2297,7 @@ biblios.app = function() {
                                                                                 catch(ex) {
                                                                                     Ext.MessageBox.alert('Error', ex.message);
                                                                                 }
-                                                                                e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled from SendTargets'});
+                                                                                e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled, searchtarget from SendTargets'});
                                                                                 setILSTargets();
                                                                             } // afteredit handler
                                                                         },
@@ -2347,6 +2347,27 @@ biblios.app = function() {
                                                                                 dataIndex: 'plugin',
                                                                                 editor: new Ext.form.TextField(),
                                                                                 hidden: true
+                                                                            }
+                                                                            ,{
+                                                                                header: 'SearchTarget',
+                                                                                dataIndex: 'searchtarget',
+                                                                                width: 100,
+                                                                                renderer: function(value) {
+                                                                                    return DB.SearchTargets.select('SearchTargets.rowid=?',[value]).getOne().name;
+                                                                                },
+                                                                                editor: new Ext.form.ComboBox({
+                                                                                    width:100,
+                                                                                    store: new Ext.data.SimpleStore({
+                                                                                        fields: ['rowid', 'name'],
+                                                                                        data: getTargetsForCombo()
+                                                                                    }),
+                                                                                    mode:'local',
+                                                                                    displayField: 'name',
+                                                                                    valueField: 'rowid',
+                                                                                    forceSelection:true,
+                                                                                    typeAhead:true,
+                                                                                    triggerAction:all
+                                                                                })
                                                                             }
                                                                         ]), // send target column model
                                                                         tbar:  new Ext.Toolbar({

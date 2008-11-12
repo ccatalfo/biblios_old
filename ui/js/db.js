@@ -325,7 +325,26 @@ GearsORMShift.rules = [
             DB.Savefiles.remove('name=?',['Uploads']); 
             return true;
         }
-    } // version 13
+    }, // version 13
+    {
+        version: 14,
+        comment: 'Add search target fk to send targets table to associate a send target w/ a search target',
+        up: function() {
+			try {
+				db.execute('alter table SendTargets add column searchtarget integer');
+			}
+			catch(ex) {
+				if (debug) {
+					console.info("Unable to add pazpar2settings col to SearchTargets table");
+				}
+			}
+			return true;
+        },
+        down: function() {
+            // no remove col
+            return true;
+        }
+    } // rule 14
 ];
 
 function createTestTargets() {
@@ -469,7 +488,8 @@ function init_gears() {
 					enabled: new GearsORM.Fields.Integer({defaultValue: 0}),
                     allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
                     allowModify: new GearsORM.Fields.Integer({defaultValue:1}),
-                    embedded: new GearsORM.Fields.Integer({defaultValue:0})
+                    embedded: new GearsORM.Fields.Integer({defaultValue:0}),
+                    searchtarget: new GearsORM.Fields.Integer()
 				}
 			});
 			DB.Macros = new GearsORM.Model({

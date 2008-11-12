@@ -808,3 +808,4 @@ function displayInitErrors() {
         Ext.MessageBox.alert('Biblios loading errors', errors);
     }
 }
+

@@ -12,7 +12,7 @@
    None.
 
 */
-function openRecord(xml, recid, syntax, savefileid) {
+function openRecord(xml, recid, syntax, savefileid, searchtarget) {
 	// we need to display record view first since editors are lazily rendered
 	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
@@ -35,7 +35,7 @@ function openRecord(xml, recid, syntax, savefileid) {
             savefileid: savefileid,
             record : '',
             comboboxes : new Array(),
-            loc: ''
+            loc:searchtarget || ''
         };
         Ext.getCmp('editorTabPanel').add({ 
             title: '', 
