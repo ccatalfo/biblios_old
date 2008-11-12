@@ -723,7 +723,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 		applyTo: $(subfield_text).get(0).id
 	});
 	cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
-		combo.query = combo.combo.queryIndex + "=" + combo.query;
+		combo.query = combo.combo.queryIndex + "=" + combo.query + '*';
 	});
 	cb.on('select', function(combo, record, index) {
 		var tagnumber = $(combo.el.dom).parents('.tag').children('.tagnumber').val();
