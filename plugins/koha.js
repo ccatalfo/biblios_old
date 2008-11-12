@@ -148,7 +148,7 @@ koha.prototype = {
 			});
 		},
 
-		save: function(xmldoc, adding) {
+		save: function(xmldoc, editing) {
 			// if we have a bib number, replace. Otherwise, new bib
             if( this.recidXpath == '' || this.recidXpath === undefined) {
                 throw {
@@ -157,7 +157,7 @@ koha.prototype = {
             }
 			var recid = $(this.recidXpath, xmldoc).text();
 			var savepath = '';
-			if(adding == 1) {
+			if(editing == 1) {
 				savepath = 'bib/'+recid;
 			}
 			else {

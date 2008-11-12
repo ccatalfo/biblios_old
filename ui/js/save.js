@@ -155,15 +155,15 @@ function doSaveRemote(loc, xmldoc, editorid, editorloc) {
 	xmldoc = UI.editor[editorid].record.XML();
 
     // see if we're doing an add or an edit
-    var adding = 0;
+    var editing = 0;
     // see if this send target has an associated search target
     var searchtargetid = DB.SendTargets.select('name=?',[loc]).getOne().searchtarget;
     var searchtarget = DB.SearchTargets.select('SearchTargets.rowid=?',[searchtargetid]).getOne().name;
     if( searchtarget == editorloc) {
-        adding = 1;
+        editing = 1;
     }
     if(bibliosdebug) {
-        console.debug('doSaveRemote: adding = ' + adding);
+        console.debug('doSaveRemote: editing = ' + editing);
     }
 
 	UI.editor.progress = Ext.MessageBox.progress('Saving record to remote server', '');
@@ -192,7 +192,7 @@ function doSaveRemote(loc, xmldoc, editorid, editorloc) {
         return false;
     }
     try {
-        Prefs.remoteILS[loc].instance.save(xmldoc, adding);
+        Prefs.remoteILS[loc].instance.save(xmldoc, editing);
     }
     catch(ex) {
         Ext.MessageBox.alert('Error', ex.msg);
