@@ -146,14 +146,26 @@ function doSaveLocal(savefileid, editorid, offset) {
 		return true;
 	}
 
-function doSaveRemote(loc, xmldoc, editorid) {
+function doSaveRemote(loc, xmldoc, editorid, editorloc) {
 	/*Ext.get('ffeditor').mask();
 	Ext.get('vareditor').mask();*/
 	Ext.getCmp('editorTabPanel').getActiveTab().sending = true;
 // make sure we have up to date record
 	UI.editor[editorid].record.update();
 	xmldoc = UI.editor[editorid].record.XML();
-	UI.editor[editorid].location = loc;
+
+    // see if we're doing an add or an edit
+    var adding = 0;
+    // see if this send target has an associated search target
+    var searchtargetid = DB.SendTargets.select('name=?',[loc]).getOne().searchtarget;
+    var searchtarget = DB.SearchTargets.select('SearchTargets.rowid=?',[searchtargetid]).getOne().name;
+    if( searchtarget == editorloc) {
+        adding = 1;
+    }
+    if(bibliosdebug) {
+        console.debug('doSaveRemote: adding = ' + adding);
+    }
+
 	UI.editor.progress = Ext.MessageBox.progress('Saving record to remote server', '');
 	if(bibliosdebug) { console.info('Saving open record to ' + loc); }
 	// set UI.editor.location to point to this record so we get special entries etc.
@@ -180,7 +192,7 @@ function doSaveRemote(loc, xmldoc, editorid) {
         return false;
     }
     try {
-        Prefs.remoteILS[loc].instance.save(xmldoc);
+        Prefs.remoteILS[loc].instance.save(xmldoc, adding);
     }
     catch(ex) {
         Ext.MessageBox.alert('Error', ex.msg);
@@ -360,7 +372,7 @@ function sendFromEditor(locsendto, editorid) {
         if( !biblios.app.fireEvent('beforesendrecord', '', UI.editor[editorid].record.XML(), locsendto)){
             return false;
         }
-        doSaveRemote(locsendto, UI.editor[editorid].record.XML(), editorid);
+        doSaveRemote(locsendto, UI.editor[editorid].record.XML(), editorid, UI.editor[editorid].loc);
     }
 }
 
