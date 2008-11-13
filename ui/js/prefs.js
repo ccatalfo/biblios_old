@@ -19,11 +19,45 @@ function loadConfig(confPath, callback) {
     });
 }
 
+function importMacroFromFile(name, code, enabled) {
+    // see if already is loaded into gears db
+    if( m = DB.Macros.select('Macros.name=?',[name]).getOne() ) {
+        // update macro code
+        m.code = code;
+        m.enabled = enabled;
+        m.save();
+    }
+    else {
+        var m = new DB.Macros({
+            name : name,
+            code : code,
+            enabled : enabled
+        }).save();
+    }
+}
+
 function setupConfig( configDoc ) {
 		  marcFlavor = $("//marcflavor", configDoc).text();
 		  encoding = $("//encoding", configDoc).text();
 		  pazpar2url = $("//pazpar2url", configDoc).text();
 		  sruauthurl = $("//sruauthurl", configDoc).text();
+          $("macros//macro", configDoc).each( function() {
+            var name = $(this).attr('name');
+            var file = $(this).attr('file');
+            var enabled = $(this).attr('enabled');
+            $.ajax({
+                url: uiPath + file,
+                macroname: name,
+                macroenabled: enabled,
+                success: function(data, textStatus) {
+                    importMacroFromFile(this.macroname, data, this.macroenabled);
+                },
+                error: function(req, textStatus, errorThrown) {
+                    Ext.Msg.alert('Error', 'Error loading macro: ' + this.macroname + ' ' + errorThrown);
+                }
+            });
+              clearStatusMsg();
+          });
 		  $("searching//server", configDoc).each( function() { 
 			var hostname = $(this).children('hostname').text();
             var id = $(this).children('id').text();

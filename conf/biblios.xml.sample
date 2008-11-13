@@ -191,4 +191,13 @@
             </toolbar>
         </icons>
     </ui>
+
+    <macros>
+    <!-- include macro elements like these to load macros automatically 
+        <macro name="biblios040" file="macros/biblios040.js" enabled="1"/>
+        <macro name="IncIndx504" file="macros/IncIndx504.js" enabled="1"/>
+        <macro name="IncIndxBib504" file="macros/IncIndxBib504.js" enabled="1"/>
+        <macro name="www538.js" file="macros/www538.js" enabled="1"/>
+    -->
+    </macros>
 </conf>

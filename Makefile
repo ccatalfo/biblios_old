@@ -53,7 +53,7 @@ install:
 	mkdir -p $(HTMLDIR)/lib/extjs2/resources/images/default
 	cp -r lib/extjs2/resources/css $(HTMLDIR)/lib/extjs2/resources/css
 	cp -r lib/extjs2/resources/images/default $(HTMLDIR)/lib/extjs2/resources/images
-	cp -r ui tools templates conf plugins $(HTMLDIR)
+	cp -r ui tools macros templates conf plugins $(HTMLDIR)
 	cp cgi-bin/* $(CGIDIR)
 
 install-debug: 
