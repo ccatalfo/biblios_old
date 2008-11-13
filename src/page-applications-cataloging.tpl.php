@@ -59,7 +59,7 @@ _overflow-y: visible;
 
  <div id="wrapper"<?php if ($user->uid) { echo " class=\"loggedin\""; } ?>>
 
-   <div id="header" class="clearfix">
+   <div id="bibliosheader" class="clearfix">
       <?php print $header ?>
 	</div>
     <br clear="all"/>
