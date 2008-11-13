@@ -12,7 +12,8 @@ var plugins = '';
 var templates = '';
 var pazcgiurl = cgiDir +'paz.pl';
 var pazpar2url = 'http://localhost:9004';
-var sruauthurl = 'http://'+ location.hostname+ ':' + hostPort + '/authorities';
+var sruauthcgiurl = cgiDir + 'authoritiessruproxy.pl';
+var sruauthurl = '';
 
 
 

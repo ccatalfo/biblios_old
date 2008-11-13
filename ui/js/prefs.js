@@ -23,6 +23,7 @@ function setupConfig( configDoc ) {
 		  marcFlavor = $("//marcflavor", configDoc).text();
 		  encoding = $("//encoding", configDoc).text();
 		  pazpar2url = $("//pazpar2url", configDoc).text();
+		  sruauthurl = $("//sruauthurl", configDoc).text();
 		  $("searching//server", configDoc).each( function() { 
 			var hostname = $(this).children('hostname').text();
             var id = $(this).children('id').text();

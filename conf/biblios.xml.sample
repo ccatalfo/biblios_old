@@ -4,6 +4,7 @@
 		<marcflavor>marc21</marcflavor>
 	</record-defs>
     <pazpar2url>http://localhost:9004</pazpar2url>
+    <sruauthurl>http://sru.beta.biblios.net/authority</sruauthurl>
 	
     <editors>
 	

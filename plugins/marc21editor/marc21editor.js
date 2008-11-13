@@ -689,12 +689,13 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 	var ds = new Ext.data.Store({
 		proxy: new Ext.data.HttpProxy(
 			{
-				url: sruauthurl,
+				url: sruauthcgiurl,
 				method: 'GET',
 				disableCaching: false
 			
 			}),
 		baseParams: {
+                                sruurl: sruauthurl,
 								version: '1.1',
 								operation: 'searchRetrieve',
 								recordSchema: recordSchema,
