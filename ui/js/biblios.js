@@ -2088,7 +2088,6 @@ biblios.app = function() {
                                                                                 }).show();
 
                                                                             } // search targets grid cell dbl click handler
->>>>>>> Add partly functional means of adding a search type via the searchtargets grid pazpar2settings property grid.  At the moment, extjs is mangling the cclmap string (which should be the "name" of the property) so this is not yet functional.:ui/js/biblios.js
                                                                         }, // search target grid listeners
                                                                         sm: (sm =new Ext.grid.SmartCheckboxSelectionModel({
                                                                             dataIndex:'enabled',
