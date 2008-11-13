@@ -166,6 +166,7 @@ function getPazPar2Settings() {
 				settings.push(s);
 			}
 	}
+    return settings;
 }
 
 function setPazPar2Targets(callback) {
