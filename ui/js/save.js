@@ -161,6 +161,8 @@ function doSaveRemote(loc, xmldoc, editorid, editorloc) {
     var searchtarget = DB.SearchTargets.select('SearchTargets.rowid=?',[searchtargetid]).getOne().name;
     if( searchtarget == editorloc) {
         editing = 1;
+        // check record against bibprofile returned by this send target if we're editing a record
+        validateRemote(editorid,loc);
     }
     if(bibliosdebug) {
         console.debug('doSaveRemote: editing = ' + editing);
@@ -179,6 +181,7 @@ function doSaveRemote(loc, xmldoc, editorid, editorloc) {
             if( !biblios.app.fireEvent('sendrecordcomplete', loc, xmldoc, status)) {
                 return false;
             }
+            UI.editor[editorid].loc = loc;
 			var xml = xslTransform.serialize(xmldoc);
 			UI.editor.progress.updateProgress(.7, 'Retrieved remote record');
 			openRecord(xml, editorid, 'marcxml');
@@ -386,12 +389,7 @@ function sendSelectedFromSaveGrid(locsendto) {
 }
 
 function sendFromEditor(locsendto, editorid) {
-    if( validateRemote(editorid, locsendto) ) {
-        if( !biblios.app.fireEvent('beforesendrecord', '', UI.editor[editorid].record.XML(), locsendto)){
-            return false;
-        }
-        doSaveRemote(locsendto, UI.editor[editorid].record.XML(), editorid, UI.editor[editorid].loc);
-    }
+    doSaveRemote(locsendto, UI.editor[editorid].record.XML(), editorid, UI.editor[editorid].loc);
 }
 
 function getSendFileMenuItems(recordSource) {
