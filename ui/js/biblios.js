@@ -1766,7 +1766,7 @@ biblios.app = function() {
                                                                     alwaysSelectOnCheck: true,
                                                                     email: true,
                                                                     dataIndex: 'enabled',
-                                                                    header: '',
+                                                                    header: ''
                                                                 })),
                                                                 cm: new Ext.grid.ColumnModel([
                                                                     sm,
