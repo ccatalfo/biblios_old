@@ -94,7 +94,7 @@ if( $action eq 'search' ) {
         my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
         print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
         print to_json({sessionID => 'failed'});
-        return;
+        exit 1;
     }
     my $cookie = new CGI::Cookie(-name=>'bibliospazsession', -value=>$session->id);
     print $cgi->header(-type=>'application/json', -status=>$paz->{'httpstatus'}, -cookie=>$cookie);
