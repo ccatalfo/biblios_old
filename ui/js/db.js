@@ -344,7 +344,28 @@ GearsORMShift.rules = [
             // no remove col
             return true;
         }
-    } // rule 14
+    }, // rule 14
+	{
+	    version: 15,
+	    comment: 'Add sysdefined columns to search and send targets tables to identify system defined targets',
+	    up: function() {
+		try {
+		    db.execute('alter table Searchtargets add column sysdefined integer');
+		    db.execute('alter table Sendtargets add column sysdefined integer');
+		    return true;
+		}
+		catch(ex) {
+		    if(bibliosdebug) {
+			console.debug('version 15 up failed ' + ex);
+		    }
+		}
+	    },
+	    down: function() {
+		// no remove col
+		return true;
+	    }
+	} // version 15: add sysdefined cols
+		
 ];
 
 function createTestTargets() {
@@ -422,7 +443,8 @@ function init_gears() {
 					pluginlocation: new GearsORM.Fields.String(),
                     allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
                     allowModify: new GearsORM.Fields.Integer({defaultValue:1}),
-					pazpar2settings: new GearsORM.Fields.String()
+					pazpar2settings: new GearsORM.Fields.String(),
+					sysdefined: new GearsORM.Fields.Integer({defaultValue:0})
 				}
 			});
 			DB.Prefs = new GearsORM.Model({
@@ -488,8 +510,11 @@ function init_gears() {
 					enabled: new GearsORM.Fields.Integer({defaultValue: 0}),
                     allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
                     allowModify: new GearsORM.Fields.Integer({defaultValue:1}),
-                    embedded: new GearsORM.Fields.Integer({defaultValue:0}),
-                    searchtarget: new GearsORM.Fields.Integer()
+					embedded: new GearsORM.Fields.Integer({defaultValue:0}),
+					searchtarget: new GearsORM.Fields.Integer(),
+					sysdefined: new GearsORM.Fields.Integer({defaultValue:0})
+					
+				    
 				}
 			});
 			DB.Macros = new GearsORM.Model({

@@ -58,9 +58,10 @@ function setupConfig( configDoc ) {
             });
               clearStatusMsg();
           });
+	  DB.SearchTargets.remove('SearchTargets.sysdefined=1');
 		  $("searching//server", configDoc).each( function() { 
 			var hostname = $(this).children('hostname').text();
-            var id = $(this).children('id').text();
+			var sysdefined = $(this).children('sysdefined').text();
 			var port = $(this).children('port').text();
 			var dbname = $(this).children('dbname').text();
 			var userid = $(this).children('userid').text();
@@ -71,23 +72,6 @@ function setupConfig( configDoc ) {
 			var allowDelete= $(this).children('allowDelete').text();
 			var allowModify= $(this).children('allowModify').text();
 			var pazpar2settings= $(this).children('pazpar2settings').text();
-			// check db if already exists based on hostname, port and db fields
-			if( t = DB.SearchTargets.select('SearchTargets.hostname = ? and SearchTargets.port = ? and SearchTargets.dbname = ?', [hostname, port, dbname]).getOne() ) {
-				t.hostname = hostname;
-				t.port = port;
-				t.dbname = dbname;
-				t.userid = userid;
-				t.password = password;
-				t.name = name;
-				t.enabled = enabled;
-				t.description = description;
-				t.syntax = 'marcxml';
-                t.allowDelete = allowDelete;
-                t.allowModify = allowModify;
-				t.pazpar2settings = pazpar2settings;
-				t.save();
-			}
-			else {
 				var t = new DB.SearchTargets({
 					hostname: hostname,
 					port: port,
@@ -100,9 +84,9 @@ function setupConfig( configDoc ) {
                     allowDelete: allowDelete,
                     allowModify: allowModify,
 					pazpar2settings: pazpar2settings,
-					syntax: 'marcxml'
+					syntax: 'marcxml',
+					sysdefined: sysdefined
 				}).save();
-			}
 		  } );
           $("plugins//plugin", configDoc).each( function() {
             var name = $(this).children('name').text();
@@ -149,9 +133,10 @@ function setupConfig( configDoc ) {
                 }).save();
             }
           });
+	  DB.SendTargets.remove('SendTargets.sysdefined=1');
 		  z3950serversSave = $("saving//server", configDoc).each( function() {
 				var name = $(this).children('name').text();
-                var id = $(this).children('id').text();
+				var sysdefined = $(this).children('sysdefined').text();
 				var loc= $(this).children('location').text();
 				var url = $(this).children('url').text();
 				var user = $(this).children('user').text();
@@ -162,24 +147,9 @@ function setupConfig( configDoc ) {
                 var allowModify= $(this).children('allowModify').text();
                 var embedded = $(this).children('embedded').text();
                 var searchtarget = $(this).children('searchtarget').text();
-				// check db for sendtarget based on url field
-				if( t = DB.SendTargets.select('SendTargets.url=?', [url]).getOne() ) {
-					t.name = name;
-					t.location = loc;
-					t.url = url;
-					t.user = user;
-					t.password = password;
-					t.plugin= plugin;
-					t.enabled = enabled;
-                    t.allowDelete = allowDelete || 1;
-                    t.allowModify = allowModify || 1;
-                    t.embedded = embedded || 0;
-                    t.searchtarget = searchtarget || '';
-					t.save();
-				}
-				else {
 					t = new DB.SendTargets({
 						name: name,
+						sysdefined: sysdefined,
 						location: loc,
 						url: url,
 						user: user,
@@ -190,10 +160,9 @@ function setupConfig( configDoc ) {
                         allowModify: allowModify || 1,
                         embedded: embedded || 0,
                         searchtarget: searchtarget || ''
-					}).save();
-				}
-		  });
-		  $("//plugins/plugin/file", configDoc).each( function() { plugins += ' ' + $(this).text(); } );
+			}).save();
+		      });
+	    		  $("//plugins/plugin/file", configDoc).each( function() { plugins += ' ' + $(this).text(); } );
 		  $("//templates/template/file", configDoc).each( function() { templates += ' ' + $(this).text(); } );
         
         $('//icons/resources_panel', configDoc).children().each( function(i,j) {
