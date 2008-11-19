@@ -758,8 +758,19 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
             }
 		}
 		UI.editor[editorid].cbOpen = false;
-
-	});
+		var authrecxml = xslTransform.transform(marcxsl, record.node, {}).doc;
+		var authrecxmlserialized = xslTransform.serialize( authrecxml );
+		Ext.QuickTips.register({
+			target: cb.initialConfig.applyTo,
+			    title: 'Authority Record',
+			    text: authrecxmlserialized,
+			    width: 300
+			    ,showDelay: 0
+			    ,dismissDelay: 12000
+	
+			    });
+	
+	    });
 	cb.on('specialkey', function(cb, e) {
 		e.stopEvent();
 	});
@@ -809,25 +820,25 @@ function setupMarc21AuthorityLiveSearches() {
 		record: 'record',
 		deleteSubfields: false, // don't remote following subfields
 		id: 'controlfield[tag=001]'
-		},
-		[
-			{name: 'confname', id: 'a', mapping: 'datafield[tag=111] > subfield[code=a]'}
-	]);
+	    },
+	    [
+	{name: 'confname', id: 'a', mapping: 'datafield[tag=111] > subfield[code=a]'}
+	     ]);
 	var uniformtitleXmlReader = new Ext.data.XmlReader({
 		record: 'record',
 		deleteSubfields: false, // don't remote following subfields
 		id: 'controlfield[tag=001]'
-		},
-		[
-			{name: 'title', id: 'a', mapping: 'datafield[tag=130] > subfield[code=a]'}
-	]);
+	    },
+	    [
+	{name: 'title', id: 'a', mapping: 'datafield[tag=130] > subfield[code=a]'}
+	     ]);
 	var pnameXmlReader = new Ext.data.XmlReader({
-			record: 'record',
-			deleteSubfields: true,
-			id: 'controlfield[tag=001]'
-			},
-			[
-				// field mapping
+		record: 'record',
+		deleteSubfields: true,
+		id: 'controlfield[tag=001]'
+	    },
+	    [
+	     // field mapping
 				{name: 'pname', id: 'a', mapping: 'datafield[tag=100] > subfield[code=a]'},
 				{name: 'numeration', id: 'b', mapping: 'datafield[tag=100] > subfield[code=b]'},
 				{name: 'titles', id: 'c', mapping: 'datafield[tag=100] > subfield[code=c]'},
