@@ -2322,7 +2322,7 @@ MarcEditor.getToolbar = function(editorid) {
                                 }
                             }
                         }
-                    },
+                    }
                 ] //editor tools menu items
             }
         },

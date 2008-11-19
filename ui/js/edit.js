@@ -63,15 +63,21 @@ function openRecord(xml, recid, syntax, savefileid, searchtarget) {
         }
     }
     var xmldoc;
-    if( Ext.isIE ) {
-        xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
-        xmldoc.async = false; 
-        xmldoc.loadXML(xml);
+    try {
+	if( Ext.isIE ) {
+	    xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
+	    xmldoc.async = false; 
+	    xmldoc.loadXML(xml);
+	}
+	else {
+	    xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
+	}
     }
-    else {
-        xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
+    catch(ex) {
+	UI.editor.progress.hide();
+	Ext.Msg.alert('Error', 'Error loading editor: ' + ex);
     }
-	UI.editor[editorid].record.loadXml( xmldoc, handle_html );
+    UI.editor[editorid].record.loadXml( xmldoc, handle_html );
 }
 
 function handle_html(html, editorid) {

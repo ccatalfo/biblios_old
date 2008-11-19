@@ -284,43 +284,48 @@ function getNewRecordMenu() {
             icon: uiPath + templates[i].icon,
 			listeners: {
 				click:	function(node, e) {
-                    UI.editor.progress = Ext.Msg.progress(
-                        'Loading Record',
+			    UI.editor.progress = Ext.Msg.progress(
+								  'Loading Record',
                         '',
                         '0%'
                     );
                     UI.editor.loading.numToLoad = 1;
                     UI.editor.loading.numLoaded = 0;
-					Ext.Ajax.request({
-								url: node.attributes.file,
-								method: 'GET',
-								callback: function(options, isSuccess, resp) { 
+		    $.ajax({
+			    url: node.attributes.file
+				,method: 'GET'
+				,dataType:'xml'
+				,success: function(data, textStatus) {
                                     UI.editor.progress.updateProgress(.3, 'Loading template');
-									var xml = resp.responseText; 
-									srchResults = (new DOMParser()).parseFromString(xml, "text/xml");
-									var record = srchResults.getElementsByTagName('record')[0];
-									var xml = (new XMLSerializer().serializeToString(record));
-									var rdb = new DB.Records({
-										title: '',
-										author: '',
-										location: '',
-										publisher: '',
-										medium: '',
-										date: '',
-										status: 'new',
-										date_added: new Date().toString(),
-										date_modified: new Date().toString(),
-										SearchTargets_id: null,
-										Savefiles_id: 3, // Drafts
-										xmlformat: 'marcxml',
-										marcflavour: 'marc21',
-										template: null,
-										marcformat: null
-									}).save();
-									openRecord(xml, rdb.rowid, 'marcxml');
-							} // ajax callback
-					}); // ajax request
-				} // do new record handler
+				    var xml = $('record', data).get(0);
+				    var xmlstring = xslTransform.serialize(xml);
+				    
+				    var rdb = new DB.Records({
+					    title: '',
+					    author: '',
+					    location: '',
+					    publisher: '',
+					    medium: '',
+					    date: '',
+					    status: 'new',
+					    date_added: new Date().toString(),
+					    date_modified: new Date().toString(),
+					    SearchTargets_id: null,
+					    Savefiles_id: 3, // Drafts
+					    xml: xmlstring,
+					    xmlformat: 'marcxml',
+					    marcflavour: 'marc21',
+					    template: null,
+					    marcformat: null
+					}).save();
+				    openRecord(xmlstring, rdb.rowid, 'marcxml');
+			    } // success callback
+			    ,error: function(req, textStatus, errorThrown) {
+				UI.editor.progress.hide();
+				Ext.Msg.alert('Editor error', 'The editor could not be loaded: ' + errorThrown);
+			    }
+			}); // ajax request
+			} // do new record handler
 			} // listeners
 		}; // new record menu item
 		list.push(o);
