@@ -2362,7 +2362,6 @@ biblios.app = function() {
                                                                                     return DB.SearchTargets.select('SearchTargets.rowid=?',[value]).getOne().name;
                                                                                 },
                                                                                 editor: new Ext.form.ComboBox({
-                                                                                    width:100,
                                                                                     store: new Ext.data.SimpleStore({
                                                                                         fields: ['rowid', 'name'],
                                                                                         data: getTargetsForCombo()
