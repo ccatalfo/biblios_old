@@ -97,6 +97,7 @@ _overflow-y: visible;
     var editingsplash = '[% editingsplash %]';
     var folderssplash = '[% folderssplash %]';
     var searchingsplash = '[% searchingsplash %]';
+    var recordxml = '[% recordxml %]';
     var cgiDir = '[% cgiPath %]';
     var confPath = libPath + "conf/biblios.xml";
 </script>
