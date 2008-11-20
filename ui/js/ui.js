@@ -653,6 +653,7 @@ function resetDB() {
         DB.Savefiles.select('name!=? and name!=? and name!=? and name!=?',['Trash','Drafts','Completed','Uploads']).each( function(s) { s.remove(); });
         DB.Records.remove();
         DB.Macros.remove();
+	DB.Plugins.remove();
         Ext.getCmp('TargetsTreePanel').root.reload();
         Ext.getCmp('FoldersTreePanel').root.reload();
     }
