@@ -1963,6 +1963,7 @@ biblios.app = function() {
                                                                                         }
                                                                                     }
                                                                                     Ext.getCmp('TargetsTreePanel').root.reload();
+										    setPazPar2Targets();
                                                                                     
                                                                                 } // search targets store update
                                                                             } // search targets grid store listeners
@@ -1988,7 +1989,7 @@ biblios.app = function() {
                                                                                 catch(ex) {
                                                                                     Ext.MessageBox.alert('Error', ex.message);
                                                                                 }
-                                                                                setPazPar2Targets();
+                                                                                setPazPar2Targets(Ext.emptyFn);
                                                                                 Ext.getCmp('searchtargetsgrid').store.reload();
                                                                                 Ext.getCmp('TargetsTreePanel').getRootNode().reload();
                                                                                 
@@ -2079,7 +2080,7 @@ biblios.app = function() {
                                                                                                 btn.record.data.pazpar2settings = settingsstring;
                                                                                                 btn.record.commit();
                                                                                                 Ext.getCmp('searchtargetsgrid').store.reload();
-                                                                                                setPazPar2Targets();
+                                                                                                setPazPar2Targets(Ext.emptyFn);
                                                                                                 Ext.getCmp('pazpar2settingsproperties').close();
                                                                                             }
                                                                                         },
