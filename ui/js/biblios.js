@@ -2398,7 +2398,8 @@ biblios.app = function() {
                                                                                         user: '',
                                                                                         password: '',
                                                                                         plugin: 'Save To Koha',
-                                                                                        enabled: 0
+                                                                                        enabled: 0,
+											searchtarget: ''
                                                                                     });
                                                                                     var sendtargetgrid = Ext.ComponentMgr.get('sendtargetsgrid');
                                                                                     var ds = sendtargetgrid.store;
