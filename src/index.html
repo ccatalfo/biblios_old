@@ -13,6 +13,7 @@
     [% ELSE %]
     <link rel="stylesheet" type="text/css" href="[% libPath %]lib/extjs2/resources/css/ext-all.css">
 	<link type="text/css" rel="stylesheet" href="[% uiPath %]styles.css" />
+	<link type="text/css" rel="stylesheet" href="[% libPath %]lib/firebug/firebug.css">
     [% END %]
     
     <title>Biblios</title>
@@ -51,7 +52,7 @@
 </script>
     [% IF debug %]
     <!-- firebug lite -->
-    <script type="text/javascript" src="[% libPath %]lib/firebug/firebug.js"></script>
+    <script type="text/javascript" src="[% libPath %]lib/firebug/firebug-lite-compressed.js"></script>
     <!-- cookie utility funcs -->
     <script type="text/javascript" src="[% libPath %]lib/cookieHelpers.js"></script>
     <!-- extjs -->
