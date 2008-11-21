@@ -72,7 +72,8 @@ koha.prototype = {
                     that: this,
                     dataType:'json',
                     success: function(json, status) {
-                        var sessionStatus = $('status', json.resp).text();
+			var xmlresp = xslTransform.loadString(json.resp);
+                        var sessionStatus = $('status', xmlresp).text();
                         var cookie = json.cookie;
                         this.that.cookie = cookie;
                         this.that.sessionStatus = sessionStatus;
@@ -82,7 +83,8 @@ koha.prototype = {
                         this.that.initHandler(sessionStatus);
                     },
                     error: function(req, textStatus, errorThrown) {
-                        var sessionStatus = $('status', json.resp).text();
+			var xmlresp = xslTransform.loadString(json.resp);
+                        var sessionStatus = $('status', xmlresp).text();
                         this.that.sessionStatus = sessionStatus;
                         this.that.initHandler(sessionStatus);
                     },
