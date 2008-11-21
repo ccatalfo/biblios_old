@@ -211,7 +211,7 @@ biblios.app = function() {
                                 region: 'north',
                                 border: false,
                                 layout: 'border',
-                                height: 60,
+                                height: 100,
                                 items: [
                                     {
                                         region: 'north',
@@ -223,7 +223,7 @@ biblios.app = function() {
                                     {
                                         region: 'center',
                                         border: false,
-                                        height: 40,
+                                        height: 10,
                                         style:'padding-bottom: 5px; padding-top:5px',
                                         html: {
                                             tag:'div',
