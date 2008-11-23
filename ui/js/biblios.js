@@ -284,7 +284,7 @@ biblios.app = function() {
                                                     data: [['kw','Keyword'],['ti','Title'],['au','Author'],['su','Subject'],['isbn','ISBN'],['issn','ISSN'],['','Advanced']]
                                                 }),
                                                 border:false,
-                                                value:'',
+                                                value:'kw',
                                                 hideLabel:true,
                                                 displayField:'full',
                                                 valueField:'abbr',
