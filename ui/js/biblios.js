@@ -162,15 +162,12 @@ biblios.app = function() {
 		},
 
         init: function() {
-	  if( Ext.isSafari ) {
-                Ext.get('biblios').update('<p>Your web browser, Safari, is not yet supported by Google Gears.  Please use Firefox or Internet Explorer to access.</p>'); 
-            }
-	  else if( Ext.isLinux ) {
-	    Ext.get('biblios').update('<p>Your web browser, Firefox running under Linux, is not yet supported by Google Gears.  Please use Firefox or Internet Explorer on Windows or Mac to access.</p>'); 
-	  }
-	  else if( Ext.isOpera ) {
+	  if( Ext.isOpera ) {
 	   Ext.get('biblios').update('<p>Your web browser, Opera, is not yet supported by Google Gears.  Please use Firefox or Internet Explorer to access.</p>'); 
 	  }
+      else if( Ext.isIE6 ) {
+        Ext.get('biblios').update('<p>Your web browser, Internet Explorer 6, is not yet supported by biblios.  Please use Internet Explorer 7, available here: <a href="http://www.microsoft.com/windows/downloads/ie/getitnow.mspx">download IE7</a></p>');
+        }
             else {
                 if( Ext.get('loadingtext') ) {
                     Ext.get('loadingtext').update('Loading database');

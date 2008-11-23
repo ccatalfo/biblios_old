@@ -151,7 +151,7 @@ _overflow-y: visible;
     </script>
 <script>
     // do some browser checks for browser who aren't supported by google gears.
-    if( Ext.isSafari || Ext.isLinux || Ext.isOpera ) {
+    if( Ext.isOpera || Ext.isIE6 ) {
         Ext.get('loadingtext').update('Sorry, your web browser is not supported at the moment.  Please access again using Firefox or Internet Explorer');
     }
     else {
