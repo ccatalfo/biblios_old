@@ -2155,7 +2155,7 @@ biblios.app = function() {
                                                                             },
                                                                             {
                                                                                 header: 'PazPar2 settings',
-                                                                                dataIndex: 'pazpar2settings',
+                                                                                dataIndex: 'pazpar2settings'
                                                                             }
                                                                         ]),
                                                                         tbar: new Ext.Toolbar({
