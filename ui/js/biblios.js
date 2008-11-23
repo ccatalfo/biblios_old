@@ -2152,6 +2152,10 @@ biblios.app = function() {
                                                                                 dataIndex: 'syntax',
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField()),
                                                                                 hidden: true
+                                                                            },
+                                                                            {
+                                                                                header: 'PazPar2 settings',
+                                                                                dataIndex: 'pazpar2settings',
                                                                             }
                                                                         ]),
                                                                         tbar: new Ext.Toolbar({
