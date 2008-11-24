@@ -191,5 +191,9 @@ _overflow-y: visible;
   </div>
 
   <br clear="all"/>
+<div id="footer">
+  <?php print $footer_message;?><br/>
+  <?php print $closure ?>
+</div>
 </body>
 </html>
