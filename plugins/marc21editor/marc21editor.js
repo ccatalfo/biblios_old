@@ -772,7 +772,9 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 	
 	    });
 	cb.on('specialkey', function(cb, e) {
-		e.stopEvent();
+		if( e.getKey() == Ext.EventObject.ENTER ) {
+		    e.stopEvent();
+		}
 	});
 	cb.on('expand', function(cb, e) {
 		UI.editor[editorid].cbOpen = true;
