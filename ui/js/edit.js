@@ -13,6 +13,12 @@
 
 */
 function openRecord(xml, recid, syntax, savefileid, searchtarget) {
+    if(bibliosdebug) {
+	console.debug('openRecord: xml: ' + xml);
+	console.debug('recid: ' + recid);
+	console.debug('savefileid: ' + savefileid);
+	console.debug('searchtarget: ' + searchtarget);
+    }
 	// we need to display record view first since editors are lazily rendered
 	UI.lastWindowOpen = openState;
 	openState = 'editorPanel';
@@ -20,6 +26,9 @@ function openRecord(xml, recid, syntax, savefileid, searchtarget) {
         var sending = Ext.getCmp('editorTabPanel').getActiveTab().sending;
     }
     if( sending ) {
+	if(bibliosdebug) {
+	    console.debug('openRecord sending: ' + sending);
+	}
         var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
         Ext.getCmp('editorTabPanel').getActiveTab().sending = false;
     }
@@ -70,7 +79,7 @@ function openRecord(xml, recid, syntax, savefileid, searchtarget) {
 	    xmldoc.loadXML(xml);
 	}
 	else {
-	    xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
+	    xmldoc = xslTransform.loadString(xml);
 	}
     }
     catch(ex) {
@@ -81,6 +90,9 @@ function openRecord(xml, recid, syntax, savefileid, searchtarget) {
 }
 
 function handle_html(html, editorid) {
+    if(bibliosdebug) {
+	console.debug('handle_html: ' + html.substr(40));
+    }
     Ext.get(editorid).update(html);
     var tabTitle = UI.editor[editorid].record.getTitle();
     if(tabTitle == '' || tabTitle == undefined) {

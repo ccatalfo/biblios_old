@@ -179,6 +179,10 @@ function doSaveRemote(loc, xmldoc, editorid, editorloc) {
 	if(bibliosdebug) { console.info('Saving open record to ' + loc); }
 	// set UI.editor.location to point to this record so we get special entries etc.
 	Prefs.remoteILS[loc].instance.saveHandler = function(xmldoc, status) {
+	    if(bibliosdebug) {
+		console.debug('Xmldoc received from send target: ' + xslTransform.serialize(xmldoc).substr(40) );
+		console.debug('send target status: ' + status);
+	    }
 		if( status == 'failed' ) {
 			UI.editor.progress.hide();
 			Ext.MessageBox.alert('Remote Send Target failure', "Remote send target couldn't save record.  Returned http status code: " + status);
