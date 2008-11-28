@@ -719,7 +719,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 		store: ds,
 		typeAhead: false,
 		typeAheadDelay: 500,
-		allQuery: 'query',
+		allQuery: 'a',
 		queryParam: 'query',
 		queryIndex: queryIndex,
 		editable: true,
@@ -879,7 +879,7 @@ function setupMarc21AuthorityLiveSearches() {
 				{name: 'authcontrolnum', id: '9', mapping: 'datafield[tag=001]'} // KOHA specific
 			]
 	);
-	// personal names
+
 	Ext.select('div[id^=100] .a.subfield-text, div[id^=700] .a.subfield-text, div[id^=600] .a.subfield-text, div[id^=800] .a.subfield-text').each( function(item) {
 		createAuthComboBox($(item.dom), pnameXmlReader, 'pname', 'bath.personalName', 'marcxml' );
 		return true;
@@ -1521,7 +1521,7 @@ function setupFFEditorCtryCombo() {
 				  newtag += '<span class="subfield" id="dsubfields'+tagnumber+newId+'">';
 				  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;'+sf[i]['delimiter']+'">';
 				  var textlength = sf[i]['text'].length;
-				  newtag += '<input id="dsubfields'+newId+i+'text" onfocus="onFocus(this)" onblur="onBlur(this)" class="subfield-text" size="'+textlength+'" value="'+sf[i]['text']+'">';
+				  newtag += '<input id="dsubfields'+newId+i+'text" onfocus="onFocus(this)" onblur="onBlur(this)" class="subfield-text a" size="'+textlength+'" value="'+sf[i]['text']+'">';
 				}
 			} // insert datafield
 			// insert out new tag after the tag we just found
@@ -1551,6 +1551,9 @@ function setupFFEditorCtryCombo() {
                 );
                 biblios.app.viewport.doLayout();
             }
+		
+	    setupMarc21AuthorityLiveSearches();
+	    
 
 			// set the focus to this new tag
 			//$( newId ).get(0).focus();
