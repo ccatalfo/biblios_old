@@ -703,10 +703,21 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 		},
 		reader: xmlReader 
 	});
-
+	// global override to keep user's typed text in combo even when combo selection box is open, per this post: https://extjs.com/forum/showthread.php?t=27026
+	(function(){
+	    var old = Ext.form.ComboBox.prototype.initEvents;
+	    Ext.form.ComboBox.prototype.initEvents = function(){
+		old.apply(this, arguments);
+		//delete this.keyNav.tab;
+		this.keyNav.tab = function(e) {
+		    this.collapse();
+		    return true;
+		}
+	    };
+	})();
 	var cb = new Ext.form.ComboBox({
 		store: ds,
-		typeAhead: true,
+		typeAhead: false,
 		typeAheadDelay: 500,
 		allQuery: 'query',
 		queryParam: 'query',
@@ -774,6 +785,12 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 	cb.on('specialkey', function(cb, e) {
 		if( e.getKey() == Ext.EventObject.ENTER ) {
 		    e.stopEvent();
+		}
+		else if( e.getKey() == Ext.EventObject.TAB ) {
+		    if(bibliosdebug) {
+			console.debug('marc21editor: tabbing out of auth combo now');
+		    }
+		    cb.collapse();
 		}
 	});
 	cb.on('expand', function(cb, e) {
