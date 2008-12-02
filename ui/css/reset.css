@@ -1,3 +1,4 @@
+/*
 div#biblios div,div#biblios dl,div#biblios dt,div#biblios dd,div#biblios ul,div#biblios ol,div#biblios li,div#biblios h1,div#biblios h2,div#biblios h3,div#biblios h4,div#biblios h5,div#biblios h6,div#biblios pre,div#biblios form,div#biblios fieldset,div#biblios input,div#biblios textarea,div#biblios p,div#biblios blockquote,div#biblios th,div#biblios td { 
 
 	margin:0;
@@ -5,6 +6,7 @@ div#biblios div,div#biblios dl,div#biblios dt,div#biblios dd,div#biblios ul,div#
 	padding:0;
 
 }
+*/
 
 div#biblios td, div#biblios th {
 
@@ -12,7 +14,7 @@ div#biblios td, div#biblios th {
 
 	border: medium none;
 }
-
+/*
 div#biblios table {
 
 	border-collapse:collapse;
@@ -20,6 +22,7 @@ div#biblios table {
 	border-spacing:0;
 
 }
+*/
 
 div#biblios fieldset,div#biblios img { 
 

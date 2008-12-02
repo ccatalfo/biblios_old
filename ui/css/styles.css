@@ -267,3 +267,6 @@ color: #000 !important;
     padding-left: 7px;
     padding-right: 7px;
 }
+#biblios table, #biblios tr, #biblios td {
+    border: none;
+}
