@@ -35,7 +35,7 @@
     var version = '[% version %]';
     var cgiDir = '[% kohacgidir %]';
     var embeddedUrl = '[% embeddedUrl %]';
-    var userid = '<!-- TMPL_VAR name="loggedinuser" -->';
+    var userid = '<!-- TMPL_VAR name="loggedinusername" -->';
     var embeddedSESSID = '<!-- TMPL_VAR name="embeddedSESSID" -->';
     var openOnLoadRecId = '[% openOnLoadRecId %]';
     var recordxml = '[% recordxml %]';
@@ -48,17 +48,13 @@
 </script>
     <script type="text/javascript" src="[% kohaintranetdir %]lib.js"></script>
 <script>
-    if( $.browser.safari ) {
-        $('#loadingtext').html('safari detected');
-    }
-    else {
         Ext.get('loadingtext').update('Checking for Google Gears');
       if (!window.google || !google.gears) {
         Ext.get('loadingtext').update('<p>Unable to load Google Gears.</p><p>Please visit the following url to install:</p><p><a target="_blank" href="http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application">Install Google Gears</a></p>');
-        //location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
+        location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
                         "&return="+location.href;
       }
-    }
+
 </script>
 <div id="branding-area"</div>
 <div id="kohaheader">
