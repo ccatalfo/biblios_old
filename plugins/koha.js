@@ -51,7 +51,7 @@ koha.prototype = {
             this.retrieveurl = retrieveurl ? retrieveurl : this.retrieveurl;
             this.saveurl = saveurl ? saveurl : this.saveurl;
 	if( this.embedded ) {
-	    Ext.Msg.prompt('Send Plugin', 'Please enter your password to authenticate to this web service', function(btn,text) {
+	    Ext.Msg.prompt('biblios is configured with an Embedded Koha Send Target that requires direct authentication to its Web Service. Please enter the password for the ' + userid + ' user on ' + this.url, '', function(btn,text) {
 		    if( btn == 'ok' ) {
 			this.password = text;
 			this.auth();
