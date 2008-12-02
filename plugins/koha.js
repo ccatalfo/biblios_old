@@ -26,11 +26,6 @@ var koha = function() {
 
 koha.prototype = {	
 		init: function(config) {
-            if( config.user == '' || !config.user || config.password == '' || !config.password) {
-                throw {
-                    msg: 'No username or password!'
-                }
-            }
 			this.url = config.url || 'http://' + location.host + '/';
             // add trailing slash if missing
             if( this.url[ this.url.length-1] != '/') {
@@ -55,17 +50,21 @@ koha.prototype = {
             this.bibprofileurl = bibprofileurl ? bibprofileurl : this.bibprofileurl;
             this.retrieveurl = retrieveurl ? retrieveurl : this.retrieveurl;
             this.saveurl = saveurl ? saveurl : this.saveurl;
-
-			this.auth();
-		}, // end init
-
-		auth: function() {
 	if( this.embedded ) {
-	    this.cookie = embeddedSESSID;
-	    this.sessionStatus = 'ok';
-	    this.bibprofile();
+	    Ext.Msg.prompt('Send Plugin', 'Please enter your password to authenticate to this web service', function(btn,text) {
+		    if( btn == 'ok' ) {
+			this.password = text;
+			this.auth();
+		    }
+		}, this);
 	}
 	else {
+	    this.auth();
+	}
+    	}, // end init
+
+		auth: function() {
+
             $.ajax({
                     url: cgiDir + 'kohaws.pl',
                     method: 'post',
@@ -99,7 +98,6 @@ koha.prototype = {
                     complete: function(req, textStatus) {
                     }
             });
-	}
 		},
 
 		bibprofile: function() {

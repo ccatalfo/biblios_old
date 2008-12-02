@@ -135,7 +135,7 @@ biblios.app = function() {
 			numToGet: 0
 		},
 		db : {
-			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled, searchtarget from SendTargets',
+			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled, searchtarget, embedded, sysdefined from SendTargets',
 			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled, pazpar2settings from SearchTargets',
 			selectSqlMacros: 'select Macros.rowid as rowid, name, code, hotkey, file, enabled from Macros',
             handle: db,
@@ -208,7 +208,7 @@ biblios.app = function() {
                                 region: 'north',
                                 border: false,
                                 layout: 'border',
-                                height: 100,
+                                height: $('brandingPanelRegionHeight', configDoc).text() || 100,
                                 items: [
                                     {
                                         region: 'north',
@@ -2304,7 +2304,7 @@ biblios.app = function() {
                                                                                 catch(ex) {
                                                                                     Ext.MessageBox.alert('Error', ex.message);
                                                                                 }
-                                                                                e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled, searchtarget from SendTargets'});
+                                                                                e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled, searchtarget, embedded, sysdefined from SendTargets'});
                                                                                 setILSTargets();
                                                                             } // afteredit handler
                                                                         },
@@ -2440,21 +2440,28 @@ biblios.app = function() {
                                                                                         return false;
                                                                                     }
                                                                                     var record = sel[0];
-                                                                                    if( record.data.user == '' || record.data.password == '' || record.data.url == '' || record.data.plugin== '' ) {
+                                                                                    if( !record.data.embedded && (record.data.user == '' || record.data.password == '' || record.data.url == '' || record.data.plugin== '') ) {
                                                                                         Ext.MessageBox.alert('Error', 'Please enter user, password, url, plugin location and plugin init to test this connection.');
                                                                                         return false;
                                                                                     }
                                                                                     var plugin = DB.Plugins.select('name=?', [record.data.plugin]).getOne();
                                                                                     var initcall = plugin.initcall;
                                                                                     try {
-                                                                                    var instance = eval( initcall );
+											var instance = eval( initcall );
+											instance.url = record.data.url;
+											instance.name = record.data.name;
                                                                                         try {
-                                                                                            instance.init( {
-                                                                                                url:record.data.url, 
-                                                                                                name:record.data.name, 
-                                                                                                user: record.data.user, 
-                                                                                                password: record.data.password
-                                                                                            });
+											    if( record.data.embedded == '1' ) {
+												Ext.MessageBox.alert('Send Plugin', 'Connection ok');
+											    }
+											    else {
+												instance.init( {
+													url:record.data.url, 
+													    name:record.data.name, 
+													    user: record.data.user, 
+													    password: record.data.password
+												 });
+											    }
                                                                                             instance.initHandler = function(sessionStatus) {
                                                                                                 if( sessionStatus != 'ok' ) {
                                                                                                     Ext.MessageBox.alert('Connection error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');

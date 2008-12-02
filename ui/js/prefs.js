@@ -228,8 +228,14 @@ function setILSTargets() {
 				Prefs.remoteILS[ ils.name ] = {};
 				// get params for this ils
 				Prefs.remoteILS[ils.name].location = ils.location;
-				Prefs.remoteILS[ils.name].user = ils.user;
-				Prefs.remoteILS[ils.name].pw = ils.password;
+				if( ils.embedded ) {
+				    Prefs.remoteILS[ils.name].user = userid;
+				    Prefs.remoteILS[ils.name].pw = '';
+				}
+				else {
+				    Prefs.remoteILS[ils.name].user = ils.user;
+				    Prefs.remoteILS[ils.name].pw = ils.password;
+				}
 				Prefs.remoteILS[ils.name].url = ils.url;
                 Prefs.remoteILS[ils.name].embedded = ils.embedded;
                 Prefs.remoteILS[ils.name].plugin = ils.plugin;
@@ -260,10 +266,10 @@ function setILSTargets() {
                     try {
                         Prefs.remoteILS[ils.name].instance.init({
                             url:ils.url, 
-                            name:ils.name, 
-                            user:ils.user, 
-                            password: ils.password, 
-                            embedded: ils.embedded
+				    name:Prefs.remoteILS[ils.name].name,
+				    user:Prefs.remoteILS[ils.name].user,
+				    password: Prefs.remoteILS[ils.name].pw,
+				    embedded: ils.embedded
                         });
                     } // try clause for xmlhttp req
                     catch( ex ) {
