@@ -52,7 +52,7 @@ elsif( $action eq 'bibprofile') {
     }
     else {
         print $cgi->header(-type=>'text/xml', -status=>$resp->code);
-        print '<?xml version="1.0"?><error><msg>' . $resp->status_line . '</msg></error>';
+        print $resp->content;
     }
 
 }

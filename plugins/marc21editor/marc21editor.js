@@ -514,6 +514,7 @@ function MarcEditor(editorid) {
 	// private methods
 
     this._getMarcRecord = function() {
+	update();
         return marcrecord;
     }
 function getFFTagFromPopup(tagnumber, rectype, ffid) {

@@ -60,6 +60,12 @@ koha.prototype = {
 		}, // end init
 
 		auth: function() {
+	if( this.embedded ) {
+	    this.cookie = embeddedSESSID;
+	    this.sessionStatus = 'ok';
+	    this.bibprofile();
+	}
+	else {
             $.ajax({
                     url: cgiDir + 'kohaws.pl',
                     method: 'post',
@@ -93,6 +99,7 @@ koha.prototype = {
                     complete: function(req, textStatus) {
                     }
             });
+	}
 		},
 
 		bibprofile: function() {

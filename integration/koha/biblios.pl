@@ -52,5 +52,6 @@ if( $biblionumber ) {
 }
 
 $template->param( loggedinuser => $loggedinuser );
+$template->param( embeddedSESSID => $cookie );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -35,8 +35,8 @@
     var version = '[% version %]';
     var cgiDir = '[% kohacgidir %]';
     var embeddedUrl = '[% embeddedUrl %]';
-    var userid = '[% userid %]';
-    var embeddedSESSID = '[% SESSID %]';
+    var userid = '<!-- TMPL_VAR name="loggedinuser" -->';
+    var embeddedSESSID = '<!-- TMPL_VAR name="embeddedSESSID" -->';
     var openOnLoadRecId = '[% openOnLoadRecId %]';
     var recordxml = '[% recordxml %]';
     var confPath = libPath + "conf/biblios.xml";
