@@ -60,6 +60,8 @@ var SendTarget = Ext.data.Record.create([
 	{name: 'plugin', type: 'string'},
 	{name: 'enabled', type: 'bool'}
     ,{name: 'searchtarget', type:'string'}
+	,{name:'embedded', type:'string'}
+	,{name:'sysdefined',type:'string'}
 ]);
 var Macro = Ext.data.Record.create([
 	{name: 'rowid'},
