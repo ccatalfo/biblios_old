@@ -1,3 +1,14 @@
+Ext.apply(Ext.MessageBox, {
+	promptPassword: function(){
+	    var d = Ext.MessageBox.getDialog().body.child('.ext-mb-input').dom;
+	    Ext.MessageBox.getDialog().on({
+		    show:{fn:function(){d.type = 'password';},single:true},
+			hide:{fn:function(){d.type = 'text';},single:true}
+		});
+	    Ext.MessageBox.prompt.apply(Ext.MessageBox, arguments);
+	}
+    });
+
 var koha = function() {
 	var that = this;
 	// auth stuff
@@ -51,7 +62,7 @@ koha.prototype = {
             this.retrieveurl = retrieveurl ? retrieveurl : this.retrieveurl;
             this.saveurl = saveurl ? saveurl : this.saveurl;
 	if( this.embedded ) {
-	    Ext.Msg.prompt('biblios is configured with an Embedded Koha Send Target that requires direct authentication to its Web Service. Please enter the password for the ' + userid + ' user on ' + this.url, '', function(btn,text) {
+	    Ext.MessageBox.promptPassword('biblios is configured with an Embedded Koha Send Target that requires direct authentication to its Web Service. Please enter the password for the ' + userid + ' user on ' + this.url, '', function(btn,text) {
 		    if( btn == 'ok' ) {
 			this.password = text;
 			this.auth();
