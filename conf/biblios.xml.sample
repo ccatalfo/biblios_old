@@ -3,21 +3,25 @@
 	<record-defs>
 		<marcflavor>marc21</marcflavor>
 	</record-defs>
-    <pazpar2url>http://localhost:9004</pazpar2url>
-    <sruauthurl>http://sru.beta.biblios.net/authority</sruauthurl>
+	
+	<!-- insert url to your PazPar2 server here -->
+	<pazpar2url>http://localhost:9004</pazpar2url>
+
+	<!-- insert url to an SRU server here for performing authority searches in marc21 editor -->
+	<sruauthurl>http://sru.beta.biblios.net/authority</sruauthurl>
 	
     <editors>
 	
         <editor>
             <name>MARC21Editor</name>
             <syntax>marcxml</syntax>
-			<enabled>1</enabled>
+	    <enabled>1</enabled>
         </editor>
 		
         <editor>
             <name>MARCViewer</name>
             <syntax>marcxml</syntax>
-			<enabled>0</enabled>
+	    <enabled>0</enabled>
         </editor>
 	
     </editors>
@@ -25,18 +29,20 @@
 	<searching>
 		<searchtargets>
 		  <server>
+		    <!-- sysdefined element tells biblios to recreate records for these targets on each page refresh -->
+		    <sysdefined>1</sysdefined>
 			<name>‡biblios.net</name>
-            <id>1</id> 
-		 	<hostname>z3950.beta.biblios.net</hostname>
+			<hostname>z3950.beta.biblios.net</hostname>
 			<port>210</port>
 			<dbname>bibliographic</dbname>
 			<userid></userid>
 			<password></password>
 			<enabled>1</enabled>
 			<description>‡biblios.net</description>
-            <allowDelete>1</allowDelete>
-            <allowModify>1</allowModify>
-            <pazpar2settings>{"pz:name[z3950.beta.biblios.net:210/bibliographic]":"‡biblios.net",
+			<allowDelete>1</allowDelete>
+			<allowModify>1</allowModify>
+			<!-- pazpar2settings contains PazPar2-specific ccl settings.  This element is optional and is used to tweak the settings biblios uses by default for search targets -->
+			<pazpar2settings>{"pz:name[z3950.beta.biblios.net:210/bibliographic]":"‡biblios.net",
 "pz:requestsyntax[z3950.beta.biblios.net:210/bibliographic]":"marc21",
 "pz:allow[z3950.beta.biblios.net:210/bibliographic]":"1",
 "pz:elements[z3950.beta.biblios.net:210/bibliographic]":"F",
@@ -58,20 +64,24 @@
 	<saving>
 		<sendtargets>
 			<server>
+			  <!-- sysdefined tells biblios to recreate this target on each page load -->
+			  <sysdefined>1</sysdefined>
 				<name>‡biblios.net</name>
 				<location>‡biblios.net</location>
 				<url>api.beta.biblios.net</url>
-				<user>cataloger</user>
-				<password>cataloger</password>
+				<user><!-- enter koha username here --></user>
+				<password><!-- enter koha password here--></password>
 				<plugin>Save To Koha</plugin>
 				<enabled>1</enabled>
                 <allowDelete>0</allowDelete>
                 <allowModify>0</allowModify>
                 <embedded>0</embedded>
+		<!-- these elements are optional: if left off, the koha send plugin figures out what urls to use on its own.  Only use for special setups where rewrite rules are being used in front of the normal koha paths 
                 <authurl>http://api.beta.biblios.net/authentication</authurl>
                 <bibprofileurl>http://api.beta.biblios.net/bib_profile</bibprofileurl> 
                 <retrieveurl>http://api.beta.biblios.net/bib/</retrieveurl>
                 <saveurl>http://api.beta.biblios.net/</saveurl>
+		-->
 			</server>
 		</sendtargets>
 	</saving>
@@ -138,6 +148,8 @@
             <enabled>1</enabled>
             <allowDelete>0</allowDelete>
             <allowModify>0</allowModify>
+	    <!-- NOTE: need to change <xslpath> element to the absolute path of your biblios installation's plugins/marc21editor directory so 
+	    marc21 editor can find its xslt stylesheets to generate the editor -->
             <xslpath>plugins/marc21editor/</xslpath>
         </plugin>
 
