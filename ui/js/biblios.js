@@ -3,17 +3,17 @@
   * by Jozef Sakalos, aka Saki
   * http://extjs.com/learn/Tutorial:Application_Layout_for_Beginners
   */
- 
+
 // reference local blank image
 Ext.BLANK_IMAGE_URL = 'lib/extjs2/resources/images/default/s.gif';
 // create namespace
 Ext.namespace('biblios');
- 
+
 // create application
 biblios.app = function() {
     // private variables
 
-	var viewport; 
+	var viewport;
 	var viewState = '';
 	// save file vars
 	var currSaveFile, currSaveFileName;
@@ -81,7 +81,7 @@ biblios.app = function() {
 		displayHelpMsg(UI.messages.help.en.saveview);
         Ext.getCmp('TargetsTreePanel').getSelectionModel().clearSelections();
 	}
-	
+
 	function showStatusMsg(msg) {
 
 	}
@@ -100,7 +100,7 @@ biblios.app = function() {
         paz : {
             sessionID : '',
             query : '',
-            settings : { 
+            settings : {
 
             },
             record : {
@@ -141,7 +141,7 @@ biblios.app = function() {
             handle: db,
             selectSqlPlugins: 'select Plugins.rowid as rowid, name, file, type, initcall, enabled from Plugins'
 		},
-		
+
         // public methods
         search : function(searchWhere, searchQuery) {
             if( this.fireEvent('beforesearch', searchWhere, searchQuery) ) {
@@ -163,7 +163,7 @@ biblios.app = function() {
 
         init: function() {
 	  if( Ext.isOpera ) {
-	   Ext.get('biblios').update('<p>Your web browser, Opera, is not yet supported by Google Gears.  Please use Firefox or Internet Explorer to access.</p>'); 
+	   Ext.get('biblios').update('<p>Your web browser, Opera, is not yet supported by Google Gears.  Please use Firefox or Internet Explorer to access.</p>');
 	  }
       else if( Ext.isIE6 ) {
         Ext.get('biblios').update('<p>Your web browser, Internet Explorer 6, is not yet supported by biblios.  Please use Internet Explorer 7, available here: <a href="http://www.microsoft.com/windows/downloads/ie/getitnow.mspx">download IE7</a></p>');
@@ -182,7 +182,7 @@ biblios.app = function() {
                     loadPlugins();
                 });
             }
-        }, 
+        },
 
         initUI: function() {
 			Ext.QuickTips.init();
@@ -192,7 +192,7 @@ biblios.app = function() {
                 treeloader.baseParams.name = 'author,publication-name,subject,date';
             });
             this.facetsTreeLoader.on('load', function(treeloader, node, response) {
-                
+
             });
             this.viewport = new Ext.Viewport({
 				layout: 'fit',
@@ -356,7 +356,7 @@ biblios.app = function() {
                                                                         action: 'show'
                                                                     },
                                                                     proxy: new Ext.data.HttpProxy({url: pazcgiurl}),
-                                                                    reader: 
+                                                                    reader:
                                                                         new Ext.data.JsonReader({
                                                                             totalProperty: 'merged',
                                                                             merged: 'merged',
@@ -369,7 +369,7 @@ biblios.app = function() {
                                                                     remoteSort: true,
                                                                     listeners: {
                                                                         beforeload: function(store, options) {
-                                                                            
+
                                                                         },
                                                                         loadexception: function(proxy, options, response, e) {
                                                                             Ext.Msg.alert('Search error', 'Error: ' +response.status + ' ' + response.responseText );
@@ -397,18 +397,18 @@ biblios.app = function() {
                                                                         }
                                                                     } // searchgrid listeners
                                                                 })), // data store search grid aka ds
-                                                                
+
                                                                 view: new Ext.grid.GroupingView({
                                                                     forceFit:true
                                                                     ,groupTextTpl:
                                                                         '<table class="x-grid3-row-table">'
                                                                         + '<tbody>'
-                                                                        + '<tr>' 
+                                                                        + '<tr>'
 
                                                                         + '<td class="x-grid3-col x-grid3-cell x-grid3-td-1 groupingMedium" width="49">'
-                                                                        + '{[ values.rs[0].data.medium ]}' 
+                                                                        + '{[ values.rs[0].data.medium ]}'
                                                                         + '</td>'
-                                                                        
+
                                                                         + '<td class="x-grid3-col x-grid3-cell x-grid3-td-2 groupingTitle" width="222">'
                                                                         + '{[ values.rs[0].data.title ]}'
                                                                         + '</td>'
@@ -428,13 +428,13 @@ biblios.app = function() {
                                                                         + '</tr>'
                                                                         + '</tbody>'
                                                                         + '</table>'
-                                                                    
+
                                                                     ,groupRenderer: function(v, unused,r, rowIndex, colIndex,ds) {
                                                                         return v;
                                                                     },
                                                                     showGroupName:true,
                                                                     header: 'title:'
-                                                                   
+
                                                               }),
                                                             sm: (sm = new Ext.grid.SmartCheckboxSelectionModel({
                                                                     //singleSelect: false,
@@ -451,17 +451,17 @@ biblios.app = function() {
                                                                             Ext.getCmp('searchgridToolsBtn').enable();
                                                                             showStatusMsg('Previewing...');
                                                                             // get the marcxml for this record and send to preview()
-                                                                            var xmlstring = record.data.fullrecord;		
+                                                                            var xmlstring = record.data.fullrecord;
                                                                             if(bibliosdebug) {
                                                                                 console.info(xmlstring);
-                                                                            }																
+                                                                            }
                                                                             var xml = xslTransform.loadString(xmlstring);
-                                                                            previewRemoteRecord(xml);																			
+                                                                            previewRemoteRecord(xml);
                                                                         } // search grid row select handler
                                                                     } // selection listeners
-                                                                })), // search grid selecion model		
-                                                                cm : new Ext.grid.ColumnModel([			
-                                                                    sm,																					
+                                                                })), // search grid selecion model
+                                                                cm : new Ext.grid.ColumnModel([
+                                                                    sm,
                                                                     {header: "Medium", width: 50, dataIndex: 'medium'},
                                                                     {header: "Title", sortable: true, width: 280, dataIndex: 'title'},
                                                                     {header: "Author", sortable: true, width: 170, dataIndex: 'author'},
@@ -511,12 +511,12 @@ biblios.app = function() {
                                                                     Ext.getCmp('searchgridEditBtn').disable();
                                                                 },
                                                                 editRecord: function(rec) {
-                                                                    var xml = rec.data.fullrecord;	
+                                                                    var xml = rec.data.fullrecord;
                                                                     var xmlformat = 'marcxml';
                                                                     var loc = rec.data.location_name;
-                                                                    var id = rec.id;	
+                                                                    var id = rec.id;
                                                                     biblios.app.fireEvent('remoterecordretrieve', rec.data.fullrecord);
-                                                                    openRecord( xml, '', xmlformat, '',loc ); 
+                                                                    openRecord( xml, '', xmlformat, '',loc );
                                                                 },
                                                                 listeners: {
                                                                     render: function(grid) {
@@ -541,7 +541,7 @@ biblios.app = function() {
                                                                                     xtype: 'tbtext',
                                                                                     text: 'Select <a href="#" onclick="Ext.getCmp(\'searchgrid\').selectAll()">All</a>,' + '<a href="#" onclick="Ext.getCmp(\'searchgrid\').selectNone()">None</a>'
                                                                                 }
-                                                                                
+
                                                                             ]
                                                                         });
                                                                         var selectAllInStore = new Ext.Toolbar({
@@ -558,11 +558,11 @@ biblios.app = function() {
                                                                         });
                                                                         this.syncSize();
                                                                     }, // search grid render listener
-                                                                    
+
                                                                     headerclick: function(grid, colIndex, event) {
                                                                         var colName = grid.getColumnModel().getColumnById(colIndex).dataIndex;
                                                                         var reqName = '';
-                                                                        var dir = UI.search.currentSort.dir ? 0 : 1; 
+                                                                        var dir = UI.search.currentSort.dir ? 0 : 1;
                                                                         switch(colName) {
                                                                             case 'title':
                                                                                 reqName = 'title';
@@ -589,18 +589,18 @@ biblios.app = function() {
                                                                         var loc = record.data.location[0].name;
                                                                         var xmlformat = 'marcxml';
                                                                         biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
-                                                                        openRecord( record.data.fullrecord,  '', xmlformat, '' ); 
+                                                                        openRecord( record.data.fullrecord,  '', xmlformat, '' );
                                                                     },
                                                                     keypress: function(e) {
                                                                       if( e.getKey() == Ext.EventObject.ENTER ) {
                                                                         var record = Ext.getCmp('searchgrid').getSelections()[0];
                                                                         var loc = record.data.location[0].name;
                                                                         var xmlformat = 'marcxml';
-                                                                          
+
                                                                         biblios.app.fireEvent('remoterecordretrieve', record.data.fullrecord);
-                                                                        openRecord( record.data.fullrecord,  '', xmlformat, ''); 
-                                                                            
-                                                                        }	
+                                                                        openRecord( record.data.fullrecord,  '', xmlformat, '');
+
+                                                                        }
                                                                     } // on ENTER keypress
                                                                 }, // search grid listeners
                                                                 tbar: new Ext.ux.ImprovedPagingToolbar({
@@ -616,7 +616,7 @@ biblios.app = function() {
                                                                     displayInfo: true,
                                                                     displayMsg: '{0} - {1} of {2} (de-duplicated) {3} - {4} of {5} (records)',
                                                                     msgFormatFunc: function() {
-                                                                        var count = this.store.getCount(); 
+                                                                        var count = this.store.getCount();
                                                                         var mergedStart = (this.current * this.pageSize) + 1;
                                                                         var mergedEnd = (this.current * this.pageSize) + parseInt(this.store.reader.jsonData.num);
                                                                         var mergedTotal = this.store.reader.jsonData.merged;
@@ -628,7 +628,7 @@ biblios.app = function() {
                                                                     emptyMsg: 'No records to display',
                                                                     listeners: {
                                                                         beforerender: function(tbar) {
-                                                                            
+
 
                                                                         },
                                                                         beforepagechange: function(tbar, start) {
@@ -642,7 +642,7 @@ biblios.app = function() {
                                                                                     if( currentPage == 0 ) {
                                                                                         start = 1;
                                                                                         tbar.unmergedCounts[currentPage] = {
-                                                                                            start: start,        
+                                                                                            start: start,
                                                                                             end: tbar.store.getCount()
                                                                                         }
                                                                                     }
@@ -671,11 +671,11 @@ biblios.app = function() {
                                                                                 var searchgrid = Ext.getCmp('searchgrid');
                                                                                 var checked = searchgrid.getSelectionModel().getChecked();
                                                                                 var selections = searchgrid.getSelectionModel().getSelections();
-                                                                                
+
                                                                                 if(checked.length>0 && checked.length<11) {
                                                                                     UI.editor.loading.numToLoad = checked.length;
                                                                                     for( var i = 0; i < checked.length; i++ ) {
-                                                                                        searchgrid.editRecord( checked[i] ); 
+                                                                                        searchgrid.editRecord( checked[i] );
                                                                                     } // for each checked record
                                                                                 }
                                                                                 else if( checked.length > 10 ) {
@@ -685,7 +685,7 @@ biblios.app = function() {
                                                                                 else if(selections.length > 0 ) {
                                                                                     UI.editor.loading.numToLoad = selections.length;
                                                                                     for( var j = 0; j < selections.length; j++ ) {
-                                                                                        searchgrid.editRecord( selections[j] ); 
+                                                                                        searchgrid.editRecord( selections[j] );
                                                                                     } // for each checked record
                                                                                 }
                                                                                 else if( checked.length == 0 && selections.length == 0){
@@ -694,7 +694,7 @@ biblios.app = function() {
 
                                                                                 }
                                                                                 UI.editor.loading.numLoaded = 0;
-                                                                                    
+
                                                                                 UI.editor.progress = Ext.Msg.progress(
                                                                                     'Loading records',
                                                                                     'Retrieving and formatting records',
@@ -708,10 +708,10 @@ biblios.app = function() {
                                                                             id:'searchgridToolsBtn',
                                                                             disabled:true,
                                                                             text:'Tools',
-                                                                            menu: 
+                                                                            menu:
                                                                                 {
                                                                                     items: [
-                                                                                                                                                                                {   
+                                                                                                                                                                                {
                                                                                             cls: 'x-btn-text-icon bmenu', // icon and text class
                                                                                             icon:libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/export', configDoc).text(),
                                                                                             text: 'Export',
@@ -781,7 +781,7 @@ biblios.app = function() {
                                                                                     }
                                                                                 ]
                                                                             } // uploads menu
-                                                                            
+
                                                                         ] // grid toolbar items
                                                                 }) // search grid paging toolbar
                                                             }), // search results grid panel
@@ -794,7 +794,7 @@ biblios.app = function() {
                                                                 autoScroll: true,
                                                                 html: '<div id="searchselect"></div><div id="searchprevrecord"></div>',
                                                                 height: 150
-                                                            } // search preview 
+                                                            } // search preview
                                                         ] // search results items
                                                     }, // search results region
                                                     {
@@ -878,7 +878,7 @@ biblios.app = function() {
                                                                     cm: new Ext.grid.ColumnModel([
                                                                         sm, // checkbox for smartcheckbox selectiomodel
                                                                         {header: 'Id', dataIndex:'Id', hidden:true},
-                                                                        
+
                                                                         {header: "Medium", dataIndex: 'Medium', width: 50, sortable: true},
                                                                         {header: "Title", width: 200, dataIndex: 'Title', sortable: true},
                                                                         {header: "Author", width: 160, dataIndex: 'Author', sortable: true},
@@ -942,7 +942,7 @@ biblios.app = function() {
                                                                                 });
                                                                             this.syncSize();
                                                                         },
-                                                                            
+
                                                                         rowdblclick: function(grid, rowIndex, e) {
                                                                             var id = grid.store.data.get(rowIndex).data.Id;
                                                                             grid.editRecord(id);
@@ -968,7 +968,7 @@ biblios.app = function() {
                                                                         emptyMsg: 'No records to display',
                                                                         listeners: {
                                                                             render: function(){
-                                                                            
+
                                                                             }
                                                                         },
                                                                         items: [
@@ -984,7 +984,7 @@ biblios.app = function() {
                                                                                     var selections = Ext.getCmp('savegrid').getSelectionModel().getSelections();
                                                                                     UI.editor.loading.numLoaded = 0;
                                                                                     if( checked.length > 0 && checked.length < 11) {
-                                                                                        UI.editor.loading.numToLoad = checked.length;  
+                                                                                        UI.editor.loading.numToLoad = checked.length;
                                                                                         for( var i = 0; i < checked.length; i++) {
                                                                                             var savefileid = checked[i].data.Savefiles_id;
                                                                                             var recid = checked[i].data.Id;
@@ -1039,7 +1039,7 @@ biblios.app = function() {
                                                                                                 }
                                                                                             }
                                                                                         },
-                                                                                        {   
+                                                                                        {
                                                                                             cls: 'x-btn-text-icon bmenu', // icon and text class
                                                                                             icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/export', configDoc).text(),
                                                                                             text: 'Export',
@@ -1170,7 +1170,7 @@ biblios.app = function() {
                                                                                                                                                     ]
                                                                     }) // save grid paging toolbar
                                                             }), // savepanel center
-                                                            { 													
+                                                            {
                                                                 region: 'south',
                                                                 id: 'savepreview',
                                                                 title: 'Preview',
@@ -1181,7 +1181,7 @@ biblios.app = function() {
                                                                 html: '<div id="select"></div><div id="saveprevrecord"></div>'
                                                             } // savepanel south
                                                         ] // savepanel items
-                                                    }, // savefilegrid region 
+                                                    }, // savefilegrid region
                                                     {
                                                         region: 'center',
                                                         layout: 'fit',
@@ -1207,7 +1207,7 @@ biblios.app = function() {
                                                         height: 'auto',
                                                         autoScroll:true,
                                                         region: 'center',
-                                                        items: 
+                                                        items:
                                                         [
                                                             new Ext.tree.TreePanel({
                                                                 id: 'editingTreePanel',
@@ -1217,7 +1217,7 @@ biblios.app = function() {
                                                                 maskDisabled:true,
                                                                 disabled:true,
                                                                 root: new Ext.tree.AsyncTreeNode({
-                                                                    text: 'Editing',	
+                                                                    text: 'Editing',
                                                                     loader: new Ext.tree.TreeLoader({}),
                                                                     children: getNewRecordMenu(),
                                                                     expanded: true,
@@ -1247,7 +1247,7 @@ biblios.app = function() {
                                                                     expanded: true,
                                                                     icon: uiPath + 'ui/images/resources_parents/' + $('//ui/icons/resources_panel/searching', configDoc).text(),
                                                                     listeners: {
-                                                                        load: function(tree) {										
+                                                                        load: function(tree) {
                                                                             tree.appendChild( new Ext.tree.TreeNode({
                                                                                 text: 'Edit Search Targets',
                                                                                 listeners: {
@@ -1265,8 +1265,8 @@ biblios.app = function() {
                                                                         }
                                                                     },
                                                                     loader: new Ext.ux.GearsTreeLoader({
-                                                                        db: db, 
-                                                                        selectSql: 'select SearchTargets.rowid, name, hostname, port, dbname, enabled, description, userid  from SearchTargets', 
+                                                                        db: db,
+                                                                        selectSql: 'select SearchTargets.rowid, name, hostname, port, dbname, enabled, description, userid  from SearchTargets',
                                                                         applyLoader: false,
                                                                         baseAttrs: {
                                                                             listeners: {
@@ -1283,7 +1283,7 @@ biblios.app = function() {
                                                                                     });
 
                                                                                 }
-                                                                                
+
                                                                             },
                                                                             allowDrag: false,
                                                                             allowDrop: false,
@@ -1324,7 +1324,7 @@ biblios.app = function() {
                                                                                 } // processData for server info leaves
                                                                             }) // loader for server info leaves
                                                                         }, // baseAttrs for server nodes
-                                                                        processData: function(data) {  
+                                                                        processData: function(data) {
                                                                             var json = [];
                                                                             for( var i = 0; i< data.length; i++) {
                                                                                 var pazid = data[i][2];
@@ -1404,7 +1404,7 @@ biblios.app = function() {
                                                                             Ext.getCmp('savegridEditBtn').disable();
                                                                             Ext.getCmp('savegridExportBtn').disable();
                                                                             Ext.getCmp('savegridSendBtn').disable();
-                                                                            
+
                                                                         }
                                                                     }, // save folder listeners
                                                                     loader: new Ext.ux.GearsTreeLoader({
@@ -1457,7 +1457,7 @@ biblios.app = function() {
                                                                                     } // save folder listeners
                                                                                 } // inner save folder baseAttrs
                                                                             }) // gears loader for subsequent savefile nodes
-                                                                            
+
                                                                         } // baseAttrs for savefile children nodes
                                                                     }) // savefiles root gears loader
                                                                 }),
@@ -1499,7 +1499,7 @@ biblios.app = function() {
                                                                                             var n = Ext.getCmp('FoldersTreePanel').getSelectionModel().getSelectedNode();
                                                                                             if(n && n.attributes.allowDelete) {
                                                                                                     // do we really want to do this???
-                                                                                                    Ext.MessageBox.confirm("Delete", "Really delete this folder and all records in it?", 
+                                                                                                    Ext.MessageBox.confirm("Delete", "Really delete this folder and all records in it?",
                                                                                                         function(btn, text) {
                                                                                                         if( btn == 'yes' ) {
                                                                                                             var id = n.attributes.savefileid;
@@ -1519,7 +1519,7 @@ biblios.app = function() {
                                                                                                             return true;
                                                                                                         }
                                                                                                         else {
-                                                                                                            return false;   
+                                                                                                            return false;
                                                                                                         }
                                                                                                     } // on user confirmation of delete
                                                                                                 );
@@ -1565,18 +1565,18 @@ biblios.app = function() {
                                                                                         }
                                                                                         var newnode = new Ext.tree.TreeNode(
                                                                                         {
-                                                                                            text: 'New Folder', 
-                                                                                            savefileid: id, 
+                                                                                            text: 'New Folder',
+                                                                                            savefileid: id,
                                                                                             id: id,
-                                                                                            qtip:'', 
+                                                                                            qtip:'',
                                                                                             icon: libPath + 'lib/extjs2/resources/images/default/tree/folder-open.gif',
-                                                                                            leaf: false, 
-                                                                                            allowDelete:true, 
+                                                                                            leaf: false,
+                                                                                            allowDelete:true,
                                                                                             allowAdd: true,
                                                                                             allowRename: true,
                                                                                             allowEdit: true,
-                                                                                            allowDrag:true, 
-                                                                                            allowDrop:true, 
+                                                                                            allowDrag:true,
+                                                                                            allowDrop:true,
                                                                                             ddGroup:'SaveFileNodeDrop',
                                                                                             listeners: {
                                                                                                 click: function(node, e) {
@@ -1606,7 +1606,7 @@ biblios.app = function() {
                                                                                 } // if this node allows us to add to it
                                                                                 }, // addnode handler
                                                                                 cls: 'add',
-                                                                                text: 'Add folder' 
+                                                                                text: 'Add folder'
                                                                                 },
                                                                                 {
                                                                                 id: 'renameNode',
@@ -1621,7 +1621,7 @@ biblios.app = function() {
                                                                                     }
                                                                                 }, // rename node handler
                                                                                 cls: 'rename',
-                                                                                text: 'Rename folder' 
+                                                                                text: 'Rename folder'
                                                                                 }
                                                                                 ]
                                                                             });
@@ -1846,7 +1846,7 @@ biblios.app = function() {
                                                                 biblios.app.viewport.doLayout();
                                                             }
                                                         },
-                                                        items: 
+                                                        items:
                                                             {
                                                                 region: 'center',
                                                                 height: 600,
@@ -1948,7 +1948,7 @@ biblios.app = function() {
                                                                                     if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT) {
                                                                                         t = DB.SearchTargets.select('SearchTargets.rowid=?', [record.data.rowid]).getOne();
                                                                                         if( t.allowModify == 0 ) {
-                                                                                           Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings"); 
+                                                                                           Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings");
                                                                                             return false;
                                                                                         }
                                                                                         try {
@@ -1961,7 +1961,7 @@ biblios.app = function() {
                                                                                     }
                                                                                     Ext.getCmp('TargetsTreePanel').root.reload();
 										    setPazPar2Targets();
-                                                                                    
+
                                                                                 } // search targets store update
                                                                             } // search targets grid store listeners
                                                                         }),
@@ -1975,7 +1975,7 @@ biblios.app = function() {
                                                                                 }
                                                                                 t = DB.SearchTargets.select('SearchTargets.rowid=?', [id]).getOne();
                                                                                 if( t.allowModify == 0 ) {
-                                                                                   Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings"); 
+                                                                                   Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings");
                                                                                     return false;
                                                                                 }
                                                                                 var rs;
@@ -1989,7 +1989,7 @@ biblios.app = function() {
                                                                                 setPazPar2Targets(Ext.emptyFn);
                                                                                 Ext.getCmp('searchtargetsgrid').store.reload();
                                                                                 Ext.getCmp('TargetsTreePanel').getRootNode().reload();
-                                                                                
+
                                                                             }, // after edit event on search target grid
                                                                             celldblclick: function(grid, rowIndex, colIndex, e) {
                                                                                 if( colIndex != 9 ) {
@@ -2009,8 +2009,8 @@ biblios.app = function() {
                                                                                 var win = new Ext.Window({
                                                                                     id:'pazpar2settingsproperties',
                                                                                     layout:'fit',
-                                                                                    width: 300,
-                                                                                    height: 300,
+                                                                                    width: 500,
+                                                                                    height: 400,
                                                                                     autoScroll: true,
                                                                                     closeAction:'hide',
                                                                                     items: (pg = new Ext.grid.PropertyGrid({
@@ -2042,7 +2042,7 @@ biblios.app = function() {
                                                                                                     this.grid.store.commitChanges();
                                                                                                     return true;
                                                                                                 }, btn);
-                                                                                                
+
 
                                                                                             }
                                                                                         },
@@ -2102,39 +2102,39 @@ biblios.app = function() {
                                                                         cm: new Ext.grid.ColumnModel([
                                                                             sm,
                                                                             {
-                                                                                header: 'Name', 
-                                                                                dataIndex: 'name', 
+                                                                                header: 'Name',
+                                                                                dataIndex: 'name',
                                                                                 sortable: true,
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField())
                                                                             },
-                                                                            {	
-                                                                                header: 'Host', 
-                                                                                dataIndex: 'hostname', 
+                                                                            {
+                                                                                header: 'Host',
+                                                                                dataIndex: 'hostname',
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField())
                                                                             },
                                                                             {
-                                                                                header: 'Port', 
-                                                                                dataIndex: 'port', 
+                                                                                header: 'Port',
+                                                                                dataIndex: 'port',
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField())
                                                                             },
                                                                             {
-                                                                                header: 'Database', 
-                                                                                dataIndex: 'dbname', 
+                                                                                header: 'Database',
+                                                                                dataIndex: 'dbname',
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField())
                                                                             },
                                                                             {
-                                                                                header: 'Description', 
-                                                                                dataIndex: 'description', 
+                                                                                header: 'Description',
+                                                                                dataIndex: 'description',
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField())
                                                                             },
                                                                             {
-                                                                                header: 'User', 
-                                                                                dataIndex: 'userid', 
+                                                                                header: 'User',
+                                                                                dataIndex: 'userid',
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField())
                                                                             },
                                                                             {
-                                                                                header: 'Password', 
-                                                                                dataIndex: 'password', 
+                                                                                header: 'Password',
+                                                                                dataIndex: 'password',
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField({inputType:'password'})),
                                                                                 renderer: function(value) {
                                                                                     var pw = '';
@@ -2151,7 +2151,7 @@ biblios.app = function() {
                                                                                 hidden: true
                                                                             },
                                                                             {
-                                                                                header: 'PazPar2 settings',
+                                                                                header: 'Search settings',
                                                                                 dataIndex: 'pazpar2settings'
                                                                             }
                                                                         ]),
@@ -2199,7 +2199,7 @@ biblios.app = function() {
                                                                                                 t.remove();
                                                                                             }
                                                                                             else {
-                                                                                               Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings"); 
+                                                                                               Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings");
                                                                                             }
                                                                                         }
                                                                                         catch(ex) {
@@ -2233,7 +2233,7 @@ biblios.app = function() {
                                                                 biblios.app.viewport.doLayout();
                                                             } // activate search targets grid tab
                                                         }, // send targets listeners
-                                                        items: 
+                                                        items:
                                                             {
                                                                 region: 'center',
                                                                 height: 300,
@@ -2317,29 +2317,29 @@ biblios.app = function() {
                                                                         cm: new Ext.grid.ColumnModel([
                                                                             sm,
                                                                             {
-                                                                                header: 'Name', 
-                                                                                dataIndex: 'name', 
+                                                                                header: 'Name',
+                                                                                dataIndex: 'name',
                                                                                 sortable: true,
                                                                                 editor: new Ext.form.TextField()
                                                                             },
-                                                                            {	
-                                                                                header: 'Location Name', 
-                                                                                dataIndex: 'location', 
+                                                                            {
+                                                                                header: 'Location Name',
+                                                                                dataIndex: 'location',
                                                                                 editor: new Ext.form.TextField()
                                                                             },
                                                                             {
-                                                                                header: 'Url', 
-                                                                                dataIndex: 'url', 
+                                                                                header: 'Url',
+                                                                                dataIndex: 'url',
                                                                                 editor: new Ext.form.TextField()
                                                                             },
                                                                             {
-                                                                                header: 'User', 
-                                                                                dataIndex: 'user', 
+                                                                                header: 'User',
+                                                                                dataIndex: 'user',
                                                                                 editor: new Ext.form.TextField()
                                                                             },
                                                                             {
-                                                                                header: 'Password', 
-                                                                                dataIndex: 'password', 
+                                                                                header: 'Password',
+                                                                                dataIndex: 'password',
                                                                                 editor: new Ext.form.TextField({inputType:'password'}),
                                                                                 renderer: function(value) {
                                                                                     var pw = '';
@@ -2456,9 +2456,9 @@ biblios.app = function() {
 											    }
 											    else {
 												instance.init( {
-													url:record.data.url, 
-													    name:record.data.name, 
-													    user: record.data.user, 
+													url:record.data.url,
+													    name:record.data.name,
+													    user: record.data.user,
 													    password: record.data.password
 												 });
 											    }
@@ -2481,7 +2481,7 @@ biblios.app = function() {
                                                                                     }
                                                                                 }
                                                                             }
-                                                                        ], 
+                                                                        ],
                                                                         listeners: {
                                                                             beforerender: function(tbar) {
                                                                                     tbar.autoCreate.html = '<table cellspacing="0"><tr></tr></table>';
@@ -2534,7 +2534,7 @@ biblios.app = function() {
                     }) // inner panel
                 ] // viewport items
 			}); // viewport constructor
-			
+
 		getSaveFileNames(); // set up hash of save file id->names
 		openState = 'searchgrid';
 		treeEditor = new Ext.tree.TreeEditor( Ext.getCmp('FoldersTreePanel'), {
@@ -2555,13 +2555,13 @@ biblios.app = function() {
             if( n.attributes.allowRename == false || n.attributes.allowEdit == false || n.attributes.allowDelete == false) {
                 return false;
             }
-                
+
         });
 
 		treeEditor.render();
 
 		Ext.getCmp('tabpanel').activate(0);
-        Ext.getCmp('splashpanel').getEl().update(mainsplash); 
+        Ext.getCmp('splashpanel').getEl().update(mainsplash);
         Ext.getCmp('bibliocenter').layout.setActiveItem(3);
         Ext.getCmp('facetsTreePanel').hide();
         } // end of init method
@@ -2590,7 +2590,7 @@ biblios.app.addEvents({
     'beforeeditrecord' : true,
     /*
         beforesaverecord
-        params: 
+        params:
             savefileid: savefile where record is to be saved
             editorid: editor id where record is being saved from
             offset: offset used for record retrieval from pazpar2 (optional)
@@ -2598,14 +2598,14 @@ biblios.app.addEvents({
     'beforesaverecord' : true,
     /*
         saverecordcomplete
-        params: 
+        params:
             savefileid: id of save file where record was saved
             xml: xml string of record saved
     */
     'saverecordcomplete' : true,
     /*
         beforesendrecord
-        params: 
+        params:
             loc: location record is being saved to
             xmldoc: xml document of record being saved
             editorid: id of editor record is being saved from
@@ -2613,7 +2613,7 @@ biblios.app.addEvents({
     'beforesendrecord' : true,
     /*
         sendrecordcomplete
-        params: 
+        params:
             loc: location where record was (attempted to be) saved
             xmldoc: xml document of record as returned from remote server
             status: status of request to server
@@ -2639,4 +2639,4 @@ biblios.app.addEvents({
     'beforerecordexport':true
 });
 
- 
+
