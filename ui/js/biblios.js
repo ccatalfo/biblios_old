@@ -1952,7 +1952,7 @@ biblios.app = function() {
                                                                                             return false;
                                                                                         }
                                                                                         try {
-                                                                                            var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ? where rowid = ?', [record.data.name, record.data.hostname, record.data.port, record.data.dbname, record.data.description, record.data.userid, record.data.password, record.data.enabled, record.data.rowid]);
+                                                                                          var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ?, pazpar2settings = ? where rowid = ?', [record.data.name, record.data.hostname, record.data.port, record.data.dbname, record.data.description, record.data.userid, record.data.password, record.data.enabled, record.data.pazpar2settings, record.data.rowid]);
                                                                                             rs.close();
                                                                                         }
                                                                                         catch(ex) {
