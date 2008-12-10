@@ -32,7 +32,7 @@ if( $action eq 'auth' ) {
         print to_json($data);
     }
     else {
-        print $cgi->header(-type=>'text/xml', -status=>$resp->code);
+        print $cgi->header(-type=>'text/xml; charset=utf-8', -status=>$resp->code);
         my $data = {
             resp => $resp->content
         };
@@ -47,11 +47,11 @@ elsif( $action eq 'bibprofile') {
     my $cookie = $cgi->param('cookie');
     my $resp = $ua->post( $url, {},'Cookie' => $cookie );
     if($resp->is_success) {
-        print $cgi->header(-type=>'text/xml', -status=>$resp->code);
+        print $cgi->header(-type=>'text/xml; charset=utf-8', -status=>$resp->code);
         print $resp->content;
     }
     else {
-        print $cgi->header(-type=>'text/xml', -status=>$resp->code);
+        print $cgi->header(-type=>'text/xml; charset=utf-8', -status=>$resp->code);
         print $resp->content;
     }
 
@@ -65,11 +65,11 @@ elsif( $action eq 'retrieve' ) {
     my $cookie = $cgi->param('cookie');
     my $resp = $ua->get( $url, 'Cookie' => $cookie );
     if($resp->is_success) {
-        print $cgi->header(-type=>'text/xml', -status=>$resp->code);
+        print $cgi->header(-type=>'text/xml; charset=utf-8', -status=>$resp->code);
         print $resp->content;
     }
     else {
-        print $cgi->header(-type=>'text/xml', -status=>$resp->code);
+        print $cgi->header(-type=>'text/xml; charset=utf-8', -status=>$resp->code);
         print '<?xml version="1.0"?><error><msg>' . $resp->status_line . '</msg></error>';
     }
 
@@ -84,11 +84,11 @@ elsif( $action eq 'save' ) {
     my $xml = $cgi->param('xml');
     my $resp = $ua->post( $url,'Cookie' => $cookie, 'Content-type' => 'text/xml', Content => $xml );
     if($resp->is_success) {
-        print $cgi->header(-type=>'text/xml', -status=>$resp->code);
+        print $cgi->header(-type=>'text/xml; charset=utf-8', -status=>$resp->code);
         print $resp->content;
     }
     else {
-        print $cgi->header(-type=>'text/xml', -status=>$resp->code);
+        print $cgi->header(-type=>'text/xml; charset=utf-8', -status=>$resp->code);
         print '<?xml version="1.0"?><error><msg>' . $resp->status_line . '</msg></error>';
     }
 }
