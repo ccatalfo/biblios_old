@@ -16,7 +16,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
+use warnings;
 
 use C4::Output;    # contains gettemplate
 use C4::Auth;
@@ -40,6 +40,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired   => { editcatalogue => 1 },
     }
 );
+
 my $biblionumber = $query->param('biblionumber');
 if( $biblionumber ) {
     my $record = GetMarcBiblio($biblionumber);
