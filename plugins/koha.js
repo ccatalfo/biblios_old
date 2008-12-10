@@ -29,13 +29,13 @@ var koha = function() {
 	// record save and retrieval
 	this.recordCache = {};
 	this.saveStatus = '';
-	this.embedded = false; 
+	this.embedded = false;
 	this.savedBiblionumber = '';
 	this.retrieveHandler = function() {};
 	this.saveHandler = function() {};
 };
 
-koha.prototype = {	
+koha.prototype = {
 		init: function(config) {
 			this.url = config.url || 'http://' + location.host + '/';
             // add trailing slash if missing
@@ -51,12 +51,13 @@ koha.prototype = {
             this.bibprofileurl = config.bibprofileurl || this.url + '/cgi-bin/koha/svc/bib_profile';
             this.retrieveurl = config.retrieveurl || this.url + '/cgi-bin/koha/svc/bib';
             this.saveurl = config.saveurl || this.url + '/cgi-bin/koha/svc/';
-                
+
             // override url settings if found in biblios config doc for this send target
-            var authurl = $('url:contains('+this.url+') ~ authurl', configDoc).text();
-            var bibprofileurl = $('url:contains('+this.url+') ~ bibprofileurl', configDoc).text();
-            var retrieveurl = $('url:contains('+this.url+') ~ retrieveurl', configDoc).text();
-            var saveurl = $('url:contains('+this.url+') ~ saveurl', configDoc).text();
+            var authurl = $('url:contains("'+this.url+'")', configDoc).siblings('authurl').text();
+            var bibprofileurl = $('url:contains("'+this.url+'")', configDoc).siblings('bibprofileurl').text();
+            var retrieveurl = $('url:contains("'+this.url+'")', configDoc).siblings('retrieveurl').text();
+            var saveurl = $('url:contains("'+this.url+'")', configDoc).siblings('saveurl').text();
+
             this.authurl = authurl ? authurl : this.authurl;
             this.bibprofileurl = bibprofileurl ? bibprofileurl : this.bibprofileurl;
             this.retrieveurl = retrieveurl ? retrieveurl : this.retrieveurl;
@@ -79,7 +80,7 @@ koha.prototype = {
             $.ajax({
                     url: cgiDir + 'kohaws.pl',
                     method: 'post',
-                    data:{ 
+                    data:{
                         kohaurl: this.authurl,
                         userid: this.user,
                         password: this.password,
@@ -186,7 +187,7 @@ koha.prototype = {
                 dataType: 'xml',
 				data: {
                     xml:xml,
-                    kohaurl:this.saveurl, 
+                    kohaurl:this.saveurl,
                     saveurl:savepath,
                     action:'save',
                     cookie:this.cookie
@@ -206,7 +207,7 @@ koha.prototype = {
 						this.that.saveStatus = 'ok';
 						var biblionumber = $('biblionumber', data).text();
 						this.that.savedBiblionumber = biblionumber;
-						// replace marcxml in recordcache	
+						// replace marcxml in recordcache
 						var marcxml = $('record', data).get(0);
 						this.that.recordCache[ this.id ] = marcxml;
 					}
