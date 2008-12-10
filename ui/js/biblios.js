@@ -2156,6 +2156,7 @@ biblios.app = function() {
                                                                             }
                                                                         ]),
                                                                         tbar: new Ext.Toolbar({
+										id:'searchtargetsgridtbar',
                                                                             items: [
                                                                             {
                                                                                 text: 'Add Search Target',
