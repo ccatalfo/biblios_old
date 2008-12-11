@@ -2140,7 +2140,6 @@ biblios.app = function() {
                                                                                 dataIndex: 'remoteID',
                                                                                 hidden: true
                                                                             }
-<<<<<<< HEAD:ui/js/biblios.js
                                                                             ,{
                                                                                 header: 'Source'
                                                                                 ,dataIndex: 'source'
