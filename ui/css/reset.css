@@ -14,15 +14,15 @@ div#biblios td, div#biblios th {
 
 	border: medium none;
 }
-/*
 div#biblios table {
 
 	border-collapse:collapse;
 
-	border-spacing:0;
+	border-spacing:0px;
+
+    margin: 0px;
 
 }
-*/
 
 div#biblios fieldset,div#biblios img { 
 
