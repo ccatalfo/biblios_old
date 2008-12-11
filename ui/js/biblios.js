@@ -2047,25 +2047,6 @@ biblios.app = function() {
                                                                                             }
                                                                                         },
                                                                                         {
-                                                                                            grid:pg,
-                                                                                            record:record,
-                                                                                            text:'Remove',
-                                                                                            handler: function(btn) {
-                                                                                                Ext.Msg.confirm('Remove search type', 'Are you sure you want to remove this search type?', function(btn, text) {
-                                                                                                    if(btn=='ok') {
-                                                                                                        var r = Ext.getCmp('searchtargetspropertygrid').getSelectionModel().selection.record;
-                                                                                                        this.grid.store.remove( r );
-                                                                                                        this.grid.store.commitChanges();
-                                                                                                        return true;
-                                                                                                    }
-                                                                                                    else {
-                                                                                                        return true;
-                                                                                                    }
-                                                                                                }, btn);
-
-                                                                                            }
-                                                                                        },
-                                                                                        {
                                                                                             grid: pg,
                                                                                             record: record,
                                                                                             text: 'Save',
