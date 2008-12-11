@@ -1,0 +1,67 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use C4::Z3950;
+use C4::Auth qw/check_api_auth/;
+use JSON;
+use CGI;
+use CGI::Carp;
+use Data::Dumper;
+
+my $debug = 1;
+my $cgi = CGI->new;
+
+my ($status, $cookie, $sessioNID) = check_api_auth($cgi, {editcatalogue => 1} );
+
+if( $status eq 'ok' ) {
+    print $cgi->header(-type=>'application/json');
+}
+else {
+    print $cgi->header(-type=>'application/json', -status=>'403 Forbidden');
+    print to_json({status=>$status});
+    #exit 0;
+}
+my $action = $cgi->param('action');
+
+if( $action eq 'get') {
+    my $jsondata = [];
+    my @servers= getz3950servers(0);
+    if($debug) {
+        #warn Dumper @servers;
+    }
+    foreach my $server (@servers) {
+       push @{$jsondata}, {
+           'hostname' => $server->{'host'},
+           'port' => $server->{'port'},
+           'dbname' => $server->{'db'},
+           'userid' => $server->{'userid'},
+           'password' => $server->{'password'},
+           'name' => $server->{'name'},
+           'rank' => $server->{'rank'},
+           'enabled' => $server->{'checked'},
+           'type' => $server->{'type'},
+           'position' => $server->{'position'},
+           'syntax' => $server->{'syntax'},
+           'pazpar2settings' => '',
+           'remoteID' => $server->{'id'},
+	   'sysdefined' => 1,
+	   'source' => 'koha',
+       };
+    }
+    my $json = to_json($jsondata);
+    if($debug) {
+        warn $json;
+    }
+    
+    print $cgi->param('callback') . '(' . $json . ')';
+}
+
+
+elsif ($action eq 'add' ) {
+
+}
+
+elsif( $action eq 'update' ) {
+
+}

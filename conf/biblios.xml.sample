@@ -10,6 +10,13 @@
 	<!-- insert url to an SRU server here for performing authority searches in marc21 editor -->
 	<sruauthurl>http://sru.beta.biblios.net/authority</sruauthurl>
 	
+    <!-- loadsearchtargetsurl specifies url to load search targets from on biblios initalization.  Url specified here should return json formatted search targets via jsonp call 
+    <loadsearchtargetsurl>http://takeyourchoice.net:8081/cgi-bin/koha/svc/z3950</loadsearchtargetsurl>
+    -->
+
+    <!-- searchtargetsdburl specifies url of external search targets database for use with plugins/externalSearchtargets plugin.  This database should provide restful interface to search targets and return json formatted data. 
+    <searchtargetsdburl>http://eowyn.metavore.com:8888/SearchTargets/</searchtargetsdburl>
+    -->
     <editors>
 	
         <editor>
@@ -164,6 +171,16 @@
             <allowDelete>0</allowDelete>
             <allowModify>0</allowModify>
         </plugin>
+
+    <!-- plugin for interfacing with external search targets database.  Must be configured using <searchtargetsdburl> element (see top of this config file
+	<plugin>
+	  <name>External Search Targets</name>
+	  <type>externalInterface</type>
+	  <initcall></initcall>
+	  <enabled>1</enabled>
+	  <file>plugins/externalSearchtargets/externalSearchtargets.js</file>
+	</plugin>
+    -->
 
 	</plugins>
 

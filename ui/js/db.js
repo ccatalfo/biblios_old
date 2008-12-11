@@ -322,7 +322,7 @@ GearsORMShift.rules = [
             return true;
         },
         down: function() {
-            DB.Savefiles.remove('name=?',['Uploads']); 
+            DB.Savefiles.remove('name=?',['Uploads']);
             return true;
         }
     }, // version 13
@@ -341,7 +341,6 @@ GearsORMShift.rules = [
 			return true;
         },
         down: function() {
-            // no remove col
             return true;
         }
     }, // rule 14
@@ -391,6 +390,66 @@ GearsORMShift.rules = [
 		return true;
 	    }
 	} // version 16
+    ,{
+        version: 17,
+        comment: 'Add remoteID col to SearchTargets table to allow association of search targets withe external db',
+        up: function() {
+            try {
+                db.execute('alter table SearchTargets add column remoteID integer');
+                return true;
+            }
+	  catch(ex) {
+	    if (debug) {
+	      console.info("Unable to add pazpar2settings col to SearchTargets table");
+	    }
+	    return true;
+	  }
+        },
+        down: function() {
+            return true;
+        }
+    }, // rule 17
+    {
+        version: 18
+        ,comment: 'Add source col to SearchTargets table to show source of that target'
+        ,up: function() {
+            try {
+            db.execute('alter table SearchTargets add column source string');
+            return true;
+            }
+            catch(ex) {
+            if(bibliosdebug) {
+                console.debug('unable to add source column to searchtargets table ' + ex);
+            }
+            }
+	  return true;
+        }
+        ,down: function() {
+            return true;
+        }
+    }
+  ,{
+        version: 19
+        ,comment: 'Add library type, country, reliability cols to SearchTargets table to show source of that target'
+        ,up: function() {
+            try {
+            db.execute('alter table SearchTargets add column librarytype string');
+	    db.execute('alter table SearchTargets add column country string');
+	    db.execute('alter table SearchTargets add column reliability string');
+            return true;
+            }
+            catch(ex) {
+              if(bibliosdebug) {
+                console.debug('unable to add librarytype, country,reliability columns to searchtargets table ' + ex);
+              }
+	      return true;
+            }
+        }
+        ,down: function() {
+            return true;
+        }
+    }
+
 ];
 
 function createTestTargets() {
@@ -434,7 +493,7 @@ function removeTestTargets() {
 }
 
 function init_gears() {
-	
+
 			GearsORM.dbName = "biblios";
 			db = GearsORM.getDB();
 			DB.Info_Schema = new GearsORM.Model({
@@ -450,7 +509,7 @@ function init_gears() {
 			}
 			DB.SearchTargets = new GearsORM.Model({
 				name: 'SearchTargets',
-				fields: 
+				fields:
 				{
 					hostname: new GearsORM.Fields.String(),
 					port: new GearsORM.Fields.Integer(),
@@ -469,7 +528,12 @@ function init_gears() {
                     allowDelete: new GearsORM.Fields.Integer({defaultValue:1}),
                     allowModify: new GearsORM.Fields.Integer({defaultValue:1}),
 					pazpar2settings: new GearsORM.Fields.String(),
-					sysdefined: new GearsORM.Fields.Integer({defaultValue:0})
+					sysdefined: new GearsORM.Fields.Integer({defaultValue:0}),
+					remoteID: new GearsORM.Fields.Integer(),
+					source: new GearsORM.Fields.String(),
+					librarytype: new GearsORM.Fields.String(),
+					country: new GearsORM.Fields.String(),
+					reliability: new GearsORM.Fields.String()
 				}
 			});
 			DB.Prefs = new GearsORM.Model({
@@ -502,7 +566,7 @@ function init_gears() {
 			});
 			DB.Records = new GearsORM.Model({
 				name: 'Records',
-				fields: 
+				fields:
 				{
 					title: new GearsORM.Fields.String(),
 					author: new GearsORM.Fields.String(),
@@ -524,7 +588,7 @@ function init_gears() {
 			});
 			DB.SendTargets = new GearsORM.Model({
 				name: 'SendTargets',
-				fields: 
+				fields:
 				{
 				    name: new GearsORM.Fields.String({unique:1}),
 					location: new GearsORM.Fields.String(),
@@ -538,8 +602,8 @@ function init_gears() {
 					embedded: new GearsORM.Fields.Integer({defaultValue:0}),
 					searchtarget: new GearsORM.Fields.Integer(),
 					sysdefined: new GearsORM.Fields.Integer({defaultValue:0})
-					
-				    
+
+
 				}
 			});
 			DB.Macros = new GearsORM.Model({
@@ -556,7 +620,7 @@ function init_gears() {
             DB.Plugins = new GearsORM.Model({
                 name: 'Plugins',
                 fields:
-                {   
+                {
                     name: new GearsORM.Fields.String(),
                     file: new GearsORM.Fields.String(),
                     type: new GearsORM.Fields.String(),

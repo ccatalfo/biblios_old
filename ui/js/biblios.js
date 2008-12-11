@@ -136,7 +136,7 @@ biblios.app = function() {
 		},
 		db : {
 			selectSqlSendTargets : 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled, searchtarget, embedded, sysdefined from SendTargets',
-			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled, pazpar2settings from SearchTargets',
+			selectSqlSearchTargets: 'select SearchTargets.rowid as rowid, name, hostname, port, dbname, description, userid, password, syntax, enabled, pazpar2settings, remoteID, sysdefined,allowDelete,allowModify, source, librarytype, country, reliability from SearchTargets',
 			selectSqlMacros: 'select Macros.rowid as rowid, name, code, hotkey, file, enabled from Macros',
             handle: db,
             selectSqlPlugins: 'select Plugins.rowid as rowid, name, file, type, initcall, enabled from Plugins'
@@ -250,6 +250,7 @@ biblios.app = function() {
                                         listeners: {
                                             activate: function(p) {
                                                 biblios.app.viewport.doLayout();
+												Ext.getCmp('TargetsTreePanel').root.reload();
                                                 displayHelpMsg(UI.messages.help.en.welcome);
                                             }
                                         }, //biblio tab listeners
@@ -1943,11 +1944,6 @@ biblios.app = function() {
                                                                             reader: new Ext.data.ArrayReader({
                                                                                 record: 'name'
                                                                             }, SearchTarget),
-                                                                            remoteSort: false,
-                                                                            sortInfo: {
-                                                                                field: 'name',
-                                                                                direction: 'ASC'
-                                                                            },
                                                                             listeners: {
                                                                                 update: function(store, record, operation) {
                                                                                     record.data.enabled = record.data.enabled ? 1 : 0;
@@ -1958,7 +1954,7 @@ biblios.app = function() {
                                                                                             return false;
                                                                                         }
                                                                                         try {
-                                                                                          var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ?, pazpar2settings = ? where rowid = ?', [record.data.name, record.data.hostname, record.data.port, record.data.dbname, record.data.description, record.data.userid, record.data.password, record.data.enabled, record.data.pazpar2settings, record.data.rowid]);
+                                                                                          var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ?, pazpar2settings = ?, remoteID = ? where rowid = ?', [record.data.name, record.data.hostname, record.data.port, record.data.dbname, record.data.description, record.data.userid, record.data.password, record.data.enabled, record.data.pazpar2settings, record.data.remoteID, record.data.rowid]);
                                                                                             rs.close();
                                                                                         }
                                                                                         catch(ex) {
@@ -1993,7 +1989,7 @@ biblios.app = function() {
                                                                                     Ext.MessageBox.alert('Error', ex.message);
                                                                                 }
                                                                                 setPazPar2Targets(Ext.emptyFn);
-                                                                                Ext.getCmp('searchtargetsgrid').store.reload();
+                                                                                //Ext.getCmp('searchtargetsgrid').store.reload();
                                                                                 Ext.getCmp('TargetsTreePanel').getRootNode().reload();
 
                                                                             }, // after edit event on search target grid
@@ -2098,6 +2094,7 @@ biblios.app = function() {
                                                                             },
                                                                             {
                                                                                 header: 'Port',
+                                                                                width: 40,
                                                                                 dataIndex: 'port',
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField())
                                                                             },
@@ -2113,11 +2110,13 @@ biblios.app = function() {
                                                                             },
                                                                             {
                                                                                 header: 'User',
+                                                                                width: 45,
                                                                                 dataIndex: 'userid',
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField())
                                                                             },
                                                                             {
                                                                                 header: 'Password',
+                                                                                width: 45,
                                                                                 dataIndex: 'password',
                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField({inputType:'password'})),
                                                                                 renderer: function(value) {
@@ -2137,10 +2136,41 @@ biblios.app = function() {
                                                                             {
                                                                                 header: 'Search settings',
                                                                                 dataIndex: 'pazpar2settings'
+                                                                            },
+                                                                            {
+                                                                                header: 'Remote ID',
+                                                                                dataIndex: 'remoteID',
+                                                                                hidden: true
                                                                             }
+<<<<<<< HEAD:ui/js/biblios.js
+                                                                            ,{
+                                                                                header: 'Source'
+                                                                                ,dataIndex: 'source'
+                                                                            }
+                                                                           ,{
+                                                                                 header:'Library Type',
+                                                                                 dataIndex:'librarytype',
+                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+                                                                           }
+                                                                           ,{
+                                                                                 header: 'Country',
+                                                                                 dataIndex:'country',
+                                                                                 editor: new Ext.grid.GridEditor(new Ext.form.TextField())
+                                                                           }
+                                                                           ,{
+                                                                                 header: 'Reliability',
+                                                                                 dataIndex:'reliability'
+                                                                                 ,renderer: function(value) {
+
+                                                                                   if(value > 0) {
+                                                                                     return (value*100) + '%';
+                                                                                   }
+
+                                                                                 }
+                                                                           }
                                                                         ]),
                                                                         tbar: new Ext.Toolbar({
-										id:'searchtargetsgridtbar',
+                                                                            id:'searchtargetsgridtbar',
                                                                             items: [
                                                                             {
                                                                                 text: 'Add Search Target',
@@ -2148,7 +2178,7 @@ biblios.app = function() {
                                                                                     // insert new target into db so we get it's id
                                                                                     var rs;
                                                                                     try {
-                                                                                        rs = db.execute('insert into SearchTargets (name, allowDelete, allowModify, description, hostname, dbname, port, userid, password, pazpar2settings) values ("", 1, 1,"","","","", "", "", "")');
+                                                                                        rs = db.execute('insert into SearchTargets (name, allowDelete, allowModify, description, hostname, dbname, port, userid, password, pazpar2settings, sysdefined, source, remoteID) values ("", 1, 1,"","","","", "", "", "", 0, "user", "")');
                                                                                         rs.close();
                                                                                     }
                                                                                     catch(ex) {
@@ -2165,7 +2195,9 @@ biblios.app = function() {
                                                                                         password: '',
                                                                                         enabled: 0,
                                                                                         allowModify: 1,
-                                                                                        allowDelete: 1
+                                                                                        allowDelete: 1,
+											sysdefined: 0,
+											source: "user"
                                                                                     });
                                                                                     var grid = Ext.getCmp('searchtargetsgrid');
                                                                                     grid.stopEditing();
@@ -2233,11 +2265,7 @@ biblios.app = function() {
                                                                             reader: new Ext.data.ArrayReader({
                                                                                 record: 'name'
                                                                             }, SendTarget),
-                                                                            remoteSort: false,
-                                                                            sortInfo: {
-                                                                                field: 'name',
-                                                                                direction: 'ASC'
-                                                                            },
+
                                                                         listeners: {
                                                                             update: function(store, record, operation) {
                                                                                 if( record.data.enabled == true) {
@@ -2290,7 +2318,7 @@ biblios.app = function() {
                                                                                 catch(ex) {
                                                                                     Ext.MessageBox.alert('Error', ex.message);
                                                                                 }
-                                                                                e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled, searchtarget, embedded, sysdefined from SendTargets'});
+                                                                                //e.grid.store.load({db: db, selectSql: 'select SendTargets.rowid as rowid, name, location, url, user, password, plugin, enabled, searchtarget, embedded, sysdefined from SendTargets'});
                                                                                 setILSTargets();
                                                                             } // afteredit handler
                                                                         },

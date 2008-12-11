@@ -59,7 +59,12 @@ function setupConfig( configDoc ) {
               clearStatusMsg();
           });
 	  DB.SearchTargets.remove('SearchTargets.sysdefined=1');
+          searchtargetsurl = $("//searchtargetsurl", configDoc).text();
+          if( searchtargetsurl ) {
+              loadSearchTargetsFromUrl(searchtargetsurl);
+            }
 		  $("searching//server", configDoc).each( function() { 
+			  var source = $(this).children('source').text();
 			var hostname = $(this).children('hostname').text();
 			var sysdefined = $(this).children('sysdefined').text();
 			var port = $(this).children('port').text();
@@ -73,6 +78,7 @@ function setupConfig( configDoc ) {
 			var allowModify= $(this).children('allowModify').text();
 			var pazpar2settings= $(this).children('pazpar2settings').text();
 				var t = new DB.SearchTargets({
+					source: 'biblios',
 					hostname: hostname,
 					port: port,
 					dbname: dbname,
@@ -202,6 +208,27 @@ function loadEmbeddedRecord() {
     }
 }
 
+function loadSearchTargetsFromUrl(url) {
+    $.ajax({
+        url: url,
+        data: {action:'get'},
+        dataType:'jsonp',
+        success: function(json, textStatus) {
+            for( var i = 0; i < json.length; i++) {
+		if(bibliosdebug) {
+		    console.debug('loadSearchTargetsFromUrl: json from koha: ' + json[i].source + ' ' + json[i].sysdefined);
+		}
+		DB.SearchTargets.load(json[i],true);
+	    }
+            Ext.getCmp('searchtargetsgrid').store.reload();
+            Ext.getCmp('TargetsTreePanel').root.reload();
+        },
+        error: function(req, textStatus, errorThrown) {
+            Ext.Msg.alert('Load error', 'Error loading remote search targets: ' + req.responseText);
+        }
+    });
+}
+
 function loadPlugins() {
     biblios.app.numPlugins = DB.Plugins.select('enabled=1').toArray().length;
     DB.Plugins.select('enabled=1').each( function(plugin) {
@@ -209,6 +236,7 @@ function loadPlugins() {
             biblios.app.numPlugins--;
             if( biblios.app.numPlugins == 0 ) {
                 setILSTargets();
+				Ext.getCmp('TargetsTreePanel').root.reload();
                 displayInitErrors();
                 loadEmbeddedRecord();
             }

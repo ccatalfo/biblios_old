@@ -35,8 +35,8 @@ var PazPar2Results = Ext.data.Record.create([
     {name: 'fullrecord'},
     {name: 'location_name', mapping:'location_name'},
     {name: 'location_id', mapping:'location_id'},
-    {name: 'count', mapping: 'count'}																
-    ]); 
+    {name: 'count', mapping: 'count'}
+    ]);
 var SearchTarget = Ext.data.Record.create([
 	{name: 'rowid'},
 	{name: 'name', type: 'string'},
@@ -48,7 +48,23 @@ var SearchTarget = Ext.data.Record.create([
 	{name: 'password', type: 'string'},
 	{name: 'syntax', type: 'string'},
 	{name: 'enabled', type: 'bool'},
-    {name: 'pazpar2settings', type: 'string'}
+    {name: 'pazpar2settings', type: 'string'},
+    {name: 'remoteID'},
+    {name: 'sysdefined'},
+    {name: 'allowDelete'},
+    {name: 'allowModify'},
+    {name: 'source'},
+					    {
+					      name:'librarytype'
+					    },
+					    {
+					      name:'country'
+					    },
+					    {
+					      name:'reliability'
+					    }
+
+
 ]);
 var SendTarget = Ext.data.Record.create([
 	{name: 'rowid'},
