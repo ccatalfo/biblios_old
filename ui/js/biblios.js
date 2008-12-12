@@ -2030,16 +2030,13 @@ biblios.app = function() {
                                                                                                 Ext.Msg.prompt('Add new search type', 'Enter abbreviation for new search type', function(btn, text) {
                                                                                                     var rowid = this.record.data.rowid;
                                                                                                     var pazid = getPazTargetName( DB.SearchTargets.select('SearchTargets.rowid=?',[rowid]).getOne() );
-                                                                                                    var newcclmap = 'pz:cclmap:'+text+'['+pazid+']';
+                                                                                                    var newcclmap = 'pz:ccl:'+text+'['+pazid+']';
                                                                                                     if(bibliosdebug) {
                                                                                                         console.debug('add searchtype: ' + rowid + ' ' + pazid + ' ' + newcclmap);
                                                                                                     }
-                                                                                                    var rec = new Ext.grid.PropertyRecord({
-                                                                                                        name: newcclmap,
-                                                                                                        value: ''
-                                                                                                    });
-                                                                                                    this.grid.store.addSorted(rec);
-                                                                                                    this.grid.store.commitChanges();
+                                                                                                    var oldsource = this.grid.getSource();
+                                                                                                    oldsource[newcclmap] = '';
+                                                                                                    this.grid.setSource(oldsource);
                                                                                                     return true;
                                                                                                 }, btn);
 
