@@ -650,7 +650,7 @@ function resetDB() {
     try {
         DB.SendTargets.select().each( function(s) { s.remove() }); 
         DB.SearchTargets.select().each( function(s) { s.remove() }); 
-        DB.Savefiles.select('name!=? and name!=? and name!=? and name!=?',['Trash','Drafts','Completed','Uploads']).each( function(s) { s.remove(); });
+        DB.Savefiles.select('Savefiles.rowid > ?',[4]).each( function(s) { s.remove(); });
         DB.Records.remove();
         DB.Macros.remove();
 	DB.Plugins.remove();
