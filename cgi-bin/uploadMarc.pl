@@ -11,14 +11,22 @@ use File::Slurp qw(slurp);
 use File::Temp qw(tempfile);
 use JSON;
 
+my $debug=1;
+
 my $cgi = CGI->new();
 my ($returnfh, $returnfilepath) = tempfile(UNLINK => 0, SUFFIX=>'.xml', DIR=>"/tmp/") or die "$!";
+binmode $returnfh, ":utf8";
 my $response = {};
 my $records = '';
 
 my $filepath = $cgi->param('file');
+my ($dev, $ino, $mode, $nlink, $uid, $gid, $rdev, $size, $atime, $mtime, $ctime, $blksize, $blocks) = stat($filepath);
+if($debug) {
+    warn 'uploadMarc.pl: file size: ' . $size;
+}
 my $format = $cgi->param('format');
 my $fh = $cgi->upload("file");
+binmode $fh,":utf8";
 my ($filename, $directories, $suffix) = fileparse($filepath, , qr/\.[^.]*/);
 #warn "uploadMarc.pl got filename: " . $filename . " with suffix: " . $suffix;
 #warn "uploadMarc.pl got format: $format";
