@@ -576,6 +576,9 @@ biblios.app = function() {
                                                                             case 'date':
                                                                                 reqName = 'date';
                                                                                 break;
+                                                                            case 'medium':
+                                                                                reqName = 'medium';
+                                                                                break;
                                                                         }
                                                                         UI.search.currentSort.field = reqName;
                                                                         UI.search.currentSort.dir = dir;
