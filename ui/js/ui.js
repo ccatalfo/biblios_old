@@ -23,7 +23,7 @@ UI.search = {};
 UI.search.currQuery = '';
 UI.search.limitby = {};
 UI.search.currentSort = {
-    field: '',
+    field: 'relevance',
     dir: 0
 };
 // save state
