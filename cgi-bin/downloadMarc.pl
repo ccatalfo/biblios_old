@@ -29,6 +29,7 @@ foreach my $record (@records) {
 if( $format eq 'MARCXML' ) {
   print $cgi->header( -type => 'text/plain');
   my ($fh, $filepath) = tempfile(UNLINK => 0, SUFFIX=>'.xml', DIR=>"/tmp/") or die "$!";
+  binmode $fh, ":utf8";
   print $fh MARC::File::XML::header();
   my $xml_recs = "";
   foreach my $rec (@records) {
@@ -44,6 +45,7 @@ if( $format eq 'MARCXML' ) {
 elsif( $format eq 'MARC21' ) {
   print $cgi->header( -type => 'text/plain');
   my ($fh, $filepath) = tempfile(UNLINK => 0, SUFFIX=>'.mrc', DIR=>"/tmp/") or die "$!";
+  binmode $fh, ":utf8";
   foreach my $rec (@records) {
     my $record = MARC::Record->new_from_xml( $rec, $encoding, $format );
     print $fh $record->as_usmarc();
