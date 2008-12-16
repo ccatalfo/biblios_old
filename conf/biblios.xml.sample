@@ -81,6 +81,9 @@
                 <retrieveurl>http://api.beta.biblios.net/bib/</retrieveurl>
                 <saveurl>http://api.beta.biblios.net/</saveurl>
 		-->
+		<!-- optional element to link this send target to the following search target, ensuring that adds/edits and editor display are formatted properly for records from this search target
+		<searchtarget>‡biblios.net</searchtarget>
+		-->
 			</server>
 		</sendtargets>
 	</saving>
