@@ -164,8 +164,7 @@ function doSaveRemote(loc, xmldoc, editorid, editorloc) {
     // see if we're doing an add or an edit
     var editing = 0;
     // see if this send target has an associated search target
-    var searchtargetid = DB.SendTargets.select('name=?',[loc]).getOne().searchtarget;
-    var searchtarget = DB.SearchTargets.select('SearchTargets.rowid=?',[searchtargetid]).getOne().name;
+    var searchtarget = DB.SendTargets.select('name=?',[loc]).getOne().searchtarget;
     if( searchtarget == editorloc) {
         editing = 1;
         // check record against bibprofile returned by this send target if we're editing a record

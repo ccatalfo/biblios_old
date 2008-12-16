@@ -366,7 +366,31 @@ GearsORMShift.rules = [
 		return true;
 	    }
 	} // version 15: add sysdefined cols
-		
+	,{
+	    version: 16,
+	    comment: 'Drop SearchTargets table, recreate with unique constraint on name field, add old data back in',
+	    up: function() {
+		try {
+		    // save old data
+		    var searchtargets = DB.SearchTargets.select().toArray();
+		    // drop old table
+		    DB.SearchTargets.dropTable();
+		    // create new one
+		    DB.SearchTargets.createTable();
+		    // insert old data into new table
+		    DB.SearchTargets.load( searchtargets, true);
+		    return true;
+		}
+		catch(ex) {
+		    if(bibliosdebug) {
+			console.info(ex);
+		    }
+		}
+	    }// up
+	    ,down: function() {
+		return true;
+	    }
+	} // version 16
 ];
 
 function createTestTargets() {
@@ -502,7 +526,7 @@ function init_gears() {
 				name: 'SendTargets',
 				fields: 
 				{
-					name: new GearsORM.Fields.String(),
+				    name: new GearsORM.Fields.String({unique:1}),
 					location: new GearsORM.Fields.String(),
 					url: new GearsORM.Fields.String(),
 					user: new GearsORM.Fields.String(),

@@ -2342,7 +2342,7 @@ biblios.app = function() {
                                                                                 dataIndex: 'searchtarget',
                                                                                 width: 100,
                                                                                 renderer: function(value) {
-                                                                                    return DB.SearchTargets.select('SearchTargets.rowid=?',[value]).getOne().name;
+                                                                                    return value;
                                                                                 },
                                                                                 editor: new Ext.form.ComboBox({
                                                                                     store: new Ext.data.SimpleStore({

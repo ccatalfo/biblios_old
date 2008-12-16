@@ -100,15 +100,10 @@ function handle_html(html, editorid) {
     }
     Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).setTitle( tabTitle );
     UI.editor[editorid].record.postProcess();
-    var searchtarget = DB.SearchTargets.select('SearchTargets.name=?',[UI.editor[editorid].loc]).getOne();
-    var searchtargetid = '';
-    if(searchtarget) {
-	var searchtargetid = searchtarget.rowid;
-    }
-    var sendtarget = DB.SendTargets.select('searchtarget=?',[searchtargetid]).getOne();
+    var sendtarget = DB.SendTargets.select('searchtarget=?',[UI.editor[editorid].loc]).getOne();
 
     if(bibliosdebug) {
-	console.debug('handle_html searchtarget setting' + searchtargetid + ' send target matches ' + sendtarget );
+	console.debug('handle_html sendtarget for this records searchtarget: ' + sendtarget);
     }
 	// setup remote ils-controlled fields
     if( sendtarget ) {
