@@ -119,7 +119,7 @@ function getDefaultPazSettingsJSON( target ) {
 	
 	settings['pz:cclmap:kw['+db+']'] = 'u=1016';
 	
-	settings['pz:cclmap:au['+db+']']  = 'u=1004 s=al';
+	settings['pz:cclmap:au['+db+']']  = 'u=1003 s=al';
 	
 	settings['pz:cclmap:ti['+db+']'] = 'u=4 s=al';
 	
