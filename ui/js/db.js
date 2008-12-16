@@ -358,6 +358,7 @@ GearsORMShift.rules = [
 		    if(bibliosdebug) {
 			console.debug('version 15 up failed ' + ex);
 		    }
+		    return true;
 		}
 	    },
 	    down: function() {

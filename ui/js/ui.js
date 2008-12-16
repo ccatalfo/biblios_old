@@ -648,20 +648,9 @@ function uploadError(dialog, filename, data) {
 
 function resetDB() {
     try {
-        DB.SendTargets.select().each( function(s) { s.remove() }); 
-        DB.SearchTargets.select().each( function(s) { s.remove() }); 
-        // remove all savefolders except trash, drafts, completed and uploads
-        DB.Savefiles.select('Savefiles.rowid > ?',[4]).each( function(s) { s.remove(); });
-        // rename those first four folders in case something has gone wrong
-        var folders = ['', 'Trash','Completed','Drafts','Uploads'];
-        for( var i = 1; i < 5; i++) {
-            var folder = DB.Savefiles.select('Savefiles.rowid = ?',[i]).getOne();
-            folder.name = folders[i];
-            folder.save();
-        }
-        DB.Records.remove();
-        DB.Macros.remove();
-	DB.Plugins.remove();
+	// migrate to db version 0 and back up to latest
+	GearsORMShift.setMyVersion(0);
+	GearsORMShift.migrateTo( GearsORMShift.latestVersion() );
         Ext.getCmp('TargetsTreePanel').root.reload();
         Ext.getCmp('FoldersTreePanel').root.reload();
     }
