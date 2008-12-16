@@ -67,7 +67,6 @@
 			  <!-- sysdefined tells biblios to recreate this target on each page load -->
 			  <sysdefined>1</sysdefined>
 				<name>‡biblios.net</name>
-				<location>‡biblios.net</location>
 				<url>api.beta.biblios.net</url>
 				<user><!-- enter koha username here --></user>
 				<password><!-- enter koha password here--></password>

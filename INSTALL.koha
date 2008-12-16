@@ -45,7 +45,7 @@ Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site aja
 
 Note that if you download pazpar2 via apt, it will probably create an apache2 conf file under /etc/apache2/conf.d/pazpar2 with a ProxyPass directive.  Make sure to either comment this out or change its path so it won't interfere with Biblios' use of the /pazpar2/search.pz2 path.
 
-4. Copy the conf/biblios.xml.sample file to conf/biblios.xml.  Edit conf/biblios.xml to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios.xml.sample file for the syntax.  Note that in order to retrieve records directly from Koha, as well as to enable extra functionality for Koha-retrieved records (e.g. disabling Koha-specific tags and validating certain required tags), your Koha installation's Search Target name must match your Koha installation's Send Target name.  
+4. Copy the conf/biblios.xml.sample file to conf/biblios.xml.  Edit conf/biblios.xml to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios.xml.sample file for the syntax.  Note that in order to retrieve records directly from Koha, as well as to enable extra functionality for Koha-retrieved records (e.g. disabling Koha-specific tags and validating certain required tags), your Koha installation's Send Target stanza must contain the 1-indexed id of your Koha search target in a <searchtarget></searchtarget> element.
 
 5. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/
 
