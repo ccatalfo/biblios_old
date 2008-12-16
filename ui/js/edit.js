@@ -100,7 +100,11 @@ function handle_html(html, editorid) {
     }
     Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).setTitle( tabTitle );
     UI.editor[editorid].record.postProcess();
-    var searchtargetid = DB.SearchTargets.select('SearchTargets.name=?',[UI.editor[editorid].loc]).getOne().rowid;
+    var searchtarget = DB.SearchTargets.select('SearchTargets.name=?',[UI.editor[editorid].loc]).getOne();
+    var searchtargetid = '';
+    if(searchtarget) {
+	var searchtargetid = searchtarget.rowid;
+    }
     var sendtarget = DB.SendTargets.select('searchtarget=?',[searchtargetid]).getOne();
 
     if(bibliosdebug) {
