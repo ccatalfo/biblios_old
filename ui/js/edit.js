@@ -100,10 +100,11 @@ function handle_html(html, editorid) {
     }
     Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).setTitle( tabTitle );
     UI.editor[editorid].record.postProcess();
-
+    var searchtargetid = DB.SendTargets.select('name=?',[UI.editor[editorid].loc]).getOne().searchtarget;
+    var searchtarget = DB.SearchTargets.select('SearchTargets.rowid=?',[searchtargetid]).getOne().name;
 	// setup remote ils-controlled fields
-	if( Prefs.remoteILS[ UI.editor[editorid].location ] ) {
-        UI.editor[editorid].record.processForLocation(UI.editor[editorid].location);
+    if( searchtarget && searchtarget == UI.editor[editorid].loc ) {
+        UI.editor[editorid].record.processForLocation(UI.editor[editorid].loc);
 	}
     // disable Revert, Duplicate buttons if record is coming from search results 
     /*

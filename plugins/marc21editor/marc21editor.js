@@ -569,6 +569,9 @@ function getFFTagFromPopup(tagnumber, rectype, ffid) {
 }
 
 function setupSpecialEntries(loc) {
+    if(bibliosdebug) {
+	console.debug('setupSpecialEntries for location ' + loc);
+    }
 	var specialentries = Prefs.remoteILS[loc].instance.special_entries;
 	for( var i = 0; i < specialentries.length; i++) {
 		var entry = specialentries.eq(i);
@@ -620,6 +623,9 @@ function setupSpecialEntries(loc) {
 }
 
 function setupReservedTags(loc) {
+    if(bibliosdebug) {
+	console.debug('setupReservedTags for location: ' + loc);
+    }
 	var reservedtags = Prefs.remoteILS[loc].instance.reserved_tags;
 	for( var i = 0; i< reservedtags.length; i++) {
 		var tagnumber = $(reservedtags).eq(i).text();
