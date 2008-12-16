@@ -100,11 +100,18 @@ function handle_html(html, editorid) {
     }
     Ext.getCmp('editorTabPanel').getItem(UI.editor[editorid].tabid).setTitle( tabTitle );
     UI.editor[editorid].record.postProcess();
-    var searchtargetid = DB.SendTargets.select('name=?',[UI.editor[editorid].loc]).getOne().searchtarget;
-    var searchtarget = DB.SearchTargets.select('SearchTargets.rowid=?',[searchtargetid]).getOne().name;
+    var searchtargetid = DB.SearchTargets.select('SearchTargets.name=?',[UI.editor[editorid].loc]).getOne().rowid;
+    var sendtarget = DB.SendTargets.select('searchtarget=?',[searchtargetid]).getOne();
+
+    if(bibliosdebug) {
+	console.debug('handle_html searchtarget setting' + searchtargetid + ' send target matches ' + sendtarget );
+    }
 	// setup remote ils-controlled fields
-    if( searchtarget && searchtarget == UI.editor[editorid].loc ) {
-        UI.editor[editorid].record.processForLocation(UI.editor[editorid].loc);
+    if( sendtarget ) {
+	if(bibliosdebug) {
+	    console.debug('setting up ils controlled fields');
+	}
+        UI.editor[editorid].record.processForLocation(sendtarget.name);
 	}
     // disable Revert, Duplicate buttons if record is coming from search results 
     /*
