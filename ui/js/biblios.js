@@ -2224,6 +2224,7 @@ biblios.app = function() {
                                                                     new Ext.grid.EditorGridPanel({
                                                                         id: 'sendtargetsgrid',
                                                                         height: 300,
+									clicksToEdit: 1,
                                                                         ds: new Ext.data.Store({
                                                                             proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                             reader: new Ext.data.ArrayReader({
@@ -2340,18 +2341,22 @@ biblios.app = function() {
                                                                             ,{
                                                                                 header: 'SearchTarget',
                                                                                 dataIndex: 'searchtarget',
-                                                                                width: 100,
-                                                                                renderer: function(value) {
+                                                                                width: 150,
+                                                                                /*renderer: function(value) {
                                                                                     return value;
-                                                                                },
+                                                                                },*/
                                                                                 editor: new Ext.form.ComboBox({
                                                                                     store: new Ext.data.SimpleStore({
                                                                                         fields: ['rowid', 'name'],
                                                                                         data: getTargetsForCombo()
                                                                                     }),
+
+										    lazyRender:true,
+										    listClass:'x-combo-list-small',
+										    width: 'auto',
                                                                                     mode:'local',
                                                                                     displayField: 'name',
-                                                                                    valueField: 'rowid',
+                                                                                    valueField: 'name',
                                                                                     forceSelection:true,
                                                                                     typeAhead:true,
                                                                                     triggerAction:all

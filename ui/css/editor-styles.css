@@ -90,7 +90,7 @@ input.controlfield-text, input.subfield-text, input.subfield-delimiter, input.in
 }
 
 
-.x-form-field-wrap {
+#editorTabPanel .x-form-field-wrap {
 	display: inline;
 }
 
