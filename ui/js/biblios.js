@@ -2347,7 +2347,8 @@ biblios.app = function() {
                                                                                 },*/
                                                                                 editor: new Ext.form.ComboBox({
                                                                                     store: new Ext.data.SimpleStore({
-                                                                                        fields: ['rowid', 'name'],
+											id: 'searchtargetsStore'
+											,fields: ['rowid', 'name'],
                                                                                         data: getTargetsForCombo()
                                                                                     }),
 
