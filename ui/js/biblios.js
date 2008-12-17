@@ -1736,6 +1736,7 @@ biblios.app = function() {
                                                                 id: 'macrosgrid',
                                                                 region: 'center',
                                                                 height: 600,
+								clicksToEdit: 1,
                                                                 ds: new Ext.data.Store({
                                                                     proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                     reader: new Ext.data.ArrayReader({
@@ -1858,6 +1859,7 @@ biblios.app = function() {
                                                                     new Ext.grid.GridPanel({
                                                                         id: 'pluginsgrid',
                                                                         height: 600,
+									clicksToEdit:1,
                                                                         ds: new Ext.data.Store({
                                                                             proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                             reader: new Ext.data.ArrayReader({
@@ -1935,6 +1937,7 @@ biblios.app = function() {
                                                                     new Ext.grid.EditorGridPanel({
                                                                         id: 'searchtargetsgrid',
                                                                         height: 600,
+									clicksToEdit:1,
                                                                         ds: new Ext.data.Store({
                                                                             proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                             reader: new Ext.data.ArrayReader({
