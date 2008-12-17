@@ -2305,12 +2305,7 @@ biblios.app = function() {
                                                                                 sortable: true,
                                                                                 editor: new Ext.form.TextField()
                                                                             },
-                                                                            {
-                                                                                header: 'Location Name',
-                                                                                dataIndex: 'location',
-                                                                                editor: new Ext.form.TextField()
-                                                                            },
-                                                                            {
+									    {
                                                                                 header: 'Url',
                                                                                 dataIndex: 'url',
                                                                                 editor: new Ext.form.TextField()

@@ -137,7 +137,6 @@ function setupConfig( configDoc ) {
 		  z3950serversSave = $("saving//server", configDoc).each( function() {
 				var name = $(this).children('name').text();
 				var sysdefined = $(this).children('sysdefined').text();
-				var loc= $(this).children('location').text();
 				var url = $(this).children('url').text();
 				var user = $(this).children('user').text();
 				var password = $(this).children('password').text();
@@ -150,7 +149,6 @@ function setupConfig( configDoc ) {
 					t = new DB.SendTargets({
 						name: name,
 						sysdefined: sysdefined,
-						location: loc,
 						url: url,
 						user: user,
 						password: password,
