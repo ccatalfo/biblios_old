@@ -2437,17 +2437,13 @@ biblios.app = function() {
 											instance.url = record.data.url;
 											instance.name = record.data.name;
                                                                                         try {
-											    if( record.data.embedded == '1' ) {
-												Ext.MessageBox.alert('Send Plugin', 'Connection ok');
-											    }
-											    else {
 												instance.init( {
 													url:record.data.url,
 													    name:record.data.name,
 													    user: record.data.user,
 													    password: record.data.password
 												 });
-											    }
+
                                                                                             instance.initHandler = function(sessionStatus) {
                                                                                                 if( sessionStatus != 'ok' ) {
                                                                                                     Ext.MessageBox.alert('Connection error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');

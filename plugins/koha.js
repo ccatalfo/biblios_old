@@ -62,17 +62,7 @@ koha.prototype = {
             this.bibprofileurl = bibprofileurl ? bibprofileurl : this.bibprofileurl;
             this.retrieveurl = retrieveurl ? retrieveurl : this.retrieveurl;
             this.saveurl = saveurl ? saveurl : this.saveurl;
-	if( this.embedded ) {
-	    Ext.MessageBox.promptPassword('biblios is configured with an Embedded Koha Send Target that requires direct authentication to its Web Service. Please enter the password for the ' + userid + ' user on ' + this.url, '', function(btn,text) {
-		    if( btn == 'ok' ) {
-			this.password = text;
-			this.auth();
-		    }
-		}, this);
-	}
-	else {
 	    this.auth();
-	}
     	}, // end init
 
 		auth: function() {
