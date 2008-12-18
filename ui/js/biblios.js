@@ -2029,7 +2029,7 @@ biblios.app = function() {
                                                                                                 Ext.Msg.prompt('Add new search type', 'Enter abbreviation for new search type', function(btn, text) {
                                                                                                     var rowid = this.record.data.rowid;
                                                                                                     var pazid = getPazTargetName( DB.SearchTargets.select('SearchTargets.rowid=?',[rowid]).getOne() );
-                                                                                                    var newcclmap = 'pz:ccl:'+text+'['+pazid+']';
+                                                                                                    var newcclmap = 'pz:cclmap:'+text+'['+pazid+']';
                                                                                                     if(bibliosdebug) {
                                                                                                         console.debug('add searchtype: ' + rowid + ' ' + pazid + ' ' + newcclmap);
                                                                                                     }
