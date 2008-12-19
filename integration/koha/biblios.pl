@@ -52,7 +52,17 @@ if( $biblionumber ) {
     }
 }
 
+# create session cookie for use by proxy
+my $url =   ($query->https() ? "https://" : "http://")
+          . $ENV{'SERVER_NAME'}
+          . ($ENV{'SERVER_PORT'} eq ($query->https() ? "443" : "80") ? '' : ":$ENV{'SERVER_PORT'}")
+          . '/cgi-bin/koha/svc/proxy_auth_cookie';
+my $ua = LWP::UserAgent->new();
+$ua->cookie_jar({});
+my $resp = $ua->post( $url, { origip => $ENV{'REMOTE_ADDR'} },'Cookie' => $cookie );
+my $proxy_cookie = $resp->is_success ? $resp->header('Set-Cookie') : $cookie;
+
 $template->param( loggedinuser => $loggedinuser );
-$template->param( embeddedSESSID => $cookie );
+$template->param( embeddedSESSID => $proxy_cookie );
 
 output_html_with_http_headers $query, $cookie, $template->output;

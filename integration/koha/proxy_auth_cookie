@@ -1,0 +1,72 @@
+#!/usr/bin/perl
+
+# Copyright 2008 LibLime
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+#
+
+use strict;
+use warnings;
+
+use CGI;
+use C4::Auth qw{ check_api_auth get_session };
+use XML::Simple;
+
+my $query = CGI->new();
+
+# This service, given a valid Koha session cookie CGISESSID and the 
+# client IP address associated with it, creates a new session and returns
+# its session ID in a new cookie called PROXYCGISESSID.  This allows
+# a script running on the Koha web server to proxy web service requests
+# without having to know the operator's password; instead, the proxy script
+# just needs to pass the session ID via a CGISESSID cookie.
+#
+# FIXME: because this script was inspired by biblios, the user session
+# must of editcatalogue privileges.
+#
+# Since this script does nothing to ensure that the proxy calling it is Not
+# Evil (tm), it represents a security hole, and as such should be installed
+# only as part of a biblios integration.  Since it is meant to be called
+# by biblios.pl, it could be made more secure by having biblios.pl store
+# something in the original user's session to indicate that this is a valid
+# request to clone the user's session.
+
+# fake out REMOTE_ADDR
+my $real_remote_addr = $ENV{'REMOTE_ADDR'};
+$ENV{'REMOTE_ADDR'} = $query->param('origip');
+
+my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 1} );
+
+# and restore it
+$ENV{'REMOTE_ADDR'} = $real_remote_addr;
+
+if ($status eq 'ok') {
+    my $host_session  = get_session($sessionID);
+    my $proxy_session = get_session('');
+   
+    # copy all parameters from host session except IP address
+    my $host_params = $host_session->dataref();
+    for my $key (grep { $_ !~ /^_SESSION_/ } keys %{$host_params}) {
+        $proxy_session->param($key, $host_params->{$key});
+    }
+    $proxy_session->param('ip', $proxy_session->remote_addr());
+   
+    my $proxy_cookie = $query->cookie('PROXYCGISESSID' => $proxy_session->id());
+    print $query->header(-type => 'text/xml', cookie => $proxy_cookie);
+} else {
+    print $query->header(-type => 'text/xml');
+}
+print XMLout({ status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
