@@ -19,14 +19,26 @@ my $action = $cgi->param('action');
 
 if( $action eq 'auth' ) {
     my $url = $kohaurl;
+    my $cookie = $cgi->param('cookie');
+
+    my $resp;
     if($debug){
         warn "Authenticating to $url";
     }
-    my $resp = $ua->post( $url, {userid=>$userid, password=>$password});
+    if($cookie) {
+	$cookie =~ s/PROXYCGISESSID/CGISESSID/;
+	if($debug) {
+	    warn "authenticating to koha with cookie: $cookie";
+	}
+	$resp = $ua->post($url, {}, 'Cookie'=>$cookie);
+    }
+    else {
+	$resp = $ua->post( $url, {userid=>$userid, password=>$password});
+    }
     if($resp->is_success) {
         print $cgi->header(-type=>'text/x-json', -status=>$resp->code);
         my $data = { 
-            cookie => $resp->header('Set-Cookie'),
+            cookie => $resp->header('Set-Cookie') ? $resp->header('Set-Cookie') : '',
             resp => $resp->content,
         };
         print to_json($data);

@@ -16,7 +16,7 @@ var koha = function() {
 	this.name = '';
 	this.user = '';
 	this.password = '';
-	this.cgisessid = '';
+	this.cookie = '';
 	this.initHandler = function(){};
 	// bib profile
 	this.bibprofileHandler = function(){};
@@ -62,6 +62,9 @@ koha.prototype = {
             this.bibprofileurl = bibprofileurl ? bibprofileurl : this.bibprofileurl;
             this.retrieveurl = retrieveurl ? retrieveurl : this.retrieveurl;
             this.saveurl = saveurl ? saveurl : this.saveurl;
+		  if(this.embedded) {
+		    this.cookie = embeddedSESSID;
+		  }
 	    this.auth();
     	}, // end init
 
@@ -74,7 +77,8 @@ koha.prototype = {
                         kohaurl: this.authurl,
                         userid: this.user,
                         password: this.password,
-                        action:'auth'
+                      action:'auth',
+		      cookie: this.cookie
                     },
                     that: this,
                     dataType:'json',

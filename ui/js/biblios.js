@@ -2441,7 +2441,8 @@ biblios.app = function() {
 													url:record.data.url,
 													    name:record.data.name,
 													    user: record.data.user,
-													    password: record.data.password
+													    password: record.data.password,
+													    embedded: true
 												 });
 
                                                                                             instance.initHandler = function(sessionStatus) {
