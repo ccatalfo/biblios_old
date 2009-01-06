@@ -137,7 +137,7 @@ Ext.getCmp('searchtargetsgrid').add(
         renderTo:this.tbar,
         items:[
 	       {
-		   text: 'Search for a search target'
+		   text: 'Find a search target'
 	       },
           searchSearchTargetsdb,
 	  {
