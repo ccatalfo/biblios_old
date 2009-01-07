@@ -1,3 +1,4 @@
+
 /**
   * Application Layout
   * by Jozef Sakalos, aka Saki
@@ -2170,7 +2171,7 @@ biblios.app = function() {
                                                                             id:'searchtargetsgridtbar',
                                                                             items: [
                                                                             {
-                                                                                text: 'Add Search Target',
+                                                                                text: 'Add Target',
                                                                                 handler: function() {
                                                                                     // insert new target into db so we get it's id
                                                                                     var rs;
@@ -2203,7 +2204,7 @@ biblios.app = function() {
                                                                                 }
                                                                             },
                                                                             {
-                                                                                text: 'Remove Search Target',
+                                                                                text: 'Remove Target',
                                                                                 handler: function() {
                                                                                     var records = Ext.getCmp('searchtargetsgrid').getSelectionModel().getSelections();
                                                                                     for( var i = 0; i < records.length; i++) {
