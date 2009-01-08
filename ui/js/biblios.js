@@ -2194,7 +2194,11 @@ biblios.app = function() {
                                                                                         allowModify: 1,
                                                                                         allowDelete: 1,
 											sysdefined: 0,
-											source: "user"
+											source: "user",
+											pazpar2settings : '',
+											librarytype:'',
+											country: '',
+											reliability: ''
                                                                                     });
                                                                                     var grid = Ext.getCmp('searchtargetsgrid');
                                                                                     grid.stopEditing();
