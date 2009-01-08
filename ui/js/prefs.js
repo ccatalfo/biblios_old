@@ -63,7 +63,7 @@ function setupConfig( configDoc ) {
           if( searchtargetsurl ) {
               loadSearchTargetsFromUrl(searchtargetsurl);
             }
-		  $("searching//server", configDoc).each( function() { 
+		  $("searching//server", configDoc).each( function() {
 			  var source = $(this).children('source').text();
 			var hostname = $(this).children('hostname').text();
 			var sysdefined = $(this).children('sysdefined').text();
@@ -168,7 +168,7 @@ function setupConfig( configDoc ) {
 		      });
 	    		  $("//plugins/plugin/file", configDoc).each( function() { plugins += ' ' + $(this).text(); } );
 		  $("//templates/template/file", configDoc).each( function() { templates += ' ' + $(this).text(); } );
-        
+
         $('//icons/resources_panel', configDoc).children().each( function(i,j) {
             UI.icons.resources.searching = $(this).children('searching').text();
 
@@ -181,7 +181,7 @@ function setupConfig( configDoc ) {
 
 function reloadConfig() {
     loadConfig( confPath, function() {
-    
+
     });
 }
 
@@ -291,7 +291,7 @@ function setILSTargets() {
                     // try initing plugin
                     try {
                         Prefs.remoteILS[ils.name].instance.init({
-                            url:ils.url, 
+                            url:ils.url,
 				    name:Prefs.remoteILS[ils.name].name,
 				    user:Prefs.remoteILS[ils.name].user,
 				    password: Prefs.remoteILS[ils.name].pw,
@@ -326,6 +326,15 @@ function getTargetsForCombo() {
         list.push([targets[i].rowid,targets[i].name]);
     }
     return list;
+}
+
+function getPluginsForCombo(plugintype) {
+  var list = new Array();
+  var plugins = DB.Plugins.select('type=?',[plugintype]).toArray();
+  for( var i = 0; i<plugins.length; i++) {
+    list.push([plugins[i].name,plugins[i].name]);
+  }
+  return list;
 }
 
 function getSaveFileNames() {

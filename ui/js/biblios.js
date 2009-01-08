@@ -2361,8 +2361,24 @@ biblios.app = function() {
                                                                             {
                                                                                 header: 'Plugin',
                                                                                 dataIndex: 'plugin',
-                                                                                editor: new Ext.form.TextField(),
-                                                                                hidden: true
+                                                                                editor: new Ext.form.ComboBox({
+										  id:'sendtargetsplugincombo'
+										  ,store: new Ext.data.SimpleStore({
+										    id: 'pluginscombostore'
+										    ,fields:['display','value']
+										    ,data: getPluginsForCombo('sendtarget')
+														   }),
+										    lazyRender:true,
+										    listClass:'x-combo-list-small',
+										    width: 'auto',
+                                                                                    mode:'local',
+                                                                                    displayField: 'display',
+                                                                                    valueField: 'value',
+                                                                                    forceSelection:true,
+                                                                                    typeAhead:true,
+                                                                                    triggerAction:all
+										}),
+                                                                                hidden: false
                                                                             }
                                                                             ,{
                                                                                 header: 'SearchTarget',
@@ -2411,7 +2427,7 @@ biblios.app = function() {
                                                                                         url: '',
                                                                                         user: '',
                                                                                         password: '',
-                                                                                        plugin: 'Save To Koha',
+													     plugin: getPluginsForCombo('sendtarget')[0][0],
                                                                                         enabled: 0,
 											searchtarget: ''
                                                                                     });
