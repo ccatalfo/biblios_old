@@ -318,7 +318,7 @@ function getNewRecordMenu() {
 					    template: null,
 					    marcformat: null
 					}).save();
-				    openRecord(xmlstring, rdb.rowid, 'marcxml');
+				    openRecord(xmlstring, rdb.rowid, 'marcxml','none', 'none');
 			    } // success callback
 			    ,error: function(req, textStatus, errorThrown) {
 				UI.editor.progress.hide();
