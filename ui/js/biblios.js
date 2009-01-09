@@ -2000,7 +2000,7 @@ biblios.app = function() {
                                                                                 var settings = {};
                                                                                 if( settingsjson == '' ) {
                                                                                     var target = DB.SearchTargets.select('SearchTargets.rowid=?',[ record.data.rowid ] ).getOne();
-                                                                                    settings = getDefaultPazSettingsJSON(target);
+                                                                                    settings = getDefaultPazSettingsJSON(record.data);
 
                                                                                 }
                                                                                 else {
