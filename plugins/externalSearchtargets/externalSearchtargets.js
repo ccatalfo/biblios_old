@@ -237,6 +237,8 @@ Ext.getCmp('searchtargetsgridtbar').on('render', function(tbar) {
 			      delete target['rowid'];
 			      target['allowDelete'] = 1;
 			      target['allowModify'] = 1;
+			      target['library_type'] = target['librarytype'];
+			      delete target['librarytype'];
 			      try {
 				var targetjson = Ext.util.JSON.encode([target]);
 			      }
