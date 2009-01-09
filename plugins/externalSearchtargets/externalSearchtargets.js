@@ -44,6 +44,9 @@ var searchSearchTargetsdb = new Ext.form.ComboBox({
     pageSize: 10,
     hideTrigger: true,
     triggerAction: 'all',
+    tpl: new Ext.XTemplate(
+      '<tpl for="."><div class="x-combo-list-item">{name}<br/>&nbsp;&nbsp;<bold>country:</bold>{country} <bold>type:</bold>{librarytype} <bold>db:</bold>{dbname}</div></tpl>'
+    ),
     onSelect: function(record) {
         if(bibliosdebug) {
             console.debug(record);
