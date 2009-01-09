@@ -209,7 +209,7 @@ biblios.app = function() {
                                 region: 'north',
                                 border: false,
                                 layout: 'border',
-                                height: $('brandingPanelRegionHeight', configDoc).text() || 100,
+                                height: $('brandingPanelRegionHeight', configDoc).text() || 55,
                                 items: [
                                     {
                                         region: 'north',
