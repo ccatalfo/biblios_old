@@ -371,13 +371,40 @@ GearsORMShift.rules = [
 	    up: function() {
 		try {
 		    // save old data
-		    var searchtargets = DB.SearchTargets.select().toArray();
-		    // drop old table
-		    DB.SearchTargets.dropTable();
-		    // create new one
-		    DB.SearchTargets.createTable();
+		  var searchtargets = new Array();
+		    var rs = db.execute('SELECT hostname, port, dbname, userid,password,name,enabled,rank,description,syntax,icon,position,type,pluginlocation,allowDelete,allowModify,pazpar2settings,sysdefined FROM SearchTargets');
+		  while( rs.isValidRow() ) {
+		    var o = {
+		      hostname: rs.fieldByName('hostname')
+		      ,port: rs.fieldByName('port')
+		      ,dbname:rs.fieldByName('dbname')
+		      ,userid: rs.fieldByName('userid')
+		      ,password:rs.fieldByName('password')
+		      ,name:rs.fieldByName('name')
+		      ,enabled:rs.fieldByName('enabled')
+		      ,rank:rs.fieldByName('rank')
+		      ,description:rs.fieldByName('description')
+		      ,syntax:rs.fieldByName('syntax')
+		      ,icon:rs.fieldByName('icon')
+		      ,position:rs.fieldByName('position')
+		      ,type:rs.fieldByName('type')
+		      ,pluginlocation:rs.fieldByName('pluginlocation')
+		      ,allowDelete:rs.fieldByName('allowDelete')
+		      ,allowModify:rs.fieldByName('allowModify')
+		      ,pazpar2settings:rs.fieldByName('pazpar2settings')
+		      ,sysdefined:rs.fieldByName('sysdefined')
+		    }
+		    searchtargets.push(o);
+		    rs.next();
+		  }
+		  // drop old table
+ 		  DB.SearchTargets.dropTable();
+		  // recreate table with uniq constraint on name
+		  var creaters = db.execute('CREATE TABLE SearchTargets (hostname text, port text, dbname text, userid text, password text, name text unique, enabled integer, rank integer, description text, syntax text, icon text, position text, type text, pluginlocation text, allowDelete integer default 1, allowModify integer default 1, pazpar2settings text, sysdefined integer default 0)');
 		    // insert old data into new table
-		    DB.SearchTargets.load( searchtargets, true);
+		  for( var i = 0; i < searchtargets.length; i++) {
+		    var insertrs = db.execute('insert into SearchTargets (hostname, port, dbname, userid, password, name, enabled, rank, description, syntax, icon, position, type, pluginlocation, allowDelete, allowModify, pazpar2settings, sysdefined) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',[searchtargets[i].hostname, searchtargets[i].port, searchtargets[i].dbname, searchtargets[i].userid, searchtargets[i].password, searchtargets[i].name, searchtargets[i].enabled, searchtargets[i].rank, searchtargets[i].description, searchtargets[i].syntax, searchtargets[i].icon, searchtargets[i].position, searchtargets[i].type, searchtargets[i].pluginlocation, searchtargets[i].allowDelete, searchtargets[i].allowModify, searchtargets[i].pazpar2settings, searchtargets[i].sysdefined]);
+		  }
 		    return true;
 		}
 		catch(ex) {
@@ -516,7 +543,7 @@ function init_gears() {
 					dbname: new GearsORM.Fields.String(),
 					userid: new GearsORM.Fields.String(),
 					password: new GearsORM.Fields.String(),
-					name: new GearsORM.Fields.String(),
+					name: new GearsORM.Fields.String({unique:1}),
 					enabled: new GearsORM.Fields.Integer(),
 					rank: new GearsORM.Fields.Integer(),
 					description: new GearsORM.Fields.String(),
