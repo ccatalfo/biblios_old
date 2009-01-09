@@ -113,6 +113,52 @@ var countriesds = new Ext.data.Store({
 					       ,forceSelection:false
 					       ,emptyText:'Select a country'
 					     });
+// in search targets grid, make country and library type columns editable with combobox
+// library type is col 12
+var libtypeditor = new Ext.grid.GridEditor(
+							     new Ext.form.ComboBox({
+							       store: librarytypesds
+
+							       ,displayField:'display'
+							       ,valueField:'value'
+							       ,typeAhead:true
+							       ,triggerAction:'all'
+							       ,forceSelection:false
+							       ,emptyText:'Select Library Type'
+
+							     }), {
+							       listeners: {
+								 beforeedit: function(editor) {
+								   if(bibliosdebug) {
+								     console.info(editor);
+								   }
+								   editor.field.row = editor.row;
+								   editor.field.col = editor.col;
+								   editor.field.record = editor.record;
+								   return true;
+								 } // afteredit list
+								 ,afteredit: function(editor) {
+								   console.info(editor);
+								   return true;
+								 }
+							       } // listeners
+							     });
+Ext.getCmp('searchtargetsgrid').getColumnModel().setEditor(12, libtypeditor );
+
+// country is col 13
+Ext.getCmp('searchtargetsgrid').getColumnModel().setEditor(13,
+							   new Ext.grid.GridEditor(
+							     new Ext.form.ComboBox({
+							       store: countriesds
+							       ,displayField:'display'
+							       ,valueField:'value'
+							       ,typeAhead:true
+							       ,triggerAction:'all'
+							       ,forceSelection:false
+							       ,emptyText:'Select a country'
+							     })
+							   )
+							  );
 
 var searchTargetsSearchButton = new Ext.Button({
 						 id:'searchtargetsSearchButton'
