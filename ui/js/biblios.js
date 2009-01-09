@@ -1946,51 +1946,14 @@ biblios.app = function() {
                                                                                 update: function(store, record, operation) {
                                                                                     record.data.enabled = record.data.enabled ? 1 : 0;
                                                                                     if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT) {
-                                                                                        t = DB.SearchTargets.select('SearchTargets.rowid=?', [record.data.rowid]).getOne();
-                                                                                        if( t.allowModify == 0 ) {
-                                                                                           Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings");
-                                                                                            return false;
-                                                                                        }
-                                                                                        try {
-											    var rs = db.execute('update SearchTargets set name = ?, hostname = ?, port = ?, dbname = ?, description = ?, userid = ?, password = ?, enabled = ?, pazpar2settings = ?, remoteID = ?, librarytype=?, country=? where rowid = ?', [record.data.name, record.data.hostname, record.data.port, record.data.dbname, record.data.description, record.data.userid, record.data.password, record.data.enabled, record.data.pazpar2settings, record.data.remoteID, record.data.librarytype, record.data.country, record.data.rowid]);
-                                                                                            rs.close();
-                                                                                        }
-                                                                                        catch(ex) {
-                                                                                            Ext.MessageBox.alert('Error', ex.message);
-                                                                                        }
-                                                                                    }
+										      DB.SearchTargets.load(record.data, true);
                                                                                     Ext.getCmp('TargetsTreePanel').root.reload();
 										    setPazPar2Targets();
-
+										      }
                                                                                 } // search targets store update
                                                                             } // search targets grid store listeners
                                                                         }),
                                                                         listeners: {
-                                                                            afteredit: function(e) {
-                                                                                var id = e.record.data.id;
-                                                                                var field = e.field;
-                                                                                var value = e.value;
-                                                                                if(field == 'enabled') {
-                                                                                    value = value ? 1 : 0;
-                                                                                }
-                                                                                t = DB.SearchTargets.select('SearchTargets.rowid=?', [id]).getOne();
-                                                                                if( t.allowModify == 0 ) {
-                                                                                   Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings");
-                                                                                    return false;
-                                                                                }
-                                                                                var rs;
-                                                                                try {
-                                                                                    rs = db.execute('update SearchTargets set '+field+' = ? where SearchTargets.rowid = ?', [value, id]);
-                                                                                    rs.close();
-                                                                                }
-                                                                                catch(ex) {
-                                                                                    Ext.MessageBox.alert('Error', ex.message);
-                                                                                }
-                                                                                setPazPar2Targets(Ext.emptyFn);
-                                                                                //Ext.getCmp('searchtargetsgrid').store.reload();
-                                                                                Ext.getCmp('TargetsTreePanel').getRootNode().reload();
-
-                                                                            }, // after edit event on search target grid
                                                                             celldblclick: function(grid, rowIndex, colIndex, e) {
                                                                                 if( colIndex != 9 ) {
                                                                                     return true;
@@ -2054,7 +2017,9 @@ biblios.app = function() {
                                                                                                 if(bibliosdebug) { console.info(settingsstring);}
                                                                                                 btn.record.data.pazpar2settings = settingsstring;
                                                                                                 btn.record.commit();
-                                                                                                Ext.getCmp('searchtargetsgrid').store.reload();
+                                                                                                if(bibliosdebug) {
+												  console.info(Ext.getCmp('searchtargetsgrid').store.getModifiedRecords());
+												}
                                                                                                 setPazPar2Targets(Ext.emptyFn);
                                                                                                 Ext.getCmp('pazpar2settingsproperties').close();
                                                                                             }
@@ -2173,33 +2138,36 @@ biblios.app = function() {
                                                                                 text: 'Add Target',
                                                                                 handler: function() {
                                                                                     // insert new target into db so we get it's id
-                                                                                    var rs;
-                                                                                    try {
-                                                                                        rs = db.execute('insert into SearchTargets (name, allowDelete, allowModify, description, hostname, dbname, port, userid, password, pazpar2settings, sysdefined, source, remoteID) values ("", 1, 1,"","","","", "", "", "", 0, "user", "")');
-                                                                                        rs.close();
-                                                                                    }
-                                                                                    catch(ex) {
-                                                                                        Ext.MessageBox.alert('Error', ex.message);
-                                                                                    }
-                                                                                    var t = new SearchTarget({
-                                                                                        id: db.lastInsertRowId,
-                                                                                        name: '',
-                                                                                        hostname: '',
-                                                                                        port: '',
-                                                                                        dbname: '',
-                                                                                        description: '',
-                                                                                        userid: '',
-                                                                                        password: '',
-                                                                                        enabled: 0,
-                                                                                        allowModify: 1,
-                                                                                        allowDelete: 1,
-											sysdefined: 0,
-											source: "user",
-											pazpar2settings : '',
-											librarytype:'',
-											country: '',
-											reliability: ''
-                                                                                    });
+										  var newtarget = new DB.SearchTargets({
+															 hostname:''
+															 ,port:''
+															 ,dbname:''
+															 ,userid:''
+															 ,password:''
+															 ,name:''
+															 ,enabled:0
+															 ,rank:''
+															 ,allowModify:1
+															 ,allowDelete:1
+															 ,description:''
+															 ,syntax:''
+															 ,icon:''
+															 ,position:''
+															 ,type:''
+															 ,pluginlocation:''
+															 ,pazpar2settings:''
+															 ,remoteID:''
+															 ,source:'user'
+															 ,sysdefined:0
+															 ,librarytype:''
+															 ,country:''
+															 ,reliability:''
+														       }
+										  );
+										  newtarget.save();
+                                                                                    var t = new SearchTarget(
+											      newtarget
+                                                                                    );
                                                                                     var grid = Ext.getCmp('searchtargetsgrid');
                                                                                     grid.stopEditing();
                                                                                     grid.store.insert(0, t);
