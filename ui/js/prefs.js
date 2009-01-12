@@ -238,7 +238,6 @@ function loadPlugins() {
                 setILSTargets();
 				Ext.getCmp('TargetsTreePanel').root.reload();
                 displayInitErrors();
-                loadEmbeddedRecord();
             }
         });
     });
@@ -287,6 +286,13 @@ function setILSTargets() {
                             sendtarget.save();
                             Ext.getCmp('sendtargetsgrid').store.reload();
                         }
+						// if bib profile successful
+						else {
+							// if this send target is embedded, try to load embedded marcxml record
+							if(this.embedded) {
+								loadEmbeddedRecord();
+							}
+						}
                     }
                     // try initing plugin
                     try {
