@@ -572,68 +572,71 @@ function setupSpecialEntries(loc) {
     if(bibliosdebug) {
 	console.debug('setupSpecialEntries for location ' + loc);
     }
-	var specialentries = Prefs.remoteILS[loc].instance.special_entries;
-	for( var i = 0; i < specialentries.length; i++) {
-		var entry = specialentries.eq(i);
-		var tagnumber = $('field tag', entry).text();	
-		var subfield = $('field/subfield', entry).text();	
-		// get the element to replace w/ combobox
-		var elemToReplace = $('[@id^='+tagnumber+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
-		if(elemToReplace.length == 0) {
-			return false;
-		}
-		var currentValue = $(elemToReplace).val();
-		var id = $(elemToReplace).get(0).id;
-		// get parent .subfield to render combo to
-		var subfield = $(elemToReplace).parents('.subfield');
-		// remove current text of elemToReplace
-		//$(elemToReplace).remove();
-		var valid_values = $('valid_values value', entry);
-		var storevalues = new Array();
-		for( j = 0; j < valid_values.length; j++) {
-			var value = valid_values.eq(j);
-			var code = $('code', value).text();
-			var desc = $('description', value).text();
-			// store valid values in store
-			storevalues.push([code, desc]);
-		}
-		if(bibliosdebug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry');}
-		var store = new Ext.data.SimpleStore({
-			fields: ['code', 'desc'],
-			data: storevalues
-		});
-		var combo = new Ext.form.ComboBox({
-			id: id,
-			store: store,
-			typeAhead: true,
-			displayField: 'desc',
-			valueField: 'code',
-			grow: true,
-			mode: 'local',
-			selectOnFocus: true,
-			value: currentValue,
-			triggerAction: 'all',
-			hideTrigger: true,
-			applyTo: $(elemToReplace).get(0)
-		});
-		Ext.ComponentMgr.register(combo);
-		if(bibliosdebug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry');}
-		
-	}
+    if( Prefs.remoteILS[loc] && Prefs.remoteILS[loc].instance && Prefs.remoteILS[loc].instance.special_entries ) {
+        var specialentries = Prefs.remoteILS[loc].instance.special_entries;
+        for( var i = 0; i < specialentries.length; i++) {
+            var entry = specialentries.eq(i);
+            var tagnumber = $('field tag', entry).text();	
+            var subfield = $('field/subfield', entry).text();	
+            // get the element to replace w/ combobox
+            var elemToReplace = $('[@id^='+tagnumber+']').children('.subfields').children('[@id*='+subfield+']').children('.subfield-text');
+            if(elemToReplace.length == 0) {
+                return false;
+            }
+            var currentValue = $(elemToReplace).val();
+            var id = $(elemToReplace).get(0).id;
+            // get parent .subfield to render combo to
+            var subfield = $(elemToReplace).parents('.subfield');
+            // remove current text of elemToReplace
+            //$(elemToReplace).remove();
+            var valid_values = $('valid_values value', entry);
+            var storevalues = new Array();
+            for( j = 0; j < valid_values.length; j++) {
+                var value = valid_values.eq(j);
+                var code = $('code', value).text();
+                var desc = $('description', value).text();
+                // store valid values in store
+                storevalues.push([code, desc]);
+            }
+            if(bibliosdebug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry');}
+            var store = new Ext.data.SimpleStore({
+                fields: ['code', 'desc'],
+                data: storevalues
+            });
+            var combo = new Ext.form.ComboBox({
+                id: id,
+                store: store,
+                typeAhead: true,
+                displayField: 'desc',
+                valueField: 'code',
+                grow: true,
+                mode: 'local',
+                selectOnFocus: true,
+                value: currentValue,
+                triggerAction: 'all',
+                hideTrigger: true,
+                applyTo: $(elemToReplace).get(0)
+            });
+            Ext.ComponentMgr.register(combo);
+            if(bibliosdebug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry');}
+        }
+    }
 }
 
 function setupReservedTags(loc) {
     if(bibliosdebug) {
 	console.debug('setupReservedTags for location: ' + loc);
     }
-	var reservedtags = Prefs.remoteILS[loc].instance.reserved_tags;
-	for( var i = 0; i< reservedtags.length; i++) {
-		var tagnumber = $(reservedtags).eq(i).text();
-		// set readonly for tagnumber and indicators
-		$('.'+tagnumber, editorelem).find('input').attr('readonly', 'readonly').addClass('reserved_tag');
-		// set readonly for subfields
-		$('.'+tagnumber, editorelem).find('.subfield').children('input').attr('readonly', 'readonly').addClass('reserved_tag');
-	}	
+    if( Prefs.remoteILS[loc] && Prefs.remoteILS[loc].instance && Prefs.remoteILS[loc].instance.reserved_tags ) {
+        var reservedtags = Prefs.remoteILS[loc].instance.reserved_tags;
+        for( var i = 0; i< reservedtags.length; i++) {
+            var tagnumber = $(reservedtags).eq(i).text();
+            // set readonly for tagnumber and indicators
+            $('.'+tagnumber, editorelem).find('input').attr('readonly', 'readonly').addClass('reserved_tag');
+            // set readonly for subfields
+            $('.'+tagnumber, editorelem).find('.subfield').children('input').attr('readonly', 'readonly').addClass('reserved_tag');
+        }	
+    }
 }
 
 function setupEditorHotkeys() {
