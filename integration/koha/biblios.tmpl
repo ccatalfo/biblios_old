@@ -46,16 +46,15 @@
     var folderssplash = '[% folderssplash %]';
     var searchingsplash = '[% searchingsplash %]';
 </script>
-    <script type="text/javascript" src="[% kohaintranetdir %]lib.js"></script>
+    <script type="text/javascript" src="[% kohaintranetdir %]gears_init.js"></script>
 <script>
-        Ext.get('loadingtext').update('Checking for Google Gears');
       if (!window.google || !google.gears) {
-        Ext.get('loadingtext').update('<p>Unable to load Google Gears.</p><p>Please visit the following url to install:</p><p><a target="_blank" href="http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application">Install Google Gears</a></p>');
         location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
                         "&return="+location.href;
       }
 
 </script>
+    <script type="text/javascript" src="[% kohaintranetdir %]lib.js"></script>
 <div id="branding-area"</div>
 <div id="kohaheader">
 <!-- TMPL_INCLUDE NAME="header.inc" -->

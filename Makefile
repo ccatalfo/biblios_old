@@ -32,7 +32,7 @@ build: $(SRCS)
 	@echo
 	@echo "Concatenating all js files"
 	@echo
-	$(CAT) lib/cookieHelpers.js lib/jquery/jquery-1.2.2.min.js build/lib/jquery_plugins-min.js lib/sarissa/sarissa.js lib/jquery/jquery.xslTransform.packed.js lib/sarissa/sarissa_ieemu_xpath.js lib/extjs2/adapter/ext/ext-base.js lib/extjs2/ext-all.js build/lib/ext_ux_libs-min.js lib/google_gears/gears_init.js lib/google_gears/GearsORM_all.js lib/google_gears/GearsORMShift.js build/lib/biblios_min.js > build/lib.js
+	$(CAT) lib/cookieHelpers.js lib/jquery/jquery-1.2.2.min.js build/lib/jquery_plugins-min.js lib/sarissa/sarissa.js lib/jquery/jquery.xslTransform.packed.js lib/sarissa/sarissa_ieemu_xpath.js lib/extjs2/adapter/ext/ext-base.js lib/extjs2/ext-all.js build/lib/ext_ux_libs-min.js lib/google_gears/GearsORM_all.js lib/google_gears/GearsORMShift.js build/lib/biblios_min.js > build/lib.js
 	@echo
 	@echo "Compressing css files"
 	@echo
@@ -48,6 +48,7 @@ build: $(SRCS)
 install: 
 	cp build/index.html $(HTMLDIR)/index.html
 	cp build/lib.js $(HTMLDIR)/lib.js
+	cp lib/google_gears/gears_init.js $(HTMLDIR)
 	cp build/styles.css $(HTMLDIR)/styles.css
 	mkdir -p $(HTMLDIR)/lib/extjs2/resources
 	mkdir -p $(HTMLDIR)/lib/extjs2/resources/images/default
@@ -125,6 +126,7 @@ koha-install:
 	cp integration/koha/proxy_auth_cookie $(KOHACGIDIR)/svc/
 	cp cgi-bin/* $(KOHACGIDIR)/plugins/biblios/
 	cp build/lib.js $(KOHADIR)/lib/biblios/
+	cp lib/google_gears/gears_init.js $(KOHADIR)/lib/biblios/
 	cp build/styles.css $(KOHADIR)/lib/biblios/
 	cp ui/css/reset.css $(KOHADIR)/lib/biblios/
 	cp -r lib/extjs2/resources/css $(KOHADIR)/lib/biblios/lib/extjs2/resources

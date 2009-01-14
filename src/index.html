@@ -51,6 +51,17 @@
     var searchingsplash = '[% searchingsplash %]';
 </script>
     [% IF debug %]
+    <!-- try to load gears first before loading rest of biblios app-->
+    <!-- gears -->
+	<script type="text/javascript" src="[% libPath %]lib/google_gears/gears_init.js"></script>
+    <script>
+        if (!window.google || !google.gears) {
+            location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
+                            "&return="+location.href;   
+        }
+    </script>
+	<script type="text/javascript" src="[% libPath %]lib/google_gears/GearsORM_all.js"></script>
+	<script type="text/javascript" src="[% libPath %]lib/google_gears/GearsORMShift.js"></script>
     <!-- firebug lite -->
     <script type="text/javascript" src="[% libPath %]lib/firebug/firebug-lite-compressed.js"></script>
     <!-- cookie utility funcs -->
@@ -71,10 +82,6 @@
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/miframe.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/GridViewOverride.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/extjs2/Ext.ux.ToolbarContainer.js"></script>
-    <!-- gears -->
-	<script type="text/javascript" src="[% libPath %]lib/google_gears/gears_init.js"></script>
-	<script type="text/javascript" src="[% libPath %]lib/google_gears/GearsORM_all.js"></script>
-	<script type="text/javascript" src="[% libPath %]lib/google_gears/GearsORMShift.js"></script>
     <!-- jquery -->
 	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery-1.2.2.js"></script>
 	<script type="text/javascript" src="[% libPath %]lib/jquery/jquery.hotkeys.js"></script>
@@ -94,16 +101,16 @@
     <script type="text/javascript" src="[% uiPath %]ui/js/ui.js"></script>
     <script type="text/javascript" src="[% uiPath %]ui/js/edit.js"></script>
     [% ELSE %]
+    <!-- try to load gears first before loading rest of biblios app-->
+	<script type="text/javascript" src="[% libPath %]google_gears/gears_init.js"></script>
+    <script>
+        if (!window.google || !google.gears) {
+            location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
+                            "&return="+location.href;   
+        }
+    </script>
     <script type="text/javascript" src="[% uiPath %]lib.js"></script>
     [% END %]
-<script>
-        Ext.get('loadingtext').update('Checking for Google Gears');
-    if (!window.google || !google.gears) {
-        Ext.get('loadingtext').update('<p>Unable to load Google Gears.</p><p>Please visit the following url to install:</p><p><a target="_blank" href="http://gears.google.com/?action=install&message=Install Google Gears to use this Cataloging Application">Install Google Gears</a></p>');
-    location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
-                        "&return="+location.href;   
-    }
-</script>
 <div id="branding-area"</div>
 <div id="bibliosheader">[% headerhtml %]</div>
 <div id='biblios'>

@@ -426,7 +426,7 @@ GearsORMShift.rules = [
                 return true;
             }
 	  catch(ex) {
-	    if (debug) {
+	    if (bibliosdebug) {
 	      console.info("Unable to add pazpar2settings col to SearchTargets table");
 	    }
 	    return true;
