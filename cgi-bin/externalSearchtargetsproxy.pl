@@ -13,6 +13,10 @@ use JSON;
 my $debug = 1;
 
 my $ua = LWP::UserAgent->new();
+# allow LWP to redirecto for POST,PUT
+push @{ $ua->requests_redirectable }, 'POST';
+push @{ $ua->requests_redirectable }, 'PUT';
+
 my $cgi = CGI->new();
 my $resp;
 
