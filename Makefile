@@ -45,7 +45,7 @@ build: $(SRCS)
 	@echo
 	$(CAT) build/css/styles-min.css build/css/editor-styles-min.css build/css/preview-styles-min.css build/css/Ext.ux.ToolbarContainer-min.css > build/styles.css
 
-install: 
+install: checkperldeps
 	cp build/index.html $(HTMLDIR)/index.html
 	cp build/lib.js $(HTMLDIR)/lib.js
 	cp lib/google_gears/gears_init.js $(HTMLDIR)
@@ -88,6 +88,7 @@ dist: build
 	zip -r $(PROGNAME).zip $(PROGNAME)
 	rm -rf $(PROGNAME)
 
+
 distclean:
 	@echo "Removing distributions"
 	@echo
@@ -108,7 +109,7 @@ clean:
 tags: 
 	$(CTAGS) ui/js/biblios.js ui/js/db.js ui/js/search.js ui/js/ui.js ui/js/save.js ui/js/edit.js ui/js/options.js ui/js/init.js ui/js/prefs.js
 
-koha-install: 
+koha-install: checkperlkohadeps
 	mkdir -p $(KOHACGIDIR)/plugins/biblios
 	mkdir -p $(KOHADIR)/lib/biblios
 	mkdir -p $(KOHADIR)/lib/biblios/ui
@@ -140,3 +141,20 @@ koha-uninstall:
 	-rm -f $(KOHADIR)/includes/doc-head-close-biblios.inc
 	rm -rf $(KOHACGIDIR)/plugins/biblios
 	rm -rf $(KOHADIR)/lib/biblios
+
+perldeps:
+	@echo "Creating file containing required perl modules and versions in tools/perldeps.txt (requires Devel::Modlist)"
+	cat tools/*.pl cgi-bin/*.pl *.pl > tools/perlscripts.txt
+	perl -d:Modlist -MDevel::Modlist=stop,nocore,zerodefault,stdout tools/perlscripts.txt > tools/perldeps.txt 2> /dev/null
+
+perlkohadeps:
+	@echo "Creating file containing required perl modules and versions in (including Koha scripts) tools/perldeps.txt (requires Devel::Modlist)"
+	cat tools/*.pl cgi-bin/*.pl *.pl integration/koha/*.pl integration/koha/proxy_auth_cookie integration/koha/z3950 > tools/perlkohascripts.txt
+	perl -I$(KOHACGIDIR) -d:Modlist -MDevel::Modlist=stop,nocore,zerodefault,stdout tools/perlkohascripts.txt > tools/perlkohadeps.txt 2> /dev/null
+
+checkperldeps:
+	perl tools/check_perl_deps.pl `cat tools/perldeps.txt`
+
+checkperlkohadeps:
+	perl tools/check_perl_deps.pl `cat tools/perlkohadeps.txt`
+

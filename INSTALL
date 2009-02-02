@@ -61,4 +61,6 @@ make -B all
 
 ./install.pl
 
+Note before installing the files the Makefile will check that perl dependencies have been satisfied for the scripts in cgi-bin.  If they fail, the make install process will not run and a list of missing perl modules will be printed.
+
 9. Point your browser to the appropriate path and catalog away...

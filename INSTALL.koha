@@ -64,6 +64,8 @@ make -B all
 
 integration/koha/install-koha.pl
 
+Note before installing the files the Makefile will check that perl dependencies have been satisfied for the scripts in cgi-bin.  If they fail, the make install process will not run and a list of missing perl modules will be printed.
+
 9. You should now be able to access biblios from within your koha staff intranet via the following url:
 
 	http://<your koha intranet url>/cgi-bin/koha/cataloguing/biblios.pl
