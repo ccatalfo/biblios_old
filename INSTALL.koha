@@ -10,7 +10,7 @@ Google Gears plugin for your web browser (Internet Explorer 6/7 or FireFox), ava
 
 1.Get a copy of biblios, via git 
 
-	git clone git://git.biblios.net/pub/scm/biblios.git
+	git clone git://git.biblios.org/pub/scm/biblios.git
 
 or by downloading a prepackaged .tar.gz or .zip file:
 
@@ -21,52 +21,31 @@ or by downloading a prepackaged .tar.gz or .zip file:
 	sudo /usr/sbin/a2enmod proxy_http
 	sudo /usr/sbin/apache2ctl force-reload
 
-3. Setup Apache2 to proxy requests from biblios to appropriate urls:
-Add reverse proxies to koha intranet's vhost to allow pazpar2 and cross site ajax requests.  Copy these lines into your koha intranet's virtual host section in your koha-http.conf file, adding urls appropriate to your configuration.
+3. Copy the conf/biblios.xml.sample file to conf/biblios.xml.  Edit conf/biblios.xml to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios.xml.sample file for the syntax.  Note that in order to retrieve records directly from Koha, as well as to enable extra functionality for Koha-retrieved records (e.g. disabling Koha-specific tags and validating certain required tags), your Koha installation's Send Target stanza must contain the name of your Koha search target in a <searchtarget></searchtarget> element.
 
-<IfModule mod_proxy.c>
-       ProxyRequests Off
+4. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/
 
-       <Proxy *>
-        AddDefaultCharset off
-        Order deny,allow
-        Allow from all
-       </Proxy>
-
-       ProxyVia Off
-
-       # proxy for pazpar2 daemon
-       ProxyPass /pazpar2/search.pz2 http://localhost:9004/search.pz2
-
-       # proxy for sru authority server
-       ProxyPass /kohaauth/ <your koha sru auth server e.g. http://eowyn.metavore.com:9999/>
-
-</IfModule>
-
-Note that if you download pazpar2 via apt, it will probably create an apache2 conf file under /etc/apache2/conf.d/pazpar2 with a ProxyPass directive.  Make sure to either comment this out or change its path so it won't interfere with Biblios' use of the /pazpar2/search.pz2 path.
-
-4. Copy the conf/biblios.xml.sample file to conf/biblios.xml.  Edit conf/biblios.xml to include any static Z39.50 search targets or remote ils (koha) targets.  Follow the comments in the biblios.xml.sample file for the syntax.  Note that in order to retrieve records directly from Koha, as well as to enable extra functionality for Koha-retrieved records (e.g. disabling Koha-specific tags and validating certain required tags), your Koha installation's Send Target stanza must contain the 1-indexed id of your Koha search target in a <searchtarget></searchtarget> element.
-
-5. Download and install PazPar2, available here: http://www.indexdata.dk/pazpar2/
-
-6. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
+5. Run pazpar2 with included config files and search targets with the following command from your biblios directory.
  
-pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.cfg
+pazpar2 -D -l logs/pazpar2.log -f conf/pazpar2/pazpar2.cfg -t conf/pazpar2/biblios-pazpar2.xml
 
 Note that if you download pazpar2 via apt, it will probably create an apache2 conf file under /etc/apache2/conf.d/pazpar2 with a ProxyPass directive.  Make sure to either comment this out or change its path so it won't interfere with Biblios' use of the /pazpar2/search.pz2 path.
 
-
-7. If you've downloaded biblios via git, you'll need to build the javascrit and css files via
+6. If you've downloaded biblios via git, you'll need to build the javascrit and css files via
 
 make -B all
 
-8. Run the following command to build biblios' index.html file to work within your koha installation and install Biblios files.  This will prompt you to provide koha installation parameters and then copy the Biblios source files to appropriate paths in your koha installation.
+This produces concatenated and minified javascript and css files in the bibliosclone/build directory.
+
+7. Run the following command to build biblios' index.html file to work within your koha installation and install Biblios files.  This will prompt you to provide koha installation parameters and then copy the Biblios source files to appropriate paths in your koha installation.  
+
+You will be prompted whether you wish you copy the biblios source files directly into the koha installation or symlink the biblios files into koha.  Choosing the symlink installation procedure will allow you to update biblios via git more simply: you will run git pull in your bibliosclone dir and koha's biblios will automatically see the changes due to the symlinks.  Note that if you install into Koha via symlinks, it is not safe to delete the bibliosclone/build directory, as these files will be symlinked into your Koha installation.
 
 integration/koha/install-koha.pl
 
 Note before installing the files the Makefile will check that perl dependencies have been satisfied for the scripts in cgi-bin.  If they fail, the make install process will not run and a list of missing perl modules will be printed.
 
-9. You should now be able to access biblios from within your koha staff intranet via the following url:
+8. You should now be able to access biblios from within your koha staff intranet via the following url:
 
 	http://<your koha intranet url>/cgi-bin/koha/cataloguing/biblios.pl
 	Example: http://eowyn.metavore.com:8001/cgi-bin/koha/cataloguing/biblios.pl

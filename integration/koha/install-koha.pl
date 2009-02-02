@@ -29,6 +29,8 @@ if($debug) {
     print "kohaintranetdir = $kohaintranetdir\n";
     print "kohacgidir = $kohacgidir\n";
 }
+my $installsymlinks = confirm("Install into Koha directory using symlinks (allows for easier updating of biblios)?");
+
 my $tt = Template->new({
   PRE_PROCESS => 'conf/build-koha.conf',
   RELATIVE => 1,
@@ -46,4 +48,11 @@ $tt->process('./integration/koha/biblios.tmpl', $vars, './build/biblios.tmpl')
 #my $buildstatus = `make koha`;
 
 print "Installing biblios into $kohadir \n";
-my $status = `make koha-install KOHADIR=$kohadir KOHACGIDIR=$kohacgidir`; 
+if( $installsymlinks) {
+	print "Installing using symlinks in Koha directories\n";
+		my $status = `make koha-install-symlinks KOHADIR=$kohadir KOHACGIDIR=$kohacgidir`; 
+}
+else {
+	print "Installing by copying into Koha directories\n";
+		my $status = `make koha-install KOHADIR=$kohadir KOHACGIDIR=$kohacgidir`; 
+}

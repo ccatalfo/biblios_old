@@ -133,6 +133,31 @@ koha-install: checkperlkohadeps
 	cp -r lib/extjs2/resources/css $(KOHADIR)/lib/biblios/lib/extjs2/resources
 	cp -r lib/extjs2/resources/images/default $(KOHADIR)/lib/biblios/lib/extjs2/resources/images
 
+koha-install-symlinks:
+	mkdir -p $(KOHACGIDIR)/plugins/biblios
+	mkdir -p $(KOHADIR)/lib/biblios
+	mkdir -p $(KOHADIR)/lib/biblios/ui
+	mkdir -p $(KOHADIR)/lib/biblios/lib/extjs2/resources 
+	mkdir -p $(KOHADIR)/lib/biblios/lib/extjs2/resources/images/images
+	ln -s `pwd`/ui/images $(KOHADIR)/lib/biblios/ui
+	ln -s `pwd`/ui/xsl $(KOHADIR)/lib/biblios/ui
+	ln -s `pwd`/tools $(KOHADIR)/lib/biblios
+	ln -s `pwd`/plugins $(KOHADIR)/lib/biblios
+	ln -s `pwd`/conf $(KOHADIR)/lib/biblios
+	ln -s `pwd`/templates $(KOHADIR)/lib/biblios
+	ln -s `pwd`/macros $(KOHADIR)/lib/biblios
+	ln -s `pwd`/build/biblios.tmpl $(KOHADIR)/modules/cataloguing/biblios.tmpl
+	ln -s `pwd`/integration/koha/z3950 $(KOHACGIDIR)/svc/z3950
+	ln -s `pwd`/integration/koha/biblios.pl $(KOHACGIDIR)/cataloguing/biblios.pl
+	ln -s `pwd`/integration/koha/proxy_auth_cookie $(KOHACGIDIR)/svc/proxy_auth_cookie
+	ln -s `pwd`/cgi-bin/* $(KOHACGIDIR)/plugins/biblios/
+	ln -s `pwd`/build/lib.js $(KOHADIR)/lib/biblios/lib.js
+	ln -s `pwd`/lib/google_gears/gears_init.js $(KOHADIR)/lib/biblios/gears_init.js
+	ln -s `pwd`/build/styles.css $(KOHADIR)/lib/biblios/styles.css
+	ln -s `pwd`/ui/css/reset.css $(KOHADIR)/lib/biblios/reset.css
+	ln -s `pwd`/lib/extjs2/resources/css $(KOHADIR)/lib/biblios/lib/extjs2/resources
+	ln -s `pwd`/lib/extjs2/resources/images/default $(KOHADIR)/lib/biblios/lib/extjs2/resources/images
+
 koha-uninstall:
 	@echo Uninstalling biblios files from koha path $(KOHADIR)
 	@echo
@@ -141,6 +166,8 @@ koha-uninstall:
 	-rm -f $(KOHADIR)/includes/doc-head-close-biblios.inc
 	rm -rf $(KOHACGIDIR)/plugins/biblios
 	rm -rf $(KOHADIR)/lib/biblios
+	rm -rf $(KOHACGIDIR)/svc/z3950
+	rm -rf $(KOHACGIDIR)/svc/proxy_auth_cookie
 
 perldeps:
 	@echo "Creating file containing required perl modules and versions in tools/perldeps.txt (requires Devel::Modlist)"
