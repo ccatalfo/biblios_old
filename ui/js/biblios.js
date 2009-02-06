@@ -1684,14 +1684,16 @@ biblios.app = function() {
                                                                     {
                                                                         text: 'Reset Google Gears database',
                                                                         handler: function(btn) {
-                                                                            Ext.MessageBox.confirm('Reset Database', 'Reset database, removing all records, send targets, search targets, macros, and user-created savefiles?', function(btn) {
-                                                                                try {
+                                                                    Ext.MessageBox.confirm('Reset Database', 'Reset database, removing all records, send targets, search targets, macros, and user-created savefiles?', function(btn) {
+                                                                            if(btn == 'yes' ) {
+                                                                              try {
                                                                                     resetDB();
                                                                                     Ext.MessageBox.alert('Reset Database', 'Database has been reset');
                                                                                 }
                                                                                 catch(ex) {
                                                                                     Ext.MessageBox.alert('Reset Database', 'There was an error in reseting the database.  Please report this error to your system administrator: ' + ex);
                                                                                 }
+                                                                              }
                                                                             });
                                                                         }
                                                                     },
