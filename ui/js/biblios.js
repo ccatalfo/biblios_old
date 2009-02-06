@@ -197,7 +197,7 @@ biblios.app = function() {
             });
             this.viewport = new Ext.Viewport({
 				layout: 'fit',
-                border: false,
+                                border: false,
 				items: [
                     new Ext.Panel({
                         layout: 'border',
@@ -209,19 +209,16 @@ biblios.app = function() {
                                 region: 'north',
                                 border: false,
                                 layout: 'border',
-                                height: $('brandingPanelRegionHeight', configDoc).text() || 55,
                                 items: [
                                     {
                                         region: 'north',
                                         id: 'brandingPanel',
                                         border: false,
-                                        contentEl: 'bibliosheader',
                                         width:'100%'
                                     },
                                     {
                                         region: 'center',
                                         border: false,
-                                        height: 10,
                                         style:'padding-bottom: 5px; padding-top:5px',
                                         html: {
                                             tag:'div',
@@ -338,14 +335,12 @@ biblios.app = function() {
                                                         region: 'center',
                                                         layout: 'border',
                                                         id: 'searchpanel',
-                                                        height: 500,
                                                         width: 500,
                                                         items: [
                                                             new Ext.grid.GridPanel({
                                                                 enableDragDrop: true,
                                                                 ddGroup: 'RecordDrop',
                                                                 region: 'center',
-                                                                height: 300,
                                                                 //autoWidth: true,
                                                                 loadMask: true,
                                                                 id: 'searchgrid',
@@ -793,12 +788,12 @@ biblios.app = function() {
                                                             {
                                                                 region: 'south',
                                                                 id: 'searchpreview',
+                                                                height: 250,
                                                                 title: 'Preview',
                                                                 split: true,
                                                                 collapsible: true,
                                                                 autoScroll: true,
                                                                 html: '<div id="searchselect"></div><div id="searchprevrecord"></div>',
-                                                                height: 150
                                                             } // search preview
                                                         ] // search results items
                                                     }, // search results region
@@ -836,7 +831,6 @@ biblios.app = function() {
                                                                     region: 'center',
                                                                     id: 'savegrid',
                                                                     ddGroup: 'RecordDrop',
-                                                                    height: 300,
                                                                     store: (ds = new Ext.data.Store({
                                                                         proxy: new Ext.data.GoogleGearsProxy(),
                                                                         reader: new Ext.data.ArrayReader({}, [
@@ -1178,10 +1172,10 @@ biblios.app = function() {
                                                             {
                                                                 region: 'south',
                                                                 id: 'savepreview',
+                                                                height: 250,
                                                                 title: 'Preview',
                                                                 split: true,
                                                                 collapsible: true,
-                                                                height: 150,
                                                                 autoScroll: true,
                                                                 html: '<div id="select"></div><div id="saveprevrecord"></div>'
                                                             } // savepanel south
@@ -1201,7 +1195,6 @@ biblios.app = function() {
                                                 collapsed: false,
                                                 maxSize: 300,
                                                 width:280,
-                                                height: 'auto',
                                                 autoScroll:true,
                                                 title: 'Resources',
                                                 headerAsText:false,
@@ -1209,7 +1202,6 @@ biblios.app = function() {
                                                 id: 'resourcesPanel',
                                                 items: [
                                                     {
-                                                        height: 'auto',
                                                         autoScroll:true,
                                                         region: 'center',
                                                         items:
@@ -1739,7 +1731,6 @@ biblios.app = function() {
                                                             new Ext.grid.EditorGridPanel({
                                                                 id: 'macrosgrid',
                                                                 region: 'center',
-                                                                height: 600,
                                                                 ds: new Ext.data.Store({
                                                                     proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                     reader: new Ext.data.ArrayReader({
@@ -1856,12 +1847,10 @@ biblios.app = function() {
                                                         items:
                                                             {
                                                                 region: 'center',
-                                                                height: 600,
                                                                 id: 'pluginsgridpanel',
                                                                 items: [
                                                                     new Ext.grid.GridPanel({
                                                                         id: 'pluginsgrid',
-                                                                        height: 600,
                                                                         ds: new Ext.data.Store({
                                                                             proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                             reader: new Ext.data.ArrayReader({
@@ -1933,12 +1922,10 @@ biblios.app = function() {
                                                         items:
                                                             {
                                                                 region: 'center',
-                                                                height: 600,
                                                                 id: 'searchtargetsgridpanel',
                                                                 items: [
                                                                     new Ext.grid.EditorGridPanel({
                                                                         id: 'searchtargetsgrid',
-                                                                        height: 600,
                                                                         ds: new Ext.data.Store({
                                                                             proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                             reader: new Ext.data.ArrayReader({
@@ -2225,12 +2212,10 @@ biblios.app = function() {
                                                         items:
                                                             {
                                                                 region: 'center',
-                                                                height: 300,
                                                                 id: 'sendtargetsgridpanel',
                                                                 items: [
                                                                     new Ext.grid.EditorGridPanel({
                                                                         id: 'sendtargetsgrid',
-                                                                        height: 300,
                                                                         ds: new Ext.data.Store({
                                                                             proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                             reader: new Ext.data.ArrayReader({
