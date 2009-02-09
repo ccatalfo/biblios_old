@@ -209,12 +209,13 @@ biblios.app = function() {
                                 region: 'north',
                                 border: false,
                                 layout: 'border',
+                                height: 30,
                                 items: [
                                     {
                                         region: 'north',
                                         id: 'brandingPanel',
                                         border: false,
-                                        width:'100%'
+                                      width:'100%'
                                     },
                                     {
                                         region: 'center',
@@ -1731,6 +1732,7 @@ biblios.app = function() {
                                                             new Ext.grid.EditorGridPanel({
                                                                 id: 'macrosgrid',
                                                                 region: 'center',
+                                                                height: 300,
                                                                 ds: new Ext.data.Store({
                                                                     proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                     reader: new Ext.data.ArrayReader({
@@ -1851,6 +1853,7 @@ biblios.app = function() {
                                                                 items: [
                                                                     new Ext.grid.GridPanel({
                                                                         id: 'pluginsgrid',
+                                                                        height: 300,
                                                                         ds: new Ext.data.Store({
                                                                             proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                             reader: new Ext.data.ArrayReader({
@@ -1926,6 +1929,7 @@ biblios.app = function() {
                                                                 items: [
                                                                     new Ext.grid.EditorGridPanel({
                                                                         id: 'searchtargetsgrid',
+                                                                        height: 300,
                                                                         ds: new Ext.data.Store({
                                                                             proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                             reader: new Ext.data.ArrayReader({
@@ -2216,6 +2220,7 @@ biblios.app = function() {
                                                                 items: [
                                                                     new Ext.grid.EditorGridPanel({
                                                                         id: 'sendtargetsgrid',
+                                                                        height: 300,
                                                                         ds: new Ext.data.Store({
                                                                             proxy: new Ext.data.GoogleGearsProxy(new Array()),
                                                                             reader: new Ext.data.ArrayReader({
