@@ -1,9 +1,7 @@
+
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <title>Koha &rsaquo; Biblios</title>
-	<link type="text/css" rel="stylesheet" href="[% kohaintranetdir %]reset.css" />
-    <link rel="stylesheet" type="text/css" href="[% kohaintranetdir %]lib/extjs2/resources/css/ext-all.css">
-	<link type="text/css" rel="stylesheet" href="[% kohaintranetdir %]styles.css" />
 <script type="text/javascript">
 //<![CDATA[
 
@@ -17,62 +15,13 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a> &rsaquo; Biblios</div>
 
-<div id="loading-mask" ></div>
-
-<div id="loading">
-
-	<div class="loading-ind">
-		<img src="[% kohaintranetdir %]ui/images/biblios-logo.gif"><p id='loadingtext'>Loading...</p>
-	</div>
-
-</div>
-<!-- properties which need to be modified on a global basis -->
-<script type="text/javascript">
-    var libPath = '[% kohaintranetdir %]';
-    var uiPath = '[% kohaintranetdir %]';
-    var hostPort = '[% hostPort %]';
-    var buildtime = '[% buildtime %]';
-    var version = '[% version %]';
-    var cgiDir = '[% kohacgidir %]';
-    var embeddedUrl = '[% embeddedUrl %]';
-    var userid = '<!-- TMPL_VAR name="loggedinusername" -->';
-    var embeddedSESSID = '<!-- TMPL_VAR name="embeddedSESSID" -->';
-    var openOnLoadRecId = '[% openOnLoadRecId %]';
-    var recordxml = '[% recordxml %]';
-    var confPath = libPath + "conf/biblios.xml";
-    var biblioslogo = libPath + 'ui/images/biblios-logo.gif';
-    var mainsplash = '[% mainsplash %]';
-    var editingsplash = '[% editingsplash %]';
-    var folderssplash = '[% folderssplash %]';
-    var searchingsplash = '[% searchingsplash %]';
-</script>
-    <script type="text/javascript" src="[% kohaintranetdir %]gears_init.js"></script>
-<script>
-      if (!window.google || !google.gears) {
-        location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
-                        "&return="+location.href;
-      }
-
-</script>
-    <script type="text/javascript" src="[% kohaintranetdir %]lib.js"></script>
-<div id="branding-area"</div>
-<div id="kohaheader">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-</div>
-<div id="bibliosheader"></div>
-<div id='biblios'>
-<div id='downloads'></div>
-</div>
-    <script type="text/javascript">
-		var bibliosdebug = [% bibliosdebug %];
-        Ext.onReady(function() {
-			Ext.BLANK_IMAGE_URL = libPath + 'lib/extjs2/resources/images/default/s.gif';
-            Ext.get('loadingtext').update('Initializing Biblios');
-			biblios.app.init();
-            completeInit();
-			//Ext.fly('loading').remove();
-			// placeholder
-		}, biblios.app);
-    </script>
-    <div id="bibliosfooter">[% footerhtml %]</div>
+
+<iframe src="/intranet-tmpl/prog/en/lib/biblios/index.html" name="bibliosframe" frameborder="0" width="100%" style="height:500px;"></iframe>
+<script type="text/javascript">
+    bibliosframe.userid = '<!-- TMPL_VAR name="loggedinusername" -->';
+    bibliosframe.embeddedSESSID = '<!-- TMPL_VAR name="embeddedSESSID" -->';
+    bibliosframe.openOnLoadRecId = '<!-- TMPL_VAR NAME="biblionumber" -->';
+    bibliosframe.recordxml = '<!-- TMPL_VAR ESCAPE=JS NAME="recordxml" -->';
+</script>
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
