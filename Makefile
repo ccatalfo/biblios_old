@@ -139,24 +139,24 @@ koha-install-symlinks:
 	mkdir -p $(KOHADIR)/lib/biblios/ui
 	mkdir -p $(KOHADIR)/lib/biblios/lib/extjs2/resources 
 	mkdir -p $(KOHADIR)/lib/biblios/lib/extjs2/resources/images/images
-	ln -s `pwd`/ui/images $(KOHADIR)/lib/biblios/ui
-	ln -s `pwd`/ui/xsl $(KOHADIR)/lib/biblios/ui
-	ln -s `pwd`/tools $(KOHADIR)/lib/biblios
-	ln -s `pwd`/plugins $(KOHADIR)/lib/biblios
-	ln -s `pwd`/conf $(KOHADIR)/lib/biblios
-	ln -s `pwd`/templates $(KOHADIR)/lib/biblios
-	ln -s `pwd`/macros $(KOHADIR)/lib/biblios
-	ln -s `pwd`/build/biblios.tmpl $(KOHADIR)/modules/cataloguing/biblios.tmpl
-	ln -s `pwd`/integration/koha/z3950 $(KOHACGIDIR)/svc/z3950
-	ln -s `pwd`/integration/koha/biblios.pl $(KOHACGIDIR)/cataloguing/biblios.pl
-	ln -s `pwd`/integration/koha/proxy_auth_cookie $(KOHACGIDIR)/svc/proxy_auth_cookie
-	ln -s `pwd`/cgi-bin/* $(KOHACGIDIR)/plugins/biblios/
-	ln -s `pwd`/build/lib.js $(KOHADIR)/lib/biblios/lib.js
-	ln -s `pwd`/lib/google_gears/gears_init.js $(KOHADIR)/lib/biblios/gears_init.js
-	ln -s `pwd`/build/styles.css $(KOHADIR)/lib/biblios/styles.css
-	ln -s `pwd`/ui/css/reset.css $(KOHADIR)/lib/biblios/reset.css
-	ln -s `pwd`/lib/extjs2/resources/css $(KOHADIR)/lib/biblios/lib/extjs2/resources
-	ln -s `pwd`/lib/extjs2/resources/images/default $(KOHADIR)/lib/biblios/lib/extjs2/resources/images
+	ln -sf `pwd`/ui/images $(KOHADIR)/lib/biblios/ui
+	ln -sf `pwd`/ui/xsl $(KOHADIR)/lib/biblios/ui
+	ln -sf `pwd`/tools $(KOHADIR)/lib/biblios
+	ln -sf `pwd`/plugins $(KOHADIR)/lib/biblios
+	ln -sf `pwd`/conf $(KOHADIR)/lib/biblios
+	ln -sf `pwd`/templates $(KOHADIR)/lib/biblios
+	ln -sf `pwd`/macros $(KOHADIR)/lib/biblios
+	ln -sf `pwd`/build/biblios.tmpl $(KOHADIR)/modules/cataloguing/biblios.tmpl
+	ln -sf `pwd`/integration/koha/z3950 $(KOHACGIDIR)/svc/z3950
+	ln -sf `pwd`/integration/koha/biblios.pl $(KOHACGIDIR)/cataloguing/biblios.pl
+	ln -sf `pwd`/integration/koha/proxy_auth_cookie $(KOHACGIDIR)/svc/proxy_auth_cookie
+	ln -sf `pwd`/cgi-bin/* $(KOHACGIDIR)/plugins/biblios/
+	ln -sf `pwd`/build/lib.js $(KOHADIR)/lib/biblios/lib.js
+	ln -sf `pwd`/lib/google_gears/gears_init.js $(KOHADIR)/lib/biblios/gears_init.js
+	ln -sf `pwd`/build/styles.css $(KOHADIR)/lib/biblios/styles.css
+	ln -sf `pwd`/ui/css/reset.css $(KOHADIR)/lib/biblios/reset.css
+	ln -sf `pwd`/lib/extjs2/resources/css $(KOHADIR)/lib/biblios/lib/extjs2/resources
+	ln -sf `pwd`/lib/extjs2/resources/images/default $(KOHADIR)/lib/biblios/lib/extjs2/resources/images
 
 koha-uninstall:
 	@echo Uninstalling biblios files from koha path $(KOHADIR)
