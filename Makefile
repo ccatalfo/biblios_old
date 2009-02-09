@@ -129,6 +129,7 @@ koha-install: checkperlkohadeps
 	cp build/lib.js $(KOHADIR)/lib/biblios/
 	cp lib/google_gears/gears_init.js $(KOHADIR)/lib/biblios/
 	cp build/styles.css $(KOHADIR)/lib/biblios/
+	cp build/index.html $(KOHADIR)/lib/biblios/
 	cp ui/css/reset.css $(KOHADIR)/lib/biblios/
 	cp -r lib/extjs2/resources/css $(KOHADIR)/lib/biblios/lib/extjs2/resources
 	cp -r lib/extjs2/resources/images/default $(KOHADIR)/lib/biblios/lib/extjs2/resources/images
@@ -152,6 +153,7 @@ koha-install-symlinks:
 	ln -sf `pwd`/integration/koha/proxy_auth_cookie $(KOHACGIDIR)/svc/proxy_auth_cookie
 	ln -sf `pwd`/cgi-bin/* $(KOHACGIDIR)/plugins/biblios/
 	ln -sf `pwd`/build/lib.js $(KOHADIR)/lib/biblios/lib.js
+	ln -sf `pwd`/build/index.html $(KOHADIR)/lib/biblios/index.html
 	ln -sf `pwd`/lib/google_gears/gears_init.js $(KOHADIR)/lib/biblios/gears_init.js
 	ln -sf `pwd`/build/styles.css $(KOHADIR)/lib/biblios/styles.css
 	ln -sf `pwd`/ui/css/reset.css $(KOHADIR)/lib/biblios/reset.css
