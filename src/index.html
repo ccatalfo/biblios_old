@@ -102,7 +102,7 @@
     <script type="text/javascript" src="[% uiPath %]ui/js/edit.js"></script>
     [% ELSE %]
     <!-- try to load gears first before loading rest of biblios app-->
-	<script type="text/javascript" src="[% libPath %]google_gears/gears_init.js"></script>
+	<script type="text/javascript" src="[% libPath %]gears_init.js"></script>
     <script>
         if (!window.google || !google.gears) {
             location.href = "http://gears.google.com/?action=install&message=Please install Google Gears to run Biblios" +
