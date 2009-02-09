@@ -36,7 +36,6 @@ MARC::File::SAX           0
 MARC::File::XML        0.88
 MARC::Record            2.0
 Net::Z3950::ZOOM       1.14
-PazPar2                   0
 Template               2.20
 Template::Base         2.78
 Template::Config       2.75
