@@ -45,6 +45,9 @@ my $vars = {
 $tt->process('./integration/koha/biblios.tmpl', $vars, './build/biblios.tmpl')
   || die $tt->error(), "\n";
 
+$tt->process('./src/index.html', $vars, './build/index.html')
+  || die $tt->error(), "\n";
+
 #my $buildstatus = `make koha`;
 
 print "Installing biblios into $kohadir \n";
