@@ -54,17 +54,9 @@ var SearchTarget = Ext.data.Record.create([
     {name: 'allowDelete'},
     {name: 'allowModify'},
     {name: 'source'},
-					    {
-					      name:'librarytype'
-					    },
-					    {
-					      name:'country'
-					    },
-					    {
-					      name:'reliability'
-					    }
-
-
+    {name:'librarytype'},
+    {name:'country'},
+    {name:'reliability'}
 ]);
 var SendTarget = Ext.data.Record.create([
 	{name: 'rowid'},

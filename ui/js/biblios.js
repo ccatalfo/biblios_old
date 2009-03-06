@@ -163,12 +163,12 @@ biblios.app = function() {
 		},
 
         init: function() {
-	  if( Ext.isOpera ) {
-	   Ext.get('biblios').update('<p>Your web browser, Opera, is not yet supported by Google Gears.  Please use Firefox or Internet Explorer to access.</p>');
-	  }
-      else if( Ext.isIE6 ) {
-        Ext.get('biblios').update('<p>Your web browser, Internet Explorer 6, is not yet supported by biblios.  Please use Internet Explorer 7, available here: <a href="http://www.microsoft.com/windows/downloads/ie/getitnow.mspx">download IE7</a></p>');
-        }
+	  		if( Ext.isOpera ) {
+	  			 Ext.get('biblios').update('<p>Your Web browser, Opera, is not yet supported by ‡biblios. Please use a supported browser: <a href="http://mozilla.com/firefox">Download Firefox</a> <a href="http://www.microsoft.com/windows/downloads/ie/getitnow.mspx">Download Internet Explorer 7</a></p>');
+	  		}
+            else if( Ext.isIE6 ) {
+                Ext.get('biblios').update('<p>Your Web browser, Internet Explorer 6, is not yet supported by ‡biblios. Please use a supported browser: <a href="http://mozilla.com/firefox">Download Firefox</a> <a href="http://www.microsoft.com/windows/downloads/ie/getitnow.mspx">Download Internet Explorer 7</a></p>');
+            }
             else {
                 if( Ext.get('loadingtext') ) {
                     Ext.get('loadingtext').update('Loading database');
@@ -694,7 +694,7 @@ biblios.app = function() {
                                                                                     } // for each checked record
                                                                                 }
                                                                                 else if( checked.length == 0 && selections.length == 0){
-                                                                                    Ext.Msg.alert('Editing', 'Please select a record or records to edit by clicking a row or by checking checkboxes next to records you want to edit');
+                                                                                    Ext.Msg.alert('Editing', 'Please select one or more records for editing by highlighting or selecting them via their checkboxes');
                                                                                     return false;
 
                                                                                 }
@@ -768,7 +768,7 @@ biblios.app = function() {
                                                                                 cls: 'x-btn-text-icon bmenu',
                                                                                 icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/upload', configDoc).text(),
                                                                                 text: 'Upload',
-                                                                                tooltip: {text: 'Upload marc21 or marcxml files'},
+                                                                                tooltip: {text: 'Upload MARC21 or MARCXML files'},
                                                                                 menu: [
                                                                                     {
                                                                                         id: 'marc21uploadBtn',
@@ -1008,7 +1008,7 @@ biblios.app = function() {
                                                                                         }
                                                                                     }
                                                                                     else if( checked.length == 0 && selections.length == 0){
-                                                                                        Ext.Msg.alert('Editing', 'Please select a record or records to edit by clicking a row or by checking checkboxes next to records you want to edit');
+                                                                                        Ext.Msg.alert('Editing', 'Please select one or more records for editing by highlighting or selecting them via their checkboxes');
                                                                                         return false;
 
                                                                                     }
@@ -1061,7 +1061,7 @@ biblios.app = function() {
                                                                                             icon:  libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/send', configDoc).text(),
                                                                                             disabled: true,
                                                                                             text: 'Send',
-                                                                                            tooltip: {text: 'Send record to remote ILS'},
+                                                                                            tooltip: {text: 'Send record to remote database'},
                                                                                             menu: {
                                                                                                 id: 'savegridSendMenu',
                                                                                                 items: getSendFileMenuItems('savegrid'),
@@ -1154,7 +1154,7 @@ biblios.app = function() {
                                                                                 cls: 'x-btn-text-icon bmenu',
                                                                                 icon: libPath + 'ui/images/toolbar/' + $('//ui/icons/toolbar/upload', configDoc).text(),
                                                                                 text: 'Upload',
-                                                                                tooltip: {text: 'Upload marc21 or marcxml files'},
+                                                                                tooltip: {text: 'Upload MARC21 or MARCXML files'},
                                                                                 menu: [
                                                                                     {
                                                                                         id: 'marc21uploadBtn',
@@ -1682,7 +1682,7 @@ biblios.app = function() {
                                                                 region: 'center',
                                                                 items: [
                                                                     {
-                                                                        text: 'Reset Google Gears database',
+                                                                        text: 'Reset Gears database',
                                                                         handler: function(btn) {
                                                                     Ext.MessageBox.confirm('Reset Database', 'Reset database, removing all records, send targets, search targets, macros, and user-created savefiles?', function(btn) {
                                                                             if(btn == 'yes' ) {
@@ -1698,21 +1698,21 @@ biblios.app = function() {
                                                                         }
                                                                     },
                                                                     {
-                                                                        text: 'Reload ‡biblios.net configuration',
+                                                                        text: 'Reload ‡biblios configuration',
                                                                         handler: function(btn) {
                                                                             reloadConfig();
-                                                                            Ext.MessageBox.alert('Configuration reload', '‡biblios.net configuration has been reloaded');
+                                                                            Ext.MessageBox.alert('Configuration reload', '‡biblios configuration has been reloaded');
                                                                         }
                                                                     },
                                                                     {
-                                                                        text: 'Export Google Gears database',
+                                                                        text: 'Export Gears database',
                                                                         handler: function(btn) {
                                                                             var db = exportDB();
                                                                             doExportDB(db);
                                                                         }
                                                                     },
                                                                     {
-                                                                        text: 'Import Google Gears database',
+                                                                        text: 'Import Gears database',
                                                                         handler: function(btn) {
                                                                             showImportDBDialog();
                                                                         }
@@ -1948,10 +1948,10 @@ biblios.app = function() {
                                                                                 update: function(store, record, operation) {
                                                                                     record.data.enabled = record.data.enabled ? 1 : 0;
                                                                                     if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT) {
-										      DB.SearchTargets.load(record.data, true);
-                                                                                    Ext.getCmp('TargetsTreePanel').root.reload();
-										    setPazPar2Targets();
-										      }
+										                                                DB.SearchTargets.load(record.data, true);
+                                                                                        Ext.getCmp('TargetsTreePanel').root.reload();
+										                                                setPazPar2Targets();
+										                                            }
                                                                                 } // search targets store update
                                                                             } // search targets grid store listeners
                                                                         }),
@@ -2020,8 +2020,8 @@ biblios.app = function() {
                                                                                                 btn.record.data.pazpar2settings = settingsstring;
                                                                                                 btn.record.commit();
                                                                                                 if(bibliosdebug) {
-												  console.info(Ext.getCmp('searchtargetsgrid').store.getModifiedRecords());
-												}
+												                                                    console.info(Ext.getCmp('searchtargetsgrid').store.getModifiedRecords());
+												                                                }
                                                                                                 setPazPar2Targets(Ext.emptyFn);
                                                                                                 Ext.getCmp('pazpar2settingsproperties').close();
                                                                                             }
@@ -2140,35 +2140,36 @@ biblios.app = function() {
                                                                                 text: 'Add Target',
                                                                                 handler: function() {
                                                                                     // insert new target into db so we get it's id
-										  var newtarget = new DB.SearchTargets({
-															 hostname:''
-															 ,port:''
-															 ,dbname:''
-															 ,userid:''
-															 ,password:''
-															 ,name:''
-															 ,enabled:0
-															 ,rank:''
-															 ,allowModify:1
-															 ,allowDelete:1
-															 ,description:''
-															 ,syntax:''
-															 ,icon:''
-															 ,position:''
-															 ,type:''
-															 ,pluginlocation:''
-															 ,pazpar2settings:''
-															 ,remoteID:''
-															 ,source:'user'
-															 ,sysdefined:0
-															 ,librarytype:''
-															 ,country:''
-															 ,reliability:''
-														       }
-										  );
-										  newtarget.save();
+										                                            var newtarget = new DB.SearchTargets({
+															                            hostname:''
+															                            ,port:''
+															                            ,dbname:''
+															                            ,userid:''
+															                            ,password:''
+															                            ,name:''
+															                            ,enabled:0
+															                            ,rank:''
+															                            ,allowModify:1
+															                            ,allowDelete:1
+															                            ,description:''
+															                            ,syntax:''
+															                            ,icon:''
+															                            ,position:''
+															                            ,type:''
+															                            ,pluginlocation:''
+															                            ,pazpar2settings:''
+															                            ,remoteID:''
+															                            ,source:'user'
+															                            ,sysdefined:0
+															                            ,librarytype:''
+															                            ,country:''
+															                            ,reliability:''
+														                            }
+										                                            );
+										                                            newtarget.save();
+
                                                                                     var t = new SearchTarget(
-											      newtarget
+											                                            newtarget
                                                                                     );
                                                                                     var grid = Ext.getCmp('searchtargetsgrid');
                                                                                     grid.stopEditing();
@@ -2187,7 +2188,7 @@ biblios.app = function() {
                                                                                                 t.remove();
                                                                                             }
                                                                                             else {
-                                                                                               Ext.MessageBox.alert('Error', "This search target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings");
+                                                                                               Ext.MessageBox.alert('Error', "This search target is system-defined.  Please contact your system administrator to change it.");
                                                                                             }
                                                                                         }
                                                                                         catch(ex) {
@@ -2246,7 +2247,7 @@ biblios.app = function() {
                                                                                 }
                                                                                 t = DB.SendTargets.select('SendTargets.rowid=?', [record.data.rowid]).getOne();
                                                                                 if( t.allowModify == 0 ) {
-                                                                                    Ext.MessageBox.alert('Error', "This send target is defined in the biblios configuration file.  Please contact your system administrator to change it's settings");
+                                                                                    Ext.MessageBox.alert('Error', "This send target is system-defined.  Please contact your system administrator to change it.");
                                                                                     return false;
                                                                                 }
                                                                                 if( operation == Ext.data.Record.COMMIT || operation == Ext.data.Record.EDIT ) {
@@ -2267,7 +2268,7 @@ biblios.app = function() {
                                                                                 var id = e.record.data.rowid;
                                                                                 var t = DB.SendTargets.select('SendTargets.rowid=?', [id]).getOne();
                                                                                 if( t.allowModify == 0 ) {
-                                                                                    Ext.MessageBox.alert('Error', "This send target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings");
+                                                                                    Ext.MessageBox.alert('Error', "This send target is system-defined.  Please contact your system administrator to change it.");
                                                                                     return false;
                                                                                 }
                                                                                 var field = e.field;
@@ -2306,7 +2307,7 @@ biblios.app = function() {
                                                                                 sortable: true,
                                                                                 editor: new Ext.form.TextField()
                                                                             },
-									    {
+									                                        {
                                                                                 header: 'Url',
                                                                                 dataIndex: 'url',
                                                                                 editor: new Ext.form.TextField()
@@ -2332,22 +2333,22 @@ biblios.app = function() {
                                                                                 header: 'Plugin',
                                                                                 dataIndex: 'plugin',
                                                                                 editor: new Ext.form.ComboBox({
-										  id:'sendtargetsplugincombo'
-										  ,store: new Ext.data.SimpleStore({
-										    id: 'pluginscombostore'
-										    ,fields:['display','value']
-										    ,data: getPluginsForCombo('sendtarget')
-														   }),
-										    lazyRender:true,
-										    listClass:'x-combo-list-small',
-										    width: 'auto',
+										                                            id:'sendtargetsplugincombo'
+										                                            ,store: new Ext.data.SimpleStore({
+										                                                id: 'pluginscombostore'
+										                                                ,fields:['display','value']
+										                                                ,data: getPluginsForCombo('sendtarget')
+														                            }),
+										                                            lazyRender:true,
+										                                            listClass:'x-combo-list-small',
+										                                            width: 'auto',
                                                                                     mode:'local',
                                                                                     displayField: 'display',
                                                                                     valueField: 'value',
                                                                                     forceSelection:true,
                                                                                     typeAhead:true,
                                                                                     triggerAction:all
-										}),
+										                                        }),
                                                                                 hidden: false
                                                                             }
                                                                             ,{
@@ -2359,14 +2360,13 @@ biblios.app = function() {
                                                                                 },*/
                                                                                 editor: new Ext.form.ComboBox({
                                                                                     store: new Ext.data.SimpleStore({
-											id: 'searchtargetsStore'
-											,fields: ['rowid', 'name'],
+											                                            id: 'searchtargetsStore'
+											                                            ,fields: ['rowid', 'name'],
                                                                                         data: getTargetsForCombo()
                                                                                     }),
-
-										    lazyRender:true,
-										    listClass:'x-combo-list-small',
-										    width: 'auto',
+										                                            lazyRender:true,
+										                                            listClass:'x-combo-list-small',
+										                                            width: 'auto',
                                                                                     mode:'local',
                                                                                     displayField: 'name',
                                                                                     valueField: 'name',
@@ -2397,9 +2397,9 @@ biblios.app = function() {
                                                                                         url: '',
                                                                                         user: '',
                                                                                         password: '',
-													     plugin: getPluginsForCombo('sendtarget')[0][0],
+													                                    plugin: getPluginsForCombo('sendtarget')[0][0],
                                                                                         enabled: 0,
-											searchtarget: ''
+											                                            searchtarget: ''
                                                                                     });
                                                                                     var sendtargetgrid = Ext.ComponentMgr.get('sendtargetsgrid');
                                                                                     var ds = sendtargetgrid.store;
@@ -2420,7 +2420,7 @@ biblios.app = function() {
                                                                                                 delete Prefs.remoteILS[ records[i].data.location ];
                                                                                             }
                                                                                             else {
-                                                                                                Ext.MessageBox.alert('Error', "This send target is defined in the ‡biblios.net configuration file.  Please contact your system administrator to change it's settings");
+                                                                                                Ext.MessageBox.alert('Error', "This send target is system-defined.  Please contact your system administrator to change it.");
                                                                                             // remove from Prefs hash
                                                                                             }
                                                                                         }
@@ -2447,24 +2447,24 @@ biblios.app = function() {
                                                                                     var plugin = DB.Plugins.select('name=?', [record.data.plugin]).getOne();
                                                                                     var initcall = plugin.initcall;
                                                                                     try {
-											var instance = eval( initcall );
-											instance.url = record.data.url;
-											instance.name = record.data.name;
+											                                            var instance = eval( initcall );
+											                                            instance.url = record.data.url;
+											                                            instance.name = record.data.name;
                                                                                         try {
-												instance.init( {
-													url:record.data.url,
-													    name:record.data.name,
-													    user: record.data.user,
-													    password: record.data.password,
-													    embedded: true
-												 });
+												                                            instance.init( {
+													                                            url:record.data.url,
+													                                            name:record.data.name,
+													                                            user: record.data.user,
+													                                            password: record.data.password,
+													                                            embedded: true
+												                                            });
 
                                                                                             instance.initHandler = function(sessionStatus) {
                                                                                                 if( sessionStatus != 'ok' ) {
-                                                                                                    Ext.MessageBox.alert('Connection error', 'Authentication to Koha server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
+                                                                                                    Ext.MessageBox.alert('Connection error', 'Authentication to server at ' + this.url + ' failed.  Response: ' + sessionStatus + '.');
                                                                                                 }
                                                                                                 else {
-                                                                                                    Ext.MessageBox.alert('Connection successful', 'Authentication to Koha server at ' + this.url + ' was successful.  Response: ' + sessionStatus + '.');
+                                                                                                    Ext.MessageBox.alert('Connection successful', 'Authentication to server at ' + this.url + ' was successful.  Response: ' + sessionStatus + '.');
 
                                                                                                 }
                                                                                             };
