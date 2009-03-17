@@ -48,7 +48,7 @@ if( $success == 1 ) {
       #warn "got record with title: " . $record->title();
       my $format = detect_format( $record->leader() );
         # add extra 1000 field with medium detected to be used by biblios in assigning medium.  biblios will strip that out.
-        $record->add_fields(999, '', '', a => $format);
+        $record->add_fields(993, '', '', a => $format);
       $records .= MARC::File::XML::record($record);
       #warn "xml: " . MARC::File::XML::record($record);
     }
