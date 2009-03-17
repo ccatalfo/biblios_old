@@ -672,7 +672,6 @@ biblios.app = function() {
                                                                                 var searchgrid = Ext.getCmp('searchgrid');
                                                                                 var checked = searchgrid.getSelectionModel().getChecked();
                                                                                 var selections = searchgrid.getSelectionModel().getSelections();
-g
                                                                                 if(checked.length>0 && checked.length<11) {
                                                                                     UI.editor.loading.numToLoad = checked.length;
                                                                                     for( var i = 0; i < checked.length; i++ ) {
