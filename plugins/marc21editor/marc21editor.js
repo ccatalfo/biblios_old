@@ -2327,7 +2327,7 @@ MarcEditor.getToolbar = function(editorid) {
                                 status : 'duplicate',
                                 medium : r.medium,
                                 SearchTargets_id : r.SearchTargets_id,
-                                Savefiles_id : r.Savefiles_id,
+                                Savefiles_id : '3', // Drafts folder ID
                                 xmlformat : r.xmlformat,
                                 marcflavour : r.marcflavour,
                                 template : r.template,

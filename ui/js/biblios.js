@@ -1087,14 +1087,14 @@ biblios.app = function() {
                                                                                                         status : 'duplicate',
                                                                                                         medium : r.medium || '',
                                                                                                         SearchTargets_id : r.SearchTargets_id,
-                                                                                                        Savefiles_id : r.Savefiles_id,
+                                                                                                        Savefiles_id : '3', // Drafts folder
                                                                                                         xmlformat : r.xmlformat || '',
                                                                                                         marcflavour : r.marcflavour || '',
                                                                                                         template : r.template || '',
                                                                                                         marcformat : r.marcformat || ''
                                                                                                     }).save();
                                                                                                 }
-                                                                                                showStatusMsg(records.length + ' records duplicated.');
+                                                                                                Ext.MessageBox.alert(records.length + ' records duplicated to Drafts folder.');
                                                                                                 Ext.getCmp('savegrid').store.reload();
                                                                                                 biblios.app.displaySaveFile( UI.currSaveFile);
                                                                                                 return true;
