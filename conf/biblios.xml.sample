@@ -8,15 +8,14 @@
 	<pazpar2url>http://localhost:9004</pazpar2url>
 
 	<!-- insert url to an SRU server here for performing authority searches in marc21 editor -->
-	<sruauthurl>http://sru.beta.biblios.net/authority</sruauthurl>
+	<sruauthurl>http://sru.biblios.net/authority</sruauthurl>
 	
     <!-- loadsearchtargetsurl specifies url to load search targets from on biblios initalization.  Url specified here should return json formatted search targets via jsonp call 
     <loadsearchtargetsurl>http://takeyourchoice.net:8081/cgi-bin/koha/svc/z3950</loadsearchtargetsurl>
     -->
 
-    <!-- searchtargetsdburl specifies url of external search targets database for use with plugins/externalSearchtargets plugin.  This database should provide restful interface to search targets and return json formatted data. 
-    <searchtargetsdburl>http://eowyn.metavore.com:8888/SearchTargets/</searchtargetsdburl>
-    -->
+    <!-- searchtargetsdburl specifies url of external search targets database for use with plugins/externalSearchtargets plugin.  This database should provide restful interface to search targets and return json formatted data. -->
+    <searchtargetsdburl>http://bws.biblios.net/targets/send.fcgi/SearchTarget/</searchtargetsdburl>
     <editors>
 	
         <editor>
@@ -39,7 +38,7 @@
 		    <!-- sysdefined element tells biblios to recreate records for these targets on each page refresh -->
 		    <sysdefined>1</sysdefined>
 			<name>‡biblios.net</name>
-			<hostname>z3950.beta.biblios.net</hostname>
+			<hostname>z3950.biblios.net</hostname>
 			<port>210</port>
 			<dbname>bibliographic</dbname>
 			<userid></userid>
@@ -49,20 +48,20 @@
 			<allowDelete>1</allowDelete>
 			<allowModify>1</allowModify>
 			<!-- pazpar2settings contains PazPar2-specific ccl settings.  This element is optional and is used to tweak the settings biblios uses by default for search targets -->
-			<pazpar2settings>{"pz:name[z3950.beta.biblios.net:210/bibliographic]":"‡biblios.net",
-"pz:requestsyntax[z3950.beta.biblios.net:210/bibliographic]":"marc21",
-"pz:allow[z3950.beta.biblios.net:210/bibliographic]":"1",
-"pz:elements[z3950.beta.biblios.net:210/bibliographic]":"F",
-"pz:nativesyntax[z3950.beta.biblios.net:210/bibliographic]":"iso2709;utf-8",
-"pz:xslt[z3950.beta.biblios.net:210/bibliographic]":"marc21.xsl",
-"pz:cclmap:kw[z3950.beta.biblios.net:210/bibliographic]":"u=1016 t=1,r s=al",
-"pz:cclmap:au[z3950.beta.biblios.net:210/bibliographic]":"u=1004 s=al",
-"pz:cclmap:ti[z3950.beta.biblios.net:210/bibliographic]":"u=4 s=al",
-"pz:cclmap:su[z3950.beta.biblios.net:210/bibliographic]":"u=21 s=al",
-"pz:cclmap:isbn[z3950.beta.biblios.net:210/bibliographic]":"u=7",
-"pz:cclmap:issn[z3950.beta.biblios.net:210/bibliographic]":"u=8",
-"pz:cclmap:date[z3950.beta.biblios.net:210/bibliographic]":"u=30 r=r",
-"pz:cclmap:pub[z3950.beta.biblios.net:210/bibliographic]":"u=1018 s=al"}</pazpar2settings>
+			<pazpar2settings>{"pz:name[z3950.biblios.net:210/bibliographic]":"‡biblios.net",
+"pz:requestsyntax[z3950.biblios.net:210/bibliographic]":"marc21",
+"pz:allow[z3950.biblios.net:210/bibliographic]":"1",
+"pz:elements[z3950.biblios.net:210/bibliographic]":"F",
+"pz:nativesyntax[z3950.biblios.net:210/bibliographic]":"iso2709;utf-8",
+"pz:xslt[z3950.biblios.net:210/bibliographic]":"marc21.xsl",
+"pz:cclmap:kw[z3950.biblios.net:210/bibliographic]":"u=1016 t=1,r s=al",
+"pz:cclmap:au[z3950.biblios.net:210/bibliographic]":"u=1004 s=al",
+"pz:cclmap:ti[z3950.biblios.net:210/bibliographic]":"u=4 s=al",
+"pz:cclmap:su[z3950.biblios.net:210/bibliographic]":"u=21 s=al",
+"pz:cclmap:isbn[z3950.biblios.net:210/bibliographic]":"u=7",
+"pz:cclmap:issn[z3950.biblios.net:210/bibliographic]":"u=8",
+"pz:cclmap:date[z3950.biblios.net:210/bibliographic]":"u=30 r=r",
+"pz:cclmap:pub[z3950.biblios.net:210/bibliographic]":"u=1018 s=al"}</pazpar2settings>
 		  </server>
 		</searchtargets>
 
@@ -74,19 +73,19 @@
 			  <!-- sysdefined tells biblios to recreate this target on each page load -->
 			  <sysdefined>1</sysdefined>
 				<name>‡biblios.net</name>
-				<url>api.beta.biblios.net</url>
+				<url>bws.biblios.net</url>
 				<user><!-- enter koha username here --></user>
 				<password><!-- enter koha password here--></password>
-				<plugin>Save To Koha</plugin>
+				<plugin>Send</plugin>
 				<enabled>1</enabled>
                 <allowDelete>0</allowDelete>
                 <allowModify>0</allowModify>
                 <embedded>0</embedded>
 		<!-- these elements are optional: if left off, the koha send plugin figures out what urls to use on its own.  Only use for special setups where rewrite rules are being used in front of the normal koha paths 
-                <authurl>http://api.beta.biblios.net/authentication</authurl>
-                <bibprofileurl>http://api.beta.biblios.net/bib_profile</bibprofileurl> 
-                <retrieveurl>http://api.beta.biblios.net/bib/</retrieveurl>
-                <saveurl>http://api.beta.biblios.net/</saveurl>
+                <authurl>http://bws.biblios.net/authentication</authurl>
+                <bibprofileurl>http://bws.biblios.net/bib_profile</bibprofileurl> 
+                <retrieveurl>http://bws.biblios.net/bib/</retrieveurl>
+                <saveurl>http://bws.biblios.net/</saveurl>
 		-->
 		<!-- optional element to link this send target to the following search target, ensuring that adds/edits and editor display are formatted properly for records from this search target
 		<searchtarget>‡biblios.net</searchtarget>
@@ -140,7 +139,7 @@
 
 	<plugins>
 		<plugin>
-			<name>Save To Koha</name>
+			<name>Send</name>
             <type>sendtarget</type>
 			<file>plugins/koha.js</file>
             <initcall>new koha()</initcall>
