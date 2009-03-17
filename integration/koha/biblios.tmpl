@@ -15,7 +15,22 @@
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 
-<iframe src="/intranet-tmpl/prog/en/lib/biblios/index.html" name="bibliosframe" frameborder="0" width="100%" style="height:500px;"></iframe>
+<iframe src="/intranet-tmpl/prog/en/lib/biblios/index.html" id="frame" name="bibliosframe" height="100%" width="100%" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+<script type="text/javascript">
+function resizeIframe() {
+    var height = document.documentElement.clientHeight;
+    height -= document.getElementById('frame').offsetTop;
+    // not sure how to get this dynamically
+    height -= 35; /* whatever you set your body bottom margin/padding to be */
+    
+    document.getElementById('frame').style.height = height +"px";
+    
+};
+document.getElementById('frame').onload = resizeIframe;
+window.onresize = resizeIframe;
+</script>
+
+
 <script type="text/javascript">
     bibliosframe.userid = '<!-- TMPL_VAR name="loggedinusername" -->';
     bibliosframe.embeddedSESSID = '<!-- TMPL_VAR name="embeddedSESSID" -->';
