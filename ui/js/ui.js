@@ -141,7 +141,7 @@ function makeSubfieldsDraggable() {
 /*
    Function: doDownloadRecords
 
-   Retrieve currently selected/open records, prompt user for record type (marc21, marcxml) and initiate download. 
+   Retrieve currently selected/open records, prompt user for record type (marc21, marcxml) and initiate download.
 
    Parameters:
 
@@ -191,11 +191,11 @@ function doDownloadRecords(format, editorid) {
                         biblios.app.download.recordsString += records[i].data.fullrecord;
                         biblios.app.download.recordsString += recsep;
                     }
-                    var encoding = 'utf-8';				
+                    var encoding = 'utf-8';
 			}
 			handleDownload(format, encoding, biblios.app.download.recordsString);
 		}
-    } // if we have a grid open 
+    } // if we have a grid open
 }
 
 function getExportMenuItems(editorid) {
@@ -237,15 +237,15 @@ function getExportMenuItems(editorid) {
 */
 function handleDownload(format, encoding, xml) {
       $.post(
-        cgiDir + "downloadMarc.pl", 
-        {format: format, encoding: encoding, xml: xml}, 
+        cgiDir + "downloadMarc.pl",
+        {format: format, encoding: encoding, xml: xml},
           function(data) {
             //if(bibliosdebug){ alert(data);}
             //$("<iframe id='dl' src="+cgiDir+"'download.pl?filename="+data+"'/>").appendTo("#downloads");
             //$("#dl").remove()
 			var MIF = new Ext.ux.ManagedIFrame({ autoCreate:{src:cgiDir+'download.pl?filename='+data,height:350,width:'100%'}
 
-                     ,loadMask :false 
+                     ,loadMask :false
 
                    });
 			clearStatusMsg();
@@ -299,7 +299,7 @@ function getNewRecordMenu() {
                                     UI.editor.progress.updateProgress(.3, 'Loading template');
 				    var xml = $('record', data).get(0);
 				    var xmlstring = xslTransform.serialize(xml);
-				    
+
 				    var rdb = new DB.Records({
 					    title: '',
 					    author: '',
@@ -351,8 +351,8 @@ function doCreateNewRecord() {
         Ext.Ajax.request({
 			url: filename,
 			method: 'GET',
-			callback: function(options, isSuccess, resp) { 
-			   var xml = resp.responseText; 
+			callback: function(options, isSuccess, resp) {
+			   var xml = resp.responseText;
 			   srchResults = (new DOMParser()).parseFromString(xml, "text/xml");
 				var currRecord = srchResults.getElementsByTagName('record')[0];
 				var recordAsString = (new XMLSerializer().serializeToString(currRecord));
@@ -419,7 +419,7 @@ function doDeleteFromSaveFile(sel) {
 	clearStatusMsg();
     // redisplay current savefile (to show moved record)
     var currentNode = folderTree.getSelectionModel().getSelectedNode();
-    displaySaveFile(currentNode.attributes.savefileid, currentNode.text); 
+    displaySaveFile(currentNode.attributes.savefileid, currentNode.text);
     displaySaveView();
   }
 }
@@ -427,7 +427,7 @@ function doDeleteFromSaveFile(sel) {
 /*
   Function: showStatusMsg
 
-  Parameters: 
+  Parameters:
 
     msg: String containing message to show
 
@@ -450,7 +450,7 @@ function clearStatusMsg() {
 /* Function: filterSearchResultsByServer
   Filter Search results by Server name based on checkbox status of server targets in folder list.
 
-  Parameters: 
+  Parameters:
 
   None.
 
@@ -584,7 +584,7 @@ function showUploadDialog(format) {
         upload_autostart: true,
         post_var_name: 'file'
       });
-      
+
       uploadDialog.on('uploadsuccess', doUploadMarc);
       uploadDialog.on('uploadcomplete', uploadComplete);
       uploadDialog.on('uploadfailed', uploadFailed);
@@ -593,44 +593,24 @@ function showUploadDialog(format) {
 }
 
 function doUploadMarc(dialog, filename, resp_data) {
-    //console.info(resp_data);
-    $.get(cgiDir+'download.pl?filename='+resp_data.filepath, function(data) {
-        var numToLoad = $('record', data).length;
-        //console.info(data);
-        var uploadProgress = Ext.Msg.progress('Uploading records', 'Retrieving and formatting records', '0%');
-        var uploadfileid = DB.Savefiles.select('name=?',['Uploads']).getOne().rowid; 
-        for (var i = 0; i < $('record', data).length; i++) {
-            var xmlorig = $('record', data).eq(i);
-            var xml = updateLeaderToUnicode(xmlorig);
-			var title = $(xml).find('datafield[@tag=245] subfield[@code=a]', data).text();
-            var ratio = i / numToLoad;
-            // retrieve medium entered into 993 field by uploadMarc script
-            var medium = $(xml).find('datafield[@tag=993]:last subfield[@code=a]').text();
-            // remove medium entered into 993 field by uploadMarc script (should be last 993 tag as it ws appended to record)
-            $(xml).find('datafield[@tag=993]:last').remove();
-            uploadProgress.updateProgress(ratio, Math.round(100*ratio)+'% completed');
-			var record = new DB.Records({
-				xml: '<record xmlns="http://www.loc.gov/MARC21/slim">' + $(xml).html() + '</record>',
-				title: $(xml).find('datafield[@tag=245] subfield[@code=a]').text(),
-				author: $(xml).find('datafield[@tag=245] subfield[@code=c]').text(),
-				publisher: $(xml).find('datafield[@tag=260] subfield[@code=b]').text(),
-				date: $(xml).find('datafield[@tag=260] subfield[@code=c]').text(),
-				date_added: new Date().toString(),
-				date_modified: new Date().toString(),
-				status: 'uploaded',
-				medium: medium,
-				SearchTargets_id: '',
-				Savefiles_id: uploadfileid,
-				xmlformat: 'marcxml',
-				marcflavour: 'marc21',
-				template: null,
-				marcformat: null
-			}).save();
-		}
-            Ext.MessageBox.alert('Upload complete', 'Uploading is completed.  Files have been added to Uploads folder with status \'uploaded\'');
-            biblios.app.displaySaveFile(3);
-			Ext.getCmp('savegrid').store.reload();
-    });
+  var records = resp_data.records;
+  // run html decode on each xml record
+  for( var i = 0; i < records.length; i++) {
+    records[i].xml = Ext.util.Format.htmlDecode(records[i].xml);
+    records[i].title = Ext.util.Format.htmlDecode(records[i].title);
+    records[i].author = Ext.util.Format.htmlDecode(records[i].author);
+    records[i].publisher = Ext.util.Format.htmlDecode(records[i].publisher);
+  }
+  try {
+    DB.Records.load( records, true);
+  }
+  catch(ex) {
+    Ext.MessageBox.alert('Upload error', 'An error was encountered during uploading: ' + ex.message);
+    return false;
+  }
+    Ext.MessageBox.alert('Upload complete', 'Uploading is completed.  Files have been added to Uploads folder with status \'uploaded\'');
+    biblios.app.displaySaveFile(4);
+    Ext.getCmp('savegrid').store.reload();
 }
 
 function uploadComplete(dialog) {
@@ -642,7 +622,8 @@ function uploadFailed(dialog, filename) {
 }
 
 function uploadError(dialog, filename, data) {
-    //console.info(data);
+    console.info(data);
+
     Ext.MessageBox.alert('Upload error', filename + ' failed to upload');
 }
 
@@ -680,8 +661,8 @@ function exportDB() {
         version : GearsORMShift.latestVersion(),
         records : new Array(),
         savefiles : new Array(),
-        searchtargets : new Array(), 
-        sendtargets : new Array(), 
+        searchtargets : new Array(),
+        sendtargets : new Array(),
         macros : new Array()
     };
     // for each rec in db, set it's rowid to '' so that gearsorm doesn't try to update rec w/ that rowid and instead inserts a new row in table
@@ -739,7 +720,7 @@ function showImportDBDialog() {
 
 function doUploadDB(dialog, filename, resp_data) {
     //console.info(resp_data);
-    $.getJSON(cgiDir+'download.pl?filename='+ resp_data.filepath, function(data) { 
+    $.getJSON(cgiDir+'download.pl?filename='+ resp_data.filepath, function(data) {
         try {
             importDB(data);
             Ext.MessageBox.alert('Import', 'Database import complete');
@@ -756,7 +737,7 @@ Function: displayHelpMsg
   Display a message in the help panel.
 
 Parameters:
-  
+
   msg: String containingin the message to display.
 
 Returns:
@@ -774,7 +755,7 @@ function completeInit() {
     }
     //	alert('Application successfully initialized');
     var loading = Ext.get('loading');
-	
+
 	// hide facets tree panel when no search present
 	if( Ext.getCmp('facetsTreePanel') ) {
         Ext.getCmp('facetsTreePanel').hide();
@@ -782,7 +763,7 @@ function completeInit() {
 
     // show splash page
 
-	
+
     var mask = Ext.get('loading-mask');
     mask.setOpacity(.8);
 
@@ -812,4 +793,3 @@ function displayInitErrors() {
         Ext.MessageBox.alert('‡biblios loading errors', errors);
     }
 }
-

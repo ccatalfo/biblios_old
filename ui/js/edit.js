@@ -31,6 +31,7 @@ function openRecord(xml, recid, syntax, savefileid, searchtarget) {
 	}
         var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
         Ext.getCmp('editorTabPanel').getActiveTab().sending = false;
+        Ext.getCmp('editorTabPanel').getActiveTab().doLayout();
     }
     else {
         var editorid = Ext.id();
@@ -56,6 +57,7 @@ function openRecord(xml, recid, syntax, savefileid, searchtarget) {
                 activate: function(tab) {
                     biblios.app.currentEditor = UI.editor[tab.editorid].record;
                     biblios.app.currentTabId = tab.id;
+                    Ext.getCmp('editorTabPanel').getActiveTab().doLayout();
                 }
             },
             tbar: MarcEditor.getToolbar(editorid)

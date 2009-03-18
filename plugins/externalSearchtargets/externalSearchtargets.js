@@ -42,7 +42,7 @@ var searchSearchTargetsdb = new Ext.form.ComboBox({
     loadText: 'Searching...',
     width: 300,
     pageSize: 10,
-    hideTrigger: true,
+    hideTrigger: false,
     triggerAction: 'all',
     tpl: new Ext.XTemplate(
       '<tpl for="."><div class="x-combo-list-item">{name}<br/>&nbsp;&nbsp;<bold>country:</bold>{country} <bold>type:</bold>{librarytype} <bold>db:</bold>{dbname}</div></tpl>'
@@ -61,8 +61,6 @@ var searchSearchTargetsdb = new Ext.form.ComboBox({
 	Ext.getCmp('searchtargetsgrid').getSelectionModel().clearSelections();
         Ext.getCmp('TargetsTreePanel').root.reload();
         setPazPar2Targets();
-    },
-    listeners: {
     }
 });
 var librarytypesds = new Ext.data.Store({

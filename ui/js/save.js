@@ -117,12 +117,12 @@ function doSaveLocal(savefileid, editorid, offset) {
 					record.date_modified = new Date().toString();
 					record.save();
                     UI.editor[editorid].savefileid = savefileid;
-					if(bibliosdebug) { 
-						console.info("saved record with id: " + recid + " to savefile: " + savefilename); 
+					if(bibliosdebug) {
+						console.info("saved record with id: " + recid + " to savefile: " + savefilename);
 				}
 					progress.updateProgress(1, 'Saving record to local database');
                     biblios.app.fireEvent('saverecordcomplete', savefileid, record.xml);
-                    
+
 				} catch(ex) {
 						Ext.MessageBox.alert('Database error',ex.message);
 				}
@@ -134,18 +134,18 @@ function doSaveLocal(savefileid, editorid, offset) {
 		} // save record from marc editor
 
 		if( openState == 'searchgrid' ) {
-			
+
 				var records = Ext.getCmp('searchgrid').getSelectionModel().getChecked();
-				
-				
+
+
 				showStatusMsg('Saving selected records');
-				
-					
+
+
 					for( var i = 0; i < records.length; i++) {
-						
+
 						addRecordFromSearch(records[i], savefileid, editorid);
 					}
-				
+
 		}
 		showStatusMsg('Records saved');
 		Ext.getCmp('savegrid').el.unmask();
@@ -186,7 +186,7 @@ function doSaveRemote(loc, xmldoc, editorid, editorloc) {
 			UI.editor.progress.hide();
 			Ext.MessageBox.alert('Remote Send Target failure', "Remote send target couldn't save record.  Returned http status code: " + status);
             biblios.app.fireEvent('sendrecordcomplete', loc, xmldoc, status);
-		} 
+		}
 		else {
             if( !biblios.app.fireEvent('sendrecordcomplete', loc, xmldoc, status)) {
                 return false;
@@ -216,7 +216,7 @@ function doSaveRemote(loc, xmldoc, editorid, editorloc) {
 
 
 function addRecordFromSearch(srchRecord, savefileid, editorid) {
-	
+
         biblios.app.fireEvent('remoterecordretrieve', srchRecord.data.fullrecord);
 		// data param is this record's xml as returned by pazpar2
 		// o is a json literal containing the record id, grid data and savefileid for this record
@@ -328,11 +328,20 @@ function sendSelectedFromSearchGrid(locsendto) {
     for(var i= 0; i < records.length; i++) {
         var id= records[i].id;
         var loc= records[i].data.location_name;
-        
+
         var title= records[i].data.title;
 		var xml = records[i].data.fullrecord;
-        
-            if( !biblios.app.fireEvent('beforesendrecord', loc, xml, '') ) {
+        var xmldoc = '';
+            if( Ext.isIE ) {
+                xmldoc = new ActiveXObject("Microsoft.XMLDOM");
+                xmldoc.async = false;
+                xmldoc.loadXML(xml);
+            }
+            else {
+                xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");
+            }
+
+            if( !biblios.app.fireEvent('beforesendrecord', loc, xmldoc, '') ) {
                 return false;
             }
             var editing = 0;
@@ -343,12 +352,14 @@ function sendSelectedFromSearchGrid(locsendto) {
                 console.debug('sendSelectedFromSearchGrid(): locsendto: ' + locsendto + ' record loc: ' + loc + ' editing = ' + editing);
             }
             showStatusMsg('Sending ' + title + ' to ' + locsendto );
-            Prefs.remoteILS[locsendto].instance.save(xml, editing);
-       
+            Prefs.remoteILS[locsendto].instance.save(xmldoc, editing);
         }
 }
 
 function sendSelectedFromSaveGrid(locsendto) {
+  if(bibliosdebug) {
+    console.debug('sending to ' + locsendto + ' from savegrid');
+  }
     Prefs.remoteILS[locsendto].instance.saveHandler = function(xmldoc, status) {
         if( !biblios.app.fireEvent('sendrecordcomplete', locsendto, xmldoc, status) ) {
             return false;
@@ -371,29 +382,34 @@ function sendSelectedFromSaveGrid(locsendto) {
     for( var i = 0; i < records.length; i++) {
             var xml = records[i].data.xml;
             var recordloc = records[i].data.SearchTargets_id;
+      var records_searchtarget = DB.SearchTargets.select('SearchTargets.rowid=?', [recordloc]).getOne().name;
+            if(bibliosdebug) {
+              console.debug('record originally from ' + recordloc);
+            }
             var xmldoc = '';
             if( Ext.isIE ) {
-                xmldoc = new ActiveXObject("Microsoft.XMLDOM"); 
-                xmldoc.async = false; 
+                xmldoc = new ActiveXObject("Microsoft.XMLDOM");
+                xmldoc.async = false;
                 xmldoc.loadXML(xml);
             }
             else {
-                xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");  
+                xmldoc = (new DOMParser()).parseFromString(xml, "text/xml");
             }
             if( !biblios.app.fireEvent('beforesendrecord', locsendto, xml, '') ) {
                 return false;
             }
             var editing = 0;
-            var searchtargetid = DB.SendTargets.select('name=?',[locsendto]).getOne().searchtarget;
-            var searchtarget = DB.SearchTargets.select('SearchTargets.rowid=?',[searchtargetid]).getOne().name;
-            var recordlocname = DB.SearchTargets.select('SearchTargets.rowid=?',[recordloc]).getOne().name;
-            if( searchtarget == recordlocname ) {
+            var searchtarget = DB.SendTargets.select('name=?',[locsendto]).getOne().searchtarget;
+
+
+            if( searchtarget == records_searchtarget ) {
                 editing = 1;
             }
             if(bibliosdebug) {
+              console.debug('searchtarget:' + searchtarget);
                 console.debug('sendSelectedFromSaveGrid(): editing = ' + editing);
             }
-            showStatusMsg('Sending ' + records[i].data.title + ' to ' + locsendto);
+            showStatusMsg('Sending ' + records[i].data.Title + ' to ' + locsendto);
             Prefs.remoteILS[locsendto].instance.save(xmldoc, editing);
     }
 }
@@ -408,7 +424,7 @@ function getSendFileMenuItems(recordSource) {
 	var handler;
 	if( recordSource == 'searchgrid') {
 		handler = function(btn) {
-		    sendSelectedFromSearchGrid(btn.id);	
+		    sendSelectedFromSearchGrid(btn.id);
 		}
 	}
 	else if (recordSource == 'savegrid') {

@@ -32,11 +32,13 @@ biblios.app = function() {
         }
         else {
             Ext.getCmp('bibliocenter').layout.setActiveItem(0);
-            Ext.getCmp('resourcesPanel').expand();
+            Ext.getCmp('searchpreview').expand();
+            Ext.getCmp('searchpreview').setHeight(200);
             openState = 'searchgrid';
             displayHelpMsg(UI.messages.help.en.searchview);
             Ext.getCmp('FoldersTreePanel').getSelectionModel().clearSelections();
         }
+		biblios.app.viewport.doLayout();
 	}
 
 	function displaySaveFile(id) {
@@ -210,12 +212,14 @@ biblios.app = function() {
                                 border: false,
                                 layout: 'border',
                                 height: 30,
+                                height: 55,
                                 items: [
                                     {
                                         region: 'north',
                                         id: 'brandingPanel',
                                         border: false,
-                                      width:'100%'
+                                        contentEl: 'bibliosheader',
+                                        width:'100%'
                                     },
                                     {
                                         region: 'center',
@@ -248,6 +252,9 @@ biblios.app = function() {
                                         id: 'bibliotab',
                                         listeners: {
                                             activate: function(p) {
+												// force left hand sidebar to be wide and expand for IE
+												Ext.getCmp('resourcesPanel').setWidth(280);
+												Ext.getCmp('resourcesPanel').expand();
                                                 biblios.app.viewport.doLayout();
 												Ext.getCmp('TargetsTreePanel').root.reload();
                                                 displayHelpMsg(UI.messages.help.en.welcome);
@@ -384,7 +391,9 @@ biblios.app = function() {
                                                                                 Ext.getCmp('searchgridSelectAllTbar').show();
                                                                                 Ext.getCmp('facetsTreePanel').show();
                                                                                 Ext.getCmp('facetsTreePanel').root.reload();
+																				biblios.app.viewport.doLayout();
                                                                                 //this.selectNone();
+                                                                              biblios.app.fireEvent('searchcomplete', Ext.getCmp('searchgrid').store.getCount());
                                                                             }
                                                                             else {
                                                                                 // reload after 1s
@@ -943,20 +952,23 @@ biblios.app = function() {
                                                                         },
 
                                                                         rowdblclick: function(grid, rowIndex, e) {
-                                                                            var id = grid.store.data.get(rowIndex).data.Id;
-                                                                            grid.editRecord(id);
+                                                                          var record = grid.store.data.get(rowIndex);
+                                                                            grid.editRecord(record);
                                                                         },// save grid row dbl click handler
                                                                         keypress: function(e) {
                                                                             if( e.getKey() == Ext.EventObject.ENTER ) {
-                                                                                var id = Ext.getCmp('savegrid').getSelectionModel().getSelected()[0].data.Id;
-                                                                                Ext.getCmp('savegrid').editRecord(id);
+                                                                                var record = Ext.getCmp('savegrid').getSelectionModel().getSelected();
+                                                                                Ext.getCmp('savegrid').editRecord(record);
                                                                             } // ENTER
                                                                         } // savegrid keypress
                                                                     }, // save grid listeners
-                                                                    editRecord: function(id, savefileid) {
+                                                                    editRecord: function(record) {
                                                                         showStatusMsg('Opening record...');
-                                                                        var xml = getLocalXml(id);
-                                                                        openRecord( xml,  id, 'marcxml', savefileid);
+                                                                        var xml = getLocalXml(record.data.Id);
+                                                                      var id = record.data.Id;
+                                                                      var savefileid = record.data.Savefiles_id;
+                                                                      var searchtarget = DB.SearchTargets.select('SearchTargets.rowid=?', [record.data.SearchTargets_id]).getOne().name;
+                                                                      openRecord( xml,  id, 'marcxml', savefileid, searchtarget);
                                                                     },
                                                                     tbar: new Ext.PagingToolbar({
                                                                         id: 'savegridtbar',
@@ -987,7 +999,7 @@ biblios.app = function() {
                                                                                         for( var i = 0; i < checked.length; i++) {
                                                                                             var savefileid = checked[i].data.Savefiles_id;
                                                                                             var recid = checked[i].data.Id;
-                                                                                            savegrid.editRecord( recid, savefileid );
+                                                                                            savegrid.editRecord( checked[i] );
                                                                                         }
                                                                                     }
                                                                                     else if (checked.length > 10 ) {
@@ -998,7 +1010,7 @@ biblios.app = function() {
                                                                                         UI.editor.loading.numToLoad = selections.length;
                                                                                         for( var j = 0; j < selections.length; j++) {
                                                                                             var savefileid = selections[j].data.Savefiles_id;
-                                                                                            savegrid.editRecord( selections[j].data.Id, savefileid );
+                                                                                            savegrid.editRecord( selections[j] );
                                                                                         }
                                                                                     }
                                                                                     else if( checked.length == 0 && selections.length == 0){
@@ -2563,6 +2575,10 @@ biblios.app.addEvents({
             searchQuery: search query being sent to targets
     */
     'beforesearch' : true,
+    /* searchcomplete
+     * params:
+     *   numRecords: number of records retrieved
+     */
     'searchcomplete' : true,
     /*
         remoterecordretrieve

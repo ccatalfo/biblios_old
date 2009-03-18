@@ -166,11 +166,17 @@ koha.prototype = {
             if( this.recidXpath == '' || this.recidXpath === undefined) {
                 throw {
                     msg: 'Unable to retrieve record id (xpath not set).  Please check your Koha connection.'
-                }
+                };
             }
 			var recid = $(this.recidXpath, xmldoc).text();
+                        if(bibliosdebug) {
+                          console.info(recid);
+                        }
 			var savepath = '';
-			if(editing == 1) {
+			if(editing == 1 && recid && recid != '') {
+                          if(bibliosdebug) {
+                            console.info('editing = 1 and got recid');
+                          }
 				savepath = 'bib/'+recid;
 			}
 			else {

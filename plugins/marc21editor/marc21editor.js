@@ -1,3 +1,15 @@
+	// global override to keep user's typed text in combo even when combo selection box is open, per this post: https://extjs.com/forum/showthread.php?t=27026
+	(function(){
+	    var old = Ext.form.ComboBox.prototype.initEvents;
+	    Ext.form.ComboBox.prototype.initEvents = function(){
+		old.apply(this, arguments);
+		//delete this.keyNav.tab;
+		this.keyNav.tab = function(e) {
+		    this.collapse();
+		    return true;
+		}
+	    };
+	})();
 // load in MarcRecord from plugins
 $.getScript(libPath + 'plugins/marc21editor/marcrecord.js');
 // load in marc21 config files (xml data)
@@ -26,6 +38,148 @@ showStatusMsg('Loading marc21 editor complete');
 clearStatusMsg();
 Ext.getCmp('editingTreePanel').enable();
 
+	var topicalTermXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+		},
+		[
+			{name: 'topicalterm', id: 'a', mapping: 'datafield[tag=150] > subfield[code=a]'}
+	]);
+	var geoTermXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+		},
+		[
+			{name: 'geoTerm', id: 'a', mapping: 'datafield[tag=151] > subfield[code=a]'}
+	]);
+	var genreTermXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+		},
+		[
+			{name: 'genreTerm', id: 'a', mapping: 'datafield[tag=155] > subfield[code=a]'}
+	]);
+	var corpnameXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+		},
+		[
+			{name: 'corpname', id: 'a', mapping: 'datafield[tag=110] > subfield[code=a]'}
+	]);
+	var confnameXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+	    },
+	    [
+	{name: 'confname', id: 'a', mapping: 'datafield[tag=111] > subfield[code=a]'}
+	     ]);
+	var uniformtitleXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: false, // don't remote following subfields
+		id: 'controlfield[tag=001]'
+	    },
+	    [
+	{name: 'title', id: 'a', mapping: 'datafield[tag=130] > subfield[code=a]'}
+	     ]);
+	var pnameXmlReader = new Ext.data.XmlReader({
+		record: 'record',
+		deleteSubfields: true,
+		id: 'controlfield[tag=001]'
+	    },
+	    [
+	     // field mapping
+				{name: 'pname', id: 'a', mapping: 'datafield[tag=100] > subfield[code=a]'},
+				{name: 'numeration', id: 'b', mapping: 'datafield[tag=100] > subfield[code=b]'},
+				{name: 'titles', id: 'c', mapping: 'datafield[tag=100] > subfield[code=c]'},
+				{name: 'dates', id: 'd', mapping: 'datafield[tag=100] > subfield[code=d]'},
+				{name: 'relator', id: 'e', mapping: 'datafield[tag=100] > subfield[code=e]'},
+				{name: 'dateofwork', id: 'f', mapping: 'datafield[tag=100] > subfield[code=f]'},
+				{name: 'miscinfo', id: 'g', mapping: 'datafield[tag=100] > subfield[code=g]'},
+				{name: 'attrqualifier', id: 'j', mapping: 'datafield[tag=100] > subfield[code=j]'},
+				{name: 'formsubheading', id: 'k', mapping: 'datafield[tag=100] > subfield[code=k]'},
+				{name: 'langofwork', id: 'l', mapping: 'datafield[tag=100] > subfield[code=l]'},
+				{name: 'numofpart', id: 'n', mapping: 'datafield[tag=100] > subfield[code=n]'},
+				{name: 'nameofpart', id: 'p', mapping: 'datafield[tag=100] > subfield[code=p]'},
+				{name: 'fullerform', id: 'q', mapping: 'datafield[tag=100] > subfield[code=q]'},
+				{name: 'titleofwork', id: 't', mapping: 'datafield[tag=100] > subfield[code=t]'},
+				{name: 'affiliation', id: 'u', mapping: 'datafield[tag=100] > subfield[code=u]'},
+				{name: 'relatorcode', id: '4', mapping: 'datafield[tag=100] > subfield[code=4]'},
+				{name: 'linkage', id: '6', mapping: 'datafield[tag=100] > subfield[code=6]'},
+				{name: 'fieldlinkseqnum', id: '8', mapping: 'datafield[tag=100] > subfield[code=8]'},
+				{name: 'authcontrolnum', id: '9', mapping: 'datafield[tag=001]'} // KOHA specific
+			]
+	);
+
+var pnameSettings = {
+		xmlReader: pnameXmlReader
+		,displayField:'pname'
+		,queryIndex:'bath.personalName'
+		,recordSchema:'marcxml'
+	};
+
+var corpnameSettings = {
+		xmlReader: corpnameXmlReader
+		,displayField:'corpname'
+		,queryIndex:'bath.corporateName'
+		,recordSchema:'marcxml'
+};
+var confnameSettings = {
+		xmlReader: confnameXmlReader
+		,displayField:'confname'
+		,queryIndex:'bath.conferenceName'
+		,recordSchema:'marcxml'
+};
+var uniformTitleSettings = {
+		xmlReader: uniformtitleXmlReader
+		,displayField:'title'
+		,queryIndex:'bath.uniformTitle'
+		,recordSchema:'marcxml'
+};
+var topicalSettings = {
+		xmlReader: topicalTermXmlReader
+		,displayField:'topicalterm'
+		,queryIndex:'bath.topicalSubject'
+		,recordSchema:'marcxml'
+};
+var geoTermSettings = {
+		xmlReader: geoTermXmlReader
+		,displayField:'geoterm'
+		,queryIndex:'bath.geographicName'
+		,recordSchema:'marcxml'
+};
+var genreTermSettings = {
+		xmlReader: genreTermXmlReader
+		,displayField:'genreterm'
+		,queryIndex:'bath.genreForm'
+		,recordSchema:'marcxml'
+};
+var authMap = {
+	100: pnameSettings
+	,700: pnameSettings
+	,600:pnameSettings
+	,800:pnameSettings
+	,110: corpnameSettings
+	,710: corpnameSettings
+	,610:corpnameSettings
+	,810:corpnameSettings
+	,111:confnameSettings
+	,711:confnameSettings
+	,611:confnameSettings
+	,811:confnameSettings
+	,240:uniformTitleSettings
+	,130:uniformTitleSettings
+	,740:uniformTitleSettings
+	,630:uniformTitleSettings
+	,650:topicalSettings
+	,651:geoTermSettings
+	,655:genreTermSettings
+};
+
 function getLeaderFromEditor(ff_ed) {
 	var leaderval = '';
 	var rlen = $("#RLen", ff_ed ).val(); // record length
@@ -36,8 +190,6 @@ function getLeaderFromEditor(ff_ed) {
 	var ctrl = $("#Ctrl", ff_ed ).val();
 	var encode = $("#Enc", ff_ed ).val();
 	var indc = '2'; // indicator count = 2	
-	var subc = '2'; // subfield count = 2
-	var elvl = $("#ELvl", ff_ed ).val();
 	var desc = $("#Desc", ff_ed ).val();
 	var multi = $("#Multipart", ff_ed ).val();
 	var entry = '4500'; // entry
@@ -307,7 +459,7 @@ function doMerge() {
 function onFocus(elem) {
     //console.info(elem);
 	$(elem).addClass('focused');
-    // is this element an input or a textarea?
+    // is this a subfield delimiter?
     var nodeName = $(elem).get(0).nodeName;
 	var editorid = Ext.getCmp('editorTabPanel').getActiveTab().editorid;
     var elemid = $(elem).get(0).id;
@@ -603,7 +755,7 @@ function setupSpecialEntries(loc) {
                 fields: ['code', 'desc'],
                 data: storevalues
             });
-            var combo = new Ext.form.ComboBox({
+            var cb = new Ext.form.ComboBox({
                 id: id,
                 store: store,
                 typeAhead: true,
@@ -614,10 +766,10 @@ function setupSpecialEntries(loc) {
                 selectOnFocus: true,
                 value: currentValue,
                 triggerAction: 'all',
-                hideTrigger: true,
+                hideTrigger: !Ext.isIE7,
                 applyTo: $(elemToReplace).get(0)
             });
-            Ext.ComponentMgr.register(combo);
+            Ext.ComponentMgr.register(cb);
             if(bibliosdebug) { console.info('Applying combobox to '+tagnumber+' '+subfield+' with current value of ' +currentValue + ' for special entry');}
         }
     }
@@ -693,6 +845,9 @@ function setupEditorHotkeys() {
 function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, recordSchema) {
 	var subfield_text = $(tagelem);
 	if( subfield_text.length == 0 ) {
+		if(bibliosdebug) {
+			console.debug('subfield length is 0...quitting');
+		}
 		return;
 	}
 	if(bibliosdebug) {console.info('applying combobox to '+ $(subfield_text).val() ); }
@@ -713,18 +868,6 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 		},
 		reader: xmlReader 
 	});
-	// global override to keep user's typed text in combo even when combo selection box is open, per this post: https://extjs.com/forum/showthread.php?t=27026
-	(function(){
-	    var old = Ext.form.ComboBox.prototype.initEvents;
-	    Ext.form.ComboBox.prototype.initEvents = function(){
-		old.apply(this, arguments);
-		//delete this.keyNav.tab;
-		this.keyNav.tab = function(e) {
-		    this.collapse();
-		    return true;
-		}
-	    };
-	})();
 	var cb = new Ext.form.ComboBox({
 		store: ds,
 		typeAhead: false,
@@ -737,8 +880,9 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 		triggerAction: 'all',
 		mode: 'remote',
 		selectOnFocus: true,
-		hideTrigger: true,
+		hideTrigger: !Ext.isIE7,
 		displayField: displayField,
+		listWidth: 200,
 		loadingText: 'Searching...',
 		cls: 'authority-field',
 		lazyRender: false,
@@ -767,20 +911,36 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 			var value = record.data[fieldname];
 			// update subfield a
 			if( subfieldcode == 'a') {
-				combo.setValue(value);	
+				combo.setRawValue(value);	
+				combo.syncSize();
+				combo.focus();
 			}
 			// add new one if we have a value for it
 			else if( value != '' || null ) {
                 var newid = Ext.id();
-                $(tag).find('.subfield:last').after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;"+subfieldcode+"'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text' value=\""+value+"\"></span>");
+                $(tag).find('.subfield:last').after("<span id='subfield-"+newid+"' class='subfield'>&Dagger;<input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='1' maxlength='1' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='"+subfieldcode+"'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text' value=\""+value+"\"></span>");
                 if(bibliosdebug) {
                     console.debug('adding subfield to ' + $(tag) + ' with value ' + value);
                 }
             }
+            UI.editor[editorid].record.setupSubfieldDelimiterFocus();
 		}
 		UI.editor[editorid].cbOpen = false;
-		var authrecxml = xslTransform.transform(marcxsl, record.node, {}).doc;
-		var authrecxmlserialized = xslTransform.serialize( authrecxml );
+                try {
+                  if(Ext.isIE7 || Ext.isIE6 ) {
+                    var authrecxmlserialized = record.node.transformNode(marcxsl);
+                  }
+                  else {
+		    var authrecxml = xslTransform.transform(marcxsl, record.node, {}).doc;
+		    var authrecxmlserialized = xslTransform.serialize( authrecxml );
+
+                  }
+                }
+                catch(ex) {
+                  if(bibliosdebug) {
+                    console.info(ex);
+                  }
+                }
 		Ext.QuickTips.register({
 			target: cb.initialConfig.applyTo,
 			    title: 'Authority Record',
@@ -791,6 +951,7 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 	
 			    });
 	
+		biblios.app.viewport.doLayout();
 	    });
 	cb.on('specialkey', function(cb, e) {
 		if( e.getKey() == Ext.EventObject.ENTER ) {
@@ -813,82 +974,6 @@ function createAuthComboBox(tagelem, xmlReader, displayField, queryIndex, record
 }
 
 function setupMarc21AuthorityLiveSearches() {
-	var topicalTermXmlReader = new Ext.data.XmlReader({
-		record: 'record',
-		deleteSubfields: false, // don't remote following subfields
-		id: 'controlfield[tag=001]'
-		},
-		[
-			{name: 'topicalterm', id: 'a', mapping: 'datafield[tag=150] > subfield[code=a]'}
-	]);
-	var geoTermXmlReader = new Ext.data.XmlReader({
-		record: 'record',
-		deleteSubfields: false, // don't remote following subfields
-		id: 'controlfield[tag=001]'
-		},
-		[
-			{name: 'geoTerm', id: 'a', mapping: 'datafield[tag=151] > subfield[code=a]'}
-	]);
-	var genreTermXmlReader = new Ext.data.XmlReader({
-		record: 'record',
-		deleteSubfields: false, // don't remote following subfields
-		id: 'controlfield[tag=001]'
-		},
-		[
-			{name: 'genreTerm', id: 'a', mapping: 'datafield[tag=155] > subfield[code=a]'}
-	]);
-	var corpnameXmlReader = new Ext.data.XmlReader({
-		record: 'record',
-		deleteSubfields: false, // don't remote following subfields
-		id: 'controlfield[tag=001]'
-		},
-		[
-			{name: 'corpname', id: 'a', mapping: 'datafield[tag=110] > subfield[code=a]'}
-	]);
-	var confnameXmlReader = new Ext.data.XmlReader({
-		record: 'record',
-		deleteSubfields: false, // don't remote following subfields
-		id: 'controlfield[tag=001]'
-	    },
-	    [
-	{name: 'confname', id: 'a', mapping: 'datafield[tag=111] > subfield[code=a]'}
-	     ]);
-	var uniformtitleXmlReader = new Ext.data.XmlReader({
-		record: 'record',
-		deleteSubfields: false, // don't remote following subfields
-		id: 'controlfield[tag=001]'
-	    },
-	    [
-	{name: 'title', id: 'a', mapping: 'datafield[tag=130] > subfield[code=a]'}
-	     ]);
-	var pnameXmlReader = new Ext.data.XmlReader({
-		record: 'record',
-		deleteSubfields: true,
-		id: 'controlfield[tag=001]'
-	    },
-	    [
-	     // field mapping
-				{name: 'pname', id: 'a', mapping: 'datafield[tag=100] > subfield[code=a]'},
-				{name: 'numeration', id: 'b', mapping: 'datafield[tag=100] > subfield[code=b]'},
-				{name: 'titles', id: 'c', mapping: 'datafield[tag=100] > subfield[code=c]'},
-				{name: 'dates', id: 'd', mapping: 'datafield[tag=100] > subfield[code=d]'},
-				{name: 'relator', id: 'e', mapping: 'datafield[tag=100] > subfield[code=e]'},
-				{name: 'dateofwork', id: 'f', mapping: 'datafield[tag=100] > subfield[code=f]'},
-				{name: 'miscinfo', id: 'g', mapping: 'datafield[tag=100] > subfield[code=g]'},
-				{name: 'attrqualifier', id: 'j', mapping: 'datafield[tag=100] > subfield[code=j]'},
-				{name: 'formsubheading', id: 'k', mapping: 'datafield[tag=100] > subfield[code=k]'},
-				{name: 'langofwork', id: 'l', mapping: 'datafield[tag=100] > subfield[code=l]'},
-				{name: 'numofpart', id: 'n', mapping: 'datafield[tag=100] > subfield[code=n]'},
-				{name: 'nameofpart', id: 'p', mapping: 'datafield[tag=100] > subfield[code=p]'},
-				{name: 'fullerform', id: 'q', mapping: 'datafield[tag=100] > subfield[code=q]'},
-				{name: 'titleofwork', id: 't', mapping: 'datafield[tag=100] > subfield[code=t]'},
-				{name: 'affiliation', id: 'u', mapping: 'datafield[tag=100] > subfield[code=u]'},
-				{name: 'relatorcode', id: '4', mapping: 'datafield[tag=100] > subfield[code=4]'},
-				{name: 'linkage', id: '6', mapping: 'datafield[tag=100] > subfield[code=6]'},
-				{name: 'fieldlinkseqnum', id: '8', mapping: 'datafield[tag=100] > subfield[code=8]'},
-				{name: 'authcontrolnum', id: '9', mapping: 'datafield[tag=001]'} // KOHA specific
-			]
-	);
 
 	Ext.select('div[id^=100] .a.subfield-text, div[id^=700] .a.subfield-text, div[id^=600] .a.subfield-text, div[id^=800] .a.subfield-text').each( function(item) {
 		createAuthComboBox($(item.dom), pnameXmlReader, 'pname', 'bath.personalName', 'marcxml' );
@@ -942,7 +1027,7 @@ function setupFFEditorLangCombo() {
 		id: 'Lang',
 		store: store,
 		forceSelection: true,
-		hideTrigger: true,
+		hideTrigger: !Ext.isIE7,
 		typeAhead: true,
 		displayField: 'name',
 		valueField: 'code',
@@ -1214,7 +1299,7 @@ function setupFFEditorCtryCombo() {
 			var editorsubfields = $(elem).children('.subfields').children('.subfield');
 			var subfields = new Array();
 			for(var j = 0; j < editorsubfields.length; j++) {
-				var code = editorsubfields.eq(j).find('.subfield-delimiter').val().substr(1, 1);
+				var code = editorsubfields.eq(j).find('.subfield-delimiter').val().substr(0, 1);
 				var value = editorsubfields.eq(j).find('.subfield-text').val();
 				var newsf = new Subfield(code, value);
 				subfields.push(newsf);
@@ -1325,8 +1410,13 @@ function setupFFEditorCtryCombo() {
             data: {xml:this.getFFXML(tagnumber, tagvalue), stylesheet: 'fixedfields_editor.xsl', xslpath: xslpath, editorid: editorid, rectype:rectype},
             success: function(html) {
                 var win = new Ext.Window({
-                    title: 'Control Fields Guided Editor',
                     html: html,
+					autoHeight: true,
+					autoScroll: true,
+					border: false,
+					constrain:true,
+					shadow:false,
+					shim:false,
                     id: (winid=Ext.id()),
                     tbar: [
                         {
@@ -1517,7 +1607,7 @@ function setupFFEditorCtryCombo() {
 			for( var i = 0; i<tags.length; i++) {
 				var id = $(tags[i]).attr('id').substr(0,3);
 			}
-			var newId = tagnumber + "-" + newSuffix + editorid;
+			var newId = tagnumber + "-" + Ext.id() + editorid;
 			  var newtag = '<div class="tag '+tagnumber+'" id="'+newId+'">';
 			  newtag += '<input size="3" onblur="onBlur(this)" onfocus="onFocus(this)" class="tagnumber" id="d'+tagnumber+editorid+'" value="'+tagnumber+'" />';
 			  newtag += '<input size="1" onblur="onBlur(this)" onfocus="onFocus(this)" size="2" class="indicator" value="'+firstind+'" id="dind1'+newId+'"/>';
@@ -1529,17 +1619,20 @@ function setupFFEditorCtryCombo() {
 			  newtag += '<span class="subfields" id="dsubfields'+newId+'">';
 			  for( var i = 0; i< sf.length; i++) {
 				  newtag += '<span class="subfield" id="dsubfields'+tagnumber+newId+'">';
-				  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" class="subfield-delimiter" maxlength="2" size="2" value="&Dagger;'+sf[i]['delimiter']+'">';
+                  newtag += '&Dagger;';
+				  newtag += '<input onblur="onBlur(this)" onfocus="onFocus(this)" class="subfield-delimiter" maxlength="1" size="1" value="'+sf[i]['delimiter']+'">';
 				  var textlength = sf[i]['text'].length;
 				  newtag += '<input id="dsubfields'+newId+i+'text" onfocus="onFocus(this)" onblur="onBlur(this)" class="subfield-text a" size="'+textlength+'" value="'+sf[i]['text']+'">';
 				}
 			} // insert datafield
 			// insert out new tag after the tag we just found
 			$(tagToInsertAfter, editorelem).after(newtag);
+            Ext.getCmp('editorTabPanel').getActiveTab().doLayout();
             if( getPref('ShowFieldBordersInEditor') == "1") {
                 addInputOutlines(); 
             }
 			update();
+            this._setupSubfieldDelimiterFocus();
             // if user is adding an 006 or 007, add a new tbar item to the appropriate fixed fields tbar
             if( tagnumber == '006' || tagnumber == '007' ) {
                 if(bibliosdebug) {
@@ -1562,7 +1655,120 @@ function setupFFEditorCtryCombo() {
                 biblios.app.viewport.doLayout();
             }
 		
-	    setupMarc21AuthorityLiveSearches();
+	    //setupMarc21AuthorityLiveSearches();
+		if( authMap[tagnumber] ) {
+			if(bibliosdebug) {
+				console.debug('adding combo to newly added tag: ' + tagnumber);
+			}
+			/*createAuthComboBox($('#'+newId).find('.subfield-text').get(0).id,
+								authMap[tagnumber].xmlReader,
+								authMap[tagnumber].displayField,
+								authMap[tagnumber].queryIndex,
+								authMap[tagnumber].recordSchema
+								);*/
+								
+			var cb = new Ext.form.ComboBox({
+				applyTo: $('#'+newId).find('.subfield-text').get(0).id
+				,store: new Ext.data.Store({
+					proxy: new Ext.data.HttpProxy({
+						url: sruauthcgiurl
+						,method:'GET'
+						,disableCaching:false
+					})
+					,baseParams: {
+						sruurl: sruauthurl,
+						version: '1.1',
+						operation: 'searchRetrieve',
+						recordSchema: authMap[tagnumber].recordSchema,
+						maximumRecords: '100'
+					},
+					reader: authMap[tagnumber].xmlReader
+				}) // store
+				,listWidth:200
+				,mode:'remote'
+				,hideTrigger:!Ext.isIE7
+				,cls:'authority-field'
+				,typeAhead: false
+				,typeAheadDelay: 500
+				,allQuery: 'a'
+				,queryParam: 'query'
+				,queryIndex: authMap[tagnumber].queryIndex
+				,editable: true
+				,forceSelection: false
+				,triggerAction: 'all'
+				,selectOnFocus: true
+				,displayField: authMap[tagnumber].displayField
+				,loadingText: 'Searching...'
+			});
+		}
+	cb.on('beforequery', function(combo, query, forceAll, cancel, e) {
+		combo.query = combo.combo.queryIndex + "=" + combo.query + '*';
+	});
+	cb.on('select', function(combo, record, index) {
+		var tagnumber = $(combo.el.dom).parents('.tag').children('.tagnumber').val();
+		var tag = $(combo.el.dom).parents('.tag');
+		var tagindex = UI.editor[editorid].record.getIndexOf( tag );
+		// create/update subfields
+		if( record.store.reader.meta.deleteSubfields == true ) {
+			// delete any subfields following the first (subfield $a)
+			var subfields = $(tag).find('.subfield');
+			for( var i = 1; i< subfields.length; i++) {
+				$( subfields[i] ).remove();
+			}
+		}
+		// for each subfield in this record
+		for( var i = 0; i < record.fields.length; i++) {
+			var data = record.fields.itemAt(i);
+			var subfieldcode = data.id;
+			var fieldname = data.name;
+			var value = record.data[fieldname];
+			// update subfield a
+			if( subfieldcode == 'a') {
+				combo.setRawValue(value);	
+				combo.syncSize();
+				combo.focus();
+			}
+			// add new one if we have a value for it
+			else if( value != '' || null ) {
+                var newid = Ext.id();
+                $(tag).find('.subfield:last').after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;"+subfieldcode+"'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text' value=\""+value+"\"></span>");
+                if(bibliosdebug) {
+                    console.debug('adding subfield to ' + $(tag) + ' with value ' + value);
+                }
+            }
+		}
+		UI.editor[editorid].cbOpen = false;
+		var authrecxml = xslTransform.transform(marcxsl, record.node, {}).doc;
+		var authrecxmlserialized = xslTransform.serialize( authrecxml );
+		Ext.QuickTips.register({
+			target: cb.initialConfig.applyTo,
+			    title: 'Authority Record',
+			    text: authrecxmlserialized,
+			    width: 300
+			    ,showDelay: 0
+			    ,dismissDelay: 12000
+	
+			    });
+	
+		biblios.app.viewport.doLayout();
+	    });
+	cb.on('specialkey', function(cb, e) {
+		if( e.getKey() == Ext.EventObject.ENTER ) {
+		    e.stopEvent();
+		}
+		else if( e.getKey() == Ext.EventObject.TAB ) {
+		    if(bibliosdebug) {
+			console.debug('marc21editor: tabbing out of auth combo now');
+		    }
+		    cb.collapse();
+		}
+	});
+	cb.on('expand', function(cb, e) {
+		UI.editor[editorid].cbOpen = true;
+	});
+	cb.on('hide', function(cb, e) {
+	});
+	UI.editor[editorid].comboboxes.push(cb);
 	    
 
 			// set the focus to this new tag
@@ -1645,7 +1851,9 @@ function setupFFEditorCtryCombo() {
         else {
             elToAddAfter = $(lastFocused).parents('.subfield');
         }
-        $(elToAddAfter).after("<span id='subfield-"+newid+"' class='subfield'><input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='2' maxlength='2' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value='&Dagger;'><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text' value=\""+newval+"\"></span>");
+        $(elToAddAfter).after("<span id='subfield-"+newid+"' class='subfield'>&Dagger;<input onblur='onBlur(this)' onfocus='onFocus(this)' id='delimiter-"+newid+"' length='1' maxlength='1' class='subfield-delimiter' onblur='onBlur(this)' onfocus='onFocus(this)' value=''><input id='subfield-text-'"+newid+"' onfocus='onFocus(this)' onblur='onBlur(this)' class='subfield-text' value=\""+newval+"\"></span>");
+        this._setupSubfieldDelimiterFocus();
+        Ext.getCmp('editorTabPanel').getActiveTab().doLayout();
 	};
 
 	this._deleteSubfield = function(editorid, tag, index, subfield) {
@@ -1771,8 +1979,14 @@ function setupFFEditorCtryCombo() {
             data: {tag:tagnumber, xml:this.getFFXML(tagnumber,''), stylesheet:'fixedfields_editor.xsl', xslpath: xslpath, editorid: editorid},
             success: function(html) {
                 var win = new Ext.Window({
-                    title: 'Select type of field',
                     html: html,
+					width: 100,
+					autoHeight: true,
+					autoScroll: true,
+					border: false,
+					constrain:true,
+					shadow:false,
+					shim:false,
                     bbar: [
                         {
                             text: 'OK',
@@ -1949,6 +2163,44 @@ function setupFFEditorCtryCombo() {
         biblios.app.viewport.doLayout();
     }
 
+    this._setupSubfieldDelimiterFocus = function() {
+        // move focus to subfield-text when typing text in full preceding subfield-delimiter
+        $('#'+editorid).find('.subfield-delimiter').keyup( function( e ) {
+            /*if(bibliosdebug) {
+                console.info(ev);
+            }*/
+            /* following code snippet borrowed from jquery.autotab.js jquery plugin http://www.lousyllama.com/sandbox/jquery-autotab */
+		/**
+		 * Do not auto tab when the following keys are pressed
+		 * 8:	Backspace
+		 * 9:	Tab
+		 * 16:	Shift
+		 * 17:	Ctrl
+		 * 18:	Alt
+		 * 19:	Pause Break
+		 * 20:	Caps Lock
+		 * 27:	Esc
+		 * 33:	Page Up
+		 * 34:	Page Down
+		 * 35:	End
+		 * 36:	Home
+		 * 37:	Left Arrow
+		 * 38:	Up Arrow
+		 * 39:	Right Arrow
+		 * 40:	Down Arroww
+		 * 45:	Insert
+		 * 46:	Delete
+		 * 144:	Num Lock
+		 * 145:	Scroll Lock
+		 */
+		var keys = [8, 9, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 144, 145];
+		var string = keys.toString();
+
+		if(string.indexOf(key(e)) == -1 && $(this).val().length == $(this).get(0).maxLength )
+                $(this).siblings().eq(1).focus();
+        });
+    }
+
     this._postProcessJs = function() {
         update();
         Ext.get(editorid).mask();
@@ -1965,6 +2217,7 @@ function setupFFEditorCtryCombo() {
             addInputOutlines(); 
         }
         this._addFixedFieldToolbars();
+        this._setupSubfieldDelimiterFocus();
         // hide fixed field controlfields
         $('#'+editorid).find('.varfields_editor').find(".000, .001, .003, .005, .008, .006, .007").hide();
         // set change event for Type fixed fields select dropdown
@@ -2015,6 +2268,9 @@ MarcEditor.prototype.showFFPopup = function() {
 }
 MarcEditor.prototype.toggleFixedFieldDisplay = function() {
     return this._toggleFixedFieldDisplay();
+}
+MarcEditor.prototype.setupSubfieldDelimiterFocus = function() {
+    return this._setupSubfieldDelimiterFocus();
 }
 MarcEditor.prototype.getValue = function(tag, subfield) {
 	return this._getValue(tag, subfield);
@@ -2313,9 +2569,11 @@ MarcEditor.getToolbar = function(editorid) {
                         tooltip: {text: 'Duplicate this record to Drafts folder'},
                         editorid: editorid,
                         id: editorid+'DuplicateBtn',
+                        disabled: UI.editor[editorid].id == '' ? true: false,
                         handler: function(btn) {
                             // get record from db for this record
                             var r = DB.Records.select('Records.rowid=?', [ UI.editor[btn.editorid].id ]).getOne();
+                          var savefilename = DB.Savefiles.select('Savefiles.rowid=?', [r.Savefiles_id]).getOne().name;
                             var newrec = new DB.Records({
                                 xml : r.xml,
                                 title : r.title,
@@ -2333,7 +2591,7 @@ MarcEditor.getToolbar = function(editorid) {
                                 template : r.template,
                                 marcformat : r.marcformat
                             }).save();
-                            Ext.MessageBox.alert('Record duplication', 'Record was duplicated to Drafts folder');
+                            Ext.MessageBox.alert('Record duplication', 'Record was duplicated to ' + savefilename + ' folder');
                         }
                     },
                     {
@@ -2420,3 +2678,11 @@ function formatFixedFieldsPopupWidth(index) {
         }
     }
 }
+
+
+	var key = function(e) {
+		if(!e)
+			e = window.event;
+
+		return e.keyCode;
+	};

@@ -149,11 +149,11 @@
 		<xsl:param name="id"/>
 			<span class="subfield {@code}">
 				<xsl:attribute name="id"><xsl:value-of select="$id"/>-<xsl:value-of select="@code"/><xsl:value-of select="generate-id(.)"/><xsl:value-of select="$editorid"/></xsl:attribute>
-				<input class="subfield-delimiter {@code}">
+				<span style="color:blue;">&#8225;</span><input class="subfield-delimiter {@code}">
                                   <xsl:attribute name='text'>text</xsl:attribute>
-					<xsl:attribute name='size'>2</xsl:attribute>
-					<xsl:attribute name='maxlength'>2</xsl:attribute>
-					<xsl:attribute name='value'>&#8225;<xsl:value-of select="@code"/></xsl:attribute>
+					<xsl:attribute name='size'>1</xsl:attribute>
+					<xsl:attribute name='maxlength'>1</xsl:attribute>
+					<xsl:attribute name='value'><xsl:value-of select="@code"/></xsl:attribute>
 					<xsl:attribute name='onfocus'>onFocus(this)</xsl:attribute>
 					<xsl:attribute name='onblur'>onBlur(this)</xsl:attribute>
 					<xsl:attribute name="id">

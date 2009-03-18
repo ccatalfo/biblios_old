@@ -1,3 +1,9 @@
+if( Ext.isIE6 || Ext.isIE7 ) {
+$.ajaxSetup ({
+    // Disable caching of AJAX responses */
+	    cache: false
+		});
+}
 function doSearch(form) {
     Ext.getCmp('bibliocenter').layout.setActiveItem(0);
 	showStatusMsg('Searching...');

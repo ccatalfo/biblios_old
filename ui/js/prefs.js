@@ -196,6 +196,7 @@ function loadEmbeddedRecord() {
     // if we have xml in recordxml (passed in by embedding system) open in editor
     if( recordxml != '' ) {
         showStatusMsg('Loading remote record');
+        var rec_location = DB.SendTargets.select('embedded=1').getOne().name;
         UI.editor.loading.numToLoad = 1;
         UI.editor.loading.numLoaded = 0;
         UI.editor.progress = Ext.Msg.progress(
@@ -203,7 +204,7 @@ function loadEmbeddedRecord() {
             'Retrieving and formatting record',
             '0%'
         );
-        openRecord( recordxml, '', 'marcxml');
+      openRecord( recordxml, '', 'marcxml','', rec_location);
         clearStatusMsg();
     }
 }
@@ -222,6 +223,7 @@ function loadSearchTargetsFromUrl(url) {
 	    }
             Ext.getCmp('searchtargetsgrid').store.reload();
             Ext.getCmp('TargetsTreePanel').root.reload();
+			setPazPar2Targets();
         },
         error: function(req, textStatus, errorThrown) {
             Ext.Msg.alert('Load error', 'Error loading remote search targets: ' + req.responseText);
@@ -258,7 +260,7 @@ function setILSTargets() {
 				    Prefs.remoteILS[ils.name].pw = '';
 				}
 				else {
-				    Prefs.remoteILS[ils.name].user = ils.user;
+				  Prefs.remoteILS[ils.name].user = ils.user;
 				    Prefs.remoteILS[ils.name].pw = ils.password;
 				}
 				Prefs.remoteILS[ils.name].url = ils.url;

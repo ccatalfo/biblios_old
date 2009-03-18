@@ -164,6 +164,7 @@ elsif ( $action eq 'show') {
         my $i = 0;
         foreach my $fullrecord ( @fullrecords ) {
                 my $marcxml = $fullrecord->findvalue('.');
+                $marcxml =~ s/%26/&amp;/g;
                 my $hit = {};
                 $hit->{'recid'} = $recid;
                 $hit->{'count'} = $count;
