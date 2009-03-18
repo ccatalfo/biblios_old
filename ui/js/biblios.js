@@ -212,7 +212,7 @@ biblios.app = function() {
                                 border: false,
                                 layout: 'border',
                                 height: 30,
-                                height: 55,
+                                height: 25,
                                 items: [
                                     {
                                         region: 'north',
