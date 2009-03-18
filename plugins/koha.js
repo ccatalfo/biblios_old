@@ -77,8 +77,8 @@ koha.prototype = {
                         kohaurl: this.authurl,
                         userid: this.user,
                         password: this.password,
-                      action:'auth',
-		      cookie: this.cookie
+                        action:'auth',
+		                cookie: this.cookie
                     },
                     that: this,
                     dataType:'json',
