@@ -131,11 +131,19 @@
 
       		<xsl:for-each select="marc:datafield[@tag='245']">
 		<pz:metadata type="title">
+                  <xsl:variable name="title">
+                    <xsl:call-template name="replace-string">
+                      <xsl:with-param name="text" select="marc:subfield[@code='a']"/>
+                      <xsl:with-param name="replace" select="':'"/>
+                      <xsl:with-param name="with" select="''"/>
+                    </xsl:call-template>
+                  </xsl:variable>
+
           <!-- TODO: normalize this and use punctuation -->
-         	<xsl:value-of select="marc:subfield[@code='a']"/> <xsl:if test="marc:subfield[@code='b']"> <xsl:value-of select="marc:subfield[@code='b']"/></xsl:if>
+         	<xsl:value-of select="$title"/> <xsl:if test="marc:subfield[@code='b']"> <xsl:value-of select="marc:subfield[@code='b']"/></xsl:if>
 		</pz:metadata>
       		</xsl:for-each>
-		
+
 			<xsl:choose>
     		<xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
 		<pz:metadata type="author">
@@ -164,4 +172,25 @@
 
   </xsl:template>
 
+<!--<xsl:template name="replace-string">
+    <xsl:param name="text"/>
+    <xsl:param name="replace"/>
+    <xsl:param name="with"/>
+    <xsl:choose>
+      <xsl:when test="contains($text,$replace)">
+        <xsl:value-of select="substring-before($text,$replace)"/>
+        <xsl:value-of select="$with"/>
+        <xsl:call-template name="replace-string">
+          <xsl:with-param name="text"
+select="substring-after($text,$replace)"/>
+          <xsl:with-param name="replace" select="$replace"/>
+          <xsl:with-param name="with" select="$with"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+-->
 </xsl:stylesheet>
