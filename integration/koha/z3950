@@ -12,7 +12,11 @@ use Data::Dumper;
 my $debug = 1;
 my $cgi = CGI->new;
 
-my ($status, $cookie, $sessioNID) = check_api_auth($cgi, {editcatalogue => 1} );
+#my ($status, $cookie, $sessioNID) = check_api_auth($cgi, {editcatalogue => 1} );
+# FIXME - temporarily disable authentiation, as this script is currently
+# not known by kohaws.pl and attempting to do check_api_auth can break
+# initializing the Koha send target gmc 2009-06-23
+my $status = 'ok';
 
 if( $status eq 'ok' ) {
     print $cgi->header(-type=>'application/json');
