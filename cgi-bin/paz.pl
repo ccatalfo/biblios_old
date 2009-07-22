@@ -13,7 +13,7 @@ use XML::Simple;
 
 binmode STDOUT, ":utf8";
 
-my $debug = 1;
+my $debug = 0;
 
 my $cgi = CGI->new();
 CGI::Session->name('bibliospazsession');
